@@ -1,0 +1,4 @@
+#!/bin/bash
+
+LIBDEX=../lib/asmdex-1.0.jar
+java -classpath bin:$LIBDEX  SimpleTest

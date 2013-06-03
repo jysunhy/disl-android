@@ -1,0 +1,24 @@
+<project name="disl-android" default="example" basedir=".">
+  <property file="build.properties"/>
+  <path id="buildpath">
+    <pathelement location="${asmdex.path}"/>
+  </path>
+
+
+
+  <target name="clean">
+        <delete dir="bin"/>
+   </target>
+
+
+
+
+  <target name="example">
+  	<mkdir dir="bin"/>
+    <javac srcdir="src" destdir="bin" debug="true"> 
+      <classpath refid="buildpath"/>
+    </javac>
+  </target>
+	
+</project>
+
