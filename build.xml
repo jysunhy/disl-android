@@ -1,0 +1,46 @@
+<project name="javaagent" default="package" basedir=".">
+  <property file="build.properties"/>
+  <path id="buildpath">
+    <pathelement location="${asm.path}"/>
+    <pathelement location="lib/agent.jar"/>
+  </path>
+
+
+
+  <target name="clean">
+        <delete dir="bin"/>
+        <delete dir="build"/>
+   </target>
+
+
+
+
+  <target name="compile-agent">
+  	<mkdir dir="bin"/>
+    <javac srcdir="src" destdir="bin" debug="true"> 
+<exclude name="ch/usi/dag/asm/experiment/sjtu/MyCodeInstrumenter.java"/>
+      <classpath refid="buildpath"/>
+    </javac>
+  </target>
+	
+  <target name="compile-instrumentation" depends="clean">
+  	<mkdir dir="bin"/>
+    <javac srcdir="src" destdir="bin" debug="true"> 
+<include name="ch/usi/dag/experiment/runtime/MyAnalysis.java"/>
+<include name="ch/usi/dag/asm/experiment/sjtu/MyCodeInstrumenter.java"/>
+      <classpath refid="buildpath"/>
+    </javac>
+  </target>
+
+  <target name="package-agent" depends="compile-agent" >
+    <jar basedir="bin" manifest="resources/MANIFEST.MF" includes="ch/usi/dag/asm/experiment/sjtu/**" excludes="ch/usi/dag/asm/experiment/runtime/**,ch/usi/dag/asm/experiment/sjtu/MyCodeInstrumenter.class" destfile="lib/agent.jar"/>
+   </target>
+
+  
+  
+	
+  
+   	
+	<target name="package" depends="compile-instrumentation"/>
+</project>
+

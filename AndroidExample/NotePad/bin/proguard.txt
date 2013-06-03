@@ -1,0 +1,21 @@
+# view AndroidManifest.xml #generated:55
+-keep class com.example.android.notepad.NoteEditor { <init>(...); }
+
+# view res/layout/note_editor.xml #generated:16
+-keep class com.example.android.notepad.NoteEditor$LinedEditText { <init>(...); }
+
+# view AndroidManifest.xml #generated:30
+-keep class com.example.android.notepad.NotePadProvider { <init>(...); }
+
+# view AndroidManifest.xml #generated:36
+-keep class com.example.android.notepad.NotesList { <init>(...); }
+
+# view AndroidManifest.xml #generated:110
+-keep class com.example.android.notepad.NotesLiveFolder { <init>(...); }
+
+# view AndroidManifest.xml #generated:83
+-keep class com.example.android.notepad.TitleEditor { <init>(...); }
+
+# onClick res/layout/title_editor.xml #generated:36
+-keepclassmembers class * { *** onClickOk(...); }
+

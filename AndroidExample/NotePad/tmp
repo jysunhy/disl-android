@@ -1,0 +1,4 @@
+export ANDROID_PATH="/home/user/disl-android/NotePad"
+export PATH="$PATH:$ANDROID_PATH/tools"
+export PATH="$PATH:$ANDROID_PATH/platform-tools"
+export PATH="$PATH:$ANDROID_PATH/build-tools/android-4.2.2"
