@@ -3,18 +3,13 @@
 Profile="/etc/profile"
 #Profile="tmp"
 
-if [[ $ANDROID_PATH != "" ]]
-then
-	echo "PATH already set"
-else
-	if [[ $# == 0 ]]
-	then echo "SDK PATH should be passed"
+	if [ "$#" -eq 0 ]
+	then 
+		echo "SDK PATH should be passed"
 	else
-	echo "setting the PATH"
-	sudo echo 'export ANDROID_PATH="'` pwd `'"' >> $Profile
-	sudo echo 'export PATH="$PATH:$ANDROID_PATH/tools"' >> $Profile
-	sudo echo 'export PATH="$PATH:$ANDROID_PATH/platform-tools"' >> $Profile
-	sudo echo 'export PATH="$PATH:$ANDROID_PATH/build-tools/android-4.2.2"' >> $Profile
-	source $Profile
+	echo "setting the PATH"'"'$1'"'
+	sudo echo 'export ANDROID_HOME="'$1'"' >> $Profile
+	sudo echo 'export PATH="$PATH:$ANDROID_HOME/tools"' >> $Profile
+	sudo echo 'export PATH="$PATH:$ANDROID_HOME/platform-tools"' >> $Profile
+	sudo echo 'export PATH="$PATH:$ANDROID_HOME/build-tools/android-4.2.2"' >> $Profile
 	fi
-fi
