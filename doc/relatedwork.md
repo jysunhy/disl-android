@@ -1,5 +1,8 @@
 #Related Work
 ---
+##TaintDroid
+open source and include the dynamic instrumentation needed.
+
 ## Bytecode manipulation
 * [Android official bytecode document](http://source.android.com/tech/dalvik/dalvik-bytecode.html)
 * [Redexer](http://www.cs.umd.edu/projects/PL/redexer/): a project from UMD that can rewrite dex file statically.
