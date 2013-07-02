@@ -2,6 +2,8 @@
 ---
 ##TaintDroid
 open source and include the dynamic instrumentation needed.
+http://appanalysis.org/tdro1d.html
+https://dl-ssl.google.com/dl/googlesource/git-repo/repo
 
 ## Bytecode manipulation
 * [Android official bytecode document](http://source.android.com/tech/dalvik/dalvik-bytecode.html)
