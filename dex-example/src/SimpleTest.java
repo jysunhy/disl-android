@@ -38,9 +38,11 @@ try{
 		List<ClassNode> classes = appnode.classes;
 
 //                System.err.println("=== Instrumenting class " + clazz.name + " ===");
+		System.out.println("classes: " + classes.size());
 
 		for( ClassNode clazz : classes) {	
                 List<MethodNode> methods = clazz.methods;
+		System.out.println("in class " + methods.size());
                 for (MethodNode method : methods) {
                         if ((method.access & Opcodes.ACC_NATIVE) != 0)
                                 continue;

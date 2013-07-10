@@ -1,0 +1,11 @@
+#Conversion EXAMPLE:
+./apk2jar.sh bin/input.apk  #this will produce bin/original.jar
+#cp bin/original.jar bin/instrumented.jar
+./jar2apk.sh bin/instrumented.jar bin/input.apk  #use instrumented-jar and original-apk to produce new apk
+
+#INSTALL/UNINSTALL/RUN in ANDROID
+android list avd #get device list including the name
+emulator -avd "devicename" #launch the emulator
+adb uninstall a.b #uninstall original package (Can get in AndroidManifest.xml)
+adb install test_apk-debug-toast-signed.apk #install new apk
+adb shell am start -n a.b/.Main #run in the emulator
