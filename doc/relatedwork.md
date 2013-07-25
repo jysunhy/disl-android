@@ -1,27 +1,26 @@
 #Related Work
 ---
-
 ##AndroidAnalysis
 
-Android
+* [2010 OSDI] [TaintDroid](http://appanalysis.org/)
 
-    *[2010 OSDI] TaintDroid  
+   	dynamic, run on mobile phone, modify dvm, only monitor java code
 
-        dynamic, run on mobile phone, modify dvm, only monitor java code
+* [2011 Security] [A study of android application security](http://www.enck.org/pubs/enck-sec11.pdf)
 
-    *[2011 Security] A study of android application security
+	static analysis
 
-    *[2012 Security] DroidScope
+* [2012 Security] [DroidScope](https://www.usenix.org/conference/usenixsecurity12/droidscope-seamlessly-reconstructing-os-and-dalvik-semantic-views)
 
-        dynamic, virtualization, emulator, low-level instrumentation, reconstruct semantic context, OS-level, Native level, JAVA level APIs
+	dynamic, virtualization, emulator, low-level instrumentation, reconstruct semantic context, OS-level, Native level, JAVA level APIs
 
-    *[2011 CCS]  Android permissions demystified
+* [2011 CCS]  [Android permissions demystified](http://dl.acm.org/citation.cfm?id=2046779)
 
-        detect over-privileged app
+	detect over-privileged app
 
-    *[2012 NDSS] DroidRanger
+* [2012 NDSS] [DroidRanger](http://www.csd.uoc.gr/~hy558/papers/mal_apps.pdf) [ppt](http://www.jrmcclurg.com/papers/talk_overview_hey_you_get_off_my_market.pdf)
 
-    *[app]       DroidBox
+* [app]       [DroidBox](https://code.google.com/p/droidbox/)
 
 
 ##TaintDroid
