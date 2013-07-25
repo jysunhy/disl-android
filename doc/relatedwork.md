@@ -22,6 +22,7 @@
 
 * [app]       [DroidBox](https://code.google.com/p/droidbox/)
 
+* [2012 S&P] [Dissecting android malware: Characterization and evolution](http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6234407)
 
 ##TaintDroid
 open source and include the dynamic instrumentation needed.
