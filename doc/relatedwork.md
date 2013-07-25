@@ -1,5 +1,20 @@
 #Related Work
 ---
+
+##AndroidAnalysis
+
+Android
+    [2010 OSDI] TaintDroid  
+        dynamic, run on mobile phone, modify dvm, only monitor java code
+    [2011 Security] A study of android application security
+    [2012 Security] DroidScope
+        dynamic, virtualization, emulator, low-level instrumentation, reconstruct semantic context, OS-level, Native level, JAVA level APIs
+    [2011 CCS]  Android permissions demystified
+        detect over-privileged app
+    [2012 NDSS] DroidRanger
+    [app]       DroidBox
+
+
 ##TaintDroid
 open source and include the dynamic instrumentation needed.
 http://appanalysis.org/tdro1d.html
