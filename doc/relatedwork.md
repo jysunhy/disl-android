@@ -20,9 +20,16 @@
 	detect over-privileged app
 
 * [2012 NDSS] [DroidRanger](http://www.csd.uoc.gr/~hy558/papers/mal_apps.pdf) [ppt](http://www.jrmcclurg.com/papers/talk_overview_hey_you_get_off_my_market.pdf)
+	
+	static analysis, on Dalvik bytecode
 
 * [app]       [DroidBox](https://code.google.com/p/droidbox/)
 
+* [2012 S&P] [Dissecting android malware: Characterization and evolution](http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6234407)
+
+* [2012 Asia JCIS] [DroidMat](http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6298136)
+
+	static analysis, malware detection through manifest and API calls tracing
 
 ##TaintDroid
 open source and include the dynamic instrumentation needed.
