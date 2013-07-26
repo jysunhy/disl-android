@@ -9,6 +9,7 @@
 * [2011 Security] [A study of android application security](http://www.enck.org/pubs/enck-sec11.pdf)
 
 	static analysis
+	introduce the compilation of DVM:
 
 * [2012 Security] [DroidScope](https://www.usenix.org/conference/usenixsecurity12/droidscope-seamlessly-reconstructing-os-and-dalvik-semantic-views)
 
