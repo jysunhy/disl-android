@@ -22,5 +22,9 @@
 * Step I. Heuristic-based filtering
  * DroidRanger takes a heuristic-based approach to detecting unknown malware
  * The first heuristic involves looking for dynamic loading of untrusted code (for example, use of DexClassLoader)
- * This type of dynamic loading is present in 1,055 apps (0.58%), mostly for ads
- * Discovered Plankton spyware this way
+ * The second heuristic involves looking for suspicious native code
+* Dynamic execution monitoring
+ * Dynamically execute the apps uncovered by step I 
+ * For example, during a call to SmsManager.sendTextMessage, the analysis can get the destination phone number and content
+ * Log questionable system calls, e.g. sys mount, a command which can be used to remount the sys partition as writeable if executed in root mode
+ * Flagged apps are manually inspected and included in the known malware detection engine if they are genuinely malicious
