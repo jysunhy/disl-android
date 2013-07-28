@@ -2,5 +2,8 @@
 ---
 ###source code research
 * figure out the class loading process
+* verify how library is loaded
+* verify how app is loaded
 
-###Native library Case study
+###Native library case study
+
