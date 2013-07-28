@@ -30,6 +30,7 @@
 * [2012 Asia JCIS] [DroidMat](http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6298136)
 
 	static analysis, malware detection through manifest and API calls tracing
+* [CODASPY '13] [AppsPlayground: automatic security analysis of smartphone applications](http://dl.acm.org/citation.cfm?id=2435379&CFID=236376075&CFTOKEN=80349731)
 
 ##TaintDroid
 open source and include the dynamic instrumentation needed.
