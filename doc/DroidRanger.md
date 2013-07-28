@@ -17,3 +17,10 @@
   * Filtering based on dynamic code loading/execution and native code use
   * Analysis based on dynamic monitoring of the execution
   * Conformed malware are fed back to step 1
+
+###Detecting unknown malware
+* Step I. Heuristic-based filtering
+ * DroidRanger takes a heuristic-based approach to detecting unknown malware
+ * The first heuristic involves looking for dynamic loading of untrusted code (for example, use of DexClassLoader)
+ * This type of dynamic loading is present in 1,055 apps (0.58%), mostly for ads
+ * Discovered Plankton spyware this way
