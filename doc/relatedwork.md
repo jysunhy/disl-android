@@ -33,6 +33,8 @@
 * [CODASPY '13] [AppsPlayground: automatic security analysis of smartphone applications](http://dl.acm.org/citation.cfm?id=2435379&CFID=236376075&CFTOKEN=80349731)
 
 * [2011 Workshop on S&P] [Crowdroid](http://dl.acm.org/citation.cfm?id=2046619)
+
+	dynamic analysis, Strace, Behavior based (Linux system call), lightweight client and analysis server
 ##TaintDroid
 open source and include the dynamic instrumentation needed.
 
