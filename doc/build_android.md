@@ -1,7 +1,13 @@
 ##Build Android
 ---
-	curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > ~/bin/repo
+	
+	curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > ./repo
 
+	mkdir -p ~/tdroid/tdroid-4.1.1_r6
+	cd ~/tdroid/tdroid-4.1.1_r6
+	repo init -u https://android.googlesource.com/platform/manifest -b android-4.1.1_r6
+	repo sync
+	
 	sudo add-apt-repository ppa:webupd8team/java
 	sudo apt-get update
 	sudo apt-get install oracle-java7-installer
