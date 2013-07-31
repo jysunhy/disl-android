@@ -1,7 +1,7 @@
 ANDROID PROJECT
 ----
 
-###(DVM source code)(https://github.com/jysunhy/disl-android/blob/master/doc/src-reading/dalvik_source.md)
+###[DVM source code](https://github.com/jysunhy/disl-android/blob/master/doc/src-reading/dalvik_source.md)
 
 
 ###[build instructions](https://github.com/jysunhy/disl-android/blob/master/doc/src-reading/build_android.md)
