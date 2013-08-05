@@ -16,11 +16,12 @@
   	libxml2-utils xsltproc
   
   	
-  	sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev build-essential
-  	wget https://git-core.googlecode.com/files/git-1.8.1.2.tar.gz
-  	
   	mkdir android-source
 	cd android-source
+	
 	#repo init -u https://android.googlesource.com/platform/manifest -b android-4.1.1_r6
 	repo init -u https://android.googlesource.com/platform/manifest
 	repo sync
+	make -j8
+	make -j8 PRODUCT-sdk-sdk showcommands dist
+	
