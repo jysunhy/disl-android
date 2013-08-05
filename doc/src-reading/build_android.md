@@ -9,13 +9,8 @@
 	sudo apt-get update
 	sudo apt-get install oracle-java6-installer
 	
-	sudo apt-get install git-core gnupg flex bison gperf build-essential \
-  	zip curl zlib1g-dev libc6-dev lib32ncurses5-dev ia32-libs \
-  	x11proto-core-dev libx11-dev lib32readline5-dev lib32z-dev \
-  	libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown \
-  	libxml2-utils xsltproc
+	sudo apt-get install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev libc6-dev lib32ncurses5-dev ia32-libs x11proto-core-dev libx11-dev lib32readline5-dev lib32z-dev libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown libxml2-utils xsltproc
   
-  	
   	mkdir android-source
 	cd android-source
 	
@@ -25,3 +20,4 @@
 	make -j8
 	make -j8 PRODUCT-sdk-sdk showcommands dist
 	
+	emulator -sysdir out/target/product/generic/ -system out/target/product/generic/system.img -ramdisk out/target/product/generic/ramdisk.img -data out/target/product/generic/userdata.img -kernel prebuilts/qemu-kernel/arm/kernel-qemu -sdcard sdcard.img -skindir sdk/emulator/skins -skin WVGA800 -scale 0.7 -memory 512 -partition-size 1024
