@@ -1,4 +1,4 @@
-##Build Android on Ubuntu10.04
+##Build Android on Ubuntu13.04
 ---
 	
 	#curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > ./repo
