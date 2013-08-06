@@ -200,6 +200,12 @@ git clone https://android.googlesource.com/platform/dalvik
 	    return (const DexCode*) (pDexFile->baseAddr + pDexMethod->codeOff);
 	}
 
+	libdex/SysUtil.cpp sysMapFileInShmemWritableReadOnly
+	
+	vm/DvmDex.cpp dvmDexFileOpenFromFd
+	
+	libdex/DexFile.cpp dexFileParse
+	
 ###libdex folder
 
 
