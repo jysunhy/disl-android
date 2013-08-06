@@ -30,4 +30,7 @@ ANDROID PROJECT
 			2.3、adb logcat Test1:V Test2:D 显示标签为Test1的所有调试信息，以及显示标签为Test2Debug过滤器过滤后的调试信息
 ####[DDVM](http://developer.android.com/tools/debugging/ddms.html)
 
-###[JNI](http://en.wikipedia.org/wiki/Java_Native_Interface#JNIEnv.2A)
+####Good Blogs
+[1. cover many topics of android dvm](http://blog.csdn.net/Luoshengyang/article/category/838604)
+[2. some building blogs](http://blog.csdn.net/leonan/article/category/1335976)
+
