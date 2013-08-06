@@ -8,9 +8,13 @@
 * ___disable optimization option -> refer to TaintDroid___
 * ___dex file entry point___
 
+
 * bytecode representation and instrumentation
 * native library modification for instrumentation
-* interpreter optimization
+* [Optimization](http://www.netmite.com/android/mydroid/dalvik/docs/dexopt.html)
+  * pre Dex Optimization
+  * interpreter optimization(JIT)
+  * first time
 * whether class can be reloaded(hotswap) -> not supported
 
 ##Done
