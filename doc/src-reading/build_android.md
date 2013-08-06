@@ -17,9 +17,15 @@
 	#repo init -u https://android.googlesource.com/platform/manifest -b android-4.1.1_r6
 	repo init -u https://android.googlesource.com/platform/manifest
 	repo sync
+
+##Compile and run
 	make -j8
-	make -j8 PRODUCT-sdk-sdk showcommands dist
+	#make -j8 PRODUCT-sdk-sdk showcommands dist
 	
 	emulator -sysdir out/target/product/generic/ -system out/target/product/generic/system.img -ramdisk out/target/product/generic/ramdisk.img -data out/target/product/generic/userdata.img -kernel prebuilts/qemu-kernel/arm/kernel-qemu -sdcard sdcard.img -skindir sdk/emulator/skins -skin WVGA800 -scale 0.7 -memory 512 -partition-size 1024
 
 	./out/host/linux-x86/bin/emulator -sysdir out/target/product/generic/ -system out/target/product/generic/system.img -ramdisk out/target/product/generic/ramdisk.img -data out/target/product/generic/userdata.img -kernel prebuilts/qemu-kernel/arm/kernel-qemu-armv7 -sdcard sdcard.img -skindir development/tools/emulator/skins -skin HVGA -scale 0.7 -memory 512 -partition-size 1024
+
+###mmm can be used to compile single module (.)[http://blog.csdn.net/luoshengyang/article/details/6566662]
+	mmm packages/apps/Email/	//generate Email.app to app folder in out/..
+	make snod			//repackage the system.img
