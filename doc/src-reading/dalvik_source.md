@@ -205,8 +205,7 @@ git clone https://android.googlesource.com/platform/dalvik
 	vm/DvmDex.cpp dvmDexFileOpenFromFd
 	
 	libdex/DexFile.cpp dexFileParse
-		1. Only the application is loaded via this function
-		2. the input are odex files loaded in the memory
+		. the input are odex files loaded in the memory
 	
 ###libdex folder
 
