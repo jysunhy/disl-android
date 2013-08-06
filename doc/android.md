@@ -34,3 +34,12 @@ ANDROID PROJECT
 [1. cover many topics of android dvm](http://blog.csdn.net/Luoshengyang/article/category/838604)
 [2. some building blogs](http://blog.csdn.net/leonan/article/category/1335976)
 
+
+####dex optimization
+Dalvik Optimization and Verification With dexopt
+
+There are at least three different ways to create a "prepared" DEX file, sometimes known as "ODEX" (for Optimized DEX):
+
+* The VM does it "just in time". The output goes into a special dalvik-cache directory. This works on the desktop and engineering-only device builds where the permissions on the dalvik-cache directory are not restricted. On production devices, this is not allowed.
+* The system installer does it when an application is first added. It has the privileges required to write to dalvik-cache.
+* The build system does it ahead of time. The relevant jar / apk files are present, but the classes.dex is stripped out. The optimized DEX is stored next to the original zip archive, not in dalvik-cache, and is part of the system image.
