@@ -1,4 +1,4 @@
-##Build Android on Ubuntu10.04
+##Build Android on Ubuntu13.04
 ---
 	
 	#curl https://dl-ssl.google.com/dl/googlesource/git-repo/repo > ./repo
@@ -9,18 +9,23 @@
 	sudo apt-get update
 	sudo apt-get install oracle-java6-installer
 	
-	sudo apt-get install git-core gnupg flex bison gperf build-essential \
-  	zip curl zlib1g-dev libc6-dev lib32ncurses5-dev ia32-libs \
-  	x11proto-core-dev libx11-dev lib32readline5-dev lib32z-dev \
-  	libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown \
-  	libxml2-utils xsltproc
+	sudo apt-get install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev libc6-dev lib32ncurses5-dev ia32-libs x11proto-core-dev libx11-dev lib32readline5-dev lib32z-dev libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown libxml2-utils xsltproc
   
-  	
-  	sudo apt-get install libcurl4-gnutls-dev libexpat1-dev gettext libz-dev libssl-dev build-essential
-  	wget https://git-core.googlecode.com/files/git-1.8.1.2.tar.gz
-  	
   	mkdir android-source
 	cd android-source
+	
 	#repo init -u https://android.googlesource.com/platform/manifest -b android-4.1.1_r6
 	repo init -u https://android.googlesource.com/platform/manifest
 	repo sync
+
+##Compile and run
+	make -j8
+	#make -j8 PRODUCT-sdk-sdk showcommands dist
+	
+	emulator -sysdir out/target/product/generic/ -system out/target/product/generic/system.img -ramdisk out/target/product/generic/ramdisk.img -data out/target/product/generic/userdata.img -kernel prebuilts/qemu-kernel/arm/kernel-qemu -sdcard sdcard.img -skindir sdk/emulator/skins -skin WVGA800 -scale 0.7 -memory 512 -partition-size 1024
+
+	./out/host/linux-x86/bin/emulator -sysdir out/target/product/generic/ -system out/target/product/generic/system.img -ramdisk out/target/product/generic/ramdisk.img -data out/target/product/generic/userdata.img -kernel prebuilts/qemu-kernel/arm/kernel-qemu-armv7 -sdcard sdcard.img -skindir development/tools/emulator/skins -skin HVGA -scale 0.7 -memory 512 -partition-size 1024
+
+###mmm can be used to compile single module [refer.](http://blog.csdn.net/luoshengyang/article/details/6566662)
+	mmm packages/apps/Email/	//generate Email.app to app folder in out/..
+	make snod			//repackage the system.img
