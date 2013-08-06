@@ -202,8 +202,10 @@ git clone https://android.googlesource.com/platform/dalvik
 ###About loading the class
 
 ###About JNI
+	JNI.cpp
 	dvmCallJNIMethod
 	dvmPlatformInvoke
 		written in assemble code
 
 ###About zygote
+	
