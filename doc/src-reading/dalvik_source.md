@@ -4,9 +4,10 @@ git clone https://android.googlesource.com/platform/dalvik
 
 [taintdroid commits](https://github.com/TaintDroid/android_platform_dalvik.git)
 
+----
 ###The vm folder
 
-###structures
+####structures
 	DvmGlobals
 		gDvm.inlinedMethods
 		gDvm.loadedClasses //hashmap
@@ -198,6 +199,9 @@ git clone https://android.googlesource.com/platform/dalvik
 	        return NULL;
 	    return (const DexCode*) (pDexFile->baseAddr + pDexMethod->codeOff);
 	}
+
+###libdex folder
+
 
 ###About loading the class
 
