@@ -1,17 +1,18 @@
 ##To Do
 ---
 ###source code research
-* figure out the class loading process
-* verify how library is loaded
-* verify how app is loaded
-* [done]DroidBox
-* ! dex file entry point
+* ___loading process___
+  * library -> Zygote will load all core java libraries and share with all apps
+  * application class loading -> runtime
+  * native class -> NDK and ?
+* ___disable optimization option -> refer to TaintDroid___
+* ___dex file entry point___
+
 * bytecode representation and instrumentation
-* native library modification
+* native library modification for instrumentation
 * interpreter optimization
-* ! disable optimization option -> refer to TaintDroid
-* whether class can be reloaded(hotswap)
-* 
+* whether class can be reloaded(hotswap) -> not supported
 
-###Native library case study
-
+##Done
+---
+* [done] droidBox
