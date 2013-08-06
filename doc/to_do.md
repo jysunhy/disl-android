@@ -10,9 +10,14 @@
 
 
 * bytecode representation and instrumentation
+  * the instrument point
+    * test that whether it is ok to pause here
+    * test possible deadlock if network deadlock
+    * sleep test
+    
 * native library modification for instrumentation
 * [Optimization](http://www.netmite.com/android/mydroid/dalvik/docs/dexopt.html)
-  * pre Dex Optimization
+  * pre Dex Optimization(odex)
   * interpreter optimization(JIT)
   * first time
 * whether class can be reloaded(hotswap) -> not supported
