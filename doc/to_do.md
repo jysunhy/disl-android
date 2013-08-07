@@ -5,7 +5,10 @@
   * library -> Zygote will load all core java libraries and share with all apps
   * application class loading -> runtime
   * native class -> NDK and ?
-* ___disable optimization option -> refer to TaintDroid___
+* Optimization
+  * ___disable optimization option -> refer to TaintDroid___
+  * [odex](https://code.google.com/p/smali/wiki/DeodexInstructions)
+  * [about dvm optimization](http://www.netmite.com/android/mydroid/dalvik/docs/dexopt.html)
 * ___dex file entry point___
   * dalvik/libdex/DexFile.cpp -> dexFileParse
 
