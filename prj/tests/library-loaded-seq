@@ -1,0 +1,122 @@
+1
+-rw-rw-r-- 1 sunh sunh  3399296 Aug  5 18:53 ./out/target/product/generic/dex_bootjars/system/framework/core.odex
+-rw-rw-r-- 1 sunh sunh  3399296 Aug  5 18:53 ./out/target/product/generic/obj/JAVA_LIBRARIES/core_intermediates/javalib.odex
+-rw-rw-r-- 1 sunh sunh  3399296 Aug  5 18:53 ./out/target/product/generic/system/framework/core.odex
+2
+-rw-rw-r-- 1 sunh sunh    27352 Aug  5 18:53 ./out/target/product/generic/dex_bootjars/system/framework/core-junit.odex
+-rw-rw-r-- 1 sunh sunh    27352 Aug  5 18:53 ./out/target/product/generic/obj/JAVA_LIBRARIES/core-junit_intermediates/javalib.odex
+-rw-rw-r-- 1 sunh sunh    27352 Aug  5 18:53 ./out/target/product/generic/system/framework/core-junit.odex
+3
+-rw-rw-r-- 1 sunh sunh   982688 Aug  5 18:53 ./out/target/product/generic/dex_bootjars/system/framework/bouncycastle.odex
+-rw-rw-r-- 1 sunh sunh   982688 Aug  5 18:53 ./out/target/product/generic/obj/JAVA_LIBRARIES/bouncycastle_intermediates/javalib.odex
+-rw-rw-r-- 1 sunh sunh   982688 Aug  5 18:53 ./out/target/product/generic/system/framework/bouncycastle.odex
+4
+-rw-rw-r-- 1 sunh sunh  1502816 Aug  5 18:54 ./out/target/product/generic/dex_bootjars/system/framework/ext.odex
+-rw-rw-r-- 1 sunh sunh  1502816 Aug  5 18:54 ./out/target/product/generic/obj/JAVA_LIBRARIES/ext_intermediates/javalib.odex
+-rw-rw-r-- 1 sunh sunh  1502816 Aug  5 18:54 ./out/target/product/generic/system/framework/ext.odex
+5
+-rw-rw-r-- 1 sunh sunh 11361232 Aug  5 18:58 ./out/target/product/generic/dex_bootjars/system/framework/framework.odex
+-rw-rw-r-- 1 sunh sunh 11361232 Aug  5 18:59 ./out/target/product/generic/obj/JAVA_LIBRARIES/framework_intermediates/javalib.odex
+-rw-rw-r-- 1 sunh sunh 11361232 Aug  5 19:00 ./out/target/product/generic/system/framework/framework.odex
+6
+-rw-rw-r-- 1 sunh sunh   315968 Aug  5 19:02 ./out/target/product/generic/dex_bootjars/system/framework/android.policy.odex
+-rw-rw-r-- 1 sunh sunh   315968 Aug  5 19:02 ./out/target/product/generic/obj/JAVA_LIBRARIES/android.policy_intermediates/javalib.odex
+-rw-rw-r-- 1 sunh sunh   315968 Aug  5 19:03 ./out/target/product/generic/system/framework/android.policy.odex
+7
+-rw-rw-r-- 1 sunh sunh  2260576 Aug  5 19:07 ./out/target/product/generic/dex_bootjars/system/framework/services.odex
+-rw-rw-r-- 1 sunh sunh  2260576 Aug  5 19:07 ./out/target/product/generic/obj/JAVA_LIBRARIES/services_intermediates/javalib.odex
+-rw-rw-r-- 1 sunh sunh  2260576 Aug  5 19:07 ./out/target/product/generic/system/framework/services.odex
+8
+-rw-rw-r-- 1 sunh sunh  1378496 Aug  5 19:07 ./out/target/product/generic/dex_bootjars/system/framework/apache-xml.odex
+-rw-rw-r-- 1 sunh sunh  1378496 Aug  5 19:10 ./out/target/product/generic/obj/JAVA_LIBRARIES/apache-xml_intermediates/javalib.odex
+-rw-rw-r-- 1 sunh sunh  1378496 Aug  5 19:10 ./out/target/product/generic/system/framework/apache-xml.odex
+9
+-rw-rw-r-- 1 sunh sunh    71936 Aug  5 19:10 ./out/target/product/generic/obj/APPS/SettingsProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh    71936 Aug  5 19:10 ./out/target/product/generic/system/app/SettingsProvider.odex
+10
+-rw-rw-r-- 1 sunh sunh   184472 Aug  5 19:10 ./out/target/product/generic/obj/JAVA_LIBRARIES/android.test.runner_intermediates/javalib.odex
+-rw-rw-r-- 1 sunh sunh   184472 Aug  5 19:10 ./out/target/product/generic/system/framework/android.test.runner.odex
+11
+-rw-rw-r-- 1 sunh sunh  2050320 Aug  5 19:10 ./out/target/product/generic/obj/APPS/CalendarProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  2050320 Aug  5 19:10 ./out/target/product/generic/system/app/CalendarProvider.odex
+12
+-rw-rw-r-- 1 sunh sunh   155400 Aug  5 19:10 ./out/target/product/generic/obj/APPS/MediaProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh   155400 Aug  5 19:10 ./out/target/product/generic/system/app/MediaProvider.odex
+13
+-rw-rw-r-- 1 sunh sunh  2508704 Aug  5 19:09 ./out/target/product/generic/obj/APPS/ContactsProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  2508704 Aug  5 19:10 ./out/target/product/generic/system/app/ContactsProvider.odex
+14
+-rw-rw-r-- 1 sunh sunh   533992 Aug  5 19:11 ./out/target/product/generic/obj/APPS/SystemUI_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh   533992 Aug  5 19:11 ./out/target/product/generic/system/app/SystemUI.odex
+15
+-rw-rw-r-- 1 sunh sunh   722952 Aug  5 19:10 ./out/target/product/generic/obj/APPS/Phone_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh   722952 Aug  5 19:10 ./out/target/product/generic/system/app/Phone.odex
+16
+-rw-rw-r-- 1 sunh sunh   252032 Aug  5 19:10 ./out/target/product/generic/obj/APPS/TelephonyProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh   252032 Aug  5 19:10 ./out/target/product/generic/system/app/TelephonyProvider.odex
+17
+-rw-rw-r-- 1 sunh sunh  1099368 Aug  5 19:10 ./out/target/product/generic/obj/APPS/LatinIME_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  1099368 Aug  5 19:10 ./out/target/product/generic/system/app/LatinIME.odex
+18
+-rw-rw-r-- 1 sunh sunh  3275328 Aug  5 19:11 ./out/target/product/generic/obj/APPS/Settings_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  3275328 Aug  5 19:11 ./out/target/product/generic/system/app/Settings.odex
+19
+-rw-rw-r-- 1 sunh sunh     1920 Aug  5 19:10 ./out/target/product/generic/obj/APPS/Provision_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh     1920 Aug  5 19:10 ./out/target/product/generic/system/app/Provision.odex
+20
+-rw-rw-r-- 1 sunh sunh   160104 Aug  5 19:10 ./out/target/product/generic/obj/APPS/WAPPushManager_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh   160104 Aug  5 19:10 ./out/target/product/generic/system/app/WAPPushManager.odex
+21
+-rw-rw-r-- 1 sunh sunh    16608 Aug  5 19:10 ./out/target/product/generic/obj/APPS/UserDictionaryProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh    16608 Aug  5 19:10 ./out/target/product/generic/system/app/UserDictionaryProvider.odex
+22
+-rw-rw-r-- 1 sunh sunh  2508704 Aug  5 19:09 ./out/target/product/generic/obj/APPS/ContactsProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  2508704 Aug  5 19:10 ./out/target/product/generic/system/app/ContactsProvider.odex
+23
+-rw-rw-r-- 1 sunh sunh    26464 Aug  5 19:09 ./out/target/product/generic/obj/APPS/ApplicationsProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh    26464 Aug  5 19:10 ./out/target/product/generic/system/app/ApplicationsProvider.odex
+24
+-rw-rw-r-- 1 sunh sunh  1097904 Aug  5 19:10 ./out/target/product/generic/obj/APPS/Launcher2_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  1097904 Aug  5 19:10 ./out/target/product/generic/system/app/Launcher2.odex
+25
+-rw-rw-r-- 1 sunh sunh   882768 Aug  5 19:09 ./out/target/product/generic/obj/APPS/Calendar_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh   882768 Aug  5 19:10 ./out/target/product/generic/system/app/Calendar.odex
+26
+-rw-rw-r-- 1 sunh sunh   462192 Aug  5 19:09 ./out/target/product/generic/obj/APPS/DeskClock_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh   462192 Aug  5 19:10 ./out/target/product/generic/system/app/DeskClock.odex
+27
+-rw-rw-r-- 1 sunh sunh   184472 Aug  5 19:10 ./out/target/product/generic/obj/JAVA_LIBRARIES/android.test.runner_intermediates/javalib.odex
+-rw-rw-r-- 1 sunh sunh   184472 Aug  5 19:10 ./out/target/product/generic/system/framework/android.test.runner.odex
+28
+-rw-rw-r-- 1 sunh sunh  2050320 Aug  5 19:10 ./out/target/product/generic/obj/APPS/CalendarProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  2050320 Aug  5 19:10 ./out/target/product/generic/system/app/CalendarProvider.odex
+29
+-rw-rw-r-- 1 sunh sunh  3623008 Aug  5 19:11 ./out/target/product/generic/obj/APPS/Contacts_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  3623008 Aug  5 19:11 ./out/target/product/generic/system/app/Contacts.odex
+30
+-rw-rw-r-- 1 sunh sunh  1795480 Aug  5 19:09 ./out/target/product/generic/obj/APPS/DownloadProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  1795480 Aug  5 19:10 ./out/target/product/generic/system/app/DownloadProvider.odex
+31
+-rw-rw-r-- 1 sunh sunh   155400 Aug  5 19:10 ./out/target/product/generic/obj/APPS/MediaProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh   155400 Aug  5 19:10 ./out/target/product/generic/system/app/MediaProvider.odex
+32
+-rw-rw-r-- 1 sunh sunh    14336 Aug  5 19:09 ./out/target/product/generic/obj/APPS/DrmProvider_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh    14336 Aug  5 19:10 ./out/target/product/generic/system/app/DrmProvider.odex
+33
+-rw-rw-r-- 1 sunh sunh  3440528 Aug  5 19:11 ./out/target/product/generic/obj/APPS/Email_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  3440528 Aug  5 19:11 ./out/target/product/generic/system/app/Email.odex
+34
+-rw-rw-r-- 1 sunh sunh  2840824 Aug  5 19:10 ./out/target/product/generic/obj/APPS/Exchange2_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  2840824 Aug  5 19:10 ./out/target/product/generic/system/app/Exchange2.odex
+35
+-rw-rw-r-- 1 sunh sunh   990976 Aug  5 19:10 ./out/target/product/generic/obj/APPS/Mms_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh   990976 Aug  5 19:10 ./out/target/product/generic/system/app/Mms.odex
+36
+-rw-rw-r-- 1 sunh sunh    74520 Aug  5 19:10 ./out/target/product/generic/obj/APPS/VoiceDialer_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh    74520 Aug  5 19:10 ./out/target/product/generic/system/app/VoiceDialer.odex
+37
+-rw-rw-r-- 1 sunh sunh  1637928 Aug  5 19:10 ./out/target/product/generic/obj/APPS/Gallery2_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  1637928 Aug  5 19:10 ./out/target/product/generic/system/app/Gallery2.odex
+38
+-rw-rw-r-- 1 sunh sunh  2133040 Aug  5 19:10 ./out/target/product/generic/obj/APPS/QuickSearchBox_intermediates/package.odex
+-rw-rw-r-- 1 sunh sunh  2133040 Aug  5 19:10 ./out/target/product/generic/system/app/QuickSearchBox.odex
