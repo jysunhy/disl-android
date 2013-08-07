@@ -29,3 +29,6 @@
 ###mmm can be used to compile single module [refer.](http://blog.csdn.net/luoshengyang/article/details/6566662)
 	mmm packages/apps/Email/	//generate Email.app to app folder in out/..
 	make snod			//repackage the system.img
+
+### DEBUG
+adb logcat -s TAG:[i|e|...]
