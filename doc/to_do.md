@@ -7,6 +7,7 @@
   * native class -> NDK and ?
 * Optimization
   * ___disable optimization option -> refer to TaintDroid___
+  * disable verification process with option [refer](http://www.netmite.com/android/mydroid/dalvik/docs/embedded-vm-control.html)
   * [odex](https://code.google.com/p/smali/wiki/DeodexInstructions)
   * [about dvm optimization](http://www.netmite.com/android/mydroid/dalvik/docs/dexopt.html)
 * ___dex file entry point___
