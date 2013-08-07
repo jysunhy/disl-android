@@ -7,6 +7,7 @@
   * native class -> NDK and ?
 * ___disable optimization option -> refer to TaintDroid___
 * ___dex file entry point___
+  * dalvik/libdex/DexFile.cpp -> dexFileParse
 
 
 * bytecode representation and instrumentation
@@ -14,13 +15,20 @@
     * test that whether it is ok to pause here
     * test possible deadlock if network deadlock
     * sleep test
+    * ___Whether we can use network module in Dalvik???___
     
 * native library modification for instrumentation
+   * native library loaded by zygote
+   * native library loaded for app
+
 * [Optimization](http://www.netmite.com/android/mydroid/dalvik/docs/dexopt.html)
   * pre Dex Optimization(odex)
   * interpreter optimization(JIT)
   * first time
+  
 * whether class can be reloaded(hotswap) -> not supported
+
+
 
 ##Done
 ---
