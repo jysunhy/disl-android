@@ -44,6 +44,13 @@ There are at least three different ways to create a "prepared" DEX file, sometim
 * The system installer does it when an application is first added. It has the privileges required to write to dalvik-cache.
 * The build system does it ahead of time. The relevant jar / apk files are present, but the classes.dex is stripped out. The optimized DEX is stored next to the original zip archive, not in dalvik-cache, and is part of the system image.
 
+make showcommands WITH_DEXPREOPT=false
+
+odex -> dex
+1. disable pre opt
+	make showcommands WITH_DEXPREOPT=false -j16
+2. use tool to de-compile odex to dex
+
 ###DVM Options
 adb shell dalvikvm -help
 -Xdexopt:{none,verified,all,full}
