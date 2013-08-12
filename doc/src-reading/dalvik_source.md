@@ -184,9 +184,12 @@ git clone https://android.googlesource.com/platform/dalvik
 		
 	* AllocTracker
 		if we add support for class unloading
+	
+	* dvmPrepForDexOpt
 
 
 ###About loading the dex
+
 	dexGetCode
 	/*
 	 * Get the DexCode for a DexMethod.  Returns NULL if the class is native
@@ -207,6 +210,10 @@ git clone https://android.googlesource.com/platform/dalvik
 	libdex/DexFile.cpp dexFileParse
 		. the input are odex files loaded in the memory
 	
+	dexopt/OptMain.cpp 
+		the dexopt 
+	vm/analysis/DexPrepare.cpp
+		dvmContinueOptimization
 ###libdex folder
 
 
