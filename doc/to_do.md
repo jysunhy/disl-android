@@ -35,6 +35,9 @@
   
 * whether class can be reloaded(hotswap) -> not supported
 
+* Try adb/ddms tool using jdwp for communication
+
+
 
 ##Some related jobs
 ---
