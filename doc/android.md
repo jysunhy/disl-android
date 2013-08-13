@@ -22,6 +22,7 @@ ANDROID PROJECT
 	emulator -avd $1 -logcat [w|v|d|i|e] -system images/system.img -ramdisk images/ramdisk.img -kernel images/zImage -prop dalvik.vm.execution-mode=int:portable &
 
 ###Android Debug
+####[about adb & adbd architecture](http://blog.csdn.net/liranke/article/details/4999210#_Toc248316006)
 ####LogCat
 		#LogCat(without eclipse)
 		in adb
