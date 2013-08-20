@@ -219,3 +219,17 @@ git clone https://android.googlesource.com/platform/dalvik
 		written in assemble code
 
 ###About zygote
+	1. system/core/rootdir/init.rc
+	2. frameworks/base/cmds/app_process/app_main.cpp <- system/bin/app_process
+		-runtime.start("com.android.internal.os.ZygoteInit", startSystemServer); 
+	3. frameworks/base/core/jni/AndroidRuntime.cpp
+		AndroidRuntime::start
+			startVM
+			startReg
+			ZygoteInit.main(java)
+	4.3 frameworks/base/core/java/com/android/internal/os/ZygoteInit.java
+		ZygoteInit.main
+			registerZygoteSocket -> communiacate with ActivityManagerService
+			startSystemServer	-> start SystemService
+				fork and exec handleSystemServerProcess which calls RuntimeInit.zygoteInit
+			runSelectLoopMode -> wait on the socket for new vm
