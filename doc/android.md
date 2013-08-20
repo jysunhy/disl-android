@@ -22,6 +22,7 @@ ANDROID PROJECT
 	emulator -avd $1 -logcat [w|v|d|i|e] -system images/system.img -ramdisk images/ramdisk.img -kernel images/zImage -prop dalvik.vm.execution-mode=int:portable &
 
 ###Android Debug
+####[about adb & adbd architecture](http://blog.csdn.net/liranke/article/details/4999210#_Toc248316006)
 ####LogCat
 		#LogCat(without eclipse)
 		in adb
@@ -43,3 +44,14 @@ There are at least three different ways to create a "prepared" DEX file, sometim
 * The VM does it "just in time". The output goes into a special dalvik-cache directory. This works on the desktop and engineering-only device builds where the permissions on the dalvik-cache directory are not restricted. On production devices, this is not allowed.
 * The system installer does it when an application is first added. It has the privileges required to write to dalvik-cache.
 * The build system does it ahead of time. The relevant jar / apk files are present, but the classes.dex is stripped out. The optimized DEX is stored next to the original zip archive, not in dalvik-cache, and is part of the system image.
+
+make showcommands WITH_DEXPREOPT=false
+
+odex -> dex
+1. disable pre opt
+	make showcommands WITH_DEXPREOPT=false -j16
+2. use tool to de-compile odex to dex
+
+###DVM Options
+adb shell dalvikvm -help
+-Xdexopt:{none,verified,all,full}

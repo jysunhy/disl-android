@@ -5,17 +5,24 @@
   * library -> Zygote will load all core java libraries and share with all apps
   * application class loading -> runtime
   * native class -> NDK and ?
-* ___disable optimization option -> refer to TaintDroid___
+* Optimization
+  * ___disable optimization option -> refer to TaintDroid___
+  * disable verification process with option [refer](http://www.netmite.com/android/mydroid/dalvik/docs/embedded-vm-control.html)
+  * [odex](https://code.google.com/p/smali/wiki/DeodexInstructions)
+  * [about dvm optimization](http://www.netmite.com/android/mydroid/dalvik/docs/dexopt.html)
 * ___dex file entry point___
-  * dalvik/libdex/DexFile.cpp -> dexFileParse
-
+  * dalvik/libdex/DexFile.cpp -> dexFileParse(this is after optimization)
+  * dexopt/OptMain.cpp -> main (without optimization)
 
 * bytecode representation and instrumentation
-  * the instrument point
-    * test that whether it is ok to pause here
+  * Instrument before loading the dex
+    * test that whether it is ok to pause
     * test possible deadlock if network deadlock
     * sleep test
-    * ___Whether we can use network module in Dalvik???___
+    * ___Whether we can use network module in Dalvik???___ or we cannot load the system library since it is loaded before android is all ready
+  * Instrument before loading from memory
+    * where is the bytecode stored in memory
+    * how to instrument from bytecodes in memory(which is already optimized)
     
 * native library modification for instrumentation
    * native library loaded by zygote
@@ -28,8 +35,11 @@
   
 * whether class can be reloaded(hotswap) -> not supported
 
+* Try adb/ddms tool using jdwp for communication
 
 
-##Done
+
+##Some related jobs
 ---
-* [done] droidBox
+* TaindDroid
+* droidBox
