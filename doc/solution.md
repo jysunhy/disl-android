@@ -5,3 +5,6 @@ SOLUTION
 refer to adb
 	modify system/core/adb/Android.mk
 	modify build/core/user_tags.mk
+	
+___done___ use socket to connect from a client to a host
+___to-do___ try start a service when the android linux starts as a channel for instrumentation
