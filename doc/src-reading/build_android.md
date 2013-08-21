@@ -32,3 +32,13 @@
 
 ### DEBUG
 adb logcat -s TAG:[i|e|...]
+
+### make
+make snod and emulator builds.
+Symptom: When using make snod (make system no dependencies) on emulator builds, the resulting build doesn't work.
+
+Cause: All emulator builds now run Dex optimization at build time by default, which requires to follow all dependencies to re-optimize the applications each time the framework changes.
+
+Fix: Locally disable Dex optimizations with export WITH_DEXPREOPT=false, delete the existing optimized versions with make installclean and run a full build to re-generate non-optimized versions. After that, make snod will work.
+
+
