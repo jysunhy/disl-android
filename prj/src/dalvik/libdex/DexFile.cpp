@@ -297,17 +297,17 @@ void dexFileSetupBasicPointers(DexFile* pDexFile, const u1* data) {
 #define DEX_SIZE 50000000
 #define min(a,b) a>b?b:a
 
-#define INSTRUMENT true
+#define INSTRUMENT false
 
 /*
  * haiyang function
  */
-int instrument(const char* in, int i_len,char* out, int &o_len){
-    if(!INSTRUMENT){
+int instrument(const char* in, int i_len, char* &out, int &o_len){
+    /*if(!INSTRUMENT){
 	out = const_cast<char *>(in);
 	o_len = i_len;
 	return 0;
-	}
+	}*/
 
     struct sockaddr_in client_addr;
     bzero(&client_addr,sizeof(client_addr));
@@ -405,6 +405,7 @@ int instrument(const char* in, int i_len,char* out, int &o_len){
  *
  * On success, return a newly-allocated DexFile.
  */
+//DexFile* dexFileParse(const u1* data, size_t length, int flags)
 DexFile* dexFileParse(const u1* _data, size_t _length, int flags)
 {
     DexFile* pDexFile = NULL;
@@ -413,10 +414,24 @@ DexFile* dexFileParse(const u1* _data, size_t _length, int flags)
     int result = -1;
 
     /*HAIYANG*/
-    u1* data;
+
+    char* tmp=NULL;
+    u1* data=NULL;
     int length;
     ALOG(LOG_INFO, "HAIYANG", "in %s for dex original sized: %d",__FUNCTION__, _length);
-    instrument((const char*)_data,_length,(char*)data,length);
+    ALOG(LOG_INFO, "HAIYANG", "sizeof u1: %d", sizeof(u1));
+if(INSTRUMENT) {
+    instrument((const char*)_data,_length * sizeof(u1),tmp,length);
+    length = length / sizeof(u1);
+    data = new u1[length];
+    memcpy(data,tmp,length*sizeof(u1));
+}
+else{
+   data = new u1[_length];
+   memcpy(data,_data,length*sizeof(u1));
+   length = _length;
+}
+
     ALOG(LOG_INFO, "HAIYANG", "in %s for dex new sized: %d",__FUNCTION__, length);
 
 
@@ -544,7 +559,12 @@ bail:
         dexFileFree(pDexFile);
         pDexFile = NULL;
     }
-    delete []data;
+
+    if(tmp)
+        delete []tmp;
+    if(data)
+        delete []data;
+
     return pDexFile;
 }
 
