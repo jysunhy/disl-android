@@ -55,3 +55,7 @@ odex -> dex
 ###DVM Options
 adb shell dalvikvm -help
 -Xdexopt:{none,verified,all,full}
+
+###Libraries
+* [dex2jar](https://code.google.com/p/dex2jar/)
+* [smali](https://code.google.com/p/smali/)

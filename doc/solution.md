@@ -10,3 +10,7 @@ modify init.rc (system/core/rootdir/init.rc)
 
 ___done___ use socket to connect from a client to a host
 ___to-do___ try start a service when the android linux starts as a channel for instrumentation
+
+###Where to inject
+@@@found /data/dalvik-cache stored optimized dex
+if remove these files, new application won't work
