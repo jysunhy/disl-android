@@ -1,3 +1,6 @@
+#ifndef _BYTE_BUFFER_H_
+#define _BYTE_BUFFER_H_
+
 #include <pthread.h>
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -18,3 +21,5 @@ private:
 	int _capacity;
 	int _used;
 };
+
+#endif
