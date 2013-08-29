@@ -49,22 +49,22 @@ try{
                         if ((method.access & Opcodes.ACC_ABSTRACT) != 0)
                                 continue;
 
-//                        InsnList instructions = method.instructions;
+                        InsnList instructions = method.instructions;
 
-//                        instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC,
-//                                        "ch/usi/dag/experiment/runtime/MyAnalysis",
-//                                        "onMethodEntry", "(Ljava/lang/String;)V"));
-//                        instructions.insert(new LdcInsnNode(""));
-//                        Iterator<AbstractInsnNode> i = instructions.iterator();
-//                        while(i.hasNext()){
-//                                AbstractInsnNode curInsn = i.next();
-//                                if(curInsn instanceof LineNumberNode){
-//                                        System.out.println(((LineNumberNode)curInsn).line);
-//                                }else
-//                                {
- //                                       System.out.println("opcode:"+curInsn.getType());
-//                                }
-//                        }
+                        instructions.insert(new MethodInsnNode(Opcodes.INVOKESTATIC,
+                                        "ch/usi/dag/experiment/runtime/MyAnalysis",
+                                        "onMethodEntry", "(Ljava/lang/String;)V"));
+                        instructions.insert(new LdcInsnNode(""));
+                        Iterator<AbstractInsnNode> i = instructions.iterator();
+                        while(i.hasNext()){
+                                 AbstractInsnNode curInsn = i.next();
+                                if(curInsn instanceof LineNumberNode){
+                                        System.out.println(((LineNumberNode)curInsn).line);
+                                }else
+                                {
+                                       System.out.println("opcode:"+curInsn.getType());
+                                }
+                        }
 
  	               }
 		}
