@@ -1,4 +1,4 @@
-// Server running on the android linux
+// Server running on the instrument server or as an daemon service on android
 // S.HY 2013
 // Waiting for connection from dalvik library loading process
 
@@ -6,6 +6,7 @@
 #include <stdio.h>      // for printf()
 #include <stdlib.h>     // for exit()
 #include <string.h>     // for strcpy(),strerror() and strlen()
+#include <unistd.h>
 #include <fcntl.h>      // for file i/o constants
 #include <sys/stat.h>       // for file i/o constants
 #include <errno.h>
@@ -20,13 +21,6 @@
 #include <signal.h>     /* for signal                     */
 #include <semaphore.h>      /* for p-thread semaphores        */
 /* ------------------------------------------------------------------------ */
-
-/*----- HTTP response messages ----------------------------------------------
-#define OK_IMAGE    "HTTP/1.0 200 OK\nContent-Type:image/gif\n\n"
-#define OK_TEXT     "HTTP/1.0 200 OK\nContent-Type:text/html\n\n"
-#define NOTOK_404   "HTTP/1.0 404 Not Found\nContent-Type:text/html\n\n"
-#define MESS_404    "<html><body><h1>FILE NOT FOUND</h1></body></html>"
-*/
 
 //----- Defines -------------------------------------------------------------
 #define BUF_SIZE            1024    // buffer size in bytes
@@ -89,7 +83,7 @@ my_thread (void *arg)
 			goto release;
 		char filename[100];
 		int len = snprintf(filename,100,"tmp%d.odex",dex_size);
-		//filename[len]=0;
+		filename[len]=0;
 		output = fopen(filename,"wb");
 		while(cnt<dex_size) {
 			retcode = recv (myClient_s, buf, BUF_SIZE, 0);
@@ -97,9 +91,6 @@ my_thread (void *arg)
 				goto release;
 			memcpy(dex+cnt,buf,retcode);
 			fwrite(buf, sizeof(char),retcode,output);
-			//strncpy(dex+cnt,buf,retcode);
-			
-		//	fwrite(dex+cnt,sizeof(char),retcode,output);
 			cnt+=retcode;
 		}
 		fclose(output);
@@ -165,6 +156,15 @@ main (void)
 	//	dexes[i] = malloc(20000000);
 
 	int index=0;
+//test system
+    char arg[300]="/home/sunh/makejar.sh";
+    //system(arg);
+    printf("\ndone message in program\n");
+
+
+
+
+
 	while (TRUE)
 	{
 		printf ("my server is ready ...\n");
@@ -196,9 +196,6 @@ main (void)
 		}
 		index++;
 	}
-	i = 0;
-	//for(; i < NTHREADS; i++)
-	//	free(dexes[i]);
 
 	/* To make sure this "main" returns an integer --- */
 	close (server_s);       // close the primary socket

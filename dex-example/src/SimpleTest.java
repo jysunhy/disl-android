@@ -33,8 +33,10 @@ try{
 		File outFile = new File("output.dex");
 		int api = Opcodes.ASM4;
                 ApplicationReader ar = new ApplicationReader(api,inFile);
+		System.out.println("ar ready ");
                 ApplicationNode appnode = new ApplicationNode(Opcodes.ASM4);
                 ar.accept(appnode, 0);
+				/*
 		List<ClassNode> classes = appnode.classes;
 
 //                System.err.println("=== Instrumenting class " + clazz.name + " ===");
@@ -68,8 +70,11 @@ try{
 
  	               }
 		}
-                ApplicationWriter aw = new ApplicationWriter();
-                ar.accept(aw,0);
+		*/
+               
+	   	ApplicationWriter aw = new ApplicationWriter();
+        appnode.accept(aw);
+		System.out.println("aw ready ");
 
 		FileOutputStream os = null;
 		byte [] b = aw.toByteArray();
