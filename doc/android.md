@@ -59,3 +59,4 @@ adb shell dalvikvm -help
 ###Libraries
 * [dex2jar](https://code.google.com/p/dex2jar/)
 * [smali](https://code.google.com/p/smali/)
+* build/core/definitions.mk
