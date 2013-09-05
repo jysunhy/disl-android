@@ -37,6 +37,13 @@
 
 #define min(a,b) a>b?b:a
 
+//int able[300];
+//int able_size = 0;
+int blacklist[300];
+int bl_size = 0;
+int alllist[300];
+int a_size = 0;
+
 /* global variables ---------------------------------------------------- */
 
 sem_t thread_sem[NTHREADS];
@@ -52,6 +59,7 @@ char* dexes[NTHREADS];
 my_thread (void *arg)
 {
 	unsigned int myClient_s;    //copy socket
+	int success = 1;
 
 	/* other local variables ------------------------------------------------ */
 	char buf[BUF_SIZE]; // buffer for socket
@@ -59,31 +67,51 @@ my_thread (void *arg)
 
 	int index = ((int*)arg)[1]%NTHREADS;
 	printf("in %d thread\n",index);
-	//char* dex=dexes[index];
 	char* dex = (char*)malloc(20000000);
-
-
 	unsigned int dex_size=0;
 	unsigned int cnt=0;
 
 	myClient_s = *(unsigned int *) arg; // copy the socket
 	FILE* output = NULL;
-	printf("new client\n");
 
-	{
-		// receive from the client the dex content
-		retcode = recv(myClient_s, &dex_size, sizeof(int), 0);
-		printf("need to receive %d bytes\n", dex_size);
-		if(dex_size>20000000) {
-			goto release;
-			printf("too big size %d\n", dex_size);
-			
+	// receive from the client the dex content
+	retcode = recv(myClient_s, &dex_size, sizeof(int), 0);
+	printf("receive dex size: %d\n", dex_size);
+	if(dex_size>20000000) {
+		goto release;
+		printf("too big size %d\n", dex_size);
+	}
+	int i = 0;
+	for(; i < bl_size; i++) {
+		if(dex_size == blacklist[i]) {
+			printf("this one can not be insturmented\n");
+			success = 0;
+			break;
 		}
-		if(retcode != sizeof(int))
-			goto release;
+	}
+	if(success) {
+		for(i=0;i < a_size; i++) {
+			if(dex_size == alllist[i]) {
+				success = 0;
+				blacklist[bl_size++]=dex_size;
+				printf("found new in black list %d\n", dex_size);
+				break;
+			}
+		}
+		if(success)
+			alllist[a_size++]=dex_size;
+	}
+	if(!success) {
+		bl_size = 0;
+	}
+
+	if(success) {
 		char filename[100];
-		int len = snprintf(filename,100,"tmp%d.odex",dex_size);
+		char filename2[100];
+		int len = snprintf(filename,100,"tmp%d.dex",dex_size);
+		int len2 = snprintf(filename2,100,"tmp%d.dex.output",dex_size);
 		filename[len]=0;
+		filename2[len2]=0;
 		output = fopen(filename,"wb");
 		while(cnt<dex_size) {
 			retcode = recv (myClient_s, buf, BUF_SIZE, 0);
@@ -95,22 +123,61 @@ my_thread (void *arg)
 		}
 		fclose(output);
 		output=NULL;
-		printf("dex received size: %d\n", dex_size);
+		//
+		char cmd[300]="java -jar /home/sunh/instr.jar ";
+		snprintf(cmd+strlen(cmd),300,"%s ",filename);
+		snprintf(cmd+strlen(cmd),300,"%s",filename2);
+		printf("%s\n", cmd);
+		system(cmd);
 
-		retcode = send(myClient_s, &dex_size, sizeof(int),0);
+		FILE * input = NULL;
+		input = fopen(filename2,"rb");
+		if(!input) {
+			printf("cannot open file");
+			success = -1;
+		}
+		int newsize = 0;
+		while( (retcode=fread(buf,sizeof(unsigned char),BUF_SIZE, input))!=0)
+		{
+			newsize += retcode;
+		}
+		fclose(input);
+		printf("old size/new size: %d/%d",dex_size,newsize);
+		retcode = send(myClient_s, &newsize, sizeof(int),0);
 		if(retcode != sizeof(int))
 			goto release;
-		printf("return size returned: %d\n", dex_size);
+		input = fopen(filename2,"rb");
+		while( (retcode=fread(buf,sizeof(unsigned char),BUF_SIZE, input))!=0)
+		{
+			newsize -= retcode;
+			send(myClient_s, buf, BUF_SIZE,0);
+		}
+		if(newsize != 0) {
+			printf("err happens during sending new file\n");
+		}
 
+		fclose(input);
+	}else {
 		cnt = 0;
-		while(cnt < dex_size){
-			retcode = send(myClient_s, dex+cnt, min(BUF_SIZE,dex_size-cnt), 0);
+		while(cnt<dex_size) {
+			retcode = recv (myClient_s, buf, BUF_SIZE, 0);
 			if (retcode < 0)
 				goto release;
-			cnt += retcode;
+			memcpy(dex+cnt,buf,retcode);
+			cnt+=retcode;
 		}
-		printf("return dex returned:\n" );
+		printf("received %d bytes\n",cnt);
+		retcode = send(myClient_s, &dex_size, sizeof(int), 0);
+		cnt = 0;
+		while(cnt < dex_size) {
+			retcode = send(myClient_s, dex+cnt, min(BUF_SIZE, dex_size-cnt),0);
+			if(retcode < 0)
+				goto release;
+			cnt+=retcode;
+		}
+		printf("return size returned: %d\n", cnt);
 	}
+	
 release:
 	printf("get to release on client\n");
 	if(output)
@@ -156,10 +223,8 @@ main (void)
 	//	dexes[i] = malloc(20000000);
 
 	int index=0;
-//test system
-    char arg[300]="/home/sunh/makejar.sh";
-    //system(arg);
-    printf("\ndone message in program\n");
+	//test system
+	printf("\ndone message in program\n");
 
 
 
