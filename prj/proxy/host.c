@@ -40,26 +40,26 @@
 pthread_mutex_t lock;
 
 int stop = 0;
-int blacksize = 0;
+int blacksize = 1;
 int blacklist[300]= {
-	2973048, /* core.jar */
+	//2973048, /* core.jar */
 	//24244,  /* core-junit.jar */
-	//10157580, /* framework.jar */
+	10157580, /* framework.jar */
 	//866260, /* bouncycastle.jar */
-	1334004, /* ext.jar */
+	//1334004, /* ext.jar */
 	//283636, /* android.policy.jar */
 	//2027844, /* services.jar */
 	//1223876, /* apache-xml.jar */
-	2916180,	/* Setting.apk */
-	978612,  /* Launcher2.apk */
+	//2916180,	/* Setting.apk */
+	//978612,  /* Launcher2.apk */
 };
 int corelist[10] = {
 	2973048,
-	1334004
+	1334004,
 };
 const char*corename[10] = {
 	"core.jar",
-	"ext.jar"
+	"ext.jar",
 };
 int coresize = 2;
 int liblist[300] = {
@@ -325,7 +325,7 @@ my_thread (void *arg)
 		success = 0;
 	}else if(find_lib(dex_size)>=0){
 		printf("receive lib: %s of size %d \n",libname[find_lib(dex_size)],dex_size);
-		if(iscore(dex_size) >=0)
+		if(iscore(dex_size))
 			coreinst = 1;
 		success = 1;
 	}else {
