@@ -5,7 +5,7 @@
 #include <stdlib.h> // for exit
 #include <string.h> // for bzero
 
-#define HELLO_WORLD_SERVER_PORT 6666
+#define HELLO_WORLD_SERVER_PORT 6665
 #define BUFFER_SIZE 1024
 #define SERVER_IP "127.0.0.1"
 #define min(a,b) a>b?b:a
@@ -48,39 +48,73 @@ int main(int argc, char **argv)
 	}
 
 
-	char* dex = malloc(10000000);
-	int dex_size=10000000;
-	dex[0] = '1';
-	int length = 0;
+
+
+	FILE* input = fopen(argv[1],"rb");
+	if(!input){
+		printf("openerrr\n");
+		exit(1);
+	}
+	char *content = malloc(10000000);
+	int rc;
+	int filesize=0;
+	while( (rc=fread(content+filesize,sizeof(unsigned char),BUFFER_SIZE, input))!=0)
+	{
+		filesize+=rc;
+	}
+	fclose(input);
 
 	char buffer[BUFFER_SIZE];
-	send(client_socket,&dex_size,sizeof(int),0);
+	char* dex = malloc(10000000);
+	int dex_size=10000000;
+
+	int i = 0;
+	for(; i < 10; i++){
+	int length = 0;
+	printf("sending size:%d!\n",filesize);
+	send(client_socket,&filesize,sizeof(int),0);
 	int cnt = 0;
-	while(cnt < dex_size) {
-		length = send(client_socket,dex+cnt,min(BUFFER_SIZE,dex_size-cnt),0);
+	while(cnt < filesize) {
+		length = send(client_socket,content+cnt,min(BUFFER_SIZE,filesize-cnt),0);
 		if(length<=0)
 			goto error;
 		cnt+=length;
 	}
+	printf("receiving!\n");
 	length = recv(client_socket, &dex_size, sizeof(int), 0);
 	if(length!=sizeof(int))
 		goto error;
 	cnt = 0;
+
+	//FILE* output=fopen("tmp.dex","wb");
+
 	while( cnt < dex_size)
 	{
 		length = recv(client_socket,buffer,BUFFER_SIZE,0);
 		if(length <= 0)
 			goto error;
-		strncpy(dex+cnt,buffer,length);
+	//	fwrite(buffer,sizeof(unsigned char), length, output);
+		memcpy(dex+cnt,buffer,length);
 		cnt+=length;
 	}
-	dex[cnt]=0;
-	printf("%s\n",dex);
-	printf("size: %d\n",cnt);
+	printf("receive dex size %d:\n",dex_size);
+	//dex[cnt]=0;
+	if(memcmp(content,dex,dex_size))
+		printf("not equal\n");
+	else
+		printf("equal\n");
+
+	}
+	free(content);
+	//fclose(output);
+	
+	if(dex)
+		free(dex);
 	return 0;
 error:
+	if(dex)
+		free(dex);
 	close(client_socket);
 	printf("error happens\n");
-	exit(-1);
 	return 0;
 }

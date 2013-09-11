@@ -9,6 +9,8 @@
 #include <fcntl.h>      // for file i/o constants
 #include <sys/stat.h>       // for file i/o constants
 #include <errno.h>
+#include <cutils/sockets.h>
+#include <cutils/log.h>
 
 /* FOR BSD UNIX/LINUX  ---------------------------------------------------- */
 #include <sys/types.h>      //
@@ -19,153 +21,192 @@
 #include <pthread.h>        /* P-thread implementation        */
 #include <signal.h>     /* for signal                     */
 #include <semaphore.h>      /* for p-thread semaphores        */
-/* ------------------------------------------------------------------------ */
-
-/*----- HTTP response messages ----------------------------------------------
-#define OK_IMAGE    "HTTP/1.0 200 OK\nContent-Type:image/gif\n\n"
-#define OK_TEXT     "HTTP/1.0 200 OK\nContent-Type:text/html\n\n"
-#define NOTOK_404   "HTTP/1.0 404 Not Found\nContent-Type:text/html\n\n"
-#define MESS_404    "<html><body><h1>FILE NOT FOUND</h1></body></html>"
-*/
+#include <sys/un.h>
 
 //----- Defines -------------------------------------------------------------
 #define BUF_SIZE            1024    // buffer size in bytes
-#define PORT_NUM            6666    // Port number for a Web server (TCP 5080)
-#define PEND_CONNECTIONS     100    // pending connections to hold
+#define HOST_PORT            6666    // Port number for a Web server (TCP 5080··)
+#define LISTEN_PORT            6664    // Port number for a Web server (TCP 5080)
 #define TRUE                   1
 #define FALSE                  0
-#define NTHREADS 5      /* Number of child threads        */
-#define NUM_LOOPS  10       /* Number of local loops          */
-#define SCHED_INTVL 5       /* thread scheduling interval     */
-#define HIGHPRIORITY 10
-
+#define SERVER_IP "10.10.6.101"
+#define SOCKFILE "/dev/socket/instrument"
 #define min(a,b) a>b?b:a
 
-/* global variables ---------------------------------------------------- */
+int map_key[300];
+int map_size=0;
+int map_value[300];
 
-sem_t thread_sem[NTHREADS];
-int next_thread;
-int can_run;
-int i_stopped[NTHREADS];
-
-//unsigned int client_s;      // Client socket descriptor
-
-
-/* Child thread implementation ----------------------------------------- */
-    void *
-my_thread (void *arg)
+void * my_thread (void *arg)
 {
-    unsigned int myClient_s;    //copy socket
+	ALOG (LOG_INFO,"HAIYANG","IS: new client of instrument server");
+	unsigned int myClient_s;    //copy socket
+	char buf[BUF_SIZE]; // buffer for socket
+	int retcode;       // Return code
 
-    /* other local variables ------------------------------------------------ */
-    char buf[BUF_SIZE]; // buffer for socket
-    unsigned int retcode;       // Return code
+	unsigned int dex_size=0;
+	unsigned int cnt=0;
+	cnt = 0;
+	dex_size=0;
+	myClient_s = *(unsigned int *) arg; // copy the socket
+	int sock_host = -1;
+	while(TRUE) {
+		retcode = recv(myClient_s, &dex_size, sizeof(int), 0);
+		ALOG (LOG_INFO,"HAIYANG","IS: receive %d size from client", dex_size);
+		
+		if(dex_size == -1)
+		{
+			break;
+		}
+		if(dex_size == -2) {
+			int key;
+			recv(myClient_s, &key, sizeof(int),0);
+			int i = 0;
+			for(; i < map_size; i++) {
+				if(map_key[i] == key)
+					break;
+			}
+			if(i == map_size) {
+				int tmp = -1;
+				send(myClient_s,&tmp,sizeof(int),0);
+			}else {
+				send(myClient_s,&map_value[i],sizeof(int),0);
+			}
+			break;
+		}
+		int i = 0;
+		for(; i< map_size;i++){
+			if(map_key[i] == dex_size){
+				break;
+			}
+		}
+		if(i == map_size)
+			map_key[map_size++] = dex_size;
 
-    char *dex=NULL;
-    unsigned int dex_size=0;
-    unsigned int cnt=0;
+		if(retcode != sizeof(int))
+			goto release;
+		while(sock_host < 0) {
+			sock_host = socket_network_client(SERVER_IP, HOST_PORT, SOCK_STREAM);
+			if(sock_host < 0){
+				ALOG (LOG_INFO,"HAIYANG","new host sock error");
+				sleep(1);
+			}
+			
+		}
+		ALOG (LOG_INFO,"HAIYANG","IS: sending %d size from IS", dex_size);
+		retcode = send(sock_host, &dex_size, sizeof(int), 0);
+		while(cnt<dex_size) {
+			retcode = recv (myClient_s, buf, BUF_SIZE, 0);
+			if (retcode < 0)
+				goto release;
+			send(sock_host, buf, retcode, 0);
+			cnt+=retcode;
+		}
 
-    myClient_s = *(unsigned int *) arg; // copy the socket
-
-    // receive from the client the dex content
-    retcode = recv(myClient_s, &dex_size, sizeof(int), 0);
-    if(retcode != sizeof(int))
-        goto error;
-    dex = (char*)malloc(dex_size+1);
-    while(cnt<dex_size) {
-        retcode = recv (myClient_s, buf, BUF_SIZE, 0);
-        /* if receive error --- */
-        if (retcode < 0)
-            goto error;
-        strncpy(dex+cnt,buf,retcode);
-        cnt+=retcode;
-    }
-
-    printf("dex received size: %d\n", dex_size);
-
-    retcode = send(myClient_s, &dex_size, sizeof(int),0);
-    if(retcode != sizeof(int))
-        goto error;
-
-cnt = 0;
-    while(cnt < dex_size){
-        retcode = send(myClient_s, dex+cnt, min(BUF_SIZE,dex_size-cnt), 0);
-        if (retcode < 0)
-            goto error;
-        cnt += retcode;
-    }
-cleanup:
-    close (myClient_s); // close the client connection
-    free(dex);
-    pthread_exit(NULL);
-error:
-    if(dex)
-        free(dex);
-    printf("error occurs\n");
-    exit(-1);
+		cnt = 0;
+		retcode = recv(sock_host, &dex_size, sizeof(int), 0);
+		if(i == map_size - 1){
+			map_value[map_size-1] = dex_size;
+		}
+		ALOG (LOG_INFO,"HAIYANG","IS: new size %d size from HS", dex_size);
+		if(retcode != sizeof(int))
+			goto release;
+		retcode = send(myClient_s, &dex_size, sizeof(int), 0);
+		while(cnt<dex_size) {
+			retcode = recv (sock_host, buf, BUF_SIZE, 0);
+			if (retcode < 0)
+				goto release;
+			send(myClient_s, buf, retcode, 0);
+			cnt+=retcode;
+		}
+		close (sock_host);
+		sock_host = -1;
+	}
+release:
+	if(sock_host > 0)
+		close (sock_host);
+	close (myClient_s); // close the client connection
+	pthread_detach(pthread_self());
+	pthread_exit(NULL);
+	return NULL;
 }
 
 //===== Main program ========================================================
-    int
-main (void)
+int main (void)
 {
-    /* local variables for socket connection -------------------------------- */
-    unsigned int server_s;  // Server socket descriptor
-    struct sockaddr_in server_addr; // Server Internet address
-    unsigned int            client_s;           // Client socket descriptor
-    struct sockaddr_in client_addr; // Client Internet address
-    struct in_addr client_ip_addr;  // Client IP address
-    int addr_len;           // Internet address length
+struct sockaddr_un address;
+ int socket_fd, connection_fd;
+ socklen_t address_length;
+ pid_t child;
+ 
 
-    unsigned int ids;       // holds thread args
-    pthread_attr_t attr;        //  pthread attributes
+ socket_fd = socket(PF_UNIX, SOCK_STREAM, 0);
+ if(socket_fd < 0)
+ {
+		ALOG (LOG_INFO,"HAIYANG","create socket error");
+  return 1;
+ } 
+
+ /* start with a clean address structure */
+ memset(&address, 0, sizeof(struct sockaddr_un));                                                                                                                                                                                           
+ address.sun_family = AF_UNIX;
+ snprintf(address.sun_path, UNIX_PATH_MAX, SOCKFILE);
+ if(bind(socket_fd, 
+         (struct sockaddr *) &address,  
+         sizeof(struct sockaddr_un)) != 0)                                                                                                                                                                                                  
+ {
+		ALOG (LOG_INFO,"HAIYANG","bind socket error");
+  return 1;
+ }
+	char mod[]="0666";
+	chmod(address.sun_path, strtol(mod,0,8));
+
+ if(listen(socket_fd, 5) != 0)
+ {
+  printf("listen() failed\n");
+  return 1;
+ }
+
+
+
+unsigned int ids;       // holds thread args
+    pthread_attr_t attr;        //  pthread attributes     
     pthread_t threads;      // Thread ID (used by OS)
 
-    /* create a new socket -------------------------------------------------- */
-    server_s = socket (AF_INET, SOCK_STREAM, 0);
 
-    /* fill-in address information, and then bind it ------------------------ */
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_port = htons (PORT_NUM);
-    server_addr.sin_addr.s_addr = htonl (INADDR_ANY);
-    bind (server_s, (struct sockaddr *) &server_addr, sizeof (server_addr));
 
-    /* Listen for connections and then accept ------------------------------- */
-    listen (server_s, PEND_CONNECTIONS);
-/* the web server main loop ============================================= */
-    pthread_attr_init (&attr);
-    while (TRUE)
-    {
-        printf ("my server is ready ...\n");
+	pthread_attr_init (&attr);
 
-        /* wait for the next client to arrive -------------- */
-        addr_len = sizeof (client_addr);
-        client_s =
-            accept (server_s, (struct sockaddr *) &client_addr, &addr_len);
+	while (TRUE)
+	{
+		ALOG (LOG_INFO,"HAIYANG","my server is ready ...");
 
-        printf ("a new client arrives ...\n");
+ 		connection_fd = accept(socket_fd,                     
+                               (struct sockaddr *) &address,  
+                               &address_length);                                                                                                                                                                                      
+		ALOG (LOG_INFO,"HAIYANG","a new client arrives ...");
 
-        if (client_s == FALSE)
-        {
-            printf ("ERROR - Unable to create socket \n");
-            exit (FALSE);
-        }
+		if (connection_fd == FALSE)
+		{
+			ALOG (LOG_INFO,"HAIYANG","ERROR - Unable to create socket");
+			continue;
+		}
 
-        else
-        {
-            /* Create a child thread --------------------------------------- */
-            ids = client_s;
-            pthread_create (    /* Create a child thread        */
-                    &threads,   /* Thread ID (system assigned)  */
-                    &attr,  /* Default thread attributes    */
-                    my_thread,  /* Thread routine               */
-                    &ids);  /* Arguments to be passed       */
+		else
+		{
+			/* Create a child thread --------------------------------------- */
+			ids = connection_fd;
+			pthread_create (    /* Create a child thread        */
+					&threads,   /* Thread ID (system assigned)  */
+					&attr,  /* Default thread attributes    */
+					my_thread,  /* Thread routine               */
+					&ids);  /* Arguments to be passed       */
 
-        }
-    }
+		}
+	}
 
-    /* To make sure this "main" returns an integer --- */
-    close (server_s);       // close the primary socket
-    return (TRUE);      // return code from "main"
+	/* To make sure this "main" returns an integer --- */
+	close (socket_fd);       // close the primary socket
+	return (TRUE);      // return code from "main"
 }
-                                                             
+

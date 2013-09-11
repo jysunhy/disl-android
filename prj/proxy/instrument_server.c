@@ -33,6 +33,10 @@
 #define SOCKFILE "/dev/socket/instrument"
 #define min(a,b) a>b?b:a
 
+int map_key[300];
+int map_size=0;
+int map_value[300];
+
 void * my_thread (void *arg)
 {
 	ALOG (LOG_INFO,"HAIYANG","IS: new client of instrument server");
@@ -54,6 +58,31 @@ void * my_thread (void *arg)
 		{
 			break;
 		}
+		if(dex_size == -2) {
+			int key;
+			recv(myClient_s, &key, sizeof(int),0);
+			int i = 0;
+			for(; i < map_size; i++) {
+				if(map_key[i] == key)
+					break;
+			}
+			if(i == map_size) {
+				int tmp = -1;
+				send(myClient_s,&tmp,sizeof(int),0);
+			}else {
+				send(myClient_s,&map_value[i],sizeof(int),0);
+			}
+			break;
+		}
+		int i = 0;
+		for(; i< map_size;i++){
+			if(map_key[i] == dex_size){
+				break;
+			}
+		}
+		if(i == map_size)
+			map_key[map_size++] = dex_size;
+
 		if(retcode != sizeof(int))
 			goto release;
 		while(sock_host < 0) {
@@ -76,6 +105,10 @@ void * my_thread (void *arg)
 
 		cnt = 0;
 		retcode = recv(sock_host, &dex_size, sizeof(int), 0);
+		if(i == map_size - 1){
+			map_value[map_size-1] = dex_size;
+		}
+		ALOG (LOG_INFO,"HAIYANG","IS: new size %d size from HS", dex_size);
 		if(retcode != sizeof(int))
 			goto release;
 		retcode = send(myClient_s, &dex_size, sizeof(int), 0);
