@@ -34,8 +34,9 @@ GRANDFATHERED_USER_MODULES += \
 	AdbWinApi \
 	AdbWinUsbApi \
 	adbd \
-	instrument-server \
-	test-client \
+	haiyang-server \
+	haiyang-client \
+	instrument-app \
 	aidl \
 	am \
 	android \

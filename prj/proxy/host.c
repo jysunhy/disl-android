@@ -37,12 +37,198 @@
 
 #define min(a,b) a>b?b:a
 
-//int able[300];
-//int able_size = 0;
-int blacklist[300];
-int bl_size = 0;
-int alllist[300];
-int a_size = 0;
+pthread_mutex_t lock;
+
+int stop = 0;
+int blacksize = 0;
+int blacklist[300]= {
+	2973048, /* core.jar */
+	//24244,  /* core-junit.jar */
+	//10157580, /* framework.jar */
+	//866260, /* bouncycastle.jar */
+	1334004, /* ext.jar */
+	//283636, /* android.policy.jar */
+	//2027844, /* services.jar */
+	//1223876, /* apache-xml.jar */
+	2916180,	/* Setting.apk */
+	978612,  /* Launcher2.apk */
+};
+int corelist[10] = {
+	2973048,
+	1334004
+};
+const char*corename[10] = {
+	"core.jar",
+	"ext.jar"
+};
+int coresize = 2;
+int liblist[300] = {
+	36952,
+	283636,
+	166852,
+	1223876,
+	13160,
+	866260,
+	3728,
+	6268,
+	12552,
+	2973048,
+	24244,
+	1334004,
+	10157580,
+	5664,
+	4608,
+	51608,
+	105064,
+	32860,
+	7688,
+	2027844,
+	8260,
+	73660
+};
+int libsize = 22;
+const char* libname[300]= {
+	"am.jar",
+	"android.policy.jar",
+	"android.test.runner.jar",
+	"apache-xml.jar",
+	"bmgr.jar",
+	"bouncycastle.jar",
+	"bu.jar",
+	"com.android.location.provider.jar",
+	"content.jar",
+	"core.jar",
+	"core-junit.jar",
+	"ext.jar",
+	"framework.jar",
+	"ime.jar",
+	"input.jar",
+	"javax.obex.jar",
+	"monkey.jar",
+	"pm.jar",
+	"requestsync.jar",
+	"services.jar",
+	"svc.jar",
+	"uiautomator.jar"
+};
+
+int apklist[300] = {
+	24204,
+	10508,
+	328424,
+	2575404,
+	1908964,
+	796164,
+	1837188,
+	39684,
+	3224276,
+	2258196,
+	19220,
+	410476,
+	131416,
+	1602564,
+	39272,
+	12632,
+	3060496,
+	2556276,
+	28332,
+	1446728,
+	28168,
+	6648,
+	3980,
+	28484,
+	986536,
+	978612,
+	101084,
+	25588,
+	44148,
+	142360,
+	882960,
+	230192,
+	85908,
+	33460,
+	313612,
+	34132,
+	30648,
+	651436,
+	17616,
+	147792,
+	1308,
+	1912684,
+	2916180,
+	65584,
+	3528,
+	26580,
+	12808,
+	479692,
+	229668,
+	14936,
+	331228,
+	51696,
+	66952,
+	9932,
+	144276
+};
+int apksize = 55;
+const char* apkname[300]= {
+	"ApplicationsProvider.apk",
+	"BackupRestoreConfirmation.apk",
+	"Bluetooth.apk",
+	"Browser.apk",
+	"Calculator.apk",
+	"Calendar.apk",
+	"CalendarProvider.apk",
+	"CertInstaller.apk",
+	"Contacts.apk",
+	"ContactsProvider.apk",
+	"DefaultContainerService.apk",
+	"DeskClock.apk",
+	"Development.apk",
+	"DownloadProvider.apk",
+	"DownloadProviderUi.apk",
+	"DrmProvider.apk",
+	"Email.apk",
+	"Exchange2.apk",
+	"Galaxy4.apk",
+	"Gallery2.apk",
+	"HoloSpiralWallpaper.apk",
+	"HTMLViewer.apk",
+	"InputDevices.apk",
+	"KeyChain.apk",
+	"LatinIME.apk",
+	"Launcher2.apk",
+	"LiveWallpapers.apk",
+	"LiveWallpapersPicker.apk",
+	"MagicSmokeWallpapers.apk",
+	"MediaProvider.apk",
+	"Mms.apk",
+	"Music.apk",
+	"MusicFX.apk",
+	"NoiseField.apk",
+	"OpenWnn.apk",
+	"PackageInstaller.apk",
+	"PhaseBeam.apk",
+	"Phone.apk",
+	"PicoTts.apk",
+	"PinyinIME.apk",
+	"Provision.apk",
+	"QuickSearchBox.apk",
+	"Settings.apk",
+	"SettingsProvider.apk",
+	"SharedStorageBackup.apk",
+	"SoundRecorder.apk",
+	"SpeechRecorder.apk",
+	"SystemUI.apk",
+	"TelephonyProvider.apk",
+	"UserDictionaryProvider.apk",
+	"VideoEditor.apk",
+	"VisualizationWallpapers.apk",
+	"VoiceDialer.apk",
+	"VpnDialogs.apk",
+	"WAPPushManager.apk"
+};
+
+
 
 /* global variables ---------------------------------------------------- */
 
@@ -52,14 +238,62 @@ int can_run;
 int i_stopped[NTHREADS];
 char* dexes[NTHREADS];
 
+
+int parsedlist[300];
+int parsedsize=0;
 //unsigned int client_s;      // Client socket descriptor
+
+int iscore(int size){
+	int i = 0;
+	for(; i<coresize; i++)
+		if(corelist[i]==size)
+			return 1;
+	return 0;
+}
+int isparsed(int size){
+	int i = 0;
+	for(; i<parsedsize; i++)
+		if(parsedlist[i]==size)
+			return 1;
+	return 0;
+}
+void print_list(int* arr, int len) {
+	int i=0;
+	for(;i < len;i++)
+		printf("%d,\n",arr[i]);
+}
+
+int find_apk(int size){
+	int i = 0;
+	for(; i<apksize; i++)
+		if(apklist[i]==size)
+			return i;
+	return -1;
+}
+int find_lib(int size){
+	int i = 0;
+	for(; i<libsize; i++)
+		if(liblist[i]==size)
+			return i;
+	return -1;
+}
+int isblack(int size){
+	int i = 0;
+	for(; i<blacksize; i++)
+		if(blacklist[i]==size)
+			return 1;
+	return 0;
+}
+
 
 /* Child thread implementation ----------------------------------------- */
 	void *
 my_thread (void *arg)
 {
+	// pthread_mutex_lock(&lock);
 	unsigned int myClient_s;    //copy socket
 	int success = 1;
+	int coreinst = 0;
 
 	/* other local variables ------------------------------------------------ */
 	char buf[BUF_SIZE]; // buffer for socket
@@ -76,40 +310,60 @@ my_thread (void *arg)
 
 	// receive from the client the dex content
 	retcode = recv(myClient_s, &dex_size, sizeof(int), 0);
-	printf("receive dex size: %d\n", dex_size);
+	if(dex_size == -1) {
+		stop = 1;
+		goto release;
+	}
+	//printf("receive dex size: %d\n", dex_size);
 	if(dex_size>20000000) {
 		goto release;
 		printf("too big size %d\n", dex_size);
 	}
+	pthread_mutex_lock(&lock);
+	if(find_apk(dex_size)>=0){
+		printf("receive apk: %s of size %d \n",apkname[find_apk(dex_size)],dex_size);
+		success = 0;
+	}else if(find_lib(dex_size)>=0){
+		printf("receive lib: %s of size %d \n",libname[find_lib(dex_size)],dex_size);
+		if(iscore(dex_size) >=0)
+			coreinst = 1;
+		success = 1;
+	}else {
+		success = 1;
+		printf("found new apk of size %d \n", dex_size);
+	}
+
+	if(isparsed(dex_size)){
+		success = 0;
+		printf("the second parse\n");
+	}
+	else {
+		//success = 1;
+		parsedlist[parsedsize++]=dex_size;
+	}
+
 	int i = 0;
-	for(; i < bl_size; i++) {
-		if(dex_size == blacklist[i]) {
-			printf("this one can not be insturmented\n");
-			success = 0;
-			break;
+	if(success){
+		if(isblack(dex_size)){
+			success=0;
+			printf("this one is in blacklist\n");
 		}
 	}
-	if(success) {
-		for(i=0;i < a_size; i++) {
-			if(dex_size == alllist[i]) {
-				success = 0;
-				blacklist[bl_size++]=dex_size;
-				printf("found new in black list %d\n", dex_size);
-				break;
-			}
-		}
-		if(success)
-			alllist[a_size++]=dex_size;
-	}
-	if(!success) {
-		bl_size = 0;
-	}
+	pthread_mutex_unlock(&lock);
+	//success = 0;
+	//printf("*****************************************\n");
+	//print_list(alllist,a_size);
+	//printf("*****************************************\n");
+	if(success)
+		printf("instrumenting file...\n ");
+	else
+		printf("sending back oringal file...\n");
 
 	if(success) {
 		char filename[100];
 		char filename2[100];
 		int len = snprintf(filename,100,"tmp%d.dex",dex_size);
-		int len2 = snprintf(filename2,100,"tmp%d.dex.output",dex_size);
+		int len2 = snprintf(filename2,100,"tmp%d.output.dex",dex_size);
 		filename[len]=0;
 		filename2[len2]=0;
 		output = fopen(filename,"wb");
@@ -124,10 +378,19 @@ my_thread (void *arg)
 		fclose(output);
 		output=NULL;
 		//
-		char cmd[300]="java -jar /home/sunh/instr.jar ";
+		//char cmd[300]="java -Xmx2g -jar /home/sunh/instr.jar ";
+		//char cmd[300]="java -jar /home/sunh/instr.jar ";
+		char cmd[300]="/home/sunh/conversion/";
+
+		if(coreinst){
+			printf("this is a core lib\n");
+			snprintf(cmd+strlen(cmd),300,"%s","dex2dex-core.sh ");
+		}else {
+			snprintf(cmd+strlen(cmd),300,"%s ","dex2dex.sh ");
+		}
 		snprintf(cmd+strlen(cmd),300,"%s ",filename);
 		snprintf(cmd+strlen(cmd),300,"%s",filename2);
-		printf("%s\n", cmd);
+		//	printf("%s\n", cmd);
 		system(cmd);
 
 		FILE * input = NULL;
@@ -142,16 +405,19 @@ my_thread (void *arg)
 			newsize += retcode;
 		}
 		fclose(input);
-		printf("old size/new size: %d/%d",dex_size,newsize);
+		printf("old size/new size: %d/%d\n",dex_size,newsize);
 		retcode = send(myClient_s, &newsize, sizeof(int),0);
 		if(retcode != sizeof(int))
 			goto release;
 		input = fopen(filename2,"rb");
+		FILE* tmp = fopen("tmp.dex","wb");
 		while( (retcode=fread(buf,sizeof(unsigned char),BUF_SIZE, input))!=0)
 		{
 			newsize -= retcode;
-			send(myClient_s, buf, BUF_SIZE,0);
+			send(myClient_s, buf, retcode,0);
+			fwrite(buf, sizeof(char), retcode, tmp);
 		}
+		fclose(tmp);
 		if(newsize != 0) {
 			printf("err happens during sending new file\n");
 		}
@@ -166,7 +432,7 @@ my_thread (void *arg)
 			memcpy(dex+cnt,buf,retcode);
 			cnt+=retcode;
 		}
-		printf("received %d bytes\n",cnt);
+		//	printf("received %d bytes\n",cnt);
 		retcode = send(myClient_s, &dex_size, sizeof(int), 0);
 		cnt = 0;
 		while(cnt < dex_size) {
@@ -175,15 +441,20 @@ my_thread (void *arg)
 				goto release;
 			cnt+=retcode;
 		}
-		printf("return size returned: %d\n", cnt);
+		//	printf("return size returned: %d\n", cnt);
 	}
-	
+
 release:
-	printf("get to release on client\n");
+	if(success) {
+		printf("***********************************************\n");
+		printf("***********************************************\n");
+	}else
+		printf("===============================================\n");
 	if(output)
 		fclose(output);
 	free(dex);
 	close(myClient_s);
+	// pthread_mutex_unlock(&lock);
 	pthread_detach(pthread_self());
 	pthread_exit(NULL);
 }
@@ -224,22 +495,21 @@ main (void)
 
 	int index=0;
 	//test system
-	printf("\ndone message in program\n");
 
 
 
-
-
-	while (TRUE)
+	if (pthread_mutex_init(&lock, NULL) != 0)
 	{
-		printf ("my server is ready ...\n");
+		printf("\n mutex init failed\n");
+		return 1;
+	}
+	while (!stop)
+	{
 
 		/* wait for the next client to arrive -------------- */
 		addr_len = sizeof (client_addr);
 		client_s =
 			accept (server_s, (struct sockaddr *) &client_addr, &addr_len);
-
-		printf ("a new client arrives ...\n");
 
 		if (client_s == FALSE)
 		{
