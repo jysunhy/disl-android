@@ -363,14 +363,12 @@ service adbd /sbin/adbd
 on property:ro.kernel.qemu=1
     start adbd
 
-# instrument server
-service instrument-server /sbin/instrument-server
+service instrumentserver /sbin/instrumentserver
     class core
     disabled
 
-# adbd on at boot in emulator
 on property:ro.kernel.qemu=1
-    start instrument-server
+    start instrumentserver
 
 service servicemanager /system/bin/servicemanager
     class core
