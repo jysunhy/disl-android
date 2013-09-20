@@ -49,6 +49,7 @@
   * vm/oo/Object.h
   * vm/alloc/Alloc.h
   * vm/UtfString.h
+  * 
 ## Static Analysis
  * asmdex
  * smali/baksmali
