@@ -45,7 +45,10 @@
 
 ## Shadow VM support
  * Fast tag
-
+  * vm/mterp/common/asm-constants.h
+  * vm/oo/Object.h
+  * vm/alloc/Alloc.h
+  
 ## Static Analysis
  * asmdex
  * smali/baksmali
