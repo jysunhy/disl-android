@@ -40,7 +40,7 @@
 
 * Try adb/ddms tool using jdwp for communication [finished with socket]
 
-### How to use different system libraries for different app
+* How to use different system libraries for different app
  * change dexopt options
 
 ## Shadow VM support
