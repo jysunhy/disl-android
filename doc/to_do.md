@@ -1,11 +1,14 @@
 ##To Do
 ---
+
+##Dynamic Instrumentation
 ###source code research
 * ___loading process___
   * library -> Zygote will load all core java libraries and share with all apps
   * application class loading -> runtime
   * native class -> NDK and ?
 * Optimization
+  * (preopt can be disabled)
   * ___disable optimization option -> refer to TaintDroid___
   * disable verification process with option [refer](http://www.netmite.com/android/mydroid/dalvik/docs/embedded-vm-control.html)
   * [odex](https://code.google.com/p/smali/wiki/DeodexInstructions)
@@ -15,7 +18,7 @@
   * dexopt/OptMain.cpp -> main (without optimization)
 
 * bytecode representation and instrumentation
-  * Instrument before loading the dex
+  * Instrument before loading the dex [done]
     * test that whether it is ok to pause
     * test possible deadlock if network deadlock
     * sleep test
@@ -35,8 +38,15 @@
   
 * whether class can be reloaded(hotswap) -> not supported
 
-* Try adb/ddms tool using jdwp for communication
+* Try adb/ddms tool using jdwp for communication [finished with socket]
 
+## Shadow VM support
+ * Fast tag
+
+## Static Analysis
+ * asmdex
+ * smali/baksmali
+ * dex2jar
 
 
 ##Some related jobs
