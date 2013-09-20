@@ -14,8 +14,8 @@
   	mkdir android-source
 	cd android-source
 	
-	#repo init -u https://android.googlesource.com/platform/manifest -b android-4.1.1_r6
-	repo init -u https://android.googlesource.com/platform/manifest
+	repo init -u https://android.googlesource.com/platform/manifest -b android-4.1.1_r6
+	#repo init -u https://android.googlesource.com/platform/manifest
 	repo sync
 
 ##Compile and run
