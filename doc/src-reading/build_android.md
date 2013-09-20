@@ -19,7 +19,8 @@
 	repo sync
 
 ##Compile and run
-	make -j8
+	make -j16 showcommands WITH_DEXPREOPT=false
+	#make -j8
 	#make -j8 PRODUCT-sdk-sdk showcommands dist
 	
 	emulator -sysdir out/target/product/generic/ -system out/target/product/generic/system.img -ramdisk out/target/product/generic/ramdisk.img -data out/target/product/generic/userdata.img -kernel prebuilts/qemu-kernel/arm/kernel-qemu -sdcard sdcard.img -skindir sdk/emulator/skins -skin WVGA800 -scale 0.7 -memory 512 -partition-size 1024
