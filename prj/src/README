@@ -1,0 +1,6 @@
+##before started, you should check the macro SERVER_IP in system/core/adb/addin/server.c, this should be set to the ip of the instrument server
+
+#you have to compile the host.c using:
+gcc host.c -o host_server -lpthread
+#then start the host_server use ./host_server
+./host_server
