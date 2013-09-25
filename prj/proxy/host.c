@@ -352,14 +352,14 @@ my_thread (void *arg)
 	pthread_mutex_lock(&lock);
 	if(find_apk(dex_size)>=0){
 		printf("receive apk: %s of size %d \n",apkname[find_apk(dex_size)],dex_size);
-		success = 0;
+		success = 1;
 	}else if(find_lib(dex_size)>=0){
 		printf("receive lib: %s of size %d \n",libname[find_lib(dex_size)],dex_size);
 		if(iscore(dex_size))
 			coreinst = 1;
-		success = 0;
+		success = 1;
 	}else {
-		success = 0;
+		success = 1;
 		printf("found new apk of size %d \n", dex_size);
 	}
 
@@ -432,8 +432,8 @@ my_thread (void *arg)
 			snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[DEX2JAR]);
 		}*/
 //		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[ASMDEX]);
-//		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[SMALI]);
-		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[EMPTY]);
+		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[SMALI]);
+//		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[EMPTY]);
 		snprintf(cmd+strlen(cmd),300,"%s ",filename);
 		snprintf(cmd+strlen(cmd),300,"%s",filename2);
 		//	printf("%s\n", cmd);
