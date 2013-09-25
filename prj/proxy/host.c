@@ -39,12 +39,34 @@
 
 pthread_mutex_t lock;
 
+enum INSTR_CMD {
+ASMDEX,
+DEX2JAR,
+DEX2JAR_CORE,
+SMALI,
+SMALI2DEX,
+EMPTY
+};
+
+const char* instrument_cmd[10]= {
+"java -Xmx2g -jar /home/sunh/disl-android/lib/instr.jar",
+"/home/sunh/disl-android/lib/conversion/dex2dex.sh",
+"/home/sunh/disl-android/lib/conversion/dex2dex-core.sh",
+"/home/sunh/disl-android/lib/conversion/dex2dex-smali.sh",
+"/home/sunh/disl-android/lib/conversion/smali2dex.sh",
+"/home/sunh/disl-android/lib/conversion/empty.sh",
+};
+
 int stop = 0;
+int whitesize = 0;
+int whitelist[300] = {
+	2575404,
+};
 int blacksize = 1;
 int blacklist[300]= {
-	//2973048, /* core.jar */
+	2973048, /* core.jar */
 	//24244,  /* core-junit.jar */
-	10157580, /* framework.jar */
+	//10157580, /* framework.jar */
 	//866260, /* bouncycastle.jar */
 	//1334004, /* ext.jar */
 	//283636, /* android.policy.jar */
@@ -277,6 +299,14 @@ int find_lib(int size){
 			return i;
 	return -1;
 }
+int iswhite(int size){
+	int i = 0;
+	for(; i<whitesize; i++)
+		if(whitelist[i]==size)
+			return 1;
+	return 0;
+}
+
 int isblack(int size){
 	int i = 0;
 	for(; i<blacksize; i++)
@@ -327,14 +357,14 @@ my_thread (void *arg)
 		printf("receive lib: %s of size %d \n",libname[find_lib(dex_size)],dex_size);
 		if(iscore(dex_size))
 			coreinst = 1;
-		success = 1;
+		success = 0;
 	}else {
-		success = 1;
+		success = 0;
 		printf("found new apk of size %d \n", dex_size);
 	}
 
 	if(isparsed(dex_size)){
-		success = 0;
+		success = 1;
 		printf("the second parse\n");
 	}
 	else {
@@ -343,6 +373,9 @@ my_thread (void *arg)
 	}
 
 	int i = 0;
+	if(iswhite(dex_size)){
+		success = 1;
+	}
 	if(success){
 		if(isblack(dex_size)){
 			success=0;
@@ -381,14 +414,26 @@ my_thread (void *arg)
 		//char cmd[300]="java -Xmx2g -jar /home/sunh/instr.jar ";
 		//char cmd[300]="java -jar /home/sunh/instr.jar ";
 		//char cmd[300]="/home/sunh/conversion/";
-		char cmd[300]="/home/usi/disl-android/lib/conversion";
-
+		//char cmd[300]="java -Xmx2g -jar /home/sunh/disl-android/lib/instr.jar ";
+		//char cmd[300]="/home/sunh/disl-android/lib/conversion/";
+		char cmd[300]="";
+/*
 		if(coreinst){
 			printf("this is a core lib\n");
 			snprintf(cmd+strlen(cmd),300,"%s","dex2dex-core.sh ");
 		}else {
 			snprintf(cmd+strlen(cmd),300,"%s ","dex2dex.sh ");
 		}
+*/
+//		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[SMALI2DEX]);
+/*		if(coreinst) {
+			snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[DEX2JAR_CORE]);
+		}else{
+			snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[DEX2JAR]);
+		}*/
+//		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[ASMDEX]);
+//		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[SMALI]);
+		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[EMPTY]);
 		snprintf(cmd+strlen(cmd),300,"%s ",filename);
 		snprintf(cmd+strlen(cmd),300,"%s",filename2);
 		//	printf("%s\n", cmd);
