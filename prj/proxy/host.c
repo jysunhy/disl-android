@@ -34,7 +34,7 @@
 #define HIGHPRIORITY 10
 
 #define MAX_DEX 20000000
-
+#define ROOTDIR "/home/sunh/disl-android/lib/"
 #define min(a,b) a>b?b:a
 
 pthread_mutex_t lock;
@@ -44,17 +44,18 @@ ASMDEX,
 DEX2JAR,
 DEX2JAR_CORE,
 SMALI,
-SMALI2DEX,
-EMPTY
+//SMALI2DEX,
+CACHE
 };
-
+int TOOL = SMALI;
+const char* rootdir=ROOTDIR;
 const char* instrument_cmd[10]= {
-"java -Xmx2g -jar /home/sunh/disl-android/lib/instr.jar",
-"/home/sunh/disl-android/lib/conversion/dex2dex.sh",
-"/home/sunh/disl-android/lib/conversion/dex2dex-core.sh",
-"/home/sunh/disl-android/lib/conversion/dex2dex-smali.sh",
-"/home/sunh/disl-android/lib/conversion/smali2dex.sh",
-"/home/sunh/disl-android/lib/conversion/empty.sh",
+"conversion/asmdex.sh",
+"conversion/dex2dex.sh",
+"conversion/dex2dex-core.sh",
+"conversion/dex2dex-smali.sh",
+//"conversion/smali2dex.sh",
+"conversion/empty.sh",
 };
 
 int stop = 0;
@@ -410,33 +411,19 @@ my_thread (void *arg)
 		}
 		fclose(output);
 		output=NULL;
-		//
-		//char cmd[300]="java -Xmx2g -jar /home/sunh/instr.jar ";
-		//char cmd[300]="java -jar /home/sunh/instr.jar ";
-		//char cmd[300]="/home/sunh/conversion/";
-		//char cmd[300]="java -Xmx2g -jar /home/sunh/disl-android/lib/instr.jar ";
-		//char cmd[300]="/home/sunh/disl-android/lib/conversion/";
 		char cmd[300]="";
-/*
-		if(coreinst){
-			printf("this is a core lib\n");
-			snprintf(cmd+strlen(cmd),300,"%s","dex2dex-core.sh ");
+
+		if(TOOL == DEX2JAR || TOOL == DEX2JAR_CORE) {
+			if(coreinst) {
+				snprintf(cmd+strlen(cmd),300,"%s%s ",rootdir,instrument_cmd[DEX2JAR_CORE]);
+			}else{
+				snprintf(cmd+strlen(cmd),300,"%s%s ",rootdir,instrument_cmd[DEX2JAR]);
+			}
 		}else {
-			snprintf(cmd+strlen(cmd),300,"%s ","dex2dex.sh ");
+			snprintf(cmd+strlen(cmd),300,"%s%s ",rootdir,instrument_cmd[TOOL]);
 		}
-*/
-//		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[SMALI2DEX]);
-/*		if(coreinst) {
-			snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[DEX2JAR_CORE]);
-		}else{
-			snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[DEX2JAR]);
-		}*/
-//		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[ASMDEX]);
-		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[SMALI]);
-//		snprintf(cmd+strlen(cmd),300,"%s ",instrument_cmd[EMPTY]);
 		snprintf(cmd+strlen(cmd),300,"%s ",filename);
 		snprintf(cmd+strlen(cmd),300,"%s",filename2);
-		//	printf("%s\n", cmd);
 		system(cmd);
 
 		FILE * input = NULL;
@@ -510,9 +497,33 @@ release:
 main (int argc, const char* argv[])
 {
 	//const char* progname = NULL;
-	//printf("to instrument, specify instrument program or return the original bytecode\n");
-	//if(argc == 2)
-	//	progname = argv[1];
+	printf("you can specify which tool to use for instrumentation: smali/dex2jar/asmdex/cache\n");
+	TOOL = SMALI;
+	if(argc >= 2) {
+		if(!strcmp(argv[1],"smali")) {
+			TOOL = SMALI;
+		}else if(!strcmp(argv[1],"dex2jar")) {
+			TOOL = DEX2JAR;
+		}else if(!strcmp(argv[1],"asmdex")) {
+			TOOL = ASMDEX;
+		}else if(!strcmp(argv[1],"cache")) {
+			TOOL = CACHE;
+		}
+	}
+	switch(TOOL){
+		case SMALI:
+			printf("use smali to instrument\n");
+			break;
+		case DEX2JAR:
+			printf("use dex2jar to instrument\n");
+			break;
+		case ASMDEX:
+			printf("use asmdex to instrument\n");
+			break;
+		case CACHE:
+			printf("use result of last time\n");
+			break;
+	};
 	/* local variables for socket connection -------------------------------- */
 	unsigned int server_s;  // Server socket descriptor
 	struct sockaddr_in server_addr; // Server Internet address
