@@ -1,4 +1,10 @@
-##before started, you should check the macro SERVER_IP in system/core/adb/addin/server.c, this should be set to the ip of the instrument server
+##before started
+##check the macro SERVER_IP in system/core/adb/addin/server.c, this should be set to the ip of the instrument server
+
+##modify the macro ROOTDIR in host.c to the github_dir/lib
+
+##and set environment $LIB_HOME and $DX as in disl-android/lib/conversion/setenv.sh using source setenv.sh
+source setenv.sh
 
 #you have to compile the host.c using:
 gcc host.c -o host_server -lpthread
