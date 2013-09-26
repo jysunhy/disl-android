@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export LIB_HOME=/home/sunh/disl-android/lib
+#export LIB_HOME=/home/sunh/disl-android/lib
 
 export D2J_HOME=$LIB_HOME/dex2jar-0.0.9.15
 
