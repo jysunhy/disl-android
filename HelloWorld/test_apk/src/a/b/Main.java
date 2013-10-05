@@ -5,11 +5,20 @@ import android.os.Bundle;
 
 public class Main extends Activity
 {
+
+static {  
+    System.loadLibrary("driver");  
+}  
+
+private native void helloLog(String logThis);
+
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+		helloLog("This will log to LogCat via the native call.");
         setContentView(R.layout.main);
     }
 }
