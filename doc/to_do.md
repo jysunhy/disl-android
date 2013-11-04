@@ -49,11 +49,13 @@
   * vm/oo/Object.h
   * vm/alloc/Alloc.h
   * vm/UtfString.h
-  * 
+ * remote agent replacement
+  * replace jvmti functionailty in disl-re-agent
+  
 ## Static Analysis
  * asmdex
  * smali/baksmali
- * dex2jar
+ * dex2jar + disl
 
 
 ##Some related jobs
