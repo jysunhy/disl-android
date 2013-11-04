@@ -21,4 +21,4 @@ if remove these files, new application won't work
 	* JVMTI replacement
 		* critical section(RawMonitorEnter/RawMonitorExit)
 		* netref(SetTag/GetTag)
-		* class_file_load_hook/object_free_hook/vm_start_hook/vm_init_hook/vm_death_hook/thread_end_hook;
+		* class_file_load_hook(for new class event)/object_free_hook(can be done on DVM)/vm_start_hook(can be done in DVM)/vm_init_hook(can be done in DVM)/vm_death_hook(can be done in DVM)/thread_end_hook(??);
