@@ -14,3 +14,11 @@ ___to-do___ try start a service when the android linux starts as a channel for i
 ###Where to inject
 @@@found /data/dalvik-cache stored optimized dex
 if remove these files, new application won't work
+
+###ShadowVM android support
+* fasttag on android DVM
+* remote-agent-library re-implement on android
+	* JVMTI replacement
+		* critical section(RawMonitorEnter/RawMonitorExit)
+		* netref(SetTag/GetTag)
+		* class_file_load_hook/object_free_hook/vm_start_hook/vm_init_hook/vm_death_hook/thread_end_hook;
