@@ -34,32 +34,55 @@
 #define HIGHPRIORITY 10
 
 #define MAX_DEX 20000000
-
+#define ROOTDIR "/home/sunh/disl-android/lib/"
 #define min(a,b) a>b?b:a
 
 pthread_mutex_t lock;
 
+enum INSTR_CMD {
+ASMDEX,
+DEX2JAR,
+DEX2JAR_CORE,
+SMALI,
+//SMALI2DEX,
+CACHE
+};
+int TOOL = SMALI;
+const char* rootdir=ROOTDIR;
+const char* instrument_cmd[10]= {
+"conversion/asmdex.sh",
+"conversion/dex2dex.sh",
+"conversion/dex2dex-core.sh",
+"conversion/dex2dex-smali.sh",
+//"conversion/smali2dex.sh",
+"conversion/empty.sh",
+};
+
 int stop = 0;
-int blacksize = 0;
+int whitesize = 0;
+int whitelist[300] = {
+	2575404,
+};
+int blacksize = 1;
 int blacklist[300]= {
 	2973048, /* core.jar */
 	//24244,  /* core-junit.jar */
 	//10157580, /* framework.jar */
 	//866260, /* bouncycastle.jar */
-	1334004, /* ext.jar */
+	//1334004, /* ext.jar */
 	//283636, /* android.policy.jar */
 	//2027844, /* services.jar */
 	//1223876, /* apache-xml.jar */
-	2916180,	/* Setting.apk */
-	978612,  /* Launcher2.apk */
+	//2916180,	/* Setting.apk */
+	//978612,  /* Launcher2.apk */
 };
 int corelist[10] = {
 	2973048,
-	1334004
+	1334004,
 };
 const char*corename[10] = {
 	"core.jar",
-	"ext.jar"
+	"ext.jar",
 };
 int coresize = 2;
 int liblist[300] = {
@@ -277,6 +300,14 @@ int find_lib(int size){
 			return i;
 	return -1;
 }
+int iswhite(int size){
+	int i = 0;
+	for(; i<whitesize; i++)
+		if(whitelist[i]==size)
+			return 1;
+	return 0;
+}
+
 int isblack(int size){
 	int i = 0;
 	for(; i<blacksize; i++)
@@ -322,10 +353,10 @@ my_thread (void *arg)
 	pthread_mutex_lock(&lock);
 	if(find_apk(dex_size)>=0){
 		printf("receive apk: %s of size %d \n",apkname[find_apk(dex_size)],dex_size);
-		success = 0;
+		success = 1;
 	}else if(find_lib(dex_size)>=0){
 		printf("receive lib: %s of size %d \n",libname[find_lib(dex_size)],dex_size);
-		if(iscore(dex_size) >=0)
+		if(iscore(dex_size))
 			coreinst = 1;
 		success = 1;
 	}else {
@@ -334,7 +365,7 @@ my_thread (void *arg)
 	}
 
 	if(isparsed(dex_size)){
-		success = 0;
+		success = 1;
 		printf("the second parse\n");
 	}
 	else {
@@ -343,6 +374,9 @@ my_thread (void *arg)
 	}
 
 	int i = 0;
+	if(iswhite(dex_size)){
+		success = 1;
+	}
 	if(success){
 		if(isblack(dex_size)){
 			success=0;
@@ -377,21 +411,19 @@ my_thread (void *arg)
 		}
 		fclose(output);
 		output=NULL;
-		//
-		//char cmd[300]="java -Xmx2g -jar /home/sunh/instr.jar ";
-		//char cmd[300]="java -jar /home/sunh/instr.jar ";
-		//char cmd[300]="/home/sunh/conversion/";
-		char cmd[300]="/home/usi/disl-android/lib/conversion";
+		char cmd[300]="";
 
-		if(coreinst){
-			printf("this is a core lib\n");
-			snprintf(cmd+strlen(cmd),300,"%s","dex2dex-core.sh ");
+		if(TOOL == DEX2JAR || TOOL == DEX2JAR_CORE) {
+			if(coreinst) {
+				snprintf(cmd+strlen(cmd),300,"%s%s ",rootdir,instrument_cmd[DEX2JAR_CORE]);
+			}else{
+				snprintf(cmd+strlen(cmd),300,"%s%s ",rootdir,instrument_cmd[DEX2JAR]);
+			}
 		}else {
-			snprintf(cmd+strlen(cmd),300,"%s ","dex2dex.sh ");
+			snprintf(cmd+strlen(cmd),300,"%s%s ",rootdir,instrument_cmd[TOOL]);
 		}
 		snprintf(cmd+strlen(cmd),300,"%s ",filename);
 		snprintf(cmd+strlen(cmd),300,"%s",filename2);
-		//	printf("%s\n", cmd);
 		system(cmd);
 
 		FILE * input = NULL;
@@ -465,9 +497,33 @@ release:
 main (int argc, const char* argv[])
 {
 	//const char* progname = NULL;
-	//printf("to instrument, specify instrument program or return the original bytecode\n");
-	//if(argc == 2)
-	//	progname = argv[1];
+	printf("you can specify which tool to use for instrumentation: smali/dex2jar/asmdex/cache\n");
+	TOOL = SMALI;
+	if(argc >= 2) {
+		if(!strcmp(argv[1],"smali")) {
+			TOOL = SMALI;
+		}else if(!strcmp(argv[1],"dex2jar")) {
+			TOOL = DEX2JAR;
+		}else if(!strcmp(argv[1],"asmdex")) {
+			TOOL = ASMDEX;
+		}else if(!strcmp(argv[1],"cache")) {
+			TOOL = CACHE;
+		}
+	}
+	switch(TOOL){
+		case SMALI:
+			printf("use smali to instrument\n");
+			break;
+		case DEX2JAR:
+			printf("use dex2jar to instrument\n");
+			break;
+		case ASMDEX:
+			printf("use asmdex to instrument\n");
+			break;
+		case CACHE:
+			printf("use result of last time\n");
+			break;
+	};
 	/* local variables for socket connection -------------------------------- */
 	unsigned int server_s;  // Server socket descriptor
 	struct sockaddr_in server_addr; // Server Internet address
