@@ -1,3 +1,4 @@
 #/bin/bash
 
-instr-server/host_server $*
+cd instr-server
+./host_server $*

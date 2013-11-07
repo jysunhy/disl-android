@@ -5,7 +5,7 @@
 #include <stdlib.h> // for exit
 #include <string.h> // for bzero
 
-#define HELLO_WORLD_SERVER_PORT 6665
+#define HELLO_WORLD_SERVER_PORT 6666
 #define BUFFER_SIZE 1024
 #define SERVER_IP "127.0.0.1"
 #define min(a,b) a>b?b:a
