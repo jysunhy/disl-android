@@ -8,7 +8,7 @@ export DISL_HOME=$LIB_HOME/disl-offline
 
 export DISL_CLASS=$LIB_HOME/conversion/DiSLClass.class
 
-export DX=/home/sunh/tdroid/out/host/linux-x86/bin/dx
+export DX=/home/usi/tdroid/tdroid-4.1.1_r6/out/host/linux-x86/bin/dx
 
 echo "Generating .jar"
 $D2J_HOME/d2j-dex2jar.sh -f -o $1"_classes.jar" $1
