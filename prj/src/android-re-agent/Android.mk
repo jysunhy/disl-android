@@ -24,7 +24,7 @@ LOCAL_MODULE_TAGS := samples
 
 # This is the target being built.
 LOCAL_MODULE:= libshadowvm
-APP_STL := stlport_static
+#APP_STL := stlport_static
 
 # All of the source files that we will compile.
 LOCAL_SRC_FILES:= \
@@ -34,15 +34,15 @@ LOCAL_SRC_FILES:= \
 
 # All of the shared libraries we link against.
 LOCAL_SHARED_LIBRARIES := \
-	libutils libcutils libdvm libstdc++
+	libutils libcutils libdvm #libstlport libstdc++
 
 # No static libraries.
-LOCAL_STATIC_LIBRARIES :=
+#LOCAL_STATIC_LIBRARIES := libstlport_static
 
 # Also need the JNI headers.
 LOCAL_C_INCLUDES +=	\
-	$(JNI_H_INCLUDE) \
-	ndk/sources/cxx-stl/stlport/stlport
+	$(JNI_H_INCLUDE) 
+#	ndk/sources/cxx-stl/stlport/stlport
 
 LOCAL_C_INCLUDES +=	\
 	dalvik \
@@ -61,4 +61,32 @@ LOCAL_CFLAGS += -DANDROID_SMP=1
 
 LOCAL_PRELINK_MODULE := false
 
+ifdef HISTORICAL_NDK_VERSIONS_ROOT # In the platform build system
+include external/stlport/libstlport.mk
+else # In the NDK build system
+	LOCAL_C_INCLUDES += external/stlport/stlport bionic
+endif
+
 include $(BUILD_SHARED_LIBRARY)
+#######################################################################
+#include $(CLEAR_VARS)
+# All code in LOCAL_WHOLE_STATIC_LIBRARIES will be built into this shared library.
+#LOCAL_WHOLE_STATIC_LIBRARIES := libshadowvm_static
+
+#ifdef HISTORICAL_NDK_VERSIONS_ROOT # In the platform build system
+#LOCAL_SHARED_LIBRARIES := libstlport
+#else # In the NDK build system
+#LOCAL_SHARED_LIBRARIES := libstlport_static
+#endif
+
+#LOCAL_SHARED_LIBRARIES := \
+	libutils libcutils libdvm #libstlport libstdc++
+
+#LOCAL_MODULE := libshadowvm
+#LOCAL_MODULE_TAGS := optional
+
+#ifdef HISTORICAL_NDK_VERSIONS_ROOT # In the platform build system
+#include external/stlport/libstlport.mk
+#endif
+
+#include $(BUILD_SHARED_LIBRARY)

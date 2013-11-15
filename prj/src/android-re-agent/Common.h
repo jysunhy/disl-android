@@ -9,6 +9,7 @@
 
 #define MY_LOG_TAG "SHADOWVM"
 
+
 #define ASSERT(cond, msg) do{if(!cond) ALOG(LOG_ERROR,MY_LOG_TAG,msg);}while(0)
 
 #define ERROR(msg) do{ALOG(LOG_ERROR,MY_LOG_TAG,msg);}while(0)

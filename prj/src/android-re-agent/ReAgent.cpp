@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include "Common.h"
+#include "ReProtocol.h"
 
 jint add(JNIEnv *env, jobject thiz, jint x, jint y){
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
-	return x + y;
+	return x + y + 1000;
 }
 
 // ******************* REDispatch methods *******************
@@ -122,7 +123,7 @@ static JNINativeMethod methods[]= {
 	{"sendChar", "(C)V", (void*)sendChar},
 	{"sendShort", "(S)V", (void*)sendShort},
 	{"sendInt", "(I)V", (void*)sendInt},
-	{"sendLong", "(L)V", (void*)sendLong},
+	{"sendLong", "(J)V", (void*)sendLong},
 	{"sendFloat", "(F)V", (void*)sendFloat},
 	{"sendDouble", "(D)V", (void*)sendDouble},
 	{"sendObject", "(Ljava/lang/Object;)V", (void*)sendObject},
