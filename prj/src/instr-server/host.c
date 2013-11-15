@@ -34,10 +34,11 @@
 #define HIGHPRIORITY 10
 
 #define MAX_DEX 20000000
-#define ROOTDIR "/home/sunh/disl-android/lib/"
+#define ROOTDIR "/home/usi/disl-android/lib/"
 #define min(a,b) a>b?b:a
 
 pthread_mutex_t lock;
+int doNothing = 0;
 
 enum INSTR_CMD {
 ASMDEX,
@@ -45,7 +46,8 @@ DEX2JAR,
 DEX2JAR_CORE,
 SMALI,
 //SMALI2DEX,
-CACHE
+CACHE,
+ORIGINAL
 };
 int TOOL = SMALI;
 const char* rootdir=ROOTDIR;
@@ -360,7 +362,7 @@ my_thread (void *arg)
 			coreinst = 1;
 		success = 1;
 	}else {
-		success = 1;
+		success = 0;
 		printf("found new apk of size %d \n", dex_size);
 	}
 
@@ -388,6 +390,8 @@ my_thread (void *arg)
 	//printf("*****************************************\n");
 	//print_list(alllist,a_size);
 	//printf("*****************************************\n");
+	if(doNothing)
+		success = 0;
 	if(success)
 		printf("instrumenting file...\n ");
 	else
@@ -508,6 +512,9 @@ main (int argc, const char* argv[])
 			TOOL = ASMDEX;
 		}else if(!strcmp(argv[1],"cache")) {
 			TOOL = CACHE;
+		}else if(!strcmp(argv[1],"original")) {
+			TOOL = ORIGINAL;
+			doNothing = 1;
 		}
 	}
 	switch(TOOL){
