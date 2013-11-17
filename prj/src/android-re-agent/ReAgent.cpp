@@ -163,12 +163,18 @@ static int registerNatives(JNIEnv *env){
 
 }
 
+void testShadowHook(Object* obj){
+	ALOG(LOG_INFO,"HAIYANG","in shadow hook");
+}
+
 jint JNI_OnLoad(JavaVM* vm, void* reserved){
 
 	UnionJNIEnvToVoid uenv;
 	uenv.venv = NULL;
 	jint result = -1;
 	JNIEnv *env = NULL;
+
+	gDvm.shadowHook = &testShadowHook;
 
 	if (vm->GetEnv(&uenv.venv, JNI_VERSION_1_4) != JNI_OK){
 		goto bail;

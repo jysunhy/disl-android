@@ -9,7 +9,6 @@
 
 #define MY_LOG_TAG "SHADOWVM"
 
-
 #define ASSERT(cond, msg) do{if(!cond) ALOG(LOG_ERROR,MY_LOG_TAG,msg);}while(0)
 
 #define ERROR(msg) do{ALOG(LOG_ERROR,MY_LOG_TAG,msg);}while(0)
@@ -28,5 +27,11 @@ class ScopedMutex{
 		pthread_mutex_t *local_mtx;
 		ScopedMutex(){}
 };
+
+typedef long ordering_id_type;
+
+typedef ordering_id_type lock_id_type;
+
+typedef u4 thread_id_type;
 
 #endif

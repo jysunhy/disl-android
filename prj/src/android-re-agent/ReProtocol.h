@@ -4,6 +4,8 @@
 #include "Common.h"
 #include "ReQueue.h"
 #include "Socket.h"
+#include "Map.h"
+#include "Lock.h"
 //#include <map>
 using namespace std;
 
@@ -35,9 +37,6 @@ enum QueueType{
 	QUEUE_OBJFREE
 };
 
-ReQueue q_objfree;
-//map<long, ReQueue> q_invocation_map;
-
 class ReProtocol{
 	public:
 		ReProtocol(const char* host, int port){
@@ -48,21 +47,22 @@ class ReProtocol{
 			memset(re_host, '\0', MAXHOSTNAME);
 			memcpy(re_host, host, strlen(host) < MAXHOSTNAME?strlen(host):MAXHOSTNAME);
 		}
-		void InvocationStartEvent(long orderingId, short methodId){
-			UpdateMutexMap(orderingId);
+		void AnalysisStartEvent(ordering_id_type orderingId, short methodId){
+			//UpdateMutexMap(orderingId);
 			//pthread_mutex_lock(invocation_mtx[orderingId]);
+			lock_buf.Lock(orderingId);
 			current_ordering_id = orderingId;
 		}
-		void InvocationEndEvent(){
+		void AnalysisEndEvent(){
+			
+			lock_buf.Unlock(current_ordering_id);
 			//pthread_mutex_unlock(invocation_mtx[current_ordering_id]);
 		}
 
 		void ObjFreeEvent(jlong objectId){
-			ScopedMutex mtx(&objfree_mtx);
+			pthread_mutex_lock(&objfree_mtx);
 			if(q_objfree.IsEmpty())
-			{
 				q_objfree.EnqueueJbype(MSG_OBJ_FREE);
-			}
 			if(!q_objfree.EnqueueJlong(objectId)){
 				char* tmp=NULL;
 				int len=0;
@@ -70,31 +70,20 @@ class ReProtocol{
 				ASSERT(tmp && len, "Error after Get Data");
 				Send(tmp, len);
 				q_objfree.Reset();
+				pthread_mutex_unlock(&objfree_mtx);
 				ObjFreeEvent(objectId);
+				return;
 			}
+			pthread_mutex_unlock(&objfree_mtx);
 		}
 
 	//	void MethodRegisterEvent(string name, int threadId){
 	//	}
 		~ReProtocol(){
-			//destroy the invocation_mtx and gl_mtx;
 			pthread_mutex_destroy(&gl_mtx);
 			pthread_mutex_destroy(&objfree_mtx);
-			/*for(map<long, pthread_mutex_t*>::iterator iter = invocation_mtx.begin(); iter != invocation_mtx.end(); iter++){
-				pthread_mutex_destroy(iter->second);
-				delete iter->second;
-			}*/
-
 		}
 	private:
-		void UpdateMutexMap(long orderingId){
-			ScopedMutex mtx(&gl_mtx);
-			//if(invocation_mtx.find(orderingId) == invocation_mtx.end()){
-			//	invocation_mtx[orderingId] = new pthread_mutex_t;
-			//	pthread_mutex_init(invocation_mtx[orderingId], NULL);
-			//}
-		}
-
 		bool Send(const char* data, int length){
 			Socket sock;
 			sock.connect(re_host, re_port);
@@ -105,9 +94,13 @@ class ReProtocol{
 		}
 
 		pthread_mutex_t gl_mtx;
+
 		pthread_mutex_t objfree_mtx;
-		//map<long, pthread_mutex_t*> invocation_mtx;
-		//map<long, Buffer*> invocation_buf;
+		ReQueue q_objfree;
+
+		LockBuffer lock_buf;
+		Map<ordering_id_type, Buffer*> invocation_buf;
+		Map<ordering_id_type, ReQueue*> analysis_q;
 
 		long current_ordering_id;
 
