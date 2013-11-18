@@ -85,6 +85,11 @@ class BaseQueue{
 			memcpy(q_data+pos, input, len);
 			return true;
 		}
+		virtual void Print(){
+			ALOG(LOG_DEBUG,"HAIYANG","Print Queue");
+			for(int i = 0; i < q_occupied; i++)
+				ALOG(LOG_DEBUG,"HAIYANG","\t %d:%d",i, (int)q_data[i]);
+		}
 
 	protected:
 		int q_capacity;
@@ -97,6 +102,7 @@ class ReQueue: public BaseQueue{
 		ReQueue():BaseQueue(){ event_count = 0; }
 		ReQueue(int capacity):BaseQueue(capacity){ event_count = 0; }
 		virtual int Enqueue(const char* data, int length){
+			ALOG(LOG_DEBUG,"HAIYANG","in %s, %d %d %d pushed back to queue", __FUNCTION__, length, q_capacity, q_occupied);
 			if(length > q_capacity - q_occupied) {
 				return false;
 			}else{

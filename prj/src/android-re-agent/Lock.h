@@ -21,11 +21,13 @@ class LockBuffer{
 			pthread_mutex_destroy(&gl_mtx);
 		}
 		void Lock(lock_id_type lockid){
+			ALOG(LOG_DEBUG,"HAIYANG","in %s %d",__FUNCTION__, (int)lockid);
 			pthread_mutex_t *lock = GetLock(lockid);
 			if(lock)
 				pthread_mutex_lock(lock);
 		}
 		void Unlock(lock_id_type lockid){
+			ALOG(LOG_DEBUG,"HAIYANG","in %s %d",__FUNCTION__, (int)lockid);
 			pthread_mutex_t *lock = GetLock(lockid);
 			if(lock)
 				pthread_mutex_unlock(lock);

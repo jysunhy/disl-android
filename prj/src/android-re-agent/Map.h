@@ -20,28 +20,42 @@ class Map{
 			pthread_mutex_destroy(&gl_mtx);
 		}
 		bool Exist(const K &key){
+			ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			ScopedMutex mtx(&gl_mtx);
 			return _Exist(key);
 		}
 		V& Get(const K &key){
+			ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			ScopedMutex mtx(&gl_mtx);
 			return _Get(key);
 		}
 		void Set(const K &key, const V &value) {
+			ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			ScopedMutex mtx(&gl_mtx);
 			_Set(key, value);
 		}
 		V& operator[](const K& key){
+			ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			ScopedMutex mtx(&gl_mtx);
 			return _Get(key);
 		}
+		void Print(){
+			ALOG(LOG_DEBUG,"HAIYANG","PRINTING MAP: %s",__FUNCTION__);
+			for(int i = 0; i < b_occupied; i++){
+				ALOG(LOG_DEBUG,"HAIYANG","\t %d:%d",(int)b_keys[i],(int)b_values[i]);
+			}
+		}
 	private:
 		bool _Exist(const K& key){
+			bool res = false;
 			for(int i = 0; i < b_occupied; i++){
-				if(b_keys[i] == key)
-					return true;
+				if(b_keys[i] == key) {
+					res = true;
+					break;
+				}
 			}
-			return false;
+			ALOG(LOG_DEBUG,"HAIYANG","in %s %s",__FUNCTION__, res?"exists":"noexists");
+			return res;
 		}
 		V& _Get(const K &key){
 			for(int i = 0; i < b_occupied; i++){
@@ -49,10 +63,11 @@ class Map{
 					return b_values[i];
 			}
 			ERROR("should check exist before  use Get ");
+			return b_values[0];
 			//return NULL;
 		}
 		void _Set(const K &key, const V &value) {
-			if(Exist(key)){
+			if(_Exist(key)){
 				V &res = _Get(key);
 				res = value;
 				return;
