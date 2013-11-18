@@ -19,7 +19,11 @@ class Map{
 			delete []b_values;
 			pthread_mutex_destroy(&gl_mtx);
 		}
-		V* Get(const K &key){
+		bool Exist(const K &key){
+			ScopedMutex mtx(&gl_mtx);
+			return _Exist(key);
+		}
+		V& Get(const K &key){
 			ScopedMutex mtx(&gl_mtx);
 			return _Get(key);
 		}
@@ -27,12 +31,22 @@ class Map{
 			ScopedMutex mtx(&gl_mtx);
 			_Set(key, value);
 		}
+		V& operator[](const K& key){
+			ScopedMutex mtx(&gl_mtx);
+			return _Get(key);
+		}
 	private:
-		V* _Get(const K &key){
-			V* res;
+		bool _Exist(const K& key){
 			for(int i = 0; i < b_occupied; i++){
 				if(b_keys[i] == key)
-					return &b_values[i];
+					return true;
+			}
+			return false;
+		}
+		V& _Get(const K &key){
+			for(int i = 0; i < b_occupied; i++){
+				if(b_keys[i] == key)
+					return b_values[i];
 			}
 			return NULL;
 		}

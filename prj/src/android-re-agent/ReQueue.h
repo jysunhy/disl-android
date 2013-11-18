@@ -31,7 +31,7 @@ class BaseQueue{
 		int EnqueueJboolean(jboolean data){
 			return Enqueue((char*)&data, sizeof(jboolean));
 		}
-		int EnqueueJbype(jbyte data){
+		int EnqueueJbyte(jbyte data){
 			return Enqueue((char*)&data, sizeof(jbyte));
 		}
 		int EnqueueJchar(jchar data){
@@ -78,6 +78,13 @@ class BaseQueue{
 			data = q_data;
 			length = q_occupied;
 		}
+		virtual bool Update(int pos, const char* input, int len){
+			if(pos+len > q_occupied){
+				return false;
+			}
+			memset(q_data+pos, input, len);
+			return true;
+		}
 
 	protected:
 		int q_capacity;
@@ -87,8 +94,8 @@ class BaseQueue{
 
 class ReQueue: public BaseQueue{
 	public:
-		ReQueue():BaseQueue(){}
-		ReQueue(int capacity):BaseQueue(capacity){}
+		ReQueue():BaseQueue(){ count = 0; }
+		ReQueue(int capacity):BaseQueue(capacity){ count = 0; }
 		virtual int Enqueue(const char* data, int length){
 			if(length > q_capacity - q_occupied) {
 				return false;
@@ -98,6 +105,11 @@ class ReQueue: public BaseQueue{
 			}
 			return true;
 		}
+		virtual void Reset(){
+			q_occupied = 0;
+			event_count = 0;
+		}
+		jint event_count; // count how many events accumulated
 };
 
 class Buffer: public BaseQueue{
