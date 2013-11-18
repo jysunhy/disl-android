@@ -76,7 +76,7 @@ class ReProtocol{
 			}
 			analysis_queue[oid]->event_count++;
 			jint tmp = htons(analysis_queue[oid]->event_count);
-			analysis_queue[oid]->Update(sizeof(jbyte)+sizeof(jlong),&tmp, sizeof(jint));
+			analysis_queue[oid]->Update(sizeof(jbyte)+sizeof(jlong),(char*)&tmp, sizeof(jint));
 			if(!invocation_buf.Exist(oid)){
 				invocation_buf.Set(oid, new Buffer(INVOCATION_SIZE));
 			}
@@ -97,40 +97,39 @@ class ReProtocol{
 				return false;
 			char *buf=NULL;
 			int len_buf;
-			invocation_buf[oid].GetData(buf, len_buf);
-			invocation_buf[oid].Update(sizeof(jbyte)+sizeof(jshort),len_buf-sizeof(jshort)*2);
-			invocation_buf[oid].GetData(buf, len_buf);
-			ASSERT(tmp != NULL,"error get data from buffer");
-			bool full = analysis_queue[oid].Enqueue(buf, len_buf);
+			invocation_buf[oid]->GetData(buf, len_buf);
+			invocation_buf[oid]->Update(sizeof(jbyte)+sizeof(jshort),(char*)buf,len_buf-sizeof(jshort)*2);
+			invocation_buf[oid]->GetData(buf, len_buf);
+			bool full = analysis_queue[oid]->Enqueue(buf, len_buf);
 			if(full){
 				char* q=NULL;
 				int len_q;
-				analysis_queue[oid].GetData(q, len_q);
-				Send(q, len_q, buf, len_buf);
-				analysis_queue[oid].Reset();
-				invocation_buf[oid].Reset();
+				analysis_queue[oid]->GetData(q, len_q);
+				Send(q, len_q, (char*)buf, len_buf);
+				analysis_queue[oid]->Reset();
+				invocation_buf[oid]->Reset();
 			}
 			SetOrderingId(tid, INVALID_ORDERING_ID);
-			lock_buf.Unlock(current_ordering_id);
+			lock_buf.Unlock(oid);
 			return true;
 		}
 		void ObjFreeEvent(jlong objectId){
 			pthread_mutex_lock(&objfree_mtx);
 			if(q_objfree.IsEmpty()) {
-				q_objfree.EnqueueJbype(MSG_OBJ_FREE);
+				q_objfree.EnqueueJbyte(MSG_OBJ_FREE);
 				q_objfree.event_count = 0;
 				q_objfree.EnqueueJint(0);
 			}
 			q_objfree.event_count++;
 			if(!q_objfree.EnqueueJlong(objectId)){
-				jint tmp = htons(q_objfree.event_count);
-				q_objfree.Update(sizeof(jbyte), &tmp, sizeof(jint));
+				jint tmpint = htons(q_objfree.event_count);
+				q_objfree.Update(sizeof(jbyte), (char*)&tmpint, sizeof(jint));
 				char* tmp=NULL;
 				int len=0;
 				q_objfree.GetData(tmp, len);
 				ASSERT(tmp && len, "Error after Get Data");
 				jlong nts = htobe64(objectId);
-				Send(tmp, len, &nts, sizeof(jlong));
+				Send(tmp, len, (char*)&nts, sizeof(jlong));
 				q_objfree.Reset();
 				pthread_mutex_unlock(&objfree_mtx);
 				return;

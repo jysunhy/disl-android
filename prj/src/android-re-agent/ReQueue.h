@@ -82,7 +82,7 @@ class BaseQueue{
 			if(pos+len > q_occupied){
 				return false;
 			}
-			memset(q_data+pos, input, len);
+			memcpy(q_data+pos, input, len);
 			return true;
 		}
 
@@ -94,8 +94,8 @@ class BaseQueue{
 
 class ReQueue: public BaseQueue{
 	public:
-		ReQueue():BaseQueue(){ count = 0; }
-		ReQueue(int capacity):BaseQueue(capacity){ count = 0; }
+		ReQueue():BaseQueue(){ event_count = 0; }
+		ReQueue(int capacity):BaseQueue(capacity){ event_count = 0; }
 		virtual int Enqueue(const char* data, int length){
 			if(length > q_capacity - q_occupied) {
 				return false;

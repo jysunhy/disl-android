@@ -48,12 +48,13 @@ class Map{
 				if(b_keys[i] == key)
 					return b_values[i];
 			}
-			return NULL;
+			ERROR("should check exist before  use Get ");
+			//return NULL;
 		}
 		void _Set(const K &key, const V &value) {
-			V* res = _Get(key);
-			if(res){
-				*res = value;
+			if(Exist(key)){
+				V &res = _Get(key);
+				res = value;
 				return;
 			}
 			if(b_occupied == b_capacity){
