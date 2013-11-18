@@ -149,15 +149,13 @@ class ReProtocol{
 			invocation_buf[oid]->Print();
 			bool full = !(analysis_queue[oid]->Enqueue(buf, len_buf));
 			if(full){
-				ALOG(LOG_DEBUG,"HAIYANG","Full");
 				char* q=NULL;
 				int len_q;
 				analysis_queue[oid]->GetData(q, len_q);
 				Send(q, len_q, (char*)buf, len_buf);
 				analysis_queue[oid]->Reset();
-			}else{
-				ALOG(LOG_DEBUG,"HAIYANG","Not Full");
 			}
+			
 			invocation_buf[oid]->Reset();
 			SetOrderingId(tid, INVALID_ORDERING_ID);
 			lock_buf.Unlock(oid);
@@ -208,11 +206,9 @@ class ReProtocol{
 		}
 	private:
 		ordering_id_type GetOrderingId(thread_id_type tid){
-			ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			//ScopedMutex mtx(&analysis_mtx);
 			if(!running_oid.Exist(tid))
 				running_oid.Set(tid, INVALID_ORDERING_ID);
-
 			ALOG(LOG_DEBUG,"HAIYANG","in %s %d:%d",__FUNCTION__, tid, (int)running_oid[tid]);
 			return running_oid[tid];
 		}
