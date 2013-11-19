@@ -126,15 +126,14 @@ class ReProtocol{
 		}
 		int SendJobject(thread_id_type tid, jlong netref){
 			ALOG(LOG_DEBUG,"HAIYANG","new obj %lld", netref);
-			//return SendJlong(tid, netref);
-			return 1;
+			return SendJlong(tid, netref);
 		}
-		bool SendArgument(thread_id_type tid, const char* data, int length){
+		int SendArgument(thread_id_type tid, const char* data, int length){
 			ordering_id_type oid = GetOrderingId(tid);
 			if(oid == INVALID_ORDERING_ID)
-				return false;
+				return 0;
 			invocation_buf[oid]->Enqueue(data, length);
-			return true;
+			return length;
 		}
 		bool AnalysisEndEvent(thread_id_type tid){
 			ordering_id_type oid = GetOrderingId(tid);
@@ -167,7 +166,16 @@ class ReProtocol{
 			return true;
 		}
 		void NewClassInfo(jlong netref, const char* className, int namelen, const char* generic, int glen, jlong netrefClassLoader, jlong netrefSuperClass){
+			ScopedMutex mtx(&objfree_mtx);
 			ALOG(LOG_DEBUG,"HAIYANG","new class info %s:%lld", className, netref);
+			//TODO use pool to optimize
+			Buffer tmp;
+			tmp.EnqueueJbyte(MSG_CLASS_INFO);
+			tmp.EnqueueJlong(netref);
+			tmp.EnqueueStringUtf8(className, namelen);
+			tmp.EnqueueStringUtf8(generic, glen);
+			tmp.EnqueueJlong(netrefClassLoader);
+			tmp.EnqueueJlong(netrefSuperClass);
 		}
 		void ObjFreeEvent(jlong objectId){
 			ScopedMutex mtx(&objfree_mtx);
@@ -192,6 +200,7 @@ class ReProtocol{
 		}
 		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, jbyte *bytes){
 			ScopedMutex mtx(&gl_mtx);
+			//TODO Use pool to reuse the buffer
 			Buffer tmp;
 			tmp.EnqueueJbyte(MSG_NEW_CLASS);
 			tmp.EnqueueStringUtf8(name, nameLength);
@@ -204,6 +213,8 @@ class ReProtocol{
 			return Send(content, len);
 		}
 		void MethodRegisterEvent(int threadId, const char* name, int len){
+			ScopedMutex mtx(&gl_mtx);
+
 		}
 		~ReProtocol(){
 			pthread_mutex_destroy(&gl_mtx);
