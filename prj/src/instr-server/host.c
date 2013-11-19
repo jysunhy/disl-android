@@ -502,7 +502,7 @@ main (int argc, const char* argv[])
 {
 	//const char* progname = NULL;
 	printf("you can specify which tool to use for instrumentation: smali/dex2jar/asmdex/cache\n");
-	TOOL = SMALI;
+	TOOL = ORIGINAL;
 	if(argc >= 2) {
 		if(!strcmp(argv[1],"smali")) {
 			TOOL = SMALI;
@@ -514,7 +514,6 @@ main (int argc, const char* argv[])
 			TOOL = CACHE;
 		}else if(!strcmp(argv[1],"original")) {
 			TOOL = ORIGINAL;
-			doNothing = 1;
 		}
 	}
 	switch(TOOL){
@@ -529,6 +528,10 @@ main (int argc, const char* argv[])
 			break;
 		case CACHE:
 			printf("use result of last time\n");
+			break;
+		case ORIGINAL:
+			printf("use original to instrument\n");
+			doNothing = 1;
 			break;
 	};
 	/* local variables for socket connection -------------------------------- */

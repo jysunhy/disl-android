@@ -124,6 +124,11 @@ class ReProtocol{
 			uint16_t nsize = htons(size_in_bytes);
 			return SendArgument(tid, (char*)&nsize, sizeof(uint16_t))+SendArgument(tid, (char*)string_utf8, size_in_bytes);
 		}
+		int SendJobject(thread_id_type tid, jlong netref){
+			ALOG(LOG_DEBUG,"HAIYANG","new obj %lld", netref);
+			//return SendJlong(tid, netref);
+			return 1;
+		}
 		bool SendArgument(thread_id_type tid, const char* data, int length){
 			ordering_id_type oid = GetOrderingId(tid);
 			if(oid == INVALID_ORDERING_ID)
@@ -160,6 +165,9 @@ class ReProtocol{
 			SetOrderingId(tid, INVALID_ORDERING_ID);
 			lock_buf.Unlock(oid);
 			return true;
+		}
+		void NewClassInfo(jlong netref, const char* className, int namelen, const char* generic, int glen, jlong netrefClassLoader, jlong netrefSuperClass){
+			ALOG(LOG_DEBUG,"HAIYANG","new class info %s:%lld", className, netref);
 		}
 		void ObjFreeEvent(jlong objectId){
 			ScopedMutex mtx(&objfree_mtx);
@@ -209,11 +217,11 @@ class ReProtocol{
 			//ScopedMutex mtx(&analysis_mtx);
 			if(!running_oid.Exist(tid))
 				running_oid.Set(tid, INVALID_ORDERING_ID);
-			ALOG(LOG_DEBUG,"HAIYANG","in %s %d:%d",__FUNCTION__, tid, (int)running_oid[tid]);
+			//ALOG(LOG_DEBUG,"HAIYANG","in %s %d:%d",__FUNCTION__, tid, (int)running_oid[tid]);
 			return running_oid[tid];
 		}
 		void SetOrderingId(thread_id_type tid, ordering_id_type oid){
-			ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			//ScopedMutex mtx(&analysis_mtx);
 			running_oid.Set(tid, oid);
 		}

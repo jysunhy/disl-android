@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include "Common.h"
 #include "ReProtocol.h"
+#include "Netref.h"
 
 ReProtocol remote("192.168.1.103",7777);
+
+pthread_mutex_t gl_mtx;
+jint ot_class_id = 1;
+jlong ot_object_id = 1;
 
 jint add(JNIEnv *env, jobject thiz, jint x, jint y){
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
@@ -106,13 +111,43 @@ void sendDouble
 	//pack_double(tld_get()->analysis_buff, to_send);
 }
 
+jlong SetAndGetNetref(Object* obj);
+jlong newClass(ClassObject *obj){
+	obj->uuid = _set_net_reference(ot_object_id++,ot_class_id++,1,1);
+	remote.NewClassInfo(obj->uuid, obj->descriptor, strlen(obj->descriptor), "", 0, SetAndGetNetref(obj->classLoader), SetAndGetNetref(obj->super));
+	return obj->uuid;
+}
+
+jlong SetAndGetNetref(Object* obj){
+	if(obj == NULL) //to_send is null or is weak reference which has already been cleared
+	{
+		return 0;
+	}else if(obj->uuid != 0){
+		return obj->uuid;
+	}else if(dvmIsClassObject(obj)){
+		return newClass((ClassObject*)obj);
+	}else {
+		if(obj->clazz->uuid == 0){ //its class not registered
+			newClass(obj->clazz);
+		}
+		obj->uuid = _set_net_reference(ot_object_id++,obj->clazz->uuid,0,0);
+		return obj->uuid;
+	}
+}
+
 void sendObject
 (JNIEnv * jni_env, jclass this_class, jobject to_send) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	//TODO
 	//struct tldata * tld = tld_get ();
 	//pack_object(jni_env, tld->analysis_buff, tld->command_buff, to_send,
 	//		OT_OBJECT);
+	
+	Thread *self = dvmThreadSelf();
+	Object* obj = dvmDecodeIndirectRef(self, to_send);
+	jlong netref = SetAndGetNetref(obj);
+	remote.SendJobject(self->threadId, netref);
 }
 
 void sendObjectPlusData
@@ -191,6 +226,8 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	JNIEnv *env = NULL;
 
 	gDvm.shadowHook = &testShadowHook;
+
+	pthread_mutex_init(&gl_mtx, NULL);
 
 	if (vm->GetEnv(&uenv.venv, JNI_VERSION_1_4) != JNI_OK){
 		goto bail;
