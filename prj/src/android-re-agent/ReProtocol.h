@@ -85,7 +85,7 @@ class ReProtocol{
 			}
 			invocation_buf[oid]->EnqueueJshort(methodId);
 			invocation_buf[oid]->EnqueueJshort(0); //space for arg length
-			//running_oid.Print();
+			running_oid.Print();
 			return true;
 		}
 		int SendJboolean(thread_id_type tid, jboolean data){
@@ -150,7 +150,7 @@ class ReProtocol{
 			arglen = htons(arglen);
 			invocation_buf[oid]->Update(sizeof(jshort),(char*)&arglen, sizeof(jshort));
 			invocation_buf[oid]->GetData(buf, len_buf);
-			//invocation_buf[oid]->Print();
+			invocation_buf[oid]->Print();
 			bool full = !(analysis_queue[oid]->Enqueue(buf, len_buf));
 			if(full){
 				char* q=NULL;
@@ -166,7 +166,8 @@ class ReProtocol{
 			return true;
 		}
 		bool NewClassInfo(jlong netref, const char* className, int namelen, const char* generic, int glen, jlong netrefClassLoader, jlong netrefSuperClass){
-			ALOG(LOG_DEBUG,"HAIYANG","new class info %s:%lld", className, netref);
+			//ALOG(LOG_DEBUG,"HAIYANG","new class info %s:%lld", className, netref);
+			return true;
 			//ScopedMutex mtx(&gl_mtx);
 			//TODO optimization with pool
 			Buffer tmp(100);
@@ -179,7 +180,8 @@ class ReProtocol{
 			char* content;
 			int len;
 			tmp.GetData(content, len);
-			return Send(content, len);
+			bool res = Send(content, len);
+			return res;
 		}
 		void ObjFreeEvent(jlong objectId){
 			ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
