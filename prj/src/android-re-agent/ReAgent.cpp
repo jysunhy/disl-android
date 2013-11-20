@@ -6,8 +6,9 @@
 ReProtocol remote("192.168.1.103",7777);
 
 pthread_mutex_t gl_mtx;
-jint ot_class_id = 1;
-jlong ot_object_id = 1;
+static volatile jint ot_class_id = 1;
+static volatile jlong ot_object_id = 1;
+static volatile jshort method_id = 1;
 
 jint add(JNIEnv *env, jobject thiz, jint x, jint y){
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
@@ -21,7 +22,11 @@ jshort registerMethod
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	    jsize str_len = jni_env->GetStringUTFLength(analysis_method_desc);
 		const char * str = 	jni_env->GetStringUTFChars(analysis_method_desc, NULL);
-	remote.MethodRegisterEvent(dvmThreadSelf()->threadId, str, str_len);
+	//pthread_mutex_lock(&gl_mtx);
+	method_id++;
+	remote.MethodRegisterEvent(dvmThreadSelf()->threadId, method_id, str, str_len);
+	jni_env->ReleaseStringUTFChars(analysis_method_desc,str);
+	pthread_mutex_unlock(&gl_mtx);
 	return 0;
 	//return register_method(jni_env, analysis_method_desc, tld_get()->id);
 }
@@ -113,26 +118,36 @@ void sendDouble
 
 jlong SetAndGetNetref(Object* obj);
 jlong newClass(ClassObject *obj){
+	if(obj == NULL)  {
+		ALOG(LOG_DEBUG,"HAIYANG NULL CLASSOBJECT","in %s",__FUNCTION__);
+		return 0;
+	}
 	obj->uuid = _set_net_reference(ot_object_id++,ot_class_id++,1,1);
 	remote.NewClassInfo(obj->uuid, obj->descriptor, strlen(obj->descriptor), "", 0, SetAndGetNetref(obj->classLoader), SetAndGetNetref(obj->super));
+	ALOG(LOG_DEBUG,"HAIYANG","after %s %lld %s",__FUNCTION__, obj->uuid, obj->descriptor);
 	return obj->uuid;
 }
 
 jlong SetAndGetNetref(Object* obj){
+	if(obj && obj->clazz) 
+		ALOG(LOG_INFO,"HAIYANG","before set %s",obj->clazz->descriptor);
+	jlong res;
 	if(obj == NULL) //to_send is null or is weak reference which has already been cleared
 	{
-		return 0;
+		res = 0;
 	}else if(obj->uuid != 0){
-		return obj->uuid;
+		res = obj->uuid;
 	}else if(dvmIsClassObject(obj)){
-		return newClass((ClassObject*)obj);
+		res = newClass((ClassObject*)obj);
 	}else {
 		if(obj->clazz->uuid == 0){ //its class not registered
 			newClass(obj->clazz);
 		}
 		obj->uuid = _set_net_reference(ot_object_id++,obj->clazz->uuid,0,0);
-		return obj->uuid;
+		res = obj->uuid;
 	}
+	ALOG(LOG_DEBUG,"HAIYANG","in %s %lld %s",__FUNCTION__, obj->uuid, obj->clazz->descriptor);
+	return res;
 }
 
 void sendObject
@@ -147,6 +162,10 @@ void sendObject
 	Thread *self = dvmThreadSelf();
 	Object* obj = dvmDecodeIndirectRef(self, to_send);
 	jlong netref = SetAndGetNetref(obj);
+
+	//Object* obj2 = dvmDecodeIndirectRef(self, to_send);
+	//ALOG(LOG_INFO,"HAIYANG","after set %lld",obj2->uuid);
+
 	remote.SendJobject(self->threadId, netref);
 }
 
@@ -213,8 +232,18 @@ static int registerNatives(JNIEnv *env){
 
 }
 
-void testShadowHook(Object* obj){
-	ALOG(LOG_INFO,"HAIYANG","in shadow hook %llu", obj->uuid);
+void objNewHook(Object* obj){
+	//ALOG(LOG_INFO,"HAIYANG","in hook %s %s", __FUNCTION__, obj->clazz->descriptor);
+}
+void threadEndHook(Thread* self){
+	bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
+	ALOG(LOG_INFO,"HAIYANG","in hook %s %d %s", __FUNCTION__, self->threadId, isDaemon?"daemon":"not daemon");
+}
+void vmEndHook(JavaVM* vm){
+	ALOG(LOG_INFO,"HAIYANG","in hook %s", __FUNCTION__);
+}
+void objFreeHook(Object* obj, Thread* self){
+	ALOG(LOG_INFO,"HAIYANG","in hook %s %lld", obj->clazz->descriptor, obj->uuid);
 	//remote.ObjFreeEvent(obj->uuid);
 }
 
@@ -225,7 +254,11 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	jint result = -1;
 	JNIEnv *env = NULL;
 
-	gDvm.shadowHook = &testShadowHook;
+	//gDvm.shadowHook = &testShadowHook;
+	gDvm.newObjHook = &objNewHook;
+	gDvm.freeObjHook = &objFreeHook;
+	gDvm.threadEndHook = &threadEndHook;
+	gDvm.vmEndHook = &vmEndHook;
 
 	pthread_mutex_init(&gl_mtx, NULL);
 

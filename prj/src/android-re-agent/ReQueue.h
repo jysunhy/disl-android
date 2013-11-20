@@ -19,7 +19,9 @@ union double_jlong {
 class BaseQueue{
 	public:
 		BaseQueue(){
-			BaseQueue(DEFAULT_QUEUE_SIZE);
+			q_capacity = DEFAULT_QUEUE_SIZE;
+			q_occupied = 0;
+			q_data = new char[q_capacity];
 		}
 		BaseQueue(int capacity):q_capacity(capacity),q_occupied(0){
 			q_data = new char[capacity];
@@ -120,7 +122,6 @@ class ReQueue: public BaseQueue{
 
 class Buffer: public BaseQueue{
 	public:
-		Buffer():BaseQueue(){}
 		Buffer(int capacity):BaseQueue(capacity){}
 		virtual int Enqueue(const char* data, int length){
 			if(q_occupied + length > q_capacity){
