@@ -19,6 +19,7 @@ jint add(JNIEnv *env, jobject thiz, jint x, jint y){
 
 jshort registerMethod
 (JNIEnv * jni_env, jclass this_class, jstring analysis_method_desc) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	    jsize str_len = jni_env->GetStringUTFLength(analysis_method_desc);
 		const char * str = 	jni_env->GetStringUTFChars(analysis_method_desc, NULL);
@@ -33,6 +34,7 @@ jshort registerMethod
 
 void analysisStart__S
 (JNIEnv * jni_env, jclass this_class, jshort analysis_method_id) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, 0, analysis_method_id);
 	//analysis_start(jni_env, analysis_method_id, tld_get());
@@ -41,6 +43,7 @@ void analysisStart__S
 void analysisStart__SB
 (JNIEnv * jni_env, jclass this_class, jshort analysis_method_id,
 		jbyte ordering_id) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, ordering_id, analysis_method_id);
 	//analysis_start_buff(jni_env, analysis_method_id, ordering_id, tld_get());
@@ -48,6 +51,7 @@ void analysisStart__SB
 
 void analysisEnd
 (JNIEnv * jni_env, jclass this_class) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	remote.AnalysisEndEvent(dvmThreadSelf()->threadId);
 	//analysis_end(tld_get());
@@ -55,6 +59,7 @@ void analysisEnd
 
 void sendBoolean
 (JNIEnv * jni_env, jclass this_class, jboolean to_send) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	remote.SendJboolean(dvmThreadSelf()->threadId, to_send);
 	//pack_boolean(tld_get()->analysis_buff, to_send);
@@ -62,6 +67,7 @@ void sendBoolean
 
 void sendByte
 (JNIEnv * jni_env, jclass this_class, jbyte to_send) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	remote.SendJbyte(dvmThreadSelf()->threadId, to_send);
 
@@ -70,6 +76,7 @@ void sendByte
 
 void sendChar
 (JNIEnv * jni_env, jclass this_class, jchar to_send) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	remote.SendJchar(dvmThreadSelf()->threadId, to_send);
 
@@ -78,6 +85,7 @@ void sendChar
 
 void sendShort
 (JNIEnv * jni_env, jclass this_class, jshort to_send) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	remote.SendJshort(dvmThreadSelf()->threadId, to_send);
 
@@ -86,6 +94,7 @@ void sendShort
 
 void sendInt
 (JNIEnv * jni_env, jclass this_class, jint to_send) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	remote.SendJint(dvmThreadSelf()->threadId, to_send);
 
@@ -94,6 +103,7 @@ void sendInt
 
 void sendLong
 (JNIEnv * jni_env, jclass this_class, jlong to_send) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	remote.SendJlong(dvmThreadSelf()->threadId, to_send);
 
@@ -102,6 +112,7 @@ void sendLong
 
 void sendFloat
 (JNIEnv * jni_env, jclass this_class, jfloat to_send) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	remote.SendJfloat(dvmThreadSelf()->threadId, to_send);
 
@@ -110,6 +121,7 @@ void sendFloat
 
 void sendDouble
 (JNIEnv * jni_env, jclass this_class, jdouble to_send) {
+	ScopedMutex mtx(&gl_mtx);
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 	remote.SendJdouble(dvmThreadSelf()->threadId, to_send);
 
@@ -173,6 +185,7 @@ void sendObjectPlusData
 (JNIEnv * jni_env, jclass this_class, jobject to_send) {
 	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s", __FUNCTION__);
 
+	ScopedMutex mtx(&gl_mtx);
 	//TODO
 	//struct tldata * tld = tld_get ();
 	//pack_object(jni_env, tld->analysis_buff, tld->command_buff, to_send,
