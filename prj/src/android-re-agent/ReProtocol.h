@@ -85,7 +85,7 @@ class ReProtocol{
 			}
 			invocation_buf[oid]->EnqueueJshort(methodId);
 			invocation_buf[oid]->EnqueueJshort(0); //space for arg length
-			running_oid.Print();
+	//		running_oid.Print();
 			return true;
 		}
 		int SendJboolean(thread_id_type tid, jboolean data){
@@ -128,6 +128,22 @@ class ReProtocol{
 			ALOG(LOG_DEBUG,"HAIYANG","new obj %lld", netref);
 			return SendJlong(tid, netref);
 		}
+		int SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){
+			int res = SendJlong(tid,netref);
+			res += SendArgument(tid, (const char*) utf8, len*sizeof(jchar));
+			return res;
+		}
+		int SendStringObject(thread_id_type tid, jlong netref, const char* utf8, int len){
+			int res = SendJlong(tid,netref);
+			res += SendStringUtf8(tid, utf8, len);
+			return res;
+		}
+		int SendThreadObject(thread_id_type tid, jlong netref, const char* threadName, int len, jboolean isDaemon){
+			int res = SendJlong(tid, netref);
+			res += SendStringUtf8(tid, threadName, len);
+			res += SendJboolean(tid, isDaemon);
+			return res;
+		}
 		bool SendArgument(thread_id_type tid, const char* data, int length){
 			ordering_id_type oid = GetOrderingId(tid);
 			if(oid == INVALID_ORDERING_ID)
@@ -150,7 +166,7 @@ class ReProtocol{
 			arglen = htons(arglen);
 			invocation_buf[oid]->Update(sizeof(jshort),(char*)&arglen, sizeof(jshort));
 			invocation_buf[oid]->GetData(buf, len_buf);
-			invocation_buf[oid]->Print();
+	//		invocation_buf[oid]->Print();
 			bool full = !(analysis_queue[oid]->Enqueue(buf, len_buf));
 			if(full){
 				char* q=NULL;
@@ -167,7 +183,6 @@ class ReProtocol{
 		}
 		bool NewClassInfo(jlong netref, const char* className, int namelen, const char* generic, int glen, jlong netrefClassLoader, jlong netrefSuperClass){
 			//ALOG(LOG_DEBUG,"HAIYANG","new class info %s:%lld", className, netref);
-			return true;
 			//ScopedMutex mtx(&gl_mtx);
 			//TODO optimization with pool
 			Buffer tmp(100);

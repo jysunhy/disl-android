@@ -119,42 +119,32 @@ void sendDouble
 jlong SetAndGetNetref(Object* obj);
 jlong newClass(ClassObject *obj){
 	if(obj == NULL)  {
-		ALOG(LOG_DEBUG,"HAIYANG NULL CLASSOBJECT","in %s",__FUNCTION__);
 		return 0;
 	}
 	obj->uuid = _set_net_reference(ot_object_id++,ot_class_id++,1,1);
-	ALOG(LOG_DEBUG,"HAIYANG","before %s %lld %s",__FUNCTION__, obj->uuid, obj->descriptor);
 	remote.NewClassInfo(obj->uuid, obj->descriptor, strlen(obj->descriptor), "", 0, SetAndGetNetref(obj->classLoader), SetAndGetNetref(obj->super));
-	ALOG(LOG_DEBUG,"HAIYANG","after %s %lld %s",__FUNCTION__, obj->uuid, obj->descriptor);
+	ALOG(LOG_DEBUG,"HAIYANG","new class fond %lld:%s",obj->uuid, obj->descriptor);
 	return obj->uuid;
 }
 
 jlong SetAndGetNetref(Object* obj){
-	ALOG(LOG_INFO,"HAIYANG","in %s", __FUNCTION__);
-	//if(obj) 
-	//	if(obj->clazz)
-	//		ALOG(LOG_INFO,"HAIYANG","before set %s",obj->clazz->descriptor);
 	jlong res;
 	if(obj == NULL) //to_send is null or is weak reference which has already been cleared
 	{
-	ALOG(LOG_INFO,"HAIYANG","in %s 1", __FUNCTION__);
 		res = 0;
 	}else if(obj->uuid != 0){
-	ALOG(LOG_INFO,"HAIYANG","in %s 2 %lld", __FUNCTION__, obj->uuid);
 		res = obj->uuid;
 	}else if(dvmIsClassObject(obj)){
-	ALOG(LOG_INFO,"HAIYANG","in %s 3", __FUNCTION__);
 		res = newClass((ClassObject*)obj);
 	}else {
-	ALOG(LOG_INFO,"HAIYANG","in %s 4", __FUNCTION__);
 		//ASSERT(obj->clazz != NULL,"object class is null");
 		if(obj->clazz->uuid == 0){ //its class not registered
 			newClass(obj->clazz);
 		}
 		obj->uuid = _set_net_reference(ot_object_id++,obj->clazz->uuid,0,0);
 		res = obj->uuid;
+		ALOG(LOG_DEBUG,"HAIYANG","new object fond %lld, instance of %s",obj->uuid, obj->clazz->descriptor);
 	}
-	//ALOG(LOG_DEBUG,"HAIYANG","in %s %lld %s",__FUNCTION__, obj->uuid, obj->clazz->descriptor);
 	return res;
 }
 
@@ -173,6 +163,22 @@ void sendObject
 
 	//Object* obj2 = dvmDecodeIndirectRef(self, to_send);
 	//ALOG(LOG_INFO,"HAIYANG","after set %lld",obj2->uuid);
+	if(obj->clazz == gDvm.classJavaLangString){
+		int len=((StringObject*)obj)->length();
+		int utflen = ((StringObject*)obj)->utfLength();
+		const u2* tmp = ((StringObject*)obj)->chars();
+		const jchar* content = (jchar*)tmp;
+		remote.SendStringObject(self->threadId, obj->uuid, content, len);
+		ALOG(LOG_INFO,"HAIYANG","in %s string object %d %d %s", __FUNCTION__, len, utflen, (const char*)content);
+		ALOG(LOG_INFO,"HAIYANG","in %s string object %d %d %s", __FUNCTION__, len, utflen, (const char*)(content + 1));
+		ALOG(LOG_INFO,"HAIYANG","in %s string object %d %d %s", __FUNCTION__, len, utflen, (const char*)(content + 2));
+	}
+	if(obj->clazz == gDvm.classJavaLangThread){
+		bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
+		char tmp[16];
+		itoa(self->threadId, tmp, 10);
+		remote.SendThreadObject(self->threadId, obj->uuid, tmp, strlen(tmp));
+	}
 
 	remote.SendJobject(self->threadId, netref);
 }
