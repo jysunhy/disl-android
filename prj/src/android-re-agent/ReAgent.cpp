@@ -2,6 +2,8 @@
 #include "Common.h"
 #include "ReProtocol.h"
 #include "Netref.h"
+#include "stdlib.h"
+#include "stdio.h"
 
 ReProtocol remote("192.168.1.103",7777);
 
@@ -163,6 +165,11 @@ void sendObject
 
 	//Object* obj2 = dvmDecodeIndirectRef(self, to_send);
 	//ALOG(LOG_INFO,"HAIYANG","after set %lld",obj2->uuid);
+	if(obj == NULL){
+	ALOG(LOG_INFO,"HAIYANG","in shadowvm native %s NULL", __FUNCTION__);
+		remote.SendJobject(self->threadId, 0);
+		return;
+	}
 	if(obj->clazz == gDvm.classJavaLangString){
 		int len=((StringObject*)obj)->length();
 		int utflen = ((StringObject*)obj)->utfLength();
@@ -174,10 +181,11 @@ void sendObject
 		ALOG(LOG_INFO,"HAIYANG","in %s string object %d %d %s", __FUNCTION__, len, utflen, (const char*)(content + 2));
 	}
 	if(obj->clazz == gDvm.classJavaLangThread){
-		bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
-		char tmp[16];
-		itoa(self->threadId, tmp, 10);
-		remote.SendThreadObject(self->threadId, obj->uuid, tmp, strlen(tmp));
+		ALOG(LOG_INFO,"HAIYANG","in %s thread object", __FUNCTION__);
+		//bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
+		//char tmp[16]="abcd";
+		//myitoa(self->threadId, tmp, 10);
+		//remote.SendThreadObject(self->threadId, obj->uuid, tmp, strlen(tmp), isDaemon);
 	}
 
 	remote.SendJobject(self->threadId, netref);
@@ -247,7 +255,8 @@ static int registerNatives(JNIEnv *env){
 }
 
 void objNewHook(Object* obj){
-	//ALOG(LOG_INFO,"HAIYANG","in hook %s %s", __FUNCTION__, obj->clazz->descriptor);
+	SetAndGetNetref(obj);
+	ALOG(LOG_INFO,"HAIYANG","in hook %s %s %lld", __FUNCTION__, obj->clazz->descriptor, obj->uuid);
 }
 void threadEndHook(Thread* self){
 	bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
