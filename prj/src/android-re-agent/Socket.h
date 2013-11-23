@@ -31,11 +31,11 @@ class Socket
 
   // Client initialization
   //bool connect ( const std::string host, const int port );
-  bool connect ( const char* host, const int port);
+  bool Connect ( const char* host, const int port);
 
   // Data Transimission
   //bool send ( const std::string ) const;
-  bool send ( const char* data, const int length ) const;
+  bool Send ( const char* data, const int length ) const;
 
   //int recv ( std::string& ) const;
 

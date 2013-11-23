@@ -6,6 +6,19 @@
 #include <errno.h>
 #include <fcntl.h>
 
+#include <netinet/in.h>    // for sockaddr_in
+#include <sys/types.h>    // for socket
+#include <sys/socket.h>    // for socket
+#include <stdio.h>        // for printf
+#include <stdlib.h>        // for exit
+#include <string.h>        // for bzero
+#include <unistd.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#include <sys/un.h>
+#define UNIX_PATH_MAX 108
+
 
 
 Socket::Socket() :
@@ -104,7 +117,7 @@ bool Socket::accept ( Socket& new_socket ) const
     return true;
 }
 
-bool Socket::send ( const char* s, int length ) const
+bool Socket::Send ( const char* s, int length ) const
 {
   int status = ::send ( m_sock, s, length, MSG_NOSIGNAL );
   if ( status == -1 )
@@ -158,23 +171,32 @@ int Socket::recv ( std::string& s ) const
 }
 */
 
-bool Socket::connect ( const char* host, const int port )
+bool Socket::Connect ( const char* host, const int port )
 {
-  if ( ! is_valid() ) return false;
+    struct sockaddr_un address;
 
-  m_addr.sin_family = AF_INET;
-  m_addr.sin_port = htons ( port );
+    m_sock = socket(PF_UNIX, SOCK_STREAM, 0); 
+    if(m_sock < 0)
+    {   
+    //    ALOG(LOG_INFO,"HAIYANG","CL: Create Socket Failed! %d",errno);
+        return false; 
+    }   
 
-  int status = inet_pton ( AF_INET, host, &m_addr.sin_addr );
+    /* start with a clean address structure */
+    memset(&address, 0, sizeof(struct sockaddr_un));
 
-  if ( errno == EAFNOSUPPORT ) return false;
+    address.sun_family = AF_UNIX;
+    snprintf(address.sun_path, UNIX_PATH_MAX, "/dev/socket/instrument");
 
-  status = ::connect ( m_sock, ( sockaddr * ) &m_addr, sizeof ( m_addr ) );
-
-  if ( status == 0 )
+    if(connect(m_sock, 
+                (struct sockaddr *) &address,  
+                sizeof(struct sockaddr_un)) != 0)
+    {   
+//        ALOG(LOG_INFO,"HAIYANG","CL: Connect Socket Failed! %d",errno);
+//        m_sock = -1; 
+	return false;
+    }   
     return true;
-  else
-    return false;
 }
 /*
 bool Socket::connect ( const std::string host, const int port )

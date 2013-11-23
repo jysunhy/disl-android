@@ -85,7 +85,7 @@ class ReProtocol{
 			}
 			invocation_buf[oid]->EnqueueJshort(methodId);
 			invocation_buf[oid]->EnqueueJshort(0); //space for arg length
-	//		running_oid.Print();
+			running_oid.Print();
 			return true;
 		}
 		int SendJboolean(thread_id_type tid, jboolean data){
@@ -166,7 +166,7 @@ class ReProtocol{
 			arglen = htons(arglen);
 			invocation_buf[oid]->Update(sizeof(jshort),(char*)&arglen, sizeof(jshort));
 			invocation_buf[oid]->GetData(buf, len_buf);
-	//		invocation_buf[oid]->Print();
+			invocation_buf[oid]->Print();
 			bool full = !(analysis_queue[oid]->Enqueue(buf, len_buf));
 			if(full){
 				char* q=NULL;
@@ -277,11 +277,14 @@ class ReProtocol{
 			for(int i = 0; i < length; i++){
 			//	ALOG(LOG_DEBUG,"HAIYANG","Send content %d: %d", i, (int)data[i]);
 			}
-			return true;
+			//return true;
 			Socket sock;
-			sock.connect(re_host, re_port);
 			bool res;
-			res = sock.send(data, length);
+			res = sock.Connect(re_host, re_port);
+			ASSERT(res, "error in send packets");
+			int size = -3;
+			sock.Send((char*)(&size),sizeof(int));
+			res = sock.Send(data, length);
 			ASSERT(res, "error in send packets");
 			return res;
 		}
@@ -293,13 +296,16 @@ class ReProtocol{
 			for(int i = 0; i < lastlength; i++){
 			//	ALOG(LOG_DEBUG,"HAIYANG","Send content %d: %d", i+length, (int)lastdata[i]);
 			}
-			return true;
+			//return true;
 			Socket sock;
-			sock.connect(re_host, re_port);
 			bool res;
-			res = sock.send(data, length);
+			res = sock.Connect(re_host, re_port);
 			ASSERT(res, "error in send packets");
-			res = sock.send(lastdata, lastlength);
+			int size = -3;
+			sock.Send((char*)(&size),sizeof(int));
+			res = sock.Send(data, length);
+			ASSERT(res, "error in send packets");
+			res = sock.Send(lastdata, lastlength);
 			ASSERT(res, "error in send packets");
 			return res;
 		}
