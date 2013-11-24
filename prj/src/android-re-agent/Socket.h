@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
-#define DEBUG_MODE
+//#define DEBUG_MODE
 
 const int MAXHOSTNAME = 200;
 const int MAXCONNECTIONS = 5;
