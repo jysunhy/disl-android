@@ -3,6 +3,8 @@
 
 #include <pthread.h>
 #include "Common.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 #define DEFAULT_MAP_SIZE 5
 
@@ -40,9 +42,9 @@ class Map{
 			return _Get(key);
 		}
 		void Print(){
-			ALOG(LOG_DEBUG,"HAIYANG","PRINTING MAP: %s",__FUNCTION__);
+			DEBUG("PRINTING MAP: %s",__FUNCTION__);
 			for(int i = 0; i < b_occupied; i++){
-				ALOG(LOG_DEBUG,"HAIYANG","\t %d:%d",(int)b_keys[i],(int)b_values[i]);
+				DEBUG("\t %d:%d",(int)b_keys[i],(int)b_values[i]);
 			}
 		}
 	private:

@@ -2,18 +2,7 @@
 #define _COMMON_H_
 
 #include <jni.h>
-#include <Dalvik.h>
-#include <JniInternal.h>
-#include <cutils/log.h>
 #include <pthread.h>
-
-#define MY_LOG_TAG "HAIYANG"
-
-#define ASSERT(cond, msg) do{if(!cond) ALOG(LOG_ERROR,MY_LOG_TAG,msg);}while(0)
-
-#define ERROR(msg) do{ALOG(LOG_ERROR,MY_LOG_TAG,msg);}while(0)
-
-#define DEBUG(msg) do{ALOG(LOG_DEBUG,MY_LOG_TAG,msg);}while(0)
 
 class ScopedMutex{
 	public:
@@ -60,6 +49,7 @@ typedef long ordering_id_type;
 
 typedef ordering_id_type lock_id_type;
 
-typedef u4 thread_id_type;
+typedef int thread_id_type;
+//typedef u4 thread_id_type;
 
 #endif

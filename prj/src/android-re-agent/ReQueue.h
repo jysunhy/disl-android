@@ -45,7 +45,7 @@ class BaseQueue{
 			return Enqueue((char*)&nts, sizeof(jshort));
 		}
 		int EnqueueJint(jint data){
-			jint nts = htons(data);
+			jint nts = htonl(data);
 			return Enqueue((char*)&nts, sizeof(jint));
 		}
 		int EnqueueJlong(jlong data){
@@ -88,9 +88,9 @@ class BaseQueue{
 			return true;
 		}
 		virtual void Print(){
-			ALOG(LOG_DEBUG,"HAIYANG","Print Queue");
+			DEBUG("Print Queue");
 			for(int i = 0; i < q_occupied; i++)
-				ALOG(LOG_DEBUG,"HAIYANG","\t %d:%d",i, (int)q_data[i]);
+				DEBUG("\t %d:%d",i, (int)q_data[i]);
 		}
 
 	protected:

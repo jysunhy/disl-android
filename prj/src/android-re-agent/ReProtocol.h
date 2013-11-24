@@ -12,8 +12,8 @@ using namespace std;
 #define INVALID_ORDERING_ID -1
 #define INVALID_THREAD_ID -1
 
-#define ANALYSIS_QUEUE_SIZE 100
-#define INVOCATION_SIZE 128
+#define ANALYSIS_QUEUE_SIZE 64
+#define INVOCATION_SIZE 32
 
 enum MsgType{
 	// closing connection
@@ -51,8 +51,26 @@ class ReProtocol{
 			re_port = port;
 			memset(re_host, '\0', MAXHOSTNAME);
 			memcpy(re_host, host, strlen(host) < MAXHOSTNAME?strlen(host):MAXHOSTNAME);
-		}
+			
+			sock = new Socket();
 
+			while(!sock->Connect(re_host, re_port)){
+				DEBUG("Cannot connect to %s:%d", re_host, re_port);
+				sleep(2);
+			}
+#ifndef _DEBUGHEADER_H_
+			int signal = -3;
+			sock->Send((char*)&signal,sizeof(int));
+#endif
+		}
+		~ReProtocol(){
+			pthread_mutex_destroy(&gl_mtx);
+			pthread_mutex_destroy(&analysis_mtx);
+			pthread_mutex_destroy(&objfree_mtx);
+			
+			delete sock;
+			//TODO//
+		}
 		bool ConnectionClose(){
 			//TODO********************************************//
 			//send all buffers
@@ -63,7 +81,7 @@ class ReProtocol{
 			if(GetOrderingId(tid) != INVALID_ORDERING_ID) {
 				return false;
 			}
-			ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+			DEBUG("IN %s", __FUNCTION__);
 
 			lock_buf.Lock(oid);
 			SetOrderingId(tid, oid);
@@ -78,14 +96,17 @@ class ReProtocol{
 				analysis_queue[oid]->event_count=0;
 			}
 			analysis_queue[oid]->event_count++;
-			jint tmp = htons(analysis_queue[oid]->event_count);
+			jint tmp = htonl(analysis_queue[oid]->event_count);
+			DEBUG("%d,%d,%d", (int)analysis_queue[oid]->event_count,tmp,sizeof(jbyte)+sizeof(jlong));
 			analysis_queue[oid]->Update(sizeof(jbyte)+sizeof(jlong),(char*)&tmp, sizeof(jint));
 			if(!invocation_buf.Exist(oid)){
 				invocation_buf.Set(oid, new Buffer(INVOCATION_SIZE));
 			}
+			invocation_buf[oid]->Reset();
+			DEBUG("analysis Id: %d",(int)methodId);
 			invocation_buf[oid]->EnqueueJshort(methodId);
 			invocation_buf[oid]->EnqueueJshort(0); //space for arg length
-			running_oid.Print();
+			//running_oid.Print();
 			return true;
 		}
 		int SendJboolean(thread_id_type tid, jboolean data){
@@ -103,7 +124,7 @@ class ReProtocol{
 			return SendArgument(tid, (char*)&nts, sizeof(jshort));
 		}
 		int SendJint(thread_id_type tid, jint data){
-			jint nts = htons(data);
+			jint nts = htonl(data);
 			return SendArgument(tid, (char*)&nts, sizeof(jint));
 		}
 		int SendJlong(thread_id_type tid, jlong data){
@@ -125,7 +146,6 @@ class ReProtocol{
 			return SendArgument(tid, (char*)&nsize, sizeof(uint16_t))+SendArgument(tid, (char*)string_utf8, size_in_bytes);
 		}
 		int SendJobject(thread_id_type tid, jlong netref){
-			ALOG(LOG_DEBUG,"HAIYANG","new obj %lld", netref);
 			return SendJlong(tid, netref);
 		}
 		int SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){
@@ -153,9 +173,9 @@ class ReProtocol{
 		}
 		bool AnalysisEndEvent(thread_id_type tid){
 			ordering_id_type oid = GetOrderingId(tid);
-			ALOG(LOG_DEBUG,"HAIYANG","in %s %d %d",__FUNCTION__, tid, (int)oid);
 			if(oid == INVALID_ORDERING_ID) {
-				ALOG(LOG_DEBUG,"HAIYANG","in %s thread id: %d, error end event",__FUNCTION__, tid);
+				//ALOG(LOG_DEBUG,"HAIYANG","in %s thread id: %d, error end event",__FUNCTION__, tid);
+				ERROR("invalid tid in end event");
 				//lock_buf.Unlock(oid);
 				return false;
 			}
@@ -166,13 +186,15 @@ class ReProtocol{
 			arglen = htons(arglen);
 			invocation_buf[oid]->Update(sizeof(jshort),(char*)&arglen, sizeof(jshort));
 			invocation_buf[oid]->GetData(buf, len_buf);
-			invocation_buf[oid]->Print();
+			//invocation_buf[oid]->Print();
+			//analysis_queue[oid]->Print();
 			bool full = !(analysis_queue[oid]->Enqueue(buf, len_buf));
 			if(full){
 				char* q=NULL;
 				int len_q;
 				analysis_queue[oid]->GetData(q, len_q);
 				Send(q, len_q, (char*)buf, len_buf);
+				//analysis_queue[oid]->Print();
 				analysis_queue[oid]->Reset();
 			}
 
@@ -199,7 +221,7 @@ class ReProtocol{
 			return res;
 		}
 		void ObjFreeEvent(jlong objectId){
-			ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			ScopedMutex mtx(&objfree_mtx);
 			if(q_objfree.IsEmpty()) {
 				q_objfree.EnqueueJbyte(MSG_OBJ_FREE);
@@ -208,7 +230,7 @@ class ReProtocol{
 			}
 			q_objfree.event_count++;
 			if(!q_objfree.EnqueueJlong(objectId)){
-				jint tmpint = htons(q_objfree.event_count);
+				jint tmpint = htonl(q_objfree.event_count);
 				q_objfree.Update(sizeof(jbyte), (char*)&tmpint, sizeof(jint));
 				char* tmp=NULL;
 				int len=0;
@@ -221,7 +243,7 @@ class ReProtocol{
 			}
 		}
 		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, jbyte *bytes){
-			ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			//ScopedMutex mtx(&gl_mtx);
 			//TODO optimization with pool
 			Buffer tmp(100);
@@ -236,7 +258,6 @@ class ReProtocol{
 			return Send(content, len);
 		}
 		bool MethodRegisterEvent(int threadId, jshort methodId, const char* name, int length){
-			ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			//TODO optimization with pool
 			Buffer tmp(40);
 			tmp.EnqueueJbyte(MSG_REG_ANALYSIS);
@@ -246,13 +267,6 @@ class ReProtocol{
 			int len;
 			tmp.GetData(content, len);
 			return Send(content, len);
-		}
-		~ReProtocol(){
-			pthread_mutex_destroy(&gl_mtx);
-			pthread_mutex_destroy(&analysis_mtx);
-			pthread_mutex_destroy(&objfree_mtx);
-
-			//TODO//
 		}
 	private:
 		ordering_id_type GetOrderingId(thread_id_type tid){
@@ -273,40 +287,48 @@ class ReProtocol{
 			return Send(&type, 1);
 		}
 		bool Send(const char* data, int length){
+			ScopedMutex mtx(&gl_mtx);
 			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			for(int i = 0; i < length; i++){
-			//	ALOG(LOG_DEBUG,"HAIYANG","Send content %d: %d", i, (int)data[i]);
+				printf("%d:%d ", i, (int)data[i]);
 			}
 			//return true;
-			Socket sock;
 			bool res;
-			res = sock.Connect(re_host, re_port);
-			ASSERT(res, "error in send packets");
-			int size = -3;
-			sock.Send((char*)(&size),sizeof(int));
-			res = sock.Send(data, length);
+			//size = length+1;
+			//sock.Send((char*)(&size),sizeof(int));
+			res = sock->Send(data, length);
+
+			//char close = MSG_CLOSE;
+			//sock.Send(&close, 1);
+
 			ASSERT(res, "error in send packets");
 			return res;
 		}
 		bool Send(const char* data, int length, const char* lastdata, int lastlength){
+			ScopedMutex mtx(&gl_mtx);
 			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
-			for(int i = 0; i < length; i++){
+			//for(int i = 0; i < length; i++){
 			//	ALOG(LOG_DEBUG,"HAIYANG","Send content %d: %d", i, (int)data[i]);
+		//	}
+		//	for(int i = 0; i < lastlength; i++){
+			//	ALOG(LOG_DEBUG,"HAIYANG","Send content %d: %d", i+length, (int)lastdata[i]);
+		//	}
+			//return true;
+			for(int i = 0; i < length; i++){
+				printf("%d:%d ", i, (int)data[i]);
 			}
 			for(int i = 0; i < lastlength; i++){
-			//	ALOG(LOG_DEBUG,"HAIYANG","Send content %d: %d", i+length, (int)lastdata[i]);
+				printf("%d:%d ", i+length, (int)lastdata[i]);
 			}
-			//return true;
-			Socket sock;
 			bool res;
-			res = sock.Connect(re_host, re_port);
+			//size = length+lastlength+1;
+			//sock.Send((char*)(&size),sizeof(int));
+			res = sock->Send(data, length);
 			ASSERT(res, "error in send packets");
-			int size = -3;
-			sock.Send((char*)(&size),sizeof(int));
-			res = sock.Send(data, length);
+			res = sock->Send(lastdata, lastlength);
 			ASSERT(res, "error in send packets");
-			res = sock.Send(lastdata, lastlength);
-			ASSERT(res, "error in send packets");
+			//char close = MSG_CLOSE;
+			//sock.Send(&close, 1);
 			return res;
 		}
 
@@ -325,6 +347,8 @@ class ReProtocol{
 
 		char re_host[MAXHOSTNAME];
 		int re_port;
+
+		Socket *sock;
 };
 
 #endif
