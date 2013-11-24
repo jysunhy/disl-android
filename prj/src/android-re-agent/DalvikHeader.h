@@ -6,7 +6,7 @@
 
 #define MY_LOG_TAG "HAIYANG"
 
-#define ASSERT(cond, ...) do{if(!cond) ALOG(LOG_ERROR,MY_LOG_TAG,__VA_ARGS__);exit(-1);}while(0)
+#define ASSERT(cond, ...) do{if(!cond) ALOG(LOG_ERROR,MY_LOG_TAG,__VA_ARGS__);}while(0)
 
 #define ERROR(...) do{ALOG(LOG_ERROR,MY_LOG_TAG,__VA_ARGS__);}while(0)
 
