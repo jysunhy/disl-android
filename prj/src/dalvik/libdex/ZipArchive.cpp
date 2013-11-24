@@ -43,6 +43,9 @@
 #include <pthread.h>
 int client_socket=-1;
 static pthread_mutex_t mutex;
+char apkname[APK_LENGTH];
+int apk_original_dexsize=-1;
+int apk_new_dexsize=-1;
 //int inited = 0;
 #include <netinet/in.h>    // for sockaddr_in
 #include <sys/types.h>    // for socket
@@ -750,6 +753,7 @@ static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
 	}
 	if(INSTRUMENT) {
 
+		ALOG(LOG_INFO, "HAIYANG", "in %s for %s", __FUNCTION__, apkname);
 		if(client_socket<0) {
 			if(new_sock(SYS_INSTRUMENT_PORT)<0) {
 				ALOG(LOG_INFO, "HAIYANG", "CL: in %s socket err",__FUNCTION__);  
@@ -805,7 +809,11 @@ static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
 	} while (zerr == Z_OK);
 	if(INSTRUMENT && client_socket >= 0) {
 		ALOG(LOG_INFO, "HAIYANG", "CL: in %s start sending %d bytes",__FUNCTION__,oldsize);  
+		apk_original_dexsize = oldsize;
+		int len = strlen(apkname);
+		send(client_socket, &len, sizeof(int),0);
 		send(client_socket,&oldsize,sizeof(int),0);
+		send(client_socket, apkname, strlen(apkname),0);
 		while(cnt < oldsize) {
 			length = send(client_socket,olddex + cnt,min(BUFFER_SIZE, oldsize-cnt),0);
 			cnt+=length;
@@ -813,6 +821,7 @@ static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
 
 		length = recv(client_socket, &newsize, sizeof(int), 0);
 		ALOG(LOG_INFO, "HAIYANG", "CL: in %s get new size %d",__FUNCTION__,newsize);  
+		apk_new_dexsize = newsize;
 		cnt = 0;
 		while( cnt < newsize)
 		{
@@ -864,7 +873,7 @@ int dexZipExtractEntryToFile(const ZipArchive* pArchive,
 		const ZipEntry entry, int fd)
 {
 
-	ALOG(LOG_INFO, "HAIYANG", "in %s for dex",__FUNCTION__);  
+	//ALOG(LOG_INFO, "HAIYANG", "YYYY in %s for dex %s",__FUNCTION__,pArchive->mHashTable->name);  
 	int result = -1;
 	int ent = entryToIndex(pArchive, entry);
 	if (ent < 0) {

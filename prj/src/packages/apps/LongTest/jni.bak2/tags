@@ -1,0 +1,102 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+APP_STL	Android.mk	/^APP_STL := stlport_static$/;"	m
+APP_STL	Application.mk	/^APP_STL := stlport_static$/;"	m
+ASSERT	Common.h	10;"	d
+DEBUG	Common.h	12;"	d
+ERROR	Common.h	11;"	d
+ERR_PREFIX	long.cpp	2;"	d	file:
+InvocationEndEvent	ReProtocol.h	/^		int InvocationEndEvent(){$/;"	f	class:ReProtocol
+InvocationStartEvent	ReProtocol.h	/^		int InvocationStartEvent(long orderingId, short methodId){$/;"	f	class:ReProtocol
+JNI_OnLoad	ReAgent.cpp	/^jint JNI_OnLoad(JavaVM* vm, void* reserved){$/;"	f
+JNI_OnLoad	long.cpp	/^jint JNI_OnLoad(JavaVM* vm, void* reserved){$/;"	f
+LOCAL_MODULE	Android.mk	/^LOCAL_MODULE:= libshadowvm$/;"	m
+LOCAL_MODULE_TAGS	Android.mk	/^LOCAL_MODULE_TAGS := samples$/;"	m
+LOCAL_PATH	Android.mk	/^LOCAL_PATH:= $(call my-dir)$/;"	m
+LOCAL_PRELINK_MODULE	Android.mk	/^LOCAL_PRELINK_MODULE := false$/;"	m
+LOCAL_SHARED_LIBRARIES	Android.mk	/^LOCAL_SHARED_LIBRARIES := \\$/;"	m
+LOCAL_SRC_FILES	Android.mk	/^LOCAL_SRC_FILES:= \\$/;"	m
+LOCAL_STATIC_LIBRARIES	Android.mk	/^LOCAL_STATIC_LIBRARIES :=$/;"	m
+LOG_TAG	Common.h	9;"	d
+LOG_TAG	long.cpp	1;"	d	file:
+MAXCONNECTIONS	Socket.h	/^const int MAXCONNECTIONS = 5;$/;"	v
+MAXHOSTNAME	Socket.h	/^const int MAXHOSTNAME = 200;$/;"	v
+MAXRECV	Socket.h	/^const int MAXRECV = 500;$/;"	v
+MSG_ANALYZE	ReProtocol.h	/^	MSG_ANALYZE,$/;"	e	enum:MsgType
+MSG_CLASS_INFO	ReProtocol.h	/^	MSG_CLASS_INFO,$/;"	e	enum:MsgType
+MSG_CLOSE	ReProtocol.h	/^	MSG_CLOSE,$/;"	e	enum:MsgType
+MSG_NEW_CLASS	ReProtocol.h	/^	MSG_NEW_CLASS,$/;"	e	enum:MsgType
+MSG_OBJ_FREE	ReProtocol.h	/^	MSG_OBJ_FREE,$/;"	e	enum:MsgType
+MSG_REG_ANALYSIS	ReProtocol.h	/^	MSG_REG_ANALYSIS,$/;"	e	enum:MsgType
+MSG_STRING_INFO	ReProtocol.h	/^	MSG_STRING_INFO,$/;"	e	enum:MsgType
+MSG_THREAD_END	ReProtocol.h	/^	MSG_THREAD_END$/;"	e	enum:MsgType
+MSG_THREAD_INFO	ReProtocol.h	/^	MSG_THREAD_INFO,$/;"	e	enum:MsgType
+MethodRegisterEvent	ReProtocol.h	/^		int MethodRegisterEvent(string name, int threadId){$/;"	f	class:ReProtocol
+MsgType	ReProtocol.h	/^enum MsgType{$/;"	g
+ReProtocol	ReProtocol.h	/^class ReProtocol{$/;"	c
+ReQueue	ReQueue.h	/^class ReQueue {$/;"	c
+ScopedMutex	Common.h	/^		ScopedMutex(){}$/;"	f	class:ScopedMutex
+ScopedMutex	Common.h	/^		ScopedMutex(pthread_mutex_t mtx):local_mtx(mtx){$/;"	f	class:ScopedMutex
+ScopedMutex	Common.h	/^class ScopedMutex{$/;"	c
+SendImmediate	ReQueue.h	/^		SendImmediate(const char* input, int length){$/;"	f	class:ReQueue
+Socket	Socket.cpp	/^Socket::Socket() :$/;"	f	class:Socket
+Socket	Socket.h	/^class Socket$/;"	c
+UnionJNIEnvToVoid	ReAgent.cpp	/^}UnionJNIEnvToVoid;$/;"	t	typeref:union:__anon1	file:
+UnionJNIEnvToVoid	long.cpp	/^}UnionJNIEnvToVoid;$/;"	t	typeref:union:__anon2	file:
+UpdateMutexMap	ReProtocol.h	/^		bool UpdateMutexMap(long orderingId){$/;"	f	class:ReProtocol
+_COMMON_H_	Common.h	2;"	d
+_REPROTOCOL_H_	ReProtocol.h	2;"	d
+_REQUEUE_H_	ReQueue.h	2;"	d
+_SOCKET_H_	Socket.h	4;"	d
+accept	Socket.cpp	/^bool Socket::accept ( Socket& new_socket ) const$/;"	f	class:Socket
+add	ReAgent.cpp	/^jint add(JNIEnv *env, jobject thiz, jint x, jint y){$/;"	f
+add	long.cpp	/^jint add(JNIEnv *env, jobject thiz, jint x, jint y){$/;"	f
+analysisEnd	ReAgent.cpp	/^void analysisEnd$/;"	f
+analysisStart__S	ReAgent.cpp	/^void analysisStart__S$/;"	f
+analysisStart__SB	ReAgent.cpp	/^void analysisStart__SB$/;"	f
+bind	Socket.cpp	/^bool Socket::bind ( const int port )$/;"	f	class:Socket
+classPathName	ReAgent.cpp	/^static const char *classPathName = "ch\/usi\/dag\/dislre\/REDispatch";$/;"	v	file:
+classPathName	long.cpp	/^static const char *classPathName = "com\/inspur\/test2\/MainActivity";$/;"	v	file:
+connect	Socket.cpp	/^bool Socket::connect ( const std::string host, const int port )$/;"	f	class:Socket
+create	Socket.cpp	/^bool Socket::create()$/;"	f	class:Socket
+division	long.cpp	/^jfloat division(JNIEnv *env, jobject thiz, jint x, jint y){$/;"	f
+env	ReAgent.cpp	/^	JNIEnv* env;$/;"	m	union:__anon1	file:
+env	long.cpp	/^	JNIEnv* env;$/;"	m	union:__anon2	file:
+gl_mtx	ReProtocol.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:ReProtocol
+invocation_mtx	ReProtocol.h	/^		map<orderingId, pthread_mutex_t> invocation_mtx;$/;"	m	class:ReProtocol
+is_valid	Socket.h	/^  bool is_valid() const { return m_sock != -1; }$/;"	f	class:Socket
+listen	Socket.cpp	/^bool Socket::listen() const$/;"	f	class:Socket
+local_mtx	Common.h	/^		pthread_mutex_t local_mtx;$/;"	m	class:ScopedMutex
+m_addr	Socket.h	/^  sockaddr_in m_addr;$/;"	m	class:Socket
+m_sock	Socket.h	/^  int m_sock;$/;"	m	class:Socket
+methods	ReAgent.cpp	/^static JNINativeMethod methods[]= {$/;"	v	file:
+methods	long.cpp	/^static JNINativeMethod methods[]= {$/;"	v	file:
+multiplication	long.cpp	/^jfloat multiplication(JNIEnv *env, jobject thiz, jint x, jint y){$/;"	f
+recv	Socket.cpp	/^int Socket::recv ( std::string& s ) const$/;"	f	class:Socket
+registerMethod	ReAgent.cpp	/^jshort registerMethod$/;"	f
+registerNativeMethods	ReAgent.cpp	/^static int registerNativeMethods(JNIEnv* env, const char* className,$/;"	f	file:
+registerNativeMethods	long.cpp	/^static int registerNativeMethods(JNIEnv* env, const char* className,$/;"	f	file:
+registerNatives	ReAgent.cpp	/^static int registerNatives(JNIEnv *env){$/;"	f	file:
+registerNatives	long.cpp	/^static int registerNatives(JNIEnv *env){$/;"	f	file:
+send	Socket.cpp	/^bool Socket::send ( const std::string s ) const$/;"	f	class:Socket
+sendBoolean	ReAgent.cpp	/^void sendBoolean$/;"	f
+sendByte	ReAgent.cpp	/^void sendByte$/;"	f
+sendChar	ReAgent.cpp	/^void sendChar$/;"	f
+sendDouble	ReAgent.cpp	/^void sendDouble$/;"	f
+sendFloat	ReAgent.cpp	/^void sendFloat$/;"	f
+sendInt	ReAgent.cpp	/^void sendInt$/;"	f
+sendLong	ReAgent.cpp	/^void sendLong$/;"	f
+sendObject	ReAgent.cpp	/^void sendObject$/;"	f
+sendObjectPlusData	ReAgent.cpp	/^void sendObjectPlusData$/;"	f
+sendShort	ReAgent.cpp	/^void sendShort$/;"	f
+set_non_blocking	Socket.cpp	/^void Socket::set_non_blocking ( const bool b )$/;"	f	class:Socket
+substraction	long.cpp	/^jint substraction(JNIEnv *env, jobject thiz, jint x, jint y){$/;"	f
+venv	ReAgent.cpp	/^	void* venv;$/;"	m	union:__anon1	file:
+venv	long.cpp	/^	void* venv;$/;"	m	union:__anon2	file:
+~ReProtocol	ReProtocol.h	/^		~ReProtocol(){$/;"	f	class:ReProtocol
+~ScopedMutex	Common.h	/^		~ScopedMutex(){$/;"	f	class:ScopedMutex
+~Socket	Socket.cpp	/^Socket::~Socket()$/;"	f	class:Socket

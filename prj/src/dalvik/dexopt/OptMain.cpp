@@ -67,8 +67,11 @@ int client_socket=-1;
 #define min(a,b) a>b?b:a
 #define UNIX_PATH_MAX 108
 
+
 int new_sock();
 int get_new_size(int original) {
+		ALOG(LOG_INFO,"HAIYANG","get new size use variable %d", apk_new_dexsize);
+
 	if(!INSTRUMENT)
 		return original;
 	while(new_sock() <= 0) {
@@ -643,20 +646,26 @@ int main(int argc, char* const argv[])
 
     if (argc > 1) {
 		ALOG(LOG_INFO, "HAIYANG", "in dexopt");
-		fprintf(stderr, "stderr, haiyang in dexopt\n");
+		//fprintf(stderr, "stderr, haiyang in dexopt\n");
+		/*
 		for(int i = 0; i < argc; i++){
 
-			ALOG(LOG_INFO, "HAIYANG", "in dexopt %s", argv[i]);
+			//ALOG(LOG_INFO, "HAIYANG", "in dexopt %s", argv[i]);
 			if(i == argc - 1){
-	//			for(int j = 0; j < strlen(argv[i]); j++)
-	//				ALOG(LOG_INFO, "HAIYANG", "in dexopt %d", argv[i][j]);
 			}
-		}
+		}*/
 
-        if (strcmp(argv[1], "--zip") == 0)
+        if (strcmp(argv[1], "--zip") == 0) {
+			strncpy(apkname, argv[4], APK_LENGTH-1);
+			ALOG(LOG_INFO, "HAIYANG", "in dexopt for %s", apkname);
             return fromZip(argc, argv);
-        else if (strcmp(argv[1], "--dex") == 0)
+		}
+        else if (strcmp(argv[1], "--dex") == 0) {
+			strncpy(apkname, argv[6], APK_LENGTH-1);
+			apk_original_dexsize = atoi(argv[5]);
+			ALOG(LOG_INFO, "HAIYANG", "in dexopt for %s sized %d", apkname, apk_original_dexsize);
             return fromDex(argc, argv);
+		}
         else if (strcmp(argv[1], "--preopt") == 0)
             return preopt(argc, argv);
     }

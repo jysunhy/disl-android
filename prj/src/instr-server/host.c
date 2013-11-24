@@ -342,11 +342,18 @@ my_thread (void *arg)
 	FILE* output = NULL;
 
 	// receive from the client the dex content
-	retcode = recv(myClient_s, &dex_size, sizeof(int), 0);
-	if(dex_size == -1) {
+	
+	int namelen;
+	retcode = recv(myClient_s, &namelen, sizeof(int), 0);
+	if(namelen == -1) {
 		stop = 1;
 		goto release;
 	}
+	retcode = recv(myClient_s, &dex_size, sizeof(int), 0);
+	recv(myClient_s, buf, namelen, 0);
+	buf[namelen] = 0;
+	printf("receive name: %s\n", buf);
+
 	//printf("receive dex size: %d\n", dex_size);
 	if(dex_size>20000000) {
 		goto release;

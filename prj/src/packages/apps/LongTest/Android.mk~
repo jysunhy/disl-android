@@ -9,7 +9,10 @@ LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
 APP_STL := stlport_static
 
-LOCAL_JNI_SHARED_LIBRARIES := libshadowvm
+LOCAL_JNI_SHARED_LIBRARIES := 
+
+LOCAL_JNI_STATIC_LIBRARIES := \
+	libshadowvm
 
 
 LOCAL_PACKAGE_NAME := LongTest

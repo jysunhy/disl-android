@@ -29,7 +29,8 @@
 #define LISTEN_PORT            6664    // Port number for a Web server (TCP 5080)
 #define TRUE                   1
 #define FALSE                  0
-#define SERVER_IP "10.10.6.101"
+//#define SERVER_IP "10.10.6.101"
+#define SERVER_IP "192.168.1.103"
 #define SOCKFILE "/dev/socket/instrument"
 #define min(a,b) a>b?b:a
 
@@ -39,26 +40,26 @@ int map_value[300];
 
 void * my_thread (void *arg)
 {
-	ALOG (LOG_INFO,"HAIYANG","IS: new client of instrument server");
+	//ALOG (LOG_INFO,"HAIYANG","IS: new client of instrument server");
 	unsigned int myClient_s;    //copy socket
 	char buf[BUF_SIZE]; // buffer for socket
 	int retcode;       // Return code
 
-	unsigned int dex_size=0;
+	unsigned int sign4=0;
 	unsigned int cnt=0;
 	cnt = 0;
-	dex_size=0;
+	sign4=0;
 	myClient_s = *(unsigned int *) arg; // copy the socket
 	int sock_host = -1;
 	while(TRUE) {
-		retcode = recv(myClient_s, &dex_size, sizeof(int), 0);
-		ALOG (LOG_INFO,"HAIYANG","IS: receive %d size from client", dex_size);
+		retcode = recv(myClient_s, &sign4, sizeof(int), 0);
+		//ALOG (LOG_INFO,"HAIYANG","IS: receive %d size from client", sign4);
 		
-		if(dex_size == -1)
+		if(sign4 == -1)
 		{
 			break;
 		}
-		if(dex_size == -2) {
+		if(sign4 == -2) {
 			int key;
 			recv(myClient_s, &key, sizeof(int),0);
 			int i = 0;
@@ -74,17 +75,57 @@ void * my_thread (void *arg)
 			}
 			break;
 		}
+		if(sign4 == -3){
+			ALOG (LOG_INFO,"HAIYANG","receive shadow event");
+			while(sock_host < 0) {
+				sock_host = socket_network_client(SERVER_IP, 11218, SOCK_STREAM);
+				if(sock_host < 0){
+					ALOG (LOG_INFO,"HAIYANG","new host sock error");
+					sleep(1);
+				}
+			}
+			while(true){
+				retcode = recv(myClient_s, buf, BUF_SIZE, 0);
+				if(retcode < 0){
+					break;
+				}
+				send(sock_host, buf, retcode, 0);
+				/*
+				char tmp[10241];
+				int i = 0;
+				for(; i < retcode; i++){
+ 					snprintf(tmp+(2*sizeof(int)+2)*i, 2*sizeof(int)+2, "%d:%d ", i, (unsigned int)buf[i]);
+				}
+				tmp[retcode*(2+2*sizeof(int))] = 0;
+				ALOG(LOG_INFO, "HAIYANG", "SHADOW PACKET %s", tmp);
+				*/
+			}
+			break;
+		}
+		int namelen = sign4;
+		retcode = recv(myClient_s, &sign4, sizeof(int), 0);
+		if(retcode != sizeof(int))
+			goto release;
+		int codelen = sign4;
+		cnt = 0;
+		while(cnt<namelen) {
+			retcode = recv (myClient_s, buf, namelen, 0);
+			if (retcode < 0)
+				goto release;
+			cnt+=retcode;
+		}
+		buf[namelen] = 0;
+	//	ALOG (LOG_INFO,"HAIYANG","new name comes : %s ", buf);
+
 		int i = 0;
 		for(; i< map_size;i++){
-			if(map_key[i] == dex_size){
+			if(map_key[i] == codelen){
 				break;
 			}
 		}
 		if(i == map_size)
-			map_key[map_size++] = dex_size;
+			map_key[map_size++] = codelen;
 
-		if(retcode != sizeof(int))
-			goto release;
 		while(sock_host < 0) {
 			sock_host = socket_network_client(SERVER_IP, HOST_PORT, SOCK_STREAM);
 			if(sock_host < 0){
@@ -93,9 +134,12 @@ void * my_thread (void *arg)
 			}
 			
 		}
-		ALOG (LOG_INFO,"HAIYANG","IS: sending %d size from IS", dex_size);
-		retcode = send(sock_host, &dex_size, sizeof(int), 0);
-		while(cnt<dex_size) {
+	//	ALOG (LOG_INFO,"HAIYANG","IS: sending %d size from IS", sign4);
+		retcode = send(sock_host, &namelen, sizeof(int), 0);
+		retcode = send(sock_host, &codelen, sizeof(int), 0);
+		retcode = send(sock_host, buf, namelen, 0);
+		cnt = 0;
+		while(cnt<codelen) {
 			retcode = recv (myClient_s, buf, BUF_SIZE, 0);
 			if (retcode < 0)
 				goto release;
@@ -104,15 +148,15 @@ void * my_thread (void *arg)
 		}
 
 		cnt = 0;
-		retcode = recv(sock_host, &dex_size, sizeof(int), 0);
+		retcode = recv(sock_host, &sign4, sizeof(int), 0);
 		if(i == map_size - 1){
-			map_value[map_size-1] = dex_size;
+			map_value[map_size-1] = sign4;
 		}
-		ALOG (LOG_INFO,"HAIYANG","IS: new size %d size from HS", dex_size);
+		//ALOG (LOG_INFO,"HAIYANG","IS: new size %d size from HS", sign4);
 		if(retcode != sizeof(int))
 			goto release;
-		retcode = send(myClient_s, &dex_size, sizeof(int), 0);
-		while(cnt<dex_size) {
+		retcode = send(myClient_s, &sign4, sizeof(int), 0);
+		while(cnt<sign4) {
 			retcode = recv (sock_host, buf, BUF_SIZE, 0);
 			if (retcode < 0)
 				goto release;

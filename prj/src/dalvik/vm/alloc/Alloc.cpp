@@ -20,6 +20,41 @@
 #include "alloc/Heap.h"
 #include "alloc/HeapInternal.h"
 #include "alloc/HeapSource.h"
+#include <cutils/log.h>
+#include <set>
+#include <map>
+using namespace std;
+static map<u4,set<u8> > map_obj;
+
+u8 generate_uuid(){
+	return 0;
+	u8 result;
+	set<u8>& objs = map_obj[dvmThreadSelf()->threadId];
+	if(objs.size() == 0)
+		ALOG(LOG_INFO, "UUID", "ALLOC OBJECT for new thread %d", (int)(dvmThreadSelf()->threadId));
+	while(true) {
+		result = (u8)(dvmThreadSelf()->threadId)+rand();
+		if(objs.find(result) == objs.end())
+			break;
+	}
+	if(objs.size() % 100 == 0)
+		ALOG(LOG_INFO, "UUID", "ALLOC OBJECT %lu", (long)result);
+	objs.insert(result);
+	return result;
+}
+bool find_uuid(u8 id){
+	set<u8>& objs = map_obj[dvmThreadSelf()->threadId];
+	return objs.find(id) != objs.end();
+}
+void release_uuid(u8 old){
+	set<u8>& objs = map_obj[dvmThreadSelf()->threadId];
+	if(find_uuid(old)){
+		objs.erase(objs.find(old));
+	}
+	if(objs.size() == 0)
+		ALOG(LOG_INFO, "UUID", "All objects released for thread %d", (int)(dvmThreadSelf()->threadId));
+		
+}
 
 /*
  * Initialize the GC universe.
@@ -172,6 +207,10 @@ bool dvmCreateStockExceptions()
     return true;
 }
 
+bool test(Thread* self, void* args){
+	ALOG(LOG_INFO, "HAIYANG", "in obj free HOOK");
+	return true;
+}
 
 /*
  * Create an instance of the specified class.
@@ -191,7 +230,26 @@ Object* dvmAllocObject(ClassObject* clazz, int flags)
         DVM_OBJECT_INIT(newObj, clazz);
         dvmTrackAllocation(clazz, clazz->objectSize);   /* notify DDMS */
     }
+	//newObj->uuid = generate_uuid();
 	newObj->uuid = 0;
+	if(gDvm.newObjHook){
+		gDvm.newObjHook(newObj);
+	}
+	/*
+	//((void (*)(Object*))(*((dvmThreadSelf())->shadowHooks)))(newObj);
+	Thread* self = dvmThreadSelf();
+	if(self) {
+	self->shadowHook = &test;
+	if(self->shadowHook != NULL){
+		ALOG(LOG_INFO, "HAIYANG", "in obj free HOOK found");
+		(*(self->shadowHook))(self, (void *)newObj);
+	}else{
+		ALOG(LOG_INFO, "HAIYANG", "in obj free NULL found");
+	}
+	}
+	*/
+	//ebjs.insert(newObj->uuid);
+	//ALOG(LOG_INFO, "UUID", "ALLOC OBJECT %lu", (long)(newObj->uuid));
 
     return newObj;
 }
@@ -221,7 +279,12 @@ Object* dvmCloneObject(Object* obj, int flags)
     }
 
     Object* copy = (Object*)dvmMalloc(size, flags);
+	//copy->uuid = 0;
+	//copy->uuid = (u8)(dvmThreadSelf()->threadId)+rdtsc();
+	//copy->uuid = generate_uuid();
 	copy->uuid = 0;
+	//objs.insert(copy->uuid);
+	//ALOG(LOG_INFO, "UUID", "COPY OBJECT %lu", (long)(copy->uuid));
     if (copy == NULL)
         return NULL;
 
@@ -236,6 +299,10 @@ Object* dvmCloneObject(Object* obj, int flags)
     }
 
     dvmTrackAllocation(clazz, size);    /* notify DDMS */
+
+	if(gDvm.newObjHook){
+		gDvm.newObjHook(copy);
+	}
 
     return copy;
 }
@@ -283,6 +350,11 @@ void dvmReleaseTrackedAlloc(Object* obj, Thread* self)
         self = dvmThreadSelf();
     assert(self != NULL);
 
+	if(gDvm.freeObjHook) {
+	//	if(obj->uuid)
+			gDvm.freeObjHook(obj, self);
+	}
+
     if (!dvmRemoveFromReferenceTable(&self->internalLocalRefTable,
             self->internalLocalRefTable.table, obj))
     {
@@ -290,6 +362,7 @@ void dvmReleaseTrackedAlloc(Object* obj, Thread* self)
             self->threadId, obj);
         dvmAbort();
     }
+	//release_uuid(obj->uuid);
 }
 
 

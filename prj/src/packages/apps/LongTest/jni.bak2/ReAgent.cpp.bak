@@ -1,0 +1,126 @@
+#define LOG_TAG "HAIYANG"
+#define ERR_PREFIX "ERR"
+#include <utils/Log.h>
+#include <cutils/log.h>
+#include <stdio.h>
+#include "jni.h"
+#include <string>
+#include "Dalvik.h"
+#include "JniInternal.h"
+
+
+jint JNI_OnLoad(JavaVM* vm, void* reserved){
+	jint result = -1;
+	//JNIEnv *env = NULL;
+
+	//if (vm->GetEnv((void**)&env, JNI_VERSION_1_4) != JNI_OK){
+	//	goto bail;
+	//}
+	
+	result = JNI_VERSION_1_4;
+
+bail:
+	return result;
+}
+
+
+
+// ******************* TEST METHOD **************************
+
+JNIEXPORT jint JNICALL Java_ch_usi_dag_dislre_REDispatch_add(JNIEnv *env, jobject thiz, jint x, jint y){
+	ALOG(LOG_INFO,"HAIYANG","ssss native jni in add %d", x+y);
+	return x + y;
+}
+
+// ******************* REDispatch methods *******************
+
+JNIEXPORT jshort JNICALL Java_ch_usi_dag_dislre_REDispatch_registerMethod
+(JNIEnv * jni_env, jclass this_class, jstring analysis_method_desc) {
+
+	return 0;
+	//return register_method(jni_env, analysis_method_desc, tld_get()->id);
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_analysisStart__S
+(JNIEnv * jni_env, jclass this_class, jshort analysis_method_id) {
+
+	//analysis_start(jni_env, analysis_method_id, tld_get());
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_analysisStart__SB
+(JNIEnv * jni_env, jclass this_class, jshort analysis_method_id,
+		jbyte ordering_id) {
+
+	//analysis_start_buff(jni_env, analysis_method_id, ordering_id, tld_get());
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_analysisEnd
+(JNIEnv * jni_env, jclass this_class) {
+
+	//analysis_end(tld_get());
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendBoolean
+(JNIEnv * jni_env, jclass this_class, jboolean to_send) {
+
+	//pack_boolean(tld_get()->analysis_buff, to_send);
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendByte
+(JNIEnv * jni_env, jclass this_class, jbyte to_send) {
+
+	//pack_byte(tld_get()->analysis_buff, to_send);
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendChar
+(JNIEnv * jni_env, jclass this_class, jchar to_send) {
+
+	//pack_char(tld_get()->analysis_buff, to_send);
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendShort
+(JNIEnv * jni_env, jclass this_class, jshort to_send) {
+
+	//pack_short(tld_get()->analysis_buff, to_send);
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendInt
+(JNIEnv * jni_env, jclass this_class, jint to_send) {
+
+	//pack_int(tld_get()->analysis_buff, to_send);
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendLong
+(JNIEnv * jni_env, jclass this_class, jlong to_send) {
+
+	//pack_long(tld_get()->analysis_buff, to_send);
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendFloat
+(JNIEnv * jni_env, jclass this_class, jfloat to_send) {
+
+	//pack_float(tld_get()->analysis_buff, to_send);
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendDouble
+(JNIEnv * jni_env, jclass this_class, jdouble to_send) {
+
+	//pack_double(tld_get()->analysis_buff, to_send);
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendObject
+(JNIEnv * jni_env, jclass this_class, jobject to_send) {
+
+	//struct tldata * tld = tld_get ();
+	//pack_object(jni_env, tld->analysis_buff, tld->command_buff, to_send,
+	//		OT_OBJECT);
+}
+
+JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendObjectPlusData
+(JNIEnv * jni_env, jclass this_class, jobject to_send) {
+
+	//struct tldata * tld = tld_get ();
+	//pack_object(jni_env, tld->analysis_buff, tld->command_buff, to_send,
+	//		OT_DATA_OBJECT);
+}
+

@@ -23,7 +23,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE_TAGS := samples
 
 # This is the target being built.
-LOCAL_MODULE:= libshadowvm
+LOCAL_MODULE:= libshadowvm_static
 #APP_STL := stlport_static
 
 # All of the source files that we will compile.
@@ -37,7 +37,7 @@ LOCAL_SHARED_LIBRARIES := \
 	libutils libcutils libdvm #libstlport libstdc++
 
 # No static libraries.
-#LOCAL_STATIC_LIBRARIES := libstlport_static
+#LOCAL_STATIC_LIBRARIES := 	libstlport
 
 # Also need the JNI headers.
 LOCAL_C_INCLUDES +=	\
@@ -59,7 +59,7 @@ LOCAL_CFLAGS += -DANDROID_SMP=1
 # it's difficult to do this for applications that are not supplied as
 # part of a system image.
 
-LOCAL_PRELINK_MODULE := false
+LOCAL_PRELINK_MODULE := true
 
 ifdef HISTORICAL_NDK_VERSIONS_ROOT # In the platform build system
 include external/stlport/libstlport.mk
@@ -67,26 +67,26 @@ else # In the NDK build system
 	LOCAL_C_INCLUDES += external/stlport/stlport bionic
 endif
 
-include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_STATIC_LIBRARY)
 #######################################################################
-#include $(CLEAR_VARS)
+include $(CLEAR_VARS)
 # All code in LOCAL_WHOLE_STATIC_LIBRARIES will be built into this shared library.
-#LOCAL_WHOLE_STATIC_LIBRARIES := libshadowvm_static
+LOCAL_WHOLE_STATIC_LIBRARIES := libshadowvm_static
 
-#ifdef HISTORICAL_NDK_VERSIONS_ROOT # In the platform build system
-#LOCAL_SHARED_LIBRARIES := libstlport
-#else # In the NDK build system
-#LOCAL_SHARED_LIBRARIES := libstlport_static
-#endif
+ifdef HISTORICAL_NDK_VERSIONS_ROOT # In the platform build system
+LOCAL_SHARED_LIBRARIES := libstlport
+else # In the NDK build system
+LOCAL_SHARED_LIBRARIES := libstlport_static
+endif
 
-#LOCAL_SHARED_LIBRARIES := \
+LOCAL_SHARED_LIBRARIES := \
 	libutils libcutils libdvm #libstlport libstdc++
 
-#LOCAL_MODULE := libshadowvm
-#LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE := libshadowvm
+LOCAL_MODULE_TAGS := optional
 
-#ifdef HISTORICAL_NDK_VERSIONS_ROOT # In the platform build system
-#include external/stlport/libstlport.mk
-#endif
+ifdef HISTORICAL_NDK_VERSIONS_ROOT # In the platform build system
+include external/stlport/libstlport.mk
+endif
 
-#include $(BUILD_SHARED_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
