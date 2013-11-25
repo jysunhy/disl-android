@@ -135,8 +135,13 @@ void * my_thread (void *arg)
 			
 		}
 	//	ALOG (LOG_INFO,"HAIYANG","IS: sending %d size from IS", sign4);
-		retcode = send(sock_host, &namelen, sizeof(int), 0);
-		retcode = send(sock_host, &codelen, sizeof(int), 0);
+		int flag = 123;
+		flag = htonl(flag);
+		retcode = send(sock_host, &flag, sizeof(int), 0);
+		int namelen2n = htonl(namelen);
+		retcode = send(sock_host, &namelen2n, sizeof(int), 0);
+		int codelen2n = htonl(codelen);
+		retcode = send(sock_host, &codelen2n, sizeof(int), 0);
 		retcode = send(sock_host, buf, namelen, 0);
 		cnt = 0;
 		while(cnt<codelen) {

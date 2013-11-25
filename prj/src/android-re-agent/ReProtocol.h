@@ -242,7 +242,7 @@ class ReProtocol{
 				return;
 			}
 		}
-		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, jbyte *bytes){
+		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, const char *bytes){
 			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			//ScopedMutex mtx(&gl_mtx);
 			//TODO optimization with pool
@@ -251,7 +251,7 @@ class ReProtocol{
 			tmp.EnqueueStringUtf8(name, nameLength);
 			tmp.EnqueueJlong(classLoaderId);
 			tmp.EnqueueJint(codeLength);
-			tmp.Enqueue((char*)bytes, codeLength);
+			tmp.Enqueue(bytes, codeLength);
 			char* content;
 			int len;
 			tmp.GetData(content, len);

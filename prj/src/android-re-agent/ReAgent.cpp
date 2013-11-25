@@ -107,9 +107,9 @@ jlong newClass(ClassObject *obj){
 		return 0;
 	}
 	obj->uuid = _set_net_reference(ot_object_id++,ot_class_id++,1,1);
-	remote.NewClassInfo(obj->uuid, obj->descriptor, strlen(obj->descriptor), "", 0, SetAndGetNetref(obj->classLoader), SetAndGetNetref(obj->super));
 	char tmp;
 	remote.NewClassEvent(obj->descriptor, strlen(obj->descriptor), SetAndGetNetref(obj->classLoader), 0, &tmp);
+	remote.NewClassInfo(obj->uuid, obj->descriptor, strlen(obj->descriptor), "", 0, SetAndGetNetref(obj->classLoader), SetAndGetNetref(obj->super));
 	//ALOG(LOG_DEBUG,"HAIYANG","NEW class found %lld:%s",obj->uuid, obj->descriptor);
 	return obj->uuid;
 }
