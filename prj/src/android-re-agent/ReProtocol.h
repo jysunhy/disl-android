@@ -148,21 +148,39 @@ class ReProtocol{
 		int SendJobject(thread_id_type tid, jlong netref){
 			return SendJlong(tid, netref);
 		}
-		int SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){
-			int res = SendJlong(tid,netref);
-			res += SendArgument(tid, (const char*) utf8, len*sizeof(jchar));
-			return res;
+		bool SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){
+			ScopedMutex mtx(&gl_mtx);
+			Buffer tmp(100);
+			tmp.EnqueueJbyte(MSG_STRING_INFO);
+			tmp.EnqueueJlong(netref);
+			tmp.EnqueueStringUtf8((const char*)utf8, len*sizeof(jchar));
+			char* content;
+			int packet_len;
+			tmp.GetData(content, packet_len);
+			return sock->Send(content,packet_len);
 		}
 		int SendStringObject(thread_id_type tid, jlong netref, const char* utf8, int len){
-			int res = SendJlong(tid,netref);
-			res += SendStringUtf8(tid, utf8, len);
-			return res;
+			ScopedMutex mtx(&gl_mtx);
+			Buffer tmp(100);
+			tmp.EnqueueJbyte(MSG_STRING_INFO);
+			tmp.EnqueueJlong(netref);
+			tmp.EnqueueStringUtf8(utf8, len);
+			char* content;
+			int packet_len;
+			tmp.GetData(content, packet_len);
+			return sock->Send(content,packet_len);
 		}
 		int SendThreadObject(thread_id_type tid, jlong netref, const char* threadName, int len, jboolean isDaemon){
-			int res = SendJlong(tid, netref);
-			res += SendStringUtf8(tid, threadName, len);
-			res += SendJboolean(tid, isDaemon);
-			return res;
+			ScopedMutex mtx(&gl_mtx);
+			Buffer tmp(100);
+			tmp.EnqueueJbyte(MSG_THREAD_INFO);
+			tmp.EnqueueJlong(netref);
+			tmp.EnqueueStringUtf8(threadName, len);
+			tmp.EnqueueJboolean(isDaemon);
+			char* content;
+			int packet_len;
+			tmp.GetData(content, packet_len);
+			return sock->Send(content,packet_len);
 		}
 		bool SendArgument(thread_id_type tid, const char* data, int length){
 			ordering_id_type oid = GetOrderingId(tid);

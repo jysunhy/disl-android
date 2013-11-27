@@ -1,8 +1,10 @@
 #include "Debug.h"
 //#include "Common.h"
 #include "ReProtocol.h"
+#include "Netref.h"
 
 int main(){
+	printf("%d\n",net_ref_get_class_id(5497558138886L));
 	ReProtocol p("127.0.0.1", 11218);
 	const char* method="ch.usi.dag.disl.test.dispatch.CodeExecuted.testingBasic";
 	p.MethodRegisterEvent(1,123, method, strlen(method));
