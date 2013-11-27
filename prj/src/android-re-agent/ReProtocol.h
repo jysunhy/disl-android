@@ -210,6 +210,16 @@ class ReProtocol{
 			Buffer tmp(100);
 			tmp.EnqueueJbyte(MSG_CLASS_INFO);
 			tmp.EnqueueJlong(netref);
+			/*const char *tmpname = className;
+			int tmplen = namelen;
+			if(className[0]=='L'){
+				tmpname++;
+				tmplen--;
+			}
+			if(className[namelen-1] == ';')
+				tmplen--;
+			tmp.EnqueueStringUtf8(tmpname, tmplen);
+				*/
 			tmp.EnqueueStringUtf8(className, namelen);
 			tmp.EnqueueStringUtf8(generic, glen);
 			tmp.EnqueueJlong(netrefClassLoader);
@@ -248,7 +258,16 @@ class ReProtocol{
 			//TODO optimization with pool
 			Buffer tmp(100);
 			tmp.EnqueueJbyte(MSG_NEW_CLASS);
-			tmp.EnqueueStringUtf8(name, nameLength);
+			const char *tmpname = name;
+			int tmplen = nameLength;
+			if(name[0]=='L'){
+				tmpname++;
+				tmplen--;
+			}
+			if(name[nameLength-1] == ';')
+				tmplen--;
+				
+			tmp.EnqueueStringUtf8(tmpname, tmplen);
 			tmp.EnqueueJlong(classLoaderId);
 			tmp.EnqueueJint(codeLength);
 			tmp.Enqueue(bytes, codeLength);
@@ -314,12 +333,12 @@ class ReProtocol{
 			//	ALOG(LOG_DEBUG,"HAIYANG","Send content %d: %d", i+length, (int)lastdata[i]);
 		//	}
 			//return true;
-			for(int i = 0; i < length; i++){
-				printf("%d:%d ", i, (int)data[i]);
-			}
-			for(int i = 0; i < lastlength; i++){
-				printf("%d:%d ", i+length, (int)lastdata[i]);
-			}
+			//for(int i = 0; i < length; i++){
+			//	printf("%d:%d ", i, (int)data[i]);
+			//}
+			//for(int i = 0; i < lastlength; i++){
+			//	printf("%d:%d ", i+length, (int)lastdata[i]);
+			//}
 			bool res;
 			//size = length+lastlength+1;
 			//sock.Send((char*)(&size),sizeof(int));
