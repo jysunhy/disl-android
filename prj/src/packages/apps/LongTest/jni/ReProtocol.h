@@ -148,21 +148,39 @@ class ReProtocol{
 		int SendJobject(thread_id_type tid, jlong netref){
 			return SendJlong(tid, netref);
 		}
-		int SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){
-			int res = SendJlong(tid,netref);
-			res += SendArgument(tid, (const char*) utf8, len*sizeof(jchar));
-			return res;
+		bool SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){
+			ScopedMutex mtx(&gl_mtx);
+			Buffer tmp(100);
+			tmp.EnqueueJbyte(MSG_STRING_INFO);
+			tmp.EnqueueJlong(netref);
+			tmp.EnqueueStringUtf8((const char*)utf8, len*sizeof(jchar));
+			char* content;
+			int packet_len;
+			tmp.GetData(content, packet_len);
+			return sock->Send(content,packet_len);
 		}
 		int SendStringObject(thread_id_type tid, jlong netref, const char* utf8, int len){
-			int res = SendJlong(tid,netref);
-			res += SendStringUtf8(tid, utf8, len);
-			return res;
+			ScopedMutex mtx(&gl_mtx);
+			Buffer tmp(100);
+			tmp.EnqueueJbyte(MSG_STRING_INFO);
+			tmp.EnqueueJlong(netref);
+			tmp.EnqueueStringUtf8(utf8, len);
+			char* content;
+			int packet_len;
+			tmp.GetData(content, packet_len);
+			return sock->Send(content,packet_len);
 		}
 		int SendThreadObject(thread_id_type tid, jlong netref, const char* threadName, int len, jboolean isDaemon){
-			int res = SendJlong(tid, netref);
-			res += SendStringUtf8(tid, threadName, len);
-			res += SendJboolean(tid, isDaemon);
-			return res;
+			ScopedMutex mtx(&gl_mtx);
+			Buffer tmp(100);
+			tmp.EnqueueJbyte(MSG_THREAD_INFO);
+			tmp.EnqueueJlong(netref);
+			tmp.EnqueueStringUtf8(threadName, len);
+			tmp.EnqueueJboolean(isDaemon);
+			char* content;
+			int packet_len;
+			tmp.GetData(content, packet_len);
+			return sock->Send(content,packet_len);
 		}
 		bool SendArgument(thread_id_type tid, const char* data, int length){
 			ordering_id_type oid = GetOrderingId(tid);
@@ -210,6 +228,16 @@ class ReProtocol{
 			Buffer tmp(100);
 			tmp.EnqueueJbyte(MSG_CLASS_INFO);
 			tmp.EnqueueJlong(netref);
+			/*const char *tmpname = className;
+			int tmplen = namelen;
+			if(className[0]=='L'){
+				tmpname++;
+				tmplen--;
+			}
+			if(className[namelen-1] == ';')
+				tmplen--;
+			tmp.EnqueueStringUtf8(tmpname, tmplen);
+				*/
 			tmp.EnqueueStringUtf8(className, namelen);
 			tmp.EnqueueStringUtf8(generic, glen);
 			tmp.EnqueueJlong(netrefClassLoader);
@@ -242,16 +270,25 @@ class ReProtocol{
 				return;
 			}
 		}
-		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, jbyte *bytes){
+		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, const char *bytes){
 			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
 			//ScopedMutex mtx(&gl_mtx);
 			//TODO optimization with pool
 			Buffer tmp(100);
 			tmp.EnqueueJbyte(MSG_NEW_CLASS);
-			tmp.EnqueueStringUtf8(name, nameLength);
+			const char *tmpname = name;
+			int tmplen = nameLength;
+			if(name[0]=='L'){
+				tmpname++;
+				tmplen--;
+			}
+			if(name[nameLength-1] == ';')
+				tmplen--;
+				
+			tmp.EnqueueStringUtf8(tmpname, tmplen);
 			tmp.EnqueueJlong(classLoaderId);
 			tmp.EnqueueJint(codeLength);
-			tmp.Enqueue((char*)bytes, codeLength);
+			tmp.Enqueue(bytes, codeLength);
 			char* content;
 			int len;
 			tmp.GetData(content, len);
@@ -314,12 +351,12 @@ class ReProtocol{
 			//	ALOG(LOG_DEBUG,"HAIYANG","Send content %d: %d", i+length, (int)lastdata[i]);
 		//	}
 			//return true;
-			for(int i = 0; i < length; i++){
-				printf("%d:%d ", i, (int)data[i]);
-			}
-			for(int i = 0; i < lastlength; i++){
-				printf("%d:%d ", i+length, (int)lastdata[i]);
-			}
+			//for(int i = 0; i < length; i++){
+			//	printf("%d:%d ", i, (int)data[i]);
+			//}
+			//for(int i = 0; i < lastlength; i++){
+			//	printf("%d:%d ", i+length, (int)lastdata[i]);
+			//}
 			bool res;
 			//size = length+lastlength+1;
 			//sock.Send((char*)(&size),sizeof(int));

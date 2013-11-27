@@ -106,8 +106,13 @@ jlong newClass(ClassObject *obj){
 	if(obj == NULL)  {
 		return 0;
 	}
+	jlong superid = SetAndGetNetref(obj->super);
+	jlong loaderid = SetAndGetNetref(obj->classLoader);
 	obj->uuid = _set_net_reference(ot_object_id++,ot_class_id++,1,1);
-	remote.NewClassInfo(obj->uuid, obj->descriptor, strlen(obj->descriptor), "", 0, SetAndGetNetref(obj->classLoader), SetAndGetNetref(obj->super));
+	char tmp;
+	ALOG(LOG_DEBUG,"HAIYANG","NEW class found %s id %d, loaderid: %lld, superid: %lld",obj->descriptor, ot_class_id-1, loaderid, superid);
+	remote.NewClassEvent(obj->descriptor, strlen(obj->descriptor), loaderid, 0, &tmp);
+	remote.NewClassInfo(obj->uuid, obj->descriptor, strlen(obj->descriptor), "", 0, loaderid, superid);
 	//ALOG(LOG_DEBUG,"HAIYANG","NEW class found %lld:%s",obj->uuid, obj->descriptor);
 	return obj->uuid;
 }
@@ -126,9 +131,9 @@ jlong SetAndGetNetref(Object* obj){
 		if(obj->clazz->uuid == 0){ //its class not registered
 			newClass(obj->clazz);
 		}
-		obj->uuid = _set_net_reference(ot_object_id++,obj->clazz->uuid,0,0);
+		obj->uuid = _set_net_reference(ot_object_id++,net_ref_get_class_id(obj->clazz->uuid),0,0);
 		res = obj->uuid;
-		//ALOG(LOG_DEBUG,"HAIYANG","NEW object found %lld, instance of %s",obj->uuid, obj->clazz->descriptor);
+		ALOG(LOG_DEBUG,"HAIYANG","NEW object found tag:%lld, instance of %s classid %d",obj->uuid, obj->clazz->descriptor,net_ref_get_class_id(obj->uuid));
 	}
 	return res;
 }
@@ -182,16 +187,23 @@ void sendObjectPlusData
 		int len=((StringObject*)obj)->length();
 		int utflen = ((StringObject*)obj)->utfLength();
 		const u2* tmp = ((StringObject*)obj)->chars();
-		const jchar* content = (jchar*)tmp;
-		ALOG(LOG_DEBUG,"HAIYANG","send string object");
-		remote.SendStringObject(self->threadId, obj->uuid, content, len);
+		//const jchar* content = (jchar*)tmp;
+		char* str = new char[utflen+1];
+		for(int i = 0; i < utflen; i++){
+			str[i] = tmp[i];
+		}
+		str[utflen] = 0;
+		ALOG(LOG_DEBUG,"HAIYANG","send string object %s, %d, %d",str, len, utflen);
+
+		remote.SendStringObject(self->threadId, obj->uuid, str, utflen);
 	}
 	if(obj->clazz == gDvm.classJavaLangThread){
 		ALOG(LOG_DEBUG,"HAIYANG","send thread object");
 		//bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
-		//char tmp[16]="abcd";
+		bool isDaemon = false;
+		char tmp[16]="abcd";
 		//myitoa(self->threadId, tmp, 10);
-		//remote.SendThreadObject(self->threadId, obj->uuid, tmp, strlen(tmp), isDaemon);
+		remote.SendThreadObject(self->threadId, obj->uuid, tmp, strlen(tmp), isDaemon);
 	}
 
 	remote.SendJobject(self->threadId, netref);
@@ -266,7 +278,10 @@ void objFreeHook(Object* obj, Thread* self){
 	//ALOG(LOG_DEBUG,"HAIYANG","in FREE hook %s %lld", obj->clazz->descriptor, obj->uuid);
 	//remote.ObjFreeEvent(obj->uuid);
 }
-
+int classfileLoadHook(const char* name, int len){
+	ALOG(LOG_DEBUG,"HAIYANG","LOADING CLASS %s", name);
+	return 1;
+}
 jint JNI_OnLoad(JavaVM* vm, void* reserved){
 
 	UnionJNIEnvToVoid uenv;
@@ -279,6 +294,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	gDvm.freeObjHook = &objFreeHook;
 	gDvm.threadEndHook = &threadEndHook;
 	gDvm.vmEndHook = &vmEndHook;
+	gDvm.classfileLoadHook = &classfileLoadHook;
 
 	pthread_mutex_init(&gl_mtx, NULL);
 

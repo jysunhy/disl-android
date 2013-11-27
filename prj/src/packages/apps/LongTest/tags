@@ -13,12 +13,14 @@ APP_STL	jni.bak2/Android.mk	/^APP_STL := stlport_static$/;"	m
 APP_STL	jni.bak2/Application.mk	/^APP_STL := stlport_static$/;"	m
 APP_STL	jni/Application.mk	/^APP_STL := stlport_static # system|stlport_static|stlport_shared|gnustl_static$/;"	m
 ASSERT	jni.bak2/Common.h	12;"	d
-ASSERT	jni/Common.h	12;"	d
+ASSERT	jni/DalvikHeader.h	9;"	d
+ASSERT	jni/Debug.h	10;"	d
 AnalysisEndEvent	jni/ReProtocol.h	/^		bool AnalysisEndEvent(thread_id_type tid){$/;"	f	class:ReProtocol
 AnalysisStartEvent	jni/ReProtocol.h	/^		bool AnalysisStartEvent(thread_id_type tid, ordering_id_type oid, short methodId){$/;"	f	class:ReProtocol
 BQ_BUFFERS	jni.bak/dislreagent.cpp	75;"	d	file:
 BQ_UTILITY	jni.bak/dislreagent.cpp	69;"	d	file:
 BUF_SIZE	jni/Buffer.h	4;"	d
+BUILDDIR	jni/Makefile	/^BUILDDIR=.\/build$/;"	m
 BaseQueue	jni/ReQueue.h	/^		BaseQueue(){$/;"	f	class:BaseQueue
 BaseQueue	jni/ReQueue.h	/^		BaseQueue(int capacity):q_capacity(capacity),q_occupied(0){$/;"	f	class:BaseQueue
 BaseQueue	jni/ReQueue.h	/^class BaseQueue{$/;"	c
@@ -34,13 +36,17 @@ CLASS_INSTANCE_MASK	jni.bak/netref.h	/^static const uint64_t CLASS_INSTANCE_MASK
 CLASS_INSTANCE_MASK	jni/Netref.h	/^static const uint64_t CLASS_INSTANCE_MASK = 0x1;$/;"	v
 CLASS_INSTANCE_POS	jni.bak/netref.h	/^static const uint8_t CLASS_INSTANCE_POS = 62;$/;"	v
 CLASS_INSTANCE_POS	jni/Netref.h	/^static const uint8_t CLASS_INSTANCE_POS = 62;$/;"	v
+COMMON_FLAGS	jni/Makefile	/^COMMON_FLAGS=-fPIC$/;"	m
+CPPFLAGS	jni/Makefile	/^CPPFLAGS=-I\/usr\/lib\/jvm\/java-6-oracle\/include -I\/usr\/lib\/jvm\/java-6-oracle\/include\/linux$/;"	m
+CodeExecutedRE	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^public class CodeExecutedRE {$/;"	c
 Connect	jni/Socket.cpp	/^bool Socket::Connect ( const char* host, const int port )$/;"	f	class:Socket
 ConnectionClose	jni/ReProtocol.h	/^		bool ConnectionClose(){$/;"	f	class:ReProtocol
 DEBUG	jni.bak2/Common.h	16;"	d
-DEBUG	jni/Common.h	16;"	d
+DEBUG	jni/DalvikHeader.h	13;"	d
+DEBUG	jni/Debug.h	14;"	d
 DEFAULT_HOST	jni.bak/dislreagent.cpp	/^static const char * DEFAULT_HOST = "localhost";$/;"	v	file:
 DEFAULT_LOCK_BUFFER	jni/Lock.h	7;"	d
-DEFAULT_MAP_SIZE	jni/Map.h	7;"	d
+DEFAULT_MAP_SIZE	jni/Map.h	9;"	d
 DEFAULT_PORT	jni.bak/dislreagent.cpp	/^static const char * DEFAULT_PORT = "11218";$/;"	v	file:
 DEFAULT_QUEUE_SIZE	jni.bak2/ReQueue.h	7;"	d
 DEFAULT_QUEUE_SIZE	jni/ReQueue.h	7;"	d
@@ -48,7 +54,8 @@ DoubleCapacity	jni/Buffer.h	/^		void DoubleCapacity(){$/;"	f	class:Buffer
 DoubleCapacity	jni/ReQueue.h	/^		void DoubleCapacity(){$/;"	f	class:Buffer
 ERR	jni.bak/asserter.h	15;"	d
 ERROR	jni.bak2/Common.h	14;"	d
-ERROR	jni/Common.h	14;"	d
+ERROR	jni/DalvikHeader.h	11;"	d
+ERROR	jni/Debug.h	12;"	d
 ERR_PREFIX	jni.bak/dislreagent.cpp	14;"	d	file:
 ERR_PREFIX	jni.bak/long.cpp	2;"	d	file:
 ERR_PREFIX	jni.bak2/long.cpp	2;"	d	file:
@@ -109,6 +116,10 @@ Java_ch_usi_dag_dislre_REDispatch_sendLong	jni.bak/dislreagent.cpp	/^JNIEXPORT v
 Java_ch_usi_dag_dislre_REDispatch_sendObject	jni.bak/dislreagent.cpp	/^JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendObject$/;"	f
 Java_ch_usi_dag_dislre_REDispatch_sendObjectPlusData	jni.bak/dislreagent.cpp	/^JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendObjectPlusData$/;"	f
 Java_ch_usi_dag_dislre_REDispatch_sendShort	jni.bak/dislreagent.cpp	/^JNIEXPORT void JNICALL Java_ch_usi_dag_dislre_REDispatch_sendShort$/;"	f
+LIBNAME	jni/Makefile	/^LIBNAME=dislreagent$/;"	m
+LIBRARY	jni/Makefile	/^LIBRARY=lib$(LIBNAME).jnilib$/;"	m
+LIBRARY	jni/Makefile	/^LIBRARY=lib$(LIBNAME).so$/;"	m
+LINK_SHARED	jni/Makefile	/^LINK_SHARED=$(LINK.c) -shared -o $@$/;"	m
 LOCAL_JNI_SHARED_LIBRARIES	Android.mk	/^LOCAL_JNI_SHARED_LIBRARIES := libshadowvm$/;"	m
 LOCAL_MODULE	jni.bak/Android.mk	/^LOCAL_MODULE:= libarithmetic$/;"	m
 LOCAL_MODULE	jni.bak2/Android.mk	/^LOCAL_MODULE:= libshadowvm$/;"	m
@@ -176,7 +187,7 @@ MSG_THREAD_END	jni/ReProtocol.h	/^	MSG_THREAD_END$/;"	e	enum:MsgType
 MSG_THREAD_INFO	jni.bak/messagetype.h	/^static const jbyte MSG_THREAD_INFO = 7;$/;"	v
 MSG_THREAD_INFO	jni.bak2/ReProtocol.h	/^	MSG_THREAD_INFO,$/;"	e	enum:MsgType
 MSG_THREAD_INFO	jni/ReProtocol.h	/^	MSG_THREAD_INFO,$/;"	e	enum:MsgType
-MY_LOG_TAG	jni/Common.h	10;"	d
+MY_LOG_TAG	jni/DalvikHeader.h	7;"	d
 MainActivity	src/com/inspur/test2/MainActivity.java	/^public class MainActivity extends Activity implements OnClickListener{$/;"	c
 Map	jni/Map.h	/^		Map(int capacity=DEFAULT_MAP_SIZE):b_capacity(capacity),b_occupied(0){$/;"	f	class:Map
 Map	jni/Map.h	/^class Map{$/;"	c
@@ -185,8 +196,9 @@ MethodRegisterEvent	jni/ReProtocol.h	/^		bool MethodRegisterEvent(int threadId, 
 MsgType	jni.bak2/ReProtocol.h	/^enum MsgType{$/;"	g
 MsgType	jni/ReProtocol.h	/^enum MsgType{$/;"	g
 NULL_NET_REF	jni.bak/dislreagent.cpp	140;"	d	file:
-NewClassEvent	jni/ReProtocol.h	/^		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, jbyte *bytes){$/;"	f	class:ReProtocol
+NewClassEvent	jni/ReProtocol.h	/^		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, const char *bytes){$/;"	f	class:ReProtocol
 NewClassInfo	jni/ReProtocol.h	/^		bool NewClassInfo(jlong netref, const char* className, int namelen, const char* generic, int glen, jlong netrefClassLoader, jlong netrefSuperClass){$/;"	f	class:ReProtocol
+OBJECTS	jni/Makefile	/^OBJECTS=$(SOURCES:%.cpp=%.o)$/;"	m
 OBJECT_ID_MASK	jni.bak/netref.h	/^static const uint64_t OBJECT_ID_MASK = 0xFFFFFFFFFFL;$/;"	v
 OBJECT_ID_MASK	jni/Netref.h	/^static const uint64_t OBJECT_ID_MASK = 0xFFFFFFFFFFL;$/;"	v
 OBJECT_ID_POS	jni.bak/netref.h	/^static const uint8_t OBJECT_ID_POS = 0;$/;"	v
@@ -222,6 +234,7 @@ ReQueue	jni/ReQueue.h	/^class ReQueue: public BaseQueue{$/;"	c
 Reset	jni.bak2/ReQueue.h	/^		void Reset(){$/;"	f	class:ReQueue
 Reset	jni/ReQueue.h	/^		virtual void Reset(){$/;"	f	class:BaseQueue
 Reset	jni/ReQueue.h	/^		virtual void Reset(){$/;"	f	class:ReQueue
+SOURCES	jni/Makefile	/^SOURCES=test.cpp$/;"	m
 SPEC_MASK	jni.bak/netref.h	/^static const uint64_t SPEC_MASK = 0x1;$/;"	v
 SPEC_MASK	jni/Netref.h	/^static const uint64_t SPEC_MASK = 0x1;$/;"	v
 SPEC_POS	jni.bak/netref.h	/^static const uint8_t SPEC_POS = 63;$/;"	v
@@ -249,8 +262,8 @@ SendJint	jni/ReProtocol.h	/^		int SendJint(thread_id_type tid, jint data){$/;"	f
 SendJlong	jni/ReProtocol.h	/^		int SendJlong(thread_id_type tid, jlong data){$/;"	f	class:ReProtocol
 SendJobject	jni/ReProtocol.h	/^		int SendJobject(thread_id_type tid, jlong netref){$/;"	f	class:ReProtocol
 SendJshort	jni/ReProtocol.h	/^		int SendJshort(thread_id_type tid, jshort data){$/;"	f	class:ReProtocol
+SendStringObject	jni/ReProtocol.h	/^		bool SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){$/;"	f	class:ReProtocol
 SendStringObject	jni/ReProtocol.h	/^		int SendStringObject(thread_id_type tid, jlong netref, const char* utf8, int len){$/;"	f	class:ReProtocol
-SendStringObject	jni/ReProtocol.h	/^		int SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){$/;"	f	class:ReProtocol
 SendStringUtf8	jni/ReProtocol.h	/^		int SendStringUtf8(thread_id_type tid, const char* string_utf8, uint16_t size_in_bytes){$/;"	f	class:ReProtocol
 SendThreadObject	jni/ReProtocol.h	/^		int SendThreadObject(thread_id_type tid, jlong netref, const char* threadName, int len, jboolean isDaemon){$/;"	f	class:ReProtocol
 Set	jni/Map.h	/^		void Set(const K &key, const V &value) {$/;"	f	class:Map
@@ -265,6 +278,7 @@ TO_BUFFER_COUNT	jni.bak/dislreagent.cpp	119;"	d	file:
 TO_BUFFER_MAX_ID	jni.bak/dislreagent.cpp	118;"	d	file:
 TRUE	jni.bak/asserter.h	11;"	d
 UINT16_MAX	jni.bak/comm.h	12;"	d
+UNAME	jni/Makefile	/^UNAME := $(shell uname)$/;"	m
 UNIX_PATH_MAX	jni/Socket.cpp	20;"	d	file:
 UnionJNIEnvToVoid	jni.bak/long.cpp	/^}UnionJNIEnvToVoid;$/;"	t	typeref:union:__anon6	file:
 UnionJNIEnvToVoid	jni.bak2/ReAgent.cpp	/^}UnionJNIEnvToVoid;$/;"	t	typeref:union:__anon9	file:
@@ -286,6 +300,8 @@ _BUFFPACK_H	jni/buffpack.h	2;"	d
 _COMMON_H_	jni.bak2/Common.h	2;"	d
 _COMMON_H_	jni/Common.h	2;"	d
 _COMM_H	jni.bak/comm.h	2;"	d
+_DALVIKHEADER_H_	jni/DalvikHeader.h	2;"	d
+_DEBUGHEADER_H_	jni/Debug.h	2;"	d
 _DISLAGENT_H	jni.bak/dislreagent.h	4;"	d
 _DoubleCapacity	jni/Map.h	/^		void _DoubleCapacity(){$/;"	f	class:Map
 _Exist	jni/Map.h	/^		bool _Exist(const K& key){$/;"	f	class:Map
@@ -368,6 +384,7 @@ b_locks	jni/Lock.h	/^		pthread_mutex_t *b_locks;$/;"	m	class:LockBuffer
 b_occupied	jni/Lock.h	/^		int b_occupied;$/;"	m	class:LockBuffer
 b_occupied	jni/Map.h	/^		int b_occupied;$/;"	m	class:Map
 b_values	jni/Map.h	/^		V *b_values;$/;"	m	class:Map
+beId	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^	private static short beId = REDispatch.registerMethod($/;"	f	class:CodeExecutedRE	file:
 bind	jni.bak2/Socket.cpp	/^bool Socket::bind ( const int port )$/;"	f	class:Socket
 bind	jni/Socket.cpp	/^bool Socket::bind ( const int port )$/;"	f	class:Socket
 blocking_queue	jni.bak/blockingqueue.h	/^} blocking_queue;$/;"	t	typeref:struct:__anon2
@@ -397,7 +414,9 @@ buffs_objtag	jni.bak/dislreagent.cpp	/^static void buffs_objtag(process_buffs * 
 buffs_utility_get	jni.bak/dislreagent.cpp	/^static process_buffs * buffs_utility_get() {$/;"	f	file:
 buffs_utility_send	jni.bak/dislreagent.cpp	/^static process_buffs * buffs_utility_send(process_buffs * buffs) {$/;"	f	file:
 button1	src/com/inspur/test2/MainActivity.java	/^	Button button1;$/;"	f	class:MainActivity
+bytecodesExecuted	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^	public static void bytecodesExecuted(int count) {$/;"	m	class:CodeExecutedRE
 capacity	jni.bak/buffer.h	/^	size_t capacity;$/;"	m	struct:__anon1
+ch.usi.dag.dislre	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^package ch.usi.dag.dislre;$/;"	p
 ch.usi.dag.dislre	src/ch/usi/dag/dislre/REDispatch.java	/^package ch.usi.dag.dislre;$/;"	p
 check_error	jni.bak/asserter.h	/^void check_error(int cond, const char *str) {$/;"	f
 check_std_error	jni.bak/asserter.h	/^void check_std_error(int retval, int errorval, const char *str) {$/;"	f
@@ -406,6 +425,7 @@ classPathName	jni.bak2/ReAgent.cpp	/^static const char *classPathName = "ch\/usi
 classPathName	jni.bak2/long.cpp	/^static const char *classPathName = "com\/inspur\/test2\/MainActivity";$/;"	v	file:
 classPathName	jni/ReAgent.cpp	/^static const char *classPathName = "ch\/usi\/dag\/dislre\/REDispatch";$/;"	v	file:
 classPathName	jni/long.cpp	/^static const char *classPathName = "com\/inspur\/test2\/MainActivity";$/;"	v	file:
+classfileLoadHook	jni/ReAgent.cpp	/^int classfileLoadHook(const char* name, int len){$/;"	f
 close_connection	jni.bak/dislreagent.cpp	/^static void close_connection(int conn, jlong thread_id) {$/;"	f	file:
 com.inspur.test2	src/com/inspur/test2/MainActivity.java	/^package com.inspur.test2;$/;"	p
 command_buff	jni.bak/dislreagent.cpp	/^	buffer * command_buff;$/;"	m	struct:__anon3	file:
@@ -503,6 +523,11 @@ m_addr	jni.bak2/Socket.h	/^  sockaddr_in m_addr;$/;"	m	class:Socket
 m_addr	jni/Socket.h	/^  sockaddr_in m_addr;$/;"	m	class:Socket
 m_sock	jni.bak2/Socket.h	/^  int m_sock;$/;"	m	class:Socket
 m_sock	jni/Socket.h	/^  int m_sock;$/;"	m	class:Socket
+main	jni/test.cpp	/^int main(){$/;"	f
+manuallyClose	jni/ReAgent.cpp	/^void manuallyClose$/;"	f
+manuallyClose	src/ch/usi/dag/dislre/REDispatch.java	/^	public static native void manuallyClose();$/;"	m	class:REDispatch
+methodId	src/com/inspur/test2/MainActivity.java	/^	short methodId;$/;"	f	class:MainActivity
+methodId2	src/com/inspur/test2/MainActivity.java	/^	short methodId2;$/;"	f	class:MainActivity
 method_id	jni/ReAgent.cpp	/^static volatile jshort method_id = 1;$/;"	v	file:
 methods	jni.bak/long.cpp	/^static JNINativeMethod methods[]= {$/;"	v	file:
 methods	jni.bak2/ReAgent.cpp	/^static JNINativeMethod methods[]= {$/;"	v	file:
@@ -690,6 +715,7 @@ set_bits	jni/Netref.h	/^static inline void set_bits(uint64_t * to, uint64_t bits
 set_non_blocking	jni.bak2/Socket.cpp	/^void Socket::set_non_blocking ( const bool b )$/;"	f	class:Socket
 set_non_blocking	jni/Socket.cpp	/^void Socket::set_non_blocking ( const bool b )$/;"	f	class:Socket
 set_tag	jni.bak/netref.h	/^static void set_tag(Thread* self, jobject obj, jlong tag){$/;"	f
+sock	jni/ReProtocol.h	/^		Socket *sock;$/;"	m	class:ReProtocol
 spinner1	src/com/inspur/test2/MainActivity.java	/^	Spinner spinner1, spinner2, spinner3;$/;"	f	class:MainActivity
 spinner2	src/com/inspur/test2/MainActivity.java	/^	Spinner spinner1, spinner2, spinner3;$/;"	f	class:MainActivity
 spinner3	src/com/inspur/test2/MainActivity.java	/^	Spinner spinner1, spinner2, spinner3;$/;"	f	class:MainActivity
@@ -697,11 +723,18 @@ substraction	jni.bak/long.cpp	/^jint substraction(JNIEnv *env, jobject thiz, jin
 substraction	jni.bak2/long.cpp	/^jint substraction(JNIEnv *env, jobject thiz, jint x, jint y){$/;"	f
 substraction	jni/long.cpp	/^jint substraction(JNIEnv *env, jobject thiz, jint x, jint y){$/;"	f
 substraction	src/com/inspur/test2/MainActivity.java	/^    public int substraction(int x, int y){$/;"	m	class:MainActivity
+ta2Id	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^	private static short ta2Id = REDispatch.registerMethod($/;"	f	class:CodeExecutedRE	file:
+taId	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^	private static short taId = REDispatch.registerMethod($/;"	f	class:CodeExecutedRE	file:
 tagging_lock	jni.bak/dislreagent.cpp	/^static pthread_mutex_t tagging_lock;$/;"	v	file:
+tbId	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^	private static short tbId = REDispatch.registerMethod($/;"	f	class:CodeExecutedRE	file:
 test	src/ch/usi/dag/dislre/REDispatch.java	/^	public static void test(){$/;"	m	class:REDispatch
+testingAdvanced	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^	public static void testingAdvanced(String s, Object o, Class<?> c,$/;"	m	class:CodeExecutedRE
+testingAdvanced2	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^	public static void testingAdvanced2(Object o1, Object o2, Object o3,$/;"	m	class:CodeExecutedRE
+testingBasic	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^	public static void testingBasic(boolean b, byte by, char c, short s, int i,$/;"	m	class:CodeExecutedRE
+testingNull	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^	public static void testingNull(String s, Object o, Class<?> c) {$/;"	m	class:CodeExecutedRE
 textView1	src/com/inspur/test2/MainActivity.java	/^	TextView textView1;$/;"	f	class:MainActivity
 threadEndHook	jni/ReAgent.cpp	/^void threadEndHook(Thread* self){$/;"	f
-thread_id_type	jni/Common.h	/^typedef u4 thread_id_type;$/;"	t
+thread_id_type	jni/Common.h	/^typedef int thread_id_type;$/;"	t
 tld	jni.bak/dislreagent.cpp	/^static __thread struct tldata tld = {$/;"	v	typeref:struct:tldata	file:
 tld_create	jni.bak/dislreagent.cpp	/^static struct tldata * tld_create ()  {$/;"	f	file:
 tld_get	jni.bak/dislreagent.cpp	/^inline static struct tldata * tld_get () {$/;"	f	file:
@@ -709,6 +742,7 @@ tld_init	jni.bak/dislreagent.cpp	/^inline static struct tldata * tld_init (struc
 tldata	jni.bak/dislreagent.cpp	/^struct tldata {$/;"	s	file:
 tls_init	jni.bak/dislreagent.cpp	/^static void tls_init () {$/;"	f	file:
 tls_key	jni.bak/dislreagent.cpp	/^static pthread_key_t tls_key;$/;"	v	file:
+tnId	src/ch/usi/dag/dislre/CodeExecutedRE.java	/^	private static short tnId = REDispatch.registerMethod($/;"	f	class:CodeExecutedRE	file:
 to_buff_array	jni.bak/dislreagent.cpp	/^static to_buff_struct to_buff_array[TO_BUFFER_COUNT];$/;"	v	file:
 to_buff_id	jni.bak/dislreagent.cpp	/^	jbyte to_buff_id;$/;"	m	struct:tldata	file:
 to_buff_lock	jni.bak/dislreagent.cpp	/^static pthread_mutex_t to_buff_lock;$/;"	v	file:
