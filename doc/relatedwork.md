@@ -1,4 +1,12 @@
-#Related Work
+#Papers recently on android
+---
+* Vetting Undesirable Behaviors in Android Apps with Permission Use Analysis[CCS 2013](http://faculty.cs.tamu.edu/guofei/paper/VetDroid-CCS13.pdf)
+* AppIntent: Analyzing Sensitive Data Transmission in Android for Privacy Leakage Detection[CCS 2013](http://faculty.cs.tamu.edu/guofei/paper/AppIntent-CCS13.pdf)
+* On the Effectiveness of API-Level Access Control Using Bytecode Rewriting in Android [ASIACCS 2013](http://www.cis.syr.edu/~wedu/Research/paper/api_level_ac_asiaccs2013.pdf)
+* practical and lightweight domain isolation on Android [SPSM 2011](http://www.informatik.tu-darmstadt.de/fileadmin/user_upload/Group_TRUST/PubsPDF/spsm18-bugiel.pdf)
+
+
+#Previous papers(Some Related Work I have read in summer)
 ---
 ##AndroidAnalysis
 

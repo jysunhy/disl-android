@@ -26,9 +26,9 @@ ANDROID PROJECT
 ####LogCat
 		#LogCat(without eclipse)
 		in adb
-			2.1、adb logcat 显示所有调试信息        
-			2.2、adb logcat *:w 显示waring过滤器过滤后的调试信息        
-			2.3、adb logcat Test1:V Test2:D 显示标签为Test1的所有调试信息，以及显示标签为Test2Debug过滤器过滤后的调试信息
+			2.1、adb logcat 
+			2.2、adb logcat 
+			2.3、adb logcat Test1:V Test2:D 
 ####[DDVM](http://developer.android.com/tools/debugging/ddms.html)
 
 ####Good Blogs
@@ -60,3 +60,5 @@ adb shell dalvikvm -help
 * [dex2jar](https://code.google.com/p/dex2jar/)
 * [smali](https://code.google.com/p/smali/)
 * build/core/definitions.mk
+
+
