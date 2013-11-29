@@ -50,6 +50,11 @@ void analysisStart__SB
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, ordering_id, analysis_method_id);
 }
 
+void manuallyOpen
+(JNIEnv * jni_env, jclass this_class) {
+	ALOG(LOG_INFO,"HAIYANG","EVENT: open connection");
+	remote.OpenConnection();
+}
 void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
 	ALOG(LOG_INFO,"HAIYANG","EVENT: close connection");
@@ -227,6 +232,7 @@ static JNINativeMethod methods[]= {
 	{"sendDouble", "(D)V", (void*)sendDouble},
 	{"sendObject", "(Ljava/lang/Object;)V", (void*)sendObject},
 	{"sendObjectPlusData", "(Ljava/lang/Object;)V", (void*)sendObjectPlusData},
+	{"manuallyOpen", "()V", (void*)manuallyOpen},
 	{"manuallyClose", "()V", (void*)manuallyClose},
 };
 
@@ -283,6 +289,7 @@ int classfileLoadHook(const char* name, int len){
 	return 1;
 }
 jint JNI_OnLoad(JavaVM* vm, void* reserved){
+	remote.OpenConnection();
 
 	UnionJNIEnvToVoid uenv;
 	uenv.venv = NULL;

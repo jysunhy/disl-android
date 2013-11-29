@@ -52,6 +52,20 @@ class ReProtocol{
 			memset(re_host, '\0', MAXHOSTNAME);
 			memcpy(re_host, host, strlen(host) < MAXHOSTNAME?strlen(host):MAXHOSTNAME);
 			
+		}
+		~ReProtocol(){
+			pthread_mutex_destroy(&gl_mtx);
+			pthread_mutex_destroy(&analysis_mtx);
+			pthread_mutex_destroy(&objfree_mtx);
+			
+			delete sock;
+			//TODO//
+		}
+
+		void OpenConnection(){
+			DEBUG("Opening new connection");
+			if(sock)
+				return;
 			sock = new Socket();
 
 			while(!sock->Connect(re_host, re_port)){
@@ -63,18 +77,12 @@ class ReProtocol{
 			sock->Send((char*)&signal,sizeof(int));
 #endif
 		}
-		~ReProtocol(){
-			pthread_mutex_destroy(&gl_mtx);
-			pthread_mutex_destroy(&analysis_mtx);
-			pthread_mutex_destroy(&objfree_mtx);
-			
-			delete sock;
-			//TODO//
-		}
 		bool ConnectionClose(){
 			//TODO********************************************//
 			//send all buffers
 			Send(MSG_CLOSE);
+			delete sock;
+			sock = NULL;
 			return true;
 		}
 		bool AnalysisStartEvent(thread_id_type tid, ordering_id_type oid, short methodId){
@@ -330,9 +338,12 @@ class ReProtocol{
 				printf("%d:%d ", i, (int)data[i]);
 			}
 			//return true;
-			bool res;
+			bool res = true;
 			//size = length+1;
 			//sock.Send((char*)(&size),sizeof(int));
+			while(!sock) {
+				OpenConnection();
+			}
 			res = sock->Send(data, length);
 
 			//char close = MSG_CLOSE;
@@ -357,9 +368,12 @@ class ReProtocol{
 			//for(int i = 0; i < lastlength; i++){
 			//	printf("%d:%d ", i+length, (int)lastdata[i]);
 			//}
-			bool res;
+			bool res=true;
 			//size = length+lastlength+1;
 			//sock.Send((char*)(&size),sizeof(int));
+			while(!sock){
+				OpenConnection();
+			}
 			res = sock->Send(data, length);
 			ASSERT(res, "error in send packets");
 			res = sock->Send(lastdata, lastlength);

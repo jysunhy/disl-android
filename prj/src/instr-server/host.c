@@ -343,11 +343,11 @@ my_thread (void *arg)
 
 	// receive from the client the dex content
 	
-	int flag;
-	retcode = recv(myClient_s, &flag, sizeof(int), 0);
+	//int flag;
+	//retcode = recv(myClient_s, &flag, sizeof(int), 0);
 	//printf("flag: %d\n", flag);
-	flag = ntohl(flag);
-	printf("flag: %d\n", flag);
+	//flag = ntohl(flag);
+	//printf("flag: %d\n", flag);
 
 
 	int namelen;
