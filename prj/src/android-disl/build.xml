@@ -1,0 +1,390 @@
+<project name="disl" default="prepare-all" basedir=".">
+
+	<property file="build.properties" />
+	<property file="disl.version" />
+
+	<path id="buildpath">
+		<pathelement location="${bin}" />
+		<pathelement location="${asm.path}" />
+		<pathelement location="${junit.core.path}" />
+		<pathelement location="${junit.hamcrest.path}" />
+	</path>
+
+	<path id="classpath">
+		<pathelement location="${bin}" />
+		<pathelement location="${asm.path}" />
+		<pathelement location="${junit.core.path}" />
+		<pathelement location="${junit.hamcrest.path}" />
+	</path>
+
+	<!-- it automatically compiles all other necessary stuff :) -->
+	<target name="compile-tlvinserter">
+		<mkdir dir="${bin}" />
+		<javac srcdir="${src.disl}" includes="ch/usi/dag/disl/utilinstr/tlvinserter/" destdir="${bin}" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+		</javac>
+	</target>
+
+	<target name="prepare-extendedthread" depends="compile-tlvinserter">
+		<mkdir dir="bin-thread/java/lang" />
+		<java fork="true" classname="ch.usi.dag.disl.utilinstr.tlvinserter.ExtendThread">
+			<classpath refid="buildpath" />
+		</java>
+		<mkdir dir="${build}" />
+		<jar basedir="bin-thread" destfile="${extendedthread.path}" />
+		<delete dir="bin-thread" />
+	</target>
+
+	<target name="compile-dynamicbypass" depends="prepare-extendedthread">
+		<mkdir dir="${bin}" />
+		<javac srcdir="${src.dynbypass}" destdir="${bin}" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+			<compilerarg value="-Xbootclasspath/p:${extendedthread.path}" />
+		</javac>
+		<delete file="${extendedthread.path}" />
+	</target>
+
+	<target name="compile-disl" depends="compile-dynamicbypass">
+		<javac srcdir="${src.disl}" destdir="${bin}" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+		</javac>
+	</target>
+
+	<target name="compile-agent-java" depends="compile-dynamicbypass">
+		<javac srcdir="${src.agent.java}" destdir="${bin}" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+		</javac>
+	</target>
+
+	<target name="compile-agent-c">
+		<exec executable="make" dir="${src.agent.c}/javahome" />
+		<exec executable="make" dir="${src.agent.c}" />
+	</target>
+
+	<target name="compile-reserver">
+		<javac srcdir="${src.reserver}" destdir="${bin}" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+		</javac>
+	</target>
+
+	<target name="compile-redispatch">
+		<javac srcdir="${src.redispatch}" destdir="${bin}" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+		</javac>
+	</target>
+
+	<target name="compile-reagent">
+		<exec executable="make" dir="${src.reagent}/javahome" />
+		<exec executable="make" dir="${src.reagent}" />
+	</target>
+
+	<target name="compile-test" depends="compile-disl,compile-reserver,compile-redispatch">
+		<javac srcdir="${src.test}" destdir="bin" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+		</javac>
+	</target>
+
+	<target name="compile" depends="compile-disl,compile-agent-java,compile-agent-c,compile-test,compile-reserver,compile-redispatch" />
+
+	<target name="package-dislserver" depends="compile-disl">
+		<jar basedir="${bin}" destfile="${build}/disl-server.jar" includes="ch/usi/dag/disl/**,ch/usi/dag/dislserver/**" excludes="ch/usi/dag/disl/test/**,ch/usi/dag/disl/testtools/**">
+			<manifest>
+				<attribute name="Class-Path" value="${asm.lib}" />
+				<attribute name="Main-Class" value="ch.usi.dag.dislserver.DiSLServer" />
+				<attribute name="DiSL-Version" value="${disl.version}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="compile-dynamicbypass-afterbootstrap">
+		<mkdir dir="${build.afterbootstrap}" />
+		<javac srcdir="${src.dynbypass.act}" destdir="${build.afterbootstrap}" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+		</javac>
+	</target>
+
+	<target name="package-dislagent-java" depends="compile-agent-java,compile-dynamicbypass,compile-dynamicbypass-afterbootstrap">
+		<!-- rename after bootstrap class -->
+		<move file="${build.afterbootstrap}/ch/usi/dag/disl/dynamicbypass/DynamicBypassCheck.class" tofile="${build.afterbootstrap}/DynamicBypassCheck-AfterBootstrap.class" />
+
+		<jar basedir="${bin}" destfile="${build}/disl-agent.jar" includes="ch/usi/dag/dislagent/**,ch/usi/dag/disl/dynamicbypass/**">
+
+			<manifest>
+				<attribute name="Premain-Class" value="ch.usi.dag.dislagent.DiSLAgent" />
+				<attribute name="Can-Redefine-Classes" value="true" />
+				<attribute name="DiSL-Version" value="${disl.version}" />
+			</manifest>
+
+			<!-- include after bootstrap class -->
+			<fileset file="${build.afterbootstrap}/DynamicBypassCheck-AfterBootstrap.class" />
+		</jar>
+
+		<!-- delete dir with after bootstrap class -->
+		<delete dir="${build.afterbootstrap}" />
+	</target>
+
+	<target name="package-reserver" depends="compile-reserver">
+		<jar basedir="${bin}" destfile="${build}/dislre-server.jar" includes="ch/usi/dag/dislreserver/**">
+			<manifest>
+				<attribute name="Class-Path" value="${asm.lib}" />
+				<attribute name="Main-Class" value="ch.usi.dag.dislreserver.DiSLREServer" />
+				<attribute name="DiSL-Version" value="${disl.version}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="package-redispatch" depends="compile-redispatch">
+		<jar basedir="${bin}" destfile="${build}/dislre-dispatch.jar" includes="ch/usi/dag/dislre/**">
+		</jar>
+	</target>
+
+	<target name="package" depends="package-dislserver,package-dislagent-java,package-reserver,package-redispatch,compile-agent-c,compile-reagent" />
+
+	<target name="eclipse-agent" description="creates simple agent jar file for eclipse">
+		<mkdir dir="build" />
+		<jar jarfile="build/eclipse-agent.jar">
+			<manifest>
+				<attribute name="Premain-Class" value="ch.usi.dag.disl.testtools.agent.Agent" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="eclipse-dynamicbypass" depends="compile-dynamicbypass" description="creates support library for DiSL development under eclipse">
+		<jar basedir="${bin}" destfile="${build}/eclipse-dynamicbypass.jar" includes="ch/usi/dag/disl/dynamicbypass/" />
+	</target>
+
+	<target name="eclipse" depends="eclipse-dynamicbypass,eclipse-agent" />
+
+	<target name="copy-asm">
+		<copy file="${asm.path}" tofile="${build}/${asm.lib}" />
+	</target>
+
+	<target name="prepare-all" depends="package,eclipse,compile-test,copy-asm" />
+
+	<target name="clean">
+		<delete dir="${bin}" />
+		<delete dir="${build}" />
+		<delete dir="${build.test}" />
+		<delete dir="${build.thread}" />
+		<delete dir="${build.afterbootstrap}" />
+		<delete dir="${dist}" />
+		<exec executable="make" dir="${src.agent.c}/javahome">
+			<arg value="clean" />
+		</exec>
+		<exec executable="make" dir="${src.agent.c}">
+			<arg value="clean" />
+		</exec>
+		<exec executable="make" dir="${src.reagent}/javahome">
+			<arg value="clean" />
+		</exec>
+		<exec executable="make" dir="${src.reagent}">
+			<arg value="clean" />
+		</exec>
+		<ant antfile="example/build.xml" target="clean" useNativeBasedir="true" />
+	</target>
+
+	<target name="javadoc" depends="package,eclipse">
+		<javadoc access="public" author="true" overview="doc/overview.html" classpath="build/eclipse-dynamicbypass.jar:${asm.path}" destdir="doc" nodeprecated="false" nodeprecatedlist="false" noindex="false" nonavbar="false" notree="false" packagenames="ch.usi.dag.disl.guardcontext,ch.usi.dag.disl.staticcontext,ch.usi.dag.disl.dynamiccontext,ch.usi.dag.disl.classcontext,ch.usi.dag.disl.marker,ch.usi.dag.disl.transformer,ch.usi.dag.disl.processorcontext,ch.usi.dag.disl.annotation" source="1.7" sourcefiles="src/ch/usi/dag/disl/scope/Scope.java,src/ch/usi/dag/disl/scope/ScopeImpl.java,src/ch/usi/dag/disl/DiSL.java,src/ch/usi/dag/disl/snippet/Shadow.java" sourcepath="src-test:src-agent-java:src" splitindex="true" use="true" version="true" />
+	</target>
+
+	<property name="dist.executables" value="
+		**/find.sh,
+		**/find.bat" />
+
+	<property name="dist.excludes" value="
+		${bin}/**,
+		${build}/**,
+		${build.test}/**,
+		${dist}/**,
+		.settings/**,
+		.classpath,
+		.project,
+		eclipse.**,
+		test.py,
+		run**" />
+
+	<target name="dist-tar">
+		<mkdir dir="${dist}" />
+		<tar destfile="${dist}/disl-src-${disl.version}.tar">
+			<tarfileset dir="." excludes="${dist.excludes}, ${dist.executables}" />
+			<tarfileset dir="." includes="${dist.executables}" filemode="755" />
+		</tar>
+	</target>
+
+	<target name="dist-zip">
+		<mkdir dir="${dist}" />
+		<zip destfile="${dist}/disl-src-${disl.version}.zip">
+			<zipfileset dir="." excludes="${dist.excludes}, ${dist.executables}" />
+			<zipfileset dir="." includes="${dist.executables}" filemode="755" />
+		</zip>
+	</target>
+
+	<!-- *** test instrumentaion package *** -->
+
+	<!-- package suite test application -->
+	<target name="package-test-app">
+		<jar jarfile="${build.test}/disl-app-${tmp.test.name}.jar" basedir="${bin}" includes="${tmp.test.path}/app/**">
+			<manifest>
+				<attribute name="Main-Class" value="${tmp.test.pkg}.app.TargetClass" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- package suite test instrumentaton with default DiSLClass -->
+	<target name="package-test-instr-nomanifest">
+		<jar jarfile="${build.test}/disl-instr-${tmp.test.name}.jar" basedir="${bin}" includes="${tmp.test.path}/instr/**" excludes="${tmp.test.path}/instr/MANIFEST.MF">
+			<manifest>
+				<attribute name="DiSL-Classes" value="${tmp.test.path}.instr.DiSLClass" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- package suite test instrumentaton with manifest file -->
+	<target name="package-test-instr-manifest">
+		<jar jarfile="${build.test}/disl-instr-${tmp.test.name}.jar" basedir="${bin}" includes="${tmp.test.path}/instr/**" excludes="${tmp.test.path}/instr/MANIFEST.MF" manifest="${tmp.test.manifest}">
+		</jar>
+	</target>
+
+	<!-- iterates over files and runs targets on them, dir is passed as property -->
+	<!-- property passed in the targets must be used directly -->
+	<!--
+		currently used ant-contrib instead
+		javascript requires js.jar and bsf.jar in lower versions of jdk and ant
+				
+	<scriptdef name="package-test-script" language="javascript">
+		<element name="dirset" type="dirset" />
+		<![CDATA[
+			dirsets = elements.get("dirset");
+			for (i = 0; i < dirsets.size(); ++i) {
+				var it = dirsets.get(i).iterator();
+				while (it.hasNext()) {
+					var name = it.next().getName();
+					var path = "ch/usi/dag/disl/test/suite/" + name;
+					var pkg = "ch.usi.dag.disl.test.suite." + name;
+					var manifest = self.project.getProperty("src.test") + "/" + path + "/instr/MANIFEST.MF";
+				
+					self.project.setProperty( "tmp.test.name", name); 
+					self.project.setProperty( "tmp.test.path", path); 
+					self.project.setProperty( "tmp.test.pkg", pkg); 
+					self.project.setProperty( "tmp.test.manifest", manifest); 
+
+					self.project.executeTarget( "package-test-app");
+					
+					if (new java.io.File( manifest).exists()) {
+						self.project.executeTarget( "package-test-instr-manifest");
+					} else {
+						self.project.executeTarget( "package-test-instr-nomanifest");
+					}
+				}
+			}
+		]]>
+	</scriptdef> 
+	
+	<target name="package-test">
+		<mkdir dir="${build.test}"/>
+		<package-test-script>
+			<dirset dir="src-test/ch/usi/dag/disl/test/suite/">
+				<include name="*" />
+			</dirset>
+		</package-test-script>
+	</target>
+	-->
+
+	<!-- build single suite test -->
+	<target name="package-test-single">
+		<antcall target="package-test-app" />
+		<if>
+			<available file="${tmp.test.manifest}" />
+			<then>
+				<antcall target="package-test-instr-manifest" />
+			</then>
+			<else>
+				<antcall target="package-test-instr-nomanifest" />
+			</else>
+		</if>
+	</target>
+
+	<!-- build jars for every directory in suite tests -->
+	<target name="package-test">
+		<taskdef resource="${ant-contrib.resource}">
+			<classpath>
+				<pathelement location="${ant-contrib.path}" />
+			</classpath>
+		</taskdef>
+
+		<mkdir dir="${build.test}" />
+
+		<for param="file">
+			<path>
+				<dirset dir="src-test/ch/usi/dag/disl/test/suite/">
+					<include name="*" />
+				</dirset>
+			</path>
+			<sequential>
+				<propertyregex override="yes" property="basename" input="@{file}" regexp="(.*)/(.*)" replace="\2" />
+				<antcall target="package-test-single">
+					<param name="tmp.test.name" value="${basename}" />
+					<param name="tmp.test.path" value="ch/usi/dag/disl/test/suite/${basename}" />
+					<param name="tmp.test.pkg" value="ch.usi.dag.disl.test.suite.${basename}" />
+					<param name="tmp.test.manifest" value="${src.test}/ch/usi/dag/disl/test/suite/${basename}/instr/MANIFEST.MF" />
+				</antcall>
+			</sequential>
+		</for>
+	</target>
+
+	<!-- copy resource files needed to run the tests from source to bin directory -->
+	<target name="copy-test-resource">
+		<copy todir="${bin}">
+			<fileset dir="${src.test}">
+				<include name="**/*.resource" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="prepare-test" depends="prepare-all, copy-test-resource, package-test" />
+
+	<!-- run all junit and junit wrapped suite tests -->
+	<target name="test" depends="prepare-test">
+		<junit haltonfailure="no" haltonerror="no" failureproperty="junit.failure">
+			<classpath refid="classpath" />
+			<formatter type="brief" usefile="false" />
+			<!-- allow properties starting with "-Ddisl." to be passed to tests -->
+			<syspropertyset>
+				<propertyref prefix="disl" />
+			</syspropertyset>
+			<batchtest fork="yes">
+				<fileset dir="${src.test}">
+					<include name="ch/usi/dag/disl/test/junit/*Test.java" />
+					<include name="ch/usi/dag/disl/test/suite/*/junit/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="report-test-name" depends="check-test-name" unless="test.name.set">
+		<fail message="Property test.name is not set. Set it using -Dtest.name=value" />
+	</target>
+
+	<target name="check-test-name">
+		<condition property="test.name.set">
+			<isset property="test.name" />
+		</condition>
+	</target>
+
+	<!-- run single suite test -->
+	<target name="suite-test" depends="prepare-test, report-test-name">
+		<junit haltonfailure="no" haltonerror="no" failureproperty="junit.failure">
+			<classpath refid="classpath" />
+			<formatter type="brief" usefile="false" />
+			<!-- allow properties starting with "-Ddisl." to be passed to tests -->
+			<syspropertyset>
+				<propertyref prefix="disl" />
+			</syspropertyset>
+			<batchtest fork="yes">
+				<fileset dir="${src.test}">
+					<include name="*ch/usi/dag/disl/test/suite/${test.name}/junit/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+	</target>
+</project>

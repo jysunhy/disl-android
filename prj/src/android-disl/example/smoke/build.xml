@@ -1,0 +1,22 @@
+<project name="disl-example" default="prepare-all" basedir=".">
+	
+	<target name="prepare-all">
+		<ant antfile="app/build.xml" target="package" useNativeBasedir="true" />
+		<ant antfile="instr/build.xml" target="package" useNativeBasedir="true" />
+	</target>
+	
+	<target name="clean">
+		<ant antfile="app/build.xml" target="clean" useNativeBasedir="true" />
+		<ant antfile="instr/build.xml" target="clean" useNativeBasedir="true" />
+	</target>
+	
+	<target name="run" depends="prepare-all">
+		<exec executable="../disl.py">
+			<arg value="--" />
+			<arg value="instr/build/disl-instr.jar" />
+			<arg value="-jar" />
+			<arg value="app/build/example-app.jar" />
+		</exec>	
+	</target>
+
+</project>
