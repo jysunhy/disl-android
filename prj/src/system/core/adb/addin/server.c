@@ -87,6 +87,7 @@ void * my_thread (void *arg)
 			while(true){
 				retcode = recv(myClient_s, buf, BUF_SIZE, 0);
 				if(retcode < 0){
+					ALOG(LOG_DEBUG,"HAIYANG", "closed from app");
 					break;
 				}
 				send(sock_host, buf, retcode, 0);
@@ -135,9 +136,9 @@ void * my_thread (void *arg)
 			
 		}
 	//	ALOG (LOG_INFO,"HAIYANG","IS: sending %d size from IS", sign4);
-		//int flag = 123;
-		//flag = htonl(flag);
-		//retcode = send(sock_host, &flag, sizeof(int), 0);
+	//	int flag = 123;
+	//	flag = htonl(flag);
+	//	retcode = send(sock_host, &flag, sizeof(int), 0);
 		int namelen2n = htonl(namelen);
 		retcode = send(sock_host, &namelen2n, sizeof(int), 0);
 		int codelen2n = htonl(codelen);
@@ -153,13 +154,18 @@ void * my_thread (void *arg)
 		}
 
 		cnt = 0;
+		int newnamelen;
+		retcode = recv(sock_host, &newnamelen, sizeof(int), 0);
+		newnamelen = ntohl(newnamelen);
 		retcode = recv(sock_host, &sign4, sizeof(int), 0);
+		sign4 = ntohl(sign4);
 		if(i == map_size - 1){
 			map_value[map_size-1] = sign4;
 		}
+		ALOG (LOG_INFO, "HAIYANG","new name received %d", newnamelen);
+		retcode = recv(sock_host, buf, newnamelen, 0);
+		ALOG (LOG_INFO, "HAIYANG","new dexsize received %d", sign4);
 		//ALOG (LOG_INFO,"HAIYANG","IS: new size %d size from HS", sign4);
-		if(retcode != sizeof(int))
-			goto release;
 		retcode = send(myClient_s, &sign4, sizeof(int), 0);
 		while(cnt<sign4) {
 			retcode = recv (sock_host, buf, BUF_SIZE, 0);

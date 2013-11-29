@@ -379,7 +379,7 @@ my_thread (void *arg)
 			coreinst = 1;
 		success = 1;
 	}else {
-		success = 0;
+		success = 1;
 		printf("found new apk of size %d \n", dex_size);
 	}
 
@@ -460,7 +460,15 @@ my_thread (void *arg)
 		}
 		fclose(input);
 		printf("old size/new size: %d/%d\n",dex_size,newsize);
-		retcode = send(myClient_s, &newsize, sizeof(int),0);
+
+
+		int newnamelen = 1;
+		int namelen_tmp = htonl(newnamelen);
+		send(myClient_s, &namelen_tmp, sizeof(int),0);
+
+		int newsize_tmp = htonl(newsize);
+		retcode = send(myClient_s, &newsize_tmp, sizeof(int),0);
+		retcode = send(myClient_s, buf, newnamelen,0);
 		if(retcode != sizeof(int))
 			goto release;
 		input = fopen(filename2,"rb");
@@ -487,7 +495,14 @@ my_thread (void *arg)
 			cnt+=retcode;
 		}
 		//	printf("received %d bytes\n",cnt);
-		retcode = send(myClient_s, &dex_size, sizeof(int), 0);
+		int namelength = 1;
+		int namelength_tmp = htonl(namelength);
+		
+		retcode = send(myClient_s, &namelength_tmp, sizeof(int), 0);
+		int dexsize_tmp = htonl(dex_size);
+		retcode = send(myClient_s, &dexsize_tmp, sizeof(int), 0);
+	//	retcode = send(myClient_s, &dex_size, sizeof(int), 0);
+		retcode = send(myClient_s, buf, namelength , 0);
 		cnt = 0;
 		while(cnt < dex_size) {
 			retcode = send(myClient_s, dex+cnt, min(BUF_SIZE, dex_size-cnt),0);
