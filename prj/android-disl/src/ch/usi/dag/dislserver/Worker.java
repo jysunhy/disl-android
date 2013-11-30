@@ -159,7 +159,6 @@ public class Worker extends Thread {
 		try {
 
 		while (true) {
-
 			final NetMessage nm = sc.readMessage();
 
 			// communication closed by the client
@@ -279,6 +278,9 @@ public class Worker extends Thread {
 			}
 
 			sc.sendMessage(replyData);
+			if(ANDROID) {
+                break;
+            }
 		}
 
 		}
