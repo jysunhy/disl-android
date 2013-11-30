@@ -733,7 +733,7 @@ struct DvmGlobals {
     void        (*vmStartHook)(JavaVM*);
     void        (*vmEndHook)(JavaVM*);
     void        (*vmInitHook)(JavaVM*);
-    int        (*classfileLoadHook)(char*, int);
+    int        (*classfileLoadHook)(const char*, int);
 };
 
 extern struct DvmGlobals gDvm;
