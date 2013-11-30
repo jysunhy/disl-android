@@ -8,6 +8,14 @@
 		<pathelement location="${asm.path}" />
 		<pathelement location="${junit.core.path}" />
 		<pathelement location="${junit.hamcrest.path}" />
+		<pathelement location="${dex2jar.ir.lib}" />
+		<pathelement location="${dextools.lib}" />
+		<pathelement location="${dx.lib}" />
+		<pathelement location="${jasmin.lib}" />
+		<pathelement location="${commons.lite.lib}" />
+		<pathelement location="${dexreader.lib}" />
+		<pathelement location="${dextranslator.lib}" />
+		<pathelement location="${dexrename.lib}" />
 	</path>
 
 	<path id="classpath">
