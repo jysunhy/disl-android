@@ -23,7 +23,7 @@ public abstract class DiSLServer {
 	private static final boolean timeStat = Boolean.getBoolean(PROP_TIME_STAT);
 
 	private static final String PROP_CONT = "dislserver.continuous";
-	private static final boolean continuous = Boolean.getBoolean(PROP_CONT);
+	private static final boolean continuous = true; //Boolean.getBoolean(PROP_CONT);
 	
 	private static final String PROP_BYPASS = "dislserver.disablebypass";
 	private static final boolean bypass = ! Boolean.getBoolean(PROP_BYPASS);

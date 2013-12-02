@@ -24,7 +24,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FileUtils;
-import org.objectweb.asm.ClassReader;
+import org.d2j.org.objectweb.asm.ClassReader;
 
 import ch.usi.dag.disl.DiSL;
 import ch.usi.dag.disl.exception.DiSLException;
@@ -51,7 +51,7 @@ public class Worker extends Thread {
 	private static final String PROP_ANDROID = "dislsever.android";
 	private static final boolean ANDROID = true; // Boolean.getBoolean(PROP_ANDROID);
 
-	private static final boolean EMPTY_INSTR = true;
+	private static final boolean EMPTY_INSTR = false;
 
 	// used for replays
 	private static final byte[] emptyByteArray = new byte[0];
