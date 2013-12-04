@@ -1,6 +1,7 @@
 package ch.usi.dag.dislserver;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -22,9 +23,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import org.apache.commons.io.FileUtils;
-import org.d2j.org.objectweb.asm.ClassReader;
 
 import ch.usi.dag.disl.DiSL;
 import ch.usi.dag.disl.exception.DiSLException;
@@ -68,17 +66,13 @@ public class Worker extends Thread {
 	}
 
 
-	private void instrumentJar(final String jarName) throws IOException,
+	private void instrumentJar(final JarFile jf, final String writePath) throws IOException,
 	FileNotFoundException {
-		JarFile jf;
 		Enumeration<JarEntry> entryEnum;
-		System.out.println("starting rewriting of jar file " + jarName);
-		jf = new JarFile(jarName);
-
 		entryEnum = jf.entries();
-		final String originalName=jarName.substring(jarName.lastIndexOf("/")+1);
-		String writePath;
-		writePath = "instrumented_"+originalName;
+
+		final String originalName=jf.getName ().substring(jf.getName ().lastIndexOf("/")+1);
+
 
 		final File f = new File(writePath);
 		final FileOutputStream fos = new FileOutputStream(f);
@@ -89,29 +83,52 @@ public class Worker extends Thread {
 			final ZipEntry ze = entryEnum.nextElement();
 			final String entryName = ze.getName();
 			final InputStream is = jf.getInputStream(ze);
+			if(!ze.isDirectory ()){
+			    if (entryName.endsWith(".class")) {
 
-			if (entryName.endsWith(".class")) {
-				System.out.println("now in class: " + entryName);
-				try {
-					final ZipEntry nze = new ZipEntry(entryName);
-					final ClassReader cr = new ClassReader(is);
+    				try {
+    					final ZipEntry nze = new ZipEntry(entryName);
+    					//final ClassReader cr = new ClassReader(is);
 
-					final String className = entryName.substring(0, entryName.lastIndexOf(".class"));
-					System.out.println("using className: " + className);
+    					final String className = entryName.substring(0, entryName.lastIndexOf(".class"));
+    					System.out.println("using className: " + className);
 
-					// instrument it
-					final byte[] code = instrument(className, cr.b);
+    					// instrument it
+    					//final byte[] code = instrument(className, cr.b);
 
-					zos.putNextEntry(nze);
-					final ByteArrayInputStream bin = new ByteArrayInputStream(code);
-					System.out.println(" Adding to JAR file " + nze.getName());
-					while ((bytesRead = bin.read(buffer)) != -1) {
-                        zos.write(buffer, 0, bytesRead);
+
+    					zos.putNextEntry(nze);
+    					final ByteArrayOutputStream bout = new ByteArrayOutputStream();
+    				while ((bytesRead = is.read(buffer)) != -1) {
+//                        System.out.println("Read " + bytesRead
+//                                + " byte(s) from jar file");
+                        //zos.write(buffer, 0, bytesRead);
+    				    bout.write (buffer,0,bytesRead);
                     }
-					zos.closeEntry();
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
+
+
+    					final byte[] code = instrument(className, bout.toByteArray () );
+
+  					final ByteArrayInputStream bin;
+  					if(code != null) {
+  					  System.out.println("now in class: unchanged" + entryName);
+                        bin = new ByteArrayInputStream(code);
+                    } else {
+                        System.out.println("now in class: changed" + entryName);
+                        bin = new ByteArrayInputStream(bout.toByteArray ());
+                    }
+    					System.out.println(" Adding to JAR file " + nze.getName());
+
+    					while ((bytesRead = bin.read(buffer)) != -1) {
+                            zos.write(buffer, 0, bytesRead);
+                        }
+
+    					zos.closeEntry();
+    				}
+    				catch (final Exception e) {
+    					e.printStackTrace();
+				    }
+			    }
 
 			} else {
 				final ZipEntry nze = new ZipEntry(entryName);
@@ -180,18 +197,12 @@ public class Worker extends Thread {
 					// read java class
 					final String fileName = dexName;
 
-					if(EMPTY_INSTR) {
+					if(fileName.equals ("core.jar") || EMPTY_INSTR || fileName.equals ("framework.jar") ) {
 						 instrClass = dexCode; // do nothing
 
 					}else{
-
-						//File file = new File(dexName + "-dex2jar.jar");
-
-					    final File origDexFile = File.createTempFile(dexName, "-orig.dex");
-					    FileUtils.writeByteArrayToFile(origDexFile, dexCode);
-
-
-						final File file = File.createTempFile(dexName, "-dex2jar.jar");
+					    //create tmp file in /tmp
+						final File tmpfile = File.createTempFile(dexName, ".tmp");
 						final DexFileReader reader = new DexFileReader(dexCode);
 
 						final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl().skipDebug(true);
@@ -202,7 +213,7 @@ public class Worker extends Thread {
 						.optimizeSynchronized(false)
 						.printIR(false)
 						.verbose(false)
-						.to(file);
+						.to(tmpfile);
 
 						final Map<Method, Exception> exceptions = handler.getExceptions();
 						if (exceptions.size() > 0) {
@@ -212,26 +223,36 @@ public class Worker extends Thread {
 							System.err.println("Detail Error Information in File " + errorFile);
 						}
 
-						// Now open jar file, and instrument only the .class files
-						// rename instrumented_thejarname.jar
-						instrumentJar(file.getAbsolutePath());
+						// Now open the tmp jar file, and instrument only the .class files
+						final JarFile jf = new JarFile(tmpfile.getAbsolutePath());
+						// Create new jar named with instrumented_ prefix
+						final String newJarName = "instrumented_" + dexName;
+						instrumentJar(jf, newJarName);
 
 						// now call DX on the instrumented jar
 
 						final Class<?> c = Class.forName("com.android.dx.command.Main");
 						final java.lang.reflect.Method m = c.getMethod("main", String[].class);
 
-						final File realJar = new File("instrumented_" + file.getName());
-						final File outputDex = new File(realJar.getName() + "-jar2dex.dex");
+						final File realJar = new File(newJarName);
+						//final File realJar = file;
+						final File outputDex = new File(realJar.getName() + ".dex");
 
 						final List<String> ps = new ArrayList<String>();
-						ps.addAll(Arrays.asList("--dex", "--no-strict", "--output=" + outputDex.getCanonicalPath(),
+						if( fileName.equals ("ext.jar")){
+						    ps.addAll(Arrays.asList("--dex", "--core-library", "--no-strict", "--output=" + outputDex.getCanonicalPath(),
 								realJar.getCanonicalPath()));
-						System.out.println("call com.android.dx.command.Main.main" + ps);
+						}else{
+						    ps.addAll(Arrays.asList("--dex", "--no-strict", "--output=" + outputDex.getCanonicalPath(),
+                                realJar.getCanonicalPath()));
+						}
+						//System.out.println("call com.android.dx.command.Main.main" + ps);
 						m.invoke(null, new Object[] { ps.toArray(new String[0]) });
 
 						// now read the instrumented dex file and pass return it as byte[]
 						instrClass = Files.readAllBytes(Paths.get(outputDex.getAbsolutePath()));
+
+						tmpfile.deleteOnExit ();
 					}
 
 				}else{
