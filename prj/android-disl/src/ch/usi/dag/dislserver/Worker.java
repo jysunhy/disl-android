@@ -263,10 +263,9 @@ public class Worker extends Thread {
                         // read java class
                         final String fileName = dexName;
 
-                        if (fileName.equals ("core.jar")
-                            || EMPTY_INSTR || fileName.equals ("framework.jar") || !fileName.equals ("LongTest2.apk")) {
+                        //if (fileName.equals ("core.jar") || EMPTY_INSTR || fileName.equals ("framework.jar") || !fileName.equals ("LongTest2.apk")) {
+                        if (EMPTY_INSTR) {
                             instrClass = dexCode; // do nothing
-
                         } else {
                             // create tmp file in /tmp
                             final File tmpfile = File.createTempFile (
