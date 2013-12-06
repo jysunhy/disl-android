@@ -1,6 +1,6 @@
 package ch.usi.dag.dislre;
 
-public class REDispatch {
+public class AREDispatch {
 	public static void test(){
 		add(1,2);
 		registerMethod("ch.usi.dag.disl.test.dispatch.CodeExecuted.bytecodesExecuted");
@@ -8,7 +8,7 @@ public class REDispatch {
 		byte b = 127;
 		short cnt = 0;
 		String tmp = "def";
-		REDispatch tmp2 = new REDispatch();
+		AREDispatch tmp2 = new AREDispatch();
 		
 		while(cnt < 2) {
 			try {
@@ -19,7 +19,7 @@ public class REDispatch {
 
 			analysisStart((short)29, b);
 			sendObject(new Thread());
-			sendObject(new REDispatch());
+			sendObject(new AREDispatch());
 			sendObject(tmp);
 			sendObject(tmp2);
 			sendObject(new String("adb"));

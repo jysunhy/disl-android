@@ -6,7 +6,7 @@ import ch.usi.dag.disl.marker.BodyMarker;
 
 public class DiSLClass {
 
-	@After(marker = BasicBlockMarker.class, scope = "MainActivity.*")
+	@After(marker = BasicBlockMarker.class, scope = "Main.*")
 	public static void invokedInstr(final CodeLengthSC clsc) {
 
 		CodeExecutedRE.bytecodesExecuted(clsc.codeSize());

@@ -24,9 +24,10 @@ public abstract class DiSLServer {
 
 	private static final String PROP_CONT = "dislserver.continuous";
 	private static final boolean continuous = true; //Boolean.getBoolean(PROP_CONT);
-	
+
 	private static final String PROP_BYPASS = "dislserver.disablebypass";
-	private static final boolean bypass = ! Boolean.getBoolean(PROP_BYPASS);
+	private static final boolean bypass = false;
+	//! Boolean.getBoolean(PROP_BYPASS);
 
 	private static final AtomicInteger aliveWorkers = new AtomicInteger();
 	private static final AtomicLong instrumentationTime = new AtomicLong();
@@ -64,7 +65,7 @@ public abstract class DiSLServer {
 					);
 				}
 
-				NetMessageReader sc = new NetMessageReader (newClient);
+				final NetMessageReader sc = new NetMessageReader (newClient);
 				aliveWorkers.incrementAndGet ();
 				new Worker (sc, disl).start ();
 			}

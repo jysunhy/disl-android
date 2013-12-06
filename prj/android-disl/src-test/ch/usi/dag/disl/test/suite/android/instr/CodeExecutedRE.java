@@ -1,3 +1,5 @@
+package ch.usi.dag.disl.test.suite.android.instr;
+
 import ch.usi.dag.dislre.REDispatch;
 
 // Optimally, this class is automatically created on analysis machine
@@ -8,19 +10,19 @@ import ch.usi.dag.dislre.REDispatch;
 public class CodeExecutedRE {
 
 	private static short beId = REDispatch.registerMethod(
-			"ch.usi.dag.disl.test.dispatch.CodeExecuted.bytecodesExecuted");
+			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.bytecodesExecuted");
 
 	private static short tbId = REDispatch.registerMethod(
-			"ch.usi.dag.disl.test.dispatch.CodeExecuted.testingBasic");
+			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingBasic");
 
 	private static short taId = REDispatch.registerMethod(
-			"ch.usi.dag.disl.test.dispatch.CodeExecuted.testingAdvanced");
+			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced");
 
 	private static short ta2Id = REDispatch.registerMethod(
-			"ch.usi.dag.disl.test.dispatch.CodeExecuted.testingAdvanced2");
+			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced2");
 
 	private static short tnId = REDispatch.registerMethod(
-			"ch.usi.dag.disl.test.dispatch.CodeExecuted.testingNull");
+			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingNull");
 
 	public static void bytecodesExecuted(final int count) {
 
@@ -33,7 +35,7 @@ public class CodeExecutedRE {
 	}
 
 	public static void testingBasic(final boolean b, final byte by, final char c, final short s, final int i,
-          final long l) {
+			final long l, final float f, final double d) {
 		REDispatch.analysisStart(tbId);
 
 		REDispatch.sendBoolean(b);
@@ -42,6 +44,8 @@ public class CodeExecutedRE {
 		REDispatch.sendShort(s);
 		REDispatch.sendInt(i);
 		REDispatch.sendLong(l);
+		REDispatch.sendFloat(f);
+		REDispatch.sendDouble(d);
 
 		REDispatch.analysisEnd();
 	}

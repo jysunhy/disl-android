@@ -10,7 +10,6 @@
 	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="lib/ant-contrib-0.6.jar"/>
 	<classpathentry kind="lib" path="lib/jasmin-p2.5.jar"/>
-	<classpathentry kind="lib" path="build/eclipse-dynamicbypass.jar"/>
 	<classpathentry kind="lib" path="lib/asm-all-3.3.1-jarjar.jar"/>
 	<classpathentry kind="lib" path="lib/commons-lite-1.15.jar"/>
 	<classpathentry kind="lib" path="lib/dex-reader-1.15.jar"/>
@@ -19,5 +18,6 @@
 	<classpathentry kind="lib" path="lib/dx.jar"/>
 	<classpathentry kind="lib" path="lib/asm-debug-all-4.1.jar"/>
 	<classpathentry kind="lib" path="lib/dex-ir-1.12.jarjar.jar"/>
+	<classpathentry kind="lib" path="lib/eclipse-dynamicbypass.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

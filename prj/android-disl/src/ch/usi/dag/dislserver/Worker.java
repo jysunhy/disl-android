@@ -3,6 +3,7 @@ package ch.usi.dag.dislserver;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -55,6 +56,9 @@ public class Worker extends Thread {
 
     private static final boolean EMPTY_INSTR = false;
 
+    //private static final String instrLibPath = "build-test/disl-instr-android.jar";
+    private static final String instrLibPath = "example/dispatch/instr/build/disl-instr.jar";
+
     // used for replays
     private static final byte [] emptyByteArray = new byte [0];
 
@@ -81,6 +85,7 @@ public class Worker extends Thread {
             jf.getName ().lastIndexOf ("/") + 1);
 
         final File f = new File (writePath);
+
         final FileOutputStream fos = new FileOutputStream (f);
         final ZipOutputStream zos = new ZipOutputStream (fos);
         final byte [] buffer = new byte [8192];
@@ -98,7 +103,7 @@ public class Worker extends Thread {
 
                         final String className = entryName.substring (
                             0, entryName.lastIndexOf (".class"));
-                        System.out.println ("using className: " + className);
+                        // System.out.println ("using className: " + className);
 
                         // instrument it
                         // final byte[] code = instrument(className, cr.b);
@@ -116,12 +121,13 @@ public class Worker extends Thread {
                             className, bout.toByteArray ());
 
                         final ByteArrayInputStream bin;
+                        System.out.println ("*******************************************************");
                         if (code != null) {
-                            System.out.println ("now in class: unchanged"
-                                + entryName);
+                            // System.out.println ("unchanged "
+                            // + entryName);
                             bin = new ByteArrayInputStream (code);
                         } else {
-                            System.out.println ("now in class: changed" + entryName);
+                            // System.out.println ("" + entryName);
                             bin = new ByteArrayInputStream (bout.toByteArray ());
                         }
                         System.out.println (" Adding to JAR file " + nze.getName ());
@@ -148,6 +154,63 @@ public class Worker extends Thread {
                 }
                 zos.closeEntry ();
             }
+
+        }
+
+        if (writePath.equals ("instrumented_LongTest2.apk")) {
+        //if(true){
+            //zos.putNextEntry (new ZipEntry("instr/"));
+            //zos.closeEntry ();
+            final File red = new File("bin/ch/usi/dag/dislre/REDispatch.class");
+            final FileInputStream fis = new FileInputStream(red);
+            zos.putNextEntry (new ZipEntry("ch/usi/dag/dislre/REDispatch.class"));
+            while ((bytesRead = fis.read (buffer)) != -1) {
+                zos.write (buffer, 0, bytesRead);
+            }
+            zos.closeEntry ();
+            fis.close();
+
+            final JarFile instrlib = new JarFile (
+                instrLibPath);
+            final Enumeration <JarEntry> i_entries = instrlib.entries ();
+            while (i_entries.hasMoreElements ()) {
+
+                final ZipEntry cur = i_entries.nextElement ();
+                final String curName = cur.getName ();
+                if(curName.startsWith ("META-INF")){
+                    continue;
+                }
+                final InputStream curis = instrlib.getInputStream (cur);
+                if (!cur.isDirectory ()) {
+                    if (curName.endsWith (".class")) {
+                        try {
+                            final ZipEntry curnze = new ZipEntry (curName);
+                            final String curClassName = curName.substring (
+                                0, curName.lastIndexOf (".class"));
+                            zos.putNextEntry (curnze);
+
+                            while ((bytesRead = curis.read (buffer)) != -1) {
+                                zos.write (buffer, 0, bytesRead);
+                            }
+
+                            zos.closeEntry ();
+                        } catch (final Exception e) {
+                            e.printStackTrace ();
+                        }
+                    }
+
+                } else {
+
+                    final ZipEntry curnze = new ZipEntry (curName);
+
+                    zos.putNextEntry (curnze);
+                    while ((bytesRead = curis.read (buffer)) != -1) {
+                        zos.write (buffer, 0, bytesRead);
+                    }
+                    zos.closeEntry ();
+                }
+            }
+            instrlib.close ();
         }
         zos.finish ();
         zos.close ();
@@ -201,7 +264,7 @@ public class Worker extends Thread {
                         final String fileName = dexName;
 
                         if (fileName.equals ("core.jar")
-                            || EMPTY_INSTR || fileName.equals ("framework.jar")) {
+                            || EMPTY_INSTR || fileName.equals ("framework.jar") || !fileName.equals ("LongTest2.apk")) {
                             instrClass = dexCode; // do nothing
 
                         } else {
@@ -239,6 +302,7 @@ public class Worker extends Thread {
                                 tmpfile.getAbsolutePath ());
                             // Create new jar named with instrumented_ prefix
                             final String newJarName = "instrumented_" + dexName;
+
                             instrumentJar (jf, newJarName);
 
                             // now call DX on the instrumented jar
@@ -272,7 +336,8 @@ public class Worker extends Thread {
                             // now read the instrumented dex file and pass
                             // return it as byte[]
                             instrClass = Files.readAllBytes (Paths.get (outputDex.getAbsolutePath ()));
-
+                            outputDex.deleteOnExit ();
+                            realJar.deleteOnExit ();
                             tmpfile.deleteOnExit ();
                         }
 
