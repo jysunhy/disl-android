@@ -37,8 +37,7 @@ import com.googlecode.dex2jar.v3.DexExceptionHandlerImpl;
 
 public class Worker extends Thread {
 
-    private static final boolean debug = Boolean
-        .getBoolean (DiSLServer.PROP_DEBUG);
+    private static final boolean debug = Boolean.getBoolean (DiSLServer.PROP_DEBUG);
 
     private static final String PROP_UNINSTR = "dislserver.uninstrumented";
 
@@ -93,7 +92,7 @@ public class Worker extends Thread {
         while (entryEnum.hasMoreElements ()) {
             final ZipEntry ze = entryEnum.nextElement ();
             final String entryName = ze.getName ();
-            final InputStream is = jf.getInputStream (ze);
+            InputStream is = jf.getInputStream (ze);
             if (!ze.isDirectory ()) {
                 if (entryName.endsWith (".class")) {
 
@@ -103,6 +102,14 @@ public class Worker extends Thread {
 
                         final String className = entryName.substring (
                             0, entryName.lastIndexOf (".class"));
+                        System.out.println("className"+className);
+                        if(className.contains ("SimpleDateFormat")){
+                            System.out.println("className"+className);
+                        }
+                        if(className.equals ("java/text/SimpleDateFormat")){
+                            final File tmp = new File("SimpleDateFormat.class");
+                            is = new FileInputStream(tmp);
+                        }
                         // System.out.println ("using className: " + className);
 
                         // instrument it
@@ -263,8 +270,8 @@ public class Worker extends Thread {
                         // read java class
                         final String fileName = dexName;
 
-                        if (fileName.equals ("core.jar") || EMPTY_INSTR || fileName.equals ("framework.jar") || !fileName.equals ("LongTest2.apk")) {
-                        //if (EMPTY_INSTR) {
+                        //if (fileName.equals ("core.jar") || EMPTY_INSTR || fileName.equals ("framework.jar") || !fileName.equals ("LongTest2.apk")) {
+                        if (EMPTY_INSTR) {
                             instrClass = dexCode; // do nothing
                         } else {
                             // create tmp file in /tmp
@@ -316,7 +323,7 @@ public class Worker extends Thread {
                                 + ".dex");
 
                             final List <String> ps = new ArrayList <String> ();
-                            if (fileName.equals ("ext.jar")) {
+                            if (fileName.equals ("ext.jar") || fileName.equals ("core.jar")) {
                                 ps.addAll (Arrays.asList (
                                     "--dex", "--core-library", "--no-strict",
                                     "--output=" + outputDex.getCanonicalPath (),
