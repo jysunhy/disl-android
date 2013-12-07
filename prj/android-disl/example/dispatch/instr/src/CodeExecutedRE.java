@@ -8,19 +8,19 @@ import ch.usi.dag.dislre.REDispatch;
 public class CodeExecutedRE {
 
 	private static short beId = REDispatch.registerMethod(
-			"ch.usi.dag.disl.test.dispatch.CodeExecuted.bytecodesExecuted");
+			"CodeExecuted.bytecodesExecuted");
 
 	private static short tbId = REDispatch.registerMethod(
-			"ch.usi.dag.disl.test.dispatch.CodeExecuted.testingBasic");
+			"CodeExecuted.testingBasic");
 
 	private static short taId = REDispatch.registerMethod(
-			"ch.usi.dag.disl.test.dispatch.CodeExecuted.testingAdvanced");
+			"CodeExecuted.testingAdvanced");
 
 	private static short ta2Id = REDispatch.registerMethod(
-			"ch.usi.dag.disl.test.dispatch.CodeExecuted.testingAdvanced2");
+			"CodeExecuted.testingAdvanced2");
 
 	private static short tnId = REDispatch.registerMethod(
-			"ch.usi.dag.disl.test.dispatch.CodeExecuted.testingNull");
+			"CodeExecuted.testingNull");
 
 	public static void bytecodesExecuted(final int count) {
 

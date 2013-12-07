@@ -57,7 +57,7 @@ public class Worker extends Thread {
     private static final boolean EMPTY_INSTR = false;
 
     //private static final String instrLibPath = "build-test/disl-instr-android.jar";
-    private static final String instrLibPath = "example/dispatch/instr/build/disl-instr.jar";
+    private static final String instrLibPath = "example/android/instr/build/disl-instr.jar";
 
     // used for replays
     private static final byte [] emptyByteArray = new byte [0];
@@ -161,9 +161,9 @@ public class Worker extends Thread {
         //if(true){
             //zos.putNextEntry (new ZipEntry("instr/"));
             //zos.closeEntry ();
-            final File red = new File("bin/ch/usi/dag/dislre/REDispatch.class");
+            final File red = new File("bin/ch/usi/dag/dislre/AREDispatch.class");
             final FileInputStream fis = new FileInputStream(red);
-            zos.putNextEntry (new ZipEntry("ch/usi/dag/dislre/REDispatch.class"));
+            zos.putNextEntry (new ZipEntry("ch/usi/dag/dislre/AREDispatch.class"));
             while ((bytesRead = fis.read (buffer)) != -1) {
                 zos.write (buffer, 0, bytesRead);
             }
@@ -263,8 +263,8 @@ public class Worker extends Thread {
                         // read java class
                         final String fileName = dexName;
 
-                        //if (fileName.equals ("core.jar") || EMPTY_INSTR || fileName.equals ("framework.jar") || !fileName.equals ("LongTest2.apk")) {
-                        if (EMPTY_INSTR) {
+                        if (fileName.equals ("core.jar") || EMPTY_INSTR || fileName.equals ("framework.jar") || !fileName.equals ("LongTest2.apk")) {
+                        //if (EMPTY_INSTR) {
                             instrClass = dexCode; // do nothing
                         } else {
                             // create tmp file in /tmp

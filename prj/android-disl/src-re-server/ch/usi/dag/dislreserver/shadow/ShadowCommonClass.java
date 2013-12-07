@@ -29,12 +29,20 @@ class ShadowCommonClass extends ShadowClass {
         super(net_ref, classLoader);
 
         this.superClass = superClass;
+        name = classSignature.replace('/', '.');
+        if(name.startsWith("L")) {
+            name = name.substring(1);
+        }
+        if(name.endsWith(";")) {
+            name = name.substring(0, name.length()-1);
+        }
 
-        if (classCode == null || classCode.length == 0) {
+        //HAIYANG current empty
+        /*if (classCode == null || classCode.length == 0) {
             throw new DiSLREServerFatalException("Creating class info for "
                     + classSignature + " with no code provided");
-        }
-        //HAIYANG current empty
+        }*/
+
         //initializeClassInfo(classCode);
     }
 

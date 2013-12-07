@@ -6,13 +6,13 @@ import ch.usi.dag.disl.marker.BodyMarker;
 
 public class DiSLClass {
 
-	@After(marker = BasicBlockMarker.class, scope = "MainActivity.*")
+	@After(marker = BasicBlockMarker.class, scope = "Main.*")
 	public static void invokedInstr(final CodeLengthSC clsc) {
 
 		CodeExecutedRE.bytecodesExecuted(clsc.codeSize());
 	}
 
-	@After(marker = BodyMarker.class, scope = "MainActivity.add")
+	@After(marker = BodyMarker.class, scope = "Main.main")
 	public static void testing() {
 
         CodeExecutedRE.testingBasic(true, (byte) 125, 's', (short) 50000, 100000, 10000000000L);
