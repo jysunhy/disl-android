@@ -21,6 +21,28 @@ public class CodeExecutedRE {
 
 	private static short tnId = AREDispatch.registerMethod(
 			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingNull");
+	public static void dislStart(){
+		AREDispatch.manuallyOpen();
+	}
+	public static void dislEnd(){
+		AREDispatch.manuallyClose();
+	}
+	public static void methodsRegister(){
+		beId = AREDispatch.registerMethod(
+			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.bytecodesExecuted");
+
+		tbId = AREDispatch.registerMethod(
+			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingBasic");
+
+		taId = AREDispatch.registerMethod(
+			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced");
+
+		ta2Id = AREDispatch.registerMethod(
+			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced2");
+
+		tnId = AREDispatch.registerMethod(
+			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingNull");
+	}
 
 	public static void bytecodesExecuted(final int count) {
 

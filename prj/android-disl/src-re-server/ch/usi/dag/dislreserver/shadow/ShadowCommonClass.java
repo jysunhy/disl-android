@@ -1,5 +1,13 @@
 package ch.usi.dag.dislreserver.shadow;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -25,7 +33,7 @@ class ShadowCommonClass extends ShadowClass {
     private String      name;
 
     ShadowCommonClass(final long net_ref, final String classSignature,
-            final ShadowObject classLoader, final ShadowClass superClass, final byte[] classCode) {
+            final ShadowObject classLoader, final ShadowClass superClass, byte[] classCode) {
         super(net_ref, classLoader);
 
         this.superClass = superClass;
@@ -38,12 +46,46 @@ class ShadowCommonClass extends ShadowClass {
         }
 
         //HAIYANG current empty
-        /*if (classCode == null || classCode.length == 0) {
-            throw new DiSLREServerFatalException("Creating class info for "
-                    + classSignature + " with no code provided");
-        }*/
+        if(true) {
+            return;
+        }
+        if (classCode == null || classCode.length == 0) {
+            try {
+                final Socket socket = new Socket(InetAddress.getByName (null), 6666);
+                DataOutputStream os;
+                DataInputStream is;
 
-        //initializeClassInfo(classCode);
+                os = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+                is = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+
+                os.writeInt(name.length ());
+                os.writeInt(0);
+
+                os.write(name.getBytes ());
+                //os.write(nm.getClassCode());
+                os.flush();
+                final int controlLength = is.readInt();
+                final int classCodeLength = is.readInt();
+
+                // allocate buffer for class reading
+                final byte[] control = new byte[controlLength];
+                classCode = new byte[classCodeLength];
+
+                // read class
+                is.readFully(control);
+                is.readFully(classCode);
+            } catch (final UnknownHostException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (final IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            //throw new DiSLREServerFatalException("Creating class info for "
+            //        + classSignature + " with no code provided");
+        }
+
+        initializeClassInfo(classCode);
     }
 
     private List<MethodInfo> methods;

@@ -19,6 +19,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -33,7 +34,6 @@ import com.googlecode.dex2jar.Method;
 import com.googlecode.dex2jar.reader.DexFileReader;
 import com.googlecode.dex2jar.v3.Dex2jar;
 import com.googlecode.dex2jar.v3.DexExceptionHandlerImpl;
-
 
 public class Worker extends Thread {
 
@@ -56,7 +56,9 @@ public class Worker extends Thread {
     private static final boolean EMPTY_INSTR = false;
 
     //private static final String instrLibPath = "build-test/disl-instr-android.jar";
+    //Needed by ANDROID
     private static final String instrLibPath = "example/android/instr/build/disl-instr.jar";
+    private static final ConcurrentHashMap<String, byte[]> bytecodeMap = new ConcurrentHashMap<String, byte[]>();
 
     // used for replays
     private static final byte [] emptyByteArray = new byte [0];
@@ -80,8 +82,8 @@ public class Worker extends Thread {
         Enumeration <JarEntry> entryEnum;
         entryEnum = jf.entries ();
 
-        final String originalName = jf.getName ().substring (
-            jf.getName ().lastIndexOf ("/") + 1);
+       /* final String originalName = jf.getName ().substring (
+            jf.getName ().lastIndexOf ("/") + 1);*/
 
         final File f = new File (writePath);
 
@@ -102,25 +104,18 @@ public class Worker extends Thread {
 
                         final String className = entryName.substring (
                             0, entryName.lastIndexOf (".class"));
-                        System.out.println("className"+className);
+                        /*System.out.println("className:"+className);
                         if(className.contains ("SimpleDateFormat")){
-                            System.out.println("className"+className);
-                        }
+                            System.out.println("className:"+className);
+                        }*/
                         if(className.equals ("java/text/SimpleDateFormat")){
                             final File tmp = new File("SimpleDateFormat.class");
                             is = new FileInputStream(tmp);
                         }
-                        // System.out.println ("using className: " + className);
-
-                        // instrument it
-                        // final byte[] code = instrument(className, cr.b);
 
                         zos.putNextEntry (nze);
                         final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
                         while ((bytesRead = is.read (buffer)) != -1) {
-                            // System.out.println("Read " + bytesRead
-                            // + " byte(s) from jar file");
-                            // zos.write(buffer, 0, bytesRead);
                             bout.write (buffer, 0, bytesRead);
                         }
 
@@ -128,16 +123,15 @@ public class Worker extends Thread {
                             className, bout.toByteArray ());
 
                         final ByteArrayInputStream bin;
-                        System.out.println ("*******************************************************");
+                        //System.out.println ("**********************************************************");
                         if (code != null) {
-                            // System.out.println ("unchanged "
-                            // + entryName);
                             bin = new ByteArrayInputStream (code);
+                            bytecodeMap.put (className.replace('/', '.'), code);
                         } else {
-                            // System.out.println ("" + entryName);
                             bin = new ByteArrayInputStream (bout.toByteArray ());
+                            bytecodeMap.put (className.replace('/', '.'), bout.toByteArray ());
                         }
-                        System.out.println (" Adding to JAR file " + nze.getName ());
+                        //System.out.println (" Adding to JAR file " + nze.getName ());
 
                         while ((bytesRead = bin.read (buffer)) != -1) {
                             zos.write (buffer, 0, bytesRead);
@@ -164,10 +158,9 @@ public class Worker extends Thread {
 
         }
 
-        if (writePath.equals ("instrumented_LongTest2.apk")) {
+        //if (writePath.equals ("instrumented_LongTest2.apk")) {
+        if (writePath.equals ("instrumented_core.jar")) {
         //if(true){
-            //zos.putNextEntry (new ZipEntry("instr/"));
-            //zos.closeEntry ();
             final File red = new File("bin/ch/usi/dag/dislre/AREDispatch.class");
             final FileInputStream fis = new FileInputStream(red);
             zos.putNextEntry (new ZipEntry("ch/usi/dag/dislre/AREDispatch.class"));
@@ -270,8 +263,12 @@ public class Worker extends Thread {
                         // read java class
                         final String fileName = dexName;
 
-                        //if (fileName.equals ("core.jar") || EMPTY_INSTR || fileName.equals ("framework.jar") || !fileName.equals ("LongTest2.apk")) {
-                        if (EMPTY_INSTR) {
+                        if(dexCode.length == 0) // request from disl remote server querying for loaded bytecode
+                        {
+                            instrClass = bytecodeMap.get (fullPath);
+                        //}else if (fileName.equals ("core.jar") || EMPTY_INSTR || fileName.equals ("framework.jar") || !fileName.equals ("LongTest2.apk")) {
+                        }else if (EMPTY_INSTR) {
+
                             instrClass = dexCode; // do nothing
                         } else {
                             // create tmp file in /tmp

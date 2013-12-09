@@ -13,10 +13,10 @@ static volatile jint ot_class_id = 1;
 static volatile jlong ot_object_id = 1;
 static volatile jshort method_id = 1;
 
-jint add(JNIEnv *env, jobject thiz, jint x, jint y){
-	ALOG(LOG_DEBUG,"HAIYANG","in shadowvm native %s", __FUNCTION__);
-	return x + y + 1000;
-}
+//jint add(JNIEnv *env, jobject thiz, jint x, jint y){
+//	ALOG(LOG_DEBUG,"HAIYANG","in shadowvm native %s", __FUNCTION__);
+//	return x + y + 1000;
+//}
 
 // ******************* REDispatch methods *******************
 
@@ -214,10 +214,10 @@ void sendObjectPlusData
 	remote.SendJobject(self->threadId, netref);
 }
 
-static const char *classPathName = "ch/usi/dag/dislre/REDispatch";
+static const char *classPathName = "ch/usi/dag/dislre/AREDispatch";
 
 static JNINativeMethod methods[]= {
-	{"add", "(II)I", (void*)add},
+	//{"add", "(II)I", (void*)add},
 	{"registerMethod", "(Ljava/lang/String;)S", (void*)registerMethod},
 	{"analysisStart", "(S)V", (void*)analysisStart__S},
 	{"analysisStart", "(SB)V", (void*)analysisStart__SB},

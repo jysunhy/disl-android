@@ -14,6 +14,7 @@ public class DiSLClass {
 
 	@After(marker = BodyMarker.class, scope = "MainActivity.add")
 		public static void testing() {
+			for(int i = 0; i < 50; i++) {
 			CodeExecutedRE.testingBasic(true, (byte) 125, 's', (short) 50000,
 					100000, 10000000000L, 1.5F, 2.5);
 
@@ -25,6 +26,15 @@ public class DiSLClass {
 					LinkedList.class.getClass());
 
 			CodeExecutedRE.testingNull(null, null, null);
-
+			}
+		}
+	@After(marker = BodyMarker.class, scope = "MainActivity.substraction")
+		public static void restartAnalysis() {
+			CodeExecutedRE.dislStart();
+			CodeExecutedRE.methodsRegister();
+		}
+	@After(marker = BodyMarker.class, scope = "MainActivity.multiplication")
+		public static void endAnalysis() {
+			CodeExecutedRE.dislEnd();
 		}
 }
