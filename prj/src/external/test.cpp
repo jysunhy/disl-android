@@ -2,6 +2,7 @@
 //#include "Common.h"
 #include "ReProtocol.h"
 #include "Netref.h"
+#include "Socket.h"
 
 int main(){
 	printf("%d\n",net_ref_get_class_id(5497558138886L));
@@ -23,5 +24,5 @@ int main(){
 		sleep(2);
 	}
 	sleep(5);
-	p.ConnectionClose();
+	//p.ConnectionClose();
 }

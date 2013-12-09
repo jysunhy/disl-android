@@ -32,7 +32,7 @@ class Socket
 
   // Client initialization
   //bool connect ( const std::string host, const int port );
-  bool Connect ( const char* host, const int port);
+  bool Connect ();
 
   // Data Transimission
   //bool send ( const std::string ) const;

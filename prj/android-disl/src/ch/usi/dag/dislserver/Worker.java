@@ -266,10 +266,12 @@ public class Worker extends Thread {
                         if(dexCode.length == 0) // request from disl remote server querying for loaded bytecode
                         {
                             instrClass = bytecodeMap.get (fullPath);
-                        //}else if (fileName.equals ("core.jar") || EMPTY_INSTR || fileName.equals ("framework.jar") || !fileName.equals ("LongTest2.apk")) {
+
                         }else if (EMPTY_INSTR) {
 
                             instrClass = dexCode; // do nothing
+                        }else if (!(fileName.equals ("core.jar") || fileName.equals ("LongTest2.apk"))) {
+                            instrClass = dexCode;
                         } else {
                             // create tmp file in /tmp
                             final File tmpfile = File.createTempFile (

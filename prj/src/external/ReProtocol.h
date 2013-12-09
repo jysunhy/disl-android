@@ -3,7 +3,7 @@
 
 #include "Common.h"
 #include "ReQueue.h"
-#include "Socket.h"
+//#include "Socket.h"
 #include "Map.h"
 #include "Lock.h"
 //#include <map>
@@ -14,6 +14,8 @@ using namespace std;
 
 #define ANALYSIS_QUEUE_SIZE 64
 #define INVOCATION_SIZE 32
+
+#define BUFFER_INIT_SIZE 100
 
 enum MsgType{
 	// closing connection
@@ -48,9 +50,12 @@ class ReProtocol{
 			pthread_mutex_init(&objfree_mtx, NULL);
 			pthread_mutex_init(&analysis_mtx, NULL);
 
-			re_port = port;
-			memset(re_host, '\0', MAXHOSTNAME);
-			memcpy(re_host, host, strlen(host) < MAXHOSTNAME?strlen(host):MAXHOSTNAME);
+			//re_port = port;
+			//memset(re_host, '\0', MAXHOSTNAME);
+			//memcpy(re_host, host, strlen(host) < MAXHOSTNAME?strlen(host):MAXHOSTNAME);
+
+			sendBuf = new Buffer(BUFFER_INIT_SIZE);
+			isClosed = false;
 			
 		}
 		~ReProtocol(){
@@ -58,10 +63,11 @@ class ReProtocol{
 			pthread_mutex_destroy(&analysis_mtx);
 			pthread_mutex_destroy(&objfree_mtx);
 			
-			delete sock;
+			//delete sock;
+			delete sendBuf;
 			//TODO//
 		}
-
+		/*
 		void OpenConnection(){
 			DEBUG("Opening new connection");
 			if(sock)
@@ -77,12 +83,15 @@ class ReProtocol{
 			sock->Send((char*)&signal,sizeof(int));
 #endif
 		}
+		*/
+		bool IsClosed(){
+			return isClosed;
+		}
 		bool ConnectionClose(){
-			//TODO********************************************//
+			isClosed = true;
 			//send all buffers
+			//TODO ADD ALL to BUFFER
 			Send(MSG_CLOSE);
-			delete sock;
-			sock = NULL;
 			return true;
 		}
 		bool AnalysisStartEvent(thread_id_type tid, ordering_id_type oid, short methodId){
@@ -165,7 +174,9 @@ class ReProtocol{
 			char* content;
 			int packet_len;
 			tmp.GetData(content, packet_len);
-			return sock->Send(content,packet_len);
+			sendBuf->Enqueue(content,packet_len);
+			return true;
+			//return sock->Send(content,packet_len);
 		}
 		int SendStringObject(thread_id_type tid, jlong netref, const char* utf8, int len){
 			ScopedMutex mtx(&gl_mtx);
@@ -176,7 +187,9 @@ class ReProtocol{
 			char* content;
 			int packet_len;
 			tmp.GetData(content, packet_len);
-			return sock->Send(content,packet_len);
+			sendBuf->Enqueue(content,packet_len);
+			return packet_len;
+			//return sock->Send(content,packet_len);
 		}
 		int SendThreadObject(thread_id_type tid, jlong netref, const char* threadName, int len, jboolean isDaemon){
 			ScopedMutex mtx(&gl_mtx);
@@ -188,7 +201,9 @@ class ReProtocol{
 			char* content;
 			int packet_len;
 			tmp.GetData(content, packet_len);
-			return sock->Send(content,packet_len);
+			sendBuf->Enqueue(content,packet_len);
+			return packet_len;
+			//return sock->Send(content,packet_len);
 		}
 		bool SendArgument(thread_id_type tid, const char* data, int length){
 			ordering_id_type oid = GetOrderingId(tid);
@@ -313,6 +328,12 @@ class ReProtocol{
 			tmp.GetData(content, len);
 			return Send(content, len);
 		}
+		Buffer* ReturnAndResetBuffer(){
+			ScopedMutex mtx(&gl_mtx);
+			Buffer *res = sendBuf;
+			sendBuf = new Buffer(BUFFER_INIT_SIZE);
+			return res;
+		}
 	private:
 		ordering_id_type GetOrderingId(thread_id_type tid){
 			//ScopedMutex mtx(&analysis_mtx);
@@ -338,19 +359,20 @@ class ReProtocol{
 				printf("%d:%d ", i, (int)data[i]);
 			}
 			//return true;
-			bool res = true;
+			//bool res = true;
 			//size = length+1;
 			//sock.Send((char*)(&size),sizeof(int));
-			while(!sock) {
-				OpenConnection();
-			}
-			res = sock->Send(data, length);
+			//while(!sock) {
+			//	OpenConnection();
+			//}
+			sendBuf->Enqueue(data,length);
+			//res = sock->Send(data, length);
 
 			//char close = MSG_CLOSE;
 			//sock.Send(&close, 1);
 
-			ASSERT(res, "error in send packets");
-			return res;
+			//ASSERT(res, "error in send packets");
+			return true;
 		}
 		bool Send(const char* data, int length, const char* lastdata, int lastlength){
 			ScopedMutex mtx(&gl_mtx);
@@ -368,19 +390,21 @@ class ReProtocol{
 			//for(int i = 0; i < lastlength; i++){
 			//	printf("%d:%d ", i+length, (int)lastdata[i]);
 			//}
-			bool res=true;
+			//bool res=true;
 			//size = length+lastlength+1;
 			//sock.Send((char*)(&size),sizeof(int));
-			while(!sock){
-				OpenConnection();
-			}
-			res = sock->Send(data, length);
-			ASSERT(res, "error in send packets");
-			res = sock->Send(lastdata, lastlength);
-			ASSERT(res, "error in send packets");
+			//while(!sock){
+			//	OpenConnection();
+			//}
+			//res = sock->Send(data, length);
+			//ASSERT(res, "error in send packets");
+			//res = sock->Send(lastdata, lastlength);
+			//ASSERT(res, "error in send packets");
 			//char close = MSG_CLOSE;
 			//sock.Send(&close, 1);
-			return res;
+			sendBuf->Enqueue(data,length);
+			sendBuf->Enqueue(lastdata, lastlength);
+			return true;
 		}
 
 		pthread_mutex_t gl_mtx;
@@ -396,10 +420,12 @@ class ReProtocol{
 		LockBuffer lock_buf;
 		Map<ordering_id_type, Buffer*> invocation_buf;
 
-		char re_host[MAXHOSTNAME];
-		int re_port;
+		//char re_host[MAXHOSTNAME];
+		//int re_port;
 
-		Socket *sock;
+		//Socket *sock;
+		Buffer *sendBuf;
+		bool isClosed;
 };
 
 #endif

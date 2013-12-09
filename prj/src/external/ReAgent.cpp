@@ -5,8 +5,12 @@
 #include "Netref.h"
 #include "stdlib.h"
 #include "stdio.h"
+#include "Socket.h"
 
 ReProtocol remote("/dev/socket/instrument",11218);
+Socket *sock = NULL;
+static pthread_t send_thread;
+
 
 pthread_mutex_t gl_mtx;
 static volatile jint ot_class_id = 1;
@@ -49,11 +53,23 @@ void analysisStart__SB
 	ALOG(LOG_INFO,"HAIYANG","EVENT: analysis start for method %d with ordering %d", (int)analysis_method_id, (int)ordering_id);
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, ordering_id, analysis_method_id);
 }
-
+void OpenConnection(){
+	ALOG(LOG_INFO,"HAIYANG","EVENT: open connection");
+	//remote.OpenConnection();
+	if(sock) {
+		return;
+	}
+	sock = new Socket();
+	while(!sock->Connect()){
+		DEBUG("Cannot connect through UDS");
+		sleep(2);
+	}
+	int signal = -3;
+	sock->Send((char*)&signal,sizeof(int));
+}
 void manuallyOpen
 (JNIEnv * jni_env, jclass this_class) {
-	ALOG(LOG_INFO,"HAIYANG","EVENT: open connection");
-	remote.OpenConnection();
+	OpenConnection();
 }
 void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
@@ -288,15 +304,32 @@ int classfileLoadHook(const char* name, int len){
 	ALOG(LOG_DEBUG,"HAIYANG","LOADING CLASS %s", name);
 	return 1;
 }
-jint JNI_OnLoad(JavaVM* vm, void* reserved){
-	remote.OpenConnection();
 
+
+static void * send_thread_loop(void * obj) {
+	while(true){
+		Buffer* tmp = remote.ReturnAndResetBuffer();
+		if(!sock){
+			OpenConnection();
+		}else {
+			sock->Send(tmp->q_data, tmp->q_occupied);
+		}
+		delete tmp;
+		sleep(5);
+		//if(remote.IsClosed())
+		//	break;
+	}
+	return NULL;
+}
+
+jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	UnionJNIEnvToVoid uenv;
 	uenv.venv = NULL;
 	jint result = -1;
 	JNIEnv *env = NULL;
 
 	//gDvm.shadowHook = &testShadowHook;
+	OpenConnection();
 	gDvm.newObjHook = &objNewHook;
 	gDvm.freeObjHook = &objFreeHook;
 	gDvm.threadEndHook = &threadEndHook;
@@ -319,6 +352,8 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	}
 
 	result = JNI_VERSION_1_4;
+
+	pthread_create(&send_thread, NULL, send_thread_loop, NULL);
 
 bail:
 	return result;

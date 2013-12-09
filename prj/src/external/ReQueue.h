@@ -93,7 +93,6 @@ class BaseQueue{
 				DEBUG("\t %d:%d",i, (int)q_data[i]);
 		}
 
-	protected:
 		int q_capacity;
 		int q_occupied;
 		char* q_data;
@@ -132,6 +131,11 @@ class Buffer: public BaseQueue{
 				q_occupied += length;
 				return length;
 			}
+		}
+		Buffer* Duplicate(){
+			Buffer* res = new Buffer(q_capacity);
+			memcpy(res->q_data, q_data, q_occupied);
+			return res;
 		}
 	private:
 		void DoubleCapacity(){

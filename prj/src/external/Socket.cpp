@@ -18,6 +18,7 @@
 
 #include <sys/un.h>
 #define UNIX_PATH_MAX 108
+#define SERVER_SOCK  "/dev/socket/instrument"
 
 
 
@@ -171,7 +172,7 @@ return status;
 }
 */
 
-bool Socket::Connect ( const char* host, const int port )
+bool Socket::Connect ()
 {
 #ifndef DEBUG_MODE
 	struct sockaddr_un address;
@@ -187,7 +188,7 @@ bool Socket::Connect ( const char* host, const int port )
 	memset(&address, 0, sizeof(struct sockaddr_un));
 
 	address.sun_family = AF_UNIX;
-	snprintf(address.sun_path, UNIX_PATH_MAX, "/dev/socket/instrument");
+	snprintf(address.sun_path, UNIX_PATH_MAX, SERVER_SOCK);
 
 	if(connect(m_sock, 
 				(struct sockaddr *) &address,  
