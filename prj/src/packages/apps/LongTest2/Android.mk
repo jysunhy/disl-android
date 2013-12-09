@@ -7,12 +7,12 @@ LOCAL_MODULE_TAGS := samples
 
 LOCAL_SRC_FILES := $(call all-java-files-under, src)
 
-APP_STL := stlport_static
+#APP_STL := stlport_static
 
-LOCAL_JNI_SHARED_LIBRARIES := libshadowvm
+#LOCAL_JNI_SHARED_LIBRARIES := libshadowvm
 
 
-LOCAL_PACKAGE_NAME := LongTest
+LOCAL_PACKAGE_NAME := LongTest2
 
 LOCAL_SHARED_LIBRARIES := \
 		libutils \
@@ -22,7 +22,7 @@ LOCAL_SHARED_LIBRARIES := \
 #		libdvm 
 
 include $(BUILD_PACKAGE)
-include $(LOCAL_PATH)/jni/Android.mk 
+#include $(LOCAL_PATH)/jni/Android.mk 
 # ============================================================
 
 # Also build all of the sub-targets under this one: the shared library.
