@@ -108,29 +108,34 @@ public class Worker extends Thread {
                         if(className.contains ("SimpleDateFormat")){
                             System.out.println("className:"+className);
                         }*/
-                        if(className.equals ("java/text/SimpleDateFormat")){
-                            final File tmp = new File("SimpleDateFormat.class");
-                            is = new FileInputStream(tmp);
-                        }
+
 
                         zos.putNextEntry (nze);
-                        final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
-                        while ((bytesRead = is.read (buffer)) != -1) {
-                            bout.write (buffer, 0, bytesRead);
-                        }
-
-                        final byte [] code = instrument (
-                            className, bout.toByteArray ());
-
+                        byte [] code = bytecodeMap.get (className.replace('/','.'));
                         final ByteArrayInputStream bin;
-                        //System.out.println ("**********************************************************");
-                        if (code != null) {
-                            bin = new ByteArrayInputStream (code);
+                        if(code == null){
+                            System.out.println("new class "+className+" found");
+                            if(className.equals ("java/text/SimpleDateFormat")){
+                                final File tmp = new File("SimpleDateFormat.class");
+                                is = new FileInputStream(tmp);
+                            }
+                            final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
+                            while ((bytesRead = is.read (buffer)) != -1) {
+                                bout.write (buffer, 0, bytesRead);
+                            }
+
+                            code = instrument (
+                                className, bout.toByteArray ());
+                            //System.out.println ("**********************************************************");
+                            if(code == null) {
+                                code = bout.toByteArray ();
+                            }
                             bytecodeMap.put (className.replace('/', '.'), code);
-                        } else {
-                            bin = new ByteArrayInputStream (bout.toByteArray ());
-                            bytecodeMap.put (className.replace('/', '.'), bout.toByteArray ());
+                        }else{
+                            System.out.println("use class "+className+" found in map");
                         }
+                        bin = new ByteArrayInputStream (code);
+
                         //System.out.println (" Adding to JAR file " + nze.getName ());
 
                         while ((bytesRead = bin.read (buffer)) != -1) {
@@ -146,7 +151,7 @@ public class Worker extends Thread {
             } else {
                 final ZipEntry nze = new ZipEntry (entryName);
                 zos.putNextEntry (nze);
-                System.out.println ("ignored jar entry: " + ze);
+                //System.out.println ("ignored jar entry: " + ze);
 
                 while ((bytesRead = is.read (buffer)) != -1) {
                     System.out.println ("Read " + bytesRead
@@ -262,15 +267,15 @@ public class Worker extends Thread {
 
                         // read java class
                         final String fileName = dexName;
-                        instrClass = bytecodeMap.get (fullPath.toString ());
-                        if(instrClass != null){
-                            System.out.println ("Found class "+fullPath.toString ()+" in map");
-                        }else if(dexCode.length == 0) // request from disl remote server querying for loaded bytecode
+                        if(dexCode.length == 0) // request from disl remote server querying for loaded bytecode
                         {
-                            //instrClass = bytecodeMap.get (fullPath.toString ());
-                            if(instrClass == null) {
+                            instrClass = bytecodeMap.get (fullPath.toString ());
+                            if(instrClass != null) {
+                                System.out.println ("Found class "+fullPath.toString ()+" in map");
+                            } else {
                                 System.err.println ("The class "+fullPath.toString () + " has not been loaded");
                             }
+
                         }else if (EMPTY_INSTR) {
 
                             instrClass = dexCode; // do nothing
