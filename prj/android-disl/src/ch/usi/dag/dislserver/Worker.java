@@ -262,16 +262,20 @@ public class Worker extends Thread {
 
                         // read java class
                         final String fileName = dexName;
-
-                        if(dexCode.length == 0) // request from disl remote server querying for loaded bytecode
+                        instrClass = bytecodeMap.get (fullPath.toString ());
+                        if(instrClass != null){
+                            System.out.println ("Found class "+fullPath.toString ()+" in map");
+                        }else if(dexCode.length == 0) // request from disl remote server querying for loaded bytecode
                         {
-                            instrClass = bytecodeMap.get (fullPath);
-
+                            //instrClass = bytecodeMap.get (fullPath.toString ());
+                            if(instrClass == null) {
+                                System.err.println ("The class "+fullPath.toString () + " has not been loaded");
+                            }
                         }else if (EMPTY_INSTR) {
 
                             instrClass = dexCode; // do nothing
-                        }else if (!(fileName.equals ("core.jar") || fileName.equals ("LongTest2.apk"))) {
-                            instrClass = dexCode;
+                        //}else if (!(fileName.equals ("core.jar") || fileName.equals ("LongTest2.apk"))) {
+                        //    instrClass = dexCode;
                         } else {
                             // create tmp file in /tmp
                             final File tmpfile = File.createTempFile (

@@ -46,7 +46,8 @@ class ShadowCommonClass extends ShadowClass {
         }
 
         //HAIYANG current empty
-        if(true) {
+        System.out.println ("Getting class code:" +name);
+        if(false) {
             return;
         }
         if (classCode == null || classCode.length == 0) {

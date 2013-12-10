@@ -74,9 +74,13 @@ void manuallyOpen
 void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
 	ALOG(LOG_INFO,"HAIYANG","EVENT: close connection");
-	remote.ConnectionClose();
+	//remote.ConnectionClose();
+
+	char tmp = MSG_CLOSE;
+	sock->Send(&tmp, 1);
 	delete sock;
 	sock = NULL;
+	exit(0);
 }
 void analysisEnd
 (JNIEnv * jni_env, jclass this_class) {
@@ -288,8 +292,8 @@ static int registerNatives(JNIEnv *env){
 }
 
 void objNewHook(Object* obj){
-	//SetAndGetNetref(obj);
-	//ALOG(LOG_DEBUG,"HAIYANG","in hook %s %s %lld", __FUNCTION__, obj->clazz->descriptor, obj->uuid);
+	SetAndGetNetref(obj);
+	ALOG(LOG_DEBUG,"HAIYANG","in hook %s %s %lld", __FUNCTION__, obj->clazz->descriptor, obj->uuid);
 }
 void threadEndHook(Thread* self){
 	bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
@@ -299,8 +303,13 @@ void vmEndHook(JavaVM* vm){
 	ALOG(LOG_DEBUG,"HAIYANG","in hook %s", __FUNCTION__);
 }
 void objFreeHook(Object* obj, Thread* self){
-	//ALOG(LOG_DEBUG,"HAIYANG","in FREE hook %s %lld", obj->clazz->descriptor, obj->uuid);
-	//remote.ObjFreeEvent(obj->uuid);
+	ALOG(LOG_DEBUG,"HAIYANG","in FREE hook %s %lld", obj->clazz->descriptor, obj->uuid);
+	//SetAndGetNetref(obj);
+	if(obj == NULL)
+		return;
+	if(obj->uuid == 0)
+		return;
+	remote.ObjFreeEvent(obj->uuid);
 }
 int classfileLoadHook(const char* name, int len){
 	ALOG(LOG_DEBUG,"HAIYANG","LOADING CLASS %s", name);
