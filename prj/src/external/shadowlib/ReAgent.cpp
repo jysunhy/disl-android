@@ -75,6 +75,8 @@ void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
 	ALOG(LOG_INFO,"HAIYANG","EVENT: close connection");
 	remote.ConnectionClose();
+	delete sock;
+	sock = NULL;
 }
 void analysisEnd
 (JNIEnv * jni_env, jclass this_class) {
@@ -312,10 +314,14 @@ static void * send_thread_loop(void * obj) {
 		if(!sock){
 			OpenConnection();
 		}else {
-			sock->Send(tmp->q_data, tmp->q_occupied);
+			if(!sock->Send(tmp->q_data, tmp->q_occupied)){
+				ALOG(LOG_DEBUG,"HAIYANG","SERVER ERROR DURING SEND");
+				delete sock;
+				sock = NULL;
+			}
 		}
 		delete tmp;
-		sleep(5);
+		sleep(1);
 		//if(remote.IsClosed())
 		//	break;
 	}

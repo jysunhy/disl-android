@@ -90,7 +90,11 @@ void * my_thread (void *arg)
 					ALOG(LOG_DEBUG,"HAIYANG", "closed from app");
 					break;
 				}
-				send(sock_host, buf, retcode, 0);
+				retcode = send(sock_host, buf, retcode, 0);
+				if(retcode < 0) {
+					close(myClient_s);
+					break;
+				}
 				/*
 				char tmp[10241];
 				int i = 0;
