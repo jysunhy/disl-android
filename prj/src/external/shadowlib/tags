@@ -11,15 +11,21 @@ ASSERT	Debug.h	10;"	d
 AnalysisEndEvent	ReProtocol.h	/^		bool AnalysisEndEvent(thread_id_type tid){$/;"	f	class:ReProtocol
 AnalysisStartEvent	ReProtocol.h	/^		bool AnalysisStartEvent(thread_id_type tid, ordering_id_type oid, short methodId){$/;"	f	class:ReProtocol
 BUFFER_INIT_SIZE	ReProtocol.h	18;"	d
+BUF_SIZE	Buffer.h	4;"	d
+BUILDDIR	Makefile	/^BUILDDIR=.\/build$/;"	m
 BaseQueue	ReQueue.h	/^		BaseQueue(){$/;"	f	class:BaseQueue
 BaseQueue	ReQueue.h	/^		BaseQueue(int capacity):q_capacity(capacity),q_occupied(0){$/;"	f	class:BaseQueue
 BaseQueue	ReQueue.h	/^class BaseQueue{$/;"	c
+Buffer	Buffer.h	/^		Buffer(int capacity=BUF_SIZE):buf_capacity(capacity),buf_occupied(0){$/;"	f	class:Buffer
+Buffer	Buffer.h	/^class Buffer{$/;"	c
 Buffer	ReQueue.h	/^		Buffer(int capacity):BaseQueue(capacity){}$/;"	f	class:Buffer
 Buffer	ReQueue.h	/^class Buffer: public BaseQueue{$/;"	c
 CLASS_ID_MASK	Netref.h	/^static const uint64_t CLASS_ID_MASK = 0x3FFFFF;$/;"	v
 CLASS_ID_POS	Netref.h	/^static const uint8_t CLASS_ID_POS = 40;$/;"	v
 CLASS_INSTANCE_MASK	Netref.h	/^static const uint64_t CLASS_INSTANCE_MASK = 0x1;$/;"	v
 CLASS_INSTANCE_POS	Netref.h	/^static const uint8_t CLASS_INSTANCE_POS = 62;$/;"	v
+COMMON_FLAGS	Makefile	/^COMMON_FLAGS=-fPIC$/;"	m
+CPPFLAGS	Makefile	/^CPPFLAGS=-I\/usr\/lib\/jvm\/java-6-oracle\/include -I\/usr\/lib\/jvm\/java-6-oracle\/include\/linux$/;"	m
 Connect	Socket.cpp	/^bool Socket::Connect ()$/;"	f	class:Socket
 ConnectionClose	ReProtocol.h	/^		bool ConnectionClose(){$/;"	f	class:ReProtocol
 DEBUG	DalvikHeader.h	13;"	d
@@ -27,10 +33,12 @@ DEBUG	Debug.h	14;"	d
 DEFAULT_LOCK_BUFFER	Lock.h	7;"	d
 DEFAULT_MAP_SIZE	Map.h	9;"	d
 DEFAULT_QUEUE_SIZE	ReQueue.h	7;"	d
+DoubleCapacity	Buffer.h	/^		void DoubleCapacity(){$/;"	f	class:Buffer
 DoubleCapacity	ReQueue.h	/^		void DoubleCapacity(){$/;"	f	class:Buffer
 Duplicate	ReQueue.h	/^		Buffer* Duplicate(){$/;"	f	class:Buffer
 ERROR	DalvikHeader.h	11;"	d
 ERROR	Debug.h	12;"	d
+ERR_PREFIX	long.cpp	2;"	d	file:
 Enqueue	ReQueue.h	/^		virtual int Enqueue(const char* data, int length){$/;"	f	class:BaseQueue
 Enqueue	ReQueue.h	/^		virtual int Enqueue(const char* data, int length){$/;"	f	class:Buffer
 Enqueue	ReQueue.h	/^		virtual int Enqueue(const char* data, int length){$/;"	f	class:ReQueue
@@ -54,12 +62,18 @@ INVOCATION_SIZE	ReProtocol.h	16;"	d
 IsClosed	ReProtocol.h	/^		bool IsClosed(){$/;"	f	class:ReProtocol
 IsEmpty	ReQueue.h	/^		bool IsEmpty(){$/;"	f	class:BaseQueue
 JNI_OnLoad	ReAgent.cpp	/^jint JNI_OnLoad(JavaVM* vm, void* reserved){$/;"	f
+JNI_OnLoad	long.cpp	/^jint JNI_OnLoad(JavaVM* vm, void* reserved){$/;"	f
+LIBNAME	Makefile	/^LIBNAME=dislreagent$/;"	m
+LIBRARY	Makefile	/^LIBRARY=lib$(LIBNAME).jnilib$/;"	m
+LIBRARY	Makefile	/^LIBRARY=lib$(LIBNAME).so$/;"	m
+LINK_SHARED	Makefile	/^LINK_SHARED=$(LINK.c) -shared -o $@$/;"	m
 LOCAL_MODULE	Android.mk	/^LOCAL_MODULE:= libshadowvm$/;"	m
 LOCAL_MODULE_TAGS	Android.mk	/^LOCAL_MODULE_TAGS := samples$/;"	m
 LOCAL_PATH	Android.mk	/^LOCAL_PATH:= $(call my-dir)$/;"	m
 LOCAL_PRELINK_MODULE	Android.mk	/^LOCAL_PRELINK_MODULE := false$/;"	m
 LOCAL_SHARED_LIBRARIES	Android.mk	/^LOCAL_SHARED_LIBRARIES := \\$/;"	m
 LOCAL_SRC_FILES	Android.mk	/^LOCAL_SRC_FILES:= \\$/;"	m
+LOG_TAG	long.cpp	1;"	d	file:
 Lock	Lock.h	/^		void Lock(lock_id_type lockid){$/;"	f	class:LockBuffer
 LockBuffer	Lock.h	/^		LockBuffer(int capacity=DEFAULT_LOCK_BUFFER):b_capacity(capacity),b_occupied(0){$/;"	f	class:LockBuffer
 LockBuffer	Lock.h	/^class LockBuffer{$/;"	c
@@ -82,12 +96,14 @@ MethodRegisterEvent	ReProtocol.h	/^		bool MethodRegisterEvent(int threadId, jsho
 MsgType	ReProtocol.h	/^enum MsgType{$/;"	g
 NewClassEvent	ReProtocol.h	/^		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, const char *bytes){$/;"	f	class:ReProtocol
 NewClassInfo	ReProtocol.h	/^		bool NewClassInfo(jlong netref, const char* className, int namelen, const char* generic, int glen, jlong netrefClassLoader, jlong netrefSuperClass){$/;"	f	class:ReProtocol
+OBJECTS	Makefile	/^OBJECTS=$(SOURCES:%.cpp=%.o)$/;"	m
 OBJECT_ID_MASK	Netref.h	/^static const uint64_t OBJECT_ID_MASK = 0xFFFFFFFFFFL;$/;"	v
 OBJECT_ID_POS	Netref.h	/^static const uint8_t OBJECT_ID_POS = 0;$/;"	v
 ObjFreeEvent	ReProtocol.h	/^		void ObjFreeEvent(jlong objectId){$/;"	f	class:ReProtocol
 OpenConnection	ReAgent.cpp	/^void OpenConnection(){$/;"	f
 Print	Map.h	/^		void Print(){$/;"	f	class:Map
 Print	ReQueue.h	/^		virtual void Print(){$/;"	f	class:BaseQueue
+Push	Buffer.h	/^		void Push(const char* data, int len){$/;"	f	class:Buffer
 QUEUE_INVOCATION	ReProtocol.h	/^	QUEUE_INVOCATION,$/;"	e	enum:QueueType
 QUEUE_OBJFREE	ReProtocol.h	/^	QUEUE_OBJFREE$/;"	e	enum:QueueType
 QueueType	ReProtocol.h	/^enum QueueType{$/;"	g
@@ -100,6 +116,7 @@ Reset	ReQueue.h	/^		virtual void Reset(){$/;"	f	class:BaseQueue
 Reset	ReQueue.h	/^		virtual void Reset(){$/;"	f	class:ReQueue
 ReturnAndResetBuffer	ReProtocol.h	/^		Buffer* ReturnAndResetBuffer(){$/;"	f	class:ReProtocol
 SERVER_SOCK	Socket.cpp	21;"	d	file:
+SOURCES	Makefile	/^SOURCES=test.cpp$/;"	m
 SPEC_MASK	Netref.h	/^static const uint64_t SPEC_MASK = 0x1;$/;"	v
 SPEC_POS	Netref.h	/^static const uint8_t SPEC_POS = 63;$/;"	v
 ScopedMutex	Common.h	/^		ScopedMutex(){}$/;"	f	class:ScopedMutex
@@ -128,10 +145,15 @@ SetAndGetNetref	ReAgent.cpp	/^jlong SetAndGetNetref(Object* obj){$/;"	f
 SetOrderingId	ReProtocol.h	/^		void SetOrderingId(thread_id_type tid, ordering_id_type oid){$/;"	f	class:ReProtocol
 Socket	Socket.cpp	/^Socket::Socket() :$/;"	f	class:Socket
 Socket	Socket.h	/^class Socket$/;"	c
+UNAME	Makefile	/^UNAME := $(shell uname)$/;"	m
 UNIX_PATH_MAX	Socket.cpp	20;"	d	file:
 UnionJNIEnvToVoid	ReAgent.cpp	/^}UnionJNIEnvToVoid;$/;"	t	typeref:union:__anon1	file:
+UnionJNIEnvToVoid	long.cpp	/^}UnionJNIEnvToVoid;$/;"	t	typeref:union:__anon2	file:
 Unlock	Lock.h	/^		void Unlock(lock_id_type lockid){$/;"	f	class:LockBuffer
 Update	ReQueue.h	/^		virtual bool Update(int pos, const char* input, int len){$/;"	f	class:BaseQueue
+_BUFFER_H_	Buffer.h	2;"	d
+_BUFFPACK_H	JniUtility.h	2;"	d
+_BUFFPACK_H	buffpack.h	2;"	d
 _COMMON_H_	Common.h	2;"	d
 _DALVIKHEADER_H_	DalvikHeader.h	2;"	d
 _DEBUGHEADER_H_	Debug.h	2;"	d
@@ -147,6 +169,7 @@ _SOCKET_H_	Socket.h	4;"	d
 _Set	Map.h	/^		void _Set(const K &key, const V &value) {$/;"	f	class:Map
 _set_net_reference	Netref.h	/^static jlong _set_net_reference(jlong object_id, jint class_id, unsigned char spec, unsigned char cbit) {$/;"	f
 accept	Socket.cpp	/^bool Socket::accept ( Socket& new_socket ) const$/;"	f	class:Socket
+add	long.cpp	/^jint add(JNIEnv *env, jobject thiz, jint x, jint y){$/;"	f
 analysisEnd	ReAgent.cpp	/^void analysisEnd$/;"	f
 analysisStart__S	ReAgent.cpp	/^void analysisStart__S$/;"	f
 analysisStart__SB	ReAgent.cpp	/^void analysisStart__SB$/;"	f
@@ -163,25 +186,47 @@ b_occupied	Lock.h	/^		int b_occupied;$/;"	m	class:LockBuffer
 b_occupied	Map.h	/^		int b_occupied;$/;"	m	class:Map
 b_values	Map.h	/^		V *b_values;$/;"	m	class:Map
 bind	Socket.cpp	/^bool Socket::bind ( const int port )$/;"	f	class:Socket
+buf_capacity	Buffer.h	/^		char* buf_capacity;$/;"	m	class:Buffer
+buf_data	Buffer.h	/^		char* buf_data;$/;"	m	class:Buffer
+buf_occupied	Buffer.h	/^		char* buf_occupied;$/;"	m	class:Buffer
 classPathName	ReAgent.cpp	/^static const char *classPathName = "ch\/usi\/dag\/dislre\/AREDispatch";$/;"	v	file:
+classPathName	long.cpp	/^static const char *classPathName = "com\/inspur\/test2\/MainActivity";$/;"	v	file:
 classfileLoadHook	ReAgent.cpp	/^int classfileLoadHook(const char* name, int len){$/;"	f
 create	Socket.cpp	/^bool Socket::create()$/;"	f	class:Socket
+d	JniUtility.h	/^	double d;$/;"	m	union:double_jlong
 d	ReQueue.h	/^	double d;$/;"	m	union:double_jlong
+d	buffpack.h	/^	double d;$/;"	m	union:double_jlong
+division	long.cpp	/^jfloat division(JNIEnv *env, jobject thiz, jint x, jint y){$/;"	f
+double_jlong	JniUtility.h	/^union double_jlong {$/;"	u
 double_jlong	ReQueue.h	/^union double_jlong {$/;"	u
+double_jlong	buffpack.h	/^union double_jlong {$/;"	u
 env	ReAgent.cpp	/^	JNIEnv* env;$/;"	m	union:__anon1	file:
+env	long.cpp	/^	JNIEnv* env;$/;"	m	union:__anon2	file:
 event_count	ReQueue.h	/^		jint event_count; \/\/ count how many events accumulated$/;"	m	class:ReQueue
+f	JniUtility.h	/^	float f;$/;"	m	union:float_jint
 f	ReQueue.h	/^	float f;$/;"	m	union:float_jint
+f	buffpack.h	/^	float f;$/;"	m	union:float_jint
+float_jint	JniUtility.h	/^union float_jint {$/;"	u
 float_jint	ReQueue.h	/^union float_jint {$/;"	u
+float_jint	buffpack.h	/^union float_jint {$/;"	u
 get_bits	Netref.h	/^static inline uint64_t get_bits(uint64_t from, uint64_t bit_mask,$/;"	f
 gl_mtx	Lock.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:LockBuffer
 gl_mtx	Map.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:Map
 gl_mtx	ReAgent.cpp	/^pthread_mutex_t gl_mtx;$/;"	v
 gl_mtx	ReProtocol.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:ReProtocol
+htobe64	JniUtility.h	11;"	d
+htobe64	JniUtility.h	9;"	d
+htobe64	buffpack.h	11;"	d
+htobe64	buffpack.h	9;"	d
+i	JniUtility.h	/^	jint i;$/;"	m	union:float_jint
 i	ReQueue.h	/^	jint i;$/;"	m	union:float_jint
+i	buffpack.h	/^	jint i;$/;"	m	union:float_jint
 invocation_buf	ReProtocol.h	/^		Map<ordering_id_type, Buffer*> invocation_buf;$/;"	m	class:ReProtocol
 isClosed	ReProtocol.h	/^		bool isClosed;$/;"	m	class:ReProtocol
 is_valid	Socket.h	/^  bool is_valid() const { return m_sock != -1; }$/;"	f	class:Socket
+l	JniUtility.h	/^	jlong l;$/;"	m	union:double_jlong
 l	ReQueue.h	/^	jlong l;$/;"	m	union:double_jlong
+l	buffpack.h	/^	jlong l;$/;"	m	union:double_jlong
 listen	Socket.cpp	/^bool Socket::listen() const$/;"	f	class:Socket
 local_mtx	Common.h	/^		pthread_mutex_t *local_mtx;$/;"	m	class:ScopedMutex
 lock_buf	ReProtocol.h	/^		LockBuffer lock_buf;$/;"	m	class:ReProtocol
@@ -193,6 +238,8 @@ manuallyClose	ReAgent.cpp	/^void manuallyClose$/;"	f
 manuallyOpen	ReAgent.cpp	/^void manuallyOpen$/;"	f
 method_id	ReAgent.cpp	/^static volatile jshort method_id = 1;$/;"	v	file:
 methods	ReAgent.cpp	/^static JNINativeMethod methods[]= {$/;"	v	file:
+methods	long.cpp	/^static JNINativeMethod methods[]= {$/;"	v	file:
+multiplication	long.cpp	/^jfloat multiplication(JNIEnv *env, jobject thiz, jint x, jint y){$/;"	f
 myitoa	Common.h	/^char *myitoa(int num,char *str,int radix)$/;"	f
 net_ref_get_class_id	Netref.h	/^inline jint net_ref_get_class_id(jlong net_ref) {$/;"	f
 net_ref_get_class_instance_bit	Netref.h	/^inline unsigned char net_ref_get_class_instance_bit(jlong net_ref) {$/;"	f
@@ -210,13 +257,35 @@ operator []	Map.h	/^		V& operator[](const K& key){$/;"	f	class:Map
 ordering_id_type	Common.h	/^typedef long ordering_id_type;$/;"	t
 ot_class_id	ReAgent.cpp	/^static volatile jint ot_class_id = 1;$/;"	v	file:
 ot_object_id	ReAgent.cpp	/^static volatile jlong ot_object_id = 1;$/;"	v	file:
+pack_boolean	JniUtility.h	/^void pack_boolean(Buffer * buff, jboolean to_send) {$/;"	f
+pack_boolean	buffpack.h	/^void pack_boolean(buffer * buff, jboolean to_send) {$/;"	f
+pack_byte	JniUtility.h	/^void pack_byte(Buffer * buff, jbyte to_send) {$/;"	f
+pack_byte	buffpack.h	/^void pack_byte(buffer * buff, jbyte to_send) {$/;"	f
+pack_bytes	JniUtility.h	/^void pack_bytes(Buffer * buff, const void * data, jint size) {$/;"	f
+pack_bytes	buffpack.h	/^void pack_bytes(buffer * buff, const void * data, jint size) {$/;"	f
+pack_char	JniUtility.h	/^void pack_char(Buffer * buff, jchar to_send) {$/;"	f
+pack_char	buffpack.h	/^void pack_char(buffer * buff, jchar to_send) {$/;"	f
+pack_double	JniUtility.h	/^void pack_double(Buffer * buff, jdouble to_send) {$/;"	f
+pack_double	buffpack.h	/^void pack_double(buffer * buff, jdouble to_send) {$/;"	f
+pack_float	JniUtility.h	/^void pack_float(Buffer * buff, jfloat to_send) {$/;"	f
+pack_float	buffpack.h	/^void pack_float(buffer * buff, jfloat to_send) {$/;"	f
+pack_int	JniUtility.h	/^void pack_int(Buffer * buff, jint to_send) {$/;"	f
+pack_int	buffpack.h	/^void pack_int(buffer * buff, jint to_send) {$/;"	f
+pack_long	JniUtility.h	/^void pack_long(Buffer * buff, jlong to_send) {$/;"	f
+pack_long	buffpack.h	/^void pack_long(buffer * buff, jlong to_send) {$/;"	f
+pack_short	JniUtility.h	/^void pack_short(Buffer * buff, jshort to_send) {$/;"	f
+pack_short	buffpack.h	/^void pack_short(buffer * buff, jshort to_send) {$/;"	f
+pack_string_utf8	JniUtility.h	/^void pack_string_utf8(Buffer * buff, const void * string_utf8,$/;"	f
+pack_string_utf8	buffpack.h	/^void pack_string_utf8(buffer * buff, const void * string_utf8,$/;"	f
 q_capacity	ReQueue.h	/^		int q_capacity;$/;"	m	class:BaseQueue
 q_data	ReQueue.h	/^		char* q_data;$/;"	m	class:BaseQueue
 q_objfree	ReProtocol.h	/^		ReQueue q_objfree;$/;"	m	class:ReProtocol
 q_occupied	ReQueue.h	/^		int q_occupied;$/;"	m	class:BaseQueue
 registerMethod	ReAgent.cpp	/^jshort registerMethod$/;"	f
 registerNativeMethods	ReAgent.cpp	/^static int registerNativeMethods(JNIEnv* env, const char* className,$/;"	f	file:
+registerNativeMethods	long.cpp	/^static int registerNativeMethods(JNIEnv* env, const char* className,$/;"	f	file:
 registerNatives	ReAgent.cpp	/^static int registerNatives(JNIEnv *env){$/;"	f	file:
+registerNatives	long.cpp	/^static int registerNatives(JNIEnv *env){$/;"	f	file:
 running_oid	ReProtocol.h	/^		Map<thread_id_type, ordering_id_type> running_oid;$/;"	m	class:ReProtocol
 sendBoolean	ReAgent.cpp	/^void sendBoolean$/;"	f
 sendBuf	ReProtocol.h	/^		Buffer *sendBuf;$/;"	m	class:ReProtocol
@@ -234,11 +303,14 @@ send_thread_loop	ReAgent.cpp	/^static void * send_thread_loop(void * obj) {$/;"	
 set_bits	Netref.h	/^static inline void set_bits(uint64_t * to, uint64_t bits,$/;"	f
 set_non_blocking	Socket.cpp	/^void Socket::set_non_blocking ( const bool b )$/;"	f	class:Socket
 sock	ReAgent.cpp	/^Socket *sock = NULL;$/;"	v
+substraction	long.cpp	/^jint substraction(JNIEnv *env, jobject thiz, jint x, jint y){$/;"	f
 threadEndHook	ReAgent.cpp	/^void threadEndHook(Thread* self){$/;"	f
 thread_id_type	Common.h	/^typedef int thread_id_type;$/;"	t
 venv	ReAgent.cpp	/^	void* venv;$/;"	m	union:__anon1	file:
+venv	long.cpp	/^	void* venv;$/;"	m	union:__anon2	file:
 vmEndHook	ReAgent.cpp	/^void vmEndHook(JavaVM* vm){$/;"	f
 ~BaseQueue	ReQueue.h	/^		virtual ~BaseQueue(){$/;"	f	class:BaseQueue
+~Buffer	Buffer.h	/^		~Buffer(){$/;"	f	class:Buffer
 ~LockBuffer	Lock.h	/^		~LockBuffer(){$/;"	f	class:LockBuffer
 ~Map	Map.h	/^		~Map(){$/;"	f	class:Map
 ~ReProtocol	ReProtocol.h	/^		~ReProtocol(){$/;"	f	class:ReProtocol

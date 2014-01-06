@@ -44,6 +44,10 @@ public class CodeExecutedRE {
 			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingNull");
 	}
 
+	public static void mapPID(String pname, int pid){
+		AREDispatch.mapPID(pname, pid);
+	}
+
 	public static void bytecodesExecuted(final int count) {
 
 		final byte orderingid = 1;

@@ -4,6 +4,7 @@
 
 	<path id="buildpath">
 		<pathelement location="${asm.path}" />
+		<pathelement location="${android.path}" />
 		<pathelement location="${dislserver.path}" />
 		<pathelement location="${dislre.server.path}" />
 		<pathelement location="${dislre.dispatch.path}" />

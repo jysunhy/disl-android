@@ -103,7 +103,7 @@ class ReQueue: public BaseQueue{
 		ReQueue():BaseQueue(){ event_count = 0; }
 		ReQueue(int capacity):BaseQueue(capacity){ event_count = 0; }
 		virtual int Enqueue(const char* data, int length){
-			//ALOG(LOG_DEBUG,"HAIYANG","in %s, %d %d %d pushed back to queue", __FUNCTION__, length, q_capacity, q_occupied);
+			//ALOG(LOG_DEBUG,"SHADOW","in %s, %d %d %d pushed back to queue", __FUNCTION__, length, q_capacity, q_occupied);
 			if(length > q_capacity - q_occupied) {
 				return false;
 			}else{

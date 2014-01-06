@@ -56,6 +56,7 @@ public class AREDispatch {
 	public static native void sendFloat(float floatToSend);
 	public static native void sendDouble(double doubleToSend);
 
+	public static native void mapPID(String name,int pid);
 
 	static{
 		System.loadLibrary("shadowvm");

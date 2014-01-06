@@ -18,43 +18,70 @@ static volatile jlong ot_object_id = 1;
 static volatile jshort method_id = 1;
 
 //jint add(JNIEnv *env, jobject thiz, jint x, jint y){
-//	ALOG(LOG_DEBUG,"HAIYANG","in shadowvm native %s", __FUNCTION__);
+//	ALOG(LOG_DEBUG,"SHADOW","in shadowvm native %s", __FUNCTION__);
 //	return x + y + 1000;
 //}
 
 // ******************* REDispatch methods *******************
+
+void mapPID
+(JNIEnv * jni_env, jclass this_class, jstring pname, jint pid) {
+	//remote.OpenConnection();
+	jsize str_len = jni_env->GetStringUTFLength(pname);
+	const char * str = 	jni_env->GetStringUTFChars(pname, NULL);
+	ALOG(LOG_INFO,"SHADOW","PID: %d NAME: %s", pid, str);
+	Socket *tmpsock = new Socket();
+	while(!tmpsock->Connect()){
+		DEBUG("Cannot connect through UDS");
+		sleep(2);
+	}
+	int signal = -4;
+	tmpsock->Send((char*)&signal,sizeof(int));
+	signal = str_len;
+	tmpsock->Send((char*)&signal,sizeof(int));
+	tmpsock->Send(str, str_len);
+	signal = pid;
+	tmpsock->Send((char*)&signal,sizeof(int));
+	jni_env->ReleaseStringUTFChars(pname,str);
+	delete tmpsock;
+
+}
 
 jshort registerMethod
 (JNIEnv * jni_env, jclass this_class, jstring analysis_method_desc) {
 	    jsize str_len = jni_env->GetStringUTFLength(analysis_method_desc);
 		const char * str = 	jni_env->GetStringUTFChars(analysis_method_desc, NULL);
 	char tmp[50];
-	int tmpsize = str_len<50?str_len:49;
+	int tmpsize = str_len<100?str_len:99;
 	memcpy(tmp, str, tmpsize);
 	tmp[tmpsize] = 0;
-	ALOG(LOG_INFO,"HAIYANG","EVENT:register method %s", tmp);
+	ALOG(LOG_INFO,"SHADOW","EVENT:register method %s pid:%d tid:%d", tmp, getpid(),dvmThreadSelf()->threadId);
 	//pthread_mutex_lock(&gl_mtx);
 	method_id++;
+	ALOG(LOG_INFO,"SHADOW","EVENT:register method %s pid:%d tid:%d", tmp, getpid(),dvmThreadSelf()->threadId);
 	remote.MethodRegisterEvent(dvmThreadSelf()->threadId, method_id, str, str_len);
+	ALOG(LOG_INFO,"SHADOW","EVENT:register method %s pid:%d tid:%d", tmp, getpid(),dvmThreadSelf()->threadId);
 	jni_env->ReleaseStringUTFChars(analysis_method_desc,str);
+	ALOG(LOG_INFO,"SHADOW","EVENT:register method %s pid:%d tid:%d", tmp, getpid(),dvmThreadSelf()->threadId);
 	//pthread_mutex_unlock(&gl_mtx);
+	//dvmDumpThread(dvmThreadSelf(),true);
 	return method_id;
 }
 
 void analysisStart__S
 (JNIEnv * jni_env, jclass this_class, jshort analysis_method_id) {
-	ALOG(LOG_INFO,"HAIYANG","EVENT: analysis start for method %d", (int)analysis_method_id);
+	ALOG(LOG_INFO,"SHADOW","EVENT: analysis start for method %d, tid:%d", (int)analysis_method_id,dvmThreadSelf()->threadId);
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, 0, analysis_method_id);
 }
 
 void analysisStart__SB
 (JNIEnv * jni_env, jclass this_class, jshort analysis_method_id,
 		jbyte ordering_id) {
-	ALOG(LOG_INFO,"HAIYANG","EVENT: analysis start for method %d with ordering %d", (int)analysis_method_id, (int)ordering_id);
+	ALOG(LOG_INFO,"SHADOW","EVENT: analysis start for method %d with ordering %d", (int)analysis_method_id, (int)ordering_id);
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, ordering_id, analysis_method_id);
 }
 void OpenConnection(){
-	ALOG(LOG_INFO,"HAIYANG","EVENT: open connection");
+	ALOG(LOG_INFO,"SHADOW","EVENT: open connection");
 	//remote.OpenConnection();
 	if(sock) {
 		return;
@@ -73,7 +100,7 @@ void manuallyOpen
 }
 void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
-	ALOG(LOG_INFO,"HAIYANG","EVENT: close connection");
+	ALOG(LOG_INFO,"SHADOW","EVENT: close connection");
 	//remote.ConnectionClose();
 
 	char tmp = MSG_CLOSE;
@@ -84,7 +111,7 @@ void manuallyClose
 }
 void analysisEnd
 (JNIEnv * jni_env, jclass this_class) {
-	ALOG(LOG_INFO,"HAIYANG","EVENT: analysis end for method");
+	ALOG(LOG_INFO,"SHADOW","EVENT: analysis end for method");
 	remote.AnalysisEndEvent(dvmThreadSelf()->threadId);
 }
 
@@ -137,10 +164,10 @@ jlong newClass(ClassObject *obj){
 	jlong loaderid = SetAndGetNetref(obj->classLoader);
 	obj->uuid = _set_net_reference(ot_object_id++,ot_class_id++,1,1);
 	char tmp;
-	ALOG(LOG_DEBUG,"HAIYANG","NEW class found %s id %d, loaderid: %lld, superid: %lld",obj->descriptor, ot_class_id-1, loaderid, superid);
+	ALOG(LOG_DEBUG,"SHADOW","NEW class found %s id %d, loaderid: %lld, superid: %lld",obj->descriptor, ot_class_id-1, loaderid, superid);
 	remote.NewClassEvent(obj->descriptor, strlen(obj->descriptor), loaderid, 0, &tmp);
 	remote.NewClassInfo(obj->uuid, obj->descriptor, strlen(obj->descriptor), "", 0, loaderid, superid);
-	//ALOG(LOG_DEBUG,"HAIYANG","NEW class found %lld:%s",obj->uuid, obj->descriptor);
+	//ALOG(LOG_DEBUG,"SHADOW","NEW class found %lld:%s",obj->uuid, obj->descriptor);
 	return obj->uuid;
 }
 
@@ -160,7 +187,7 @@ jlong SetAndGetNetref(Object* obj){
 		}
 		obj->uuid = _set_net_reference(ot_object_id++,net_ref_get_class_id(obj->clazz->uuid),0,0);
 		res = obj->uuid;
-		ALOG(LOG_DEBUG,"HAIYANG","NEW object found tag:%lld, instance of %s classid %d",obj->uuid, obj->clazz->descriptor,net_ref_get_class_id(obj->uuid));
+		ALOG(LOG_DEBUG,"SHADOW","NEW object found tag:%lld, instance of %s classid %d",obj->uuid, obj->clazz->descriptor,net_ref_get_class_id(obj->uuid));
 	}
 	return res;
 }
@@ -173,7 +200,7 @@ void sendObject
 	jlong netref = SetAndGetNetref(obj);
 
 	if(obj == NULL){
-		ALOG(LOG_DEBUG,"HAIYANG","send NULL object");
+		ALOG(LOG_DEBUG,"SHADOW","send NULL object");
 		remote.SendJobject(self->threadId, 0);
 		return;
 	}
@@ -183,11 +210,11 @@ void sendObject
 		int utflen = ((StringObject*)obj)->utfLength();
 		const u2* tmp = ((StringObject*)obj)->chars();
 		const jchar* content = (jchar*)tmp;
-		ALOG(LOG_DEBUG,"HAIYANG","send string object");
+		ALOG(LOG_DEBUG,"SHADOW","send string object");
 		remote.SendStringObject(self->threadId, obj->uuid, content, len);
 	}
 	if(obj->clazz == gDvm.classJavaLangThread){
-		ALOG(LOG_DEBUG,"HAIYANG","send thread object");
+		ALOG(LOG_DEBUG,"SHADOW","send thread object");
 		//bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
 		//char tmp[16]="abcd";
 		//myitoa(self->threadId, tmp, 10);
@@ -206,7 +233,7 @@ void sendObjectPlusData
 	jlong netref = SetAndGetNetref(obj);
 
 	if(obj == NULL){
-		ALOG(LOG_DEBUG,"HAIYANG","send NULL object");
+		ALOG(LOG_DEBUG,"SHADOW","send NULL object");
 		remote.SendJobject(self->threadId, 0);
 		return;
 	}
@@ -220,17 +247,17 @@ void sendObjectPlusData
 			str[i] = tmp[i];
 		}
 		str[utflen] = 0;
-		ALOG(LOG_DEBUG,"HAIYANG","send string object %s, %d, %d",str, len, utflen);
+		ALOG(LOG_DEBUG,"SHADOW","send string object %s, %d, %d",str, len, utflen);
 
 		remote.SendStringObject(self->threadId, obj->uuid, str, utflen);
 	}
 	if(obj->clazz == gDvm.classJavaLangThread){
-		ALOG(LOG_DEBUG,"HAIYANG","send thread object");
-		//bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
-		bool isDaemon = false;
-		char tmp[16]="abcd";
-		//myitoa(self->threadId, tmp, 10);
-		remote.SendThreadObject(self->threadId, obj->uuid, tmp, strlen(tmp), isDaemon);
+		ALOG(LOG_DEBUG,"SHADOW","send thread object");
+		bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
+		char *name =  dvmGetThreadName_cstr(self);
+
+		remote.SendThreadObject(self->threadId, obj->uuid, name, strlen(name), isDaemon);
+		free(name);
 	}
 
 	remote.SendJobject(self->threadId, netref);
@@ -240,6 +267,7 @@ static const char *classPathName = "ch/usi/dag/dislre/AREDispatch";
 
 static JNINativeMethod methods[]= {
 	//{"add", "(II)I", (void*)add},
+	{"mapPID", "(Ljava/lang/String;I)V", (void*)mapPID},
 	{"registerMethod", "(Ljava/lang/String;)S", (void*)registerMethod},
 	{"analysisStart", "(S)V", (void*)analysisStart__S},
 	{"analysisStart", "(SB)V", (void*)analysisStart__SB},
@@ -263,7 +291,6 @@ typedef union{
 	JNIEnv* env;
 	void* venv;
 }UnionJNIEnvToVoid;
-
 
 static int registerNativeMethods(JNIEnv* env, const char* className,
 	JNINativeMethod* gMethods, int numMethods){
@@ -292,18 +319,19 @@ static int registerNatives(JNIEnv *env){
 }
 
 void objNewHook(Object* obj){
+	return;
 	SetAndGetNetref(obj);
-	ALOG(LOG_DEBUG,"HAIYANG","in hook %s %s %lld", __FUNCTION__, obj->clazz->descriptor, obj->uuid);
+	ALOG(LOG_DEBUG,"SHADOW","in hook %s %s %lld", __FUNCTION__, obj->clazz->descriptor, obj->uuid);
 }
 void threadEndHook(Thread* self){
 	bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
-	ALOG(LOG_DEBUG,"HAIYANG","in hook %s %d %s", __FUNCTION__, self->threadId, isDaemon?"daemon":"not daemon");
+	ALOG(LOG_DEBUG,"SHADOW","in hook %s %d %s", __FUNCTION__, self->threadId, isDaemon?"daemon":"not daemon");
 }
 void vmEndHook(JavaVM* vm){
-	ALOG(LOG_DEBUG,"HAIYANG","in hook %s", __FUNCTION__);
+	ALOG(LOG_DEBUG,"SHADOW","in hook %s", __FUNCTION__);
 }
 void objFreeHook(Object* obj, Thread* self){
-	ALOG(LOG_DEBUG,"HAIYANG","in FREE hook %s %lld", obj->clazz->descriptor, obj->uuid);
+	ALOG(LOG_DEBUG,"SHADOW","in FREE hook %s %lld", obj->clazz->descriptor, obj->uuid);
 	//SetAndGetNetref(obj);
 	if(obj == NULL)
 		return;
@@ -312,7 +340,7 @@ void objFreeHook(Object* obj, Thread* self){
 	remote.ObjFreeEvent(obj->uuid);
 }
 int classfileLoadHook(const char* name, int len){
-	ALOG(LOG_DEBUG,"HAIYANG","LOADING CLASS %s", name);
+	ALOG(LOG_DEBUG,"SHADOW","LOADING CLASS %s", name);
 	return 1;
 }
 
@@ -324,7 +352,7 @@ static void * send_thread_loop(void * obj) {
 			OpenConnection();
 		}else {
 			if(!sock->Send(tmp->q_data, tmp->q_occupied)){
-				ALOG(LOG_DEBUG,"HAIYANG","SERVER ERROR DURING SEND");
+				ALOG(LOG_DEBUG,"SHADOW","SERVER ERROR DURING SEND");
 				delete sock;
 				sock = NULL;
 			}
@@ -346,7 +374,7 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved){
 	//gDvm.shadowHook = &testShadowHook;
 	OpenConnection();
 	gDvm.newObjHook = &objNewHook;
-	gDvm.freeObjHook = &objFreeHook;
+	//gDvm.freeObjHook = &objFreeHook;
 	gDvm.threadEndHook = &threadEndHook;
 	gDvm.vmEndHook = &vmEndHook;
 	gDvm.classfileLoadHook = &classfileLoadHook;

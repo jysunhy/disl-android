@@ -180,7 +180,7 @@ bool Socket::Connect ()
 	m_sock = socket(PF_UNIX, SOCK_STREAM, 0); 
 	if(m_sock < 0)
 	{   
-		//    ALOG(LOG_INFO,"HAIYANG","CL: Create Socket Failed! %d",errno);
+		//    ALOG(LOG_INFO,"SHADOW","CL: Create Socket Failed! %d",errno);
 		return false; 
 	}   
 
@@ -194,7 +194,7 @@ bool Socket::Connect ()
 				(struct sockaddr *) &address,  
 				sizeof(struct sockaddr_un)) != 0)
 	{   
-		//        ALOG(LOG_INFO,"HAIYANG","CL: Connect Socket Failed! %d",errno);
+		//        ALOG(LOG_INFO,"SHADOW","CL: Connect Socket Failed! %d",errno);
 		//        m_sock = -1; 
 		return false;
 	}   

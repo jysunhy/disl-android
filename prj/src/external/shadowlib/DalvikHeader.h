@@ -4,7 +4,7 @@
 #include <JniInternal.h>
 #include <cutils/log.h>
 
-#define MY_LOG_TAG "HAIYANG"
+#define MY_LOG_TAG "SHADOW"
 
 #define ASSERT(cond, ...) do{if(!cond) ALOG(LOG_ERROR,MY_LOG_TAG,__VA_ARGS__);}while(0)
 

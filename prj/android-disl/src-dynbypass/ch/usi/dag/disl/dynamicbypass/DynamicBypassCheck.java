@@ -6,6 +6,6 @@ public class DynamicBypassCheck {
 	// it will be after bootstrap replaced by with version in src-dynbypass-a
 	// directory
 	public static boolean executeUninstrumented() {
-		return true;
+	    return DynamicBypass.isActivated();
 	}
 }

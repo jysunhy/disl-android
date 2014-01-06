@@ -22,22 +22,22 @@ class Map{
 			pthread_mutex_destroy(&gl_mtx);
 		}
 		bool Exist(const K &key){
-	//		ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+	//		ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			ScopedMutex mtx(&gl_mtx);
 			return _Exist(key);
 		}
 		V& Get(const K &key){
-	//		ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+	//		ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			ScopedMutex mtx(&gl_mtx);
 			return _Get(key);
 		}
 		void Set(const K &key, const V &value) {
-	//		ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+	//		ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			ScopedMutex mtx(&gl_mtx);
 			_Set(key, value);
 		}
 		V& operator[](const K& key){
-	//		ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+	//		ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			ScopedMutex mtx(&gl_mtx);
 			return _Get(key);
 		}
@@ -56,7 +56,7 @@ class Map{
 					break;
 				}
 			}
-	//		ALOG(LOG_DEBUG,"HAIYANG","in %s %s",__FUNCTION__, res?"exists":"noexists");
+	//		ALOG(LOG_DEBUG,"SHADOW","in %s %s",__FUNCTION__, res?"exists":"noexists");
 			return res;
 		}
 		V& _Get(const K &key){

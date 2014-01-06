@@ -6,6 +6,7 @@
 	<path id="buildpath">
 		<pathelement location="${bin}" />
 		<pathelement location="${asm.path}" />
+		<pathelement location="${android.path}" />
 		<pathelement location="${junit.core.path}" />
 		<pathelement location="${junit.hamcrest.path}" />
 		<pathelement location="${dex2jar.ir.lib}" />
@@ -21,6 +22,7 @@
 	<path id="classpath">
 		<pathelement location="${bin}" />
 		<pathelement location="${asm.path}" />
+		<pathelement location="${android.path}" />
 		<pathelement location="${junit.core.path}" />
 		<pathelement location="${junit.hamcrest.path}" />
 	</path>

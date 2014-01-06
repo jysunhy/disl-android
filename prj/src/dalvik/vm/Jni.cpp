@@ -3446,6 +3446,8 @@ jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args) {
 	gDvm.vmEndHook = NULL;
 	gDvm.vmInitHook = NULL;
 	gDvm.classfileLoadHook = NULL;
+	gDvm.isShadow = false;
+	ALOG(LOG_INFO,"HAIYANG","in %s",__FUNCTION__);
 	//(void (*)(void));
     int argc = 0;
     for (int i = 0; i < args->nOptions; i++) {

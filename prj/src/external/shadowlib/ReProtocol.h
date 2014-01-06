@@ -174,7 +174,8 @@ class ReProtocol{
 			char* content;
 			int packet_len;
 			tmp.GetData(content, packet_len);
-			sendBuf->Enqueue(content,packet_len);
+			if(!isClosed)
+				sendBuf->Enqueue(content,packet_len);
 			return true;
 			//return sock->Send(content,packet_len);
 		}
@@ -187,7 +188,8 @@ class ReProtocol{
 			char* content;
 			int packet_len;
 			tmp.GetData(content, packet_len);
-			sendBuf->Enqueue(content,packet_len);
+			if(!isClosed)
+				sendBuf->Enqueue(content,packet_len);
 			return packet_len;
 			//return sock->Send(content,packet_len);
 		}
@@ -201,7 +203,8 @@ class ReProtocol{
 			char* content;
 			int packet_len;
 			tmp.GetData(content, packet_len);
-			sendBuf->Enqueue(content,packet_len);
+			if(!isClosed)
+				sendBuf->Enqueue(content,packet_len);
 			return packet_len;
 			//return sock->Send(content,packet_len);
 		}
@@ -215,7 +218,7 @@ class ReProtocol{
 		bool AnalysisEndEvent(thread_id_type tid){
 			ordering_id_type oid = GetOrderingId(tid);
 			if(oid == INVALID_ORDERING_ID) {
-				//ALOG(LOG_DEBUG,"HAIYANG","in %s thread id: %d, error end event",__FUNCTION__, tid);
+				//ALOG(LOG_DEBUG,"SHADOW","in %s thread id: %d, error end event",__FUNCTION__, tid);
 				ERROR("invalid tid in end event");
 				//lock_buf.Unlock(oid);
 				return false;
@@ -245,7 +248,7 @@ class ReProtocol{
 			return true;
 		}
 		bool NewClassInfo(jlong netref, const char* className, int namelen, const char* generic, int glen, jlong netrefClassLoader, jlong netrefSuperClass){
-			//ALOG(LOG_DEBUG,"HAIYANG","new class info %s:%lld", className, netref);
+			//ALOG(LOG_DEBUG,"SHADOW","new class info %s:%lld", className, netref);
 			//ScopedMutex mtx(&gl_mtx);
 			//TODO optimization with pool
 			Buffer tmp(100);
@@ -272,7 +275,7 @@ class ReProtocol{
 			return res;
 		}
 		void ObjFreeEvent(jlong objectId){
-			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+			//ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			ScopedMutex mtx(&objfree_mtx);
 			if(q_objfree.IsEmpty()) {
 				q_objfree.EnqueueJbyte(MSG_OBJ_FREE);
@@ -294,7 +297,7 @@ class ReProtocol{
 			}
 		}
 		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, const char *bytes){
-			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+			//ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			//ScopedMutex mtx(&gl_mtx);
 			//TODO optimization with pool
 			Buffer tmp(100);
@@ -339,22 +342,22 @@ class ReProtocol{
 			//ScopedMutex mtx(&analysis_mtx);
 			if(!running_oid.Exist(tid))
 				running_oid.Set(tid, INVALID_ORDERING_ID);
-			//ALOG(LOG_DEBUG,"HAIYANG","in %s %d:%d",__FUNCTION__, tid, (int)running_oid[tid]);
+			//ALOG(LOG_DEBUG,"SHADOW","in %s %d:%d",__FUNCTION__, tid, (int)running_oid[tid]);
 			return running_oid[tid];
 		}
 		void SetOrderingId(thread_id_type tid, ordering_id_type oid){
-			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+			//ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			//ScopedMutex mtx(&analysis_mtx);
 			running_oid.Set(tid, oid);
 		}
 		bool Send(MsgType msg){
-			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+			//ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			char type = msg;
 			return Send(&type, 1);
 		}
 		bool Send(const char* data, int length){
 			ScopedMutex mtx(&gl_mtx);
-			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+			//ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			for(int i = 0; i < length; i++){
 				printf("%d:%d ", i, (int)data[i]);
 			}
@@ -365,7 +368,8 @@ class ReProtocol{
 			//while(!sock) {
 			//	OpenConnection();
 			//}
-			sendBuf->Enqueue(data,length);
+			if(!isClosed)
+				sendBuf->Enqueue(data,length);
 			//res = sock->Send(data, length);
 
 			//char close = MSG_CLOSE;
@@ -376,12 +380,12 @@ class ReProtocol{
 		}
 		bool Send(const char* data, int length, const char* lastdata, int lastlength){
 			ScopedMutex mtx(&gl_mtx);
-			//ALOG(LOG_DEBUG,"HAIYANG","in %s",__FUNCTION__);
+			//ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			//for(int i = 0; i < length; i++){
-			//	ALOG(LOG_DEBUG,"HAIYANG","Send content %d: %d", i, (int)data[i]);
+			//	ALOG(LOG_DEBUG,"SHADOW","Send content %d: %d", i, (int)data[i]);
 		//	}
 		//	for(int i = 0; i < lastlength; i++){
-			//	ALOG(LOG_DEBUG,"HAIYANG","Send content %d: %d", i+length, (int)lastdata[i]);
+			//	ALOG(LOG_DEBUG,"SHADOW","Send content %d: %d", i+length, (int)lastdata[i]);
 		//	}
 			//return true;
 			//for(int i = 0; i < length; i++){
@@ -402,8 +406,10 @@ class ReProtocol{
 			//ASSERT(res, "error in send packets");
 			//char close = MSG_CLOSE;
 			//sock.Send(&close, 1);
-			sendBuf->Enqueue(data,length);
-			sendBuf->Enqueue(lastdata, lastlength);
+			if(!isClosed){
+				sendBuf->Enqueue(data,length);
+				sendBuf->Enqueue(lastdata, lastlength);
+			}
 			return true;
 		}
 

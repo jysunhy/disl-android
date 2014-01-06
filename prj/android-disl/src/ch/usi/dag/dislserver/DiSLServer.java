@@ -26,7 +26,7 @@ public abstract class DiSLServer {
 	private static final boolean continuous = true; //Boolean.getBoolean(PROP_CONT);
 
 	private static final String PROP_BYPASS = "dislserver.disablebypass";
-	private static final boolean bypass = false;
+	private static final boolean bypass = true;
 	//! Boolean.getBoolean(PROP_BYPASS);
 
 	private static final AtomicInteger aliveWorkers = new AtomicInteger();
