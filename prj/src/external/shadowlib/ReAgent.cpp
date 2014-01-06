@@ -11,7 +11,6 @@ ReProtocol remote("/dev/socket/instrument",11218);
 Socket *sock = NULL;
 static pthread_t send_thread;
 
-
 pthread_mutex_t gl_mtx;
 static volatile jint ot_class_id = 1;
 static volatile jlong ot_object_id = 1;
@@ -51,7 +50,7 @@ jshort registerMethod
 (JNIEnv * jni_env, jclass this_class, jstring analysis_method_desc) {
 	    jsize str_len = jni_env->GetStringUTFLength(analysis_method_desc);
 		const char * str = 	jni_env->GetStringUTFChars(analysis_method_desc, NULL);
-	char tmp[50];
+	char tmp[100];
 	int tmpsize = str_len<100?str_len:99;
 	memcpy(tmp, str, tmpsize);
 	tmp[tmpsize] = 0;
@@ -255,9 +254,12 @@ void sendObjectPlusData
 		ALOG(LOG_DEBUG,"SHADOW","send thread object");
 		bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
 		char *name =  dvmGetThreadName_cstr(self);
-
-		remote.SendThreadObject(self->threadId, obj->uuid, name, strlen(name), isDaemon);
-		free(name);
+		if(name!=NULL) {
+			remote.SendThreadObject(self->threadId, obj->uuid, name, strlen(name), isDaemon);
+			free(name);
+		}else{
+			remote.SendThreadObject(self->threadId, obj->uuid, "default", strlen("default"), isDaemon);
+		}
 	}
 
 	remote.SendJobject(self->threadId, netref);
