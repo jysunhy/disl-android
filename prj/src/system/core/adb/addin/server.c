@@ -30,7 +30,9 @@
 #define TRUE                   1
 #define FALSE                  0
 //#define SERVER_IP "10.10.6.101"
-#define SERVER_IP "192.168.1.103"
+//#define SERVER_IP "192.168.1.103"
+#define SERVER_IP "192.168.56.101"
+#define SERVER_IP "10.0.3.15"
 #define SOCKFILE "/dev/socket/instrument"
 #define min(a,b) a>b?b:a
 
@@ -76,7 +78,7 @@ void * my_thread (void *arg)
 			break;
 		}
 		if(sign4 == -3){
-			ALOG (LOG_INFO,"HAIYANG","receive shadow event");
+			//ALOG (LOG_INFO,"HAIYANG","receive shadow event");
 			while(sock_host < 0) {
 				sock_host = socket_network_client(SERVER_IP, 11218, SOCK_STREAM);
 				if(sock_host < 0){
@@ -106,6 +108,21 @@ void * my_thread (void *arg)
 				*/
 			}
 			break;
+		}
+		if(sign4 == -4) {
+			int pname_len;
+			char pname[1024];
+			int pid;
+			recv(myClient_s, &pname_len, sizeof(int), 0);
+			if(pname_len>1023)
+				pname_len = 1023;
+			if(recv(myClient_s,pname,pname_len,0) < 0)
+					ALOG(LOG_DEBUG,"HAIYANG", "GET PNAME ERROR");
+			pname[pname_len] = 0;
+			recv(myClient_s, &pid, sizeof(int), 0);
+			ALOG(LOG_DEBUG,"HAIYANG", "GET MAPPING PID: %d to NAME: %s", pid, pname);
+			break;		
+
 		}
 		int namelen = sign4;
 		retcode = recv(myClient_s, &sign4, sizeof(int), 0);
@@ -166,9 +183,9 @@ void * my_thread (void *arg)
 		if(i == map_size - 1){
 			map_value[map_size-1] = sign4;
 		}
-		ALOG (LOG_INFO, "HAIYANG","new name received %d", newnamelen);
+		//ALOG (LOG_INFO, "HAIYANG","new name received %d", newnamelen);
 		retcode = recv(sock_host, buf, newnamelen, 0);
-		ALOG (LOG_INFO, "HAIYANG","new dexsize received %d", sign4);
+		//ALOG (LOG_INFO, "HAIYANG","new dexsize received %d", sign4);
 		//ALOG (LOG_INFO,"HAIYANG","IS: new size %d size from HS", sign4);
 		retcode = send(myClient_s, &sign4, sizeof(int), 0);
 		while(cnt<sign4) {
