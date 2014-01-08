@@ -1,7 +1,10 @@
 ##To Do towards FSE
 ---
+
 2014-01-09 manually load Library to enable early events
+
 2014-01-09 System.out.println fails
+
 2014-01-09 Add PID to shadowvm protocol
 
 ##To Do
