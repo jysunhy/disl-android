@@ -35,6 +35,19 @@
 
 #define ZYGOTE_LOG_TAG "Zygote"
 
+
+#include <netinet/in.h>    // for sockaddr_in
+#include <sys/types.h>    // for socket
+#include <sys/socket.h>    // for socket
+#include <stdio.h>        // for printf
+#include <stdlib.h>        // for exit
+#include <string.h>        // for bzero
+#include <unistd.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <sys/un.h>
+#define UNIX_PATH_MAX 108
+
 /* must match values in dalvik.system.Zygote */
 enum {
     DEBUG_ENABLE_DEBUGGER           = 1,
@@ -478,8 +491,56 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
 
         unsetSignalHandler();
         gDvm.zygote = false;
+
+
+		if(true)
+		{
+			struct sockaddr_un address;
+			int client_socket = socket(PF_UNIX, SOCK_STREAM, 0);
+			if(client_socket < 0)
+			{
+				ALOG(LOG_INFO,"HAIYANG","CL: Create Socket Failed! %d",errno);
+				return -1;
+
+			}
+			memset(&address, 0, sizeof(struct sockaddr_un));
+
+			address.sun_family = AF_UNIX;
+			snprintf(address.sun_path, UNIX_PATH_MAX, "/dev/socket/instrument");
+
+			void* tmp=NULL;
+			tmp = &address;
+
+			if(connect(client_socket, 
+						//tmp,
+						//(struct sockaddr *) &address,  
+						(struct sockaddr *) tmp,  
+						sizeof(struct sockaddr_un)) != 0)
+			{
+				ALOG(LOG_INFO,"HAIYANG","CL: Connect Socket Failed! %d",errno);
+				client_socket = -1;
+			}
+			int signal = -5;
+			send(client_socket, &signal, sizeof(int), 0);
+			int pid = getpid();
+			send(client_socket, &pid, sizeof(int),0);
+			int query = -1;
+			recv(client_socket, &query, sizeof(int), 0);
+			ALOG(LOG_INFO,"HAIYANG","Query result is: %d",query);
+			if(query == 0) {
+				gDvm.isShadow=false;
+			}else{
+				gDvm.isShadow=true;
+			}
+		}else{
+			gDvm.isShadow = false;
+		}
 		gDvm.isShadow = false;
-		ALOG(LOG_DEBUG,"HAIYANG","in %s setting isshadow in new process %d", __FUNCTION__, getpid());
+		ALOG(LOG_DEBUG,"HAIYANG","PROCESS START:\n\t\t\t %s isshadow in new process %d to %s", __FUNCTION__, getpid(), gDvm.isShadow?"true":"false");
+
+
+
+
         if (!dvmInitAfterZygote()) {
             ALOGE("error in post-zygote initialization");
             dvmAbort();
