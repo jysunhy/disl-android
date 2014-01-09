@@ -252,12 +252,15 @@ void sendObjectPlusData
 	}
 	if(obj->clazz == gDvm.classJavaLangThread){
 		ALOG(LOG_DEBUG,"SHADOW","send thread object");
-		bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
+		//bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
+		bool isDaemon = false;
 		char *name =  dvmGetThreadName_cstr(self);
 		if(name!=NULL) {
+			ALOG(LOG_DEBUG,"SHADOW","send thread object name is %s", name);
 			remote.SendThreadObject(self->threadId, obj->uuid, name, strlen(name), isDaemon);
 			free(name);
 		}else{
+			ALOG(LOG_DEBUG,"SHADOW","send thread object name is null");
 			remote.SendThreadObject(self->threadId, obj->uuid, "default", strlen("default"), isDaemon);
 		}
 	}

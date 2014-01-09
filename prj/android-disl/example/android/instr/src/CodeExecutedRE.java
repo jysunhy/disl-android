@@ -1,4 +1,5 @@
 import ch.usi.dag.dislre.AREDispatch;
+import ch.usi.dag.dislre.ALocalDispatch;
 
 // Optimally, this class is automatically created on analysis machine
 // and redefines during loading the CodeExecuted class on the client vm
@@ -7,21 +8,37 @@ import ch.usi.dag.dislre.AREDispatch;
 // functionality
 public class CodeExecutedRE {
 
-	private static short beId = AREDispatch.registerMethod(
-			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.bytecodesExecuted");
+	private static short beId;
 
-	private static short tbId = AREDispatch.registerMethod(
-			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingBasic");
+	private static short tbId;
 
-	private static short taId = AREDispatch.registerMethod(
-			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced");
+	private static short taId;
 
-	private static short ta2Id = AREDispatch.registerMethod(
-			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced2");
+	private static short ta2Id;
 
-	private static short tnId = AREDispatch.registerMethod(
-			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingNull");
+	private static short tnId;
+
+	private static boolean methodsRegistered=false;
+
+	public static void registerMethods(){
+		beId = AREDispatch.registerMethod(
+				"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.bytecodesExecuted");
+
+		tbId = AREDispatch.registerMethod(
+				"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingBasic");
+
+		taId = AREDispatch.registerMethod(
+				"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced");
+
+		ta2Id = AREDispatch.registerMethod(
+				"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced2");
+
+		tnId = AREDispatch.registerMethod(
+				"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingNull");
+	}
 	public static void dislStart(){
+		if(!methodsRegistered)
+			methodsRegister();
 		AREDispatch.manuallyOpen();
 	}
 	public static void dislEnd(){
@@ -29,27 +46,30 @@ public class CodeExecutedRE {
 	}
 	public static void methodsRegister(){
 		beId = AREDispatch.registerMethod(
-			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.bytecodesExecuted");
+				"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.bytecodesExecuted");
 
 		tbId = AREDispatch.registerMethod(
-			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingBasic");
+				"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingBasic");
 
 		taId = AREDispatch.registerMethod(
-			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced");
+				"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced");
 
 		ta2Id = AREDispatch.registerMethod(
-			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced2");
+				"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingAdvanced2");
 
 		tnId = AREDispatch.registerMethod(
-			"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingNull");
+				"ch.usi.dag.disl.test.suite.android.instr.CodeExecuted.testingNull");
+		methodsRegistered = true;
 	}
 
 	public static void mapPID(String pname, int pid){
-		AREDispatch.mapPID(pname, pid);
+		ALocalDispatch.mapPID(pname, pid);
 	}
 
 	public static void bytecodesExecuted(final int count) {
 
+		if(!methodsRegistered)
+			methodsRegister();
 		final byte orderingid = 1;
 		AREDispatch.analysisStart(beId, orderingid);
 
@@ -59,6 +79,8 @@ public class CodeExecutedRE {
 	}
 	public static void testingBasic(final boolean b, final byte by, final char c, final short s, final int i,
 			final long l, final float f, final double d) {
+		if(!methodsRegistered)
+			methodsRegister();
 		AREDispatch.analysisStart(tbId);
 
 		AREDispatch.sendBoolean(b);
@@ -76,6 +98,8 @@ public class CodeExecutedRE {
 	public static void testingAdvanced(final String s, final Object o, final Class<?> c,
 			final Thread t) {
 
+		if(!methodsRegistered)
+			methodsRegister();
 		AREDispatch.analysisStart(taId);
 
 		AREDispatch.sendObjectPlusData(s);
@@ -90,6 +114,8 @@ public class CodeExecutedRE {
 			final Object o4, final Class<?> class1, final Class<?> class2,
 			final Class<?> class3, final Class<?> class4) {
 
+		if(!methodsRegistered)
+			methodsRegister();
 		AREDispatch.analysisStart(ta2Id);
 
 		AREDispatch.sendObject(o1);
@@ -105,6 +131,8 @@ public class CodeExecutedRE {
 	}
 
 	public static void testingNull(final String s, final Object o, final Class<?> c) {
+		if(!methodsRegistered)
+			methodsRegister();
 
 		AREDispatch.analysisStart(tnId);
 

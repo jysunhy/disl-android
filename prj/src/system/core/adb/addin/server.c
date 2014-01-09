@@ -30,9 +30,9 @@
 #define TRUE                   1
 #define FALSE                  0
 //#define SERVER_IP "10.10.6.101"
-//#define SERVER_IP "192.168.1.103"
-#define SERVER_IP "192.168.56.101"
-#define SERVER_IP "10.0.3.15"
+#define SERVER_IP "192.168.1.103"
+//#define SERVER_IP "192.168.56.101"
+//#define SERVER_IP "10.0.3.15"
 #define SOCKFILE "/dev/socket/instrument"
 #define min(a,b) a>b?b:a
 
@@ -40,9 +40,14 @@ int map_key[300];
 int map_size=0;
 int map_value[300];
 
+
+int pids[1024];
+int psize = 0;
+char* pnames[1024];
+
 void * my_thread (void *arg)
 {
-	//ALOG (LOG_INFO,"HAIYANG","IS: new client of instrument server");
+	//ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: new client of instrument server");
 	unsigned int myClient_s;    //copy socket
 	char buf[BUF_SIZE]; // buffer for socket
 	int retcode;       // Return code
@@ -55,8 +60,8 @@ void * my_thread (void *arg)
 	int sock_host = -1;
 	while(TRUE) {
 		retcode = recv(myClient_s, &sign4, sizeof(int), 0);
-		//ALOG (LOG_INFO,"HAIYANG","IS: receive %d size from client", sign4);
-		
+		//ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: receive %d size from client", sign4);
+
 		if(sign4 == -1)
 		{
 			break;
@@ -78,18 +83,18 @@ void * my_thread (void *arg)
 			break;
 		}
 		if(sign4 == -3){
-			//ALOG (LOG_INFO,"HAIYANG","receive shadow event");
+			//ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event");
 			while(sock_host < 0) {
 				sock_host = socket_network_client(SERVER_IP, 11218, SOCK_STREAM);
 				if(sock_host < 0){
-					ALOG (LOG_INFO,"HAIYANG","new host sock error");
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
 					sleep(1);
 				}
 			}
 			while(true){
 				retcode = recv(myClient_s, buf, BUF_SIZE, 0);
 				if(retcode < 0){
-					ALOG(LOG_DEBUG,"HAIYANG", "closed from app");
+					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "closed from app");
 					break;
 				}
 				retcode = send(sock_host, buf, retcode, 0);
@@ -98,18 +103,19 @@ void * my_thread (void *arg)
 					break;
 				}
 				/*
-				char tmp[10241];
-				int i = 0;
-				for(; i < retcode; i++){
- 					snprintf(tmp+(2*sizeof(int)+2)*i, 2*sizeof(int)+2, "%d:%d ", i, (unsigned int)buf[i]);
-				}
-				tmp[retcode*(2+2*sizeof(int))] = 0;
-				ALOG(LOG_INFO, "HAIYANG", "SHADOW PACKET %s", tmp);
-				*/
+				   char tmp[10241];
+				   int i = 0;
+				   for(; i < retcode; i++){
+				   snprintf(tmp+(2*sizeof(int)+2)*i, 2*sizeof(int)+2, "%d:%d ", i, (unsigned int)buf[i]);
+				   }
+				   tmp[retcode*(2+2*sizeof(int))] = 0;
+				   ALOG(LOG_INFO, "INSTRUMENTSERVER", "SHADOW PACKET %s", tmp);
+				   */
 			}
 			break;
 		}
 		if(sign4 == -4) {
+			ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "GET MAPPING EVENT");
 			int pname_len;
 			char pname[1024];
 			int pid;
@@ -117,12 +123,47 @@ void * my_thread (void *arg)
 			if(pname_len>1023)
 				pname_len = 1023;
 			if(recv(myClient_s,pname,pname_len,0) < 0)
-					ALOG(LOG_DEBUG,"HAIYANG", "GET PNAME ERROR");
+				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "GET PNAME ERROR");
 			pname[pname_len] = 0;
 			recv(myClient_s, &pid, sizeof(int), 0);
-			ALOG(LOG_DEBUG,"HAIYANG", "GET MAPPING PID: %d to NAME: %s", pid, pname);
+			ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "GET MAPPING PID: %d to NAME: %s", pid, pname);
+			if(psize <= 1023){
+				pids[psize]=pid;
+				char* tmpname = (char*)malloc(pname_len+1);
+				memcpy(tmpname,pname,pname_len);
+				tmpname[pname_len]='\0';
+				pnames[psize]=tmpname;
+				psize++;
+			}else{
+				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "more than 1024 processes");
+			}
 			break;		
 
+		}
+		if(sign4 == -5) {
+			int key;//PID
+			recv(myClient_s, &key, sizeof(int),0);
+			int i = 0;
+			for(; i < psize; i++) {
+				if(pids[i] == key)
+					break;
+			}
+			if(i == psize) { //not in process list, then return false
+				int tmp = 0;
+				send(myClient_s,&tmp,sizeof(int),0);
+				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: not founded, SETTING isShadow to FALSE", key);
+			}else {
+				int tmp = 0;
+				if(strcmp(pnames[i],"com.inspur.test")){
+					tmp = 1;
+				}
+				if(tmp)
+				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED, SETTING isShadow to TRUE", key);
+				else
+				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED and ISTARGET, SETTING isShadow to FALSE", key);
+				send(myClient_s,&tmp,sizeof(int),0);
+			}
+			break;
 		}
 		int namelen = sign4;
 		retcode = recv(myClient_s, &sign4, sizeof(int), 0);
@@ -137,7 +178,7 @@ void * my_thread (void *arg)
 			cnt+=retcode;
 		}
 		buf[namelen] = 0;
-	//	ALOG (LOG_INFO,"HAIYANG","new name comes : %s ", buf);
+		//	ALOG (LOG_INFO,"INSTRUMENTSERVER","new name comes : %s ", buf);
 
 		int i = 0;
 		for(; i< map_size;i++){
@@ -151,15 +192,15 @@ void * my_thread (void *arg)
 		while(sock_host < 0) {
 			sock_host = socket_network_client(SERVER_IP, HOST_PORT, SOCK_STREAM);
 			if(sock_host < 0){
-				ALOG (LOG_INFO,"HAIYANG","new host sock error");
+				ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
 				sleep(1);
 			}
-			
+
 		}
-	//	ALOG (LOG_INFO,"HAIYANG","IS: sending %d size from IS", sign4);
-	//	int flag = 123;
-	//	flag = htonl(flag);
-	//	retcode = send(sock_host, &flag, sizeof(int), 0);
+		//	ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: sending %d size from IS", sign4);
+		//	int flag = 123;
+		//	flag = htonl(flag);
+		//	retcode = send(sock_host, &flag, sizeof(int), 0);
 		int namelen2n = htonl(namelen);
 		retcode = send(sock_host, &namelen2n, sizeof(int), 0);
 		int codelen2n = htonl(codelen);
@@ -183,10 +224,10 @@ void * my_thread (void *arg)
 		if(i == map_size - 1){
 			map_value[map_size-1] = sign4;
 		}
-		//ALOG (LOG_INFO, "HAIYANG","new name received %d", newnamelen);
+		//ALOG (LOG_INFO, "INSTRUMENTSERVER","new name received %d", newnamelen);
 		retcode = recv(sock_host, buf, newnamelen, 0);
-		//ALOG (LOG_INFO, "HAIYANG","new dexsize received %d", sign4);
-		//ALOG (LOG_INFO,"HAIYANG","IS: new size %d size from HS", sign4);
+		//ALOG (LOG_INFO, "INSTRUMENTSERVER","new dexsize received %d", sign4);
+		//ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: new size %d size from HS", sign4);
 		retcode = send(myClient_s, &sign4, sizeof(int), 0);
 		while(cnt<sign4) {
 			retcode = recv (sock_host, buf, BUF_SIZE, 0);
@@ -210,44 +251,44 @@ release:
 //===== Main program ========================================================
 int main (void)
 {
-struct sockaddr_un address;
- int socket_fd, connection_fd;
- socklen_t address_length;
- pid_t child;
- 
+	struct sockaddr_un address;
+	int socket_fd, connection_fd;
+	socklen_t address_length;
+	pid_t child;
 
- socket_fd = socket(PF_UNIX, SOCK_STREAM, 0);
- if(socket_fd < 0)
- {
-		ALOG (LOG_INFO,"HAIYANG","create socket error");
-  return 1;
- } 
 
- /* start with a clean address structure */
- memset(&address, 0, sizeof(struct sockaddr_un));                                                                                                                                                                                           
- address.sun_family = AF_UNIX;
- snprintf(address.sun_path, UNIX_PATH_MAX, SOCKFILE);
- if(bind(socket_fd, 
-         (struct sockaddr *) &address,  
-         sizeof(struct sockaddr_un)) != 0)                                                                                                                                                                                                  
- {
-		ALOG (LOG_INFO,"HAIYANG","bind socket error");
-  return 1;
- }
+	socket_fd = socket(PF_UNIX, SOCK_STREAM, 0);
+	if(socket_fd < 0)
+	{
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","create socket error");
+		return 1;
+	} 
+
+	/* start with a clean address structure */
+	memset(&address, 0, sizeof(struct sockaddr_un));                                                                                                                                                                                           
+	address.sun_family = AF_UNIX;
+	snprintf(address.sun_path, UNIX_PATH_MAX, SOCKFILE);
+	if(bind(socket_fd, 
+				(struct sockaddr *) &address,  
+				sizeof(struct sockaddr_un)) != 0)                                                                                                                                                                                                  
+	{
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","bind socket error");
+		return 1;
+	}
 	char mod[]="0666";
 	chmod(address.sun_path, strtol(mod,0,8));
 
- if(listen(socket_fd, 5) != 0)
- {
-  printf("listen() failed\n");
-  return 1;
- }
+	if(listen(socket_fd, 5) != 0)
+	{
+		printf("listen() failed\n");
+		return 1;
+	}
 
 
 
-unsigned int ids;       // holds thread args
-    pthread_attr_t attr;        //  pthread attributes     
-    pthread_t threads;      // Thread ID (used by OS)
+	unsigned int ids;       // holds thread args
+	pthread_attr_t attr;        //  pthread attributes     
+	pthread_t threads;      // Thread ID (used by OS)
 
 
 
@@ -255,16 +296,16 @@ unsigned int ids;       // holds thread args
 
 	while (TRUE)
 	{
-		ALOG (LOG_INFO,"HAIYANG","my server is ready ...");
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","my server is ready ...");
 
- 		connection_fd = accept(socket_fd,                     
-                               (struct sockaddr *) &address,  
-                               &address_length);                                                                                                                                                                                      
-		ALOG (LOG_INFO,"HAIYANG","a new client arrives ...");
+		connection_fd = accept(socket_fd,                     
+				(struct sockaddr *) &address,  
+				&address_length);                                                                                                                                                                                      
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","a new client arrives ...");
 
 		if (connection_fd == FALSE)
 		{
-			ALOG (LOG_INFO,"HAIYANG","ERROR - Unable to create socket");
+			ALOG (LOG_INFO,"INSTRUMENTSERVER","ERROR - Unable to create socket");
 			continue;
 		}
 

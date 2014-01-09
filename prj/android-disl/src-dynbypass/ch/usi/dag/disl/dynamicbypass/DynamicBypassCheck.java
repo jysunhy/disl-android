@@ -7,5 +7,6 @@ public class DynamicBypassCheck {
 	// directory
 	public static boolean executeUninstrumented() {
 	    return DynamicBypass.isActivated();
+	    //return false;
 	}
 }

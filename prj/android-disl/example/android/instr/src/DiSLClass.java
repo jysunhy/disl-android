@@ -1,6 +1,7 @@
 import java.util.LinkedList;
 
 import ch.usi.dag.disl.annotation.After;
+import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.annotation.ThreadLocal;
 import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.marker.BasicBlockMarker;
@@ -36,6 +37,47 @@ public class DiSLClass {
 			System.out.println("disl: \t\t\t\tProcess GET PID:\t" + ret.pid+"\t PNAME:"+pname);
 		}   
 */
+	//@Before(marker = BodyMarker.class, scope = "AndroidPrintStream.log, LoggingPrintStream.println")
+	//@Before(marker = BodyMarker.class, scope = "java.io.*.*")
+	@Before(marker = BodyMarker.class, scope = "com.android.internal.os.AndroidPrintStream.log")
+		public static void testPrintln(){
+			System.out.println("IN DISL PRINTLN TEST");
+			CodeExecutedRE.mapPID("FORTEST",-1);
+	//			CodeExecutedRE.testingBasic(true, (byte) 125, 's', (short) 50000,
+	//					100000, 10000000000L, 1.5F, 2.5);
+		}
+	@Before(marker = BodyMarker.class, scope = "System.load")
+		public static void testLoading(MethodStaticContext sc, ArgumentProcessorContext pc){
+			System.out.println("DISL: IN System.load");
+			Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
+			if(args[0].getClass().getCanonicalName().equals("java.lang.String")){
+				System.out.println("SYSTEM LOADING: "+args[0].toString());
+			}
+		}
+	@After(marker = BodyMarker.class, scope = "Log.v")
+		public static void testLog(MethodStaticContext sc, ArgumentProcessorContext pc){
+			System.out.println("DISL: IN Log v");
+			Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
+			if(args[0].getClass().getCanonicalName().equals("java.lang.String")){
+				System.out.println("DISLTAG: "+args[0].toString());
+			}
+	}
+	@After(marker = BodyMarker.class, scope = "Toast.makeText")
+		public static void testToast(MethodStaticContext sc, ArgumentProcessorContext pc){
+			System.out.println("DISL: IN Toast.makeText");
+			Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
+			if(args[1].getClass().getCanonicalName().equals("java.lang.String")){
+				System.out.println("TOAST TEXT: "+args[1].toString());
+			}
+	}
+	@AfterReturning(marker = BodyMarker.class, scope = "PackageParser.buildProcessName")
+		public static void testBuildName(MethodStaticContext sc, ArgumentProcessorContext pc,DynamicContext di){
+			String ret = di.getStackValue(0, String.class);
+			Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
+			System.out.println("*****************************DISL INJECTED*****************************");
+			System.out.printf("disl: args for %s %s\n", sc.thisMethodFullName(), sc.thisMethodDescriptor());
+			System.out.println("BUILD PROCESS NAME "+ret);
+		}
 
 	@AfterReturning(marker = BodyMarker.class, scope = "Process.startViaZygote")
 		public static void testprocess(MethodStaticContext sc, ArgumentProcessorContext pc,DynamicContext di){
@@ -51,6 +93,11 @@ public class DiSLClass {
 	//		if(pname.equals("com.inspur.test"))
 	//			CodeExecutedRE.testingBasic(true, (byte) 125, 's', (short) 50000,
 	//				100000, 10000000000L, 1.5F, 2.5);
+			CodeExecutedRE.mapPID(pname,ret.pid);
+			
+
+
+			/*
 			for(int i = 0 ; i < args.length; ++i) {
 				System.out.printf("disl: \targ[%d]\n", i);
 
@@ -147,6 +194,7 @@ public class DiSLClass {
 					} 
 				}
 			}
+		*/
 		}
 
 /*
@@ -258,6 +306,7 @@ public class DiSLClass {
 	
 	@After(marker = BodyMarker.class, scope = "MainActivity.add")
 		public static void testingadd(MethodStaticContext sc, ArgumentProcessorContext pc) {
+			CodeExecutedRE.mapPID("FORTEST",-1);
 			/*
 			System.out.printf("disl: args for %s %s\n", sc.thisMethodFullName(), sc.thisMethodDescriptor());
 			Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);

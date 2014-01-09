@@ -255,6 +255,16 @@ public class Worker extends Thread {
             zos.closeEntry ();
             fisbp.close ();
 
+            final File locald = new File ("bin/ch/usi/dag/dislre/ALocalDispatch.class");
+            final FileInputStream lfis = new FileInputStream (locald);
+            zos.putNextEntry (new ZipEntry ("ch/usi/dag/dislre/ALocalDispatch.class"));
+            while ((bytesRead = lfis.read (buffer)) != -1) {
+                zos.write (buffer, 0, bytesRead);
+            }
+            zos.closeEntry ();
+            lfis.close ();
+
+
             final File red = new File ("bin/ch/usi/dag/dislre/AREDispatch.class");
             final FileInputStream fis = new FileInputStream (red);
             zos.putNextEntry (new ZipEntry ("ch/usi/dag/dislre/AREDispatch.class"));
