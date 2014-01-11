@@ -62,6 +62,9 @@ public class CodeExecutedRE {
 		methodsRegistered = true;
 	}
 
+	public static void testCoverage(int pid){
+		ALocalDispatch.testCoverage(pid);
+	}
 	public static void mapPID(String pname, int pid){
 		ALocalDispatch.mapPID(pname, pid);
 	}

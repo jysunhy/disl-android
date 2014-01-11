@@ -121,15 +121,12 @@ public class Worker extends Thread {
                         byte [] code = null;
                         final ByteArrayInputStream bin;
                         if (code == null) {
-                            System.out.println ("new class " + className + " found");
+                            //System.out.println ("new class " + className + " found");
                             if (className.equals ("java/text/SimpleDateFormat")) {
-                                final File tmp = new File ("libclass/SimpleDateFormat.class");
+                                final File tmp = new File ("lib/SimpleDateFormat.class");
                                 is = new FileInputStream (tmp);
                             }
-                           /* if (className.equals ("android/os/Process")) {
-                                final File tmp = new File ("libclass/Process.class");
-                                is = new FileInputStream (tmp);
-                            }*/
+
                             final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
                             while ((bytesRead = is.read (buffer)) != -1) {
                                 bout.write (buffer, 0, bytesRead);

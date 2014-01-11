@@ -15,7 +15,7 @@ import ch.usi.dag.dislreserver.reqdispatch.RequestDispatcher;
 public abstract class DiSLREServer {
 
 	private static final String PROP_DEBUG = "debug";
-	private static final boolean debug = Boolean.getBoolean(PROP_DEBUG);
+	private static final boolean debug = true;
 
 	private static final String PROP_PORT = "dislreserver.port";
 	private static final int DEFAULT_PORT = 11218;
@@ -40,7 +40,7 @@ public abstract class DiSLREServer {
 				);
 			}
 
-			Socket socket = listenSocket.accept ();
+			final Socket socket = listenSocket.accept ();
 			if (debug) {
 				System.out.printf (
 					"DiSL-RE: accepting connection from %s:%d\n",
@@ -61,12 +61,12 @@ public abstract class DiSLREServer {
 		if (debug) {
 			System.out.println ("DiSL-RE: shutting down analysis server...");
 		}
-		
+
 		System.exit(0); // to kill other threads
 	}
 
 
-	private static void requestLoop(Socket sock) throws DiSLREServerException {
+	private static void requestLoop(final Socket sock) throws DiSLREServerException {
 		try {
 			final DataInputStream is = new DataInputStream(
 				new BufferedInputStream(sock.getInputStream()));
@@ -86,7 +86,7 @@ public abstract class DiSLREServer {
 	}
 
 
-	private static void reportInnerError(Throwable e) {
+	private static void reportInnerError(final Throwable e) {
 		Throwable cause = e.getCause();
 
 		while (cause != null && cause.getMessage() != null) {
