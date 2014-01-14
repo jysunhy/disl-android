@@ -29,6 +29,7 @@ void mapPID
 	jsize str_len = jni_env->GetStringUTFLength(pname);
 	const char * str = 	jni_env->GetStringUTFChars(pname, NULL);
 	ALOG(LOG_INFO,"SHADOW","PID: %d NAME: %s", pid, str);
+	/*
 	Socket *tmpsock = new Socket();
 	while(!tmpsock->Connect()){
 		DEBUG("Cannot connect through UDS");
@@ -43,7 +44,7 @@ void mapPID
 	tmpsock->Send((char*)&signal,sizeof(int));
 	jni_env->ReleaseStringUTFChars(pname,str);
 	delete tmpsock;
-
+	*/
 }
 
 jshort registerMethod
@@ -329,7 +330,8 @@ void objNewHook(Object* obj){
 	ALOG(LOG_DEBUG,"SHADOW","in hook %s %s %lld", __FUNCTION__, obj->clazz->descriptor, obj->uuid);
 }
 void threadEndHook(Thread* self){
-	bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
+	//bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
+	bool isDaemon = false;
 	ALOG(LOG_DEBUG,"SHADOW","in hook %s %d %s", __FUNCTION__, self->threadId, isDaemon?"daemon":"not daemon");
 }
 void vmEndHook(JavaVM* vm){

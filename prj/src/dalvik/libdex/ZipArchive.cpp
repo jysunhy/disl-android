@@ -706,7 +706,7 @@ int dexZipGetEntryInfo(const ZipArchive* pArchive, ZipEntry entry,
  */
 static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
 {
-	ALOG(LOG_INFO, "HAIYANG", "CL: in %s for dex",__FUNCTION__);  
+	//ALOG(LOG_INFO, "HAIYANG", "CL: in %s for dex",__FUNCTION__);  
 	void* olddex = malloc(MAX_DEX);
 	void* buffer[BUFFER_SIZE];
 	int length = 0;
@@ -808,7 +808,7 @@ static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
 		}
 	} while (zerr == Z_OK);
 	if(INSTRUMENT && client_socket >= 0) {
-		ALOG(LOG_INFO, "HAIYANG", "CL: in %s start sending %d bytes",__FUNCTION__,oldsize);  
+		//ALOG(LOG_INFO, "HAIYANG", "CL: in %s start sending %d bytes",__FUNCTION__,oldsize);  
 		apk_original_dexsize = oldsize;
 		int len = strlen(apkname);
 		send(client_socket, &len, sizeof(int),0);
@@ -820,7 +820,7 @@ static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
 		}
 
 		length = recv(client_socket, &newsize, sizeof(int), 0);
-		ALOG(LOG_INFO, "HAIYANG", "CL: in %s get new size %d",__FUNCTION__,newsize);  
+		//ALOG(LOG_INFO, "HAIYANG", "CL: in %s get new size %d",__FUNCTION__,newsize);  
 		apk_new_dexsize = newsize;
 		cnt = 0;
 		while( cnt < newsize)
@@ -835,12 +835,12 @@ static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
 		close(client_socket);
 		client_socket = -1;
 	}
-	ALOG(LOG_INFO, "HAIYANG", "in %s get %d buffer",__FUNCTION__, cnt);  
+	//ALOG(LOG_INFO, "HAIYANG", "in %s get %d buffer",__FUNCTION__, cnt);  
 
 	assert(zerr == Z_STREAM_END);       /* other errors should've been caught */
 
-	ALOG(LOG_INFO, "HAIYANG", "in %s get Zip: (%ld vs %zd)",__FUNCTION__, 
-			zstream.total_out, uncompLen);
+	//ALOG(LOG_INFO, "HAIYANG", "in %s get Zip: (%ld vs %zd)",__FUNCTION__, 
+		//	zstream.total_out, uncompLen);
 	/* paranoia */
 	if (zstream.total_out != uncompLen) {
 		ALOGW("Zip: size mismatch on inflated file (%ld vs %zd)",

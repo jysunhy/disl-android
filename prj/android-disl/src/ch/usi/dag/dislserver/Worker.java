@@ -60,6 +60,7 @@ public class Worker extends Thread {
     // "build-test/disl-instr-android.jar";
     // Needed by ANDROID
     private static final String instrLibPath = "example/android/instr/build/disl-instr.jar";
+    //private static final String instrLibPath = "test-ia-sapi/build/disl-instr.jar";
     //private static final String instrLibPath2 = "example/android/instr/build/test_disl-instr.jar";
 
     private static final ConcurrentHashMap <String, byte []> bytecodeMap = new ConcurrentHashMap <String, byte []> ();
@@ -121,10 +122,11 @@ public class Worker extends Thread {
                         byte [] code = null;
                         final ByteArrayInputStream bin;
                         if (code == null) {
-                            //System.out.println ("new class " + className + " found");
+                            //System.out.println ("new class " + className + " found "+writePath);
                             if (className.equals ("java/text/SimpleDateFormat")) {
                                 final File tmp = new File ("lib/SimpleDateFormat.class");
                                 is = new FileInputStream (tmp);
+                                System.out.println ("new class " + className + " found "+writePath);
                             }
 
                             final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
@@ -376,7 +378,10 @@ public class Worker extends Thread {
                                     + fullPath.toString () + " has not been loaded");
                             }
 
-                        } else if (EMPTY_INSTR) {
+                        } else if (EMPTY_INSTR
+                        //|| fileName.equals ("framework.jar")|| fileName.equals ("services.jar")
+                        )
+                        {
 
                             instrClass = dexCode; // do nothing
                             // }else if (!(fileName.equals ("core.jar") ||

@@ -1,0 +1,11 @@
+java.lang.*.*
+java.io.*.*
+java.util.*.*
+libcore.util.*.*
+libcore.io.OsConstants.*
+com.google.common.net.TldPatterns.<clinit>
+java.io.FileDescriptor.*
+java.io.FileOutputStream.*
+java.io.FileInputStream.*
+java.io.PrintStream.*
+java.io.OutputStream.*

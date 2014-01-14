@@ -70,7 +70,7 @@ int client_socket=-1;
 
 int new_sock();
 int get_new_size(int original) {
-		ALOG(LOG_INFO,"HAIYANG","get new size use variable %d", apk_new_dexsize);
+		//ALOG(LOG_INFO,"HAIYANG","get new size use variable %d", apk_new_dexsize);
 
 	if(!INSTRUMENT)
 		return original;
@@ -198,9 +198,9 @@ static int extractAndProcessZip(int zipFd, int cacheFd,
         goto bail;
     }
 
-	ALOG(LOG_INFO,"HAIYANG","CL: size from %d", uncompLen);
+	//ALOG(LOG_INFO,"HAIYANG","CL: size from %d", uncompLen);
 	uncompLen = get_new_size(uncompLen);
-	ALOG(LOG_INFO,"HAIYANG","CL: size to %d", uncompLen);
+	//ALOG(LOG_INFO,"HAIYANG","CL: size to %d", uncompLen);
 
     /* Parse the options. */
     if (dexoptFlagStr[0] != '\0') {
@@ -287,7 +287,14 @@ static int processZipFile(int zipFd, int cacheFd, const char* zipName,
      * Check to see if this is a bootstrap class entry. If so, truncate
      * the path.
      */
-    const char* bcp = getenv("BOOTCLASSPATH");
+	//const char* bcp;
+	const char* bcp = getenv("BOOTCLASSPATH");
+	/*if(strlen(bcp)==253){
+		bcp = "/system/framework/core2.jar:/system/framework/core-junit.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/android.policy.jar:/system/framework/services.jar:/system/framework/apache-xml.jar";
+	}else
+	*/
+//		bcp = tmp;
+	//ALOG(LOG_INFO,"HAIYANG","in %s, get bootclasspath %s",__FUNCTION__, bcp);
     if (bcp == NULL) {
         ALOGE("DexOptZ: BOOTCLASSPATH not set");
         return -1;
@@ -597,9 +604,9 @@ static int fromDex(int argc, char* const argv[])
 	//	length = 2028308;
 	//}
 	
-	ALOG(LOG_INFO,"HAIYANG","CL: size from %d", length);
+	//ALOG(LOG_INFO,"HAIYANG","CL: size from %d", length);
 	length = get_new_size(length);
-	ALOG(LOG_INFO,"HAIYANG","CL: size to %d", length);
+	//ALOG(LOG_INFO,"HAIYANG","CL: size to %d", length);
 	
     /* do the optimization */
     if (!dvmContinueOptimization(fd, offset, length, debugFileName,
@@ -645,7 +652,6 @@ int main(int argc, char* const argv[])
     setvbuf(stdout, NULL, _IONBF, 0);
 
     if (argc > 1) {
-		ALOG(LOG_INFO, "HAIYANG", "in dexopt");
 		//fprintf(stderr, "stderr, haiyang in dexopt\n");
 		/*
 		for(int i = 0; i < argc; i++){

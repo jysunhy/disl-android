@@ -8,12 +8,18 @@
 
 Socket *sock = NULL;
 
+void testCoverage
+(JNIEnv * jni_env, jclass this_class, jint pid) {
+	ALOG(LOG_INFO,"COVERAGE","PID: %d", pid);
+}
+
 void mapPID
 (JNIEnv * jni_env, jclass this_class, jstring pname, jint pid) {
 	//remote.OpenConnection();
 	jsize str_len = jni_env->GetStringUTFLength(pname);
 	const char * str = 	jni_env->GetStringUTFChars(pname, NULL);
 	ALOG(LOG_INFO,"SHADOW","PID: %d NAME: %s", pid, str);
+	/*
 	Socket *tmpsock = new Socket();
 	while(!tmpsock->Connect()){
 		DEBUG("Cannot connect through UDS");
@@ -31,13 +37,14 @@ void mapPID
 	tmpsock->Send((char*)&signal,sizeof(int));
 	jni_env->ReleaseStringUTFChars(pname,str);
 	delete tmpsock;
-
+*/
 }
 
 static const char *classPathName = "ch/usi/dag/dislre/ALocalDispatch";
 
 static JNINativeMethod methods[]= {
 	{"mapPID", "(Ljava/lang/String;I)V", (void*)mapPID},
+	{"testCoverage", "(I)V", (void*)testCoverage},
 };
 
 

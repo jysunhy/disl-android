@@ -367,6 +367,7 @@ static bool createPrimitiveType(PrimitiveType primitiveType, ClassObject** pClas
  * Class and all of the classes representing primitive types.
  */
 static bool createInitialClasses() {
+	ALOG(LOG_INFO, "OO_CLASS_CPP", "in %s", __FUNCTION__);
     /*
      * Initialize the class Class. This has to be done specially, particularly
      * because it is an instance of itself.
@@ -408,7 +409,7 @@ static bool createInitialClasses() {
  */
 bool dvmClassStartup()
 {
-	ALOG(LOG_INFO, "HAIYANG", "in %s CLASS LOADING START", __FUNCTION__);
+	ALOG(LOG_INFO, "OO_CLASS_CPP", "in %s CLASS LOADING START", __FUNCTION__);
     /* make this a requirement -- don't currently support dirs in path */
     if (strcmp(gDvm.bootClassPathStr, ".") == 0) {
         ALOGE("ERROR: must specify non-'.' bootclasspath");
@@ -456,6 +457,7 @@ bool dvmClassStartup()
      */
     assert(gDvm.bootClassPath == NULL);
     processClassPath(gDvm.bootClassPathStr, true);
+	ALOG(LOG_INFO, "OO_CLASS_CPP", "IN %s, PROCESS CLASSPATH FINISH", __FUNCTION__);
 
     if (gDvm.bootClassPath == NULL)
         return false;
@@ -755,6 +757,7 @@ static ClassPathEntry* processClassPath(const char* pathStr, bool isBootstrap)
 bail:
     free(mangle);
     gDvm.bootClassPath = cpe;
+	//ALOG(LOG_INFO,"HAIYANG","in %s, classpath: %s",__FUNCTION__, pathStr);
     return cpe;
 }
 
@@ -1122,6 +1125,7 @@ static int hashcmpClassByClass(const void* vclazz, const void* vaddclazz)
 ClassObject* dvmLookupClass(const char* descriptor, Object* loader,
     bool unprepOkay)
 {
+	//ALOG(LOG_DEBUG,"CLASSLOAD","IN %s: descriptor: %s",__FUNCTION__, descriptor);
     ClassMatchCriteria crit;
     void* found;
     u4 hash;
@@ -1257,6 +1261,7 @@ void dvmSetClassSerialNumber(ClassObject* clazz)
  */
 ClassObject* dvmFindClass(const char* descriptor, Object* loader)
 {
+	//ALOG(LOG_DEBUG,"CLASSLOAD","IN %s: descriptor: %s",__FUNCTION__, descriptor);
     ClassObject* clazz;
 
     clazz = dvmFindClassNoInit(descriptor, loader);
@@ -1319,6 +1324,7 @@ static ClassObject* findClassFromLoaderNoInit(const char* descriptor,
 {
     //ALOGI("##### findClassFromLoaderNoInit (%s,%p)",
     //        descriptor, loader);
+	//ALOG(LOG_DEBUG,"CLASSLOAD","IN %s: descriptor: %s",__FUNCTION__, descriptor);
 
     Thread* self = dvmThreadSelf();
 
@@ -1984,6 +1990,8 @@ static ClassObject* loadClassFromDex(DvmDex* pDvmDex,
         ALOGI("[Loaded %s from DEX %p (cl=%p)]",
             result->descriptor, pDvmDex, classLoader);
     }
+	//ALOG(LOG_DEBUG,"CLASSLOAD", "IN %s, [Loaded %s from DEX %p (cl=%p)]", __FUNCTION__,
+     //       result->descriptor, pDvmDex, classLoader);
 
     return result;
 }
@@ -4226,6 +4234,7 @@ bool dvmIsClassInitializing(const ClassObject* clazz)
  */
 bool dvmInitClass(ClassObject* clazz)
 {
+	//ALOG(LOG_DEBUG,"CLASSLOAD","IN %s: descriptor: %s",__FUNCTION__, clazz->descriptor);
     u8 startWhen = 0;
 
 #if LOG_CLASS_LOADING
@@ -4469,6 +4478,7 @@ noverify:
     } else {
         LOGVV("Invoking %s.<clinit>", clazz->descriptor);
         JValue unused;
+		ALOG(LOG_DEBUG,"INIT","IN %s for class init %s",__FUNCTION__,clazz->descriptor);
         dvmCallMethod(self, method, NULL, &unused);
     }
 
@@ -4625,6 +4635,7 @@ static int findClassCallback(void* vclazz, void* arg)
  */
 ClassObject* dvmFindLoadedClass(const char* descriptor)
 {
+	//ALOG(LOG_DEBUG,"CLASSLOAD","IN %s: descriptor: %s",__FUNCTION__, descriptor);
     int result;
 
     dvmHashTableLock(gDvm.loadedClasses);
