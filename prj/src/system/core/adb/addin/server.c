@@ -40,10 +40,12 @@ int map_key[300];
 int map_size=0;
 int map_value[300];
 
-
-int pids[1024];
+#define MAX_PROCESS 10000
+int pids[MAX_PROCESS];
 int psize = 0;
-char* pnames[1024];
+char* pnames[MAX_PROCESS];
+
+char bufname[1024];
 
 void * my_thread (void *arg)
 {
@@ -127,18 +129,23 @@ void * my_thread (void *arg)
 			pname[pname_len] = 0;
 			recv(myClient_s, &pid, sizeof(int), 0);
 			ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "GET MAPPING PID: %d to NAME: %s", pid, pname);
-			if(psize <= 1023){
-				pids[psize]=pid;
-				char* tmpname = (char*)malloc(pname_len+1);
-				memcpy(tmpname,pname,pname_len);
-				tmpname[pname_len]='\0';
-				pnames[psize]=tmpname;
-				psize++;
+			if(pid != -1) {
+				if(psize <= MAX_PROCESS){
+					pids[psize]=pid;
+					char* tmpname = (char*)malloc(pname_len+1);
+					memcpy(tmpname,pname,pname_len);
+					tmpname[pname_len]='\0';
+					pnames[psize]=tmpname;
+					psize++;
+				}else{
+					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "more than max processes");
+				}
 			}else{
-				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "more than 1024 processes");
+				//memcpy(bufname,pname,pname_len);
+				//bufname[pname_len]='\0';
+				//ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "GET MAPPING PID: -1 BUFFERING NAME: %s", bufname);
 			}
 			break;		
-
 		}
 		if(sign4 == -5) {
 			int key;//PID
@@ -148,21 +155,25 @@ void * my_thread (void *arg)
 				if(pids[i] == key)
 					break;
 			}
+			int tmp = 0;
 			if(i == psize) { //not in process list, then return false
-				int tmp = 0;
-				send(myClient_s,&tmp,sizeof(int),0);
-				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: not founded, SETTING isShadow to FALSE", key);
+				//send(myClient_s,&tmp,sizeof(int),0);
+				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: NOT FOUNDED, SENDING BACK -1", key);
+				tmp = -1;
+				//ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: NOT FOUNDED, GUESSING %s", key, bufname);
+				//if(strcmp(bufname,"com.inspur.test")){
+				//	tmp = 1;
+				//}
 			}else {
-				int tmp = 0;
 				if(strcmp(pnames[i],"com.inspur.test")){
 					tmp = 1;
 				}
 				if(tmp)
-				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED, SETTING isShadow to TRUE", key);
+					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED, SENDING BACK 1", key);
 				else
-				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED and ISTARGET, SETTING isShadow to FALSE", key);
-				send(myClient_s,&tmp,sizeof(int),0);
+					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED and ISTARGET, SENDING BACK 0", key);
 			}
+			send(myClient_s,&tmp,sizeof(int),0);
 			break;
 		}
 		int namelen = sign4;

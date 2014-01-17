@@ -59,8 +59,9 @@ public class Worker extends Thread {
     // private static final String instrLibPath =
     // "build-test/disl-instr-android.jar";
     // Needed by ANDROID
-    private static final String instrLibPath = "example/android/instr/build/disl-instr.jar";
-    //private static final String instrLibPath = "test-ia-sapi/build/disl-instr.jar";
+    //private static final String instrLibPath = "example/android/instr/build/disl-instr.jar";
+    private static final String instrLibPath = "test-ia-sapi/build/disl-instr.jar";
+    private static final String specLibPath = "lib/spec-new.jar";
     //private static final String instrLibPath2 = "example/android/instr/build/test_disl-instr.jar";
 
     private static final ConcurrentHashMap <String, byte []> bytecodeMap = new ConcurrentHashMap <String, byte []> ();
@@ -176,8 +177,8 @@ public class Worker extends Thread {
 
         }
 
-        /*if (writePath.equals ("instrumented_LongTest2.apk")) {
-            // if(true){
+        if (writePath.contains ("inspur")) {
+            /*// if(true){
             final File red = new File ("bin/ch/usi/dag/dislre/AREDispatch.class");
             final FileInputStream fis = new FileInputStream (red);
             zos.putNextEntry (new ZipEntry ("ch/usi/dag/dislre/AREDispatch.class"));
@@ -185,10 +186,9 @@ public class Worker extends Thread {
                 zos.write (buffer, 0, bytesRead);
             }
             zos.closeEntry ();
-            fis.close ();
-
+            fis.close ();*/
             final JarFile instrlib = new JarFile (
-                instrLibPath2);
+                specLibPath);
             final Enumeration <JarEntry> i_entries = instrlib.entries ();
             while (i_entries.hasMoreElements ()) {
 
@@ -206,10 +206,29 @@ public class Worker extends Thread {
                                 0, curName.lastIndexOf (".class"));
                             zos.putNextEntry (curnze);
 
+                            final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
+
                             while ((bytesRead = curis.read (buffer)) != -1) {
+                                bout.write (buffer, 0, bytesRead);
+                            }
+                            byte [] code = null;
+                            final String className = curName.substring (
+                                0, curName.lastIndexOf (".class"));
+
+                            code = instrument (
+                                className, bout.toByteArray ());
+
+                            if (code == null) {
+                                code = bout.toByteArray ();
+                            }
+                            bytecodeMap.put (className.replace ('/', '.'), code);
+
+                            final ByteArrayInputStream bin = new ByteArrayInputStream (code);
+
+
+                            while ((bytesRead = bin.read (buffer)) != -1) {
                                 zos.write (buffer, 0, bytesRead);
                             }
-
                             zos.closeEntry ();
                         } catch (final Exception e) {
                             e.printStackTrace ();
@@ -228,7 +247,7 @@ public class Worker extends Thread {
                 }
             }
             instrlib.close ();
-        }*/
+        }
 
         // if (writePath.equals ("instrumented_LongTest2.apk")) {
         //if (writePath.equals ("instrumented_core.jar")) {

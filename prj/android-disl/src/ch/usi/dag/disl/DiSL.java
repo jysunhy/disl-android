@@ -86,12 +86,12 @@ public class DiSL {
 
     /**
      * DiSL initialization.
-     * 
+     *
      * @param useDynamicBypass
      *            enable or disable dynamic bypass instrumentation
      */
     // this method should be called only once
-    public DiSL(boolean useDynamicBypass) throws DiSLException {
+    public DiSL(final boolean useDynamicBypass) throws DiSLException {
 
         this.useDynamicBypass = useDynamicBypass;
 
@@ -110,7 +110,7 @@ public class DiSL {
         exclusionSet = ExclusionSet.prepare();
 
         // *** load disl classes ***
-        List<InputStream> dislClasses = ClassByteLoader.loadDiSLClasses();
+        final List<InputStream> dislClasses = ClassByteLoader.loadDiSLClasses();
 
         if (dislClasses == null) {
             throw new InitException("Cannot load DiSL classes. Please set"
@@ -123,22 +123,22 @@ public class DiSL {
         // - create snippets
         // - create static context methods
 
-        ClassParser parser = new ClassParser();
+        final ClassParser parser = new ClassParser();
 
-        for (InputStream classIS : dislClasses) {
+        for (final InputStream classIS : dislClasses) {
             parser.parse(classIS);
         }
 
         // initialize processors
-        Map<Type, Proc> processors = parser.getProcessors();
-        for (Proc processor : processors.values()) {
+        final Map<Type, Proc> processors = parser.getProcessors();
+        for (final Proc processor : processors.values()) {
             processor.init(parser.getAllLocalVars());
         }
 
-        List<Snippet> parsedSnippets = parser.getSnippets();
+        final List<Snippet> parsedSnippets = parser.getSnippets();
 
         // initialize snippets
-        for (Snippet snippet : parsedSnippets) {
+        for (final Snippet snippet : parsedSnippets) {
             snippet.init(parser.getAllLocalVars(), processors, exceptHandler,
                     useDynamicBypass);
         }
@@ -159,37 +159,37 @@ public class DiSL {
 
     /**
      * Finds transformer class in configuration and allocates it.
-     * 
+     *
      * @return newly allocated transformer.
      */
     private Transformer resolveTransformer() throws ManifestInfoException,
             ReflectionException {
 
-        ManifestInfo mi = ManifestHelper.getDiSLManifestInfo();
+        final ManifestInfo mi = ManifestHelper.getDiSLManifestInfo();
 
         if (mi == null) {
             return null;
         }
 
-        String transformerClsName = mi.getDislTransformer();
+        final String transformerClsName = mi.getDislTransformer();
 
         if (transformerClsName == null) {
             return null;
         }
 
         try {
-            Class<?> transformerCls = Class.forName(transformerClsName);
+            final Class<?> transformerCls = Class.forName(transformerClsName);
             return (Transformer) transformerCls.newInstance();
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             throw new ReflectionException("DiSL transformer "
                     + transformerClsName + " cannot be resolved", e);
-        } catch (InstantiationException e) {
+        } catch (final InstantiationException e) {
             throw new ReflectionException("DiSL transformer "
                     + transformerClsName + " cannot be instantiated", e);
-        } catch (IllegalAccessException e) {
+        } catch (final IllegalAccessException e) {
             throw new ReflectionException("DiSL transformer "
                     + transformerClsName + " cannot be instantiated", e);
-        } catch (ClassCastException e) {
+        } catch (final ClassCastException e) {
             throw new ReflectionException("DiSL transformer "
                     + transformerClsName
                     + " does not implement Transformer interface", e);
@@ -198,9 +198,9 @@ public class DiSL {
 
     /**
      * Instruments a method in a class.
-     * 
+     *
      * NOTE: This method changes the classNode argument
-     * 
+     *
      * @param classNode
      *            class that will be instrumented
      * @param methodNode
@@ -223,9 +223,9 @@ public class DiSL {
             return false;
         }
 
-        String className = classNode.name;
-        String methodName = methodNode.name;
-        String methodDesc = methodNode.desc;
+        final String className = classNode.name;
+        final String methodName = methodNode.name;
+        final String methodDesc = methodNode.desc;
 
         // evaluate exclusions
         for (final Scope exclScope : exclusionSet) {
@@ -259,7 +259,7 @@ public class DiSL {
                 className, methodName, methodDesc);
 
         // shadows mapped to snippets - for weaving
-        Map<Snippet, List<Shadow>> snippetMarkings =
+        final Map<Snippet, List<Shadow>> snippetMarkings =
                 new HashMap<Snippet, List<Shadow>>();
 
         for (final Snippet snippet : matchedSnippets) {
@@ -267,12 +267,12 @@ public class DiSL {
                     snippet.getOriginClassName(), snippet.getOriginMethodName());
 
             // marking
-            List<Shadow> shadows = snippet.getMarker().mark(
+            final List<Shadow> shadows = snippet.getMarker().mark(
                     classNode, methodNode, snippet
                     );
 
             // select shadows according to snippet guard
-            List<Shadow> selectedShadows = selectShadowsWithGuard(
+            final List<Shadow> selectedShadows = selectShadowsWithGuard(
                     snippet.getGuard(), shadows
                     );
 
@@ -288,21 +288,21 @@ public class DiSL {
         // *** compute static info ***
 
         // prepares SCGenerator class (computes static context)
-        SCGenerator staticInfo = new SCGenerator(snippetMarkings);
+        final SCGenerator staticInfo = new SCGenerator(snippetMarkings);
 
         // *** used synthetic local vars in snippets ***
 
         // weaver needs list of synthetic locals that are actively used in
         // selected (matched) snippets
 
-        Set<SyntheticLocalVar> usedSLVs = new HashSet<SyntheticLocalVar>();
-        for (Snippet snippet : snippetMarkings.keySet()) {
+        final Set<SyntheticLocalVar> usedSLVs = new HashSet<SyntheticLocalVar>();
+        for (final Snippet snippet : snippetMarkings.keySet()) {
             usedSLVs.addAll(snippet.getCode().getReferencedSLVs());
         }
 
         // *** prepare processors ***
 
-        PIResolver piResolver = new ProcGenerator().compute(snippetMarkings);
+        final PIResolver piResolver = new ProcGenerator().compute(snippetMarkings);
 
         // *** used synthetic local vars in processors ***
 
@@ -336,24 +336,24 @@ public class DiSL {
 
     /**
      * Selects only shadows matching the passed guard.
-     * 
+     *
      * @param guard
      *            guard, on witch conditions are the shadows selected
      * @param marking
      *            the list of shadows from where the gurads selects
      * @return selected shadows
      */
-    private List<Shadow> selectShadowsWithGuard(Method guard,
-            List<Shadow> marking) {
+    private List<Shadow> selectShadowsWithGuard(final Method guard,
+            final List<Shadow> marking) {
 
         if (guard == null) {
             return marking;
         }
 
-        List<Shadow> selectedMarking = new LinkedList<Shadow>();
+        final List<Shadow> selectedMarking = new LinkedList<Shadow>();
 
         // check guard for each shadow
-        for (Shadow shadow : marking) {
+        for (final Shadow shadow : marking) {
 
             if (GuardHelper.guardApplicable(guard, shadow)) {
 
@@ -369,11 +369,11 @@ public class DiSL {
      */
     private static class InstrumentedClass {
 
-        private ClassNode   classNode;
-        private Set<String> changedMethods;
+        private final ClassNode   classNode;
+        private final Set<String> changedMethods;
 
-        public InstrumentedClass(ClassNode classNode,
-                Set<String> changedMethods) {
+        public InstrumentedClass(final ClassNode classNode,
+                final Set<String> changedMethods) {
             super();
             this.classNode = classNode;
             this.changedMethods = changedMethods;
@@ -390,10 +390,10 @@ public class DiSL {
 
     /**
      * Instruments class node.
-     * 
+     *
      * Note: This method is thread safe. Parameter classNode is changed during
      * the invocation.
-     * 
+     *
      * @param classNode
      *            class node to instrument
      * @return instrumented class
@@ -406,17 +406,17 @@ public class DiSL {
         boolean classChanged = false;
 
         // track changed methods for code merging
-        Set<String> changedMethods = new HashSet<String>();
+        final Set<String> changedMethods = new HashSet<String>();
 
         // instrument all methods in a class
-        for (MethodNode methodNode : classNode.methods) {
+        for (final MethodNode methodNode : classNode.methods) {
 
             boolean methodChanged = false;
 
             // intercept all exceptions and add a method name
             try {
                 methodChanged = instrumentMethod(classNode, methodNode);
-            } catch (DiSLException e) {
+            } catch (final DiSLException e) {
 
                 throw new DiSLInMethodException(
                         classNode.name + "." + methodNode.name, e);
@@ -432,27 +432,27 @@ public class DiSL {
         // instrument thread local fields
         if (Type.getInternalName(Thread.class).equals(classNode.name)) {
 
-            Set<ThreadLocalVar> insertTLVs = new HashSet<ThreadLocalVar>();
+            final Set<ThreadLocalVar> insertTLVs = new HashSet<ThreadLocalVar>();
 
             // dynamic bypass
             if (useDynamicBypass) {
 
                 // prepare dynamic bypass thread local variable
-                ThreadLocalVar tlv = new ThreadLocalVar(null, "bypass",
+                final ThreadLocalVar tlv = new ThreadLocalVar(null, "bypass",
                         Type.getType(boolean.class), false);
-                tlv.setDefaultValue(1);
+                tlv.setDefaultValue(0);
                 insertTLVs.add(tlv);
             }
 
             // get all thread locals in snippets
-            for (Snippet snippet : snippets) {
+            for (final Snippet snippet : snippets) {
                 insertTLVs.addAll(snippet.getCode().getReferencedTLVs());
             }
 
             if (!insertTLVs.isEmpty()) {
 
                 // instrument fields
-                ClassNode cnWithFields = new ClassNode(Opcodes.ASM4);
+                final ClassNode cnWithFields = new ClassNode(Opcodes.ASM4);
                 classNode.accept(new TLVInserter(cnWithFields, insertTLVs));
 
                 // replace original code with instrumented one
@@ -471,7 +471,7 @@ public class DiSL {
 
     /**
      * Instruments array of bytes representing a class.
-     * 
+     *
      * @param classAsBytes
      *            class as array of bytes
      * @return instrumented class as array of bytes
@@ -492,21 +492,21 @@ public class DiSL {
         if (transformer != null) {
             try {
                 classAsBytes = transformer.transform(classAsBytes);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new TransformerException("Transformer error", e);
             }
         }
 
         // create class reader
-        ClassReader classReader = new ClassReader(classAsBytes);
+        final ClassReader classReader = new ClassReader(classAsBytes);
 
         // AfterInitBodyMarker uses AdviceAdapter
         // - classNode with API param is required by ASM 4.0 guidelines
-        ClassNode classNode = new ClassNode(Opcodes.ASM4);
+        final ClassNode classNode = new ClassNode(Opcodes.ASM4);
 
         classReader.accept(classNode, ClassReader.EXPAND_FRAMES);
 
-        InstrumentedClass instrClass = instrumentClass(classNode);
+        final InstrumentedClass instrClass = instrumentClass(classNode);
 
         if (instrClass == null) {
 
@@ -524,8 +524,8 @@ public class DiSL {
         // if dynamic bypass is enabled use code merger
         if (useDynamicBypass) {
 
-            ClassReader origCR = new ClassReader(classAsBytes);
-            ClassNode origCN = new ClassNode();
+            final ClassReader origCR = new ClassReader(classAsBytes);
+            final ClassNode origCN = new ClassNode();
 
             origCR.accept(origCN, ClassReader.EXPAND_FRAMES);
 
@@ -538,8 +538,8 @@ public class DiSL {
         final int REQUIRED_VERSION = Opcodes.V1_5;
         final int MAJOR_V_MASK = 0xFFFF;
 
-        int requiredMajorVersion = REQUIRED_VERSION & MAJOR_V_MASK;
-        int classMajorVersion = instrCN.version & MAJOR_V_MASK;
+        final int requiredMajorVersion = REQUIRED_VERSION & MAJOR_V_MASK;
+        final int classMajorVersion = instrCN.version & MAJOR_V_MASK;
 
         if (classMajorVersion < requiredMajorVersion) {
             instrCN.version = REQUIRED_VERSION;
