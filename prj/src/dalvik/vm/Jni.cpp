@@ -26,6 +26,8 @@
 #include <stdarg.h>
 #include <limits.h>
 
+#include "shadowlib/ShadowLib.h"
+
 /*
 Native methods and interaction with the GC
 
@@ -2961,8 +2963,10 @@ shutdown:
     if (gDvm.verboseShutdown) {
         ALOGD("DestroyJavaVM shutting VM down");
     }
+	pthread_mutex_lock(&gDvm.s_mtx);
 	if(gDvm.vmEndHook)
 		gDvm.vmEndHook(vm);
+	pthread_mutex_unlock(&gDvm.s_mtx);
     dvmShutdown();
 
     // TODO - free resources associated with JNI-attached daemon threads
@@ -3446,7 +3450,9 @@ jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args) {
 	gDvm.vmEndHook = NULL;
 	gDvm.vmInitHook = NULL;
 	gDvm.classfileLoadHook = NULL;
-	gDvm.isShadow = false;
+	gDvm.classInitHook = NULL;
+	gDvm.isShadow = true;
+	pthread_mutex_init(&gDvm.s_mtx,NULL);
 	ALOG(LOG_INFO,"HAIYANG","in %s",__FUNCTION__);
 	//(void (*)(void));
     int argc = 0;
@@ -3533,5 +3539,8 @@ jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args) {
     *p_env = (JNIEnv*) pEnv;
     *p_vm = (JavaVM*) pVM;
     ALOGV("CreateJavaVM succeeded");
+
+	ShadowLib_Zygote_OnLoad(gDvmJni.jniVm, NULL);
+
     return JNI_OK;
 }

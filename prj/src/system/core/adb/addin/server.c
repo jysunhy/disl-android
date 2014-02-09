@@ -30,7 +30,7 @@
 #define TRUE                   1
 #define FALSE                  0
 //#define SERVER_IP "10.10.6.101"
-#define SERVER_IP "192.168.1.103"
+#define SERVER_IP "192.168.1.101"
 //#define SERVER_IP "192.168.56.101"
 //#define SERVER_IP "10.0.3.15"
 #define SOCKFILE "/dev/socket/instrument"
@@ -46,6 +46,8 @@ int psize = 0;
 char* pnames[MAX_PROCESS];
 
 char bufname[1024];
+
+pthread_mutex_t gl_mtx;
 
 void * my_thread (void *arg)
 {
@@ -85,7 +87,8 @@ void * my_thread (void *arg)
 			break;
 		}
 		if(sign4 == -3){
-			//ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event");
+	pthread_mutex_lock(&gl_mtx);
+			ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event");
 			while(sock_host < 0) {
 				sock_host = socket_network_client(SERVER_IP, 11218, SOCK_STREAM);
 				if(sock_host < 0){
@@ -93,17 +96,22 @@ void * my_thread (void *arg)
 					sleep(1);
 				}
 			}
+			
+
 			while(true){
 				retcode = recv(myClient_s, buf, BUF_SIZE, 0);
 				if(retcode < 0){
 					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "closed from app");
 					break;
 				}
+				///*
 				retcode = send(sock_host, buf, retcode, 0);
 				if(retcode < 0) {
 					close(myClient_s);
 					break;
 				}
+				//*/
+				
 				/*
 				   char tmp[10241];
 				   int i = 0;
@@ -114,6 +122,7 @@ void * my_thread (void *arg)
 				   ALOG(LOG_INFO, "INSTRUMENTSERVER", "SHADOW PACKET %s", tmp);
 				   */
 			}
+	pthread_mutex_unlock(&gl_mtx);
 			break;
 		}
 		if(sign4 == -4) {
@@ -129,6 +138,19 @@ void * my_thread (void *arg)
 			pname[pname_len] = 0;
 			recv(myClient_s, &pid, sizeof(int), 0);
 			ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "GET MAPPING PID: %d to NAME: %s", pid, pname);
+			int tmp = 1;
+				if(!strcmp(pname,"com.inspur.test")){
+					tmp = 0;
+				}
+				/*if(!strcmp(pname,"com.android.contacts")){
+					tmp = 0;
+				}*/
+				if(tmp)
+					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED, SENDING BACK 1", pid);
+				else
+					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED and ISTARGET, SENDING BACK 0", pid);
+
+			send(myClient_s,&tmp,sizeof(int),0);
 			if(pid != -1) {
 				if(psize <= MAX_PROCESS){
 					pids[psize]=pid;
@@ -155,7 +177,7 @@ void * my_thread (void *arg)
 				if(pids[i] == key)
 					break;
 			}
-			int tmp = 0;
+			int tmp = 1;
 			if(i == psize) { //not in process list, then return false
 				//send(myClient_s,&tmp,sizeof(int),0);
 				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: NOT FOUNDED, SENDING BACK -1", key);
@@ -165,9 +187,12 @@ void * my_thread (void *arg)
 				//	tmp = 1;
 				//}
 			}else {
-				if(strcmp(pnames[i],"com.inspur.test")){
-					tmp = 1;
+				if(!strcmp(pnames[i],"com.inspur.test")){
+					tmp = 0;
 				}
+				//if(!strcmp(pnames[i],"com.android.contacts")){
+				//	tmp = 0;
+				//}
 				if(tmp)
 					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED, SENDING BACK 1", key);
 				else
@@ -266,6 +291,8 @@ int main (void)
 	int socket_fd, connection_fd;
 	socklen_t address_length;
 	pid_t child;
+
+	pthread_mutex_init(&gl_mtx, NULL);
 
 
 	socket_fd = socket(PF_UNIX, SOCK_STREAM, 0);

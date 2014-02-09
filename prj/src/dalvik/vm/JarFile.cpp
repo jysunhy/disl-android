@@ -192,7 +192,7 @@ int dvmJarFileOpen(const char* fileName, const char* odexOutputName,
      * TODO: This function has been duplicated and modified to become
      * dvmRawDexFileOpen() in RawDexFile.c. This should be refactored.
      */
-	ALOG(LOG_INFO,"HAIYANG","XXX in %s, %s, %s, %s", __FUNCTION__, fileName, odexOutputName, isBootstrap?"bootstrap":"no bootstrap");
+	//ALOG(LOG_INFO,"HAIYANG","XXX in %s, %s, %s, %s", __FUNCTION__, fileName, odexOutputName, isBootstrap?"bootstrap":"no bootstrap");
 
     ZipArchive archive;
     DvmDex* pDvmDex = NULL;
@@ -236,7 +236,7 @@ int dvmJarFileOpen(const char* fileName, const char* odexOutputName,
         ZipEntry entry;
 
 tryArchive:
-		ALOG(LOG_INFO,"HAIYANG","YYY in %s, %s, %s, %s", __FUNCTION__, fileName, odexOutputName, isBootstrap?"bootstrap":"no bootstrap");
+		//ALOG(LOG_INFO,"HAIYANG","YYY in %s, %s, %s, %s", __FUNCTION__, fileName, odexOutputName, isBootstrap?"bootstrap":"no bootstrap");
 		
 		strncpy(apkname, fileName, APK_LENGTH-1);
         /*

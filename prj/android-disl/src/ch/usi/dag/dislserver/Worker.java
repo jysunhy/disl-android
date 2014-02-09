@@ -258,27 +258,39 @@ public class Worker extends Thread {
             final File bp1 = new File ("bin/ch/usi/dag/disl/dynamicbypass/DynamicBypass.class");
             final FileInputStream fisbp1 = new FileInputStream (bp1);
             zos.putNextEntry (new ZipEntry ("ch/usi/dag/disl/dynamicbypass/DynamicBypass.class"));
+            final ByteArrayOutputStream bout1 = new ByteArrayOutputStream ();
             while ((bytesRead = fisbp1.read (buffer)) != -1) {
-                zos.write (buffer, 0, bytesRead);
+                //zos.write (buffer, 0, bytesRead);
+                bout1.write (buffer, 0, bytesRead);
             }
+            bytecodeMap.put ("ch/usi/dag/disl/dynamicbypass/DynamicBypass".replace ('/', '.'), bout1.toByteArray ());
+            zos.write (bout1.toByteArray (),0,bout1.size ());
             zos.closeEntry ();
             fisbp1.close ();
 
             final File bp = new File ("bin/ch/usi/dag/disl/dynamicbypass/DynamicBypassCheck.class");
             final FileInputStream fisbp = new FileInputStream (bp);
+            final ByteArrayOutputStream bout2 = new ByteArrayOutputStream ();
             zos.putNextEntry (new ZipEntry ("ch/usi/dag/disl/dynamicbypass/DynamicBypassCheck.class"));
             while ((bytesRead = fisbp.read (buffer)) != -1) {
-                zos.write (buffer, 0, bytesRead);
+                bout2.write (buffer,0,bytesRead);
+                //zos.write (buffer, 0, bytesRead);
             }
+            bytecodeMap.put ("ch/usi/dag/disl/dynamicbypass/DynamicBypassCheck".replace ('/', '.'), bout2.toByteArray ());
+            zos.write (bout2.toByteArray(),0,bout2.size());
             zos.closeEntry ();
             fisbp.close ();
 
             final File locald = new File ("bin/ch/usi/dag/dislre/ALocalDispatch.class");
             final FileInputStream lfis = new FileInputStream (locald);
+            final ByteArrayOutputStream bout3 = new ByteArrayOutputStream ();
             zos.putNextEntry (new ZipEntry ("ch/usi/dag/dislre/ALocalDispatch.class"));
             while ((bytesRead = lfis.read (buffer)) != -1) {
-                zos.write (buffer, 0, bytesRead);
+                bout3.write (buffer, 0, bytesRead);
+                //zos.write (buffer, 0, bytesRead);
             }
+            bytecodeMap.put ("ch/usi/dag/dislre/ALocalDispatch".replace ('/', '.'), bout3.toByteArray ());
+            zos.write (bout3.toByteArray(),0,bout3.size());
             zos.closeEntry ();
             lfis.close ();
 
@@ -310,11 +322,13 @@ public class Worker extends Thread {
                             final String curClassName = curName.substring (
                                 0, curName.lastIndexOf (".class"));
                             zos.putNextEntry (curnze);
-
+                            final ByteArrayOutputStream boutinstr = new ByteArrayOutputStream ();
                             while ((bytesRead = curis.read (buffer)) != -1) {
-                                zos.write (buffer, 0, bytesRead);
+                                boutinstr.write (buffer,0,bytesRead);
+                                //zos.write (buffer, 0, bytesRead);
                             }
-
+                            zos.write (boutinstr.toByteArray (),0,boutinstr.size());
+                            bytecodeMap.put (curClassName.replace ('/', '.'), boutinstr.toByteArray ());
                             zos.closeEntry ();
                         } catch (final Exception e) {
                             e.printStackTrace ();

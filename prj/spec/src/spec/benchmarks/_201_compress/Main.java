@@ -22,27 +22,27 @@ public class Main implements SpecBenchmark {
                args = new String[7];
                args [0] = "5";   //  number of files
                args [1] = "5";   //  loop count 
-               args [2] = "/mnt/sdcard/input.compress/213x.tar";
-               args [3] = "/mnt/sdcard/input.compress/209.tar";
-               args [4] = "/mnt/sdcard/input.compress/239.tar";
-               args [5] = "/mnt/sdcard/input.compress/211.tar";
-               args [6] = "/mnt/sdcard/input.compress/202.tar";
+               args [2] = spec.Constants.DIR_INPUT+"input.compress/213x.tar";
+               args [3] = spec.Constants.DIR_INPUT+"input.compress/209.tar";
+               args [4] = spec.Constants.DIR_INPUT+"input.compress/239.tar";
+               args [5] = spec.Constants.DIR_INPUT+"input.compress/211.tar";
+               args [6] = spec.Constants.DIR_INPUT+"input.compress/202.tar";
                               }	
             if( speed == 10  ) {
                args = new String[5];
                args [0] = "3";
                args [1] = "1";
-               args [2] = "/mnt/sdcard/input.compress/228.tar";
-               args [3] = "/mnt/sdcard/input.compress/205.tar";
-               args [4] = "/mnt/sdcard/input.compress/misc.tar";
+               args [2] = spec.Constants.DIR_INPUT+"input.compress/228.tar";
+               args [3] = spec.Constants.DIR_INPUT+"input.compress/205.tar";
+               args [4] = spec.Constants.DIR_INPUT+"input.compress/misc.tar";
 				
                               }	
             if( speed == 1   ) {
                args = new String[4];
                args [0] = "1";
                args [1] = "1";
-               args [2] = "/mnt/sdcard/input.compress/208.tar";
-               args [3] = "/mnt/sdcard/input.compress/210.tar";
+               args [2] = spec.Constants.DIR_INPUT+"input.compress/208.tar";
+               args [3] = spec.Constants.DIR_INPUT+"input.compress/210.tar";
                               }	
                                  }
 

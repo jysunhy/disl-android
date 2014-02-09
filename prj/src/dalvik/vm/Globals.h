@@ -735,7 +735,9 @@ struct DvmGlobals {
     void        (*vmEndHook)(JavaVM*);
     void        (*vmInitHook)(JavaVM*);
     int        (*classfileLoadHook)(const char*, int);
+    int        (*classInitHook)(ClassObject* clazz);
 	bool		isShadow;
+	pthread_mutex_t s_mtx;
 };
 
 extern struct DvmGlobals gDvm;

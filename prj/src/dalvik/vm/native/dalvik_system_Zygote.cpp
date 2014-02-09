@@ -19,6 +19,7 @@
  */
 #include "Dalvik.h"
 #include "native/InternalNativePriv.h"
+#include "shadowlib/ShadowLib.h"
 
 #include <signal.h>
 #include <sys/types.h>
@@ -370,6 +371,193 @@ static int setCapabilities(int64_t permitted, int64_t effective)
     return 0;
 }
 
+static pid_t forkAndSpecializeCommon_2(const u4* args, bool isSystemServer)
+{
+    pid_t pid;
+
+    uid_t uid = (uid_t) args[0];
+    gid_t gid = (gid_t) args[1];
+    ArrayObject* gids = (ArrayObject *)args[2];
+    u4 debugFlags = args[3];
+    ArrayObject *rlimits = (ArrayObject *)args[4];
+	StringObject* niceNameObj = (StringObject* )args[5];
+	char* niceName = dvmCreateCstrFromString(niceNameObj);
+    int64_t permittedCapabilities, effectiveCapabilities;
+
+    if (isSystemServer) {
+        /*
+         * Don't use GET_ARG_LONG here for now.  gcc is generating code
+         * that uses register d8 as a temporary, and that's coming out
+         * scrambled in the child process.  b/3138621
+         */
+        //permittedCapabilities = GET_ARG_LONG(args, 5);
+        //effectiveCapabilities = GET_ARG_LONG(args, 7);
+        permittedCapabilities = args[5] | (int64_t) args[6] << 32;
+        effectiveCapabilities = args[7] | (int64_t) args[8] << 32;
+    } else {
+        permittedCapabilities = effectiveCapabilities = 0;
+    }
+
+    if (!gDvm.zygote) {
+        dvmThrowIllegalStateException(
+            "VM instance not started with -Xzygote");
+
+        return -1;
+    }
+
+    if (!dvmGcPreZygoteFork()) {
+        ALOGE("pre-fork heap failed");
+        dvmAbort();
+    }
+
+    setSignalHandler();
+
+    dvmDumpLoaderStats("zygote");
+    pid = fork();
+
+    if (pid == 0) {
+		_mapPID(getpid(),niceName);
+	free(niceName);
+        int err;
+        /* The child process */
+
+#ifdef HAVE_ANDROID_OS
+        extern int gMallocLeakZygoteChild;
+        gMallocLeakZygoteChild = 1;
+
+        /* keep caps across UID change, unless we're staying root */
+        if (uid != 0) {
+            err = prctl(PR_SET_KEEPCAPS, 1, 0, 0, 0);
+
+            if (err < 0) {
+                ALOGE("cannot PR_SET_KEEPCAPS: %s", strerror(errno));
+                dvmAbort();
+            }
+        }
+
+#endif /* HAVE_ANDROID_OS */
+
+        err = setgroupsIntarray(gids);
+
+        if (err < 0) {
+            ALOGE("cannot setgroups(): %s", strerror(errno));
+            dvmAbort();
+        }
+
+        err = setrlimitsFromArray(rlimits);
+
+        if (err < 0) {
+            ALOGE("cannot setrlimit(): %s", strerror(errno));
+            dvmAbort();
+        }
+
+        err = setgid(gid);
+        if (err < 0) {
+            ALOGE("cannot setgid(%d): %s", gid, strerror(errno));
+            dvmAbort();
+        }
+
+        err = setuid(uid);
+        if (err < 0) {
+            ALOGE("cannot setuid(%d): %s", uid, strerror(errno));
+            dvmAbort();
+        }
+
+        int current = personality(0xffffFFFF);
+        int success = personality((ADDR_NO_RANDOMIZE | current));
+        if (success == -1) {
+          ALOGW("Personality switch failed. current=%d error=%d\n", current, errno);
+        }
+
+        err = setCapabilities(permittedCapabilities, effectiveCapabilities);
+        if (err != 0) {
+            ALOGE("cannot set capabilities (%llx,%llx): %s",
+                permittedCapabilities, effectiveCapabilities, strerror(err));
+            dvmAbort();
+        }
+
+        err = set_sched_policy(0, SP_DEFAULT);
+        if (err < 0) {
+            ALOGE("cannot set_sched_policy(0, SP_DEFAULT): %s", strerror(-err));
+            dvmAbort();
+        }
+
+        /*
+         * Our system thread ID has changed.  Get the new one.
+         */
+        Thread* thread = dvmThreadSelf();
+        thread->systemTid = dvmGetSysThreadId();
+
+        /* configure additional debug options */
+        enableDebugFeatures(debugFlags);
+
+        unsetSignalHandler();
+        gDvm.zygote = false;
+
+
+		if(false)
+		{
+			struct sockaddr_un address;
+			int client_socket = socket(PF_UNIX, SOCK_STREAM, 0);
+			if(client_socket < 0)
+			{
+				ALOG(LOG_INFO,"HAIYANG","CL: Create Socket Failed! %d",errno);
+				return -1;
+
+			}
+			memset(&address, 0, sizeof(struct sockaddr_un));
+
+			address.sun_family = AF_UNIX;
+			snprintf(address.sun_path, UNIX_PATH_MAX, "/dev/socket/instrument");
+
+			void* tmp=NULL;
+			tmp = &address;
+
+			if(connect(client_socket, 
+						//tmp,
+						//(struct sockaddr *) &address,  
+						(struct sockaddr *) tmp,  
+						sizeof(struct sockaddr_un)) != 0)
+			{
+				ALOG(LOG_INFO,"HAIYANG","CL: Connect Socket Failed! %d",errno);
+				client_socket = -1;
+			}
+			int signal = -5;
+			send(client_socket, &signal, sizeof(int), 0);
+			int pid = getpid();
+			send(client_socket, &pid, sizeof(int),0);
+			int query = -1;
+			recv(client_socket, &query, sizeof(int), 0);
+			ALOG(LOG_INFO,"HAIYANG","Query result is: %s , gDvm is %s",query==0?"false":"true", gDvm.isShadow==false?"false":"true");
+			if(query == 0) {
+				gDvm.isShadow=false;
+			}else{
+				gDvm.isShadow=true;
+			}
+		}
+		ALOG(LOG_DEBUG,"HAIYANG","PROCESS START:\n\t\t\t %s isshadow in new process %d to %s", __FUNCTION__, getpid(), gDvm.isShadow?"true":"false");
+
+		if(gDvm.freeObjHook==NULL)
+			ALOG(LOG_DEBUG,"HAIYANG","FREE OBJ HOOK IS NOT SET");
+		else
+			ALOG(LOG_DEBUG,"HAIYANG","FREE OBJ HOOK IS SET");
+
+			
+		if(!isSystemServer)
+			ShadowLib_OnLoad(gDvmJni.jniVm, NULL);
+
+
+
+        if (!dvmInitAfterZygote()) {
+            ALOGE("error in post-zygote initialization");
+            dvmAbort();
+        }
+    } else if (pid > 0) {
+        /* the parent process */
+    }
+
+    return pid;
+}
 /*
  * Utility routine to fork zygote and specialize the child process.
  */
@@ -535,9 +723,16 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
 		}else{
 			gDvm.isShadow = false;
 		}
-		gDvm.isShadow = false;
 		ALOG(LOG_DEBUG,"HAIYANG","PROCESS START:\n\t\t\t %s isshadow in new process %d to %s", __FUNCTION__, getpid(), gDvm.isShadow?"true":"false");
 
+		if(gDvm.freeObjHook==NULL)
+			ALOG(LOG_DEBUG,"HAIYANG","FREE OBJ HOOK IS NOT SET");
+		else
+			ALOG(LOG_DEBUG,"HAIYANG","FREE OBJ HOOK IS SET");
+
+			
+		if(!isSystemServer)
+			ShadowLib_OnLoad(gDvmJni.jniVm, NULL);
 
 
 
@@ -561,6 +756,15 @@ static void Dalvik_dalvik_system_Zygote_forkAndSpecialize(const u4* args,
     pid_t pid;
 
     pid = forkAndSpecializeCommon(args, false);
+
+    RETURN_INT(pid);
+}
+static void Dalvik_dalvik_system_Zygote_forkAndSpecialize_2(const u4* args,
+    JValue* pResult)
+{
+    pid_t pid;
+
+    pid = forkAndSpecializeCommon_2(args, false);
 
     RETURN_INT(pid);
 }
@@ -614,6 +818,8 @@ const DalvikNativeMethod dvm_dalvik_system_Zygote[] = {
       Dalvik_dalvik_system_Zygote_fork },
     { "nativeForkAndSpecialize", "(II[II[[I)I",
       Dalvik_dalvik_system_Zygote_forkAndSpecialize },
+    { "nativeForkAndSpecialize", "(II[II[[ILjava/lang/String;)I",
+      Dalvik_dalvik_system_Zygote_forkAndSpecialize_2 },
     { "nativeForkSystemServer", "(II[II[[IJJ)I",
       Dalvik_dalvik_system_Zygote_forkSystemServer },
     { "nativeExecShell", "(Ljava/lang/String;)V",

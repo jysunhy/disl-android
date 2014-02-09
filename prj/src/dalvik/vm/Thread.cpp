@@ -1235,6 +1235,7 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
     assert(threadObj != NULL);
 
     Thread* self = dvmThreadSelf();
+	//gDvm.isShadow=false;
 	ALOG(LOG_DEBUG,"HAIYANG","IN %s, pid:%d tid:%d name:%s", __FUNCTION__,getpid(),self->threadId, dvmGetThreadName(self).c_str());
 	if(dvmGetThreadName(self)=="main"){
 		ALOG(LOG_DEBUG,"HAIYANG","setting main to isShadow: %s", gDvm.isShadow?"true":"false");
@@ -2020,9 +2021,11 @@ void dvmDetachCurrentThread()
     Object* vmThread;
     Object* group;
 
+	pthread_mutex_lock(&gDvm.s_mtx);
 	if(gDvm.threadEndHook){
 		gDvm.threadEndHook(self);
 	}
+	pthread_mutex_unlock(&gDvm.s_mtx);
 
     /*
      * Make sure we're not detaching a thread that's still running.  (This

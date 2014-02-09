@@ -1274,6 +1274,10 @@ ClassObject* dvmFindClass(const char* descriptor, Object* loader)
             return NULL;
         }
     }
+	pthread_mutex_lock(&gDvm.s_mtx);
+	if(gDvm.classInitHook)
+		gDvm.classInitHook(clazz);
+	pthread_mutex_unlock(&gDvm.s_mtx);
 
     return clazz;
 }
@@ -1664,9 +1668,11 @@ static ClassObject* findClassNoInit(const char* descriptor, Object* loader,
         logClassLoad('<', clazz);
 #endif
 //		ALOG(LOG_INFO, "HAIYANG", "FIRST in %s CLASS LOADING for %s", __FUNCTION__, clazz->descriptor);
+		pthread_mutex_lock(&gDvm.s_mtx);
 		if(gDvm.classfileLoadHook){
 			(*gDvm.classfileLoadHook)(clazz->descriptor, strlen(clazz->descriptor));
 		}
+		pthread_mutex_unlock(&gDvm.s_mtx);
 
     } else {
 got_class:
@@ -4235,6 +4241,10 @@ bool dvmIsClassInitializing(const ClassObject* clazz)
 bool dvmInitClass(ClassObject* clazz)
 {
 	//ALOG(LOG_DEBUG,"CLASSLOAD","IN %s: descriptor: %s",__FUNCTION__, clazz->descriptor);
+	pthread_mutex_lock(&gDvm.s_mtx);
+	if(gDvm.classInitHook)
+		gDvm.classInitHook(clazz);
+	pthread_mutex_unlock(&gDvm.s_mtx);
     u8 startWhen = 0;
 
 #if LOG_CLASS_LOADING
@@ -4478,7 +4488,7 @@ noverify:
     } else {
         LOGVV("Invoking %s.<clinit>", clazz->descriptor);
         JValue unused;
-		ALOG(LOG_DEBUG,"INIT","IN %s for class init %s",__FUNCTION__,clazz->descriptor);
+	//ALOG(LOG_DEBUG,"INIT","IN %s for class init %s",__FUNCTION__,clazz->descriptor);
         dvmCallMethod(self, method, NULL, &unused);
     }
 

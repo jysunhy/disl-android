@@ -57,10 +57,12 @@ public class AREDispatch {
 	public static native void sendDouble(double doubleToSend);
 
 	public static native void mapPID(String name,int pid);
+	public static native void mapPID(String name);
+	public static native void test();
 
-	static{
+	/*static{
 		System.loadLibrary("shadowvm");
-	}
+	}*/
 	// TODO re - basic type array support
 	//  - send length + all values in for cycle - all in native code
 	//  PROBLEM: somebody can change the values from the outside

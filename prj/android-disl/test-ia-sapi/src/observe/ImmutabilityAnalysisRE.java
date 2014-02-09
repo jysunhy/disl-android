@@ -20,6 +20,14 @@ public class ImmutabilityAnalysisRE {
     public static short fw = AREDispatch.registerMethod(
             "analyse.ImmutabilityAnalysis.onFieldWrite");
 
+
+	public static void close(){
+		AREDispatch.manuallyClose();
+	}
+	public static void testNative(){
+		AREDispatch.test();
+	}
+	
 	public static void constructorStart(Object forObject) {
 
         AREDispatch.analysisStart(cs);

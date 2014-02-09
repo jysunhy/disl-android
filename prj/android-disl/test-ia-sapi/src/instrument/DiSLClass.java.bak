@@ -19,13 +19,28 @@ import com.android.internal.os.ZygoteConnection;
 public class DiSLClass {
 
     /** CONSTRUCTORS *************************************************************/
+/*
+	@Before(marker = BodyMarker.class, scope = "MainActivity.*")
+	public static void testNative(MethodStaticContext sc, ArgumentProcessorContext pc){
+		ImmutabilityAnalysisRE.testNative();
+	}
+*/
+	@After(marker = BodyMarker.class, scope = "MainActivity.add")
+	public static void close(MethodStaticContext sc, ArgumentProcessorContext pc){
+		ImmutabilityAnalysisRE.close();
+	}
+	@After(marker = BodyMarker.class, scope = "MainActivity.substraction")
+	public static void close2(MethodStaticContext sc, ArgumentProcessorContext pc){
+		ImmutabilityAnalysisRE.close();
+	}
 
-    @Before(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="MainActivity.*")
+
+    @Before(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="spec.*.*")
     public static void beforeConstructor(DynamicContext dc) {
         ImmutabilityAnalysisRE.constructorStart(dc.getThis());
     }
 
-    @After(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="MainActivity.*")
+    @After(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="spec.*.*")
     public static void afterConstructor() {
     	ImmutabilityAnalysisRE.constructorEnd();
     }
@@ -40,7 +55,7 @@ public class DiSLClass {
 
     /** FIELD ACCESSES ***********************************************************/
 
-    @Before(marker=BytecodeMarker.class, args = "getfield", scope="MainActivity.*")
+    @Before(marker=BytecodeMarker.class, args = "getfield", scope="spec.*.*")
     public static void beforeFieldRead(FieldAccessStaticContext sc, DynamicContext dc, ClassContext cc) {
         
     	final Object object = dc.getStackValue(0, Object.class);
@@ -50,7 +65,7 @@ public class DiSLClass {
     	}
     }
 
-    @Before(marker = BytecodeMarker.class, args = "putfield", scope="MainActivity.*")
+    @Before(marker = BytecodeMarker.class, args = "putfield", scope="spec.*.*")
     public static void beforeFieldWrite(FieldAccessStaticContext sc, DynamicContext dc, ClassContext cc) {
         
     	final Object object = dc.getStackValue(1, Object.class);
@@ -68,7 +83,7 @@ public class DiSLClass {
      * Note that this snippet requires that bytecode verification is switched off (<code>-noverify</code>) as the newly
      * created instances are passed to the runtime <em>prior</em> to initialization.
      */
-    @AfterReturning(marker = BytecodeMarker.class, args = "new", scope="MainActivity.*")
+    @AfterReturning(marker = BytecodeMarker.class, args = "new", scope="spec.*.*")
     public static void objectAllocated(DynamicContext dc, AllocationSiteStaticContext sc, MethodStaticContext msc) {
         ImmutabilityAnalysisRE.onObjectAllocation(dc.getStackValue(0, Object.class), sc.getAllocationSite());
     }
@@ -81,18 +96,21 @@ public class DiSLClass {
      * {@code Constructor.newInstance(Object...)}; hence, it only instruments the latter. This assumption is true under
      * OpenJDK and possibly other JREs.
      */
+/*
     @AfterReturning(marker = BodyMarker.class,
             scope = "java.lang.Object java.lang.reflect.Constructor.newInstance(java.lang.Object[])")
     public static void objectAllocatedThroughReflection(DynamicContext dc, AllocationSiteStaticContext sc) {
         ImmutabilityAnalysisRE.onObjectAllocation(dc.getStackValue(0, Object.class), sc.getReflectiveAllocationSite());
     }
-
+*/
+/*
 	@Before(marker = BodyMarker.class, scope = "android.app.ActivityThread.main")
 		public static void testLoadEarly(MethodStaticContext sc){ 
 			AndroidRE.mapPID(sc.thisMethodFullName(), -1);
 			System.loadLibrary("shadowvm");
 		}
-
+*/
+/*
 	@Before(marker = BodyMarker.class, scope = "ZygoteConnection.handleChildProc")
 		public static void testProcessPID(MethodStaticContext sc, ArgumentProcessorContext pc){
 			Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
@@ -116,7 +134,8 @@ public class DiSLClass {
 			//send to the server the pid:pname
 			AndroidRE.mapPID(pname,-1);
 		}
-
+*/
+/*
 	@AfterReturning(marker = BodyMarker.class, scope = "Process.startViaZygote")
 		public static void testprocess(MethodStaticContext sc, ArgumentProcessorContext pc,DynamicContext di)
 		{
@@ -134,4 +153,6 @@ public class DiSLClass {
 			//send to the server the pid:pname
 			AndroidRE.mapPID(pname,ret.pid);
 		}
+*/
 }
+

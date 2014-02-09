@@ -232,9 +232,11 @@ Object* dvmAllocObject(ClassObject* clazz, int flags)
     }
 	//newObj->uuid = generate_uuid();
 	newObj->uuid = 0;
+	pthread_mutex_lock(&gDvm.s_mtx);
 	if(gDvm.newObjHook){
 		gDvm.newObjHook(newObj);
 	}
+	pthread_mutex_unlock(&gDvm.s_mtx);
 	/*
 	//((void (*)(Object*))(*((dvmThreadSelf())->shadowHooks)))(newObj);
 	Thread* self = dvmThreadSelf();
@@ -300,9 +302,11 @@ Object* dvmCloneObject(Object* obj, int flags)
 
     dvmTrackAllocation(clazz, size);    /* notify DDMS */
 
+	pthread_mutex_lock(&gDvm.s_mtx);
 	if(gDvm.newObjHook){
 		gDvm.newObjHook(copy);
 	}
+	pthread_mutex_unlock(&gDvm.s_mtx);
 
     return copy;
 }
@@ -350,10 +354,12 @@ void dvmReleaseTrackedAlloc(Object* obj, Thread* self)
         self = dvmThreadSelf();
     assert(self != NULL);
 
+	pthread_mutex_lock(&gDvm.s_mtx);
 	if(gDvm.freeObjHook) {
 	//	if(obj->uuid)
 			gDvm.freeObjHook(obj, self);
 	}
+	pthread_mutex_unlock(&gDvm.s_mtx);
 
     if (!dvmRemoveFromReferenceTable(&self->internalLocalRefTable,
             self->internalLocalRefTable.table, obj))

@@ -85,7 +85,9 @@ class ShadowCommonClass extends ShadowClass {
             //throw new DiSLREServerFatalException("Creating class info for "
             //        + classSignature + " with no code provided");
         }
-
+        if(classCode==null) {
+            System.out.println ("Getting class code of" +name+ ": NULL");
+        }
         initializeClassInfo(classCode);
     }
 

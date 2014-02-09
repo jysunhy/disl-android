@@ -45,7 +45,7 @@ public final class Context{
  * Some times the % variation is reflected by just altering the loop
  * count in the benchmark (ie repeatedly executing the same benchmark)
  */ 
-  static int speed = 100;
+  static int speed = 1;
 
 /**
  * CachedInput is flag used to indicate, whether the classes have to 
