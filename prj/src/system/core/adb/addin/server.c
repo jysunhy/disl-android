@@ -30,7 +30,7 @@
 #define TRUE                   1
 #define FALSE                  0
 //#define SERVER_IP "10.10.6.101"
-#define SERVER_IP "192.168.1.101"
+#define SERVER_IP "192.168.1.103"
 //#define SERVER_IP "192.168.56.101"
 //#define SERVER_IP "10.0.3.15"
 #define SOCKFILE "/dev/socket/instrument"
@@ -64,12 +64,8 @@ void * my_thread (void *arg)
 	int sock_host = -1;
 	while(TRUE) {
 		retcode = recv(myClient_s, &sign4, sizeof(int), 0);
-		//ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: receive %d size from client", sign4);
-
 		if(sign4 == -1)
-		{
 			break;
-		}
 		if(sign4 == -2) {
 			int key;
 			recv(myClient_s, &key, sizeof(int),0);
@@ -87,14 +83,14 @@ void * my_thread (void *arg)
 			break;
 		}
 		if(sign4 == -3){
-	pthread_mutex_lock(&gl_mtx);
 			ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event");
-			while(sock_host < 0) {
+			while(true) {
 				sock_host = socket_network_client(SERVER_IP, 11218, SOCK_STREAM);
-				if(sock_host < 0){
+				if(sock_host <= 0){
 					ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
-					sleep(1);
-				}
+					sleep(10);
+				}else
+					break;
 			}
 			
 
@@ -107,6 +103,7 @@ void * my_thread (void *arg)
 				///*
 				retcode = send(sock_host, buf, retcode, 0);
 				if(retcode < 0) {
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","host sock error here");
 					close(myClient_s);
 					break;
 				}
@@ -122,7 +119,6 @@ void * my_thread (void *arg)
 				   ALOG(LOG_INFO, "INSTRUMENTSERVER", "SHADOW PACKET %s", tmp);
 				   */
 			}
-	pthread_mutex_unlock(&gl_mtx);
 			break;
 		}
 		if(sign4 == -4) {
@@ -142,9 +138,9 @@ void * my_thread (void *arg)
 				if(!strcmp(pname,"com.inspur.test")){
 					tmp = 0;
 				}
-				/*if(!strcmp(pname,"com.android.contacts")){
+				if(!strcmp(pname,"com.android.contacts")){
 					tmp = 0;
-				}*/
+				}
 				if(tmp)
 					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED, SENDING BACK 1", pid);
 				else
@@ -190,9 +186,9 @@ void * my_thread (void *arg)
 				if(!strcmp(pnames[i],"com.inspur.test")){
 					tmp = 0;
 				}
-				//if(!strcmp(pnames[i],"com.android.contacts")){
-				//	tmp = 0;
-				//}
+				if(!strcmp(pnames[i],"com.android.contacts")){
+					tmp = 0;
+				}
 				if(tmp)
 					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED, SENDING BACK 1", key);
 				else
@@ -278,6 +274,7 @@ void * my_thread (void *arg)
 release:
 	if(sock_host > 0)
 		close (sock_host);
+	sock_host = -1;
 	close (myClient_s); // close the client connection
 	pthread_detach(pthread_self());
 	pthread_exit(NULL);

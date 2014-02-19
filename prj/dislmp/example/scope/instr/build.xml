@@ -1,0 +1,31 @@
+<project name="example-disl" default="package" basedir=".">
+
+	<property file="../../build.properties" />
+
+	<path id="buildpath">
+		<pathelement location="${asm.path}" />
+		<pathelement location="${dislserver.path}" />
+	</path>
+
+	<target name="compile">
+		<mkdir dir="bin" />
+		<javac srcdir="src" destdir="bin" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+		</javac>
+	</target>
+
+	<target name="package" depends="compile" description="create instrumentation package">
+		<mkdir dir="build"/>
+		<jar jarfile="build/${instr.jar.name}"
+		     basedir="bin"
+		     excludes="MANIFEST.MF"
+		     manifest="src/MANIFEST.MF">
+		</jar>
+	</target>
+	
+	<target name="clean">
+		<delete dir="bin" />
+		<delete dir="build" />
+	</target>
+
+</project>

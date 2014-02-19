@@ -1,5 +1,7 @@
-lib.path=/home/usi/disl-android/prj/android-disl/build
-android.path=/home/usi/disl-android/prj/android-disl/lib/framework.jar
+lib.path=/home/shy/disl-android/prj/android-disl/build
+android.path=/home/shy.disl-android/prj/android-disl/lib/framework.jar
+
+spec.path=/home/usi/disl-android/prj/android-disl/lib/spec.jar
 
 disl-server.path=${lib.path}/disl-server.jar
 dislre-dispatch.path=${lib.path}/dislre-dispatch.jar

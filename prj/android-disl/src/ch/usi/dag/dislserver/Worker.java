@@ -297,10 +297,14 @@ public class Worker extends Thread {
 
             final File red = new File ("bin/ch/usi/dag/dislre/AREDispatch.class");
             final FileInputStream fis = new FileInputStream (red);
+            final ByteArrayOutputStream bout4 = new ByteArrayOutputStream ();
             zos.putNextEntry (new ZipEntry ("ch/usi/dag/dislre/AREDispatch.class"));
             while ((bytesRead = fis.read (buffer)) != -1) {
-                zos.write (buffer, 0, bytesRead);
+                bout4.write (buffer, 0, bytesRead);
+                //zos.write (buffer, 0, bytesRead);
             }
+            bytecodeMap.put ("ch/usi/dag/dislre/AREDispatch".replace ('/', '.'), bout4.toByteArray ());
+            zos.write (bout4.toByteArray(),0,bout4.size());
             zos.closeEntry ();
             fis.close ();
 

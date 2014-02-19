@@ -413,11 +413,16 @@ static pid_t forkAndSpecializeCommon_2(const u4* args, bool isSystemServer)
     setSignalHandler();
 
     dvmDumpLoaderStats("zygote");
+
+	BeforeFork();
+	int parent = getpid();
+
     pid = fork();
 
     if (pid == 0) {
 		_mapPID(getpid(),niceName);
 	free(niceName);
+		onFork(parent);
         int err;
         /* The child process */
 

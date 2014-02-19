@@ -17,6 +17,8 @@ using namespace std;
 
 #define BUFFER_INIT_SIZE 100
 
+#define MP 1
+
 enum MsgType{
 	// closing connection
 	MSG_CLOSE,
@@ -35,7 +37,9 @@ enum MsgType{
 	// sending thread info
 	MSG_THREAD_INFO,
 	// sending thread end message
-	MSG_THREAD_END
+	MSG_THREAD_END,
+	// sending fork
+	MSG_FORK
 };
 
 enum QueueType{
@@ -91,9 +95,29 @@ class ReProtocol{
 			isClosed = true;
 			//send all buffers
 			//TODO ADD ALL to BUFFER
-			Send(MSG_CLOSE);
+			Buffer tmp(10);
+			if(MP)
+				tmp.EnqueueJint(getpid());
+			tmp.EnqueueJbyte(MSG_CLOSE);
+			
+			Send(tmp.q_data,tmp.q_occupied);
 			return true;
 		}
+		
+		bool OnForkEvent(int parent){
+			Buffer tmp(20);
+			
+			tmp.EnqueueJint(parent);
+			tmp.EnqueueJbyte(MSG_FORK);
+			tmp.EnqueueJint(getpid());
+
+			if(MP)
+				Send(tmp.q_data, tmp.q_occupied);
+			return true;
+		}
+
+
+
 		bool AnalysisStartEvent(thread_id_type tid, ordering_id_type oid, short methodId){
 			if(GetOrderingId(tid) != INVALID_ORDERING_ID) {
 				return false;
@@ -107,6 +131,9 @@ class ReProtocol{
 
 			if(analysis_queue[oid]->IsEmpty()){
 				LOGASSERT((jbyte)MSG_ANALYZE == MSG_ANALYZE, "WRONG TYPE CONVERSION");
+				if(MP)
+					analysis_queue[oid]->EnqueueJint(getpid());
+
 				analysis_queue[oid]->EnqueueJbyte(MSG_ANALYZE);
 				analysis_queue[oid]->EnqueueJlong(oid);
 				analysis_queue[oid]->EnqueueJint(0);
@@ -114,8 +141,11 @@ class ReProtocol{
 			}
 			analysis_queue[oid]->event_count++;
 			jint tmp = htonl(analysis_queue[oid]->event_count);
-			LOGDEBUG("%d,%d,%d", (int)analysis_queue[oid]->event_count,tmp,sizeof(jbyte)+sizeof(jlong));
-			analysis_queue[oid]->Update(sizeof(jbyte)+sizeof(jlong),(char*)&tmp, sizeof(jint));
+			//LOGDEBUG("%d,%d,%d", (int)analysis_queue[oid]->event_count,tmp,sizeof(jbyte)+sizeof(jlong));
+			if(MP)
+				analysis_queue[oid]->Update(sizeof(jint)+sizeof(jbyte)+sizeof(jlong),(char*)&tmp, sizeof(jint));
+			else
+				analysis_queue[oid]->Update(sizeof(jbyte)+sizeof(jlong),(char*)&tmp, sizeof(jint));
 			if(!invocation_buf.Exist(oid)){
 				invocation_buf.Set(oid, new Buffer(INVOCATION_SIZE));
 			}
@@ -166,46 +196,57 @@ class ReProtocol{
 			return SendJlong(tid, netref);
 		}
 		bool SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){
-			ScopedMutex mtx(&gl_mtx);
 			Buffer tmp(100);
+			if(MP)
+				tmp.EnqueueJint(getpid());
 			tmp.EnqueueJbyte(MSG_STRING_INFO);
 			tmp.EnqueueJlong(netref);
 			tmp.EnqueueStringUtf8((const char*)utf8, len*sizeof(jchar));
-			char* content;
-			int packet_len;
-			tmp.GetData(content, packet_len);
-			if(!isClosed)
-				sendBuf->Enqueue(content,packet_len);
+			Send(tmp.q_data, tmp.q_occupied);
+			//char* content;
+			//int packet_len;
+			//tmp.GetData(content, packet_len);
+			//if(!isClosed)
+			//	sendBuf->Enqueue(content,packet_len);
 			return true;
 			//return sock->Send(content,packet_len);
 		}
 		int SendStringObject(thread_id_type tid, jlong netref, const char* utf8, int len){
-			ScopedMutex mtx(&gl_mtx);
+			//ScopedMutex mtx(&gl_mtx);
 			Buffer tmp(100);
+			if(MP)
+				tmp.EnqueueJint(getpid());
 			tmp.EnqueueJbyte(MSG_STRING_INFO);
 			tmp.EnqueueJlong(netref);
 			tmp.EnqueueStringUtf8(utf8, len);
-			char* content;
-			int packet_len;
-			tmp.GetData(content, packet_len);
-			if(!isClosed)
-				sendBuf->Enqueue(content,packet_len);
-			return packet_len;
+			Send(tmp.q_data, tmp.q_occupied);
+			return tmp.q_occupied;
+
+			//char* content;
+			//int packet_len;
+			//tmp.GetData(content, packet_len);
+			//if(!isClosed)
+			//	sendBuf->Enqueue(content,packet_len);
+			//return packet_len;
 			//return sock->Send(content,packet_len);
 		}
 		int SendThreadObject(thread_id_type tid, jlong netref, const char* threadName, int len, jboolean isDaemon){
-			ScopedMutex mtx(&gl_mtx);
+			//ScopedMutex mtx(&gl_mtx);
 			Buffer tmp(100);
+			if(MP)
+				tmp.EnqueueJint(getpid());
 			tmp.EnqueueJbyte(MSG_THREAD_INFO);
 			tmp.EnqueueJlong(netref);
 			tmp.EnqueueStringUtf8(threadName, len);
 			tmp.EnqueueJboolean(isDaemon);
-			char* content;
-			int packet_len;
-			tmp.GetData(content, packet_len);
-			if(!isClosed)
-				sendBuf->Enqueue(content,packet_len);
-			return packet_len;
+			Send(tmp.q_data, tmp.q_occupied);
+			return tmp.q_occupied;
+			//char* content;
+			//int packet_len;
+			//tmp.GetData(content, packet_len);
+			//if(!isClosed)
+			//	sendBuf->Enqueue(content,packet_len);
+			//return packet_len;
 			//return sock->Send(content,packet_len);
 		}
 		bool SendArgument(thread_id_type tid, const char* data, int length){
@@ -252,6 +293,8 @@ class ReProtocol{
 			//ScopedMutex mtx(&gl_mtx);
 			//TODO optimization with pool
 			Buffer tmp(100);
+			if(MP)
+				tmp.EnqueueJint(getpid());
 			tmp.EnqueueJbyte(MSG_CLASS_INFO);
 			tmp.EnqueueJlong(netref);
 			/*const char *tmpname = className;
@@ -268,16 +311,18 @@ class ReProtocol{
 			tmp.EnqueueStringUtf8(generic, glen);
 			tmp.EnqueueJlong(netrefClassLoader);
 			tmp.EnqueueJlong(netrefSuperClass);
-			char* content;
-			int len;
-			tmp.GetData(content, len);
-			bool res = Send(content, len);
-			return res;
+			//char* content;
+			//int len;
+			//tmp.GetData(content, len);
+			return Send(tmp.q_data, tmp.q_occupied);
 		}
 		void ObjFreeEvent(jlong objectId){
 			//ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			ScopedMutex mtx(&objfree_mtx);
 			if(q_objfree.IsEmpty()) {
+				if(MP)
+					q_objfree.EnqueueJint(getpid());
+
 				q_objfree.EnqueueJbyte(MSG_OBJ_FREE);
 				q_objfree.event_count = 0;
 				q_objfree.EnqueueJint(0);
@@ -285,7 +330,10 @@ class ReProtocol{
 			q_objfree.event_count++;
 			if(!q_objfree.EnqueueJlong(objectId)){
 				jint tmpint = htonl(q_objfree.event_count);
-				q_objfree.Update(sizeof(jbyte), (char*)&tmpint, sizeof(jint));
+				if(MP)
+					q_objfree.Update(sizeof(jint)+sizeof(jbyte), (char*)&tmpint, sizeof(jint));
+				else
+					q_objfree.Update(sizeof(jbyte), (char*)&tmpint, sizeof(jint));
 				char* tmp=NULL;
 				int len=0;
 				q_objfree.GetData(tmp, len);
@@ -301,6 +349,8 @@ class ReProtocol{
 			//ScopedMutex mtx(&gl_mtx);
 			//TODO optimization with pool
 			Buffer tmp(100);
+			if(MP)
+				tmp.EnqueueJint(getpid());
 			tmp.EnqueueJbyte(MSG_NEW_CLASS);
 			const char *tmpname = name;
 			int tmplen = nameLength;
@@ -315,21 +365,25 @@ class ReProtocol{
 			tmp.EnqueueJlong(classLoaderId);
 			tmp.EnqueueJint(codeLength);
 			tmp.Enqueue(bytes, codeLength);
-			char* content;
-			int len;
-			tmp.GetData(content, len);
-			return Send(content, len);
+			//char* content;
+			//int len;
+			//tmp.GetData(content, len);
+			return Send(tmp.q_data, tmp.q_occupied);
+			//return Send(content, len);
 		}
 		bool MethodRegisterEvent(int threadId, jshort methodId, const char* name, int length){
 			//TODO optimization with pool
 			Buffer tmp(40);
+			if(MP)
+				tmp.EnqueueJint(getpid());
 			tmp.EnqueueJbyte(MSG_REG_ANALYSIS);
 			tmp.EnqueueJshort(methodId);
 			tmp.EnqueueStringUtf8(name, length);
-			char* content;
-			int len;
-			tmp.GetData(content, len);
-			return Send(content, len);
+			//char* content;
+			//int len;
+			//tmp.GetData(content, len);
+			return Send(tmp.q_data, tmp.q_occupied);
+			//return Send(content, len);
 		}
 		Buffer* ReturnAndResetBuffer(){
 			ScopedMutex mtx(&gl_mtx);
@@ -357,7 +411,8 @@ class ReProtocol{
 		}
 		bool Send(const char* data, int length){
 			ScopedMutex mtx(&gl_mtx);
-			//ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
+
+			ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			//for(int i = 0; i < length; i++){
 			//	printf("%d:%d ", i, (int)data[i]);
 			//}
@@ -370,12 +425,14 @@ class ReProtocol{
 			//}
 			if(!isClosed)
 				sendBuf->Enqueue(data,length);
+			ALOG(LOG_DEBUG, "PACKET", "PACK BUFF FIRST 10 BYTES: \n\t\t: %d %d %d %d, %d, %d %d %d %d", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
 			//res = sock->Send(data, length);
 
 			//char close = MSG_CLOSE;
 			//sock.Send(&close, 1);
 
 			//LOGASSERT(res, "error in send packets");
+			ALOG(LOG_DEBUG,"SHADOW","out %s",__FUNCTION__);
 			return true;
 		}
 		bool Send(const char* data, int length, const char* lastdata, int lastlength){
@@ -410,9 +467,9 @@ class ReProtocol{
 				sendBuf->Enqueue(data,length);
 				sendBuf->Enqueue(lastdata, lastlength);
 			}
+			ALOG(LOG_DEBUG, "PACKET", "PACK BUFF FIRST 5 BYTES: \n\t\t: %d %d %d %d, %d", data[0], data[1], data[2], data[3], data[4]);
 			return true;
 		}
-
 		pthread_mutex_t gl_mtx;
 
 		ReQueue q_objfree;

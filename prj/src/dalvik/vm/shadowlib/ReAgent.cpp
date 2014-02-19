@@ -6,12 +6,15 @@
 #include "stdlib.h"
 #include "stdio.h"
 #include "Socket.h"
+#include <sched.h>
 
 ReProtocol remote("/dev/socket/instrument",11218);
 
 bool isZygote = true;
 
 Socket *sock = NULL;
+
+Buffer* zygote_buff;
 //static pthread_t *send_thread;
 //static pthread_t send_zygote_thread;
 
@@ -143,6 +146,12 @@ jshort registerMethod
 	return method_id;
 }
 
+void onFork
+(int parent) {
+	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","ONFORK happens pid-cid: %d-%d",parent, getpid());
+	remote.OnForkEvent(parent);
+
+}
 void analysisStart__S
 (JNIEnv * jni_env, jclass this_class, jshort analysis_method_id) {
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis start for method %d, tid:%d", (int)analysis_method_id,dvmThreadSelf()->threadId);
@@ -366,6 +375,7 @@ static JNINativeMethod methods[]= {
 	{"sendObjectPlusData", "(Ljava/lang/Object;)V", (void*)sendObjectPlusData},
 	{"manuallyOpen", "()V", (void*)manuallyOpen},
 	{"manuallyClose", "()V", (void*)manuallyClose},
+	//{"onFork", "(I)V", (void*)onFork},
 };
 
 
@@ -420,12 +430,27 @@ void objFreeHook(Object* obj, Thread* self){
 		return;
 	SetAndGetNetref(obj);
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in FREE hook %s %lld", obj->clazz->descriptor, obj->uuid);
-	//remote.ObjFreeEvent(obj->uuid);
+	remote.ObjFreeEvent(obj->uuid);
 }
 int classfileLoadHook(const char* name, int len){
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","LOADING CLASS %s", name);
 	return 1;
 }
+int classInitHook(ClassObject* co){
+	SetAndGetNetref(co);
+	return 1;
+}
+
+/* static void * zygote_send_thread_loop(void * obj) {
+	while(true){
+		ALOG(LOG_DEBUG,"SHADOWDEBUG","IN ZYGOTE WHILE LOOOP");
+		sleep(15);
+		//sched_yield();
+		//std::this_thread::yield();
+	}
+	return NULL;
+}
+*/
 
 static void * send_thread_loop(void * obj) {
 	Buffer *undecidedBuf = new Buffer(1024);
@@ -485,15 +510,17 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 	uenv.venv = NULL;
 	jint result = -1;
 	JNIEnv *env = NULL;
+	zygote_buff = NULL;
 
 	//gDvm.shadowHook = &testShadowHook;
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN ONLOAD, Zygote PID: %d", getpid());
 	//OpenConnection();
-	//gDvm.newObjHook = &objNewHook;
-	//gDvm.freeObjHook = &objFreeHook;
-	//gDvm.threadEndHook = &threadEndHook;
-	//gDvm.vmEndHook = &vmEndHook;
-	//gDvm.classfileLoadHook = &classfileLoadHook;
+	gDvm.newObjHook = &objNewHook;
+	gDvm.freeObjHook = &objFreeHook;
+	gDvm.threadEndHook = &threadEndHook;
+	gDvm.vmEndHook = &vmEndHook;
+	gDvm.classInitHook = &classInitHook;
+	gDvm.classfileLoadHook = &classfileLoadHook;
 
 	pthread_mutex_init(&gl_mtx, NULL);
 
@@ -512,10 +539,26 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 
 	result = JNI_VERSION_1_4;
 
-	//pthread_create(&send_thread, NULL, send_thread_loop, NULL);
+	//pthread_t send_thread;
+	//pthread_create(&send_thread, NULL, zygote_send_thread_loop, NULL);
+	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CAN BE PRINTED?");
 
 bail:
 	return result;
+}
+
+void BeforeFork(){
+	pthread_mutex_lock(&gl_mtx);
+	zygote_buff = remote.ReturnAndResetBuffer();
+	ALOG(LOG_DEBUG,"SHADOWDEBUG","BEFORE FORK, BUFF OF ZYGOTE: %d", zygote_buff->q_occupied);
+	if(!sock){
+		OpenConnection();
+	}
+	sock->Send(zygote_buff->q_data,zygote_buff->q_occupied);
+	if(zygote_buff)
+		delete zygote_buff;
+	zygote_buff=NULL;
+	pthread_mutex_unlock(&gl_mtx);
 }
 
 jint ShadowLib_OnLoad(JavaVM* vm, void* reserved){
@@ -537,6 +580,7 @@ jint ShadowLib_OnLoad(JavaVM* vm, void* reserved){
 	gDvm.freeObjHook = &objFreeHook;
 	gDvm.threadEndHook = &threadEndHook;
 	gDvm.vmEndHook = &vmEndHook;
+	//gDvm.classInitHook = &classInitHook;
 	pthread_mutex_unlock(&gDvm.s_mtx);
 	pthread_t send_thread;
 	pthread_create(&send_thread, NULL, send_thread_loop, NULL);

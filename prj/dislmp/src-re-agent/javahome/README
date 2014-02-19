@@ -1,0 +1,11 @@
+The Java finder works in the following order.
+
+1. If there is a file "var.local" then it is used. It's supposed there is
+JAVA_HOME specified as in the "var.local.tmpl".
+
+2. If there is no such file then the script checks the environment for the
+JAVA_HOME variable.
+
+3. If the envorinment variable is not found the script tries to guess based on
+currently prefered java compiler and derives the destination of JAVA_HOME.
+

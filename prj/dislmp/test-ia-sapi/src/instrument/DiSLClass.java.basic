@@ -1,0 +1,69 @@
+package instrument;
+
+import observe.ImmutabilityAnalysisRE;
+import observe.AndroidRE;
+import ch.usi.dag.disl.annotation.After;
+import ch.usi.dag.disl.annotation.AfterReturning;
+import ch.usi.dag.disl.annotation.Before;
+import ch.usi.dag.disl.annotation.GuardMethod;
+import ch.usi.dag.disl.classcontext.ClassContext;
+import ch.usi.dag.disl.dynamiccontext.DynamicContext;
+import ch.usi.dag.disl.marker.BodyMarker;
+import ch.usi.dag.disl.marker.BytecodeMarker;
+import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;
+import ch.usi.dag.disl.processorcontext.ArgumentProcessorMode;
+import ch.usi.dag.disl.staticcontext.MethodStaticContext;
+import android.os.Process;
+import com.android.internal.os.ZygoteConnection;
+
+//import spec.benchmarks._201_compress.Main;
+
+public class DiSLClass {
+
+	@Before(marker = BodyMarker.class, scope = "MainActivity.add")
+		public static void add(MethodStaticContext sc, ArgumentProcessorContext pc){
+			AndroidRE.mapPID("testadd",-1);
+			//Main.main(new String[0]);
+		}
+	@Before(marker = BodyMarker.class, scope = "ZygoteConnection.handleChildProc")
+		public static void testProcessPID(MethodStaticContext sc, ArgumentProcessorContext pc){
+			Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
+			System.out.println("****************************ZygoteConnection.handleChildProc*****************************");
+			System.out.printf("disl: args for %s %s\n", sc.thisMethodFullName(), sc.thisMethodDescriptor());
+			String pname = ((ZygoteConnection.Arguments)args[0]).niceName;
+			System.out.println("disl: \t\tProcess handleChildProc GET\t PNAME:"+pname);
+			AndroidRE.mapPID(pname,-1);
+		}
+	@Before(marker = BodyMarker.class, scope = "Process.start")
+		public static void testProcessStart(MethodStaticContext sc, ArgumentProcessorContext pc){
+			Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
+			System.out.println("*****************************DISL BEFORE START*****************************");
+			System.out.printf("disl: args for %s %s\n", sc.thisMethodFullName(), sc.thisMethodDescriptor());
+			String pname="default";
+			//Second argument is the pname
+			if(args[1].getClass().getCanonicalName().equals("java.lang.String")){
+				pname = args[1].toString();
+			}
+			System.out.println("disl: \t\tProcess before GET\t PNAME:"+pname);
+			//send to the server the pid:pname
+			AndroidRE.mapPID(pname,-1);
+		}
+
+	@AfterReturning(marker = BodyMarker.class, scope = "Process.startViaZygote")
+		public static void testprocess(MethodStaticContext sc, ArgumentProcessorContext pc,DynamicContext di)
+		{
+			//Return value contatins the new pid
+			Process.ProcessStartResult ret = di.getStackValue(0, Process.ProcessStartResult.class);
+			Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
+			System.out.println("*****************************DISL START NEW PROCESS*****************************");
+			System.out.printf("disl: args for %s %s\n", sc.thisMethodFullName(), sc.thisMethodDescriptor());
+			String pname="default";
+			//Second argument is the pname
+			if(args[1].getClass().getCanonicalName().equals("java.lang.String")){
+				pname = args[1].toString();
+			}
+			System.out.println("disl: \t\tProcess GET PID:\t" + ret.pid+"\t PNAME:"+pname);
+			//send to the server the pid:pname
+			AndroidRE.mapPID(pname,ret.pid);
+		}
+}

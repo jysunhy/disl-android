@@ -60,6 +60,8 @@ public class AREDispatch {
 	public static native void mapPID(String name);
 	public static native void test();
 
+	//public static native void onFork(int parent);
+
 	/*static{
 		System.loadLibrary("shadowvm");
 	}*/

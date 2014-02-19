@@ -1,0 +1,54 @@
+<project name="fia" default="package" basedir=".">
+
+	<property file="build.properties" />
+
+	<path id="buildpath">
+		<pathelement location="${asm.path}" />
+		<pathelement location="android-bin" />
+		<pathelement location="${android.path}" />
+		<pathelement location="${spec.path}" />
+		<pathelement location="${disl-server.path}" />
+		<pathelement location="${dislre-dispatch.path}" />
+		<pathelement location="${dislre-server.path}" />
+		<pathelement location="${bin}" />
+	</path>
+
+	<target name="compile">
+		<mkdir dir="bin" />
+		<javac srcdir="src" destdir="bin" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+		</javac>
+	</target>
+
+	<target name="package" depends="compile" description="create instrumentation package">
+		<mkdir dir="build"/>
+		<jar jarfile="build/${instr.jar.name}"
+		     basedir="bin"
+		     excludes="MANIFEST.MF"
+		     manifest="src/MANIFEST.MF">
+		</jar>
+	</target>
+
+	<target name="compile-test">
+		<mkdir dir="bin-test" />
+		<javac srcdir="src-test" destdir="bin-test" debug="true" includeAntRuntime="false" />
+	</target>
+	
+	<target name="package-test" depends="compile-test">
+		<mkdir dir="build" />
+		<jar basedir="bin-test" destfile="build/ia-test.jar">
+			<manifest>
+				<attribute name="Main-Class" value="TargetClass" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="package-all" depends="package,package-test" />
+
+	<target name="clean">
+		<delete dir="bin" />
+		<delete dir="bin-test" />
+		<delete dir="build" />
+	</target>
+
+</project>

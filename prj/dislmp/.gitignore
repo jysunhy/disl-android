@@ -1,0 +1,9 @@
+/bin/
+/build/
+/**/bin/
+/**/build/
+/**/*.so
+/**/*.o
+/**/*.jnilib
+/**/var
+/**/var
