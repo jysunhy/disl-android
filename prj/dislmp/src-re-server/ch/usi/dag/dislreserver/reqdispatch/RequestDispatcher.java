@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
+import ch.usi.dag.dislreserver.exception.DiSLREServerFatalException;
 import ch.usi.dag.dislreserver.msg.analyze.AnalysisHandler;
 import ch.usi.dag.dislreserver.msg.classinfo.ClassInfoHandler;
 import ch.usi.dag.dislreserver.msg.close.CloseHandler;
@@ -98,16 +99,7 @@ public final class RequestDispatcher {
 		// Lookup the request handler and process the request using the handler.
 		// Signal to terminate the request loop after handling a close request.
 		//
-	    RequestHandler rh = null;
-	    if(requestId >= __dispatchTable.length){
-	        System.out.printf (
-                "DiSL-RE: dispatching request message error \n"
-
-            );
-	    }else{
-	        rh = __dispatchTable [requestId];
-	    }
-
+		final RequestHandler rh = __dispatchTable [requestId];
 		if (rh != null) {
 			if (debug) {
 				System.out.printf (
@@ -120,11 +112,9 @@ public final class RequestDispatcher {
 			return requestId == __REQUEST_ID_CLOSE__;
 
 		} else {
-			//throw new DiSLREServerFatalException (
-			//	"Unsupported message type: "+ requestId
-			//);
-		    System.err.println("Unsupported message type: "+ requestId);
-		    return false;
+			throw new DiSLREServerFatalException (
+				"Unsupported message type: "+ requestId
+			);
 		}
 	}
 

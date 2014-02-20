@@ -32,14 +32,14 @@ class ObjectFreeTaskExecutor extends Thread {
 
 		// retrieve shadow object
 		final ShadowObject obj = shadowAddressSpace.getShadowObject (objectFreeID);
-		System.out.println ("PID: "+shadowAddressSpace.context.pid() +" OBJ FREE: "+obj.getShadowClass ().getCanonicalName ());
+
 		// get all analysis objects
 		final Set<RemoteAnalysis> raSet = AnalysisResolver.getAllAnalyses();
 
 		// invoke object free
-		for (final RemoteAnalysis ra : raSet) {
-			ra.objectFree(obj);
-		}
+        for (final RemoteAnalysis ra : raSet) {
+            ra.objectFree (shadowAddressSpace, obj);
+        }
 
 		// release shadow object
 		shadowAddressSpace.freeShadowObject(obj);

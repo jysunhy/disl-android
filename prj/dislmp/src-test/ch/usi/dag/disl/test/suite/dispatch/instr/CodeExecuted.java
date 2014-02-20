@@ -1,6 +1,7 @@
 package ch.usi.dag.disl.test.suite.dispatch.instr;
 
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.dislreserver.shadow.ShadowClass;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
 import ch.usi.dag.dislreserver.shadow.ShadowString;
@@ -141,13 +142,13 @@ public class CodeExecuted extends RemoteAnalysis {
 	}
 
 	@Override
-    public void atExit() {
+    public void atExit(final ShadowAddressSpace shadowAddressSpace) {
 		System.out.println("Total number of executed bytecodes: "
 				+ totalExecutedBytecodes);
 	}
 
 	@Override
-    public void objectFree(final ShadowObject netRef) {
+    public void objectFree(final ShadowAddressSpace shadowAddressSpace, final ShadowObject netRef) {
 		System.out.println("Object free for id " + netRef.getId());
 
 	}

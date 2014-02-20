@@ -23,7 +23,7 @@ public class NewClassHandler implements RequestHandler {
 			final int classCodeLength = is.readInt();
 			final byte[] classCode = new byte[classCodeLength];
 			is.readFully(classCode);
-			System.out.println ("PID: "+shadowAddressSpace.context.pid() +" NEW CLASS: "+className);
+
 			shadowAddressSpace.loadBytecode(classLoader, className, classCode, debug);
 		} catch (final IOException e) {
 			throw new DiSLREServerException(e);

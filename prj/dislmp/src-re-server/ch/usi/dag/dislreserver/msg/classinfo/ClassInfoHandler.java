@@ -6,9 +6,9 @@ import java.io.IOException;
 
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
-import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.dislreserver.shadow.ShadowClass;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 
 public class ClassInfoHandler implements RequestHandler {
@@ -24,8 +24,6 @@ public class ClassInfoHandler implements RequestHandler {
             final String classSignature = is.readUTF ();
             final String classGenericStr = is.readUTF ();
             final ShadowObject classLoader = shadowAddressSpace.getShadowObject (is.readLong ());
-
-            System.out.println ("PID: "+shadowAddressSpace.context.pid() +" CLASS INFO: "+classSignature);
 
             final ShadowClass superClass = (ShadowClass) shadowAddressSpace.getShadowObject (is.readLong ());
             shadowAddressSpace.createAndRegisterShadowClass (

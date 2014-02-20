@@ -38,12 +38,14 @@ public class DiSLClass {
 	}
 
 
-    @Before(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="spec.*.*")
+    @Before(marker = BodyMarker.class, guard = ConstructorGuard.class)
+    //@Before(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="spec.*.*")
     public static void beforeConstructor(DynamicContext dc) {
         ImmutabilityAnalysisRE.constructorStart(dc.getThis());
     }
 
-    @After(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="spec.*.*")
+    @After(marker = BodyMarker.class, guard = ConstructorGuard.class)
+    //@After(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="spec.*.*")
     public static void afterConstructor() {
     	ImmutabilityAnalysisRE.constructorEnd();
     }
@@ -58,7 +60,8 @@ public class DiSLClass {
 
     /** FIELD ACCESSES ***********************************************************/
 
-    @Before(marker=BytecodeMarker.class, args = "getfield", scope="spec.*.*")
+    @Before(marker=BytecodeMarker.class, args = "getfield")
+    //@Before(marker=BytecodeMarker.class, args = "getfield", scope="spec.*.*")
     public static void beforeFieldRead(FieldAccessStaticContext sc, DynamicContext dc, ClassContext cc) {
         
     	final Object object = dc.getStackValue(0, Object.class);
@@ -99,13 +102,11 @@ public class DiSLClass {
      * {@code Constructor.newInstance(Object...)}; hence, it only instruments the latter. This assumption is true under
      * OpenJDK and possibly other JREs.
      */
-/*
     @AfterReturning(marker = BodyMarker.class,
             scope = "java.lang.Object java.lang.reflect.Constructor.newInstance(java.lang.Object[])")
     public static void objectAllocatedThroughReflection(DynamicContext dc, AllocationSiteStaticContext sc) {
         ImmutabilityAnalysisRE.onObjectAllocation(dc.getStackValue(0, Object.class), sc.getReflectiveAllocationSite());
     }
-*/
 
 }
 

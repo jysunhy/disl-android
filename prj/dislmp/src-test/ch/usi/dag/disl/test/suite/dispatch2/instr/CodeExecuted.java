@@ -1,6 +1,7 @@
 package ch.usi.dag.disl.test.suite.dispatch2.instr;
 
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
 
 // NOTE that this class is not static anymore
@@ -37,12 +38,12 @@ public class CodeExecuted extends RemoteAnalysis {
 	}
 
 	@Override
-    public void objectFree(final ShadowObject netRef) {
+    public void objectFree(final ShadowAddressSpace shadowAddressSpace, final ShadowObject netRef) {
 		++totalFreeEvents;
 	}
 
 	@Override
-    public void atExit() {
+    public void atExit(final ShadowAddressSpace shadowAddressSpace) {
 
 		//System.out.println("Total transport time is "
 		//		+ ((System.nanoTime() - startTime) / 1000000) + " ms");

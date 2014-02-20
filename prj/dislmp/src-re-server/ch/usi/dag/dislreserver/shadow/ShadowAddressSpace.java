@@ -1,6 +1,8 @@
 package ch.usi.dag.dislreserver.shadow;
 
 import java.net.InetAddress;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.objectweb.asm.Type;
@@ -19,7 +21,7 @@ public class ShadowAddressSpace {
 
     final ConcurrentHashMap <Integer, ShadowClass> shadowClasses;
 
-    public final Context context;
+    final Context context;
 
     ShadowClass JAVA_LANG_CLASS;
 
@@ -243,6 +245,11 @@ public class ShadowAddressSpace {
     public ShadowString createShadowString (final long net_ref,
         final String value, final ShadowClass klass) {
         return new ShadowString (this, net_ref, value, klass);
+    }
+
+
+    public Iterator <Entry <Long, ShadowObject>> getShadowObjectIterator () {
+        return shadowObjects.entrySet ().iterator ();
     }
 
 

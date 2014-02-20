@@ -42,7 +42,7 @@ public class ShadowString extends ShadowObject {
         return false;
     }
 
-    /*@Override
+ /*   @Override
     public int hashCode() {
         throw new UnsupportedOperationException("overriden equals, not overriden hashCode");
     }*/

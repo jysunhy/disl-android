@@ -24,7 +24,7 @@ public final class CloseHandler implements RequestHandler {
 
 	        // invoke atExit on all analyses
 	        for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
-	            analysis.atExit ();
+	            analysis.atExit (shadowAddressSpace);
 	        }
 	    }
 	}

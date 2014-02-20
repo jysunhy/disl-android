@@ -430,7 +430,8 @@ void objFreeHook(Object* obj, Thread* self){
 		return;
 	SetAndGetNetref(obj);
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in FREE hook %s %lld", obj->clazz->descriptor, obj->uuid);
-	remote.ObjFreeEvent(obj->uuid);
+	if(!dvmIsClassObject(obj))
+		remote.ObjFreeEvent(obj->uuid);
 }
 int classfileLoadHook(const char* name, int len){
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","LOADING CLASS %s", name);

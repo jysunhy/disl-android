@@ -11,9 +11,9 @@ import java.util.Map.Entry;
 import java.util.zip.GZIPOutputStream;
 
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.dislreserver.shadow.ShadowClass;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
-import ch.usi.dag.dislreserver.shadow.ShadowObjectTable;
 import ch.usi.dag.dislreserver.shadow.ShadowString;
 
 public class ImmutabilityAnalysis extends RemoteAnalysis {
@@ -27,11 +27,11 @@ public class ImmutabilityAnalysis extends RemoteAnalysis {
     private static ThreadLocal<Deque<ShadowObject>> objectsUnderConstruction = new ThreadLocal<Deque<ShadowObject>>() {
     	@Override
     	protected Deque<ShadowObject> initialValue() {
-    		
+
     		return new ArrayDeque<ShadowObject>();
     	}
     };
-    
+
     public ImmutabilityAnalysis() {
         PrintStream tmp = null;
 
@@ -39,16 +39,16 @@ public class ImmutabilityAnalysis extends RemoteAnalysis {
             tmp = new PrintStream(new GZIPOutputStream(
                 new BufferedOutputStream(new FileOutputStream(dumpFile)))
             );
-        } catch(IOException e) {
+        } catch(final IOException e) {
             e.printStackTrace();
         }
 
         out = tmp;
     }
 
-    private boolean isObjectUnderConstruction(ShadowObject object) {
-		
-        for(Object ouc : objectsUnderConstruction.get()) {
+    private boolean isObjectUnderConstruction(final ShadowObject object) {
+
+        for(final Object ouc : objectsUnderConstruction.get()) {
             if(ouc == object) {
                 return true;
             }
@@ -57,78 +57,78 @@ public class ImmutabilityAnalysis extends RemoteAnalysis {
         return false;
 	}
 
-	public static void constructorStart(ShadowObject forObj) {
+	public static void constructorStart(final ShadowObject forObj) {
 		objectsUnderConstruction.get().push(forObj);
 	}
 
 	public static void constructorEnd() {
-	    
-		ShadowObject obj = objectsUnderConstruction.get().pollFirst();
-		
+
+		final ShadowObject obj = objectsUnderConstruction.get().pollFirst();
+
 		// sanity checking
 		if(obj == null) {
 			throw new RuntimeException("De-sync in constructor events");
 		}
 	}
-    
+
 	public void onObjectAllocation(
-	        ShadowObject object,
-			ShadowString allocationSite
+	        final ShadowObject object,
+			final ShadowString allocationSite
 	    ) {
 
-		ImmutabilityShadowStateHolder state = ImmutabilityShadowStateHolder.get(object);
+		final ImmutabilityShadowStateHolder state = ImmutabilityShadowStateHolder.get(object);
 		state.updateObjectStateAllSite(object, allocationSite.toString());
 	}
 
     public void onFieldRead(
-            ShadowObject object,
-            ShadowClass ownerClass,
-            ShadowString fieldId
+            final ShadowObject object,
+            final ShadowClass ownerClass,
+            final ShadowString fieldId
         ) {
 
     	// object cannot be null - checked on the server - analysis problem
-        ImmutabilityShadowStateHolder state = ImmutabilityShadowStateHolder.get(object);
+        final ImmutabilityShadowStateHolder state = ImmutabilityShadowStateHolder.get(object);
         state.requestObjectState(object).onFieldRead(ownerClass, fieldId.toString(), isObjectUnderConstruction(object));
     }
 
 	public void onFieldWrite(
-            ShadowObject object,
-            ShadowClass ownerClass,
-            ShadowString fieldId
+            final ShadowObject object,
+            final ShadowClass ownerClass,
+            final ShadowString fieldId
         ) {
 
 		// object cannot be null - checked on the server - analysis problem
-		ImmutabilityShadowStateHolder state = ImmutabilityShadowStateHolder.get(object);
+		final ImmutabilityShadowStateHolder state = ImmutabilityShadowStateHolder.get(object);
         state.requestObjectState(object).onFieldWrite(ownerClass, fieldId.toString(), isObjectUnderConstruction(object));
     }
 
-	private void dumpShadowObjectState(ImmutabilityShadowStateHolder issh) {
-		
+	private void dumpShadowObjectState(final ImmutabilityShadowStateHolder issh) {
+
 		if(issh != null) {
-			
-			ImmutabilityShadowObjectState isos = issh.getObjectState();
-			
+
+			final ImmutabilityShadowObjectState isos = issh.getObjectState();
+
 			if(isos != null) {
 				isos.dump(out);
 			}
         }
 	}
-	
+
 	@Override
-	public void objectFree(ShadowObject so) {
-	    
-		ImmutabilityShadowStateHolder issh = so.getState(ImmutabilityShadowStateHolder.class);
+	public void objectFree(final ShadowAddressSpace shadowAddressSpace, final ShadowObject so) {
+
+		final ImmutabilityShadowStateHolder issh = so.getState(ImmutabilityShadowStateHolder.class);
 		dumpShadowObjectState(issh);
 	}
 
 	@Override
-	public void atExit() {
+	public void atExit(final ShadowAddressSpace shadowAddressSpace) {
 
-		Iterator<Entry<Long, ShadowObject>> iter = ShadowObjectTable.getIterator();
-		
+		final Iterator<Entry<Long, ShadowObject>> iter = shadowAddressSpace.getShadowObjectIterator();
+
         while (iter.hasNext()) {
-            
-        	ImmutabilityShadowStateHolder issh = iter.next().getValue().getState(ImmutabilityShadowStateHolder.class);
+
+        	final ImmutabilityShadowStateHolder issh = iter.next().getValue().getState(ImmutabilityShadowStateHolder.class);
         	dumpShadowObjectState(issh);
         }
 
