@@ -38,12 +38,14 @@ public class DiSLClass {
 	}
 
 
-    @Before(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="spec.*.*")
+    @Before(marker = BodyMarker.class, guard = ConstructorGuard.class)
+    //@Before(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="spec.*.*")
     public static void beforeConstructor(DynamicContext dc) {
         ImmutabilityAnalysisRE.constructorStart(dc.getThis());
     }
 
-    @After(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="spec.*.*")
+    @After(marker = BodyMarker.class, guard = ConstructorGuard.class)
+    //@After(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="spec.*.*")
     public static void afterConstructor() {
     	ImmutabilityAnalysisRE.constructorEnd();
     }
@@ -58,7 +60,8 @@ public class DiSLClass {
 
     /** FIELD ACCESSES ***********************************************************/
 
-    @Before(marker=BytecodeMarker.class, args = "getfield", scope="spec.*.*")
+    @Before(marker=BytecodeMarker.class, args = "getfield")
+    //@Before(marker=BytecodeMarker.class, args = "getfield", scope="spec.*.*")
     public static void beforeFieldRead(FieldAccessStaticContext sc, DynamicContext dc, ClassContext cc) {
         
     	final Object object = dc.getStackValue(0, Object.class);
@@ -68,7 +71,8 @@ public class DiSLClass {
     	}
     }
 
-    @Before(marker = BytecodeMarker.class, args = "putfield", scope="spec.*.*")
+    @Before(marker = BytecodeMarker.class, args = "putfield")
+    //@Before(marker = BytecodeMarker.class, args = "putfield", scope="spec.*.*")
     public static void beforeFieldWrite(FieldAccessStaticContext sc, DynamicContext dc, ClassContext cc) {
         
     	final Object object = dc.getStackValue(1, Object.class);
@@ -86,7 +90,8 @@ public class DiSLClass {
      * Note that this snippet requires that bytecode verification is switched off (<code>-noverify</code>) as the newly
      * created instances are passed to the runtime <em>prior</em> to initialization.
      */
-    @AfterReturning(marker = BytecodeMarker.class, args = "new", scope="spec.*.*")
+    @AfterReturning(marker = BytecodeMarker.class, args = "new")
+    //@AfterReturning(marker = BytecodeMarker.class, args = "new", scope="spec.*.*")
     public static void objectAllocated(DynamicContext dc, AllocationSiteStaticContext sc, MethodStaticContext msc) {
         ImmutabilityAnalysisRE.onObjectAllocation(dc.getStackValue(0, Object.class), sc.getAllocationSite());
     }

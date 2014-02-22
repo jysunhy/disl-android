@@ -119,15 +119,15 @@ public class Worker extends Thread {
                          */
 
                         zos.putNextEntry (nze);
-                        //byte [] code = bytecodeMap.get (className.replace ('/', '.'));
-                        byte [] code = null;
+                        byte [] code = bytecodeMap.get (className.replace ('/', '.'));
+                        //byte [] code = null;
                         final ByteArrayInputStream bin;
                         if (code == null) {
                             //System.out.println ("new class " + className + " found "+writePath);
                             if (className.equals ("java/text/SimpleDateFormat")) {
                                 final File tmp = new File ("lib/SimpleDateFormat.class");
                                 is = new FileInputStream (tmp);
-                                System.out.println ("new class " + className + " found "+writePath);
+                                //System.out.println ("new class " + className + " found "+writePath);
                             }
 
                             final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
@@ -142,6 +142,14 @@ public class Worker extends Thread {
                             if (code == null) {
                                 code = bout.toByteArray ();
                             }
+
+                            final byte [] ori = bytecodeMap.get (className.replace ('/', '.').replace ('/', '.'));
+                            if(ori != null) {
+                                if(!Arrays.equals (ori, code)){
+                                    System.out.println ("SAME NAME, DIFFERENT CODE FOR "+className.replace ('/', '.'));
+                                }
+                            }
+
                             bytecodeMap.put (className.replace ('/', '.'), code);
                         } else {
                             System.out.println ("use class "
@@ -168,8 +176,8 @@ public class Worker extends Thread {
                 // System.out.println ("ignored jar entry: " + ze);
 
                 while ((bytesRead = is.read (buffer)) != -1) {
-                    System.out.println ("Read " + bytesRead
-                        + " byte(s) from jar file");
+                    /*System.out.println ("Read " + bytesRead
+                        + " byte(s) from jar file");*/
                     zos.write (buffer, 0, bytesRead);
                 }
                 zos.closeEntry ();
@@ -178,6 +186,8 @@ public class Worker extends Thread {
         }
 
         if (writePath.contains ("inspur")) {
+
+
             /*// if(true){
             final File red = new File ("bin/ch/usi/dag/dislre/AREDispatch.class");
             final FileInputStream fis = new FileInputStream (red);
@@ -187,17 +197,17 @@ public class Worker extends Thread {
             }
             zos.closeEntry ();
             fis.close ();*/
-            final JarFile instrlib = new JarFile (
+            final JarFile speclib = new JarFile (
                 specLibPath);
-            final Enumeration <JarEntry> i_entries = instrlib.entries ();
-            while (i_entries.hasMoreElements ()) {
+            final Enumeration <JarEntry> spec_entries = speclib.entries ();
+            while (spec_entries.hasMoreElements ()) {
 
-                final ZipEntry cur = i_entries.nextElement ();
+                final ZipEntry cur = spec_entries.nextElement ();
                 final String curName = cur.getName ();
                 if (curName.startsWith ("META-INF")) {
                     continue;
                 }
-                final InputStream curis = instrlib.getInputStream (cur);
+                final InputStream curis = speclib.getInputStream (cur);
                 if (!cur.isDirectory ()) {
                     if (curName.endsWith (".class")) {
                         try {
@@ -221,6 +231,14 @@ public class Worker extends Thread {
                             if (code == null) {
                                 code = bout.toByteArray ();
                             }
+
+                            final byte [] ori = bytecodeMap.get (className.replace ('/', '.'));
+                            if(ori != null) {
+                                if(!Arrays.equals (ori, code)){
+                                    System.out.println ("SAME NAME, DIFFERENT CODE FOR "+className);
+                                }
+                            }
+
                             bytecodeMap.put (className.replace ('/', '.'), code);
 
                             final ByteArrayInputStream bin = new ByteArrayInputStream (code);
@@ -246,7 +264,10 @@ public class Worker extends Thread {
                     zos.closeEntry ();
                 }
             }
-            instrlib.close ();
+            speclib.close ();
+
+
+
         }
 
         // if (writePath.equals ("instrumented_LongTest2.apk")) {
@@ -254,6 +275,8 @@ public class Worker extends Thread {
         if (writePath.equals ("instrumented_core.jar")) {
         //if(false){
             // if(true){
+
+
 
             final File bp1 = new File ("bin/ch/usi/dag/disl/dynamicbypass/DynamicBypass.class");
             final FileInputStream fisbp1 = new FileInputStream (bp1);
@@ -308,6 +331,7 @@ public class Worker extends Thread {
             zos.closeEntry ();
             fis.close ();
 
+
             final JarFile instrlib = new JarFile (
                 instrLibPath);
             final Enumeration <JarEntry> i_entries = instrlib.entries ();
@@ -332,6 +356,14 @@ public class Worker extends Thread {
                                 //zos.write (buffer, 0, bytesRead);
                             }
                             zos.write (boutinstr.toByteArray (),0,boutinstr.size());
+
+                            final byte [] ori = bytecodeMap.get (curClassName.replace ('/', '.').replace ('/', '.'));
+                            if(ori != null) {
+                                if(!Arrays.equals (ori, boutinstr.toByteArray ())){
+                                    System.out.println ("SAME NAME, DIFFERENT CODE FOR "+curClassName.replace ('/', '.'));
+                                }
+                            }
+
                             bytecodeMap.put (curClassName.replace ('/', '.'), boutinstr.toByteArray ());
                             zos.closeEntry ();
                         } catch (final Exception e) {
@@ -351,6 +383,7 @@ public class Worker extends Thread {
                 }
             }
             instrlib.close ();
+
         }
         zos.finish ();
         zos.close ();
@@ -408,15 +441,17 @@ public class Worker extends Thread {
                         {
                             instrClass = bytecodeMap.get (fullPath.toString ());
                             if (instrClass != null) {
-                                System.out.println ("Found class "
-                                    + fullPath.toString () + " in map");
+                                /*System.out.println ("Found class "
+                                    + fullPath.toString () + " in map");*/
                             } else {
                                 System.err.println ("The class "
                                     + fullPath.toString () + " has not been loaded");
                             }
 
                         } else if (EMPTY_INSTR
-                        //|| fileName.equals ("framework.jar")|| fileName.equals ("services.jar")
+                        //|| fileName.equals ("framework.jar")
+                        //|| fileName.equals ("services.jar")
+                        //|| !fileName.equals ("core.jar")
                         )
                         {
 

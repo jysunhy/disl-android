@@ -33,6 +33,14 @@ static void Dalvik_java_lang_VMThread_create(const u4* args, JValue* pResult)
     Object* threadObj = (Object*) args[0];
     s8 stackSize = GET_ARG_LONG(args, 1);
 
+	bool tmp = dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass);
+	if(tmp){
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is true in %d", __FUNCTION__,getpid());
+	}else{
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is false in %d", __FUNCTION__,getpid());
+	}
+	dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
+
     /* copying collector will pin threadObj for us since it was an argument */
     dvmCreateInterpThread(threadObj, (int) stackSize);
     RETURN_VOID();

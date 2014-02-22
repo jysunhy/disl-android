@@ -412,7 +412,7 @@ class ReProtocol{
 		bool Send(const char* data, int length){
 			ScopedMutex mtx(&gl_mtx);
 
-			ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
+			//ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			//for(int i = 0; i < length; i++){
 			//	printf("%d:%d ", i, (int)data[i]);
 			//}
@@ -425,14 +425,14 @@ class ReProtocol{
 			//}
 			if(!isClosed)
 				sendBuf->Enqueue(data,length);
-			ALOG(LOG_DEBUG, "PACKET", "PACK BUFF FIRST 10 BYTES: \n\t\t: %d %d %d %d, %d, %d %d %d %d", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
+			ALOG(LOG_DEBUG, "PACKET", "FIRST 10 BYTES:\t\t: %d %d %d %d, %d, %d %d %d %d", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
 			//res = sock->Send(data, length);
 
 			//char close = MSG_CLOSE;
 			//sock.Send(&close, 1);
 
 			//LOGASSERT(res, "error in send packets");
-			ALOG(LOG_DEBUG,"SHADOW","out %s",__FUNCTION__);
+			//ALOG(LOG_DEBUG,"SHADOW","out %s",__FUNCTION__);
 			return true;
 		}
 		bool Send(const char* data, int length, const char* lastdata, int lastlength){
@@ -467,7 +467,7 @@ class ReProtocol{
 				sendBuf->Enqueue(data,length);
 				sendBuf->Enqueue(lastdata, lastlength);
 			}
-			ALOG(LOG_DEBUG, "PACKET", "PACK BUFF FIRST 5 BYTES: \n\t\t: %d %d %d %d, %d", data[0], data[1], data[2], data[3], data[4]);
+			ALOG(LOG_DEBUG, "PACKET", "FIRST 5 BYTES:\t\t: %d %d %d %d, %d", data[0], data[1], data[2], data[3], data[4]);
 			return true;
 		}
 		pthread_mutex_t gl_mtx;

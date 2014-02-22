@@ -769,6 +769,7 @@ bool dvmPrepMainThread()
      */
     dvmSetFieldObject(threadObj, gDvm.offJavaLangThread_vmThread,
         vmThreadObj);
+	dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, true);
 
     thread->threadObj = threadObj;
 
@@ -1151,6 +1152,16 @@ static bool createFakeEntryFrame(Thread* thread)
 
     assert(thread->threadId == kMainThreadId);      /* main thread only */
 
+	/*
+	bool tmp = dvmGetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass);
+	if(tmp){
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is true in %d:%d", __FUNCTION__,getpid(),thread->threadId);
+	}else{
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is false in %d:%d", __FUNCTION__,getpid(),thread->threadId);
+	}
+	dvmSetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
+	*/
+
     if (!dvmPushJNIFrame(thread, gDvm.methDalvikSystemNativeStart_main))
         return false;
 
@@ -1237,10 +1248,8 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
     Thread* self = dvmThreadSelf();
 	//gDvm.isShadow=false;
 	ALOG(LOG_DEBUG,"HAIYANG","IN %s, pid:%d tid:%d name:%s", __FUNCTION__,getpid(),self->threadId, dvmGetThreadName(self).c_str());
-	if(dvmGetThreadName(self)=="main"){
-		ALOG(LOG_DEBUG,"HAIYANG","setting main to isShadow: %s", gDvm.isShadow?"true":"false");
-		dvmSetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
-	}
+	ALOG(LOG_DEBUG,"HAIYANG","setting self to isShadow: %s", gDvm.isShadow?"true":"false");
+	dvmSetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
 	dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
     int stackSize;
     if (reqStackSize == 0)

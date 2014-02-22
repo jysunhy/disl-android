@@ -678,6 +678,9 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
          */
         Thread* thread = dvmThreadSelf();
         thread->systemTid = dvmGetSysThreadId();
+		bool bypass = dvmGetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass);
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s, pid:%d tid:%d name:%s, bypass: %s", __FUNCTION__,getpid(), thread->threadId, dvmGetThreadName(thread).c_str(), bypass?"true":"false");
+		dvmSetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass, true);
 
         /* configure additional debug options */
         enableDebugFeatures(debugFlags);
@@ -730,10 +733,22 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
 		}
 		ALOG(LOG_DEBUG,"HAIYANG","PROCESS START:\n\t\t\t %s isshadow in new process %d to %s", __FUNCTION__, getpid(), gDvm.isShadow?"true":"false");
 
+    gDvm.shadowHook = NULL;
+    gDvm.newObjHook = NULL;
+	gDvm.freeObjHook = NULL;
+	gDvm.threadEndHook = NULL;
+	gDvm.vmStartHook = NULL;
+	gDvm.vmEndHook = NULL;
+	gDvm.vmInitHook = NULL;
+	gDvm.classfileLoadHook = NULL;
+	gDvm.classInitHook = NULL;
+
 		if(gDvm.freeObjHook==NULL)
 			ALOG(LOG_DEBUG,"HAIYANG","FREE OBJ HOOK IS NOT SET");
 		else
 			ALOG(LOG_DEBUG,"HAIYANG","FREE OBJ HOOK IS SET");
+
+
 
 			
 		if(!isSystemServer)

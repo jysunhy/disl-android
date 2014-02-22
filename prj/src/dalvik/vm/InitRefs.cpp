@@ -486,13 +486,22 @@ bool dvmFindRequiredClassesAndMembers() {
      * that case, the call is made from DexPrepare.c.
      */
 
-    return initClassReferences()
-        && initFieldOffsets()
-        && initConstructorReferences()
-        && initDirectMethodReferences()
-        && initVirtualMethodOffsets()
-        && initFinalizerReference()
-        && verifyStringOffsets();
+	ALOG(LOG_DEBUG,"HAIYANG","STEP 1: initClassReferences");
+    initClassReferences();
+	ALOG(LOG_DEBUG,"HAIYANG","STEP 2: initClassReferences");
+    initFieldOffsets();
+	ALOG(LOG_DEBUG,"HAIYANG","STEP 3: initClassReferences");
+    initConstructorReferences();
+	ALOG(LOG_DEBUG,"HAIYANG","STEP 4: initClassReferences");
+	initDirectMethodReferences();
+	ALOG(LOG_DEBUG,"HAIYANG","STEP 5: initClassReferences");
+    initVirtualMethodOffsets();
+	ALOG(LOG_DEBUG,"HAIYANG","STEP 6: initClassReferences");
+    initFinalizerReference();
+	ALOG(LOG_DEBUG,"HAIYANG","STEP 7: initClassReferences");
+    verifyStringOffsets();
+
+	return true;
 }
 
 /* (documented in header) */

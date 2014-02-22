@@ -8,24 +8,24 @@
 #include "Socket.h"
 #include <sched.h>
 
-ReProtocol remote("/dev/socket/instrument",11218);
+static ReProtocol remote("/dev/socket/instrument",11218);
 
-bool isZygote = true;
+static bool isZygote = true;
 
-Socket *sock = NULL;
+static Socket *sock = NULL;
 
-Buffer* zygote_buff;
+static Buffer* zygote_buff;
 //static pthread_t *send_thread;
 //static pthread_t send_zygote_thread;
 
-pthread_mutex_t gl_mtx;
+static pthread_mutex_t gl_mtx;
 static volatile jint ot_class_id = 1;
 static volatile jlong ot_object_id = 1;
 static volatile jshort method_id = 1;
 
 
 //bool gl_bypass=true;
-bool isDecided = false;
+static bool isDecided = false;
 
 //jint add(JNIEnv *env, jobject thiz, jint x, jint y){
 //	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in shadowvm native %s", __FUNCTION__);
@@ -156,6 +156,7 @@ void analysisStart__S
 (JNIEnv * jni_env, jclass this_class, jshort analysis_method_id) {
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis start for method %d, tid:%d", (int)analysis_method_id,dvmThreadSelf()->threadId);
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, 0, analysis_method_id);
+	dvmDumpAllThreads(false);
 }
 
 void analysisStart__SB
@@ -163,6 +164,7 @@ void analysisStart__SB
  jbyte ordering_id) {
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis start for method %d with ordering %d", (int)analysis_method_id, (int)ordering_id);
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, ordering_id, analysis_method_id);
+	dvmDumpAllThreads(false);
 }
 void OpenConnection(){
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: open connection");
@@ -398,7 +400,7 @@ static int registerNativeMethods(JNIEnv* env, const char* className,
 
 }
 
-static int registerNatives(JNIEnv *env){
+int registerShadowNatives(JNIEnv *env){
 
 	if (!registerNativeMethods(env, classPathName,
 				methods, sizeof(methods)/sizeof(methods[0])))
@@ -533,7 +535,7 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 
 	env = uenv.env;
 
-	if (registerNatives(env) != JNI_TRUE){
+	if (registerShadowNatives(env) != JNI_TRUE){
 
 		goto bail;
 	}
@@ -595,7 +597,7 @@ jint ShadowLib_OnLoad(JavaVM* vm, void* reserved){
 
 	env = uenv.env;
 
-	if (registerNatives(env) != JNI_TRUE){
+	if (registerShadowNatives(env) != JNI_TRUE){
 
 		goto bail;
 	}

@@ -6627,7 +6627,7 @@ OffsettedItem	dexgen/src/com/android/dexgen/dex/file/OffsettedItem.java	/^    pu
 OffsettedItem	dexgen/src/com/android/dexgen/dex/file/OffsettedItem.java	/^public abstract class OffsettedItem extends Item$/;"	c
 OffsettedItem	dx/src/com/android/dx/dex/file/OffsettedItem.java	/^    public OffsettedItem(int alignment, int writeSize) {$/;"	m	class:OffsettedItem
 OffsettedItem	dx/src/com/android/dx/dex/file/OffsettedItem.java	/^public abstract class OffsettedItem extends Item$/;"	c
-OnForkEvent	vm/shadowlib/ReProtocol.h	/^		bool OnForkEvent(int child){$/;"	f	class:ReProtocol
+OnForkEvent	vm/shadowlib/ReProtocol.h	/^		bool OnForkEvent(int parent){$/;"	f	class:ReProtocol
 OnLoadFunc	vm/Native.cpp	/^typedef int (*OnLoadFunc)(JavaVM*, void*);$/;"	t	file:
 OnLoadState	vm/Native.cpp	/^enum OnLoadState {$/;"	g	file:
 OneLocalsArray	dx/src/com/android/dx/cf/code/OneLocalsArray.java	/^    public OneLocalsArray(int maxLocals) {$/;"	m	class:OneLocalsArray
@@ -16432,7 +16432,7 @@ get_bits	vm/shadowlib/Netref.h	/^static inline uint64_t get_bits(uint64_t from, 
 get_new_size	dexopt/OptMain.cpp	/^int get_new_size(int original) {$/;"	f
 gl_mtx	vm/shadowlib/Lock.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:LockBuffer
 gl_mtx	vm/shadowlib/Map.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:Map
-gl_mtx	vm/shadowlib/ReAgent.cpp	/^pthread_mutex_t gl_mtx;$/;"	v
+gl_mtx	vm/shadowlib/ReAgent.cpp	/^static pthread_mutex_t gl_mtx;$/;"	v	file:
 gl_mtx	vm/shadowlib/ReProtocol.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:ReProtocol
 go	tests/051-thread/src/Main.java	/^    public static void go() {$/;"	m	class:Main
 graphFileName	tools/dmtracedump/TraceDump.c	/^    const char* graphFileName;$/;"	m	struct:Options	file:
@@ -17570,7 +17570,7 @@ isDalvikRegisterClobbered	vm/compiler/codegen/arm/LocalOptimizations.cpp	/^stati
 isDalvikThread	vm/Thread.cpp	/^static bool isDalvikThread(pid_t tid) {$/;"	f	file:
 isDataChunk	vm/analysis/VfyBasicBlock.cpp	/^static bool isDataChunk(u2 insn)$/;"	f	file:
 isDataSectionType	libdex/DexSwapVerify.cpp	/^static bool isDataSectionType(int mapType) {$/;"	f	file:
-isDecided	vm/shadowlib/ReAgent.cpp	/^bool isDecided = false;$/;"	v
+isDecided	vm/shadowlib/ReAgent.cpp	/^static bool isDecided = false;$/;"	v	file:
 isDeclaredSynchronized	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static boolean isDeclaredSynchronized(int flags) {$/;"	m	class:AccessFlags
 isDeclaredSynchronized	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static boolean isDeclaredSynchronized(int flags) {$/;"	m	class:AccessFlags
 isDefinitionMoveParam	dx/src/com/android/dx/ssa/back/RegisterAllocator.java	/^    protected boolean isDefinitionMoveParam(int reg) {$/;"	m	class:RegisterAllocator
@@ -17716,7 +17716,7 @@ isWeakInternedString	vm/alloc/CardTable.cpp	/^static bool isWeakInternedString(c
 isWeakReference	vm/alloc/Copying.cpp	/^static int isWeakReference(const Object *obj)$/;"	f	file:
 isWeakReference	vm/alloc/MarkSweep.cpp	/^static bool isWeakReference(const Object *obj)$/;"	f	file:
 isWordChar	docs/prettify.js	/^  function isWordChar(ch) {$/;"	f
-isZygote	vm/shadowlib/ReAgent.cpp	/^bool isZygote = true;$/;"	v
+isZygote	vm/shadowlib/ReAgent.cpp	/^static bool isZygote = true;$/;"	v	file:
 is_valid	vm/shadowlib/Socket.h	/^  bool is_valid() const { return m_sock != -1; }$/;"	f	class:Socket
 is_zeroed	vm/alloc/TEST/HeapBitmapTest/main.c	/^bool is_zeroed(const HeapBitmap *hb)$/;"	f
 itemCount	dexgen/src/com/android/dexgen/dex/file/MapItem.java	/^    private final int itemCount;$/;"	f	class:MapItem	file:
@@ -18289,7 +18289,7 @@ kMaxDepSize	vm/analysis/DexPrepare.cpp	/^static const size_t kMaxDepSize = 4 * 4
 kMaxDiffBits	vm/analysis/RegisterMap.cpp	60;"	d	file:
 kMaxEOCDSearch	libdex/ZipArchive.cpp	166;"	d	file:
 kMaxGcPointGap	vm/analysis/RegisterMap.cpp	57;"	d	file:
-kMaxHeapSize	vm/Init.cpp	36;"	d	file:
+kMaxHeapSize	vm/Init.cpp	37;"	d	file:
 kMaxHoistDistance	vm/compiler/codegen/arm/ArmLIR.h	/^    kMaxHoistDistance,$/;"	e	enum:ArmTargetOptHints
 kMaxHoistDistance	vm/compiler/codegen/x86/X86LIR.h	/^   kMaxHoistDistance,$/;"	e	enum:X86TargetOptHints
 kMaxLine	vm/StdioConverter.cpp	30;"	d	file:
@@ -18304,8 +18304,8 @@ kMessageHeaderLen	vm/AllocTracker.cpp	/^const int kMessageHeaderLen = 15;$/;"	v
 kMethodInlining	vm/compiler/codegen/Optimizer.h	/^    kMethodInlining,$/;"	e	enum:optControlVector
 kMethodJit	vm/compiler/codegen/Optimizer.h	/^    kMethodJit,$/;"	e	enum:optControlVector
 kMinDepSize	vm/analysis/DexPrepare.cpp	/^static const size_t kMinDepSize = 4 * 4;$/;"	v	file:
-kMinHeapSize	vm/Init.cpp	35;"	d	file:
-kMinHeapStartSize	vm/Init.cpp	34;"	d	file:
+kMinHeapSize	vm/Init.cpp	36;"	d	file:
+kMinHeapStartSize	vm/Init.cpp	35;"	d	file:
 kMinStackSize	vm/Thread.h	78;"	d
 kMirOpCheckInlinePrediction	vm/compiler/CompilerIR.h	/^    kMirOpCheckInlinePrediction,        \/\/ Gen checks for predicted inlining$/;"	e	enum:ExtendedMIROpcode
 kMirOpFirst	vm/compiler/CompilerIR.h	/^    kMirOpFirst = kNumPackedOpcodes,$/;"	e	enum:ExtendedMIROpcode
@@ -21548,8 +21548,8 @@ registerMapMode	vm/Globals.h	/^    RegisterMapMode     registerMapMode;$/;"	m	st
 registerMapStats	vm/Globals.h	/^    void*       registerMapStats;$/;"	m	struct:DvmGlobals
 registerMethod	vm/shadowlib/ReAgent.cpp	/^jshort registerMethod$/;"	f
 registerNativeMethods	vm/shadowlib/ReAgent.cpp	/^static int registerNativeMethods(JNIEnv* env, const char* className,$/;"	f	file:
-registerNatives	vm/shadowlib/ReAgent.cpp	/^static int registerNatives(JNIEnv *env){$/;"	f	file:
 registerObject	vm/Debugger.cpp	/^static ObjectId registerObject(const Object* obj, RegistryType type, bool reg)$/;"	f	file:
+registerShadowNatives	vm/shadowlib/ReAgent.cpp	/^int registerShadowNatives(JNIEnv *env){$/;"	f
 registerSpace	vm/interp/Jit.h	/^    int* registerSpace;         \/* copy of register state *\/$/;"	m	struct:ShadowSpace
 registerSpaceSize	vm/interp/Jit.h	/^    int registerSpaceSize;      \/* current size of register space *\/$/;"	m	struct:ShadowSpace
 registerSystemNatives	vm/Init.cpp	/^static bool registerSystemNatives(JNIEnv* pEnv)$/;"	f	file:
@@ -22348,7 +22348,7 @@ snapshot	dx/src/com/android/dx/dex/code/LocalList.java	/^        public void sna
 snooze	tests/030-bad-finalizer/src/BadFinalizer.java	/^    public static void snooze(int ms) {$/;"	m	class:BadFinalizer
 snooze	tests/036-finalizer/src/Main.java	/^    private static void snooze(int ms) {$/;"	m	class:Main	file:
 snooze	tests/048-server-socket/src/Main.java	/^    private static void snooze(int sec) {$/;"	m	class:Main	file:
-sock	vm/shadowlib/ReAgent.cpp	/^Socket *sock = NULL;$/;"	v
+sock	vm/shadowlib/ReAgent.cpp	/^static Socket *sock = NULL;$/;"	v	file:
 socketLock	vm/jdwp/JdwpPriv.h	/^    pthread_mutex_t socketLock;     \/* socket synchronization *\/$/;"	m	class:JdwpNetStateBase
 socketTransport	vm/jdwp/JdwpAdb.cpp	/^static const JdwpTransport socketTransport = {$/;"	v	file:
 socketTransport	vm/jdwp/JdwpSocket.cpp	/^static const JdwpTransport socketTransport = {$/;"	v	file:
@@ -24759,7 +24759,7 @@ zorch4	dx/tests/056-dex-call-interface/Zorch.java	/^    public long zorch4();$/;
 zorch4	dx/tests/066-dex-try-catch-rethrow/Blort.java	/^    public static Object zorch4(int x) {$/;"	m	class:Blort
 zorch5	dx/tests/066-dex-try-catch-rethrow/Blort.java	/^    public static Object zorch5(int x) {$/;"	m	class:Blort
 zygote	vm/Globals.h	/^    bool        zygote;$/;"	m	struct:DvmGlobals
-zygote_buff	vm/shadowlib/ReAgent.cpp	/^Buffer* zygote_buff;$/;"	v
+zygote_buff	vm/shadowlib/ReAgent.cpp	/^static Buffer* zygote_buff;$/;"	v	file:
 ~BaseQueue	vm/shadowlib/ReQueue.h	/^		virtual ~BaseQueue(){$/;"	f	class:BaseQueue
 ~Buffer	vm/shadowlib/Buffer.h	/^		~Buffer(){$/;"	f	class:Buffer
 ~LockBuffer	vm/shadowlib/Lock.h	/^		~LockBuffer(){$/;"	f	class:LockBuffer

@@ -30,6 +30,7 @@
 #include "test/Test.h"
 #include "mterp/Mterp.h"
 #include "Hash.h"
+#include "shadowlib/ShadowLib.h"
 
 #define kMinHeapStartSize   (1*1024*1024)
 #define kMinHeapSize        (2*1024*1024)
@@ -1299,6 +1300,7 @@ std::string dvmStartup(int argc, const char* const argv[],
         return "dvmProfilingStartup failed";
     }
 
+
     /*
      * Create a table of methods for which we will substitute an "inline"
      * version for performance.
@@ -1333,12 +1335,16 @@ std::string dvmStartup(int argc, const char* const argv[],
         return "couldn't initialized java.lang.Class";
     }
 
+
     /*
      * Register the system native methods, which are registered through JNI.
      */
     if (!registerSystemNatives(pEnv)) {
         return "couldn't register system natives";
     }
+	ALOG(LOG_DEBUG,"INITNATIVE","BEFORE CALL REGISTER SHADOW NATIVES");
+	registerShadowNatives(pEnv);
+	ALOG(LOG_DEBUG,"INITNATIVE","AFTER CALL REGISTER SHADOW NATIVES");
 
     /*
      * Do some "late" initialization for the memory allocator.  This may

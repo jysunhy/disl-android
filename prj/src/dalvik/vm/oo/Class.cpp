@@ -4240,7 +4240,7 @@ bool dvmIsClassInitializing(const ClassObject* clazz)
  */
 bool dvmInitClass(ClassObject* clazz)
 {
-	//ALOG(LOG_DEBUG,"CLASSLOAD","IN %s: descriptor: %s",__FUNCTION__, clazz->descriptor);
+	ALOG(LOG_DEBUG,"CLASSLOAD","IN %s: descriptor: %s",__FUNCTION__, clazz->descriptor);
 	pthread_mutex_lock(&gDvm.s_mtx);
 	if(gDvm.classInitHook)
 		gDvm.classInitHook(clazz);
