@@ -44,6 +44,8 @@ int map_value[300];
 int pids[MAX_PROCESS];
 int psize = 0;
 char* pnames[MAX_PROCESS];
+char* observedNames[MAX_PROCESS];
+int observedCnt = 0;
 
 char bufname[1024];
 
@@ -92,7 +94,7 @@ void * my_thread (void *arg)
 				}else
 					break;
 			}
-			
+
 
 			while(true){
 				retcode = recv(myClient_s, buf, BUF_SIZE, 0);
@@ -108,7 +110,7 @@ void * my_thread (void *arg)
 					break;
 				}
 				//*/
-				
+
 				/*
 				   char tmp[10241];
 				   int i = 0;
@@ -135,16 +137,17 @@ void * my_thread (void *arg)
 			recv(myClient_s, &pid, sizeof(int), 0);
 			ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "GET MAPPING PID: %d to NAME: %s", pid, pname);
 			int tmp = 1;
-				if(!strcmp(pname,"com.inspur.test")){
+			int i = 0;
+			for(; i < observedCnt; i++){
+				if(!strcmp(pname, observedNames[i])){
+					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "PROCESS NAME: %s is OBSERVED", pname);
 					tmp = 0;
 				}
-				if(!strcmp(pname,"com.android.contacts")){
-					tmp = 0;
-				}
-				if(tmp)
-					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED, SENDING BACK 1", pid);
-				else
-					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED and ISTARGET, SENDING BACK 0", pid);
+			}
+			if(tmp)
+				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED, SENDING BACK 1", pid);
+			else
+				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED and ISTARGET, SENDING BACK 0", pid);
 
 			send(myClient_s,&tmp,sizeof(int),0);
 			if(pid != -1) {
@@ -187,6 +190,9 @@ void * my_thread (void *arg)
 					tmp = 0;
 				}
 				if(!strcmp(pnames[i],"com.android.contacts")){
+					tmp = 0;
+				}
+				if(!strcmp(pnames[i],"system_server")){
 					tmp = 0;
 				}
 				if(tmp)
@@ -328,6 +334,59 @@ int main (void)
 
 
 	pthread_attr_init (&attr);
+
+	int sock_host = -1;
+	int retcode;
+	while(true) {
+		sock_host = socket_network_client(SERVER_IP, HOST_PORT, SOCK_STREAM);
+		if(sock_host <= 0){
+			ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
+			sleep(5);
+		}else
+			break;
+	}
+	int flag = 1;
+	flag = htonl(flag);
+	retcode = send(sock_host, &flag, sizeof(int), 0);
+	flag = 0;
+	flag = htonl(flag);
+	retcode = send(sock_host, &flag, sizeof(int), 0);
+	char minus = '-';
+	retcode = send(sock_host, &minus, sizeof(char), 0);
+
+	int listlen;
+	char * list;
+
+	int newnamelen;
+	retcode = recv(sock_host, &newnamelen, sizeof(int), 0);
+	newnamelen = ntohl(newnamelen);
+	retcode = recv(sock_host, &listlen, sizeof(int), 0);
+	listlen = ntohl(listlen);
+	char buf[10240];
+	retcode = recv(sock_host, buf, newnamelen, 0);
+	if(listlen < 10240){
+		retcode = recv (sock_host, buf, listlen, 0);
+		buf[listlen]='\0';
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","observed name list:%s", buf);
+	}else {
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","observed name list length beyond 10240");
+	}
+
+	int startPos = 0;
+	int endPos = 0;
+	for(;endPos<=listlen;endPos++){
+		if(buf[endPos]==';'){
+			observedNames[observedCnt] = (char*)malloc(endPos-startPos+1);
+			memcpy(observedNames[observedCnt], buf+startPos, endPos-startPos);
+			observedNames[observedCnt][endPos-startPos]='\0';
+			ALOG (LOG_INFO,"INSTRUMENTSERVER","new observedName %s",observedNames[observedCnt]);
+			observedCnt++;
+			startPos=endPos+1;
+		}
+	}
+
+	close (sock_host);
+
 
 	while (TRUE)
 	{

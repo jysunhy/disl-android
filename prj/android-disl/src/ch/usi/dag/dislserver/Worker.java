@@ -56,6 +56,7 @@ public class Worker extends Thread {
 
     private static final boolean EMPTY_INSTR = false;
 
+    private static boolean configMsg = true;
     // private static final String instrLibPath =
     // "build-test/disl-instr-android.jar";
     // Needed by ANDROID
@@ -435,19 +436,25 @@ public class Worker extends Thread {
 
                         // read java class
                         final String fileName = dexName;
+
                         if (dexCode.length == 0) // request from disl remote
                                                  // server querying for loaded
                                                  // bytecode
                         {
-                            instrClass = bytecodeMap.get (fullPath.toString ());
-                            if (instrClass != null) {
-                                /*System.out.println ("Found class "
-                                    + fullPath.toString () + " in map");*/
-                            } else {
-                                System.err.println ("The class "
-                                    + fullPath.toString () + " has not been loaded");
-                            }
+                            configMsg = fullPath.toString ().equals ("-");
+                            if(configMsg){
+                                instrClass = "com.inspur.test;system_server;com.android.contacts;".getBytes ();
 
+                            }else{
+                                instrClass = bytecodeMap.get (fullPath.toString ());
+                                if (instrClass != null) {
+                                    /*System.out.println ("Found class "
+                                        + fullPath.toString () + " in map");*/
+                                } else {
+                                    System.err.println ("The class "
+                                        + fullPath.toString () + " has not been loaded");
+                                }
+                            }
                         } else if (EMPTY_INSTR
                         //|| fileName.equals ("framework.jar")
                         //|| fileName.equals ("services.jar")
