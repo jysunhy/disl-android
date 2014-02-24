@@ -606,9 +606,13 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
     setSignalHandler();
 
     dvmDumpLoaderStats("zygote");
+	BeforeFork();
+	int parent = getpid();
     pid = fork();
 
     if (pid == 0) {
+		_mapPID(getpid(),"system_server");
+		onFork(parent);
         int err;
         /* The child process */
 
@@ -688,7 +692,7 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
         unsetSignalHandler();
         gDvm.zygote = false;
 
-
+/*
 		if(true)
 		{
 			struct sockaddr_un address;
@@ -731,8 +735,9 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
 		}else{
 			gDvm.isShadow = false;
 		}
+		*/
 		ALOG(LOG_DEBUG,"HAIYANG","PROCESS START:\n\t\t\t %s isshadow in new process %d to %s", __FUNCTION__, getpid(), gDvm.isShadow?"true":"false");
-
+/*
     gDvm.shadowHook = NULL;
     gDvm.newObjHook = NULL;
 	gDvm.freeObjHook = NULL;
@@ -742,7 +747,7 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
 	gDvm.vmInitHook = NULL;
 	gDvm.classfileLoadHook = NULL;
 	gDvm.classInitHook = NULL;
-
+*/
 		if(gDvm.freeObjHook==NULL)
 			ALOG(LOG_DEBUG,"HAIYANG","FREE OBJ HOOK IS NOT SET");
 		else
@@ -751,7 +756,7 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
 
 
 			
-		if(!isSystemServer)
+		if(isSystemServer)
 			ShadowLib_OnLoad(gDvmJni.jniVm, NULL);
 
 

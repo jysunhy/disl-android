@@ -35,9 +35,9 @@ static bool isDecided = false;
 // ******************* REDispatch methods *******************
 
 void _mapPID(int pid, const char* pname){
-	Socket *tmpsock = new Socket();
+	Socket *tmpsock = new Socket(false);
 	while(!tmpsock->Connect()){
-		LOGDEBUG("Cannot connect through UDS");
+		LOGDEBUG("Cannot connect through UDS in %d", getpid());
 		sleep(2);
 	}
 	int signal = -4;
@@ -72,7 +72,7 @@ void mapPID_2
 	jsize str_len = jni_env->GetStringUTFLength(pname);
 	const char * str = 	jni_env->GetStringUTFChars(pname, NULL);
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","MAPPING PID: %d NAME: %s", getpid(), str);
-	Socket *tmpsock = new Socket();
+	Socket *tmpsock = new Socket(true);
 	while(!tmpsock->Connect()){
 		LOGDEBUG("Cannot connect through UDS");
 		sleep(2);
@@ -156,7 +156,7 @@ void analysisStart__S
 (JNIEnv * jni_env, jclass this_class, jshort analysis_method_id) {
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis start for method %d, tid:%d", (int)analysis_method_id,dvmThreadSelf()->threadId);
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, 0, analysis_method_id);
-	dvmDumpAllThreads(false);
+	//dvmDumpAllThreads(false);
 }
 
 void analysisStart__SB
@@ -164,7 +164,7 @@ void analysisStart__SB
  jbyte ordering_id) {
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis start for method %d with ordering %d", (int)analysis_method_id, (int)ordering_id);
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, ordering_id, analysis_method_id);
-	dvmDumpAllThreads(false);
+	//dvmDumpAllThreads(false);
 }
 void OpenConnection(){
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: open connection");
@@ -493,7 +493,7 @@ static void * send_thread_loop(void * obj) {
 		}
 		if(tmp)
 			delete tmp;
-		sleep(1);
+		sleep(15);
 		//if(remote.IsClosed())
 		//	break;
 	}
@@ -517,6 +517,10 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 
 	//gDvm.shadowHook = &testShadowHook;
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN ONLOAD, Zygote PID: %d", getpid());
+
+	if(gDvm.zygote){
+		_mapPID(getpid(),"zygote");
+	}
 	//OpenConnection();
 	gDvm.newObjHook = &objNewHook;
 	gDvm.freeObjHook = &objFreeHook;
@@ -554,10 +558,17 @@ void BeforeFork(){
 	pthread_mutex_lock(&gl_mtx);
 	zygote_buff = remote.ReturnAndResetBuffer();
 	ALOG(LOG_DEBUG,"SHADOWDEBUG","BEFORE FORK, BUFF OF ZYGOTE: %d", zygote_buff->q_occupied);
-	if(!sock){
-		OpenConnection();
+
+	Socket *zsock = new Socket();
+	while(!zsock->Connect()){
+		LOGDEBUG("Zygote Cannot connect through UDS");
+		sleep(2);
 	}
-	sock->Send(zygote_buff->q_data,zygote_buff->q_occupied);
+	int signal = -3;
+	zsock->Send((char*)&signal,sizeof(int));
+
+	zsock->Send(zygote_buff->q_data,zygote_buff->q_occupied);
+
 	if(zygote_buff)
 		delete zygote_buff;
 	zygote_buff=NULL;

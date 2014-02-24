@@ -443,7 +443,34 @@ public class Worker extends Thread {
                         {
                             configMsg = fullPath.toString ().equals ("-");
                             if(configMsg){
-                                instrClass = "com.inspur.test;system_server;com.android.contacts;".getBytes ();
+                                instrClass =
+                                ("com.inspur.test;"
+                                //+"system_server;"
+                                +"zygote;"
+                                +"com.android.providers.calendar;"
+                                +"android.process.acore;"
+                                +"android.process.media;"
+                                +"com.android.systemui;"
+                                +"com.android.inputmethod.latin;"
+                                +"com.android.phone;"
+                                +"com.android.settings;"
+                                +"android.process.acore;"
+                                /*+"com.android.smspush;"
+                                +"com.android.provision;"
+                                +"com.android.launcher;"
+                                +"com.android.gallery3d;"
+                                +"com.android.voicedialer;"
+                                +"com.android.deskclock;"
+                                +"com.android.exchange;"
+                                +"com.android.calendar;"
+                                +"com.android.providers.calendar;"
+                                +"android.process.media;"*/
+                                +"com.android.email;"
+                                +"com.android.mms;"
+                                +"com.android.contacts;"
+                                +"com.android.quicksearchbox;")
+                                .getBytes ();
+
 
                             }else{
                                 instrClass = bytecodeMap.get (fullPath.toString ());

@@ -21,7 +21,7 @@ const int MAXRECV = 500;
 class Socket
 {
  public:
-  Socket();
+  Socket(bool need = false);
   virtual ~Socket();
 
   // Server initialization
@@ -49,6 +49,8 @@ class Socket
 
   int m_sock;
   sockaddr_in m_addr;
+
+  bool needPID;
 
 
 };

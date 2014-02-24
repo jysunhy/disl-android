@@ -22,10 +22,10 @@
 
 
 
-Socket::Socket() :
+Socket::Socket(bool need ) :
 	m_sock ( -1 )
 {
-
+	needPID = need;
 	memset ( &m_addr,
 			0,
 			sizeof ( m_addr ) );
@@ -197,7 +197,16 @@ bool Socket::Connect ()
 
 	address.sun_family = AF_UNIX;
 	snprintf(address.sun_path, UNIX_PATH_MAX, SERVER_SOCK);
-
+	if(needPID){
+				int idx=0;
+				int cur = getpid();
+				while(cur){
+					address.sun_path[strlen(SERVER_SOCK)+idx] = cur%10+'0';
+					cur /= 10;
+					idx++;
+				}
+				address.sun_path[strlen(SERVER_SOCK)+idx] = '\0';
+	}
 	void * tmp = &address;
 	if(connect(m_sock, 
 				(struct sockaddr *) tmp,  

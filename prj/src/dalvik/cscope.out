@@ -1,4 +1,4 @@
-cscope 15 $HOME/tdroid/tdroid-4.1.1_r6/dalvik               0003913591
+cscope 15 $HOME/tdroid/tdroid-4.1.1_r6/dalvik               0003914035
 	@dalvikvm/Main.cpp
 
 19 
@@ -164359,7 +164359,7 @@ thªadId
 kMaöThªadId
 );
 
-1155 i‡(!
+1165 i‡(!
 	`dvmPushJNIFøme
 (
 thªad
@@ -164369,11 +164369,11 @@ gDvm
 mëhDÆvikSy°emN©iveSèπ_maö
 ))
 
-1156  
+1166  
 Ál£
 ;
 
-1161 
+1171 
 	`as£π
 (
 gDvm
@@ -164383,7 +164383,7 @@ mëhDÆvikSy°emN©iveSèπ_maö
 ªgi°îsSize
  == 1);
 
-1162 
+1172 
 u4
 * 
 ‰amePå
@@ -164395,19 +164395,19 @@ thªad
 curFøme
 ;
 
-1163 
+1173 
 ‰amePå
 [0] = 0;
 
-1165  
+1175  
 åue
 ;
 
-1166 
+1176 
 	}
 }
 
-1174 
+1184 
 boﬁ
  
 	$¸óãFakeRunFøme
@@ -164417,7 +164417,7 @@ Thªad
 thªad
 )
 
-1176  
+1186  
 	`dvmPushJNIFøme
 (
 thªad
@@ -164427,51 +164427,51 @@ gDvm
 mëhDÆvikSy°emN©iveSèπ_run
 );
 
-1177 
+1187 
 	}
 }
 
-1182 
+1192 
 	$£tThªadName
 (c⁄° *
 thªadName
 )
 
-1184 
+1194 
 hasAt
  = 0;
 
-1185 
+1195 
 hasDŸ
  = 0;
 
-1186 c⁄° *
+1196 c⁄° *
 s
  = 
 thªadName
 ;
 
-1187 *
+1197 *
 s
 ) {
 
-1188 i‡(*
+1198 i‡(*
 s
  ='.'Ë
 hasDŸ
  = 1;
 
-1189 i‡(*
+1199 i‡(*
 s
  ='@'Ë
 hasAt
  = 1;
 
-1190 
+1200 
 s
 ++;
 
-1192 
+1202 
 Àn
  = 
 s
@@ -164479,7 +164479,7 @@ s
 thªadName
 ;
 
-1193 i‡(
+1203 i‡(
 Àn
  < 15 || 
 hasAt
@@ -164487,13 +164487,13 @@ hasAt
 hasDŸ
 ) {
 
-1194 
+1204 
 s
  = 
 thªadName
 ;
 
-1196 
+1206 
 s
  = 
 thªadName
@@ -164501,17 +164501,17 @@ thªadName
 Àn
  - 15;
 
-1198 #i‡
+1208 #i‡
 	`deföed
 (
 HAVE_ANDROID_PTHREAD_SETNAME_NP
 )
 
-1200 
+1210 
 buf
 [16];
 
-1201 
+1211 
 	`°∫˝y
 (
 buf
@@ -164519,11 +164519,11 @@ buf
 s
 , (buf)-1);
 
-1202 
+1212 
 buf
 [(buf)-1] = '\0';
 
-1203 
+1213 
 îr
  = 
 	`±hªad_£äame_≈
@@ -164533,15 +164533,15 @@ buf
 buf
 );
 
-1204 i‡(
+1214 i‡(
 îr
  != 0) {
 
-1205 
+1215 
 	`ALOGW
 ("UnableÅo setÅheÇame of currentÅhreadÅo '%s': %s",
 
-1206 
+1216 
 buf
 , 
 	`°ªº‹
@@ -164549,13 +164549,13 @@ buf
 îr
 ));
 
-1208 #ñi‡
+1218 #ñi‡
 	`deföed
 (
 HAVE_PRCTL
 )
 
-1209 
+1219 
 	`¥˘l
 (
 PR_SET_NAME
@@ -164563,17 +164563,17 @@ PR_SET_NAME
 s
 , 0, 0, 0);
 
-1211 
+1221 
 	`ALOGD
 ("NÿwayÅÿ£àcuºíàthªad'†«mê(%s)", 
 s
 );
 
-1213 
+1223 
 	}
 }
 
-1233 
+1243 
 boﬁ
  
 	$dvmCª©eI¡îpThªad
@@ -164585,7 +164585,7 @@ thªadObj
 ªqSèckSize
 )
 
-1236 
+1246 
 	`as£π
 (
 thªadObj
@@ -164593,7 +164593,7 @@ thªadObj
 NULL
 );
 
-1238 
+1248 
 Thªad
 * 
 £lf
@@ -164601,7 +164601,7 @@ Thªad
 	`dvmThªadSñf
 ();
 
-1240 
+1250 
 	`ALOG
 (
 LOG_DEBUG
@@ -164619,23 +164619,17 @@ thªadId
 	`c_°r
 ());
 
-1241 if(
-	`dvmGëThªadName
-(
-£lf
-)=="main"){
-
-1242 
+1251 
 	`ALOG
 (
 LOG_DEBUG
-,"HAIYANG","£âög maöÅÿisShadow: %s", 
+,"HAIYANG","£âög sñ‡tÿisShadow: %s", 
 gDvm
 .
 isShadow
 ?"true":"false");
 
-1243 
+1252 
 	`dvmSëFõldBoﬁón
 (
 £lf
@@ -164649,7 +164643,7 @@ offJavaL™gThªad_by∑ss
 isShadow
 );
 
-1245 
+1253 
 	`dvmSëFõldBoﬁón
 (
 thªadObj
@@ -164661,63 +164655,63 @@ offJavaL™gThªad_by∑ss
 isShadow
 );
 
-1246 
+1254 
 °ackSize
 ;
 
-1247 i‡(
+1255 i‡(
 ªqSèckSize
  == 0)
 
-1248 
+1256 
 °ackSize
  = 
 gDvm
 .stackSize;
 
-1249 i‡(
+1257 i‡(
 ªqSèckSize
  < 
 kMöSèckSize
 )
 
-1250 
+1258 
 °ackSize
  = 
 kMöSèckSize
 ;
 
-1251 i‡(
+1259 i‡(
 ªqSèckSize
  > 
 kMaxSèckSize
 )
 
-1252 
+1260 
 °ackSize
  = 
 kMaxSèckSize
 ;
 
-1254 
+1262 
 °ackSize
  = 
 ªqSèckSize
 ;
 
-1256 
+1264 
 ±hªad_©å_t
  
 thªadAâr
 ;
 
-1257 
+1265 
 	`±hªad_©å_öô
 (&
 thªadAâr
 );
 
-1258 
+1266 
 	`±hªad_©å_£tdëach°©e
 (&
 thªadAâr
@@ -164725,7 +164719,7 @@ thªadAâr
 PTHREAD_CREATE_DETACHED
 );
 
-1264 
+1272 
 Obje˘
 * 
 vmThªadObj
@@ -164739,17 +164733,17 @@ gDvm
 ALLOC_DEFAULT
 );
 
-1265 i‡(
+1273 i‡(
 vmThªadObj
  =
 NULL
 )
 
-1266  
+1274  
 Ál£
 ;
 
-1268 
+1276 
 Thªad
 * 
 √wThªad
@@ -164759,13 +164753,13 @@ Thªad
 °ackSize
 );
 
-1269 i‡(
+1277 i‡(
 √wThªad
  =
 NULL
 ) {
 
-1270 
+1278 
 	`dvmRñó£TøckedAŒoc
 (
 vmThªadObj
@@ -164773,17 +164767,17 @@ vmThªadObj
 NULL
 );
 
-1271  
+1279  
 Ál£
 ;
 
-1274 
+1282 
 √wThªad
 ->
 thªadObj
  =ÅhreadObj;
 
-1276 
+1284 
 	`as£π
 (
 √wThªad
@@ -164793,13 +164787,13 @@ thªadObj
 THREAD_INITIALIZING
 );
 
-1285 
+1293 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-1287 i‡(
+1295 i‡(
 	`dvmGëFõldObje˘
 (
 thªadObj
@@ -164811,21 +164805,21 @@ offJavaL™gThªad_vmThªad
 NULL
 ) {
 
-1288 
+1296 
 	`dvmU∆ockThªadLi°
 ();
 
-1289 
+1297 
 	`dvmThrowIŒegÆThªadSèãEx˚±i⁄
 (
 
-1291 
+1299 
 	`‰ìThªad
 (
 √wThªad
 );
 
-1292 
+1300 
 	`dvmRñó£TøckedAŒoc
 (
 vmThªadObj
@@ -164833,7 +164827,7 @@ vmThªadObj
 NULL
 );
 
-1303 
+1311 
 	`dvmSëFõldI¡
 (
 vmThªadObj
@@ -164847,7 +164841,7 @@ u4
 √wThªad
 );
 
-1304 
+1312 
 	`dvmSëFõldObje˘
 (
 thªadObj
@@ -164859,7 +164853,7 @@ offJavaL™gThªad_vmThªad
 vmThªadObj
 );
 
-1309 
+1317 
 boﬁ
  
 tmp
@@ -164873,7 +164867,7 @@ gDvm
 offJavaL™gThªad_by∑ss
 );
 
-1310 
+1318 
 	`dvmDumpThªad
 (
 √wThªad
@@ -164881,11 +164875,11 @@ offJavaL™gThªad_by∑ss
 Ál£
 );
 
-1311 if(
+1319 if(
 tmp
 ){
 
-1312 
+1320 
 	`ALOG
 (
 LOG_DEBUG
@@ -164899,7 +164893,7 @@ __FUNCTION__
 thªadId
 );
 
-1314 
+1322 
 	`ALOG
 (
 LOG_DEBUG
@@ -164913,7 +164907,7 @@ __FUNCTION__
 thªadId
 );
 
-1316 if(
+1324 if(
 	`dvmGëFõldBoﬁón
 (
 thªadObj
@@ -164925,7 +164919,7 @@ offJavaL™gThªad_by∑ss
 isShadow
 ){
 
-1317 
+1325 
 	`ALOG
 (
 LOG_DEBUG
@@ -164933,11 +164927,11 @@ LOG_DEBUG
 __FUNCTION__
 );
 
-1323 
+1331 
 	`dvmU∆ockThªadLi°
 ();
 
-1325 
+1333 
 ThªadSètus
  
 ﬁdSètus
@@ -164949,13 +164943,13 @@ ThªadSètus
 THREAD_VMWAIT
 );
 
-1326 
+1334 
 ±hªad_t
  
 thªadH™dÀ
 ;
 
-1327 
+1335 
 cc
  = 
 	`±hªad_¸óã
@@ -164967,11 +164961,11 @@ thªadAâr
 öãΩThªadSèπ
 ,
 
-1328 
+1336 
 √wThªad
 );
 
-1329 
+1337 
 	`dvmCh™geSètus
 (
 £lf
@@ -164979,11 +164973,11 @@ thªadAâr
 ﬁdSètus
 );
 
-1331 i‡(
+1339 i‡(
 cc
  != 0) {
 
-1337 
+1345 
 	`ALOGE
 ("Thªad cª©i⁄ faûed (îr=%s)", 
 	`°ªº‹
@@ -164991,7 +164985,7 @@ cc
 î∫o
 ));
 
-1339 
+1347 
 	`dvmSëFõldObje˘
 (
 thªadObj
@@ -165003,21 +164997,21 @@ offJavaL™gThªad_vmThªad
 NULL
 );
 
-1341 
+1349 
 	`dvmThrowOutOfMem‹yEº‹
 ("thread creation failed");
 
-1342 
+1350 
 Áû
 ;
 
-1424 
+1432 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-1425 
+1433 
 	`as£π
 (
 £lf
@@ -165027,7 +165021,7 @@ NULL
 THREAD_RUNNING
 );
 
-1426 
+1434 
 £lf
 ->
 °©us
@@ -165035,7 +165029,7 @@ THREAD_RUNNING
 THREAD_VMWAIT
 ;
 
-1427 
+1435 
 √wThªad
 ->
 °©us
@@ -165043,7 +165037,7 @@ THREAD_VMWAIT
 THREAD_STARTING
 )
 
-1428 
+1436 
 	`±hªad_c⁄d_waô
 (&
 gDvm
@@ -165053,7 +165047,7 @@ thªadSèπC⁄d
 thªadLi°Lock
 );
 
-1430 
+1438 
 	`LOG_THREAD
 ("thªadid=%d:áddögÅÿli°", 
 √wThªad
@@ -165061,7 +165055,7 @@ thªadLi°Lock
 thªadId
 );
 
-1431 
+1439 
 √wThªad
 ->
 √xt
@@ -165071,7 +165065,7 @@ gDvm
 thªadLi°
 ->next;
 
-1432 i‡(
+1440 i‡(
 √wThªad
 ->
 √xt
@@ -165079,7 +165073,7 @@ thªadLi°
 NULL
 )
 
-1433 
+1441 
 √wThªad
 ->
 √xt
@@ -165087,7 +165081,7 @@ NULL
 ¥ev
  =ÇewThread;
 
-1434 
+1442 
 √wThªad
 ->
 ¥ev
@@ -165097,7 +165091,7 @@ gDvm
 thªadLi°
 ;
 
-1435 
+1443 
 gDvm
 .
 thªadLi°
@@ -165107,13 +165101,13 @@ thªadLi°
 √wThªad
 ;
 
-1438 
+1446 
 	`dvmInôülizeI¡îpBªak
 (
 √wThªad
 );
 
-1440 i‡(!
+1448 i‡(!
 	`dvmGëFõldBoﬁón
 (
 thªadObj
@@ -165123,17 +165117,17 @@ gDvm
 offJavaL™gThªad_d´m⁄
 ))
 
-1441 
+1449 
 gDvm
 .
 n⁄D´m⁄ThªadCou¡
 ++;
 
-1443 
+1451 
 	`dvmU∆ockThªadLi°
 ();
 
-1446 
+1454 
 	`dvmCh™geSètus
 (
 £lf
@@ -165141,13 +165135,13 @@ n⁄D´m⁄ThªadCou¡
 THREAD_RUNNING
 );
 
-1459 
+1467 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-1461 
+1469 
 	`as£π
 (
 √wThªad
@@ -165157,7 +165151,7 @@ THREAD_RUNNING
 THREAD_STARTING
 );
 
-1462 
+1470 
 √wThªad
 ->
 °©us
@@ -165165,7 +165159,7 @@ THREAD_STARTING
 THREAD_VMWAIT
 ;
 
-1463 
+1471 
 	`±hªad_c⁄d_brﬂdˇ°
 (&
 gDvm
@@ -165173,11 +165167,11 @@ gDvm
 thªadSèπC⁄d
 );
 
-1465 
+1473 
 	`dvmU∆ockThªadLi°
 ();
 
-1467 
+1475 
 	`dvmRñó£TøckedAŒoc
 (
 vmThªadObj
@@ -165185,21 +165179,21 @@ vmThªadObj
 NULL
 );
 
-1468  
+1476  
 åue
 ;
 
-1470 
+1478 
 Áû
 :
 
-1471 
+1479 
 	`‰ìThªad
 (
 √wThªad
 );
 
-1472 
+1480 
 	`dvmRñó£TøckedAŒoc
 (
 vmThªadObj
@@ -165207,21 +165201,21 @@ vmThªadObj
 NULL
 );
 
-1473  
+1481  
 Ál£
 ;
 
-1474 
+1482 
 	}
 }
 
-1479 * 
+1487 * 
 	$öãΩThªadSèπ
 (* 
 ¨g
 )
 
-1481 
+1489 
 Thªad
 * 
 £lf
@@ -165229,7 +165223,7 @@ Thªad
 ¨g
 ;
 
-1483 
+1491 
 °d
 ::
 °rög
@@ -165241,7 +165235,7 @@ Thªad
 £lf
 ));
 
-1484 
+1492 
 	`£tThªadName
 (
 thªadName
@@ -165249,19 +165243,19 @@ thªadName
 	`c_°r
 ());
 
-1489 
+1497 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-1490 
+1498 
 	`¥ï¨eThªad
 (
 £lf
 );
 
-1492 
+1500 
 	`LOG_THREAD
 ("thªadid=%d: cª©ed from i¡îp", 
 £lf
@@ -165269,7 +165263,7 @@ thªadName
 thªadId
 );
 
-1498 
+1506 
 £lf
 ->
 °©us
@@ -165277,7 +165271,7 @@ thªadId
 THREAD_STARTING
 ;
 
-1499 
+1507 
 	`±hªad_c⁄d_brﬂdˇ°
 (&
 gDvm
@@ -165285,7 +165279,7 @@ gDvm
 thªadSèπC⁄d
 );
 
-1514 
+1522 
 £lf
 ->
 °©us
@@ -165293,7 +165287,7 @@ thªadSèπC⁄d
 THREAD_VMWAIT
 )
 
-1515 
+1523 
 	`±hªad_c⁄d_waô
 (&
 gDvm
@@ -165303,11 +165297,11 @@ thªadSèπC⁄d
 thªadLi°Lock
 );
 
-1517 
+1525 
 	`dvmU∆ockThªadLi°
 ();
 
-1522 
+1530 
 £lf
 ->
 jniEnv
@@ -165315,7 +165309,7 @@ jniEnv
 	`dvmCª©eJNIEnv
 (self);
 
-1528 
+1536 
 	`dvmCh™geSètus
 (
 £lf
@@ -165323,19 +165317,19 @@ jniEnv
 THREAD_RUNNING
 );
 
-1535 i‡(
+1543 i‡(
 gDvm
 .
 debuggîC⁄√˘ed
 )
 
-1536 
+1544 
 	`dvmDbgPo°ThªadSèπ
 (
 £lf
 );
 
-1546 
+1554 
 ¥i‹ôy
  = 
 	`dvmGëFõldI¡
@@ -165345,13 +165339,13 @@ debuggîC⁄√˘ed
 thªadObj
 ,
 
-1547 
+1555 
 gDvm
 .
 offJavaL™gThªad_¥i‹ôy
 );
 
-1548 
+1556 
 	`dvmCh™geThªadPri‹ôy
 (
 £lf
@@ -165359,7 +165353,7 @@ offJavaL™gThªad_¥i‹ôy
 ¥i‹ôy
 );
 
-1556 
+1564 
 Mëhod
 * 
 run
@@ -165377,13 +165371,13 @@ gDvm
 voffJavaL™gThªad_run
 ];
 
-1557 
+1565 
 JVÆue
  
 unu£d
 ;
 
-1559 
+1567 
 	`ALOGV
 ("thªadid=%d: cÆlögÑun()", 
 £lf
@@ -165391,7 +165385,7 @@ unu£d
 thªadId
 );
 
-1560 
+1568 
 	`as£π
 (
 	`°rcmp
@@ -165401,7 +165395,7 @@ run
 «me
 , "run") == 0);
 
-1561 
+1569 
 	`dvmCÆlMëhod
 (
 £lf
@@ -165413,7 +165407,7 @@ thªadObj
 unu£d
 );
 
-1562 
+1570 
 	`ALOGV
 ("thªadid=%d:Éxôög", 
 £lf
@@ -165421,19 +165415,19 @@ unu£d
 thªadId
 );
 
-1568 
+1576 
 	`dvmDëachCuºítThªad
 ();
 
-1570  
+1578  
 NULL
 ;
 
-1571 
+1579 
 	}
 }
 
-1586 
+1594 
 	$thªadExôUnˇughtEx˚±i⁄
 (
 Thªad
@@ -165445,29 +165439,29 @@ Obje˘
 group
 )
 
-1588 
+1596 
 Obje˘
 * 
 ex˚±i⁄
 ;
 
-1589 
+1597 
 Obje˘
 * 
 h™dÀrObj
 ;
 
-1590 
+1598 
 Mëhod
 * 
 unˇughtH™dÀr
 ;
 
-1592 
+1600 
 	`ALOGW
 ("threadid=%d:ÅhreadÉxiting with uncaughtÉxception (group=%p)",
 
-1593 
+1601 
 £lf
 ->
 thªadId
@@ -165475,7 +165469,7 @@ thªadId
 group
 );
 
-1594 
+1602 
 	`as£π
 (
 group
@@ -165483,7 +165477,7 @@ group
 NULL
 );
 
-1600 
+1608 
 ex˚±i⁄
  = 
 	`dvmGëEx˚±i⁄
@@ -165491,7 +165485,7 @@ ex˚±i⁄
 £lf
 );
 
-1601 
+1609 
 	`as£π
 (
 ex˚±i⁄
@@ -165499,7 +165493,7 @@ ex˚±i⁄
 NULL
 );
 
-1602 
+1610 
 	`dvmAddTøckedAŒoc
 (
 ex˚±i⁄
@@ -165507,13 +165501,13 @@ ex˚±i⁄
 £lf
 );
 
-1603 
+1611 
 	`dvmCÀ¨Ex˚±i⁄
 (
 £lf
 );
 
-1611 
+1619 
 h™dÀrObj
  = 
 	`dvmGëFõldObje˘
@@ -165523,25 +165517,25 @@ h™dÀrObj
 thªadObj
 ,
 
-1612 
+1620 
 gDvm
 .
 offJavaL™gThªad_unˇughtH™dÀr
 );
 
-1613 i‡(
+1621 i‡(
 h™dÀrObj
  =
 NULL
 )
 
-1614 
+1622 
 h™dÀrObj
  = 
 group
 ;
 
-1620 
+1628 
 unˇughtH™dÀr
  = 
 	`dvmFödVútuÆMëhodHõrByDes¸ùt‹
@@ -165551,19 +165545,19 @@ h™dÀrObj
 ˛azz
 ,
 
-1623 i‡(
+1631 i‡(
 unˇughtH™dÀr
  !
 NULL
 ) {
 
-1626 
+1634 
 JVÆue
  
 unu£d
 ;
 
-1627 
+1635 
 	`dvmCÆlMëhod
 (
 £lf
@@ -165575,7 +165569,7 @@ h™dÀrObj
 unu£d
 ,
 
-1628 
+1636 
 £lf
 ->
 thªadObj
@@ -165583,11 +165577,11 @@ thªadObj
 ex˚±i⁄
 );
 
-1631 
+1639 
 	`ALOGW
 ("WARNING:Ço 'uncaughtException' method in class %s",
 
-1632 
+1640 
 h™dÀrObj
 ->
 ˛azz
@@ -165595,7 +165589,7 @@ h™dÀrObj
 des¸ùt‹
 );
 
-1633 
+1641 
 	`dvmSëEx˚±i⁄
 (
 £lf
@@ -165603,17 +165597,17 @@ des¸ùt‹
 ex˚±i⁄
 );
 
-1634 
+1642 
 	`dvmLogEx˚±i⁄SèckTø˚
 ();
 
-1638 
+1646 
 	`dvmCÀ¨Ex˚±i⁄
 (
 £lf
 );
 
-1640 
+1648 
 	`dvmRñó£TøckedAŒoc
 (
 ex˚±i⁄
@@ -165621,11 +165615,11 @@ ex˚±i⁄
 £lf
 );
 
-1643 
+1651 
 	`lockThªadSu•ídCou¡
 ();
 
-1644 
+1652 
 	`dvmAddToSu•ídCou¡s
 (
 £lf
@@ -165633,15 +165627,15 @@ ex˚±i⁄
 su•ídCou¡
 , 0);
 
-1645 
+1653 
 	`u∆ockThªadSu•ídCou¡
 ();
 
-1646 
+1654 
 	}
 }
 
-1657 
+1665 
 boﬁ
  
 	$dvmCª©eI¡î«lThªad
@@ -165653,7 +165647,7 @@ pH™dÀ
 «me
 ,
 
-1658 
+1666 
 I¡î«lThªadSèπ
  
 func
@@ -165661,25 +165655,25 @@ func
 funcArg
 )
 
-1660 
+1668 
 I¡î«lSèπArgs
 * 
 pArgs
 ;
 
-1661 
+1669 
 Obje˘
 * 
 sy°emGroup
 ;
 
-1662 
+1670 
 ±hªad_©å_t
  
 thªadAâr
 ;
 
-1663 vﬁ©ûê
+1671 vﬁ©ûê
 Thªad
 * 
 √wThªad
@@ -165687,27 +165681,27 @@ Thªad
 NULL
 ;
 
-1664 vﬁ©ûê
+1672 vﬁ©ûê
 ¸óãSètus
  = 0;
 
-1666 
+1674 
 sy°emGroup
  = 
 	`dvmGëSy°emThªadGroup
 ();
 
-1667 i‡(
+1675 i‡(
 sy°emGroup
  =
 NULL
 )
 
-1668  
+1676  
 Ál£
 ;
 
-1670 
+1678 
 pArgs
  = (
 I¡î«lSèπArgs
@@ -165715,19 +165709,19 @@ I¡î«lSèπArgs
 	`mÆloc
 ((*pArgs));
 
-1671 
+1679 
 pArgs
 ->
 func
  = func;
 
-1672 
+1680 
 pArgs
 ->
 funcArg
  = funcArg;
 
-1673 
+1681 
 pArgs
 ->
 «me
@@ -165735,7 +165729,7 @@ pArgs
 	`°rdup
 (name);
 
-1674 
+1682 
 pArgs
 ->
 group
@@ -165743,7 +165737,7 @@ group
 sy°emGroup
 ;
 
-1675 
+1683 
 pArgs
 ->
 isD´m⁄
@@ -165751,7 +165745,7 @@ isD´m⁄
 åue
 ;
 
-1676 
+1684 
 pArgs
 ->
 pThªad
@@ -165759,7 +165753,7 @@ pThªad
 √wThªad
 ;
 
-1677 
+1685 
 pArgs
 ->
 pCª©eSètus
@@ -165767,13 +165761,13 @@ pCª©eSètus
 ¸óãSètus
 ;
 
-1679 
+1687 
 	`±hªad_©å_öô
 (&
 thªadAâr
 );
 
-1682 i‡(
+1690 i‡(
 	`±hªad_¸óã
 (
 pH™dÀ
@@ -165783,15 +165777,15 @@ thªadAâr
 öã∫ÆThªadSèπ
 ,
 
-1683 
+1691 
 pArgs
 ) != 0)
 
-1685 
+1693 
 	`ALOGE
 ("internalÅhread creation failed");
 
-1686 
+1694 
 	`‰ì
 (
 pArgs
@@ -165799,17 +165793,17 @@ pArgs
 «me
 );
 
-1687 
+1695 
 	`‰ì
 (
 pArgs
 );
 
-1688  
+1696  
 Ál£
 ;
 
-1706 
+1714 
 Thªad
 * 
 £lf
@@ -165817,7 +165811,7 @@ Thªad
 	`dvmThªadSñf
 ();
 
-1707 
+1715 
 ThªadSètus
  
 ﬁdSètus
@@ -165829,17 +165823,17 @@ ThªadSètus
 THREAD_VMWAIT
 );
 
-1708 
+1716 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-1709 
+1717 
 ¸óãSètus
  == 0)
 
-1710 
+1718 
 	`±hªad_c⁄d_waô
 (&
 gDvm
@@ -165849,39 +165843,23 @@ thªadSèπC⁄d
 thªadLi°Lock
 );
 
-1712 i‡(
+1720 i‡(
 √wThªad
  =
 NULL
 ) {
 
-1713 
+1721 
 	`ALOGW
 ("öã∫ÆÅhªad cª©êÁûed (¸óãSètus=%d)", 
 ¸óãSètus
 );
 
-1714 
+1722 
 	`as£π
 (
 ¸óãSètus
  < 0);
-
-1716 
-	`dvmU∆ockThªadLi°
-();
-
-1717 
-	`dvmCh™geSètus
-(
-£lf
-, 
-ﬁdSètus
-);
-
-1718  
-Ál£
-;
 
 1724 
 	`dvmU∆ockThªadLi°
@@ -165895,21 +165873,37 @@ NULL
 ﬁdSètus
 );
 
-1727  
+1726  
+Ál£
+;
+
+1732 
+	`dvmU∆ockThªadLi°
+();
+
+1733 
+	`dvmCh™geSètus
+(
+£lf
+, 
+ﬁdSètus
+);
+
+1735  
 åue
 ;
 
-1728 
+1736 
 	}
 }
 
-1738 * 
+1746 * 
 	$öã∫ÆThªadSèπ
 (* 
 ¨g
 )
 
-1740 
+1748 
 I¡î«lSèπArgs
 * 
 pArgs
@@ -165917,13 +165911,13 @@ pArgs
 ¨g
 ;
 
-1741 
+1749 
 JavaVMAâachArgs
  
 jniArgs
 ;
 
-1743 
+1751 
 jniArgs
 .
 vîsi⁄
@@ -165931,7 +165925,7 @@ vîsi⁄
 JNI_VERSION_1_2
 ;
 
-1744 
+1752 
 jniArgs
 .
 «me
@@ -165939,7 +165933,7 @@ jniArgs
 pArgs
 ->name;
 
-1745 
+1753 
 jniArgs
 .
 group
@@ -165951,7 +165945,7 @@ jobje˘
 pArgs
 ->group);
 
-1747 
+1755 
 	`£tThªadName
 (
 pArgs
@@ -165959,7 +165953,7 @@ pArgs
 «me
 );
 
-1750 i‡(
+1758 i‡(
 	`dvmAâachCuºítThªad
 (&
 jniArgs
@@ -165969,19 +165963,19 @@ pArgs
 isD´m⁄
 )) {
 
-1756 
+1764 
 	`dvmLockThªadLi°
 (
 	`dvmThªadSñf
 ());
 
-1757 *
+1765 *
 pArgs
 ->
 pCª©eSètus
  = 1;
 
-1758 *
+1766 *
 pArgs
 ->
 pThªad
@@ -165989,7 +165983,7 @@ pThªad
 	`dvmThªadSñf
 ();
 
-1759 
+1767 
 	`±hªad_c⁄d_brﬂdˇ°
 (&
 gDvm
@@ -165997,15 +165991,15 @@ gDvm
 thªadSèπC⁄d
 );
 
-1760 
+1768 
 	`dvmU∆ockThªadLi°
 ();
 
-1762 
+1770 
 	`LOG_THREAD
 ("threadid=%d: internal '%s'",
 
-1763 
+1771 
 	`dvmThªadSñf
 ()->
 thªadId
@@ -166015,7 +166009,7 @@ pArgs
 «me
 );
 
-1766 (*
+1774 (*
 pArgs
 ->
 func
@@ -166023,23 +166017,23 @@ func
 funcArg
 );
 
-1769 
+1777 
 	`dvmDëachCuºítThªad
 ();
 
-1776 
+1784 
 	`dvmLockThªadLi°
 (
 	`dvmThªadSñf
 ());
 
-1777 *
+1785 *
 pArgs
 ->
 pCª©eSètus
  = -1;
 
-1778 
+1786 
 	`as£π
 (*
 pArgs
@@ -166049,7 +166043,7 @@ pThªad
 NULL
 );
 
-1779 
+1787 
 	`±hªad_c⁄d_brﬂdˇ°
 (&
 gDvm
@@ -166057,11 +166051,11 @@ gDvm
 thªadSèπC⁄d
 );
 
-1780 
+1788 
 	`dvmU∆ockThªadLi°
 ();
 
-1782 
+1790 
 	`as£π
 (*
 pArgs
@@ -166071,7 +166065,7 @@ pThªad
 NULL
 );
 
-1785 
+1793 
 	`‰ì
 (
 pArgs
@@ -166079,21 +166073,21 @@ pArgs
 «me
 );
 
-1786 
+1794 
 	`‰ì
 (
 pArgs
 );
 
-1787  
+1795  
 NULL
 ;
 
-1788 
+1796 
 	}
 }
 
-1795 
+1803 
 boﬁ
  
 	$dvmAâachCuºítThªad
@@ -166107,7 +166101,7 @@ boﬁ
 isD´m⁄
 )
 
-1797 
+1805 
 Thªad
 * 
 £lf
@@ -166115,7 +166109,7 @@ Thªad
 NULL
 ;
 
-1798 
+1806 
 Obje˘
 * 
 thªadObj
@@ -166123,7 +166117,7 @@ thªadObj
 NULL
 ;
 
-1799 
+1807 
 Obje˘
 * 
 vmThªadObj
@@ -166131,7 +166125,7 @@ vmThªadObj
 NULL
 ;
 
-1800 
+1808 
 SåögObje˘
 * 
 thªadNameSå
@@ -166139,13 +166133,13 @@ thªadNameSå
 NULL
 ;
 
-1801 
+1809 
 Mëhod
 * 
 öô
 ;
 
-1802 
+1810 
 boﬁ
  
 ok
@@ -166153,7 +166147,7 @@ ok
 ªt
 ;
 
-1805 
+1813 
 £lf
  = 
 	`ÆlocThªad
@@ -166163,29 +166157,29 @@ gDvm
 °ackSize
 );
 
-1806 i‡(
+1814 i‡(
 £lf
  =
 NULL
 )
 
-1807 
+1815 
 Áû
 ;
 
-1808 
+1816 
 	`£tThªadSñf
 (
 £lf
 );
 
-1815 
+1823 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-1816 
+1824 
 ok
  = 
 	`¥ï¨eThªad
@@ -166193,19 +166187,19 @@ ok
 £lf
 );
 
-1817 
+1825 
 	`dvmU∆ockThªadLi°
 ();
 
-1818 i‡(!
+1826 i‡(!
 ok
 )
 
-1819 
+1827 
 Áû
 ;
 
-1821 
+1829 
 £lf
 ->
 jniEnv
@@ -166213,7 +166207,7 @@ jniEnv
 	`dvmCª©eJNIEnv
 (self);
 
-1822 i‡(
+1830 i‡(
 £lf
 ->
 jniEnv
@@ -166221,21 +166215,21 @@ jniEnv
 NULL
 )
 
-1823 
+1831 
 Áû
 ;
 
-1831 i‡(!
+1839 i‡(!
 	`¸óãFakeRunFøme
 (
 £lf
 ))
 
-1832 
+1840 
 Áû
 ;
 
-1838 
+1846 
 	`LOG_THREAD
 ("thªadid=%d:áddögÅÿli° (©èched)", 
 £lf
@@ -166243,13 +166237,13 @@ NULL
 thªadId
 );
 
-1840 
+1848 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-1842 
+1850 
 £lf
 ->
 √xt
@@ -166259,7 +166253,7 @@ gDvm
 thªadLi°
 ->next;
 
-1843 i‡(
+1851 i‡(
 £lf
 ->
 √xt
@@ -166267,7 +166261,7 @@ thªadLi°
 NULL
 )
 
-1844 
+1852 
 £lf
 ->
 √xt
@@ -166275,7 +166269,7 @@ NULL
 ¥ev
  = self;
 
-1845 
+1853 
 £lf
 ->
 ¥ev
@@ -166285,7 +166279,7 @@ gDvm
 thªadLi°
 ;
 
-1846 
+1854 
 gDvm
 .
 thªadLi°
@@ -166295,21 +166289,21 @@ thªadLi°
 £lf
 ;
 
-1847 i‡(!
+1855 i‡(!
 isD´m⁄
 )
 
-1848 
+1856 
 gDvm
 .
 n⁄D´m⁄ThªadCou¡
 ++;
 
-1850 
+1858 
 	`dvmU∆ockThªadLi°
 ();
 
-1866 
+1874 
 	`as£π
 (
 £lf
@@ -166319,7 +166313,7 @@ n⁄D´m⁄ThªadCou¡
 THREAD_INITIALIZING
 );
 
-1867 
+1875 
 	`dvmCh™geSètus
 (
 £lf
@@ -166327,7 +166321,7 @@ THREAD_INITIALIZING
 THREAD_VMWAIT
 );
 
-1868 
+1876 
 	`dvmLockMuãx
 (&
 gDvm
@@ -166335,7 +166329,7 @@ gDvm
 gcHópLock
 );
 
-1869 
+1877 
 	`dvmU∆ockMuãx
 (&
 gDvm
@@ -166343,7 +166337,7 @@ gDvm
 gcHópLock
 );
 
-1870 
+1878 
 	`dvmCh™geSètus
 (
 £lf
@@ -166351,7 +166345,7 @@ gcHópLock
 THREAD_RUNNING
 );
 
-1875 
+1883 
 thªadObj
  = 
 	`dvmAŒocObje˘
@@ -166363,7 +166357,7 @@ gDvm
 ALLOC_DEFAULT
 );
 
-1876 
+1884 
 vmThªadObj
  = 
 	`dvmAŒocObje˘
@@ -166375,7 +166369,7 @@ gDvm
 ALLOC_DEFAULT
 );
 
-1877 i‡(
+1885 i‡(
 thªadObj
  =
 NULL
@@ -166383,17 +166377,17 @@ NULL
 vmThªadObj
  == NULL)
 
-1878 
+1886 
 Áû_u∆ök
 ;
 
-1884 
+1892 
 £lf
 ->
 thªadObj
  =ÅhreadObj;
 
-1885 
+1893 
 	`dvmSëFõldI¡
 (
 vmThªadObj
@@ -166407,7 +166401,7 @@ u4
 £lf
 );
 
-1890 i‡(
+1898 i‡(
 pArgs
 ->
 «me
@@ -166415,7 +166409,7 @@ pArgs
 NULL
 ) {
 
-1891 
+1899 
 thªadNameSå
  = 
 	`dvmCª©eSåögFromC°r
@@ -166425,36 +166419,8 @@ pArgs
 «me
 );
 
-1892 i‡(
-thªadNameSå
- =
-NULL
-) {
-
-1893 
-	`as£π
-(
-	`dvmCheckEx˚±i⁄
-(
-	`dvmThªadSñf
-()));
-
-1894 
-Áû_u∆ök
-;
-
-1898 
-öô
- = 
-	`dvmFödDúe˘MëhodByDes¸ùt‹
-(
-gDvm
-.
-˛assJavaL™gThªad
-, "<init>",
-
 1900 i‡(
-öô
+thªadNameSå
  =
 NULL
 ) {
@@ -166464,20 +166430,48 @@ NULL
 (
 	`dvmCheckEx˚±i⁄
 (
-£lf
-));
+	`dvmThªadSñf
+()));
 
 1902 
 Áû_u∆ök
 ;
 
-1916 
+1906 
+öô
+ = 
+	`dvmFödDúe˘MëhodByDes¸ùt‹
+(
+gDvm
+.
+˛assJavaL™gThªad
+, "<init>",
+
+1908 i‡(
+öô
+ =
+NULL
+) {
+
+1909 
+	`as£π
+(
+	`dvmCheckEx˚±i⁄
+(
+£lf
+));
+
+1910 
+Áû_u∆ök
+;
+
+1924 
 JVÆue
  
 unu£d
 ;
 
-1917 
+1925 
 	`dvmCÆlMëhod
 (
 £lf
@@ -166495,7 +166489,7 @@ pArgs
 group
 ,
 
-1918 
+1926 
 thªadNameSå
 , 
 	`os_gëThªadPri‹ôyFromSy°em
@@ -166503,21 +166497,21 @@ thªadNameSå
 isD´m⁄
 );
 
-1919 i‡(
+1927 i‡(
 	`dvmCheckEx˚±i⁄
 (
 £lf
 )) {
 
-1920 
+1928 
 	`ALOGE
 ("exceptionÅhrown while constructingáttachedÅhread object");
 
-1921 
+1929 
 Áû_u∆ök
 ;
 
-1938 i‡(
+1946 i‡(
 	`dvmGëFõldObje˘
 (
 thªadObj
@@ -166529,27 +166523,27 @@ offJavaL™gThªad_vmThªad
 NULL
 ) {
 
-1939 
+1947 
 	`ALOGW
 ("WOW:Åhread start hijack");
 
-1940 
+1948 
 	`dvmThrowIŒegÆThªadSèãEx˚±i⁄
 (
 
-1954 
+1962 
 ªt
  = 
 Ál£
 ;
 
-1956 
+1964 
 ªt
  = 
 åue
 ;
 
-1958 
+1966 
 	`dvmSëFõldObje˘
 (
 thªadObj
@@ -166561,7 +166555,7 @@ offJavaL™gThªad_vmThªad
 vmThªadObj
 );
 
-1961 
+1969 
 	`dvmRñó£TøckedAŒoc
 (
 thªadObj
@@ -166569,7 +166563,7 @@ thªadObj
 £lf
 );
 
-1962 
+1970 
 	`dvmRñó£TøckedAŒoc
 (
 vmThªadObj
@@ -166577,7 +166571,7 @@ vmThªadObj
 £lf
 );
 
-1963 
+1971 
 	`dvmRñó£TøckedAŒoc
 ((
 Obje˘
@@ -166587,11 +166581,11 @@ thªadNameSå
 £lf
 );
 
-1965 
+1973 
 	`LOG_THREAD
 ("threadid=%d:áttached fromÇative,Çame=%s",
 
-1966 
+1974 
 £lf
 ->
 thªadId
@@ -166601,57 +166595,57 @@ pArgs
 «me
 );
 
-1969 i‡(
+1977 i‡(
 gDvm
 .
 debuggîC⁄√˘ed
 )
 
-1970 
+1978 
 	`dvmDbgPo°ThªadSèπ
 (
 £lf
 );
 
-1972  
+1980  
 ªt
 ;
 
-1974 
+1982 
 Áû_u∆ök
 :
 
-1975 
+1983 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-1976 
+1984 
 	`u∆ökThªad
 (
 £lf
 );
 
-1977 i‡(!
+1985 i‡(!
 isD´m⁄
 )
 
-1978 
+1986 
 gDvm
 .
 n⁄D´m⁄ThªadCou¡
 --;
 
-1979 
+1987 
 	`dvmU∆ockThªadLi°
 ();
 
-1981 
+1989 
 Áû
 :
 
-1982 
+1990 
 	`dvmRñó£TøckedAŒoc
 (
 thªadObj
@@ -166659,7 +166653,7 @@ thªadObj
 £lf
 );
 
-1983 
+1991 
 	`dvmRñó£TøckedAŒoc
 (
 vmThªadObj
@@ -166667,7 +166661,7 @@ vmThªadObj
 £lf
 );
 
-1984 
+1992 
 	`dvmRñó£TøckedAŒoc
 ((
 Obje˘
@@ -166677,13 +166671,13 @@ thªadNameSå
 £lf
 );
 
-1985 i‡(
+1993 i‡(
 £lf
  !
 NULL
 ) {
 
-1986 i‡(
+1994 i‡(
 £lf
 ->
 jniEnv
@@ -166691,7 +166685,7 @@ jniEnv
 NULL
 ) {
 
-1987 
+1995 
 	`dvmDe°royJNIEnv
 (
 £lf
@@ -166699,7 +166693,7 @@ NULL
 jniEnv
 );
 
-1988 
+1996 
 £lf
 ->
 jniEnv
@@ -166707,31 +166701,31 @@ jniEnv
 NULL
 ;
 
-1990 
+1998 
 	`‰ìThªad
 (
 £lf
 );
 
-1992 
+2000 
 	`£tThªadSñf
 (
 NULL
 );
 
-1993  
+2001  
 Ál£
 ;
 
-1994 
+2002 
 	}
 }
 
-2019 
+2027 
 	$dvmDëachCuºítThªad
 ()
 
-2021 
+2029 
 Thªad
 * 
 £lf
@@ -166739,19 +166733,19 @@ Thªad
 	`dvmThªadSñf
 ();
 
-2022 
+2030 
 Obje˘
 * 
 vmThªad
 ;
 
-2023 
+2031 
 Obje˘
 * 
 group
 ;
 
-2025 
+2033 
 	`±hªad_muãx_lock
 (&
 gDvm
@@ -166759,13 +166753,13 @@ gDvm
 s_mtx
 );
 
-2026 if(
+2034 if(
 gDvm
 .
 thªadEndHook
 ){
 
-2027 
+2035 
 gDvm
 .
 	`thªadEndHook
@@ -166773,7 +166767,7 @@ gDvm
 £lf
 );
 
-2029 
+2037 
 	`±hªad_muãx_u∆ock
 (&
 gDvm
@@ -166781,7 +166775,7 @@ gDvm
 s_mtx
 );
 
-2039 
+2047 
 curDïth
  = 
 	`dvmCompuãExa˘FømeDïth
@@ -166793,11 +166787,11 @@ curDïth
 curFøme
 );
 
-2040 i‡(
+2048 i‡(
 curDïth
  != 0) {
 
-2041 
+2049 
 boﬁ
  
 t›IsN©ive
@@ -166805,11 +166799,11 @@ t›IsN©ive
 Ál£
 ;
 
-2043 i‡(
+2051 i‡(
 curDïth
  == 1) {
 
-2045 
+2053 
 	`as£π
 (!
 	`dvmIsBªakFøme
@@ -166823,7 +166817,7 @@ u4
 curFøme
 ));
 
-2046 
+2054 
 SèckSaveAªa
 * 
 sß
@@ -166837,7 +166831,7 @@ sß
 curFøme
 );
 
-2047 i‡(
+2055 i‡(
 	`dvmIsN©iveMëhod
 (
 sß
@@ -166845,25 +166839,25 @@ sß
 mëhod
 ))
 
-2048 
+2056 
 t›IsN©ive
  = 
 åue
 ;
 
-2051 i‡(!
+2059 i‡(!
 t›IsN©ive
 ) {
 
-2052 
+2060 
 	`ALOGE
 ("ERROR: detachingÅhread with interp frames (count=%d)",
 
-2053 
+2061 
 curDïth
 );
 
-2054 
+2062 
 	`dvmDumpThªad
 (
 £lf
@@ -166871,11 +166865,11 @@ curDïth
 Ál£
 );
 
-2055 
+2063 
 	`dvmAb‹t
 ();
 
-2059 
+2067 
 group
  = 
 	`dvmGëFõldObje˘
@@ -166889,7 +166883,7 @@ gDvm
 offJavaL™gThªad_group
 );
 
-2060 
+2068 
 	`LOG_THREAD
 ("thªadid=%d: dëach (group=%p)", 
 £lf
@@ -166899,19 +166893,19 @@ thªadId
 group
 );
 
-2067 
+2075 
 	`dvmRñó£JniM⁄ô‹s
 (
 £lf
 );
 
-2072 i‡(
+2080 i‡(
 	`dvmCheckEx˚±i⁄
 (
 £lf
 ))
 
-2073 
+2081 
 	`thªadExôUnˇughtEx˚±i⁄
 (
 £lf
@@ -166919,19 +166913,19 @@ group
 group
 );
 
-2078 i‡(
+2086 i‡(
 group
  !
 NULL
 ) {
 
-2079 
+2087 
 Mëhod
 * 
 ªmoveThªad
  =
 
-2080 
+2088 
 group
 ->
 ˛azz
@@ -166943,13 +166937,13 @@ gDvm
 voffJavaL™gThªadGroup_ªmoveThªad
 ];
 
-2081 
+2089 
 JVÆue
  
 unu£d
 ;
 
-2082 
+2090 
 	`dvmCÆlMëhod
 (
 £lf
@@ -166963,7 +166957,7 @@ unu£d
 thªadObj
 );
 
-2091 
+2099 
 vmThªad
  = 
 	`dvmGëFõldObje˘
@@ -166973,13 +166967,13 @@ vmThªad
 thªadObj
 ,
 
-2092 
+2100 
 gDvm
 .
 offJavaL™gThªad_vmThªad
 );
 
-2093 
+2101 
 	`dvmAddTøckedAŒoc
 (
 vmThªad
@@ -166987,7 +166981,7 @@ vmThªad
 £lf
 );
 
-2094 
+2102 
 	`dvmSëFõldObje˘
 (
 £lf
@@ -167001,7 +166995,7 @@ offJavaL™gThªad_vmThªad
 NULL
 );
 
-2097 
+2105 
 	`dvmSëFõldObje˘
 (
 vmThªad
@@ -167013,19 +167007,19 @@ offJavaL™gVMThªad_vmD©a
 NULL
 );
 
-2107 i‡(
+2115 i‡(
 gDvm
 .
 debuggîC⁄√˘ed
 )
 
-2108 
+2116 
 	`dvmDbgPo°ThªadDóth
 (
 £lf
 );
 
-2114 
+2122 
 	`dvmLockObje˘
 (
 £lf
@@ -167033,7 +167027,7 @@ debuggîC⁄√˘ed
 vmThªad
 );
 
-2115 
+2123 
 	`dvmObje˘NŸifyAŒ
 (
 £lf
@@ -167041,7 +167035,7 @@ vmThªad
 vmThªad
 );
 
-2116 
+2124 
 	`dvmU∆ockObje˘
 (
 £lf
@@ -167049,7 +167043,7 @@ vmThªad
 vmThªad
 );
 
-2118 
+2126 
 	`dvmRñó£TøckedAŒoc
 (
 vmThªad
@@ -167057,13 +167051,13 @@ vmThªad
 £lf
 );
 
-2119 
+2127 
 vmThªad
  = 
 NULL
 ;
 
-2126 vﬁ©ûê* 
+2134 vﬁ©ûê* 
 øw
  = 
 ªöãΩªt_ˇ°
@@ -167073,7 +167067,7 @@ NULL
 °©us
 );
 
-2127 vﬁ©ûê
+2135 vﬁ©ûê
 öt32_t
 * 
 addr
@@ -167083,7 +167077,7 @@ addr
 øw
 );
 
-2128 
+2136 
 	`™droid_©omic_ªÀa£_°‹e
 (
 THREAD_VMWAIT
@@ -167091,7 +167085,7 @@ THREAD_VMWAIT
 addr
 );
 
-2142 
+2150 
 MëhodTø˚Sèã
 * 
 åa˚Sèã
@@ -167101,7 +167095,7 @@ gDvm
 mëhodTø˚
 ;
 
-2144 
+2152 
 	`dvmLockMuãx
 (&
 åa˚Sèã
@@ -167109,29 +167103,29 @@ mëhodTø˚
 °¨tSt›Lock
 );
 
-2145 i‡(
+2153 i‡(
 åa˚Sèã
 ->
 åa˚E«bÀd
 ) {
 
-2146 
+2154 
 	`ALOGI
 ("threadid=%d: waiting for methodÅraceÅo finish",
 
-2147 
+2155 
 £lf
 ->
 thªadId
 );
 
-2148 
+2156 
 åa˚Sèã
 ->
 åa˚E«bÀd
 ) {
 
-2149 
+2157 
 	`dvmWaôC⁄d
 (&
 åa˚Sèã
@@ -167139,13 +167133,13 @@ thªadId
 thªadExôC⁄d
 ,
 
-2150 &
+2158 &
 åa˚Sèã
 ->
 °¨tSt›Lock
 );
 
-2153 
+2161 
 	`dvmU∆ockMuãx
 (&
 åa˚Sèã
@@ -167153,13 +167147,13 @@ thªadExôC⁄d
 °¨tSt›Lock
 );
 
-2155 
+2163 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-2160 
+2168 
 	`dvmDe°royJNIEnv
 (
 £lf
@@ -167167,7 +167161,7 @@ thªadExôC⁄d
 jniEnv
 );
 
-2161 
+2169 
 £lf
 ->
 jniEnv
@@ -167175,7 +167169,7 @@ jniEnv
 NULL
 ;
 
-2163 
+2171 
 £lf
 ->
 °©us
@@ -167183,13 +167177,13 @@ NULL
 THREAD_ZOMBIE
 ;
 
-2168 
+2176 
 	`u∆ökThªad
 (
 £lf
 );
 
-2174 i‡(!
+2182 i‡(!
 	`dvmGëFõldBoﬁón
 (
 £lf
@@ -167201,23 +167195,23 @@ gDvm
 offJavaL™gThªad_d´m⁄
 )) {
 
-2175 
+2183 
 gDvm
 .
 n⁄D´m⁄ThªadCou¡
 --;
 
-2177 i‡(
+2185 i‡(
 gDvm
 .
 n⁄D´m⁄ThªadCou¡
  == 0) {
 
-2178 
+2186 
 cc
 ;
 
-2180 
+2188 
 	`ALOGV
 ("thªadid=%d:Üa°Ç⁄-d´m⁄Åhªad", 
 £lf
@@ -167225,7 +167219,7 @@ cc
 thªadId
 );
 
-2183 
+2191 
 cc
  = 
 	`±hªad_c⁄d_sig«l
@@ -167235,13 +167229,13 @@ gDvm
 vmExôC⁄d
 );
 
-2184 
+2192 
 	`as£π
 (
 cc
  == 0);
 
-2188 
+2196 
 	`ALOGV
 ("thªadid=%d: bye!", 
 £lf
@@ -167249,33 +167243,33 @@ cc
 thªadId
 );
 
-2189 
+2197 
 	`ªÀa£ThªadId
 (
 £lf
 );
 
-2190 
+2198 
 	`dvmU∆ockThªadLi°
 ();
 
-2192 
+2200 
 	`£tThªadSñf
 (
 NULL
 );
 
-2194 
+2202 
 	`‰ìThªad
 (
 £lf
 );
 
-2195 
+2203 
 	}
 }
 
-2209 
+2217 
 	$dvmSu•ídThªad
 (
 Thªad
@@ -167283,7 +167277,7 @@ Thªad
 thªad
 )
 
-2211 
+2219 
 	`as£π
 (
 thªad
@@ -167291,7 +167285,7 @@ thªad
 NULL
 );
 
-2212 
+2220 
 	`as£π
 (
 thªad
@@ -167299,21 +167293,21 @@ thªad
 	`dvmThªadSñf
 ());
 
-2215 
+2223 
 	`lockThªadSu•ídCou¡
 ();
 
-2216 
+2224 
 	`dvmAddToSu•ídCou¡s
 (
 thªad
 , 1, 1);
 
-2218 
+2226 
 	`LOG_THREAD
 ("threadid=%d: suspend++,Çow=%d",
 
-2219 
+2227 
 thªad
 ->
 thªadId
@@ -167321,11 +167315,11 @@ thªadId
 su•ídCou¡
 );
 
-2220 
+2228 
 	`u∆ockThªadSu•ídCou¡
 ();
 
-2222 
+2230 
 	`waôF‹ThªadSu•íd
 (
 	`dvmThªadSñf
@@ -167333,11 +167327,11 @@ su•ídCou¡
 thªad
 );
 
-2223 
+2231 
 	}
 }
 
-2236 
+2244 
 	$dvmResumeThªad
 (
 Thªad
@@ -167345,7 +167339,7 @@ Thªad
 thªad
 )
 
-2238 
+2246 
 	`as£π
 (
 thªad
@@ -167353,7 +167347,7 @@ thªad
 NULL
 );
 
-2239 
+2247 
 	`as£π
 (
 thªad
@@ -167361,37 +167355,37 @@ thªad
 	`dvmThªadSñf
 ());
 
-2242 
+2250 
 	`lockThªadSu•ídCou¡
 ();
 
-2243 i‡(
+2251 i‡(
 thªad
 ->
 su•ídCou¡
  > 0) {
 
-2244 
+2252 
 	`dvmAddToSu•ídCou¡s
 (
 thªad
 , -1, -1);
 
-2246 
+2254 
 	`LOG_THREAD
 ("threadid=%d: suspendCountálready zero",
 
-2247 
+2255 
 thªad
 ->
 thªadId
 );
 
-2250 
+2258 
 	`LOG_THREAD
 ("threadid=%d: suspend--,Çow=%d",
 
-2251 
+2259 
 thªad
 ->
 thªadId
@@ -167399,13 +167393,13 @@ thªadId
 su•ídCou¡
 );
 
-2253 i‡(
+2261 i‡(
 thªad
 ->
 su•ídCou¡
  == 0) {
 
-2254 
+2262 
 	`dvmBrﬂdˇ°C⁄d
 (&
 gDvm
@@ -167413,15 +167407,15 @@ gDvm
 thªadSu•ídCou¡C⁄d
 );
 
-2257 
+2265 
 	`u∆ockThªadSu•ídCou¡
 ();
 
-2258 
+2266 
 	}
 }
 
-2263 
+2271 
 	$dvmSu•ídSñf
 (
 boﬁ
@@ -167429,7 +167423,7 @@ boﬁ
 jdwpA˘ivôy
 )
 
-2265 
+2273 
 Thªad
 * 
 £lf
@@ -167437,7 +167431,7 @@ Thªad
 	`dvmThªadSñf
 ();
 
-2268 
+2276 
 	`as£π
 (
 gDvm
@@ -167447,7 +167441,7 @@ jdwpSèã
 NULL
 );
 
-2269 i‡(
+2277 i‡(
 £lf
 ->
 h™dÀ
@@ -167459,23 +167453,23 @@ gDvm
 jdwpSèã
 )) {
 
-2270 
+2278 
 	`as£π
 (
 Ál£
 );
 
-2279 
+2287 
 	`lockThªadSu•ídCou¡
 ();
 
-2280 
+2288 
 	`dvmAddToSu•ídCou¡s
 (
 £lf
 , 1, 1);
 
-2285 
+2293 
 	`as£π
 (
 £lf
@@ -167483,7 +167477,7 @@ jdwpSèã
 su•ídCou¡
  > 0);
 
-2286 
+2294 
 £lf
 ->
 °©us
@@ -167491,7 +167485,7 @@ su•ídCou¡
 THREAD_SUSPENDED
 ;
 
-2287 
+2295 
 	`LOG_THREAD
 ("thªadid=%d: sñf-su•ídög (dbg)", 
 £lf
@@ -167499,11 +167493,11 @@ THREAD_SUSPENDED
 thªadId
 );
 
-2296 i‡(
+2304 i‡(
 jdwpA˘ivôy
 ) {
 
-2299 
+2307 
 	`dvmJdwpCÀ¨WaôF‹EvítThªad
 (
 gDvm
@@ -167511,13 +167505,13 @@ gDvm
 jdwpSèã
 );
 
-2302 
+2310 
 £lf
 ->
 su•ídCou¡
  != 0) {
 
-2303 
+2311 
 	`dvmWaôC⁄d
 (&
 gDvm
@@ -167525,23 +167519,23 @@ gDvm
 thªadSu•ídCou¡C⁄d
 ,
 
-2304 &
+2312 &
 gDvm
 .
 thªadSu•ídCou¡Lock
 );
 
-2305 i‡(
+2313 i‡(
 £lf
 ->
 su•ídCou¡
  != 0) {
 
-2312 
+2320 
 	`ALOGD
 ("threadid=%d: still suspendedáfter undo (sc=%d dc=%d)",
 
-2313 
+2321 
 £lf
 ->
 thªadId
@@ -167551,7 +167545,7 @@ su•ídCou¡
 dbgSu•ídCou¡
 );
 
-2316 
+2324 
 	`as£π
 (
 £lf
@@ -167561,7 +167555,7 @@ su•ídCou¡
 dbgSu•ídCou¡
  == 0);
 
-2317 
+2325 
 £lf
 ->
 °©us
@@ -167569,11 +167563,11 @@ dbgSu•ídCou¡
 THREAD_RUNNING
 ;
 
-2318 
+2326 
 	`LOG_THREAD
 ("threadid=%d: self-reviving (dbg), status=%d",
 
-2319 
+2327 
 £lf
 ->
 thªadId
@@ -167581,15 +167575,15 @@ thªadId
 °©us
 );
 
-2321 
+2329 
 	`u∆ockThªadSu•ídCou¡
 ();
 
-2322 
+2330 
 	}
 }
 
-2328 
+2336 
 	$dumpWedgedThªad
 (
 Thªad
@@ -167597,7 +167591,7 @@ Thªad
 thªad
 )
 
-2330 
+2338 
 	`dvmDumpThªad
 (
 	`dvmThªadSñf
@@ -167605,11 +167599,11 @@ thªad
 Ál£
 );
 
-2331 
+2339 
 	`dvmPrötN©iveBackTø˚
 ();
 
-2334 
+2342 
 	`dvmDumpThªad
 (
 thªad
@@ -167617,11 +167611,11 @@ thªad
 åue
 );
 
-2338 
+2346 
 	}
 }
 
-2348 
+2356 
 	$dvmRai£ThªadPri‹ôyIfNìded
 (
 Thªad
@@ -167631,17 +167625,17 @@ thªad
 pSavedThªadPrio
 ,
 
-2349 
+2357 
 SchedPﬁicy
 * 
 pSavedThªadPﬁicy
 )
 
-2351 
+2359 
 î∫o
  = 0;
 
-2352 *
+2360 *
 pSavedThªadPrio
  = 
 	`gë¥i‹ôy
@@ -167653,15 +167647,15 @@ thªad
 sy°emTid
 );
 
-2353 i‡(
+2361 i‡(
 î∫o
  != 0) {
 
-2354 
+2362 
 	`ALOGW
 ("UnableÅo getÖriority forÅhreadid=%d sysTid=%d",
 
-2355 
+2363 
 thªad
 ->
 thªadId
@@ -167669,7 +167663,7 @@ thªadId
 sy°emTid
 );
 
-2358 i‡(
+2366 i‡(
 	`gë_sched_pﬁicy
 (
 thªad
@@ -167679,11 +167673,11 @@ sy°emTid
 pSavedThªadPﬁicy
 ) != 0) {
 
-2359 
+2367 
 	`ALOGW
 ("UnableÅo getÖolicy forÅhreadid=%d sysTid=%d",
 
-2360 
+2368 
 thªad
 ->
 thªadId
@@ -167691,17 +167685,17 @@ thªadId
 sy°emTid
 );
 
-2364 
+2372 
 ch™geFœgs
  = 0;
 
-2369 i‡(*
+2377 i‡(*
 pSavedThªadPﬁicy
  =
 SP_BACKGROUND
 ) {
 
-2370 i‡(
+2378 i‡(
 	`£t_sched_pﬁicy
 (
 thªad
@@ -167711,7 +167705,7 @@ sy°emTid
 SP_FOREGROUND
 ) != 0) {
 
-2371 
+2379 
 	`ALOGW
 ("Couldn'à£àfgÖﬁicy o¿tid %d", 
 thªad
@@ -167719,17 +167713,17 @@ thªad
 sy°emTid
 );
 
-2373 
+2381 
 ch™geFœgs
  |
 kCh™gedPﬁicy
 ;
 
-2374 
+2382 
 	`ALOGD
 ("Temporarily movingÅid %dÅo fg (was %d)",
 
-2375 
+2383 
 thªad
 ->
 sy°emTid
@@ -167737,15 +167731,15 @@ sy°emTid
 pSavedThªadPﬁicy
 );
 
-2383 i‡(*
+2391 i‡(*
 pSavedThªadPrio
  > 0) {
 
-2384 c⁄° 
+2392 c⁄° 
 kHighî
  = 0;
 
-2385 i‡(
+2393 i‡(
 	`£çri‹ôy
 (
 PRIO_PROCESS
@@ -167757,11 +167751,11 @@ sy°emTid
 kHighî
 ) != 0) {
 
-2386 
+2394 
 	`ALOGW
 ("Couldn'tÑaiseÖriority onÅid %dÅo %d",
 
-2387 
+2395 
 thªad
 ->
 sy°emTid
@@ -167769,17 +167763,17 @@ sy°emTid
 kHighî
 );
 
-2389 
+2397 
 ch™geFœgs
  |
 kCh™gedPri‹ôy
 ;
 
-2390 
+2398 
 	`ALOGD
 ("TemporarilyÑaisedÖriority onÅid %d (%d -> %d)",
 
-2391 
+2399 
 thªad
 ->
 sy°emTid
@@ -167789,15 +167783,15 @@ pSavedThªadPrio
 kHighî
 );
 
-2395  
+2403  
 ch™geFœgs
 ;
 
-2396 
+2404 
 	}
 }
 
-2401 
+2409 
 	$dvmRe£tThªadPri‹ôy
 (
 Thªad
@@ -167807,7 +167801,7 @@ thªad
 ch™geFœgs
 ,
 
-2402 
+2410 
 ßvedThªadPrio
 , 
 SchedPﬁicy
@@ -167815,13 +167809,13 @@ SchedPﬁicy
 ßvedThªadPﬁicy
 )
 
-2404 i‡((
+2412 i‡((
 ch™geFœgs
  & 
 kCh™gedPﬁicy
 ) != 0) {
 
-2405 i‡(
+2413 i‡(
 	`£t_sched_pﬁicy
 (
 thªad
@@ -167831,11 +167825,11 @@ sy°emTid
 ßvedThªadPﬁicy
 ) != 0) {
 
-2406 
+2414 
 	`ALOGW
 ("NOTE: couldn'tÑesetÅid %dÅo (%d)",
 
-2407 
+2415 
 thªad
 ->
 sy°emTid
@@ -167843,11 +167837,11 @@ sy°emTid
 ßvedThªadPﬁicy
 );
 
-2409 
+2417 
 	`ALOGD
 ("RestoredÖolicy of %dÅo %d",
 
-2410 
+2418 
 thªad
 ->
 sy°emTid
@@ -167855,13 +167849,13 @@ sy°emTid
 ßvedThªadPﬁicy
 );
 
-2414 i‡((
+2422 i‡((
 ch™geFœgs
  & 
 kCh™gedPri‹ôy
 ) != 0) {
 
-2415 i‡(
+2423 i‡(
 	`£çri‹ôy
 (
 PRIO_PROCESS
@@ -167873,11 +167867,11 @@ sy°emTid
 ßvedThªadPrio
 ) != 0)
 
-2417 
+2425 
 	`ALOGW
 ("NOTE: couldn'tÑesetÖriority onÅhread %dÅo %d",
 
-2418 
+2426 
 thªad
 ->
 sy°emTid
@@ -167885,11 +167879,11 @@ sy°emTid
 ßvedThªadPrio
 );
 
-2420 
+2428 
 	`ALOGD
 ("RestoredÖriority on %dÅo %d",
 
-2421 
+2429 
 thªad
 ->
 sy°emTid
@@ -167897,23 +167891,23 @@ sy°emTid
 ßvedThªadPrio
 );
 
-2424 
+2432 
 	}
 }
 
-2450 
+2458 
 	#FIRST_SLEEP
  (250*1000Ë
 
 	)
 
-2451 
+2459 
 	#MORE_SLEEP
  (750*1000Ë
 
 	)
 
-2452 
+2460 
 	$waôF‹ThªadSu•íd
 (
 Thªad
@@ -167923,17 +167917,17 @@ Thªad
 thªad
 )
 
-2454 c⁄° 
+2462 c⁄° 
 kMaxRërõs
  = 10;
 
-2455 
+2463 
 •öSÀïTime
  = 
 FIRST_SLEEP
 ;
 
-2456 
+2464 
 boﬁ
  
 com∂aöed
@@ -167941,15 +167935,15 @@ com∂aöed
 Ál£
 ;
 
-2457 
+2465 
 ¥iCh™geFœgs
  = 0;
 
-2458 
+2466 
 ßvedThªadPrio
  = -500;
 
-2459 
+2467 
 SchedPﬁicy
  
 ßvedThªadPﬁicy
@@ -167957,27 +167951,27 @@ SchedPﬁicy
 SP_FOREGROUND
 ;
 
-2461 
+2469 
 ¶ìpIãr
  = 0;
 
-2462 
+2470 
 ªåyCou¡
  = 0;
 
-2463 
+2471 
 u8
  
 °¨tWhí
  = 0;
 
-2464 
+2472 
 u8
  
 fú°SèπWhí
  = 0;
 
-2466 
+2474 
 thªad
 ->
 °©us
@@ -167985,31 +167979,31 @@ thªad
 THREAD_RUNNING
 ) {
 
-2467 i‡(
+2475 i‡(
 ¶ìpIãr
  == 0) {
 
-2468 
+2476 
 °¨tWhí
  = 
 	`dvmGëRñ©iveTimeU£c
 ();
 
-2469 i‡(
+2477 i‡(
 fú°SèπWhí
  == 0)
 
-2470 
+2478 
 fú°SèπWhí
  = 
 °¨tWhí
 ;
 
-2477 i‡(
+2485 i‡(
 ªåyCou¡
  == 2) {
 
-2478 
+2486 
 	`as£π
 (
 thªad
@@ -168017,7 +168011,7 @@ thªad
 sy°emTid
  != 0);
 
-2479 
+2487 
 ¥iCh™geFœgs
  = 
 	`dvmRai£ThªadPri‹ôyIfNìded
@@ -168025,19 +168019,19 @@ sy°emTid
 thªad
 ,
 
-2480 &
+2488 &
 ßvedThªadPrio
 , &
 ßvedThªadPﬁicy
 );
 
-2484 #i‡
+2492 #i‡
 	`deföed
  (
 WITH_JIT
 )
 
-2491 i‡(
+2499 i‡(
 gDvmJô
 .
 pJôE¡ryTabÀ
@@ -168045,7 +168039,7 @@ pJôE¡ryTabÀ
 ªåyCou¡
  > 0 &&
 
-2492 
+2500 
 gDvmJô
 .
 hasNewChaö
@@ -168055,7 +168049,7 @@ thªad
 öJôCodeCache
 ) {
 
-2493 
+2501 
 	`ALOGD
 ("JIT unchaöáŒ f‹Åhªadid=%d", 
 thªad
@@ -168063,11 +168057,11 @@ thªad
 thªadId
 );
 
-2494 
+2502 
 	`dvmJôUnchaöAŒ
 ();
 
-2502 i‡(!
+2510 i‡(!
 	`dvmIãøtiveSÀï
 (
 ¶ìpIãr
@@ -168077,17 +168071,17 @@ thªadId
 °¨tWhí
 )) {
 
-2503 i‡(
+2511 i‡(
 •öSÀïTime
  !
 FIRST_SLEEP
 ) {
 
-2504 
+2512 
 	`ALOGW
 ("threadid=%d: spin on suspend #%dÅhreadid=%d (pcf=%d)",
 
-2505 
+2513 
 £lf
 ->
 thªadId
@@ -168095,7 +168089,7 @@ thªadId
 ªåyCou¡
 ,
 
-2506 
+2514 
 thªad
 ->
 thªadId
@@ -168103,53 +168097,53 @@ thªadId
 ¥iCh™geFœgs
 );
 
-2507 i‡(
+2515 i‡(
 ªåyCou¡
  > 1) {
 
-2509 
+2517 
 	`dumpWedgedThªad
 (
 thªad
 );
 
-2511 
+2519 
 com∂aöed
  = 
 åue
 ;
 
-2515 
+2523 
 ¶ìpIãr
  = 0;
 
-2516 
+2524 
 •öSÀïTime
  = 
 MORE_SLEEP
 ;
 
-2518 i‡(
+2526 i‡(
 ªåyCou¡
 ++ =
 kMaxRërõs
 ) {
 
-2519 
+2527 
 	`ALOGE
 ("Fatal spin-on-suspend, dumpingÅhreads");
 
-2520 
+2528 
 	`dvmDumpAŒThªads
 (
 Ál£
 );
 
-2523 
+2531 
 	`ALOGE
 ("threadid=%d: stuck onÅhreadid=%d, giving up",
 
-2524 
+2532 
 £lf
 ->
 thªadId
@@ -168157,41 +168151,41 @@ thªadId
 thªad
 ->threadId);
 
-2527 
+2535 
 	`dvmNukeThªad
 (
 thªad
 );
 
-2529 
+2537 
 	`dvmAb‹t
 ();
 
-2534 i‡(
+2542 i‡(
 com∂aöed
 ) {
 
-2535 
+2543 
 	`ALOGW
 ("threadid=%d: spin on suspendÑesolved in %lld msec",
 
-2536 
+2544 
 £lf
 ->
 thªadId
 ,
 
-2537 (
+2545 (
 	`dvmGëRñ©iveTimeU£c
 (Ë- 
 fú°SèπWhí
 ) / 1000);
 
-2540 i‡(
+2548 i‡(
 ¥iCh™geFœgs
  != 0) {
 
-2541 
+2549 
 	`dvmRe£tThªadPri‹ôy
 (
 thªad
@@ -168201,15 +168195,15 @@ thªad
 ßvedThªadPrio
 ,
 
-2542 
+2550 
 ßvedThªadPﬁicy
 );
 
-2544 
+2552 
 	}
 }
 
-2568 
+2576 
 	$dvmSu•ídAŒThªads
 (
 Su•ídCau£
@@ -168217,7 +168211,7 @@ Su•ídCau£
 why
 )
 
-2570 
+2578 
 Thªad
 * 
 £lf
@@ -168225,25 +168219,25 @@ Thªad
 	`dvmThªadSñf
 ();
 
-2571 
+2579 
 Thªad
 * 
 thªad
 ;
 
-2573 
+2581 
 	`as£π
 (
 why
  != 0);
 
-2582 
+2590 
 	`lockThªadSu•íd
 ("su•-Æl", 
 why
 );
 
-2584 
+2592 
 	`LOG_THREAD
 ("thªadid=%d: Su•ídAŒ sèπög", 
 £lf
@@ -168251,17 +168245,17 @@ why
 thªadId
 );
 
-2597 
+2605 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-2599 
+2607 
 	`lockThªadSu•ídCou¡
 ();
 
-2600 
+2608 
 thªad
  = 
 gDvm
@@ -168273,13 +168267,13 @@ NULL
 √xt
 ) {
 
-2601 i‡(
+2609 i‡(
 thªad
  =
 £lf
 )
 
-2605 i‡((
+2613 i‡((
 why
  =
 SUSPEND_FOR_DEBUG
@@ -168287,7 +168281,7 @@ SUSPEND_FOR_DEBUG
 SUSPEND_FOR_DEBUG_EVENT
 ) &&
 
-2606 
+2614 
 thªad
 ->
 h™dÀ
@@ -168299,29 +168293,29 @@ gDvm
 jdwpSèã
 ))
 
-2609 
+2617 
 	`dvmAddToSu•ídCou¡s
 (
 thªad
 , 1,
 
-2610 (
+2618 (
 why
  =
 SUSPEND_FOR_DEBUG
  ||
 
-2611 
+2619 
 why
  =
 SUSPEND_FOR_DEBUG_EVENT
 )
 
-2614 
+2622 
 	`u∆ockThªadSu•ídCou¡
 ();
 
-2630 
+2638 
 thªad
  = 
 gDvm
@@ -168333,13 +168327,13 @@ NULL
 √xt
 ) {
 
-2631 i‡(
+2639 i‡(
 thªad
  =
 £lf
 )
 
-2635 i‡((
+2643 i‡((
 why
  =
 SUSPEND_FOR_DEBUG
@@ -168347,7 +168341,7 @@ SUSPEND_FOR_DEBUG
 SUSPEND_FOR_DEBUG_EVENT
 ) &&
 
-2636 
+2644 
 thªad
 ->
 h™dÀ
@@ -168359,7 +168353,7 @@ gDvm
 jdwpSèã
 ))
 
-2640 
+2648 
 	`waôF‹ThªadSu•íd
 (
 £lf
@@ -168367,11 +168361,11 @@ jdwpSèã
 thªad
 );
 
-2642 
+2650 
 	`LOG_THREAD
 ("threadid=%d:Åhreadid=%d status=%d sc=%d dc=%d",
 
-2643 
+2651 
 £lf
 ->
 thªadId
@@ -168381,7 +168375,7 @@ thªad
 °©us
 ,
 
-2644 
+2652 
 thªad
 ->
 su•ídCou¡
@@ -168389,15 +168383,15 @@ su•ídCou¡
 dbgSu•ídCou¡
 );
 
-2647 
+2655 
 	`dvmU∆ockThªadLi°
 ();
 
-2648 
+2656 
 	`u∆ockThªadSu•íd
 ();
 
-2650 
+2658 
 	`LOG_THREAD
 ("thªadid=%d: Su•ídAŒ com∂ëe", 
 £lf
@@ -168405,11 +168399,11 @@ dbgSu•ídCou¡
 thªadId
 );
 
-2651 
+2659 
 	}
 }
 
-2658 
+2666 
 	$dvmResumeAŒThªads
 (
 Su•ídCau£
@@ -168417,7 +168411,7 @@ Su•ídCau£
 why
 )
 
-2660 
+2668 
 Thªad
 * 
 £lf
@@ -168425,23 +168419,23 @@ Thªad
 	`dvmThªadSñf
 ();
 
-2661 
+2669 
 Thªad
 * 
 thªad
 ;
 
-2662 
+2670 
 cc
 ;
 
-2664 
+2672 
 	`lockThªadSu•íd
 ("ªs-Æl", 
 why
 );
 
-2665 
+2673 
 	`LOG_THREAD
 ("thªadid=%d: ResumeAŒ sèπög", 
 £lf
@@ -168449,17 +168443,17 @@ why
 thªadId
 );
 
-2672 
+2680 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-2673 
+2681 
 	`lockThªadSu•ídCou¡
 ();
 
-2674 
+2682 
 thªad
  = 
 gDvm
@@ -168471,13 +168465,13 @@ NULL
 √xt
 ) {
 
-2675 i‡(
+2683 i‡(
 thªad
  =
 £lf
 )
 
-2679 i‡((
+2687 i‡((
 why
  =
 SUSPEND_FOR_DEBUG
@@ -168485,7 +168479,7 @@ SUSPEND_FOR_DEBUG
 SUSPEND_FOR_DEBUG_EVENT
 ) &&
 
-2680 
+2688 
 thªad
 ->
 h™dÀ
@@ -168497,49 +168491,49 @@ gDvm
 jdwpSèã
 ))
 
-2685 i‡(
+2693 i‡(
 thªad
 ->
 su•ídCou¡
  > 0) {
 
-2686 
+2694 
 	`dvmAddToSu•ídCou¡s
 (
 thªad
 , -1,
 
-2687 (
+2695 (
 why
  =
 SUSPEND_FOR_DEBUG
  ||
 
-2688 
+2696 
 why
  =
 SUSPEND_FOR_DEBUG_EVENT
 )
 
-2691 
+2699 
 	`LOG_THREAD
 ("threadid=%d: suspendCountálready zero",
 
-2692 
+2700 
 thªad
 ->
 thªadId
 );
 
-2695 
+2703 
 	`u∆ockThªadSu•ídCou¡
 ();
 
-2696 
+2704 
 	`dvmU∆ockThªadLi°
 ();
 
-2732 
+2740 
 	`LOG_THREAD
 ("thªadid=%d: ResumeAŒ wakög othîs", 
 £lf
@@ -168547,15 +168541,15 @@ thªadId
 thªadId
 );
 
-2733 
+2741 
 	`u∆ockThªadSu•íd
 ();
 
-2739 
+2747 
 	`lockThªadSu•ídCou¡
 ();
 
-2740 
+2748 
 cc
  = 
 	`±hªad_c⁄d_brﬂdˇ°
@@ -168565,17 +168559,17 @@ gDvm
 thªadSu•ídCou¡C⁄d
 );
 
-2741 
+2749 
 	`as£π
 (
 cc
  == 0);
 
-2742 
+2750 
 	`u∆ockThªadSu•ídCou¡
 ();
 
-2744 
+2752 
 	`LOG_THREAD
 ("thªadid=%d: ResumeAŒ com∂ëe", 
 £lf
@@ -168583,15 +168577,15 @@ cc
 thªadId
 );
 
-2745 
+2753 
 	}
 }
 
-2751 
+2759 
 	$dvmUndoDebuggîSu•ísi⁄s
 ()
 
-2753 
+2761 
 Thªad
 * 
 £lf
@@ -168599,23 +168593,23 @@ Thªad
 	`dvmThªadSñf
 ();
 
-2754 
+2762 
 Thªad
 * 
 thªad
 ;
 
-2755 
+2763 
 cc
 ;
 
-2757 
+2765 
 	`lockThªadSu•íd
 ("undo", 
 SUSPEND_FOR_DEBUG
 );
 
-2758 
+2766 
 	`LOG_THREAD
 ("thªadid=%d: UndoDebuggîSu• sèπög", 
 £lf
@@ -168623,17 +168617,17 @@ SUSPEND_FOR_DEBUG
 thªadId
 );
 
-2765 
+2773 
 	`dvmLockThªadLi°
 (
 £lf
 );
 
-2766 
+2774 
 	`lockThªadSu•ídCou¡
 ();
 
-2767 
+2775 
 thªad
  = 
 gDvm
@@ -168645,13 +168639,13 @@ NULL
 √xt
 ) {
 
-2768 i‡(
+2776 i‡(
 thªad
  =
 £lf
 )
 
-2772 i‡(
+2780 i‡(
 thªad
 ->
 h™dÀ
@@ -168663,7 +168657,7 @@ gDvm
 jdwpSèã
 )) {
 
-2773 
+2781 
 	`as£π
 (
 thªad
@@ -168671,7 +168665,7 @@ thªad
 dbgSu•ídCou¡
  == 0);
 
-2777 
+2785 
 	`as£π
 (
 thªad
@@ -168681,7 +168675,7 @@ su•ídCou¡
 dbgSu•ídCou¡
 );
 
-2778 
+2786 
 	`dvmAddToSu•ídCou¡s
 (
 thªad
@@ -168689,25 +168683,25 @@ thªad
 dbgSu•ídCou¡
 ,
 
-2779 -
+2787 -
 thªad
 ->
 dbgSu•ídCou¡
 );
 
-2781 
+2789 
 	`u∆ockThªadSu•ídCou¡
 ();
 
-2782 
+2790 
 	`dvmU∆ockThªadLi°
 ();
 
-2788 
+2796 
 	`lockThªadSu•ídCou¡
 ();
 
-2789 
+2797 
 cc
  = 
 	`±hªad_c⁄d_brﬂdˇ°
@@ -168717,21 +168711,21 @@ gDvm
 thªadSu•ídCou¡C⁄d
 );
 
-2790 
+2798 
 	`as£π
 (
 cc
  == 0);
 
-2791 
+2799 
 	`u∆ockThªadSu•ídCou¡
 ();
 
-2793 
+2801 
 	`u∆ockThªadSu•íd
 ();
 
-2795 
+2803 
 	`LOG_THREAD
 ("thªadid=%d: UndoDebuggîSu• com∂ëe", 
 £lf
@@ -168739,11 +168733,11 @@ cc
 thªadId
 );
 
-2796 
+2804 
 	}
 }
 
-2809 
+2817 
 boﬁ
  
 	$dvmIsSu•íded
@@ -168753,13 +168747,13 @@ Thªad
 thªad
 )
 
-2824  (
+2832  (
 thªad
 ->
 su•ídCou¡
  != 0 &&
 
-2825 
+2833 
 thªad
 ->
 °©us
@@ -168767,11 +168761,11 @@ thªad
 THREAD_RUNNING
 );
 
-2826 
+2834 
 	}
 }
 
-2843 
+2851 
 	$dvmWaôF‹Su•íd
 (
 Thªad
@@ -168779,7 +168773,7 @@ Thªad
 thªad
 )
 
-2845 
+2853 
 Thªad
 * 
 £lf
@@ -168787,11 +168781,11 @@ Thªad
 	`dvmThªadSñf
 ();
 
-2847 
+2855 
 	`LOG_THREAD
 ("threadid=%d: waiting forÅhreadid=%dÅo sleep",
 
-2848 
+2856 
 £lf
 ->
 thªadId
@@ -168799,7 +168793,7 @@ thªadId
 thªad
 ->threadId);
 
-2850 
+2858 
 	`as£π
 (
 thªad
@@ -168813,7 +168807,7 @@ gDvm
 jdwpSèã
 ));
 
-2851 
+2859 
 	`as£π
 (
 thªad
@@ -168821,7 +168815,7 @@ thªad
 £lf
 );
 
-2852 
+2860 
 	`as£π
 (
 £lf
@@ -168831,7 +168825,7 @@ thªad
 THREAD_RUNNING
 );
 
-2854 
+2862 
 	`waôF‹ThªadSu•íd
 (
 £lf
@@ -168839,11 +168833,11 @@ THREAD_RUNNING
 thªad
 );
 
-2856 
+2864 
 	`LOG_THREAD
 ("threadid=%d:Åhreadid=%d isÇowásleep",
 
-2857 
+2865 
 £lf
 ->
 thªadId
@@ -168851,11 +168845,11 @@ thªadId
 thªad
 ->threadId);
 
-2858 
+2866 
 	}
 }
 
-2866 
+2874 
 boﬁ
  
 	$fuŒSu•ídCheck
@@ -168865,7 +168859,7 @@ Thªad
 £lf
 )
 
-2868 
+2876 
 	`as£π
 (
 £lf
@@ -168873,7 +168867,7 @@ Thªad
 NULL
 );
 
-2869 
+2877 
 	`as£π
 (
 £lf
@@ -168881,11 +168875,11 @@ NULL
 su•ídCou¡
  >= 0);
 
-2875 
+2883 
 	`lockThªadSu•ídCou¡
 ();
 
-2877 
+2885 
 boﬁ
  
 √edSu•íd
@@ -168895,11 +168889,11 @@ boﬁ
 su•ídCou¡
  != 0);
 
-2878 i‡(
+2886 i‡(
 √edSu•íd
 ) {
 
-2879 
+2887 
 	`LOG_THREAD
 ("thªadid=%d: sñf-su•ídög", 
 £lf
@@ -168907,7 +168901,7 @@ su•ídCou¡
 thªadId
 );
 
-2880 
+2888 
 ThªadSètus
  
 ﬁdSètus
@@ -168917,7 +168911,7 @@ ThªadSètus
 °©us
 ;
 
-2881 
+2889 
 £lf
 ->
 °©us
@@ -168925,13 +168919,13 @@ ThªadSètus
 THREAD_SUSPENDED
 ;
 
-2883 
+2891 
 £lf
 ->
 su•ídCou¡
  != 0) {
 
-2889 
+2897 
 	`dvmWaôC⁄d
 (&
 gDvm
@@ -168939,13 +168933,13 @@ gDvm
 thªadSu•ídCou¡C⁄d
 ,
 
-2890 &
+2898 &
 gDvm
 .
 thªadSu•ídCou¡Lock
 );
 
-2892 
+2900 
 	`as£π
 (
 £lf
@@ -168955,7 +168949,7 @@ su•ídCou¡
 dbgSu•ídCou¡
  == 0);
 
-2893 
+2901 
 £lf
 ->
 °©us
@@ -168963,11 +168957,11 @@ dbgSu•ídCou¡
 ﬁdSètus
 ;
 
-2894 
+2902 
 	`LOG_THREAD
 ("threadid=%d: self-reviving, status=%d",
 
-2895 
+2903 
 £lf
 ->
 thªadId
@@ -168975,19 +168969,19 @@ thªadId
 °©us
 );
 
-2898 
+2906 
 	`u∆ockThªadSu•ídCou¡
 ();
 
-2900  
+2908  
 √edSu•íd
 ;
 
-2901 
+2909 
 	}
 }
 
-2907 
+2915 
 boﬁ
  
 	$dvmCheckSu•ídPídög
@@ -168997,7 +168991,7 @@ Thªad
 £lf
 )
 
-2909 
+2917 
 	`as£π
 (
 £lf
@@ -169005,27 +168999,27 @@ Thªad
 NULL
 );
 
-2910 i‡(
+2918 i‡(
 £lf
 ->
 su•ídCou¡
  == 0) {
 
-2911  
+2919  
 Ál£
 ;
 
-2913  
+2921  
 	`fuŒSu•ídCheck
 (
 £lf
 );
 
-2915 
+2923 
 	}
 }
 
-2924 
+2932 
 ThªadSètus
  
 	$dvmCh™geSètus
@@ -169039,29 +169033,29 @@ ThªadSètus
 √wSètus
 )
 
-2926 
+2934 
 ThªadSètus
  
 ﬁdSètus
 ;
 
-2928 i‡(
+2936 i‡(
 £lf
  =
 NULL
 )
 
-2929 
+2937 
 £lf
  = 
 	`dvmThªadSñf
 ();
 
-2931 
+2939 
 	`LOGVV
 ("threadid=%d: (status %d -> %d)",
 
-2932 
+2940 
 £lf
 ->
 thªadId
@@ -169071,7 +169065,7 @@ thªadId
 √wSètus
 );
 
-2934 
+2942 
 ﬁdSètus
  = 
 £lf
@@ -169079,23 +169073,23 @@ thªadId
 °©us
 ;
 
-2935 i‡(
+2943 i‡(
 ﬁdSètus
  =
 √wSètus
 )
 
-2936  
+2944  
 ﬁdSètus
 ;
 
-2938 i‡(
+2946 i‡(
 √wSètus
  =
 THREAD_RUNNING
 ) {
 
-2989 vﬁ©ûê* 
+2997 vﬁ©ûê* 
 øw
  = 
 ªöãΩªt_ˇ°
@@ -169105,7 +169099,7 @@ THREAD_RUNNING
 °©us
 );
 
-2990 vﬁ©ûê
+2998 vﬁ©ûê
 öt32_t
 * 
 addr
@@ -169115,7 +169109,7 @@ addr
 øw
 );
 
-2991 
+2999 
 	`™droid_©omic_acquúe_°‹e
 (
 √wSètus
@@ -169123,19 +169117,19 @@ addr
 addr
 );
 
-2992 i‡(
+3000 i‡(
 £lf
 ->
 su•ídCou¡
  != 0) {
 
-2993 
+3001 
 	`fuŒSu•ídCheck
 (
 £lf
 );
 
-3003 
+3011 
 	`as£π
 (
 √wSètus
@@ -169143,7 +169137,7 @@ su•ídCou¡
 THREAD_SUSPENDED
 );
 
-3004 vﬁ©ûê* 
+3012 vﬁ©ûê* 
 øw
  = 
 ªöãΩªt_ˇ°
@@ -169153,7 +169147,7 @@ THREAD_SUSPENDED
 °©us
 );
 
-3005 vﬁ©ûê
+3013 vﬁ©ûê
 öt32_t
 * 
 addr
@@ -169163,7 +169157,7 @@ addr
 øw
 );
 
-3006 
+3014 
 	`™droid_©omic_ªÀa£_°‹e
 (
 √wSètus
@@ -169171,15 +169165,15 @@ addr
 addr
 );
 
-3009  
+3017  
 ﬁdSètus
 ;
 
-3010 
+3018 
 	}
 }
 
-3016 
+3024 
 Obje˘
 * 
 	$gëSèticThªadGroup
@@ -169187,19 +169181,19 @@ Obje˘
 fõldName
 )
 
-3018 
+3026 
 SèticFõld
 * 
 groupFõld
 ;
 
-3019 
+3027 
 Obje˘
 * 
 groupObj
 ;
 
-3021 
+3029 
 groupFõld
  = 
 	`dvmFödSèticFõld
@@ -169209,31 +169203,31 @@ gDvm
 ˛assJavaL™gThªadGroup
 ,
 
-3022 
+3030 
 fõldName
 , "Ljava/lang/ThreadGroup;");
 
-3023 i‡(
+3031 i‡(
 groupFõld
  =
 NULL
 ) {
 
-3024 
+3032 
 	`ALOGE
 ("java.œng.ThªadGrou∞d€†nŸ havê™ '%s' fõld", 
 fõldName
 );
 
-3025 
+3033 
 	`dvmThrowI¡î«lEº‹
 ("bad definition for ThreadGroup");
 
-3026  
+3034  
 NULL
 ;
 
-3028 
+3036 
 groupObj
  = 
 	`dvmGëSèticFõldObje˘
@@ -169241,65 +169235,65 @@ groupObj
 groupFõld
 );
 
-3029 i‡(
+3037 i‡(
 groupObj
  =
 NULL
 ) {
 
-3030 
+3038 
 	`ALOGE
 ("java.œng.ThªadGroup.%†nŸ inôülized", 
 fõldName
 );
 
-3031 
+3039 
 	`dvmThrowI¡î«lEº‹
 (
 NULL
 );
 
-3032  
+3040  
 NULL
 ;
 
-3035  
+3043  
 groupObj
 ;
-
-3036 
-	}
-}
-
-3037 
-Obje˘
-* 
-	$dvmGëSy°emThªadGroup
-()
-
-3039  
-	`gëSèticThªadGroup
-("mSystem");
-
-3040 
-	}
-}
-
-3041 
-Obje˘
-* 
-	$dvmGëMaöThªadGroup
-()
-
-3043  
-	`gëSèticThªadGroup
-("mMain");
 
 3044 
 	}
 }
 
-3053 
+3045 
+Obje˘
+* 
+	$dvmGëSy°emThªadGroup
+()
+
+3047  
+	`gëSèticThªadGroup
+("mSystem");
+
+3048 
+	}
+}
+
+3049 
+Obje˘
+* 
+	$dvmGëMaöThªadGroup
+()
+
+3051  
+	`gëSèticThªadGroup
+("mMain");
+
+3052 
+	}
+}
+
+3061 
 Thªad
 * 
 	$dvmGëThªadFromThªadObje˘
@@ -169309,11 +169303,11 @@ Obje˘
 vmThªadObj
 )
 
-3055 
+3063 
 vmD©a
 ;
 
-3057 
+3065 
 vmD©a
  = 
 	`dvmGëFõldI¡
@@ -169325,11 +169319,11 @@ gDvm
 offJavaL™gVMThªad_vmD©a
 );
 
-3059 i‡(
+3067 i‡(
 Ál£
 ) {
 
-3060 
+3068 
 Thªad
 * 
 thªad
@@ -169339,13 +169333,13 @@ gDvm
 thªadLi°
 ;
 
-3061 
+3069 
 thªad
  !
 NULL
 ) {
 
-3062 i‡((
+3070 i‡((
 Thªad
 *)
 vmD©a
@@ -169353,23 +169347,23 @@ vmD©a
 thªad
 )
 
-3065 
+3073 
 thªad
  =Åhªad->
 √xt
 ;
 
-3068 i‡(
+3076 i‡(
 thªad
  =
 NULL
 ) {
 
-3069 
+3077 
 	`ALOGW
 ("WARNING: vmThreadObj=%p hasÅhread=%p,Çot inÅhreadÜist",
 
-3070 
+3078 
 vmThªadObj
 , (
 Thªad
@@ -169377,21 +169371,21 @@ Thªad
 vmD©a
 );
 
-3071 
+3079 
 vmD©a
  = 0;
 
-3075  (
+3083  (
 Thªad
 *Ë
 vmD©a
 ;
 
-3076 
+3084 
 	}
 }
 
-3084 
+3092 
 Thªad
 * 
 	$dvmGëThªadByH™dÀ
@@ -169401,13 +169395,13 @@ Thªad
 h™dÀ
 )
 
-3086 
+3094 
 Thªad
 * 
 thªad
 ;
 
-3087 
+3095 
 thªad
  = 
 gDvm
@@ -169419,21 +169413,21 @@ NULL
 √xt
 ) {
 
-3088 i‡(
+3096 i‡(
 thªad
 ->
 h™dÀ
  == handle)
 
-3091  
+3099  
 thªad
 ;
 
-3092 
+3100 
 	}
 }
 
-3100 
+3108 
 Thªad
 * 
 	$dvmGëThªadByThªadId
@@ -169443,13 +169437,13 @@ u4
 thªadId
 )
 
-3102 
+3110 
 Thªad
 * 
 thªad
 ;
 
-3103 
+3111 
 thªad
  = 
 gDvm
@@ -169461,21 +169455,21 @@ NULL
 √xt
 ) {
 
-3104 i‡(
+3112 i‡(
 thªad
 ->
 thªadId
  ==ÅhreadId)
 
-3107  
+3115  
 thªad
 ;
 
-3108 
+3116 
 	}
 }
 
-3110 
+3118 
 	$dvmCh™geThªadPri‹ôy
 (
 Thªad
@@ -169485,7 +169479,7 @@ thªad
 √wPri‹ôy
 )
 
-3112 
+3120 
 	`os_ch™geThªadPri‹ôy
 (
 thªad
@@ -169493,11 +169487,11 @@ thªad
 √wPri‹ôy
 );
 
-3113 
+3121 
 	}
 }
 
-3119 
+3127 
 boﬁ
  
 	$dvmIsOnThªadLi°
@@ -169507,7 +169501,7 @@ Thªad
 thªad
 )
 
-3121 
+3129 
 boﬁ
  
 ªt
@@ -169515,13 +169509,13 @@ boﬁ
 Ál£
 ;
 
-3123 
+3131 
 	`dvmLockThªadLi°
 (
 NULL
 );
 
-3124 i‡(
+3132 i‡(
 thªad
  =
 gDvm
@@ -169529,13 +169523,13 @@ gDvm
 thªadLi°
 ) {
 
-3125 
+3133 
 ªt
  = 
 åue
 ;
 
-3127 
+3135 
 ªt
  = 
 thªad
@@ -169547,19 +169541,19 @@ NULL
 √xt
  != NULL;
 
-3129 
+3137 
 	`dvmU∆ockThªadLi°
 ();
 
-3131  
+3139  
 ªt
 ;
 
-3132 
+3140 
 	}
 }
 
-3138 
+3146 
 	$dvmDumpThªad
 (
 Thªad
@@ -169571,13 +169565,13 @@ boﬁ
 isRu¬ög
 )
 
-3140 
+3148 
 DebugOuçutT¨gë
  
 èrgë
 ;
 
-3142 
+3150 
 	`dvmCª©eLogOuçutT¨gë
 (&
 èrgë
@@ -169587,7 +169581,7 @@ ANDROID_LOG_INFO
 LOG_TAG
 );
 
-3143 
+3151 
 	`dvmDumpThªadEx
 (&
 èrgë
@@ -169597,11 +169591,11 @@ thªad
 isRu¬ög
 );
 
-3144 
+3152 
 	}
 }
 
-3160 
+3168 
 	$gëScheduÀrGroup
 (
 tid
@@ -169613,25 +169607,25 @@ size_t
 bufLí
 )
 
-3162 #ifde‡
+3170 #ifde‡
 HAVE_ANDROID_OS
 
 
-3163 
+3171 
 ∑thBuf
 [32];
 
-3164 
+3172 
 löeBuf
 [256];
 
-3165 
+3173 
 FILE
  *
 Â
 ;
 
-3167 
+3175 
 	`¢¥ötf
 (
 ∑thBuf
@@ -169639,7 +169633,7 @@ FILE
 tid
 );
 
-3168 i‡((
+3176 i‡((
 Â
  = 
 	`f›í
@@ -169649,7 +169643,7 @@ tid
 NULL
 ) {
 
-3169 
+3177 
 	`¢¥ötf
 (
 buf
@@ -169659,7 +169653,7 @@ bufLí
 î∫o
 );
 
-3173 
+3181 
 	`fgës
 (
 löeBuf
@@ -169669,21 +169663,21 @@ löeBuf
 NULL
 ) {
 
-3174 * 
+3182 * 
 subsys
 ;
 
-3175 * 
+3183 * 
 gΩ
 ;
 
-3176 
+3184 
 size_t
  
 Àn
 ;
 
-3179 
+3187 
 subsys
  = 
 	`°rchr
@@ -169691,23 +169685,23 @@ subsys
 löeBuf
 , ':');
 
-3180 i‡(
+3188 i‡(
 subsys
  =
 NULL
 ) {
 
-3181 
+3189 
 out_bad_d©a
 ;
 
-3184 i‡(
+3192 i‡(
 	`°∫cmp
 (
 subsys
 , ":cpu:", 5) != 0) {
 
-3189 
+3197 
 gΩ
  = 
 	`°rchr
@@ -169715,21 +169709,21 @@ gΩ
 subsys
 , '/');
 
-3190 i‡(
+3198 i‡(
 gΩ
  =
 NULL
 ) {
 
-3191 
+3199 
 out_bad_d©a
 ;
 
-3193 
+3201 
 gΩ
 ++;
 
-3195 
+3203 
 Àn
  = 
 	`°æí
@@ -169737,25 +169731,25 @@ gΩ
 gΩ
 );
 
-3196 
+3204 
 gΩ
 [
 Àn
 -1] = '\0';
 
-3198 i‡(
+3206 i‡(
 bufLí
  <
 Àn
 ) {
 
-3199 
+3207 
 Àn
  = 
 bufLí
  - 1;
 
-3201 
+3209 
 	`°∫˝y
 (
 buf
@@ -169765,19 +169759,19 @@ gΩ
 Àn
 );
 
-3202 
+3210 
 buf
 [
 Àn
 ] = '\0';
 
-3203 
+3211 
 	`f˛o£
 (
 Â
 );
 
-3207 
+3215 
 	`¢¥ötf
 (
 buf
@@ -169785,23 +169779,23 @@ buf
 bufLí
 , "[no-cpu-subsys]");
 
-3208 
+3216 
 	`f˛o£
 (
 Â
 );
 
-3211 
+3219 
 out_bad_d©a
 :
 
-3212 
+3220 
 	`ALOGE
 ("Bad cgrou∞d©®{%s}", 
 löeBuf
 );
 
-3213 
+3221 
 	`¢¥ötf
 (
 buf
@@ -169809,13 +169803,13 @@ buf
 bufLí
 , "[data-parse-failed]");
 
-3214 
+3222 
 	`f˛o£
 (
 Â
 );
 
-3218 
+3226 
 	`¢¥ötf
 (
 buf
@@ -169823,11 +169817,11 @@ buf
 bufLí
 , "[n/a]");
 
-3221 
+3229 
 	}
 }
 
-3226 c⁄° * 
+3234 c⁄° * 
 	$dvmGëThªadSètusSå
 (
 ThªadSètus
@@ -169835,55 +169829,55 @@ ThªadSètus
 °©us
 )
 
-3228 
+3236 
 °©us
 ) {
 
-3229 
+3237 
 THREAD_ZOMBIE
 :  "ZOMBIE";
 
-3230 
+3238 
 THREAD_RUNNING
 :  "RUNNABLE";
 
-3231 
+3239 
 THREAD_TIMED_WAIT
 :  "TIMED_WAIT";
 
-3232 
+3240 
 THREAD_MONITOR
 :  "MONITOR";
 
-3233 
+3241 
 THREAD_WAIT
 :  "WAIT";
 
-3234 
+3242 
 THREAD_INITIALIZING
 :  "INITIALIZING";
 
-3235 
+3243 
 THREAD_STARTING
 :  "STARTING";
 
-3236 
+3244 
 THREAD_NATIVE
 :  "NATIVE";
 
-3237 
+3245 
 THREAD_VMWAIT
 :  "VMWAIT";
 
-3238 
+3246 
 THREAD_SUSPENDED
 :  "SUSPENDED";
 
-3241 
+3249 
 	}
 }
 
-3243 
+3251 
 	$dumpSchedSèt
 (c⁄° 
 DebugOuçutT¨gë
@@ -169895,17 +169889,17 @@ pid_t
 tid
 ) {
 
-3244 #ifde‡
+3252 #ifde‡
 HAVE_ANDROID_OS
 
 
-3246 
+3254 
 ProcSètD©a
  
 ¥ocSètD©a
 ;
 
-3247 i‡(!
+3255 i‡(!
 	`dvmGëThªadSèts
 (&
 ¥ocSètD©a
@@ -169913,17 +169907,17 @@ ProcSètD©a
 tid
 )) {
 
-3249 
+3257 
 	`mem£t
 (&
 ¥ocSètD©a
 , 0, (procStatData));
 
-3253 
+3261 
 sched°©Buf
 [64];
 
-3254 
+3262 
 	`¢¥ötf
 (
 sched°©Buf
@@ -169931,7 +169925,7 @@ sched°©Buf
 tid
 );
 
-3255 
+3263 
 sched°©Fd
  = 
 	`›í
@@ -169941,23 +169935,23 @@ sched°©Buf
 O_RDONLY
 );
 
-3256 
+3264 
 	`°r˝y
 (
 sched°©Buf
 , "0 0 0");
 
-3257 i‡(
+3265 i‡(
 sched°©Fd
  >= 0) {
 
-3258 
+3266 
 ssize_t
  
 byãs
 ;
 
-3259 
+3267 
 byãs
  = 
 	`ªad
@@ -169967,29 +169961,29 @@ sched°©Fd
 sched°©Buf
 , (schedstatBuf) - 1);
 
-3260 
+3268 
 	`˛o£
 (
 sched°©Fd
 );
 
-3261 i‡(
+3269 i‡(
 byãs
  >= 1) {
 
-3262 
+3270 
 sched°©Buf
 [
 byãs
  - 1] = '\0';
 
-3267 
+3275 
 	`dvmPrötDebugMesßge
 (
 èrgë
 ,
 
-3269 
+3277 
 sched°©Buf
 , 
 ¥ocSètD©a
@@ -169999,33 +169993,33 @@ utime
 °ime
 ,
 
-3270 
+3278 
 ¥ocSètD©a
 .
 ¥o˚ss‹
 );
 
-3272 
+3280 
 	}
 }
 
-3274 
+3282 
 	sScheduÀrSèts
  {
 
-3275 
+3283 
 	mpﬁicy
 ;
 
-3276 
+3284 
 	m¥i‹ôy
 ;
 
-3277 
+3285 
 	mgroup
 [32];
 
-3283 
+3291 
 	$gëScheduÀrSèts
 (
 ScheduÀrSèts
@@ -170037,13 +170031,13 @@ pid_t
 tid
 ) {
 
-3284 
+3292 
 sched_∑øm
  
 •
 ;
 
-3285 i‡(
+3293 i‡(
 	`±hªad_gësched∑øm
 (
 	`±hªad_£lf
@@ -170055,23 +170049,23 @@ pﬁicy
 •
 ) != 0) {
 
-3286 
+3294 
 	`ALOGW
 ("Warning:Öthread_getschedparam failed");
 
-3287 
+3295 
 °©s
 ->
 pﬁicy
  = -1;
 
-3288 
+3296 
 °©s
 ->
 ¥i‹ôy
  = -1;
 
-3290 
+3298 
 °©s
 ->
 ¥i‹ôy
@@ -170081,7 +170075,7 @@ pﬁicy
 sched_¥i‹ôy
 ;
 
-3292 i‡(
+3300 i‡(
 	`gëScheduÀrGroup
 (
 tid
@@ -170091,13 +170085,13 @@ tid
 group
 , (stats->group)) == 0 &&
 
-3293 
+3301 
 °©s
 ->
 group
 [0] == '\0') {
 
-3294 
+3302 
 	`°r˝y
 (
 °©s
@@ -170105,11 +170099,11 @@ group
 group
 , "default");
 
-3296 
+3304 
 	}
 }
 
-3305 
+3313 
 	$dvmDumpThªadEx
 (c⁄° 
 DebugOuçutT¨gë
@@ -170121,71 +170115,71 @@ Thªad
 thªad
 ,
 
-3306 
+3314 
 boﬁ
  
 isRu¬ög
 )
 
-3308 
+3316 
 Obje˘
 * 
 thªadObj
 ;
 
-3309 
+3317 
 Obje˘
 * 
 groupObj
 ;
 
-3310 
+3318 
 SåögObje˘
 * 
 «meSå
 ;
 
-3311 * 
+3319 * 
 thªadName
  = 
 NULL
 ;
 
-3312 * 
+3320 * 
 groupName
  = 
 NULL
 ;
 
-3313 
+3321 
 boﬁ
  
 isD´m⁄
 ;
 
-3314 
+3322 
 ¥i‹ôy
 ;
 
-3315 
+3323 
 boﬁ
  
 by∑ss
 ;
 
-3327 
+3335 
 thªadObj
  = 
 thªad
 ->threadObj;
 
-3328 i‡(
+3336 i‡(
 thªadObj
  =
 NULL
 ) {
 
-3329 
+3337 
 	`ALOGI
 ("C™'àdum∞thªad %d:ÅhªadObjÇŸ së", 
 thªad
@@ -170193,7 +170187,7 @@ thªad
 thªadId
 );
 
-3332 
+3340 
 	`dvmAddTøckedAŒoc
 (
 thªadObj
@@ -170201,7 +170195,7 @@ thªadObj
 NULL
 );
 
-3334 
+3342 
 «meSå
  = (
 SåögObje˘
@@ -170211,13 +170205,13 @@ SåögObje˘
 thªadObj
 ,
 
-3335 
+3343 
 gDvm
 .
 offJavaL™gThªad_«me
 );
 
-3336 
+3344 
 thªadName
  = 
 	`dvmCª©eC°rFromSåög
@@ -170225,7 +170219,7 @@ thªadName
 «meSå
 );
 
-3338 
+3346 
 ¥i‹ôy
  = 
 	`dvmGëFõldI¡
@@ -170237,7 +170231,7 @@ gDvm
 offJavaL™gThªad_¥i‹ôy
 );
 
-3339 
+3347 
 isD´m⁄
  = 
 	`dvmGëFõldBoﬁón
@@ -170249,7 +170243,7 @@ gDvm
 offJavaL™gThªad_d´m⁄
 );
 
-3340 
+3348 
 by∑ss
  = 
 	`dvmGëFõldBoﬁón
@@ -170261,7 +170255,7 @@ gDvm
 offJavaL™gThªad_by∑ss
 );
 
-3343 
+3351 
 groupObj
  = (
 Obje˘
@@ -170271,25 +170265,25 @@ Obje˘
 thªadObj
 ,
 
-3344 
+3352 
 gDvm
 .
 offJavaL™gThªad_group
 );
 
-3345 i‡(
+3353 i‡(
 groupObj
  !
 NULL
 ) {
 
-3346 
+3354 
 «meSå
  = (
 SåögObje˘
 *)
 
-3347 
+3355 
 	`dvmGëFõldObje˘
 (
 groupObj
@@ -170299,7 +170293,7 @@ gDvm
 offJavaL™gThªadGroup_«me
 );
 
-3348 
+3356 
 groupName
  = 
 	`dvmCª©eC°rFromSåög
@@ -170307,25 +170301,25 @@ groupName
 «meSå
 );
 
-3350 i‡(
+3358 i‡(
 groupName
  =
 NULL
 )
 
-3351 
+3359 
 groupName
  = 
 	`°rdup
 ("(null; initializing?)");
 
-3353 
+3361 
 ScheduÀrSèts
  
 schedSèts
 ;
 
-3354 
+3362 
 	`gëScheduÀrSèts
 (&
 schedSèts
@@ -170335,23 +170329,23 @@ thªad
 sy°emTid
 );
 
-3356 
+3364 
 	`dvmPrötDebugMesßge
 (
 èrgë
 ,
 
-3358 
+3366 
 thªadName
 , 
 isD´m⁄
  ? " daemon" : "",
 
-3359 
+3367 
 by∑ss
 ? "bypass-true":"bypass-false",
 
-3360 
+3368 
 ¥i‹ôy
 , 
 thªad
@@ -170363,25 +170357,25 @@ thªadId
 °©us
 ),
 
-3361 #i‡
+3369 #i‡
 	`deföed
 (
 WITH_JIT
 )
 
-3362 
+3370 
 thªad
 ->
 öJôCodeCache
  ? " JIT" : ""
 
-3367 
+3375 
 	`dvmPrötDebugMesßge
 (
 èrgë
 ,
 
-3369 
+3377 
 groupName
 , 
 thªad
@@ -170391,19 +170385,19 @@ su•ídCou¡
 dbgSu•ídCou¡
 ,
 
-3370 
+3378 
 thªad
 ->
 thªadObj
 ,Åhread);
 
-3371 
+3379 
 	`dvmPrötDebugMesßge
 (
 èrgë
 ,
 
-3373 
+3381 
 thªad
 ->
 sy°emTid
@@ -170413,7 +170407,7 @@ sy°emTid
 PRIO_PROCESS
 ,Åhread->systemTid),
 
-3374 
+3382 
 schedSèts
 .
 pﬁicy
@@ -170427,7 +170421,7 @@ thªad
 h™dÀ
 );
 
-3376 
+3384 
 	`dumpSchedSèt
 (
 èrgë
@@ -170437,7 +170431,7 @@ thªad
 sy°emTid
 );
 
-3379 i‡(
+3387 i‡(
 thªad
 ->
 °©us
@@ -170447,7 +170441,7 @@ THREAD_NATIVE
 THREAD_VMWAIT
 ) {
 
-3380 
+3388 
 	`dvmDumpN©iveSèck
 (
 èrgë
@@ -170457,11 +170451,11 @@ thªad
 sy°emTid
 );
 
-3383 i‡(
+3391 i‡(
 isRu¬ög
 )
 
-3384 
+3392 
 	`dvmDumpRu¬ögThªadSèck
 (
 èrgë
@@ -170469,7 +170463,7 @@ isRu¬ög
 thªad
 );
 
-3386 
+3394 
 	`dvmDumpThªadSèck
 (
 èrgë
@@ -170477,13 +170471,13 @@ thªad
 thªad
 );
 
-3388 
+3396 
 	`dvmPrötDebugMesßge
 (
 èrgë
 , "\n");
 
-3390 
+3398 
 	`dvmRñó£TøckedAŒoc
 (
 thªadObj
@@ -170491,23 +170485,23 @@ thªadObj
 NULL
 );
 
-3391 
+3399 
 	`‰ì
 (
 thªadName
 );
 
-3392 
+3400 
 	`‰ì
 (
 groupName
 );
 
-3393 
+3401 
 	}
 }
 
-3394 * 
+3402 * 
 	$dvmGëThªadName_c°r
 (
 Thªad
@@ -170515,7 +170509,7 @@ Thªad
 thªad
 ){
 
-3395 i‡(
+3403 i‡(
 thªad
 ->
 thªadObj
@@ -170523,21 +170517,21 @@ thªadObj
 NULL
 ) {
 
-3396 
+3404 
 	`ALOGW
 ("threadObj is NULL,ÇameÇotávailable");
 
-3397  
+3405  
 NULL
 ;
 
-3400 
+3408 
 SåögObje˘
 * 
 «meObj
  = (StringObject*)
 
-3401 
+3409 
 	`dvmGëFõldObje˘
 (
 thªad
@@ -170549,7 +170543,7 @@ gDvm
 offJavaL™gThªad_«me
 );
 
-3402 * 
+3410 * 
 «me
  = 
 	`dvmCª©eC°rFromSåög
@@ -170557,15 +170551,15 @@ offJavaL™gThªad_«me
 «meObj
 );
 
-3403  
+3411  
 «me
 ;
 
-3404 
+3412 
 	}
 }
 
-3405 
+3413 
 	g°d
 ::
 °rög
@@ -170577,7 +170571,7 @@ Thªad
 thªad
 ) {
 
-3406 i‡(
+3414 i‡(
 thªad
 ->
 thªadObj
@@ -170585,17 +170579,17 @@ thªadObj
 NULL
 ) {
 
-3407 
+3415 
 	`ALOGW
 ("threadObj is NULL,ÇameÇotávailable");
 
-3411 
+3419 
 SåögObje˘
 * 
 «meObj
  = (StringObject*)
 
-3412 
+3420 
 	`dvmGëFõldObje˘
 (
 thªad
@@ -170607,7 +170601,7 @@ gDvm
 offJavaL™gThªad_«me
 );
 
-3413 * 
+3421 * 
 «me
  = 
 	`dvmCª©eC°rFromSåög
@@ -170615,7 +170609,7 @@ offJavaL™gThªad_«me
 «meObj
 );
 
-3414 
+3422 
 °d
 ::
 °rög
@@ -170625,25 +170619,25 @@ offJavaL™gThªad_«me
 «me
 );
 
-3415 
+3423 
 	`‰ì
 (
 «me
 );
 
-3416  
+3424  
 ªsu…
 ;
 
-3417 
+3425 
 	}
 }
 
-3419 #ifde‡
+3427 #ifde‡
 HAVE_ANDROID_OS
 
 
-3423 
+3431 
 	$dumpN©iveThªad
 (c⁄° 
 DebugOuçutT¨gë
@@ -170655,11 +170649,11 @@ pid_t
 tid
 ) {
 
-3424 
+3432 
 ∑th
 [64];
 
-3425 
+3433 
 	`¢¥ötf
 (
 ∑th
@@ -170667,7 +170661,7 @@ tid
 tid
 );
 
-3427 
+3435 
 fd
  = 
 	`›í
@@ -170677,21 +170671,21 @@ fd
 O_RDONLY
 );
 
-3428 
+3436 
 «me
 [64];
 
-3429 
+3437 
 ssize_t
  
 n
  = 0;
 
-3430 i‡(
+3438 i‡(
 fd
  >= 0) {
 
-3431 
+3439 
 n
  = 
 	`ªad
@@ -170701,45 +170695,45 @@ fd
 «me
 , (name) - 1);
 
-3432 
+3440 
 	`˛o£
 (
 fd
 );
 
-3434 i‡(
+3442 i‡(
 n
  > 0 && 
 «me
 [n - 1] == '\n') {
 
-3435 
+3443 
 n
  -= 1;
 
-3437 i‡(
+3445 i‡(
 n
  <= 0) {
 
-3438 
+3446 
 	`°r˝y
 (
 «me
 , "<noÇame>");
 
-3440 
+3448 
 «me
 [
 n
 ] = '\0';
 
-3443 
+3451 
 ScheduÀrSèts
  
 schedSèts
 ;
 
-3444 
+3452 
 	`gëScheduÀrSèts
 (&
 schedSèts
@@ -170747,13 +170741,13 @@ schedSèts
 tid
 );
 
-3446 
+3454 
 	`dvmPrötDebugMesßge
 (
 èrgë
 ,
 
-3448 
+3456 
 «me
 , 
 tid
@@ -170763,7 +170757,7 @@ tid
 PRIO_PROCESS
 ,Åid),
 
-3449 
+3457 
 schedSèts
 .
 pﬁicy
@@ -170773,7 +170767,7 @@ pﬁicy
 group
 );
 
-3450 
+3458 
 	`dumpSchedSèt
 (
 èrgë
@@ -170781,17 +170775,17 @@ group
 tid
 );
 
-3455 
+3463 
 	`dvmPrötDebugMesßge
 (
 èrgë
 , "\n");
 
-3456 
+3464 
 	}
 }
 
-3462 
+3470 
 boﬁ
  
 	$isDÆvikThªad
@@ -170801,7 +170795,7 @@ pid_t
 tid
 ) {
 
-3463 
+3471 
 Thªad
 * 
 thªad
@@ -170815,7 +170809,7 @@ NULL
 √xt
 ) {
 
-3464 i‡(
+3472 i‡(
 thªad
 ->
 sy°emTid
@@ -170823,19 +170817,19 @@ sy°emTid
 tid
 ) {
 
-3465  
+3473  
 åue
 ;
 
-3468  
+3476  
 Ál£
 ;
 
-3469 
+3477 
 	}
 }
 
-3476 
+3484 
 	$dvmDumpAŒThªads
 (
 boﬁ
@@ -170843,13 +170837,13 @@ boﬁ
 gøbLock
 )
 
-3478 
+3486 
 DebugOuçutT¨gë
  
 èrgë
 ;
 
-3480 
+3488 
 	`dvmCª©eLogOuçutT¨gë
 (&
 èrgë
@@ -170859,7 +170853,7 @@ ANDROID_LOG_INFO
 LOG_TAG
 );
 
-3481 
+3489 
 	`dvmDumpAŒThªadsEx
 (&
 èrgë
@@ -170867,11 +170861,11 @@ LOG_TAG
 gøbLock
 );
 
-3482 
+3490 
 	}
 }
 
-3491 
+3499 
 	$dvmDumpAŒThªadsEx
 (c⁄° 
 DebugOuçutT¨gë
@@ -170883,29 +170877,29 @@ boﬁ
 gøbLock
 )
 
-3493 
+3501 
 Thªad
 * 
 thªad
 ;
 
-3495 
+3503 
 	`dvmPrötDebugMesßge
 (
 èrgë
 , "DALVIK THREADS:\n");
 
-3497 #ifde‡
+3505 #ifde‡
 HAVE_ANDROID_OS
 
 
-3498 
+3506 
 	`dvmPrötDebugMesßge
 (
 èrgë
 ,
 
-3500 
+3508 
 gDvm
 .
 thªadLi°Lock
@@ -170913,7 +170907,7 @@ thªadLi°Lock
 vÆue
 ,
 
-3501 
+3509 
 gDvm
 .
 _thªadSu•ídLock
@@ -170921,7 +170915,7 @@ _thªadSu•ídLock
 vÆue
 ,
 
-3502 
+3510 
 gDvm
 .
 thªadSu•ídCou¡Lock
@@ -170929,7 +170923,7 @@ thªadSu•ídCou¡Lock
 vÆue
 ,
 
-3503 
+3511 
 gDvm
 .
 gcHópLock
@@ -170937,17 +170931,17 @@ gcHópLock
 vÆue
 );
 
-3506 i‡(
+3514 i‡(
 gøbLock
 )
 
-3507 
+3515 
 	`dvmLockThªadLi°
 (
 	`dvmThªadSñf
 ());
 
-3509 
+3517 
 thªad
  = 
 gDvm
@@ -170955,13 +170949,13 @@ gDvm
 thªadLi°
 ;
 
-3510 
+3518 
 thªad
  !
 NULL
 ) {
 
-3511 
+3519 
 	`dvmDumpThªadEx
 (
 èrgë
@@ -170971,7 +170965,7 @@ thªad
 Ál£
 );
 
-3514 
+3522 
 	`as£π
 (
 thªad
@@ -170983,21 +170977,21 @@ NULL
 ¥ev
  ==Åhread);
 
-3516 
+3524 
 thªad
  =Åhªad->
 √xt
 ;
 
-3519 #ifde‡
+3527 #ifde‡
 HAVE_ANDROID_OS
 
 
-3520 
+3528 
 ∑th
 [64];
 
-3521 
+3529 
 	`¢¥ötf
 (
 ∑th
@@ -171005,7 +170999,7 @@ HAVE_ANDROID_OS
 	`gëpid
 ());
 
-3523 
+3531 
 DIR
 * 
 d
@@ -171015,23 +171009,23 @@ d
 ∑th
 );
 
-3524 i‡(
+3532 i‡(
 d
 ) {
 
-3525 
+3533 
 dúít
  
 de
 ;
 
-3526 
+3534 
 dúít
 * 
 ªsu…
 ;
 
-3527 
+3535 
 boﬁ
  
 fú°
@@ -171039,7 +171033,7 @@ fú°
 åue
 ;
 
-3528 !
+3536 !
 	`ªaddú_r
 (
 d
@@ -171049,11 +171043,11 @@ de
 ªsu…
 ) &&Ñesult) {
 
-3529 * 
+3537 * 
 íd
 ;
 
-3530 
+3538 
 pid_t
  
 tid
@@ -171067,7 +171061,7 @@ d_«me
 íd
 , 10);
 
-3531 i‡(!*
+3539 i‡(!*
 íd
  && !
 	`isDÆvikThªad
@@ -171075,23 +171069,23 @@ d_«me
 tid
 )) {
 
-3532 i‡(
+3540 i‡(
 fú°
 ) {
 
-3533 
+3541 
 	`dvmPrötDebugMesßge
 (
 èrgë
 , "NATIVE THREADS:\n");
 
-3534 
+3542 
 fú°
  = 
 Ál£
 ;
 
-3536 
+3544 
 	`dumpN©iveThªad
 (
 èrgë
@@ -171099,25 +171093,25 @@ fú°
 tid
 );
 
-3539 
+3547 
 	`˛o£dú
 (
 d
 );
 
-3543 i‡(
+3551 i‡(
 gøbLock
 )
 
-3544 
+3552 
 	`dvmU∆ockThªadLi°
 ();
 
-3545 
+3553 
 	}
 }
 
-3561 
+3569 
 	$dvmNukeThªad
 (
 Thªad
@@ -171125,11 +171119,11 @@ Thªad
 thªad
 )
 
-3563 
+3571 
 kûlResu…
 ;
 
-3566 
+3574 
 gDvm
 .
 «tiveDebuggîA˘ive
@@ -171137,11 +171131,11 @@ gDvm
 åue
 ;
 
-3584 
+3592 
 	`ALOGD
 ("threadid=%d: sendingÅwo SIGSTKFLTsÅoÅhreadid=%d (tid=%d)Åo"
 
-3586 
+3594 
 	`dvmThªadSñf
 ()->
 thªadId
@@ -171151,7 +171145,7 @@ thªad
 sy°emTid
 );
 
-3587 
+3595 
 kûlResu…
  = 
 	`±hªad_kûl
@@ -171163,11 +171157,11 @@ h™dÀ
 SIGSTKFLT
 );
 
-3588 i‡(
+3596 i‡(
 kûlResu…
  != 0) {
 
-3589 
+3597 
 	`ALOGD
 ("NOTE:Öthªad_kû»#1 faûed: %s", 
 	`°ªº‹
@@ -171175,11 +171169,11 @@ kûlResu…
 kûlResu…
 ));
 
-3591 
+3599 
 	`u¶ìp
 (2 * 1000 * 1000);
 
-3592 
+3600 
 kûlResu…
  = 
 	`±hªad_kûl
@@ -171191,11 +171185,11 @@ h™dÀ
 SIGSTKFLT
 );
 
-3593 i‡(
+3601 i‡(
 kûlResu…
  != 0) {
 
-3594 
+3602 
 	`ALOGD
 ("NOTE:Öthªad_kû»#2 faûed: %s", 
 	`°ªº‹
@@ -171203,15 +171197,15 @@ kûlResu…
 kûlResu…
 ));
 
-3596 
+3604 
 	`ALOGD
 ("Sent,ÖausingÅoÜet debuggerdÑun");
 
-3597 
+3605 
 	`u¶ìp
 (8 * 1000 * 1000);
 
-3600 
+3608 
 	`sig«l
 (
 SIGSEGV
@@ -171219,11 +171213,11 @@ SIGSEGV
 SIG_IGN
 );
 
-3601 
+3609 
 	`ALOGD
 ("Continuing");
 
-3602 
+3610 
 	}
 }
 
@@ -570153,7 +570147,9 @@ tmpsock
 √w
  
 	`Sockë
-();
+(
+Ál£
+);
 
 39 !
 tmpsock
@@ -570397,7 +570393,9 @@ Sockë
 	gtmpsock
  = 
 √w
- Socket();
+ Sockë(
+åue
+);
 
 76 !
 	gtmpsock
@@ -570823,12 +570821,6 @@ thªadId
 ™Æysis_mëhod_id
 );
 
-159 
-dvmDumpAŒThªads
-(
-Ál£
-);
-
 162 
 	g™ÆysisSèπ__SB
 
@@ -570877,12 +570869,6 @@ thªadId
 ‹dîög_id
 , 
 ™Æysis_mëhod_id
-);
-
-167 
-dvmDumpAŒThªads
-(
-Ál£
 );
 
 169 
@@ -572551,7 +572537,19 @@ isZygŸe
 	`gëpid
 ());
 
-521 
+521 if(
+gDvm
+.
+zygŸe
+){
+
+522 
+	`_m≠PID
+(
+	`gëpid
+(),"zygote");
+
+525 
 gDvm
 .
 √wObjHook
@@ -572559,7 +572557,7 @@ gDvm
 objNewHook
 ;
 
-522 
+526 
 gDvm
 .
 ‰ìObjHook
@@ -572567,31 +572565,31 @@ gDvm
 objFªeHook
 ;
 
-523 
+527 
 gDvm
 .
 thªadEndHook
  = &threadEndHook;
 
-524 
+528 
 gDvm
 .
 vmEndHook
  = &vmEndHook;
 
-525 
+529 
 gDvm
 .
 ˛assInôHook
  = &classInitHook;
 
-526 
+530 
 gDvm
 .
 ˛assfûeLﬂdHook
  = &classfileLoadHook;
 
-528 
+532 
 	`±hªad_muãx_öô
 (&
 gl_mtx
@@ -572599,7 +572597,7 @@ gl_mtx
 NULL
 );
 
-530 i‡(
+534 i‡(
 vm
 ->
 	`GëEnv
@@ -572613,23 +572611,23 @@ JNI_VERSION_1_4
 JNI_OK
 ){
 
-531 
+535 
 baû
 ;
 
-534 
+538 
 ív
  = 
 uív
 .env;
 
-536 
+540 
 ív
  = 
 uív
 .env;
 
-538 i‡(
+542 i‡(
 	`ªgi°îShadowN©ives
 (
 ív
@@ -572637,39 +572635,39 @@ uív
 JNI_TRUE
 ){
 
-540 
+544 
 baû
 ;
 
-543 
+547 
 ªsu…
  = 
 JNI_VERSION_1_4
 ;
 
-549 
+553 
 baû
 :
 
-550  
+554  
 ªsu…
 ;
 
-551 
+555 
 	}
 }
 
-553 
+557 
 	$Bef‹eF‹k
 (){
 
-554 
+558 
 	`±hªad_muãx_lock
 (&
 gl_mtx
 );
 
-555 
+559 
 zygŸe_buff
  = 
 ªmŸe
@@ -572677,7 +572675,7 @@ zygŸe_buff
 	`Rëu∫AndRe£tBuf„r
 ();
 
-556 
+560 
 	`ALOG
 (
 LOG_DEBUG
@@ -572687,16 +572685,44 @@ zygŸe_buff
 q_occupõd
 );
 
-557 if(!
-sock
-){
-
-558 
-	`O≥nC⁄√˘i⁄
+562 
+Sockë
+ *
+zsock
+ = 
+√w
+ 
+	`Sockë
 ();
 
-560 
-sock
+563 !
+zsock
+->
+	`C⁄√˘
+()){
+
+564 
+	`LOGDEBUG
+("Zygote Cannot connectÅhrough UDS");
+
+565 
+	`¶ìp
+(2);
+
+567 
+sig«l
+ = -3;
+
+568 
+zsock
+->
+	`Síd
+((*)&
+sig«l
+,());
+
+570 
+zsock
 ->
 	`Síd
 (
@@ -572707,33 +572733,33 @@ q_d©a
 q_occupõd
 );
 
-561 if(
+572 if(
 zygŸe_buff
 )
 
-562 
+573 
 dñëe
  
 zygŸe_buff
 ;
 
-563 
+574 
 zygŸe_buff
 =
 NULL
 ;
 
-564 
+575 
 	`±hªad_muãx_u∆ock
 (&
 gl_mtx
 );
 
-565 
+576 
 	}
 }
 
-567 
+578 
 jöt
  
 	$ShadowLib_OnLﬂd
@@ -572745,25 +572771,25 @@ vm
 ª£rved
 ){
 
-568 
+579 
 isZygŸe
  = 
 Ál£
 ;
 
-569 
+580 
 sock
  = 
 NULL
 ;
 
-570 
+581 
 Uni⁄JNIEnvToVoid
  
 uív
 ;
 
-571 
+582 
 uív
 .
 vív
@@ -572771,13 +572797,13 @@ vív
 NULL
 ;
 
-572 
+583 
 jöt
  
 ªsu…
  = -1;
 
-573 
+584 
 JNIEnv
  *
 ív
@@ -572785,7 +572811,7 @@ JNIEnv
 NULL
 ;
 
-576 
+587 
 	`ALOG
 (
 LOG_DEBUG
@@ -572795,7 +572821,7 @@ isZygŸe
 	`gëpid
 ());
 
-577 
+588 
 	`±hªad_muãx_öô
 (&
 gl_mtx
@@ -572803,7 +572829,7 @@ gl_mtx
 NULL
 );
 
-581 
+592 
 	`±hªad_muãx_lock
 (&
 gDvm
@@ -572811,7 +572837,7 @@ gDvm
 s_mtx
 );
 
-582 
+593 
 gDvm
 .
 √wObjHook
@@ -572819,7 +572845,7 @@ gDvm
 objNewHook
 ;
 
-583 
+594 
 gDvm
 .
 ‰ìObjHook
@@ -572827,19 +572853,19 @@ gDvm
 objFªeHook
 ;
 
-584 
+595 
 gDvm
 .
 thªadEndHook
  = &threadEndHook;
 
-585 
+596 
 gDvm
 .
 vmEndHook
  = &vmEndHook;
 
-587 
+598 
 	`±hªad_muãx_u∆ock
 (&
 gDvm
@@ -572847,13 +572873,13 @@ gDvm
 s_mtx
 );
 
-588 
+599 
 ±hªad_t
  
 £nd_thªad
 ;
 
-589 
+600 
 	`±hªad_¸óã
 (&
 £nd_thªad
@@ -572863,7 +572889,7 @@ NULL
 £nd_thªad_lo›
 , NULL);
 
-592 i‡(
+603 i‡(
 vm
 ->
 	`GëEnv
@@ -572877,23 +572903,23 @@ JNI_VERSION_1_4
 JNI_OK
 ){
 
-593 
+604 
 baû
 ;
 
-596 
+607 
 ív
  = 
 uív
 .env;
 
-598 
+609 
 ív
  = 
 uív
 .env;
 
-600 i‡(
+611 i‡(
 	`ªgi°îShadowN©ives
 (
 ív
@@ -572901,21 +572927,21 @@ uív
 JNI_TRUE
 ){
 
-602 
+613 
 baû
 ;
 
-605 
+616 
 ªsu…
  = 
 JNI_VERSION_1_4
 ;
 
-608 
+619 
 baû
 :
 
-610 
+621 
 	}
 }
 
@@ -576277,11 +576303,21 @@ JNIEnv
 	gSockë
 ::
 	$Sockë
-() :
+(
+boﬁ
+ 
+√ed
+ ) :
 
 26 
 	`m_sock
  ( -1 )
+
+28 
+√edPID
+ = 
+√ed
+;
 
 29 
 	`mem£t
@@ -576691,41 +576727,93 @@ UNIX_PATH_MAX
 SERVER_SOCK
 );
 
-201 * 
+200 if(
+√edPID
+){
+
+201 
+idx
+=0;
+
+202 
+cur
+ = 
+	`gëpid
+();
+
+203 
+cur
+){
+
+204 
+addªss
+.
+sun_∑th
+[
+	`°æí
+(
+SERVER_SOCK
+)+
+idx
+] = 
+cur
+%10+'0';
+
+205 
+cur
+ /= 10;
+
+206 
+idx
+++;
+
+208 
+addªss
+.
+sun_∑th
+[
+	`°æí
+(
+SERVER_SOCK
+)+
+idx
+] = '\0';
+
+210 * 
 tmp
  = &
 addªss
 ;
 
-202 if(
+211 if(
 	`c⁄√˘
 (
 m_sock
 ,
 
-203 (
+212 (
 sockaddr
  *Ë
 tmp
 ,
 
-204 (
+213 (
 sockaddr_un
 )) != 0)
 
-208  
+217  
 Ál£
 ;
 
-210  
+219  
 åue
 ;
 
-212 
+221 
 	`¥ötf
 ("in debug mode \n");
 
-213 
+222 
 m_sock
  = 
 	`sockë
@@ -576733,17 +576821,17 @@ m_sock
 AF_INET
 ,
 
-214 
+223 
 SOCK_STREAM
 ,
 
-216 i‡–! 
+225 i‡–! 
 	`is_vÆid
 (ËË 
 Ál£
 ;
 
-218 
+227 
 m_addr
 .
 sö_Ámûy
@@ -576751,7 +576839,7 @@ sö_Ámûy
 AF_INET
 ;
 
-219 
+228 
 m_addr
 .
 sö_p‹t
@@ -576761,7 +576849,7 @@ sö_p‹t
 p‹t
  );
 
-221 
+230 
 °©us
  = 
 	`öë_±⁄
@@ -576775,7 +576863,7 @@ m_addr
 sö_addr
  );
 
-223 i‡–
+232 i‡–
 î∫o
  =
 EAFNOSUPPORT
@@ -576783,7 +576871,7 @@ EAFNOSUPPORT
 Ál£
 ;
 
-225 
+234 
 °©us
  = ::
 	`c⁄√˘
@@ -576795,23 +576883,23 @@ sockaddr
 m_addr
 ,  ( m_addr ) );
 
-227 i‡–
+236 i‡–
 °©us
  == 0 )
 
-228  
+237  
 åue
 ;
 
-230  
+239  
 Ál£
 ;
 
-233 
+242 
 	}
 }
 
-254 
+263 
 	gSockë
 ::
 	$£t_n⁄_blockög
@@ -576821,11 +576909,11 @@ boﬁ
 b
  )
 
-257 
+266 
 ›ts
 ;
 
-259 
+268 
 ›ts
  = 
 	`f˙é
@@ -576833,43 +576921,43 @@ b
 m_sock
 ,
 
-260 
+269 
 F_GETFL
  );
 
-262 i‡–
+271 i‡–
 ›ts
  < 0 )
 
-267 i‡–
+276 i‡–
 b
  )
 
-268 
+277 
 ›ts
  = ( o±†| 
 O_NONBLOCK
  );
 
-270 
+279 
 ›ts
  = ( o±†& ~
 O_NONBLOCK
  );
 
-272 
+281 
 	`f˙é
  ( 
 m_sock
 ,
 
-273 
+282 
 F_SETFL
 ,
 ›ts
  );
 
-275 
+284 
 	}
 }
 
@@ -576931,7 +577019,13 @@ _SOCKET_H_
 
 24 
 Sockë
-();
+(
+boﬁ
+ 
+√ed
+ = 
+Ál£
+);
 
 25 
 	mvútuÆ
@@ -577015,7 +577109,13 @@ sockaddr_ö
 m_addr
 ;
 
-54 
+53 
+boﬁ
+ 
+√edPID
+;
+
+56 
 	}
 };
 

@@ -53,7 +53,8 @@ pthread_mutex_t gl_mtx;
 
 void * my_thread (void *arg)
 {
-	//ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: new client of instrument server");
+
+	ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: NEW CLIENT");
 	unsigned int myClient_s;    //copy socket
 	char buf[BUF_SIZE]; // buffer for socket
 	int retcode;       // Return code
@@ -124,6 +125,7 @@ void * my_thread (void *arg)
 			break;
 		}
 		if(sign4 == -4) {
+
 			ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "GET MAPPING EVENT");
 			int pname_len;
 			char pname[1024];
@@ -150,6 +152,82 @@ void * my_thread (void *arg)
 				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED and ISTARGET, SENDING BACK 0", pid);
 
 			send(myClient_s,&tmp,sizeof(int),0);
+
+			if(tmp == 0){
+
+				struct sockaddr_un address;
+				int socket_fd, connection_fd;
+				socklen_t address_length;
+				pid_t child;
+				socket_fd = socket(PF_UNIX, SOCK_STREAM, 0);
+				if(socket_fd < 0)
+				{
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","create socket error");
+					return 1;
+				} 
+				memset(&address, 0, sizeof(struct sockaddr_un));                                                                                                                                                                                           
+				address.sun_family = AF_UNIX;
+				snprintf(address.sun_path, UNIX_PATH_MAX, SOCKFILE);
+				int idx=0;
+				int cur = pid;
+				while(cur){
+					address.sun_path[strlen(SOCKFILE)+idx] = cur%10+'0';
+					cur /= 10;
+					idx++;
+				}
+				address.sun_path[strlen(SOCKFILE)+idx] = '\0';
+				
+				ALOG (LOG_INFO,"INSTRUMENTSERVER","SOCKFILE %s", address.sun_path);
+
+				if(bind(socket_fd, 
+							(struct sockaddr *) &address,  
+							sizeof(struct sockaddr_un)) != 0 ){
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","bind socket for PID:%d error", pid);
+				}
+				char mod[]="0666";
+				chmod(address.sun_path, strtol(mod,0,8));
+
+				if(listen(socket_fd, 5) != 0)
+				{
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","listen to socket for PID:%d error", pid);
+				}
+
+
+				unsigned int ids;       // holds thread args
+				pthread_attr_t attr;        //  pthread attributes     
+				pthread_t threads;      // Thread ID (used by OS)
+
+				pthread_attr_init (&attr);
+				while (TRUE)
+				{
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","my server is ready for PID :%d ...", pid);
+
+					connection_fd = accept(socket_fd,                     
+							(struct sockaddr *) &address,  
+							&address_length);                                                                                                                                                                                      
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","a new client arrives ...");
+
+					if (connection_fd == FALSE)
+					{
+						ALOG (LOG_INFO,"INSTRUMENTSERVER","ERROR - Unable to create socket");
+						continue;
+					}
+
+					else
+					{
+						/* Create a child thread --------------------------------------- */
+						ids = connection_fd;
+						pthread_create (    /* Create a child thread        */
+								&threads,   /* Thread ID (system assigned)  */
+								&attr,  /* Default thread attributes    */
+								my_thread,  /* Thread routine               */
+								&ids);  /* Arguments to be passed       */
+
+					}
+				}
+
+			}
+
 			if(pid != -1) {
 				if(psize <= MAX_PROCESS){
 					pids[psize]=pid;
@@ -330,8 +408,6 @@ int main (void)
 	unsigned int ids;       // holds thread args
 	pthread_attr_t attr;        //  pthread attributes     
 	pthread_t threads;      // Thread ID (used by OS)
-
-
 
 	pthread_attr_init (&attr);
 
