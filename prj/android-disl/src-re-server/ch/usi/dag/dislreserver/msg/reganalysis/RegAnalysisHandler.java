@@ -7,14 +7,16 @@ import java.io.IOException;
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.msg.analyze.AnalysisResolver;
 import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 public final class RegAnalysisHandler implements RequestHandler {
 
-	public void handle(final DataInputStream is, final DataOutputStream os,
+	@Override
+    public void handle(final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os,
 			final boolean debug) throws DiSLREServerException {
 		try {
 			final short methodId = is.readShort();
-			String methodString = is.readUTF();
+			final String methodString = is.readUTF();
 
 			// register method
 			AnalysisResolver.registerMethodId(methodId, methodString);
@@ -30,7 +32,8 @@ public final class RegAnalysisHandler implements RequestHandler {
 		}
 	}
 
-	public void exit() {
+	@Override
+    public void exit() {
 
 	}
 

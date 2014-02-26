@@ -9,119 +9,123 @@ import java.util.concurrent.LinkedBlockingQueue;
 import ch.usi.dag.dislreserver.exception.DiSLREServerFatalException;
 
 /**
- * Manages executors 
+ * Manages executors
  */
 class ATEManager {
 
 	// we need concurrent for waitForAllToProcessEpoch method
 	protected final ConcurrentMap<Long, AnalysisTaskExecutor> liveExecutors =
 			new ConcurrentHashMap<Long, AnalysisTaskExecutor>();
-	
+
 	protected final BlockingQueue<AnalysisTaskExecutor> endingExecutors =
 			new LinkedBlockingQueue<AnalysisTaskExecutor>();
 
 	/**
-	 * Retrieves executor. Creates new one if it does not exists. 
+	 * Retrieves executor. Creates new one if it does not exists.
 	 */
-	public AnalysisTaskExecutor getExecutor(long id) {
-		
+	public AnalysisTaskExecutor getExecutor(final long id) {
+
 		AnalysisTaskExecutor ate = liveExecutors.get(id);
-		
+
 		// create new executor
 		if(ate == null) {
-			
+
 			ate = new AnalysisTaskExecutor(this);
 			liveExecutors.put(id, ate);
 		}
-		
+
 		return ate;
 	}
-	
+
 	/**
-	 * Retrieves all live executors 
+	 * Retrieves all live executors
 	 */
 	public Iterable<AnalysisTaskExecutor> getAllLiveExecutors() {
-		
+
 		return Collections.unmodifiableCollection(liveExecutors.values());
 	}
-	
+
 	/**
 	 * Moves executor from live queue to the ending queue
 	 */
-	public void executorIsEnding(long id) {
-		
-		AnalysisTaskExecutor removedATE = liveExecutors.remove(id);
-		
+	public void executorIsEnding(final long id) {
+
+        AnalysisTaskExecutor removedATE = liveExecutors.remove (id);
+
+        if (removedATE == null) {
+            removedATE = new AnalysisTaskExecutor (this);
+        }
+
 		try {
 			endingExecutors.put(removedATE);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			throw new DiSLREServerFatalException(
 					"Cannot add executor to the ending queue", e);
 		}
 	}
-	
+
 	/**
-	 * Changes global epoch in all executors 
+	 * Changes global epoch in all executors
 	 */
-	public void globalEpochChange(long newEpoch) {
-		
-		for(AnalysisTaskExecutor ate : liveExecutors.values()) {
+	public void globalEpochChange(final long newEpoch) {
+
+		for(final AnalysisTaskExecutor ate : liveExecutors.values()) {
 			ate.globalEpochChanged(newEpoch);
 		}
-		
-		for(AnalysisTaskExecutor ate : endingExecutors) {
+
+		for(final AnalysisTaskExecutor ate : endingExecutors) {
 			ate.globalEpochChanged(newEpoch);
 		}
 	}
-	
+
 	/**
-	 * Waits for all executors to process an epoch 
+	 * Waits for all executors to process an epoch
 	 */
-	public void waitForAllToProcessEpoch(long epochToProcess) {
-		
+	public void waitForAllToProcessEpoch(final long epochToProcess) {
+
 		try {
-		
-			for(AnalysisTaskExecutor ate : liveExecutors.values()) {
+
+			for(final AnalysisTaskExecutor ate : liveExecutors.values()) {
 				ate.waitForEpochProcessing(epochToProcess);
 			}
-			
-			for(AnalysisTaskExecutor ate : endingExecutors) {
+
+			for(final AnalysisTaskExecutor ate : endingExecutors) {
 				ate.waitForEpochProcessing(epochToProcess);
 			}
-		
-		} catch (InterruptedException e) {
+
+		} catch (final InterruptedException e) {
 			throw new DiSLREServerFatalException(
 					"Interupt occured while waiting for processing of an epoch",
 					e);
 		}
 	}
-	
+
 	/**
-	 * Waits for all executors to end 
+	 * Waits for all executors to end
 	 */
 	public void waitForAllToEnd() {
-		
+
 		try {
-			
-			for(AnalysisTaskExecutor ate : liveExecutors.values()) {
+
+			for(final AnalysisTaskExecutor ate : liveExecutors.values()) {
 				ate.awaitTermination();
 			}
-			
-			for(AnalysisTaskExecutor ate : endingExecutors) {
+
+			for(final AnalysisTaskExecutor ate : endingExecutors) {
 				ate.awaitTermination();
 			}
-		
-		} catch (InterruptedException e) {
+
+		} catch (final InterruptedException e) {
 			throw new DiSLREServerFatalException(
 					"Interupt occured while waiting for executor termination",
 					e);
 		}
 	}
-	
+
 	/**
 	 * Announces executor end. Can be called concurrently.
 	 */
-	public void executorEndConcurrentCallback(AnalysisTaskExecutor ate) {
+	public void executorEndConcurrentCallback(final AnalysisTaskExecutor ate) {
 		endingExecutors.remove(ate);
 	}
 }

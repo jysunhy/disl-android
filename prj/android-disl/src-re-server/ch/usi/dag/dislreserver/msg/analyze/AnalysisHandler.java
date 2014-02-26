@@ -11,25 +11,29 @@ import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.msg.analyze.AnalysisResolver.AnalysisMethodHolder;
 import ch.usi.dag.dislreserver.msg.analyze.mtdispatch.AnalysisDispatcher;
 import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
+import ch.usi.dag.dislreserver.shadow.Context;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
-import ch.usi.dag.dislreserver.shadow.ShadowObjectTable;
 
 
 public final class AnalysisHandler implements RequestHandler {
 
-	private AnalysisDispatcher dispatcher = new AnalysisDispatcher ();
+	private final AnalysisDispatcher dispatcher = new AnalysisDispatcher ();
 
 	public AnalysisDispatcher getDispatcher() {
 		return dispatcher;
 	}
 
-	public void handle (
-		final DataInputStream is, final DataOutputStream os, final boolean debug
-	) throws DiSLREServerException {
 
+    @Override
+    public void handle (
+        final ShadowAddressSpace shadowAddressSpace, final DataInputStream is,
+        final DataOutputStream os, final boolean debug
+    ) throws DiSLREServerException {
+	    // TODO (YZ) pass processID to remote analysis
 		try {
 			// get net reference for the thread
-			long orderingID = is.readLong ();
+			final long orderingID = is.readLong ();
 
 			// read and create method invocations
 			final int invocationCount = is.readInt ();
@@ -40,8 +44,8 @@ public final class AnalysisHandler implements RequestHandler {
 				));
 			}
 
-			List <AnalysisInvocation> invocations = __unmarshalInvocations (
-				invocationCount, is, debug
+			final List <AnalysisInvocation> invocations = __unmarshalInvocations (
+			    shadowAddressSpace, invocationCount, is, debug
 			);
 
 			dispatcher.addTask (orderingID, invocations);
@@ -52,29 +56,30 @@ public final class AnalysisHandler implements RequestHandler {
 	}
 
 
-	private List <AnalysisInvocation> __unmarshalInvocations (
-		final int invocationCount, final DataInputStream is, final boolean debug
-	) throws DiSLREServerException {
+    private List <AnalysisInvocation> __unmarshalInvocations (
+        final ShadowAddressSpace shadowAddressSpace, final int invocationCount,
+        final DataInputStream is, final boolean debug
+    ) throws DiSLREServerException {
 		final List <AnalysisInvocation> result =
 			new LinkedList <AnalysisInvocation> ();
 
 		for (int i = 0; i < invocationCount; ++i) {
-			result.add (__unmarshalInvocation (is, debug));
+			result.add (__unmarshalInvocation (shadowAddressSpace, is, debug));
 		}
 
 		return result;
 	}
 
 
-	private AnalysisInvocation __unmarshalInvocation (
-		final DataInputStream is, final boolean debug
-	) throws DiSLREServerException {
+    private AnalysisInvocation __unmarshalInvocation (
+        final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final boolean debug
+    ) throws DiSLREServerException {
 		try {
 			// *** retrieve method ***
 
 			// read method id from network and retrieve method
 			final short methodId = is.readShort ();
-			AnalysisMethodHolder amh = AnalysisResolver.getMethod (methodId);
+			final AnalysisMethodHolder amh = AnalysisResolver.getMethod (methodId);
 
 			// *** retrieve method argument values ***
 
@@ -93,9 +98,9 @@ public final class AnalysisHandler implements RequestHandler {
 			// read argument values data according to argument types
 			int readLength = 0;
 			final List <Object> args = new LinkedList <Object> ();
-			for (Class <?> argClass : method.getParameterTypes ()) {
+			for (final Class <?> argClass : method.getParameterTypes ()) {
 				readLength += unmarshalAndCollectArgument (
-					is, argClass, method, args
+				    shadowAddressSpace, is, argClass, method, args
 				);
 			}
 
@@ -128,10 +133,11 @@ public final class AnalysisHandler implements RequestHandler {
 	}
 
 
-	private int unmarshalAndCollectArgument (
-		final DataInputStream is, final Class <?> argClass,
-		final Method analysisMethod, List <Object> args
-	) throws IOException, DiSLREServerException {
+    private int unmarshalAndCollectArgument (
+        final ShadowAddressSpace shadowAddressSpace, final DataInputStream is,
+        final Class <?> argClass,
+        final Method analysisMethod, final List <Object> args
+    ) throws IOException, DiSLREServerException {
 
 		if (argClass.equals (boolean.class)) {
 			args.add (is.readBoolean ());
@@ -174,16 +180,22 @@ public final class AnalysisHandler implements RequestHandler {
 		}
 
 		if (ShadowObject.class.isAssignableFrom(argClass)) {
-			long net_ref = is.readLong();
+			final long net_ref = is.readLong();
 
 			// null handling
 			if (net_ref == 0) {
 				args.add(null);
 			} else {
-				args.add(ShadowObjectTable.get(net_ref));
+				args.add(shadowAddressSpace.getShadowObject (net_ref));
 			}
 
 			return Long.SIZE / Byte.SIZE;
+		}
+
+		// Pass context of current shadow address space
+		if (argClass.equals (Context.class)) {
+		    args.add (shadowAddressSpace.getContext ());
+		    return 0;
 		}
 
 		throw new DiSLREServerException (String.format (
@@ -193,15 +205,16 @@ public final class AnalysisHandler implements RequestHandler {
 		));
 	}
 
-	public void threadEnded(long threadId) {
-		dispatcher.threadEndedEvent(threadId);
+	public void threadEnded(final ShadowAddressSpace shadowAddressSpace, final long threadId) {
+		dispatcher.threadEndedEvent(shadowAddressSpace, threadId);
 	}
-	
-	public void objectsFreed(long[] objFreeIDs) {
-		dispatcher.objectsFreedEvent(objFreeIDs);
+
+	public void objectsFreed(final ShadowAddressSpace shadowAddressSpace, final long[] objFreeIDs) {
+		dispatcher.objectsFreedEvent(shadowAddressSpace, objFreeIDs);
 	}
-	
-	public void exit() {
+
+	@Override
+    public void exit() {
 		dispatcher.exit();
 	}
 }

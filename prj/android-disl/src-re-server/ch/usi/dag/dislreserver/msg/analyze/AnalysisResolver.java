@@ -2,24 +2,25 @@ package ch.usi.dag.dislreserver.msg.analyze;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.exception.DiSLREServerFatalException;
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.dislreserver.shadow.Context;
+import ch.usi.dag.dislreserver.shadow.Forkable;
 
 public final class AnalysisResolver {
 	private static final String METHOD_DELIM = ".";
 
-	private static final Map <Short, AnalysisMethodHolder>
-		methodMap = new HashMap <Short, AnalysisMethodHolder> ();
+	private static final ConcurrentHashMap <Short, AnalysisMethodHolder>
+		methodMap = new ConcurrentHashMap <Short, AnalysisMethodHolder> ();
 
-	private static final Map <String, RemoteAnalysis>
-		analysisMap = new HashMap <String, RemoteAnalysis> ();
+	private static final ConcurrentHashMap <String, RemoteAnalysis>
+		analysisMap = new ConcurrentHashMap <String, RemoteAnalysis> ();
 
 	// for fast set access - contains all values from analysisMap
 	private static final Set <RemoteAnalysis>
@@ -49,39 +50,52 @@ public final class AnalysisResolver {
 
 	//
 
-	private static AnalysisMethodHolder resolveMethod (String methodStr
+	private static AnalysisMethodHolder resolveMethod (final String methodStr
 	) throws DiSLREServerException {
 		try {
-			int classNameEnd = methodStr.lastIndexOf (METHOD_DELIM);
+			final int classNameEnd = methodStr.lastIndexOf (METHOD_DELIM);
 
 			// without METHOD_DELIM
-			String className = methodStr.substring (0, classNameEnd);
-			String methodName = methodStr.substring (classNameEnd + 1);
+			final String className = methodStr.substring (0, classNameEnd);
+			final String methodName = methodStr.substring (classNameEnd + 1);
 
 			// resolve analysis instance
 			RemoteAnalysis raInst = analysisMap.get (className);
 			if (raInst == null) {
 				// resolve class
-				Class <?> raClass = Class.forName (className);
+				final Class <?> raClass = Class.forName (className);
 
 				// create instance
 				raInst = (RemoteAnalysis) raClass.newInstance ();
+				RemoteAnalysis tmp;
 
-				analysisMap.put (className, raInst);
-				analysisSet.add (raInst);
+                if ((tmp = analysisMap.putIfAbsent (className, raInst)) == null) {
+                    analysisSet.add (raInst);
+                } else {
+                    raInst = tmp;
+                }
 			}
 
 			// resolve analysis method
 			final Method raMethod = __getAnalysisMethod (raInst, methodName);
 
+            if (Forkable.class.isAssignableFrom (raInst.getClass ())) {
+                final Class <?> [] argTypes = raMethod.getParameterTypes ();
+
+                if (!argTypes [argTypes.length - 1].equals (Context.class)) {
+                    throw new DiSLREServerFatalException ("Analysis method "
+                        + methodStr + " does not accept Context as an argument");
+                }
+            }
+
 			return new AnalysisMethodHolder(raInst, raMethod);
 		}
 
-		catch (ClassNotFoundException e) {
+		catch (final ClassNotFoundException e) {
 			throw new DiSLREServerException(e);
-		} catch (InstantiationException e) {
+		} catch (final InstantiationException e) {
 			throw new DiSLREServerException(e);
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			throw new DiSLREServerException(e);
 		}
 	}
@@ -121,7 +135,7 @@ public final class AnalysisResolver {
 
 	static AnalysisMethodHolder getMethod (final short methodId)
 	throws DiSLREServerException {
-		AnalysisMethodHolder result = methodMap.get (methodId);
+		final AnalysisMethodHolder result = methodMap.get (methodId);
 		if (result == null) {
 			throw new DiSLREServerFatalException ("Unknown method id: "+ methodId);
 		}
@@ -131,9 +145,9 @@ public final class AnalysisResolver {
 
 
 	public static void registerMethodId (
-		final short methodId, String methodString
+		final short methodId, final String methodString
 	) throws DiSLREServerException {
-		methodMap.put(methodId, resolveMethod(methodString));
+		methodMap.putIfAbsent (methodId, resolveMethod(methodString));
 	}
 
 

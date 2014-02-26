@@ -7,9 +7,13 @@ public class ShadowThread extends ShadowObject {
     private String  name;
     private boolean isDaemon;
 
-    public ShadowThread(long net_ref, String name, boolean isDaemon,
-            ShadowClass klass) {
-        super(net_ref, klass);
+
+    ShadowThread (
+        final ShadowAddressSpace currentAddressSpace, final long net_ref,
+        final String name, final boolean isDaemon,
+        final ShadowClass klass) {
+        super (
+            currentAddressSpace, net_ref, klass);
 
         this.name = name;
         this.isDaemon = isDaemon;
@@ -27,22 +31,22 @@ public class ShadowThread extends ShadowObject {
         return isDaemon;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
-    public void setDaemon(boolean isDaemon) {
+    public void setDaemon(final boolean isDaemon) {
         this.isDaemon = isDaemon;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
 
         if (super.equals(obj)) {
 
             if (obj instanceof ShadowThread) {
 
-                ShadowThread t = (ShadowThread) obj;
+                final ShadowThread t = (ShadowThread) obj;
 
                 if (name != null && name.equals(t.name)
                         && (isDaemon == t.isDaemon)) {
@@ -54,8 +58,8 @@ public class ShadowThread extends ShadowObject {
         return false;
     }
 
-    /* @Override
+    /*@Override
     public int hashCode() {
         throw new UnsupportedOperationException("overriden equals, not overriden hashCode");
-    } */
+    }*/
 }

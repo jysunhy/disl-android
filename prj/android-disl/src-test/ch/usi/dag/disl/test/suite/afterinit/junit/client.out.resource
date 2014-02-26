@@ -1,5 +1,0 @@
-Constructing TargetClass
-Before
-Constructing TargetClass2
-Construction end
-After

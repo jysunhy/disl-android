@@ -7,25 +7,30 @@ import ch.usi.dag.dislreserver.msg.analyze.AnalysisResolver;
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.dislreserver.reqdispatch.RequestDispatcher;
 import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 
 public final class CloseHandler implements RequestHandler {
 
-	public void handle (
-		final DataInputStream is, final DataOutputStream os, final boolean debug
+	@Override
+    public void handle (
+		final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os, final boolean debug
 	) {
-		// call exit on all request handlers - waits for all uncompleted actions
-		for (final RequestHandler handler : RequestDispatcher.getAllHandlers ()) {
-			handler.exit ();
-		}
+	    if (ShadowAddressSpace.removeShadowAddressSpace (shadowAddressSpace)) {
+	        // call exit on all request handlers - waits for all uncompleted actions
+	        for (final RequestHandler handler : RequestDispatcher.getAllHandlers ()) {
+	            handler.exit ();
+	        }
 
-		// invoke atExit on all analyses
-		for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
-			analysis.atExit ();
-		}
+	        // invoke atExit on all analyses
+	        for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
+	            analysis.atExit (shadowAddressSpace);
+	        }
+	    }
 	}
 
-	public void exit () {
+	@Override
+    public void exit () {
 
 	}
 

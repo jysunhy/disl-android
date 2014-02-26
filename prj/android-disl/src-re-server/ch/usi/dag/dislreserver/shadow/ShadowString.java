@@ -6,8 +6,12 @@ public class ShadowString extends ShadowObject {
 
     private String value;
 
-    public ShadowString(long net_ref, String value, ShadowClass klass) {
-        super(net_ref, klass);
+
+    ShadowString (
+        final ShadowAddressSpace currentAddressSpace, final long net_ref,
+        final String value, final ShadowClass klass) {
+        super (
+            currentAddressSpace, net_ref, klass);
         this.value = value;
     }
 
@@ -18,12 +22,12 @@ public class ShadowString extends ShadowObject {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
 
         if (super.equals(obj)) {
 
@@ -38,8 +42,12 @@ public class ShadowString extends ShadowObject {
         return false;
     }
 
-    /* @Override
-    public int hashCode() {
-        throw new UnsupportedOperationException("overriden equals, not overriden hashCode");
-    } */
+
+    @Override
+    public int hashCode () {
+        // throw new
+        // UnsupportedOperationException("overriden equals, not overriden hashCode");
+        return value == null ? 0 : value.hashCode ();
+    }
+
 }

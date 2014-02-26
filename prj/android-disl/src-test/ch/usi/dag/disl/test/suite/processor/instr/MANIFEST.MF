@@ -1,2 +1,0 @@
-Manifest-Version: 1.0
-DiSL-Classes: ch.usi.dag.disl.test.suite.processor.instr.DiSLClass:ch.usi.dag.disl.test.suite.processor.instr.ProcessorTest:ch.usi.dag.disl.test.suite.processor.instr.ProcessorTest2

@@ -20,16 +20,8 @@ import com.android.internal.os.ZygoteConnection;
 
 public class DiSLClass {
 
-	@Before(marker = BodyMarker.class, scope = "*.transact")
-		public static void client(MethodStaticContext sc, ArgumentProcessorContext pc){
-			Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
-			System.out.printf("disl: args for %s %s\n", sc.thisMethodFullName(), sc.thisMethodDescriptor());
+	@Before(marker = BodyMarker.class, scope = "MainActivity.add")
+		public static void add(MethodStaticContext sc, ArgumentProcessorContext pc){
+			AndroidRE.mapPID("testadd",-1);
 		}
-
-	@Before(marker = BodyMarker.class, scope = "*.onTransact")
-		public static void server(MethodStaticContext sc, ArgumentProcessorContext pc){
-			Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
-			System.out.printf("disl: args for %s %s\n", sc.thisMethodFullName(), sc.thisMethodDescriptor());
-		}
-
 }

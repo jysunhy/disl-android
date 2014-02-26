@@ -88,13 +88,7 @@
 		<exec executable="make" dir="${src.reagent}" />
 	</target>
 
-	<target name="compile-test" depends="compile-disl,compile-reserver,compile-redispatch">
-		<javac srcdir="${src.test}" destdir="bin" debug="true" includeAntRuntime="false">
-			<classpath refid="buildpath" />
-		</javac>
-	</target>
-
-	<target name="compile" depends="compile-disl,compile-agent-java,compile-agent-c,compile-test,compile-reserver,compile-redispatch" />
+	<target name="compile" depends="compile-disl,compile-agent-java,compile-agent-c,compile-reserver,compile-redispatch" />
 
 	<target name="package-dislserver" depends="compile-disl">
 		<jar basedir="${bin}" destfile="${build}/disl-server.jar" includes="ch/usi/dag/disl/**,ch/usi/dag/dislserver/**" excludes="ch/usi/dag/disl/test/**,ch/usi/dag/disl/testtools/**">
@@ -169,7 +163,7 @@
 		<copy file="${asm.path}" tofile="${build}/${asm.lib}" />
 	</target>
 
-	<target name="prepare-all" depends="package,eclipse,compile-test,copy-asm" />
+	<target name="prepare-all" depends="package,eclipse,copy-asm" />
 
 	<target name="clean">
 		<delete dir="${bin}" />

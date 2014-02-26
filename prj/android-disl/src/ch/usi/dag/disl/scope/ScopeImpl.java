@@ -1,9 +1,5 @@
 package ch.usi.dag.disl.scope;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,37 +13,37 @@ import ch.usi.dag.disl.util.Constants;
  * <p>
  * Filters methods based on class name, method name, method parameters and
  * return type.
- * 
- * 
+ *
+ *
  * <p>
  * Name of the filtered method is specified as follows:
- * 
+ *
  * <p>
  * <b>returnparam classname.methodname(parameters)</b>
- * 
- * 
+ *
+ *
  * <p>
  * <b>wildcards</b> Some filter patterns might be completely or partly
  * substituted with "*" wild card that might be expanded to none or unspecified
  * number of non-white character.
- * 
- * 
+ *
+ *
  * <p>
  * <b>methodname</b> is a mandatory part of the pattern specified. The method
  * name might be partly or completely replaced using "*". To filter in class
  * initializer or class instance constructor specify respectively "clinit" or
  * "init".
- * 
+ *
  * <p>
  * Examples:
  * <ul>
- * 
+ *
  * <li>*</li>
  * <ul>
  * matches:
  * <li>all methods</li>
  * </ul>
- * 
+ *
  * <li>*init</li>
  * <ul>
  * matches:
@@ -55,26 +51,26 @@ import ch.usi.dag.disl.util.Constants;
  * <li>class constructor - "init"</li>
  * <li>every other method ending with "init"</li>
  * </ul>
- * 
+ *
  * </ul>
- * 
- * 
+ *
+ *
  * <p>
  * <b>returnparam</b> is the returning parameter of the method. It is specified
  * by fully qualified name of the class or pritimive type. If the returnparam is
  * missing, it matches all the return types. Wild cards might substitute pattern
  * partly or completely.
- * 
+ *
  * <p>
  * Examples:
  * <ul>
- * 
+ *
  * <li>* or nothing</li>
  * <ul>
  * matches:
  * <li>all return types</li>
  * </ul>
- * 
+ *
  * <li>*.String</li>
  * <ul>
  * matches:
@@ -82,7 +78,7 @@ import ch.usi.dag.disl.util.Constants;
  * <li>my.package.String</li>
  * <li>every other String class in all packages</li>
  * </ul>
- * 
+ *
  * <li>*String</li>
  * <ul>
  * matches:
@@ -92,10 +88,10 @@ import ch.usi.dag.disl.util.Constants;
  * <li>every other String class in all packages</li>
  * <li>every other class ending with String in all packages</li>
  * </ul>
- * 
+ *
  * </ul>
- * 
- * 
+ *
+ *
  * <p>
  * <b>classname</b> is the fully qualified name of the class where the filtered
  * method resides. Classname is not required. If it's not specified all classes
@@ -103,23 +99,23 @@ import ch.usi.dag.disl.util.Constants;
  * classname specified do match. To specify a class without any package add
  * "[default]" as packagename. Wild cards might substitute pattern partly or
  * completely.
- * 
+ *
  * <p>
  * Examples:
  * <ul>
- * 
+ *
  * <li>* or nothing</li>
  * <ul>
  * matches:
  * <li>all classes</li>
  * </ul>
- * 
+ *
  * <li>TargetClass</li>
  * <ul>
  * matches:
  * <li>TargetClass in all packages</li>
  * </ul>
- * 
+ *
  * <li>[default].TargetClass</li>
  * <ul>
  * matches:
@@ -127,7 +123,7 @@ import ch.usi.dag.disl.util.Constants;
  * not matches:
  * <li>my.pkg.TargetClass</li>
  * </ul>
- * 
+ *
  * <li>TargetClass*</li>
  * <ul>
  * matches:
@@ -135,7 +131,7 @@ import ch.usi.dag.disl.util.Constants;
  * <li>TargetClassBar in all packages</li>
  * <li>every other class starting with TargetClass in all packages</li>
  * </ul>
- * 
+ *
  * <li>my.pkg.*Math</li>
  * <ul>
  * matches:
@@ -145,20 +141,20 @@ import ch.usi.dag.disl.util.Constants;
  * <li>my.pkg.new.fast.Math</li>
  * <li>every other class ending with Math in my.pkg subpackages</li>
  * </ul>
- * 
+ *
  * </ul>
- * 
- * 
+ *
+ *
  * <p>
  * <b>parameters</b> are specified same as <i>returnparam</i> and are separated
  * by ",". Parameter can be partly or completely substituted with "*". ".." can
  * be supplied instead of last parameter specification and matches all remaining
  * method parameters.
- * 
+ *
  * <p>
  * Examples:
  * <ul>
- * 
+ *
  * <li>(..)</li>
  * <ul>
  * matches:
@@ -166,7 +162,7 @@ import ch.usi.dag.disl.util.Constants;
  * <li>(int)</li>
  * <li>every other</li>
  * </ul>
- * 
+ *
  * <li>(int, int, ..)</li>
  * <ul>
  * matches:
@@ -174,38 +170,38 @@ import ch.usi.dag.disl.util.Constants;
  * <li>(int, int, int)</li>
  * <li>every other starting with two ints</li>
  * </ul>
- * 
+ *
  * <li>(java.lang.String, java.lang.String[])</li>
  * <ul>
  * matches:
  * <li>(java.lang.String, java.lang.String[])</li>
  * </ul>
- * 
+ *
  * </ul>
- * 
- * 
+ *
+ *
  * <p>
  * Complete examples:
  * <ul>
- * 
+ *
  * <li>my.pkg.TargetClass.main(java.lang.String[])</li>
  * <ul>
  * matches:
  * <li>exactly this one method</li>
  * </ul>
- * 
+ *
  * <li>int *</li>
  * <ul>
  * matches:
  * <li>all methods returning integer</li>
  * </ul>
- * 
+ *
  * <li>*(int, int, int)</li>
  * <ul>
  * matches:
  * <li>all methods accepting three integers</li>
  * </ul>
- * 
+ *
  * </ul>
  */
 public class ScopeImpl implements Scope {
@@ -223,9 +219,9 @@ public class ScopeImpl implements Scope {
     private String       returnWildCard;
     private List<String> paramsWildCard;
 
-    private int lastWhitespace(String where) {
+    private int lastWhitespace(final String where) {
 
-        char[] whereCharArray = where.toCharArray();
+        final char[] whereCharArray = where.toCharArray();
 
         for (int i = whereCharArray.length - 1; i >= 0; --i) {
 
@@ -239,9 +235,9 @@ public class ScopeImpl implements Scope {
 
     // thx -
     // http://stackoverflow.com/questions/4067809/how-to-check-space-in-string
-    private boolean containsWhiteSpace(String toCheck) {
+    private boolean containsWhiteSpace(final String toCheck) {
 
-        for (char c : toCheck.toCharArray()) {
+        for (final char c : toCheck.toCharArray()) {
             if (Character.isWhitespace(c)) {
                 return true;
             }
@@ -250,7 +246,7 @@ public class ScopeImpl implements Scope {
         return false;
     }
 
-    public ScopeImpl(String scopeExpression) throws ScopeParserException {
+    public ScopeImpl(final String scopeExpression) throws ScopeParserException {
 
         // -- parse the scope into parts - trim whitespace everywhere --
 
@@ -262,7 +258,7 @@ public class ScopeImpl implements Scope {
         String restOfExpr = scopeExpression;
 
         // -- method parameters --
-        int paramBegin = restOfExpr.lastIndexOf(PARAM_BEGIN);
+        final int paramBegin = restOfExpr.lastIndexOf(PARAM_BEGIN);
         if (paramBegin != -1) {
 
             // + 1 - don't include PARAM_BEGIN
@@ -279,7 +275,7 @@ public class ScopeImpl implements Scope {
             }
 
             // remove PARAM_END
-            int paramEnd = paramsStr.lastIndexOf(PARAM_END);
+            final int paramEnd = paramsStr.lastIndexOf(PARAM_END);
             paramsStr = paramsStr.substring(0, paramEnd);
 
             paramsWildCard = new LinkedList<String>();
@@ -288,7 +284,7 @@ public class ScopeImpl implements Scope {
             if (!paramsStr.trim().isEmpty()) {
 
                 // separate params and trim them again
-                String[] params = paramsStr.split(PARAM_DELIM);
+                final String[] params = paramsStr.split(PARAM_DELIM);
                 for (String param : Arrays.asList(params)) {
 
                     param = param.trim();
@@ -303,7 +299,7 @@ public class ScopeImpl implements Scope {
                 }
             }
 
-            int pmrIndex = paramsWildCard.indexOf(PARAM_MATCH_REST);
+            final int pmrIndex = paramsWildCard.indexOf(PARAM_MATCH_REST);
 
             // if the index is valid, the first occurrence of PARAM_MATCH_REST
             // should be at the end of the parameters
@@ -326,7 +322,7 @@ public class ScopeImpl implements Scope {
         }
 
         // -- method name --
-        int methodDelim = restOfExpr.lastIndexOf(METHOD_DELIM);
+        final int methodDelim = restOfExpr.lastIndexOf(METHOD_DELIM);
         if (methodDelim != -1) {
             // + 1 - don't include METHOD_DELIM
             methodWildCard = restOfExpr.substring(methodDelim + 1);
@@ -353,7 +349,7 @@ public class ScopeImpl implements Scope {
 
             if (!restOfExpr.isEmpty()) {
 
-                int classDelim = lastWhitespace(restOfExpr);
+                final int classDelim = lastWhitespace(restOfExpr);
                 if (classDelim != -1) {
                     // + 1 - don't include whitespace
                     classWildCard = restOfExpr.substring(classDelim + 1);
@@ -394,25 +390,9 @@ public class ScopeImpl implements Scope {
         }
     }
 
-    /**
-     * For testing only.
-     */
-    @SuppressWarnings("unused")
-    private static void write(String className, String methodName, String methodDesc) {
-        File file = new File("desc.txt");
-        try (
-                FileWriter fw = new FileWriter(file.getAbsoluteFile(), true);
-                BufferedWriter bw = new BufferedWriter(fw);) {
-            bw.write(String.format("classname: %s\n", className));
-            bw.write(String.format("methodName: %s\n", methodName));
-            bw.write(String.format("methodDesc: %s\n", methodDesc));
-        } catch (IOException e) {
-
-        }
-    }
-
-    public boolean matches(String className, String methodName,
-            String methodDesc) {
+    @Override
+    public boolean matches(String className, final String methodName,
+            final String methodDesc) {
         // write(className, methodName, methodDesc);
 
         // -- match class (with package) --
@@ -448,7 +428,7 @@ public class ScopeImpl implements Scope {
         if (paramsWildCard != null) {
 
             // get parameters and match one by one
-            Type[] parameters = Type.getArgumentTypes(methodDesc);
+            final Type[] parameters = Type.getArgumentTypes(methodDesc);
 
             // get last param
             String lastParamWC = null;
@@ -471,7 +451,7 @@ public class ScopeImpl implements Scope {
 
             for (int i = 0; i < parameters.length; ++i) {
 
-                String paramWC = paramsWildCard.get(i);
+                final String paramWC = paramsWildCard.get(i);
 
                 // if there is PARAM_MATCH_REST then stop
                 // works even if there is no additional parameter
@@ -479,7 +459,7 @@ public class ScopeImpl implements Scope {
                     break;
                 }
 
-                String typeName = parameters[i].getClassName();
+                final String typeName = parameters[i].getClassName();
 
                 if (!WildCard.match(typeName, paramWC)) {
                     return false;
@@ -490,8 +470,8 @@ public class ScopeImpl implements Scope {
         // -- match return type --
 
         if (returnWildCard != null) {
-            Type returnType = Type.getReturnType(methodDesc);
-            String typeName = returnType.getClassName();
+            final Type returnType = Type.getReturnType(methodDesc);
+            final String typeName = returnType.getClassName();
 
             if (!WildCard.match(typeName, returnWildCard)) {
                 return false;
@@ -507,7 +487,7 @@ public class ScopeImpl implements Scope {
 
         if (paramsWildCard != null) {
             p += "(";
-            for (String s : paramsWildCard) {
+            for (final String s : paramsWildCard) {
                 p += s + ", ";
             }
             if (p.length() > 1) {

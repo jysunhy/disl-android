@@ -7,26 +7,28 @@ import java.io.IOException;
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.msg.analyze.AnalysisHandler;
 import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 public class ThreadEndHandler implements RequestHandler {
 
 	final AnalysisHandler analysisHandler;
-	
-	public ThreadEndHandler(AnalysisHandler anlHndl) {
+
+	public ThreadEndHandler(final AnalysisHandler anlHndl) {
 		analysisHandler = anlHndl;
 	}
 
-	public void handle(DataInputStream is, DataOutputStream os, boolean debug)
+	@Override
+    public void handle(final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os, final boolean debug)
 			throws DiSLREServerException {
 
 		try {
 
-			long threadId = is.readLong();
+			final long threadId = is.readLong();
 
 			// announce thread end to the analysis handler
-			analysisHandler.threadEnded(threadId);
-			
-		} catch (IOException e) {
+			analysisHandler.threadEnded(shadowAddressSpace, threadId);
+
+		} catch (final IOException e) {
 			throw new DiSLREServerException(e);
 		}
 	}
@@ -35,7 +37,8 @@ public class ThreadEndHandler implements RequestHandler {
 
 	}
 
-	public void exit() {
+	@Override
+    public void exit() {
 
 	}
 }

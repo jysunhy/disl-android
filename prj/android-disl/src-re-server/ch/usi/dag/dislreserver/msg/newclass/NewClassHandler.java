@@ -6,31 +6,33 @@ import java.io.IOException;
 
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
-import ch.usi.dag.dislreserver.shadow.ShadowClassTable;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
-import ch.usi.dag.dislreserver.shadow.ShadowObjectTable;
 
 public class NewClassHandler implements RequestHandler {
 
-	public void handle(DataInputStream is, DataOutputStream os, boolean debug)
+	@Override
+    public void handle(final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os, final boolean debug)
 			throws DiSLREServerException {
 
 		try {
+			final String className = is.readUTF();
+			final long oid = is.readLong();
 
-			String className = is.readUTF();
-			long oid = is.readLong();
-			ShadowObject classLoader = ShadowObjectTable.get(oid);
-			int classCodeLength = is.readInt();
-			byte[] classCode = new byte[classCodeLength];
+			final ShadowObject classLoader = shadowAddressSpace.getShadowObject (oid);
+			final int classCodeLength = is.readInt();
+			final byte[] classCode = new byte[classCodeLength];
 			is.readFully(classCode);
 
-			ShadowClassTable.load(classLoader, className, classCode, debug);
-		} catch (IOException e) {
+			shadowAddressSpace.loadBytecode(classLoader, className, classCode, debug);
+			System.out.println("NEW CLASS "+className);
+		} catch (final IOException e) {
 			throw new DiSLREServerException(e);
 		}
 	}
 
-	public void exit() {
+	@Override
+    public void exit() {
 
 	}
 

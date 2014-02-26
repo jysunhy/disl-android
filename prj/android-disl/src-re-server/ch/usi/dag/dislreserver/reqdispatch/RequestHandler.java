@@ -4,12 +4,15 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 public interface RequestHandler {
 
-	void handle(DataInputStream is, DataOutputStream os, boolean debug)
-			throws DiSLREServerException;
-	
+    void handle (
+        ShadowAddressSpace shadowAddressSpace, DataInputStream is, DataOutputStream os,
+        boolean debug)
+    throws DiSLREServerException;
+
 	// invoked at exit
 	void exit();
 }

@@ -6,33 +6,41 @@ import java.io.IOException;
 
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.dislreserver.shadow.ShadowClass;
-import ch.usi.dag.dislreserver.shadow.ShadowClassTable;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
-import ch.usi.dag.dislreserver.shadow.ShadowObjectTable;
+
 
 public class ClassInfoHandler implements RequestHandler {
 
-	public void handle(DataInputStream is, DataOutputStream os, boolean debug)
-			throws DiSLREServerException {
+    @Override
+    public void handle (
+        final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os,
+        final boolean debug)
+    throws DiSLREServerException {
 
-		try {
+        try {
+            final long net_ref = is.readLong ();
+            final String classSignature = is.readUTF ();
+            final String classGenericStr = is.readUTF ();
+            System.out.println ("CLASS INFO "+ classSignature+" "+classGenericStr);
+            final ShadowObject classLoader = shadowAddressSpace.getShadowObject (is.readLong ());
 
-			long net_ref = is.readLong();
-			String classSignature = is.readUTF();
-			String classGenericStr = is.readUTF();
-			ShadowObject classLoader = ShadowObjectTable.get(is.readLong());
+            final ShadowClass superClass = (ShadowClass)shadowAddressSpace.getShadowObject (is.readLong ());
+            shadowAddressSpace.createAndRegisterShadowClass (
+                net_ref, superClass, classLoader,
+                classSignature, classGenericStr, debug);
 
-			ShadowClass superClass = (ShadowClass) ShadowObjectTable.get(is
-					.readLong());
-			ShadowClassTable.newInstance(net_ref, superClass, classLoader,
-					classSignature, classGenericStr, debug);
-		} catch (IOException e) {
-			throw new DiSLREServerException(e);
-		}
-	}
+        } catch (final IOException e) {
+            //throw new DiSLREServerException (e);
+            //HAIYANG
+            (new DiSLREServerException (e)).printStackTrace ();
+        }
+    }
 
-	public void exit() {
 
-	}
+    @Override
+    public void exit () {
+
+    }
 }

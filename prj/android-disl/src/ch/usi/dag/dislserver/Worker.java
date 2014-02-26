@@ -61,7 +61,8 @@ public class Worker extends Thread {
     // "build-test/disl-instr-android.jar";
     // Needed by ANDROID
     //private static final String instrLibPath = "example/android/instr/build/disl-instr.jar";
-    private static final String instrLibPath = "test-ia-sapi/build/disl-instr.jar";
+    //private static final String instrLibPath = "test-ia-sapi/build/disl-instr.jar";
+    private static final String instrLibPath = "bin/instr.jar";
     private static final String specLibPath = "lib/spec-new.jar";
     //private static final String instrLibPath2 = "example/android/instr/build/test_disl-instr.jar";
 
@@ -445,16 +446,16 @@ public class Worker extends Thread {
                             if(configMsg){
                                 instrClass =
                                 ("com.inspur.test;"
-                                //+"system_server;"
+                                +"system_server;"
                                 +"zygote;"
-                                +"com.android.providers.calendar;"
+                                /*+"com.android.providers.calendar;"
                                 +"android.process.acore;"
                                 +"android.process.media;"
                                 +"com.android.systemui;"
                                 +"com.android.inputmethod.latin;"
                                 +"com.android.phone;"
                                 +"com.android.settings;"
-                                +"android.process.acore;"
+                                +"android.process.acore;"*/
                                 /*+"com.android.smspush;"
                                 +"com.android.provision;"
                                 +"com.android.launcher;"
@@ -464,11 +465,12 @@ public class Worker extends Thread {
                                 +"com.android.exchange;"
                                 +"com.android.calendar;"
                                 +"com.android.providers.calendar;"
-                                +"android.process.media;"*/
+                                +"android.process.media;"
                                 +"com.android.email;"
                                 +"com.android.mms;"
                                 +"com.android.contacts;"
-                                +"com.android.quicksearchbox;")
+                                +"com.android.quicksearchbox;"*/
+                                )
                                 .getBytes ();
 
 

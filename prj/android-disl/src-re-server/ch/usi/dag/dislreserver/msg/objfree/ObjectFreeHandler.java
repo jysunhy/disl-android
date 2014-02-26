@@ -7,39 +7,42 @@ import java.io.IOException;
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.msg.analyze.AnalysisHandler;
 import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 public class ObjectFreeHandler implements RequestHandler {
 
-final AnalysisHandler analysisHandler;
-	
-	public ObjectFreeHandler(AnalysisHandler anlHndl) {
+    final AnalysisHandler analysisHandler;
+
+	public ObjectFreeHandler(final AnalysisHandler anlHndl) {
 		analysisHandler = anlHndl;
 	}
-	
-	public void handle(DataInputStream is, DataOutputStream os, boolean debug)
+
+	@Override
+    public void handle(final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os, final boolean debug)
 			throws DiSLREServerException {
 
 		try {
-			
-			int freeCount = is.readInt();
-			
-			long[] objFreeIDs = new long[freeCount];
-			
+
+			final int freeCount = is.readInt();
+
+			final long[] objFreeIDs = new long[freeCount];
+
 			for(int i = 0; i < freeCount; ++i) {
-				
-				long netref = is.readLong();
-				
+
+				final long netref = is.readLong();
+
 				objFreeIDs[i] = netref;
 			}
-			
-			analysisHandler.objectsFreed(objFreeIDs);
 
-		} catch (IOException e) {
+			analysisHandler.objectsFreed(shadowAddressSpace, objFreeIDs);
+
+		} catch (final IOException e) {
 			throw new DiSLREServerException(e);
 		}
 	}
 
-	public void exit() {
+	@Override
+    public void exit() {
 
 	}
 

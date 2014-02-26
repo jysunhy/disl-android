@@ -1,17 +1,21 @@
 package ch.usi.dag.dislreserver.shadow;
 
+import ch.usi.dag.dislreserver.shadow.ref.FieldInfo;
+import ch.usi.dag.dislreserver.shadow.ref.MethodInfo;
+
 public abstract class ShadowClass extends ShadowObject {
 
     private final int          classId;
-    private final ShadowObject classLoader;
+    private ShadowObject classLoader;
 
     //
 
-    protected ShadowClass(
-            final long netReference, final ShadowObject classLoader) {
-        super(netReference, null);
+    protected ShadowClass (final ShadowAddressSpace currentAddressSpace,
+        final long netReference, final ShadowObject classLoader) {
+        super (
+            currentAddressSpace, netReference, null);
 
-        this.classId = NetReferenceHelper.get_class_id(netReference);
+        this.classId = NetReferenceHelper.get_class_id (netReference);
         this.classLoader = classLoader;
     }
 
@@ -56,13 +60,13 @@ public abstract class ShadowClass extends ShadowObject {
     public abstract ShadowClass getSuperclass();
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
 
         if (!(obj instanceof ShadowClass)) {
             return false;
         }
 
-        ShadowClass sClass = (ShadowClass) obj;
+        final ShadowClass sClass = (ShadowClass) obj;
 
         if (getName().equals(sClass.getName())
                 && getShadowClassLoader().equals(sClass.getShadowClassLoader())) {
@@ -99,24 +103,24 @@ public abstract class ShadowClass extends ShadowObject {
     public abstract MethodInfo getDeclaredMethod(String methodName,
             String[] argumentNames) throws NoSuchMethodException;
 
-    public MethodInfo getMethod(String methodName, ShadowClass[] arguments)
+    public MethodInfo getMethod(final String methodName, final ShadowClass[] arguments)
             throws NoSuchMethodException {
         return getMethod(methodName, classesToStrings(arguments));
     }
 
-    public MethodInfo getDeclaredMethod(String methodName,
-            ShadowClass[] arguments) throws NoSuchMethodException {
+    public MethodInfo getDeclaredMethod(final String methodName,
+            final ShadowClass[] arguments) throws NoSuchMethodException {
         return getDeclaredMethod(methodName, classesToStrings(arguments));
     }
 
-    protected static String[] classesToStrings(ShadowClass[] arguments) {
+    protected static String[] classesToStrings(final ShadowClass[] arguments) {
 
         if (arguments == null) {
             return new String[0];
         }
 
-        int size = arguments.length;
-        String[] argumentNames = new String[size];
+        final int size = arguments.length;
+        final String[] argumentNames = new String[size];
 
         for (int i = 0; i < size; i++) {
             argumentNames[i] = arguments[i].getName();
@@ -125,8 +129,8 @@ public abstract class ShadowClass extends ShadowObject {
         return argumentNames;
     }
 
-    protected static String argumentNamesToString(String[] argumentNames) {
-        StringBuilder buf = new StringBuilder();
+    protected static String argumentNamesToString(final String[] argumentNames) {
+        final StringBuilder buf = new StringBuilder();
         buf.append("(");
 
         if (argumentNames != null) {
@@ -143,6 +147,12 @@ public abstract class ShadowClass extends ShadowObject {
 
         buf.append(")");
         return buf.toString();
+    }
+
+    @Override
+    void onFork (final ShadowAddressSpace shadowAddressSpace) {
+        super.onFork (shadowAddressSpace);
+        classLoader = shadowAddressSpace.getClonedShadowObject (classLoader);
     }
 
 }

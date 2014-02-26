@@ -15,10 +15,13 @@ import ch.usi.dag.dislreserver.msg.classinfo.ClassInfoHandler;
 import ch.usi.dag.dislreserver.msg.close.CloseHandler;
 import ch.usi.dag.dislreserver.msg.newclass.NewClassHandler;
 import ch.usi.dag.dislreserver.msg.objfree.ObjectFreeHandler;
+import ch.usi.dag.dislreserver.msg.onfork.OnForkHandler;
+import ch.usi.dag.dislreserver.msg.pname.ProcInfoHandler;
 import ch.usi.dag.dislreserver.msg.reganalysis.RegAnalysisHandler;
 import ch.usi.dag.dislreserver.msg.stringinfo.StringInfoHandler;
 import ch.usi.dag.dislreserver.msg.threadend.ThreadEndHandler;
 import ch.usi.dag.dislreserver.msg.threadinfo.ThreadInfoHandler;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 
 public final class RequestDispatcher {
@@ -37,6 +40,8 @@ public final class RequestDispatcher {
 	private static final byte __REQUEST_ID_REGISTER_ANALYSIS__ = 6;
 	private static final byte __REQUEST_ID_THREAD_INFO__ = 7;
 	private static final byte __REQUEST_ID_THREAD_END__ = 8;
+    private static final byte __REQUEST_ID_ON_FORK__ = 9;
+    private static final byte __REQUEST_ID_PNAME__ = 10;
 
 	//
 
@@ -52,7 +57,7 @@ public final class RequestDispatcher {
 		//
 		final Map <Byte, RequestHandler> requestMap = new HashMap <Byte, RequestHandler> ();
 		requestMap.put (__REQUEST_ID_CLOSE__, new CloseHandler ());
-		AnalysisHandler anlHndl = new AnalysisHandler ();
+		final AnalysisHandler anlHndl = new AnalysisHandler ();
 		requestMap.put (__REQUEST_ID_INVOKE_ANALYSIS__, anlHndl);
 		requestMap.put (__REQUEST_ID_OBJECT_FREE__, new ObjectFreeHandler (anlHndl));
 		requestMap.put (__REQUEST_ID_NEW_CLASS__, new NewClassHandler ());
@@ -61,6 +66,8 @@ public final class RequestDispatcher {
 		requestMap.put (__REQUEST_ID_REGISTER_ANALYSIS__, new RegAnalysisHandler ());
 		requestMap.put (__REQUEST_ID_THREAD_INFO__, new ThreadInfoHandler());
 		requestMap.put (__REQUEST_ID_THREAD_END__,  new ThreadEndHandler(anlHndl));
+        requestMap.put (__REQUEST_ID_ON_FORK__,  new OnForkHandler(anlHndl));
+        requestMap.put (__REQUEST_ID_PNAME__,  new ProcInfoHandler());
 
 		__handlers = Collections.unmodifiableCollection (requestMap.values ());
 		__dispatchTable = __createDispatchTable (requestMap);
@@ -84,9 +91,9 @@ public final class RequestDispatcher {
 
 	//
 
-	public static boolean dispatch (
+	public static boolean dispatch (final ShadowAddressSpace shadowAddressSpace,
 		final byte requestId, final DataInputStream is,
-		final DataOutputStream os, boolean debug
+		final DataOutputStream os, final boolean debug
 	) throws DiSLREServerException {
 		//
 		// Lookup the request handler and process the request using the handler.
@@ -96,12 +103,12 @@ public final class RequestDispatcher {
 		if (rh != null) {
 			if (debug) {
 				System.out.printf (
-					"DiSL-RE: dispatching request message (%d) to %s\n",
-					requestId, rh.getClass ().getSimpleName ()
+					"DiSL-RE: dispatching request message (%d)(%d) to %s\n",
+					requestId, shadowAddressSpace.getContext ().pid (), rh.getClass ().getSimpleName ()
 				);
 			}
 
-			rh.handle (is, os, debug);
+			rh.handle (shadowAddressSpace, is, os, debug);
 			return requestId == __REQUEST_ID_CLOSE__;
 
 		} else {

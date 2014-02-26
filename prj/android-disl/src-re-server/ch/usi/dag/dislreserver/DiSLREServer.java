@@ -10,11 +10,13 @@ import java.net.Socket;
 
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.reqdispatch.RequestDispatcher;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 
 public abstract class DiSLREServer {
 
 	private static final String PROP_DEBUG = "debug";
+	//private static final boolean debug = Boolean.getBoolean (PROP_DEBUG);
 	private static final boolean debug = true;
 
 	private static final String PROP_PORT = "dislreserver.port";
@@ -40,17 +42,30 @@ public abstract class DiSLREServer {
 				);
 			}
 
-			final Socket socket = listenSocket.accept ();
-			if (debug) {
-				System.out.printf (
-					"DiSL-RE: accepting connection from %s:%d\n",
-					socket.getInetAddress ().getHostAddress (),
-					socket.getPort ()
-				);
+			// TODO (YZ) how to terminate
+			while (true) {
+	            final Socket socket = listenSocket.accept ();
+	            if (debug) {
+	                System.out.printf (
+	                    "DiSL-RE: accepting connection from %s:%d\n",
+	                    socket.getInetAddress ().getHostAddress (),
+	                    socket.getPort ()
+	                );
+	            }
+
+	            new Thread () {
+	                @Override
+                    public void run() {
+	                    try {
+                            requestLoop (socket);
+                            socket.close ();
+                        } catch (final Throwable throwable) {
+                            reportError (throwable);
+                        }
+	                };
+	            }.start ();
 			}
 
-			requestLoop (socket);
-			socket.close ();
 
 		} catch (final IOException ioe) {
 			reportError (new DiSLREServerException (ioe));
@@ -74,10 +89,17 @@ public abstract class DiSLREServer {
 				new BufferedOutputStream(sock.getOutputStream()));
 
 			REQUEST_LOOP: while (true) {
+
+                final int processID = is.readInt();
 				final byte requestNo = is.readByte();
-				if (RequestDispatcher.dispatch (requestNo, is, os, debug)) {
+
+                final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpace (
+                    processID, sock.getInetAddress ());
+
+				if (RequestDispatcher.dispatch (shadowAddressSpace, requestNo, is, os, debug)) {
 					break REQUEST_LOOP;
 				}
+
 			}
 
 		} catch (final IOException ioe) {

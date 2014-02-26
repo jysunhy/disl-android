@@ -21,22 +21,30 @@ import org.objectweb.asm.tree.InnerClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import ch.usi.dag.dislreserver.exception.DiSLREServerFatalException;
+import ch.usi.dag.dislreserver.shadow.ref.FieldInfo;
+import ch.usi.dag.dislreserver.shadow.ref.MethodInfo;
 
 class ShadowCommonClass extends ShadowClass {
 
     // TODO ! is this implementation of methods really working ??
 
-    private final ShadowClass superClass;
+    private ShadowClass superClass;
     private ClassNode   classNode;
 
     private int         access;
     private String      name;
 
-    ShadowCommonClass(final long net_ref, final String classSignature,
-            final ShadowObject classLoader, final ShadowClass superClass, byte[] classCode) {
-        super(net_ref, classLoader);
+
+    ShadowCommonClass (
+        final ShadowAddressSpace currentAddressSpace, final long net_ref,
+        final String classSignature,
+        final ShadowObject classLoader, final ShadowClass superClass,
+        byte [] classCode) {
+        super (
+            currentAddressSpace, net_ref, classLoader);
 
         this.superClass = superClass;
+
         name = classSignature.replace('/', '.');
         if(name.startsWith("L")) {
             name = name.substring(1);
@@ -47,6 +55,9 @@ class ShadowCommonClass extends ShadowClass {
 
         //HAIYANG current empty
         System.out.println ("Getting class code:" +name);
+        if(name.equals("android.os.StrictMode$8")){
+            System.out.println ("debugging here");
+        }
         if(false) {
             return;
         }
@@ -88,7 +99,8 @@ class ShadowCommonClass extends ShadowClass {
         if(classCode==null) {
             System.out.println ("Getting class code of" +name+ ": NULL");
         }
-        initializeClassInfo(classCode);
+
+        initializeClassInfo (classCode);
     }
 
     private List<MethodInfo> methods;
@@ -330,6 +342,13 @@ class ShadowCommonClass extends ShadowClass {
 
         throw new NoSuchMethodException(name + "." + methodName
                 + argumentNamesToString(argumentNames));
+    }
+
+
+    @Override
+    void onFork (final ShadowAddressSpace shadowAddressSpace) {
+        super.onFork (shadowAddressSpace);
+        superClass = (ShadowClass) shadowAddressSpace.getClonedShadowObject (superClass);
     }
 
 }
