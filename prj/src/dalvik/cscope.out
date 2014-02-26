@@ -1,4 +1,4 @@
-cscope 15 $HOME/tdroid/tdroid-4.1.1_r6/dalvik               0003914035
+cscope 15 $HOME/tdroid/tdroid-4.1.1_r6/dalvik               0003915122
 	@dalvikvm/Main.cpp
 
 19 
@@ -9049,7 +9049,7 @@ addªss
 sun_∑th
 , 
 UNIX_PATH_MAX
-, "/dev/socket/instrument");
+, "/dev/socket/instrument2");
 
 108 if(
 	`c⁄√˘
@@ -44045,7 +44045,7 @@ addªss
 sun_∑th
 , 
 UNIX_PATH_MAX
-, "/dev/socket/instrument");
+, "/dev/socket/instrument2");
 
 92 if(
 	`c⁄√˘
@@ -509112,36 +509112,58 @@ zygŸe
 ("zygote");
 
 609 
+	`Bef‹eF‹k
+();
+
+610 
+∑ª¡
+ = 
+	`gëpid
+();
+
+611 
 pid
  = 
 	`f‹k
 ();
 
-611 i‡(
+613 i‡(
 pid
  == 0) {
 
-612 
+614 
+	`_m≠PID
+(
+	`gëpid
+(),"system_server");
+
+615 
+	`⁄F‹k
+(
+∑ª¡
+);
+
+616 
 îr
 ;
 
-615 #ifde‡
+619 #ifde‡
 HAVE_ANDROID_OS
 
 
-616 
+620 
 gMÆlocLókZygŸeChûd
 ;
 
-617 
+621 
 gMÆlocLókZygŸeChûd
  = 1;
 
-620 i‡(
+624 i‡(
 uid
  != 0) {
 
-621 
+625 
 îr
  = 
 	`¥˘l
@@ -509149,11 +509171,11 @@ uid
 PR_SET_KEEPCAPS
 , 1, 0, 0, 0);
 
-623 i‡(
+627 i‡(
 îr
  < 0) {
 
-624 
+628 
 	`ALOGE
 ("ˇ¬Ÿ PR_SET_KEEPCAPS: %s", 
 	`°ªº‹
@@ -509161,11 +509183,11 @@ PR_SET_KEEPCAPS
 î∫o
 ));
 
-625 
+629 
 	`dvmAb‹t
 ();
 
-631 
+635 
 îr
  = 
 	`£tgroupsI¡¨øy
@@ -509173,11 +509195,11 @@ PR_SET_KEEPCAPS
 gids
 );
 
-633 i‡(
+637 i‡(
 îr
  < 0) {
 
-634 
+638 
 	`ALOGE
 ("ˇ¬Ÿ sëgroups(): %s", 
 	`°ªº‹
@@ -509185,11 +509207,11 @@ gids
 î∫o
 ));
 
-635 
+639 
 	`dvmAb‹t
 ();
 
-638 
+642 
 îr
  = 
 	`£ålimôsFromAºay
@@ -509197,11 +509219,11 @@ gids
 æimôs
 );
 
-640 i‡(
+644 i‡(
 îr
  < 0) {
 
-641 
+645 
 	`ALOGE
 ("ˇ¬Ÿ sëæimô(): %s", 
 	`°ªº‹
@@ -509209,11 +509231,11 @@ gids
 î∫o
 ));
 
-642 
+646 
 	`dvmAb‹t
 ();
 
-645 
+649 
 îr
  = 
 	`£tgid
@@ -509221,11 +509243,11 @@ gids
 gid
 );
 
-646 i‡(
+650 i‡(
 îr
  < 0) {
 
-647 
+651 
 	`ALOGE
 ("ˇ¬Ÿ sëgid(%d): %s", 
 gid
@@ -509235,11 +509257,11 @@ gid
 î∫o
 ));
 
-648 
+652 
 	`dvmAb‹t
 ();
 
-651 
+655 
 îr
  = 
 	`£tuid
@@ -509247,11 +509269,11 @@ gid
 uid
 );
 
-652 i‡(
+656 i‡(
 îr
  < 0) {
 
-653 
+657 
 	`ALOGE
 ("ˇ¬Ÿ sëuid(%d): %s", 
 uid
@@ -509261,17 +509283,17 @@ uid
 î∫o
 ));
 
-654 
+658 
 	`dvmAb‹t
 ();
 
-657 
+661 
 cuºít
  = 
 	`≥rs⁄Æôy
 (0xffffFFFF);
 
-658 
+662 
 suc˚ss
  = 
 	`≥rs⁄Æôy
@@ -509281,11 +509303,11 @@ ADDR_NO_RANDOMIZE
 cuºít
 ));
 
-659 i‡(
+663 i‡(
 suc˚ss
  == -1) {
 
-660 
+664 
 	`ALOGW
 ("Pîs⁄Æôy swôch faûed. cuºít=%dÉº‹=%d\n", 
 cuºít
@@ -509293,7 +509315,7 @@ cuºít
 î∫o
 );
 
-663 
+667 
 îr
  = 
 	`£tC≠abûôõs
@@ -509303,15 +509325,15 @@ cuºít
 ef„˘iveC≠abûôõs
 );
 
-664 i‡(
+668 i‡(
 îr
  != 0) {
 
-665 
+669 
 	`ALOGE
 ("cannot set capabilities (%llx,%llx): %s",
 
-666 
+670 
 ≥rmôãdC≠abûôõs
 , 
 ef„˘iveC≠abûôõs
@@ -509321,11 +509343,11 @@ ef„˘iveC≠abûôõs
 îr
 ));
 
-667 
+671 
 	`dvmAb‹t
 ();
 
-670 
+674 
 îr
  = 
 	`£t_sched_pﬁicy
@@ -509333,11 +509355,11 @@ ef„˘iveC≠abûôõs
 SP_DEFAULT
 );
 
-671 i‡(
+675 i‡(
 îr
  < 0) {
 
-672 
+676 
 	`ALOGE
 ("ˇ¬Ÿ së_sched_pﬁicy(0, SP_DEFAULT): %s", 
 	`°ªº‹
@@ -509345,11 +509367,11 @@ SP_DEFAULT
 îr
 ));
 
-673 
+677 
 	`dvmAb‹t
 ();
 
-679 
+683 
 Thªad
 * 
 thªad
@@ -509357,7 +509379,7 @@ thªad
 	`dvmThªadSñf
 ();
 
-680 
+684 
 thªad
 ->
 sy°emTid
@@ -509365,7 +509387,7 @@ sy°emTid
 	`dvmGëSysThªadId
 ();
 
-681 
+685 
 boﬁ
  
 by∑ss
@@ -509381,7 +509403,7 @@ gDvm
 offJavaL™gThªad_by∑ss
 );
 
-682 
+686 
 	`ALOG
 (
 LOG_DEBUG
@@ -509401,7 +509423,7 @@ thªadId
 by∑ss
 ?"true":"false");
 
-683 
+687 
 	`dvmSëFõldBoﬁón
 (
 thªad
@@ -509415,17 +509437,17 @@ offJavaL™gThªad_by∑ss
 åue
 );
 
-686 
+690 
 	`íabÀDebugFótuªs
 (
 debugFœgs
 );
 
-688 
+692 
 	`un£tSig«lH™dÀr
 ();
 
-689 
+693 
 gDvm
 .
 zygŸe
@@ -509433,179 +509455,7 @@ zygŸe
 Ál£
 ;
 
-692 if(
-åue
-)
-
-694 
-sockaddr_un
- 
-addªss
-;
-
-695 
-˛õ¡_sockë
- = 
-	`sockë
-(
-PF_UNIX
-, 
-SOCK_STREAM
-, 0);
-
-696 if(
-˛õ¡_sockë
- < 0)
-
-698 
-	`ALOG
-(
-LOG_INFO
-,"HAIYANG","CL: Cª©êSockë Faûed! %d",
-î∫o
-);
-
-702 
-	`mem£t
-(&
-addªss
-, 0, (
-sockaddr_un
-));
-
-704 
-addªss
-.
-sun_Ámûy
- = 
-AF_UNIX
-;
-
-705 
-	`¢¥ötf
-(
-addªss
-.
-sun_∑th
-, 
-UNIX_PATH_MAX
-, "/dev/socket/instrument");
-
-707 * 
-tmp
-=
-NULL
-;
-
-708 
-tmp
- = &
-addªss
-;
-
-710 if(
-	`c⁄√˘
-(
-˛õ¡_sockë
-,
-
-713 (
-sockaddr
- *Ë
-tmp
-,
-
-714 (
-sockaddr_un
-)) != 0)
-
-716 
-	`ALOG
-(
-LOG_INFO
-,"HAIYANG","CL: C⁄√˘ Sockë Faûed! %d",
-î∫o
-);
-
-717 
-˛õ¡_sockë
- = -1;
-
-719 
-sig«l
- = -5;
-
-720 
-	`£nd
-(
-˛õ¡_sockë
-, &
-sig«l
-, (), 0);
-
-721 
-pid
- = 
-	`gëpid
-();
-
-722 
-	`£nd
-(
-˛õ¡_sockë
-, &
-pid
-, (),0);
-
-723 
-quîy
- = -1;
-
-724 
-	`ªcv
-(
-˛õ¡_sockë
-, &
-quîy
-, (), 0);
-
-725 
-	`ALOG
-(
-LOG_INFO
-,"HAIYANG","QuîyÑesu… is: %d",
-quîy
-);
-
-726 if(
-quîy
- == 0) {
-
-727 
-gDvm
-.
-isShadow
-=
-Ál£
-;
-
-729 
-gDvm
-.
-isShadow
-=
-åue
-;
-
-732 
-gDvm
-.
-isShadow
- = 
-Ál£
-;
-
-734 
+739 
 	`ALOG
 (
 LOG_DEBUG
@@ -509619,79 +509469,7 @@ gDvm
 isShadow
 ?"true":"false");
 
-736 
-gDvm
-.
-shadowHook
- = 
-NULL
-;
-
-737 
-gDvm
-.
-√wObjHook
- = 
-NULL
-;
-
-738 
-gDvm
-.
-‰ìObjHook
- = 
-NULL
-;
-
-739 
-gDvm
-.
-thªadEndHook
- = 
-NULL
-;
-
-740 
-gDvm
-.
-vmSèπHook
- = 
-NULL
-;
-
-741 
-gDvm
-.
-vmEndHook
- = 
-NULL
-;
-
-742 
-gDvm
-.
-vmInôHook
- = 
-NULL
-;
-
-743 
-gDvm
-.
-˛assfûeLﬂdHook
- = 
-NULL
-;
-
-744 
-gDvm
-.
-˛assInôHook
- = 
-NULL
-;
-
-746 if(
+751 if(
 gDvm
 .
 ‰ìObjHook
@@ -509699,24 +509477,24 @@ gDvm
 NULL
 )
 
-747 
+752 
 	`ALOG
 (
 LOG_DEBUG
 ,"HAIYANG","FREE OBJ HOOK IS NOT SET");
 
-749 
+754 
 	`ALOG
 (
 LOG_DEBUG
 ,"HAIYANG","FREE OBJ HOOK IS SET");
 
-754 if(!
+759 if(
 isSy°emSîvî
 )
 
-755 
-	`ShadowLib_OnLﬂd
+760 
+	`ShadowLib_Sy°emSîvî_OnLﬂd
 (
 gDvmJni
 .
@@ -509725,31 +509503,31 @@ jniVm
 NULL
 );
 
-759 i‡(!
+764 i‡(!
 	`dvmInôA·îZygŸe
 ()) {
 
-760 
+765 
 	`ALOGE
 ("error inÖost-zygote initialization");
 
-761 
+766 
 	`dvmAb‹t
 ();
 
-763 } i‡(
+768 } i‡(
 pid
  > 0) {
 
-767  
+772  
 pid
 ;
 
-768 
+773 
 	}
 }
 
-773 
+778 
 	$DÆvik_dÆvik_sy°em_ZygŸe_f‹kAndS≥cülize
 (c⁄° 
 u4
@@ -509757,19 +509535,19 @@ u4
 ¨gs
 ,
 
-774 
+779 
 JVÆue
 * 
 pResu…
 )
 
-776 
+781 
 pid_t
  
 pid
 ;
 
-778 
+783 
 pid
  = 
 	`f‹kAndS≥cülizeComm⁄
@@ -509779,17 +509557,17 @@ pid
 Ál£
 );
 
-780 
+785 
 	`RETURN_INT
 (
 pid
 );
 
-781 
+786 
 	}
 }
 
-782 
+787 
 	$DÆvik_dÆvik_sy°em_ZygŸe_f‹kAndS≥cülize_2
 (c⁄° 
 u4
@@ -509797,19 +509575,19 @@ u4
 ¨gs
 ,
 
-783 
+788 
 JVÆue
 * 
 pResu…
 )
 
-785 
+790 
 pid_t
  
 pid
 ;
 
-787 
+792 
 pid
  = 
 	`f‹kAndS≥cülizeComm⁄_2
@@ -509819,21 +509597,21 @@ pid
 Ál£
 );
 
-789 
+794 
 	`RETURN_INT
 (
 pid
 );
 
-790 
+795 
 	}
 }
 
-796 
+801 
 	$DÆvik_dÆvik_sy°em_ZygŸe_f‹kSy°emSîvî
 (
 
-797 c⁄° 
+802 c⁄° 
 u4
 * 
 ¨gs
@@ -509843,13 +509621,13 @@ JVÆue
 pResu…
 )
 
-799 
+804 
 pid_t
  
 pid
 ;
 
-800 
+805 
 pid
  = 
 	`f‹kAndS≥cülizeComm⁄
@@ -509859,21 +509637,21 @@ pid
 åue
 );
 
-803 i‡(
+808 i‡(
 pid
  > 0) {
 
-804 
+809 
 °©us
 ;
 
-806 
+811 
 	`ALOGI
 ("Sy°em sîvîÖro˚s†%d ha†bì¿¸óãd", 
 pid
 );
 
-807 
+812 
 gDvm
 .
 sy°emSîvîPid
@@ -509881,7 +509659,7 @@ sy°emSîvîPid
 pid
 ;
 
-812 i‡(
+817 i‡(
 	`waôpid
 (
 pid
@@ -509891,13 +509669,13 @@ pid
 WNOHANG
 ) ==Öid) {
 
-813 
+818 
 	`ALOGE
 ("Sy°em sîvîÖro˚s†%d ha†dõd. Re°¨tög ZygŸe!", 
 pid
 );
 
-814 
+819 
 	`kûl
 (
 	`gëpid
@@ -509905,21 +509683,21 @@ pid
 SIGKILL
 );
 
-817 
+822 
 	`RETURN_INT
 (
 pid
 );
 
-818 
+823 
 	}
 }
 
-822 
+827 
 	$DÆvik_dÆvik_sy°em_ZygŸe_execShñl
 (
 
-823 c⁄° 
+828 c⁄° 
 u4
 * 
 ¨gs
@@ -509929,7 +509707,7 @@ JVÆue
 pResu…
 )
 
-825 
+830 
 SåögObje˘
 * 
 comm™d
@@ -509937,7 +509715,7 @@ comm™d
 ¨gs
 [0];
 
-827 c⁄° *
+832 c⁄° *
 ¨gp
 [] = {
 _PATH_BSHELL
@@ -509945,7 +509723,7 @@ _PATH_BSHELL
 NULL
 , NULL};
 
-828 
+833 
 ¨gp
 [2] = 
 	`dvmCª©eC°rFromSåög
@@ -509953,13 +509731,13 @@ NULL
 comm™d
 );
 
-830 
+835 
 	`ALOGI
 ("Exec: %†%†%s", 
 ¨gp
 [0],árgp[1],árgp[2]);
 
-832 
+837 
 	`execv
 (
 _PATH_BSHELL
@@ -509967,41 +509745,41 @@ _PATH_BSHELL
 ¨gp
 );
 
-833 
+838 
 	`exô
 (127);
 
-834 
+839 
 	}
 }
 
-836 c⁄° 
+841 c⁄° 
 DÆvikN©iveMëhod
  
 	gdvm_dÆvik_sy°em_ZygŸe
 [] = {
 
-838 
+843 
 DÆvik_dÆvik_sy°em_ZygŸe_f‹k
  },
 
-840 
+845 
 DÆvik_dÆvik_sy°em_ZygŸe_f‹kAndS≥cülize
  },
 
-842 
+847 
 DÆvik_dÆvik_sy°em_ZygŸe_f‹kAndS≥cülize_2
  },
 
-844 
+849 
 DÆvik_dÆvik_sy°em_ZygŸe_f‹kSy°emSîvî
  },
 
-846 
+851 
 DÆvik_dÆvik_sy°em_ZygŸe_execShñl
  },
 
-847 { 
+852 { 
 NULL
 , NULL, NULL },
 
@@ -538584,18 +538362,6 @@ CœssObje˘
 * 
 ˛azz
 )
-
-4243 
-	`ALOG
-(
-LOG_DEBUG
-,"CLASSLOAD","IN %s: des¸ùt‹: %s",
-__FUNCTION__
-, 
-˛azz
-->
-des¸ùt‹
-);
 
 4244 
 	`±hªad_muãx_lock
@@ -570071,13 +569837,17 @@ cbô
 	~<sched.h
 >
 
-11 
+10 
+	~<cutûs/sockës.h
+>
+
+12 
 RePrŸocﬁ
  
 ªmŸe
 ("/dev/socket/instrument",11218);
 
-13 
+14 
 boﬁ
  
 	gisZygŸe
@@ -570085,45 +569855,37 @@ boﬁ
 åue
 ;
 
-15 
-Sockë
- *
-	gsock
- = 
-NULL
-;
-
-17 
+18 
 Buf„r
 * 
 	gzygŸe_buff
 ;
 
-21 
+22 
 ±hªad_muãx_t
  
 	ggl_mtx
 ;
 
-22 vﬁ©ûê
+23 vﬁ©ûê
 jöt
  
 	gŸ_˛ass_id
  = 1;
 
-23 vﬁ©ûê
+24 vﬁ©ûê
 jl⁄g
  
 	gŸ_obje˘_id
  = 1;
 
-24 vﬁ©ûê
+25 vﬁ©ûê
 jsh‹t
  
 	gmëhod_id
  = 1;
 
-28 
+29 
 boﬁ
  
 	gisDecided
@@ -570131,7 +569893,7 @@ boﬁ
 Ál£
 ;
 
-37 
+38 
 	$_m≠PID
 (
 pid
@@ -570139,7 +569901,7 @@ pid
 ≤ame
 ){
 
-38 
+39 
 Sockë
  *
 tmpsock
@@ -570151,25 +569913,27 @@ tmpsock
 Ál£
 );
 
-39 !
+40 !
 tmpsock
 ->
 	`C⁄√˘
 ()){
 
-40 
-	`LOGDEBUG
-("Cannot connectÅhrough UDS");
-
 41 
+	`LOGDEBUG
+("C™nŸ c⁄√˘Åhrough UDS i¿%d", 
+	`gëpid
+());
+
+42 
 	`¶ìp
 (2);
 
-43 
+44 
 sig«l
  = -4;
 
-44 
+45 
 tmpsock
 ->
 	`Síd
@@ -570177,7 +569941,7 @@ tmpsock
 sig«l
 ,());
 
-45 
+46 
 sig«l
  = 
 	`°æí
@@ -570185,7 +569949,7 @@ sig«l
 ≤ame
 );
 
-46 
+47 
 tmpsock
 ->
 	`Síd
@@ -570193,7 +569957,7 @@ tmpsock
 sig«l
 ,());
 
-47 
+48 
 tmpsock
 ->
 	`Síd
@@ -570203,13 +569967,13 @@ tmpsock
 	`°æí
 (pname));
 
-48 
+49 
 sig«l
  = 
 pid
 ;
 
-49 
+50 
 tmpsock
 ->
 	`Síd
@@ -570217,11 +569981,11 @@ tmpsock
 sig«l
 ,());
 
-51 
+52 
 bp
  = -2;
 
-52 
+53 
 tmpsock
 ->
 	`RecvI¡
@@ -570229,7 +569993,7 @@ tmpsock
 bp
 );
 
-53 
+54 
 	`ALOG
 (
 LOG_INFO
@@ -570243,7 +570007,7 @@ pid
 ≤ame
 );
 
-54 
+55 
 gDvm
 .
 isShadow
@@ -570255,7 +570019,7 @@ bp
 åue
 ;
 
-57 
+58 
 	`±hªad_muãx_lock
 (&
 gDvm
@@ -570263,13 +570027,13 @@ gDvm
 s_mtx
 );
 
-58 if(
+59 if(
 gDvm
 .
 isShadow
 ) {
 
-59 
+60 
 	`ALOG
 (
 LOG_INFO
@@ -570277,7 +570041,7 @@ LOG_INFO
 isZygŸe
 ?"SHADOWZYGOTE":"SHADOW","MAPPID SETTING THE HOOKS TO NULL");
 
-60 
+61 
 gDvm
 .
 √wObjHook
@@ -570285,7 +570049,7 @@ gDvm
 NULL
 ;
 
-61 
+62 
 gDvm
 .
 ‰ìObjHook
@@ -570293,7 +570057,7 @@ gDvm
 NULL
 ;
 
-62 
+63 
 gDvm
 .
 thªadEndHook
@@ -570301,7 +570065,7 @@ thªadEndHook
 NULL
 ;
 
-63 
+64 
 gDvm
 .
 vmEndHook
@@ -570309,7 +570073,7 @@ vmEndHook
 NULL
 ;
 
-65 
+66 
 	`±hªad_muãx_u∆ock
 (&
 gDvm
@@ -570317,27 +570081,27 @@ gDvm
 s_mtx
 );
 
-66 
+67 
 isDecided
  = 
 åue
 ;
 
-67 
+68 
 dñëe
  
 tmpsock
 ;
 
-68 
+69 
 	}
 }
 
-70 
+71 
 	gm≠PID_2
 
 
-71 (
+72 (
 JNIEnv
  * 
 	gjni_ív
@@ -570351,7 +570115,7 @@ j°rög
 	g≤ame
 ) {
 
-72 
+73 
 jsize
  
 	g°r_Àn
@@ -570363,7 +570127,7 @@ GëSåögUTFLígth
 ≤ame
 );
 
-73 c⁄° * 
+74 c⁄° * 
 	g°r
  = 
 jni_ív
@@ -570375,7 +570139,7 @@ GëSåögUTFCh¨s
 NULL
 );
 
-74 
+75 
 ALOG
 (
 LOG_INFO
@@ -570387,7 +570151,7 @@ gëpid
 °r
 );
 
-75 
+76 
 Sockë
  *
 	gtmpsock
@@ -570397,25 +570161,25 @@ Sockë
 åue
 );
 
-76 !
+77 !
 	gtmpsock
 ->
 C⁄√˘
 ()){
 
-77 
+78 
 LOGDEBUG
 ("Cannot connectÅhrough UDS");
 
-78 
+79 
 ¶ìp
 (2);
 
-80 
+81 
 	gsig«l
  = -4;
 
-81 
+82 
 	gtmpsock
 ->
 Síd
@@ -570423,13 +570187,13 @@ Síd
 sig«l
 ,());
 
-82 
+83 
 	gsig«l
  = 
 °r_Àn
 ;
 
-83 
+84 
 	gtmpsock
 ->
 Síd
@@ -570437,7 +570201,7 @@ Síd
 sig«l
 ,());
 
-84 
+85 
 	gtmpsock
 ->
 Síd
@@ -570447,13 +570211,13 @@ Síd
 °r_Àn
 );
 
-85 
+86 
 	gsig«l
  = 
 gëpid
 ();
 
-86 
+87 
 	gtmpsock
 ->
 Síd
@@ -570461,11 +570225,11 @@ Síd
 sig«l
 ,());
 
-88 
+89 
 	gbp
  = -2;
 
-89 
+90 
 	gtmpsock
 ->
 RecvI¡
@@ -570473,7 +570237,7 @@ RecvI¡
 bp
 );
 
-90 
+91 
 ALOG
 (
 LOG_INFO
@@ -570487,7 +570251,7 @@ gëpid
 °r
 );
 
-91 
+92 
 	ggDvm
 .
 	gisShadow
@@ -570499,7 +570263,7 @@ bp
 åue
 ;
 
-94 
+95 
 	gjni_ív
 ->
 Rñó£SåögUTFCh¨s
@@ -570509,7 +570273,7 @@ Rñó£SåögUTFCh¨s
 °r
 );
 
-95 
+96 
 ±hªad_muãx_lock
 (&
 gDvm
@@ -570517,13 +570281,13 @@ gDvm
 s_mtx
 );
 
-96 if(
+97 if(
 	ggDvm
 .
 	gisShadow
 ) {
 
-97 
+98 
 ALOG
 (
 LOG_INFO
@@ -570531,7 +570295,7 @@ LOG_INFO
 isZygŸe
 ?"SHADOWZYGOTE":"SHADOW","SETTING THE HOOKS TO NULL");
 
-98 
+99 
 	ggDvm
 .
 	g√wObjHook
@@ -570539,7 +570303,7 @@ isZygŸe
 NULL
 ;
 
-99 
+100 
 	ggDvm
 .
 	g‰ìObjHook
@@ -570547,7 +570311,7 @@ NULL
 NULL
 ;
 
-100 
+101 
 	ggDvm
 .
 	gthªadEndHook
@@ -570555,7 +570319,7 @@ NULL
 NULL
 ;
 
-101 
+102 
 	ggDvm
 .
 	gvmEndHook
@@ -570563,7 +570327,7 @@ NULL
 NULL
 ;
 
-103 
+104 
 ±hªad_muãx_u∆ock
 (&
 gDvm
@@ -570571,23 +570335,23 @@ gDvm
 s_mtx
 );
 
-104 
+105 
 	gisDecided
  = 
 åue
 ;
 
-105 
+106 
 dñëe
  
 	gtmpsock
 ;
 
-107 
+108 
 	gm≠PID
 
 
-108 (
+109 (
 JNIEnv
  * 
 	gjni_ív
@@ -570605,7 +570369,7 @@ jöt
 	gpid
 ) {
 
-111 c⁄° * 
+112 c⁄° * 
 	g°r
  = 
 jni_ív
@@ -570617,7 +570381,7 @@ GëSåögUTFCh¨s
 NULL
 );
 
-112 
+113 
 ALOG
 (
 LOG_INFO
@@ -570629,13 +570393,13 @@ pid
 °r
 );
 
-131 
+132 
 jsh‹t
  
 	gªgi°îMëhod
 
 
-132 (
+133 (
 JNIEnv
  * 
 	gjni_ív
@@ -570649,7 +570413,7 @@ j°rög
 	g™Æysis_mëhod_desc
 ) {
 
-133 
+134 
 jsize
  
 	g°r_Àn
@@ -570661,7 +570425,7 @@ GëSåögUTFLígth
 ™Æysis_mëhod_desc
 );
 
-134 c⁄° * 
+135 c⁄° * 
 	g°r
  = 
 jni_ív
@@ -570673,17 +570437,17 @@ GëSåögUTFCh¨s
 NULL
 );
 
-135 
+136 
 	gtmp
 [100];
 
-136 
+137 
 	gtmpsize
  = 
 °r_Àn
 <100?str_len:99;
 
-137 
+138 
 mem˝y
 (
 tmp
@@ -570693,17 +570457,17 @@ tmp
 tmpsize
 );
 
-138 
+139 
 	gtmp
 [
 tmpsize
 ] = 0;
 
-140 
+141 
 	gmëhod_id
 ++;
 
-141 
+142 
 	gªmŸe
 .
 MëhodRegi°îEvít
@@ -570719,7 +570483,7 @@ mëhod_id
 °r_Àn
 );
 
-142 
+143 
 	gjni_ív
 ->
 Rñó£SåögUTFCh¨s
@@ -570729,7 +570493,7 @@ Rñó£SåögUTFCh¨s
 °r
 );
 
-143 
+144 
 ALOG
 (
 LOG_INFO
@@ -570745,19 +570509,19 @@ dvmThªadSñf
 thªadId
 );
 
-146  
+147  
 	gmëhod_id
 ;
 
-149 
+150 
 	g⁄F‹k
 
 
-150 (
+151 (
 	g∑ª¡
 ) {
 
-151 
+152 
 ALOG
 (
 LOG_INFO
@@ -570769,7 +570533,7 @@ isZygŸe
 gëpid
 ());
 
-152 
+153 
 	gªmŸe
 .
 OnF‹kEvít
@@ -570777,11 +570541,11 @@ OnF‹kEvít
 ∑ª¡
 );
 
-155 
+156 
 	g™ÆysisSèπ__S
 
 
-156 (
+157 (
 JNIEnv
  * 
 	gjni_ív
@@ -570795,7 +570559,7 @@ jsh‹t
 	g™Æysis_mëhod_id
 ) {
 
-157 
+158 
 ALOG
 (
 LOG_INFO
@@ -570809,7 +570573,7 @@ dvmThªadSñf
 thªadId
 );
 
-158 
+159 
 	gªmŸe
 .
 A«lysisSèπEvít
@@ -570821,11 +570585,11 @@ thªadId
 ™Æysis_mëhod_id
 );
 
-162 
+163 
 	g™ÆysisSèπ__SB
 
 
-163 (
+164 (
 JNIEnv
  * 
 	gjni_ív
@@ -570839,13 +570603,13 @@ jsh‹t
 	g™Æysis_mëhod_id
 ,
 
-164 
+165 
 jbyã
  
 	g‹dîög_id
 ) {
 
-165 
+166 
 ALOG
 (
 LOG_INFO
@@ -570857,7 +570621,7 @@ isZygŸe
 ‹dîög_id
 );
 
-166 
+167 
 	gªmŸe
 .
 A«lysisSèπEvít
@@ -570871,65 +570635,11 @@ thªadId
 ™Æysis_mëhod_id
 );
 
-169 
-	$O≥nC⁄√˘i⁄
-(){
-
-170 
-	`ALOG
-(
-LOG_INFO
-,
-isZygŸe
-?"SHADOWZYGOTE":"SHADOW","EVENT: open connection");
-
-172 if(
-sock
-) {
-
-175 
-sock
- = 
-√w
- 
-	`Sockë
-();
-
-176 !
-sock
-->
-	`C⁄√˘
-()){
-
-177 
-	`LOGDEBUG
-("Cannot connectÅhrough UDS");
-
-178 
-	`¶ìp
-(2);
-
-180 
-sig«l
- = -3;
-
-181 
-sock
-->
-	`Síd
-((*)&
-sig«l
-,());
-
-182 
-	}
-}
-
-183 
+186 
 	gm™uÆlyO≥n
 
 
-184 (
+187 (
 JNIEnv
  * 
 	gjni_ív
@@ -570939,15 +570649,11 @@ j˛ass
 	gthis_˛ass
 ) {
 
-185 
-O≥nC⁄√˘i⁄
-();
-
-187 
+190 
 	gm™uÆlyClo£
 
 
-188 (
+191 (
 JNIEnv
  * 
 	gjni_ív
@@ -570957,7 +570663,7 @@ j˛ass
 	gthis_˛ass
 ) {
 
-189 
+192 
 ALOG
 (
 LOG_INFO
@@ -570965,41 +570671,11 @@ LOG_INFO
 isZygŸe
 ?"SHADOWZYGOTE":"SHADOW","EVENT: close connection");
 
-192 
-	gtmp
- = 
-MSG_CLOSE
-;
-
-193 
-	gsock
-->
-Síd
-(&
-tmp
-, 1);
-
-194 
-dñëe
- 
-	gsock
-;
-
-195 
-	gsock
- = 
-NULL
-;
-
-196 
-exô
-(0);
-
-198 
+203 
 	g™ÆysisEnd
 
 
-199 (
+204 (
 JNIEnv
  * 
 	gjni_ív
@@ -571009,7 +570685,7 @@ j˛ass
 	gthis_˛ass
 ) {
 
-200 
+205 
 ALOG
 (
 LOG_INFO
@@ -571017,7 +570693,7 @@ LOG_INFO
 isZygŸe
 ?"SHADOWZYGOTE":"SHADOW","EVENT:ánalysisÉnd for method");
 
-201 
+206 
 	gªmŸe
 .
 A«lysisEndEvít
@@ -571027,11 +570703,11 @@ dvmThªadSñf
 thªadId
 );
 
-204 
+209 
 	g£ndBoﬁón
 
 
-205 (
+210 (
 JNIEnv
  * 
 	gjni_ív
@@ -571045,7 +570721,7 @@ jboﬁón
 	gto_£nd
 ) {
 
-206 
+211 
 	gªmŸe
 .
 SídJboﬁón
@@ -571057,11 +570733,11 @@ thªadId
 to_£nd
 );
 
-209 
+214 
 	g£ndByã
 
 
-210 (
+215 (
 JNIEnv
  * 
 	gjni_ív
@@ -571075,7 +570751,7 @@ jbyã
 	gto_£nd
 ) {
 
-211 
+216 
 	gªmŸe
 .
 SídJbyã
@@ -571087,11 +570763,11 @@ thªadId
 to_£nd
 );
 
-214 
+219 
 	g£ndCh¨
 
 
-215 (
+220 (
 JNIEnv
  * 
 	gjni_ív
@@ -571105,7 +570781,7 @@ jch¨
 	gto_£nd
 ) {
 
-216 
+221 
 	gªmŸe
 .
 SídJch¨
@@ -571117,11 +570793,11 @@ thªadId
 to_£nd
 );
 
-219 
+224 
 	g£ndSh‹t
 
 
-220 (
+225 (
 JNIEnv
  * 
 	gjni_ív
@@ -571135,7 +570811,7 @@ jsh‹t
 	gto_£nd
 ) {
 
-221 
+226 
 	gªmŸe
 .
 SídJsh‹t
@@ -571147,11 +570823,11 @@ thªadId
 to_£nd
 );
 
-224 
+229 
 	g£ndI¡
 
 
-225 (
+230 (
 JNIEnv
  * 
 	gjni_ív
@@ -571165,7 +570841,7 @@ jöt
 	gto_£nd
 ) {
 
-226 
+231 
 	gªmŸe
 .
 SídJöt
@@ -571177,11 +570853,11 @@ thªadId
 to_£nd
 );
 
-229 
+234 
 	g£ndL⁄g
 
 
-230 (
+235 (
 JNIEnv
  * 
 	gjni_ív
@@ -571195,7 +570871,7 @@ jl⁄g
 	gto_£nd
 ) {
 
-231 
+236 
 	gªmŸe
 .
 SídJl⁄g
@@ -571207,11 +570883,11 @@ thªadId
 to_£nd
 );
 
-234 
+239 
 	g£ndFlﬂt
 
 
-235 (
+240 (
 JNIEnv
  * 
 	gjni_ív
@@ -571225,7 +570901,7 @@ jÊﬂt
 	gto_£nd
 ) {
 
-236 
+241 
 	gªmŸe
 .
 SídJÊﬂt
@@ -571237,11 +570913,11 @@ thªadId
 to_£nd
 );
 
-239 
+244 
 	g£ndDoubÀ
 
 
-240 (
+245 (
 JNIEnv
  * 
 	gjni_ív
@@ -571255,7 +570931,7 @@ jdoubÀ
 	gto_£nd
 ) {
 
-241 
+246 
 	gªmŸe
 .
 SídJdoubÀ
@@ -571267,7 +570943,7 @@ thªadId
 to_£nd
 );
 
-244 
+249 
 jl⁄g
  
 SëAndGëNëªf
@@ -571277,7 +570953,7 @@ Obje˘
 obj
 );
 
-245 
+250 
 jl⁄g
  
 	$√wCœss
@@ -571287,13 +570963,13 @@ CœssObje˘
 obj
 ){
 
-246 if(
+251 if(
 obj
  =
 NULL
 ) {
 
-249 
+254 
 jl⁄g
  
 su≥rid
@@ -571305,7 +570981,7 @@ obj
 su≥r
 );
 
-250 
+255 
 jl⁄g
  
 lﬂdîid
@@ -571317,7 +570993,7 @@ obj
 ˛assLﬂdî
 );
 
-251 
+256 
 obj
 ->
 uuid
@@ -571329,11 +571005,11 @@ uuid
 Ÿ_˛ass_id
 ++,1,1);
 
-252 
+257 
 tmp
 ;
 
-254 
+259 
 ªmŸe
 .
 	`NewCœssEvít
@@ -571349,7 +571025,7 @@ lﬂdîid
 tmp
 );
 
-255 
+260 
 ªmŸe
 .
 	`NewCœssInfo
@@ -571367,17 +571043,17 @@ lﬂdîid
 su≥rid
 );
 
-257  
+262  
 obj
 ->
 uuid
 ;
 
-258 
+263 
 	}
 }
 
-260 
+265 
 jl⁄g
  
 	$SëAndGëNëªf
@@ -571387,29 +571063,29 @@ Obje˘
 obj
 ){
 
-261 
+266 
 jl⁄g
  
 ªs
 ;
 
-262 if(
+267 if(
 obj
  =
 NULL
 )
 
-264 
+269 
 ªs
  = 0;
 
-265 }if(
+270 }if(
 obj
 ->
 uuid
  != 0){
 
-266 
+271 
 ªs
  = 
 obj
@@ -571417,13 +571093,13 @@ obj
 uuid
 ;
 
-267 }if(
+272 }if(
 	`dvmIsCœssObje˘
 (
 obj
 )){
 
-268 
+273 
 ªs
  = 
 	`√wCœss
@@ -571433,7 +571109,7 @@ CœssObje˘
 obj
 );
 
-271 if(
+276 if(
 obj
 ->
 ˛azz
@@ -571441,7 +571117,7 @@ obj
 uuid
  == 0){
 
-272 
+277 
 	`√wCœss
 (
 obj
@@ -571449,7 +571125,7 @@ obj
 ˛azz
 );
 
-274 
+279 
 obj
 ->
 uuid
@@ -571463,7 +571139,7 @@ uuid
 ˛azz
 ->uuid),0,0);
 
-275 
+280 
 ªs
  = 
 obj
@@ -571471,19 +571147,19 @@ obj
 uuid
 ;
 
-278  
+283  
 ªs
 ;
 
-279 
+284 
 	}
 }
 
-281 
+286 
 	g£ndObje˘
 
 
-282 (
+287 (
 JNIEnv
  * 
 	gjni_ív
@@ -571497,7 +571173,7 @@ jobje˘
 	gto_£nd
 ) {
 
-283 
+288 
 Sc›edMuãx
  
 mtx
@@ -571505,7 +571181,7 @@ mtx
 gl_mtx
 );
 
-284 
+289 
 Thªad
  *
 	g£lf
@@ -571513,7 +571189,7 @@ Thªad
 dvmThªadSñf
 ();
 
-285 
+290 
 Obje˘
 * 
 	gobj
@@ -571525,7 +571201,7 @@ dvmDecodeIndúe˘Ref
 to_£nd
 );
 
-286 
+291 
 jl⁄g
  
 	g√åef
@@ -571535,13 +571211,13 @@ SëAndGëNëªf
 obj
 );
 
-288 if(
+293 if(
 	gobj
  =
 NULL
 ){
 
-289 
+294 
 ALOG
 (
 LOG_DEBUG
@@ -571549,7 +571225,7 @@ LOG_DEBUG
 isZygŸe
 ?"SHADOWZYGOTE":"SHADOW","send NULL object");
 
-290 
+295 
 	gªmŸe
 .
 SídJobje˘
@@ -571559,7 +571235,7 @@ SídJobje˘
 thªadId
 , 0);
 
-310 
+315 
 	gªmŸe
 .
 SídJobje˘
@@ -571571,11 +571247,11 @@ thªadId
 √åef
 );
 
-313 
+318 
 	g£ndObje˘PlusD©a
 
 
-314 (
+319 (
 JNIEnv
  * 
 	gjni_ív
@@ -571589,7 +571265,7 @@ jobje˘
 	gto_£nd
 ) {
 
-316 
+321 
 Sc›edMuãx
  
 mtx
@@ -571597,7 +571273,7 @@ mtx
 gl_mtx
 );
 
-317 
+322 
 Thªad
  *
 	g£lf
@@ -571605,7 +571281,7 @@ Thªad
 dvmThªadSñf
 ();
 
-318 
+323 
 Obje˘
 * 
 	gobj
@@ -571617,7 +571293,7 @@ dvmDecodeIndúe˘Ref
 to_£nd
 );
 
-319 
+324 
 jl⁄g
  
 	g√åef
@@ -571627,13 +571303,13 @@ SëAndGëNëªf
 obj
 );
 
-321 if(
+326 if(
 	gobj
  =
 NULL
 ){
 
-322 
+327 
 ALOG
 (
 LOG_DEBUG
@@ -571641,7 +571317,7 @@ LOG_DEBUG
 isZygŸe
 ?"SHADOWZYGOTE":"SHADOW","send NULL object");
 
-323 
+328 
 	gªmŸe
 .
 SídJobje˘
@@ -571651,7 +571327,7 @@ SídJobje˘
 thªadId
 , 0);
 
-326 if(
+331 if(
 	gobj
 ->
 	g˛azz
@@ -571661,7 +571337,7 @@ gDvm
 ˛assJavaL™gSåög
 ){
 
-327 
+332 
 Àn
 =((
 SåögObje˘
@@ -571671,7 +571347,7 @@ obj
 Àngth
 ();
 
-328 
+333 
 	gutÊí
  = ((
 SåögObje˘
@@ -571681,7 +571357,7 @@ obj
 utfLígth
 ();
 
-329 c⁄° 
+334 c⁄° 
 u2
 * 
 	gtmp
@@ -571693,7 +571369,7 @@ obj
 ch¨s
 ();
 
-331 * 
+336 * 
 	g°r
  = 
 √w
@@ -571701,13 +571377,13 @@ ch¨s
 utÊí
 +1];
 
-332 
+337 
 	gi
  = 0; i < 
 	gutÊí
 ; i++){
 
-333 
+338 
 	g°r
 [
 i
@@ -571715,13 +571391,13 @@ i
 tmp
 [i];
 
-335 
+340 
 	g°r
 [
 utÊí
 ] = 0;
 
-336 
+341 
 ALOG
 (
 LOG_DEBUG
@@ -571735,7 +571411,7 @@ isZygŸe
 utÊí
 );
 
-338 
+343 
 	gªmŸe
 .
 SídSåögObje˘
@@ -571753,7 +571429,7 @@ uuid
 utÊí
 );
 
-340 if(
+345 if(
 	gobj
 ->
 	g˛azz
@@ -571763,7 +571439,7 @@ gDvm
 ˛assJavaL™gThªad
 ){
 
-341 
+346 
 ALOG
 (
 LOG_DEBUG
@@ -571771,7 +571447,7 @@ LOG_DEBUG
 isZygŸe
 ?"SHADOWZYGOTE":"SHADOW","sendÅhread object");
 
-343 
+348 
 boﬁ
  
 	gisD´m⁄
@@ -571779,7 +571455,7 @@ boﬁ
 Ál£
 ;
 
-344 *
+349 *
 	g«me
  = 
 dvmGëThªadName_c°r
@@ -571787,13 +571463,13 @@ dvmGëThªadName_c°r
 £lf
 );
 
-345 if(
+350 if(
 	g«me
 !=
 NULL
 ) {
 
-346 
+351 
 ALOG
 (
 LOG_DEBUG
@@ -571803,7 +571479,7 @@ isZygŸe
 «me
 );
 
-347 
+352 
 	gªmŸe
 .
 SídThªadObje˘
@@ -571823,13 +571499,13 @@ uuid
 isD´m⁄
 );
 
-348 
+353 
 ‰ì
 (
 «me
 );
 
-350 
+355 
 ALOG
 (
 LOG_DEBUG
@@ -571837,7 +571513,7 @@ LOG_DEBUG
 isZygŸe
 ?"SHADOWZYGOTE":"SHADOW","sendÅhread objectÇame isÇull");
 
-351 
+356 
 	gªmŸe
 .
 SídThªadObje˘
@@ -571855,7 +571531,7 @@ uuid
 isD´m⁄
 );
 
-355 
+360 
 	gªmŸe
 .
 SídJobje˘
@@ -571867,103 +571543,103 @@ thªadId
 √åef
 );
 
-358 c⁄° *
+363 c⁄° *
 	g˛assP©hName
  = "ch/usi/dag/dislre/AREDispatch";
 
-360 
+365 
 JNIN©iveMëhod
  
 	gmëhods
 []= {
 
-362 {"m≠PID", "(Ljava/œng/Såög;I)V", (*)
+367 {"m≠PID", "(Ljava/œng/Såög;I)V", (*)
 m≠PID
 },
 
-363 {"m≠PID", "(Ljava/œng/Såög;)V", (*)
+368 {"m≠PID", "(Ljava/œng/Såög;)V", (*)
 m≠PID_2
 },
 
-364 {"ªgi°îMëhod", "(Ljava/œng/Såög;)S", (*)
+369 {"ªgi°îMëhod", "(Ljava/œng/Såög;)S", (*)
 ªgi°îMëhod
 },
 
-365 {"™ÆysisSèπ", "(S)V", (*)
+370 {"™ÆysisSèπ", "(S)V", (*)
 ™ÆysisSèπ__S
 },
 
-366 {"™ÆysisSèπ", "(SB)V", (*)
+371 {"™ÆysisSèπ", "(SB)V", (*)
 ™ÆysisSèπ__SB
 },
 
-367 {"™ÆysisEnd", "()V", (*)
+372 {"™ÆysisEnd", "()V", (*)
 ™ÆysisEnd
 },
 
-368 {"£ndBoﬁón", "(Z)V", (*)
+373 {"£ndBoﬁón", "(Z)V", (*)
 £ndBoﬁón
 },
 
-369 {"£ndByã", "(B)V", (*)
+374 {"£ndByã", "(B)V", (*)
 £ndByã
 },
 
-370 {"£ndCh¨", "(C)V", (*)
+375 {"£ndCh¨", "(C)V", (*)
 £ndCh¨
 },
 
-371 {"£ndSh‹t", "(S)V", (*)
+376 {"£ndSh‹t", "(S)V", (*)
 £ndSh‹t
 },
 
-372 {"£ndI¡", "(I)V", (*)
+377 {"£ndI¡", "(I)V", (*)
 £ndI¡
 },
 
-373 {"£ndL⁄g", "(J)V", (*)
+378 {"£ndL⁄g", "(J)V", (*)
 £ndL⁄g
 },
 
-374 {"£ndFlﬂt", "(F)V", (*)
+379 {"£ndFlﬂt", "(F)V", (*)
 £ndFlﬂt
 },
 
-375 {"£ndDoubÀ", "(D)V", (*)
+380 {"£ndDoubÀ", "(D)V", (*)
 £ndDoubÀ
 },
 
-376 {"£ndObje˘", "(Ljava/œng/Obje˘;)V", (*)
+381 {"£ndObje˘", "(Ljava/œng/Obje˘;)V", (*)
 £ndObje˘
 },
 
-377 {"£ndObje˘PlusD©a", "(Ljava/œng/Obje˘;)V", (*)
+382 {"£ndObje˘PlusD©a", "(Ljava/œng/Obje˘;)V", (*)
 £ndObje˘PlusD©a
 },
 
-378 {"m™uÆlyO≥n", "()V", (*)
+383 {"m™uÆlyO≥n", "()V", (*)
 m™uÆlyO≥n
 },
 
-379 {"m™uÆlyClo£", "()V", (*)
+384 {"m™uÆlyClo£", "()V", (*)
 m™uÆlyClo£
 },
 
-385 
+390 
 JNIEnv
 * 
 	mív
 ;
 
-386 * 
+391 * 
 	mvív
 ;
 
-387 }
+392 }
 	tUni⁄JNIEnvToVoid
 ;
 
-389 
+394 
 	$ªgi°îN©iveMëhods
 (
 JNIEnv
@@ -571973,7 +571649,7 @@ JNIEnv
 ˛assName
 ,
 
-390 
+395 
 JNIN©iveMëhod
 * 
 gMëhods
@@ -571981,13 +571657,13 @@ gMëhods
 numMëhods
 ){
 
-392 
+397 
 j˛ass
  
 ˛azz
 ;
 
-393 
+398 
 ˛azz
  = 
 ív
@@ -571997,17 +571673,17 @@ j˛ass
 ˛assName
 );
 
-395 i‡(
+400 i‡(
 ˛azz
  =
 NULL
 )
 
-396  
+401  
 JNI_FALSE
 ;
 
-397 i‡(
+402 i‡(
 ív
 ->
 	`Regi°îN©ives
@@ -572019,19 +571695,19 @@ gMëhods
 numMëhods
 )<0)
 
-398  
+403  
 JNI_FALSE
 ;
 
-399  
+404  
 JNI_TRUE
 ;
 
-401 
+406 
 	}
 }
 
-403 
+408 
 	$ªgi°îShadowN©ives
 (
 JNIEnv
@@ -572039,7 +571715,7 @@ JNIEnv
 ív
 ){
 
-405 i‡(!
+410 i‡(!
 	`ªgi°îN©iveMëhods
 (
 ív
@@ -572047,23 +571723,23 @@ JNIEnv
 ˛assP©hName
 ,
 
-406 
+411 
 mëhods
 , (methods)/(methods[0])))
 
-408  
+413  
 JNI_FALSE
 ;
 
-411  
+416  
 JNI_TRUE
 ;
 
-413 
+418 
 	}
 }
 
-415 
+420 
 	$objNewHook
 (
 Obje˘
@@ -572071,17 +571747,17 @@ Obje˘
 obj
 ){
 
-417 
+422 
 	`SëAndGëNëªf
 (
 obj
 );
 
-419 
+424 
 	}
 }
 
-420 
+425 
 	$thªadEndHook
 (
 Thªad
@@ -572089,7 +571765,7 @@ Thªad
 £lf
 ){
 
-422 
+427 
 boﬁ
  
 isD´m⁄
@@ -572097,7 +571773,7 @@ isD´m⁄
 Ál£
 ;
 
-423 
+428 
 	`ALOG
 (
 LOG_DEBUG
@@ -572113,11 +571789,11 @@ thªadId
 isD´m⁄
 ?"daemon":"not daemon");
 
-424 
+429 
 	}
 }
 
-425 
+430 
 	$vmEndHook
 (
 JavaVM
@@ -572125,7 +571801,7 @@ JavaVM
 vm
 ){
 
-426 
+431 
 	`ALOG
 (
 LOG_DEBUG
@@ -572135,11 +571811,11 @@ isZygŸe
 __FUNCTION__
 );
 
-427 
+432 
 	}
 }
 
-428 
+433 
 	$objFªeHook
 (
 Obje˘
@@ -572151,31 +571827,31 @@ Thªad
 £lf
 ){
 
-429 if(
+436 if(
 obj
  =
 NULL
 )
 
-431 if(
+438 if(
 obj
 ->
 uuid
  == 0)
 
-433 
+440 
 	`SëAndGëNëªf
 (
 obj
 );
 
-435 if(!
+442 if(!
 	`dvmIsCœssObje˘
 (
 obj
 ))
 
-436 
+443 
 ªmŸe
 .
 	`ObjFªeEvít
@@ -572185,11 +571861,11 @@ obj
 uuid
 );
 
-437 
+444 
 	}
 }
 
-438 
+445 
 	$˛assfûeLﬂdHook
 (c⁄° * 
 «me
@@ -572197,7 +571873,7 @@ uuid
 Àn
 ){
 
-439 
+446 
 	`ALOG
 (
 LOG_DEBUG
@@ -572207,11 +571883,11 @@ isZygŸe
 «me
 );
 
-441 
+448 
 	}
 }
 
-442 
+449 
 	$˛assInôHook
 (
 CœssObje˘
@@ -572219,23 +571895,57 @@ CœssObje˘
 co
 ){
 
-443 
+450 
 	`SëAndGëNëªf
 (
 co
 );
 
-445 
+452 
 	}
 }
 
-458 * 
-	$£nd_thªad_lo›
+465 * 
+	$£nd_ss_thªad_lo›
 (* 
 obj
 ) {
 
-459 
+466 
+sock_ho°
+ = -1;
+
+467 
+ªtcode
+;
+
+468 
+åue
+) {
+
+469 
+sock_ho°
+ = 
+	`sockë_√tw‹k_˛õ¡
+("192.168.1.103", 11218, 
+SOCK_STREAM
+);
+
+470 if(
+sock_ho°
+ <= 0){
+
+471 
+	`ALOG
+ (
+LOG_INFO
+,"INSTRUMENTSERVER","new host sockÉrror");
+
+472 
+	`¶ìp
+(5);
+
+476 
 Buf„r
  *
 undecidedBuf
@@ -572245,17 +571955,17 @@ undecidedBuf
 	`Buf„r
 (1024);
 
-460 
+479 
 åue
 ){
 
-461 
+480 
 	`ALOG
 (
 LOG_DEBUG
 ,"SHADOWDEBUG","IN WHILE LOOOP");
 
-462 
+481 
 Buf„r
 * 
 tmp
@@ -572263,7 +571973,7 @@ tmp
 NULL
 ;
 
-463 
+482 
 tmp
  = 
 ªmŸe
@@ -572271,11 +571981,11 @@ tmp
 	`Rëu∫AndRe£tBuf„r
 ();
 
-464 if(!
+483 if(!
 isDecided
 ){
 
-465 
+484 
 undecidedBuf
 ->
 	`Enqueue
@@ -572287,7 +571997,7 @@ q_d©a
 q_occupõd
 );
 
-466 
+485 
 	`ALOG
 (
 LOG_DEBUG
@@ -572297,13 +572007,13 @@ undecidedBuf
 q_occupõd
 );
 
-468 if(
+487 if(
 gDvm
 .
 isShadow
 ){
 
-469 
+488 
 	`ALOG
 (
 LOG_DEBUG
@@ -572313,25 +572023,17 @@ undecidedBuf
 q_occupõd
 );
 
-470 
+489 
 dñëe
  
 tmp
 ;
 
-474 if(!
-sock
-){
-
-475 
-	`O≥nC⁄√˘i⁄
-();
-
-477 if(
+493 if(
 undecidedBuf
 ){
 
-478 
+494 
 	`ALOG
 (
 LOG_DEBUG
@@ -572341,7 +572043,339 @@ undecidedBuf
 q_occupõd
 );
 
-479 if(!
+495 
+ªtcode
+ = 
+	`£nd
+(
+sock_ho°
+, 
+undecidedBuf
+->
+q_d©a
+, undecidedBuf->
+q_occupõd
+, 0);
+
+496 
+ªtcode
+ <0)
+
+498 
+åue
+) {
+
+499 
+	`ALOG
+ (
+LOG_INFO
+,"INSTRUMENTSERVER","SEND ERROR RETRYING");
+
+500 
+sock_ho°
+ = 
+	`sockë_√tw‹k_˛õ¡
+("192.168.1.103", 11218, 
+SOCK_STREAM
+);
+
+501 if(
+sock_ho°
+ <= 0){
+
+502 
+	`ALOG
+ (
+LOG_INFO
+,"INSTRUMENTSERVER","new host sockÉrror");
+
+503 
+	`¶ìp
+(5);
+
+509 
+dñëe
+ 
+undecidedBuf
+;
+
+510 
+undecidedBuf
+ = 
+NULL
+;
+
+512 
+	`ALOG
+(
+LOG_DEBUG
+,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", 
+tmp
+->
+q_occupõd
+);
+
+513 
+ªtcode
+ = 
+	`£nd
+(
+sock_ho°
+,
+tmp
+->
+q_d©a
+,Åmp->
+q_occupõd
+, 0);
+
+514 
+ªtcode
+ <0){
+
+515 
+	`ALOG
+ (
+LOG_INFO
+,"INSTRUMENTSERVER","SEND ERROR RETRYING");
+
+516 
+åue
+) {
+
+517 
+sock_ho°
+ = 
+	`sockë_√tw‹k_˛õ¡
+("192.168.1.103", 11218, 
+SOCK_STREAM
+);
+
+518 if(
+sock_ho°
+ <= 0){
+
+519 
+	`ALOG
+ (
+LOG_INFO
+,"INSTRUMENTSERVER","new host sockÉrror");
+
+520 
+	`¶ìp
+(5);
+
+524 
+ªtcode
+ = 
+	`£nd
+(
+sock_ho°
+,
+tmp
+->
+q_d©a
+,Åmp->
+q_occupõd
+, 0);
+
+527 if(
+tmp
+)
+
+528 
+dñëe
+ 
+tmp
+;
+
+529 
+	`¶ìp
+(15);
+
+533 if(
+undecidedBuf
+)
+
+534 
+dñëe
+ 
+undecidedBuf
+;
+
+536 
+	`ALOG
+(
+LOG_DEBUG
+,
+isZygŸe
+?"SHADOWZYGOTE":"SHADOW","SENDING LOOP END");
+
+538 
+	`±hªad_dëach
+(
+	`±hªad_£lf
+());
+
+539 
+	`±hªad_exô
+(
+NULL
+);
+
+541  
+NULL
+;
+
+542 
+	}
+}
+
+543 * 
+	$£nd_thªad_lo›
+(* 
+obj
+) {
+
+544 
+Buf„r
+ *
+undecidedBuf
+ = 
+√w
+ 
+	`Buf„r
+(1024);
+
+545 
+Sockë
+ *
+sock
+ = 
+√w
+ 
+	`Sockë
+();
+
+546 !
+sock
+->
+	`C⁄√˘
+()){
+
+547 
+	`LOGDEBUG
+("C™nŸ c⁄√˘Åhrough UDS i¿%†f‹ %d",
+__FUNCTION__
+, 
+	`gëpid
+());
+
+548 
+	`¶ìp
+(2);
+
+550 
+sig«l
+ = -3;
+
+551 
+sock
+->
+	`Síd
+((*)&
+sig«l
+,());
+
+552 
+åue
+){
+
+553 
+	`ALOG
+(
+LOG_DEBUG
+,"SHADOWDEBUG","IN WHILE LOOOP");
+
+554 
+Buf„r
+* 
+tmp
+ = 
+NULL
+;
+
+555 
+tmp
+ = 
+ªmŸe
+.
+	`Rëu∫AndRe£tBuf„r
+();
+
+556 if(!
+isDecided
+){
+
+557 
+undecidedBuf
+->
+	`Enqueue
+(
+tmp
+->
+q_d©a
+,Åmp->
+q_occupõd
+);
+
+558 
+	`ALOG
+(
+LOG_DEBUG
+,"SHADOWDEBUG","PUTTING UNDECIDED EVENTS INTO BUFFER SIZED: %d", 
+undecidedBuf
+->
+q_occupõd
+);
+
+560 if(
+gDvm
+.
+isShadow
+){
+
+561 
+	`ALOG
+(
+LOG_DEBUG
+,"SHADOWDEBUG","DROP THE BUFFER FOR UNOBSERVED PROCESS SIZED %d", 
+undecidedBuf
+->
+q_occupõd
+);
+
+562 
+dñëe
+ 
+tmp
+;
+
+566 if(
+undecidedBuf
+){
+
+567 
+	`ALOG
+(
+LOG_DEBUG
+,"SHADOWDEBUG","SENDING UNDECIDED BUFFER SIZED: %d", 
+undecidedBuf
+->
+q_occupõd
+);
+
+568 if(!
 sock
 ->
 	`Síd
@@ -572353,37 +572387,37 @@ q_d©a
 q_occupõd
 )){
 
-480 
+569 
 	`ALOG
 (
 LOG_DEBUG
 ,"SHADOWDEBUG","SERVER ERROR DURING SEND");
 
-481 
+570 
 dñëe
  
 sock
 ;
 
-482 
+571 
 sock
  = 
 NULL
 ;
 
-484 
+573 
 dñëe
  
 undecidedBuf
 ;
 
-485 
+574 
 undecidedBuf
  = 
 NULL
 ;
 
-487 
+576 
 	`ALOG
 (
 LOG_DEBUG
@@ -572393,7 +572427,7 @@ tmp
 q_occupõd
 );
 
-488 if(!
+577 if(!
 sock
 ->
 	`Síd
@@ -572405,49 +572439,49 @@ q_d©a
 q_occupõd
 )){
 
-489 
+578 
 	`ALOG
 (
 LOG_DEBUG
 ,"SHADOWDEBUG","SERVER ERROR DURING SEND");
 
-490 
+579 
 dñëe
  
 sock
 ;
 
-491 
+580 
 sock
  = 
 NULL
 ;
 
-494 if(
+583 if(
 tmp
 )
 
-495 
+584 
 dñëe
  
 tmp
 ;
 
-496 
+585 
 	`¶ìp
-(1);
+(15);
 
-500 if(
+589 if(
 undecidedBuf
 )
 
-501 
+590 
 dñëe
  
 undecidedBuf
 ;
 
-503 
+592 
 	`ALOG
 (
 LOG_DEBUG
@@ -572455,27 +572489,27 @@ LOG_DEBUG
 isZygŸe
 ?"SHADOWZYGOTE":"SHADOW","SENDING LOOP END");
 
-505 
+594 
 	`±hªad_dëach
 (
 	`±hªad_£lf
 ());
 
-506 
+595 
 	`±hªad_exô
 (
 NULL
 );
 
-508  
+597  
 NULL
 ;
 
-509 
+598 
 	}
 }
 
-510 
+599 
 jöt
  
 	$ShadowLib_ZygŸe_OnLﬂd
@@ -572487,19 +572521,19 @@ vm
 ª£rved
 ){
 
-511 
+600 
 isZygŸe
  = 
 åue
 ;
 
-512 
+601 
 Uni⁄JNIEnvToVoid
  
 uív
 ;
 
-513 
+602 
 uív
 .
 vív
@@ -572507,13 +572541,13 @@ vív
 NULL
 ;
 
-514 
+603 
 jöt
  
 ªsu…
  = -1;
 
-515 
+604 
 JNIEnv
  *
 ív
@@ -572521,13 +572555,13 @@ JNIEnv
 NULL
 ;
 
-516 
+605 
 zygŸe_buff
  = 
 NULL
 ;
 
-519 
+608 
 	`ALOG
 (
 LOG_DEBUG
@@ -572537,19 +572571,19 @@ isZygŸe
 	`gëpid
 ());
 
-521 if(
+610 if(
 gDvm
 .
 zygŸe
 ){
 
-522 
+611 
 	`_m≠PID
 (
 	`gëpid
 (),"zygote");
 
-525 
+614 
 gDvm
 .
 √wObjHook
@@ -572557,7 +572591,7 @@ gDvm
 objNewHook
 ;
 
-526 
+615 
 gDvm
 .
 ‰ìObjHook
@@ -572565,31 +572599,25 @@ gDvm
 objFªeHook
 ;
 
-527 
+616 
 gDvm
 .
 thªadEndHook
  = &threadEndHook;
 
-528 
+617 
 gDvm
 .
 vmEndHook
  = &vmEndHook;
 
-529 
-gDvm
-.
-˛assInôHook
- = &classInitHook;
-
-530 
+619 
 gDvm
 .
 ˛assfûeLﬂdHook
  = &classfileLoadHook;
 
-532 
+621 
 	`±hªad_muãx_öô
 (&
 gl_mtx
@@ -572597,7 +572625,7 @@ gl_mtx
 NULL
 );
 
-534 i‡(
+623 i‡(
 vm
 ->
 	`GëEnv
@@ -572611,23 +572639,23 @@ JNI_VERSION_1_4
 JNI_OK
 ){
 
-535 
+624 
 baû
 ;
 
-538 
+627 
 ív
  = 
 uív
 .env;
 
-540 
+629 
 ív
  = 
 uív
 .env;
 
-542 i‡(
+631 i‡(
 	`ªgi°îShadowN©ives
 (
 ív
@@ -572635,39 +572663,39 @@ uív
 JNI_TRUE
 ){
 
-544 
+633 
 baû
 ;
 
-547 
+636 
 ªsu…
  = 
 JNI_VERSION_1_4
 ;
 
-553 
+642 
 baû
 :
 
-554  
+643  
 ªsu…
 ;
 
-555 
+644 
 	}
 }
 
-557 
+646 
 	$Bef‹eF‹k
 (){
 
-558 
+647 
 	`±hªad_muãx_lock
 (&
 gl_mtx
 );
 
-559 
+648 
 zygŸe_buff
  = 
 ªmŸe
@@ -572675,7 +572703,7 @@ zygŸe_buff
 	`Rëu∫AndRe£tBuf„r
 ();
 
-560 
+649 
 	`ALOG
 (
 LOG_DEBUG
@@ -572685,7 +572713,7 @@ zygŸe_buff
 q_occupõd
 );
 
-562 
+651 
 Sockë
  *
 zsock
@@ -572695,25 +572723,25 @@ zsock
 	`Sockë
 ();
 
-563 !
+652 !
 zsock
 ->
 	`C⁄√˘
 ()){
 
-564 
+653 
 	`LOGDEBUG
 ("Zygote Cannot connectÅhrough UDS");
 
-565 
+654 
 	`¶ìp
 (2);
 
-567 
+656 
 sig«l
  = -3;
 
-568 
+657 
 zsock
 ->
 	`Síd
@@ -572721,7 +572749,7 @@ zsock
 sig«l
 ,());
 
-570 
+659 
 zsock
 ->
 	`Síd
@@ -572733,36 +572761,36 @@ q_d©a
 q_occupõd
 );
 
-572 if(
+661 if(
 zygŸe_buff
 )
 
-573 
+662 
 dñëe
  
 zygŸe_buff
 ;
 
-574 
+663 
 zygŸe_buff
 =
 NULL
 ;
 
-575 
+664 
 	`±hªad_muãx_u∆ock
 (&
 gl_mtx
 );
 
-576 
+665 
 	}
 }
 
-578 
+667 
 jöt
  
-	$ShadowLib_OnLﬂd
+	$ShadowLib_Sy°emSîvî_OnLﬂd
 (
 JavaVM
 * 
@@ -572771,25 +572799,25 @@ vm
 ª£rved
 ){
 
-579 
+668 
+ªmŸe
+.
+	`Upd©eMuãx
+();
+
+669 
 isZygŸe
  = 
 Ál£
 ;
 
-580 
-sock
- = 
-NULL
-;
-
-581 
+670 
 Uni⁄JNIEnvToVoid
  
 uív
 ;
 
-582 
+671 
 uív
 .
 vív
@@ -572797,13 +572825,13 @@ vív
 NULL
 ;
 
-583 
+672 
 jöt
  
 ªsu…
  = -1;
 
-584 
+673 
 JNIEnv
  *
 ív
@@ -572811,7 +572839,7 @@ JNIEnv
 NULL
 ;
 
-587 
+676 
 	`ALOG
 (
 LOG_DEBUG
@@ -572821,7 +572849,7 @@ isZygŸe
 	`gëpid
 ());
 
-588 
+677 
 	`±hªad_muãx_öô
 (&
 gl_mtx
@@ -572829,67 +572857,23 @@ gl_mtx
 NULL
 );
 
-592 
-	`±hªad_muãx_lock
-(&
-gDvm
-.
-s_mtx
-);
-
-593 
-gDvm
-.
-√wObjHook
- = &
-objNewHook
-;
-
-594 
-gDvm
-.
-‰ìObjHook
- = &
-objFªeHook
-;
-
-595 
-gDvm
-.
-thªadEndHook
- = &threadEndHook;
-
-596 
-gDvm
-.
-vmEndHook
- = &vmEndHook;
-
-598 
-	`±hªad_muãx_u∆ock
-(&
-gDvm
-.
-s_mtx
-);
-
-599 
+688 
 ±hªad_t
  
 £nd_thªad
 ;
 
-600 
+689 
 	`±hªad_¸óã
 (&
 £nd_thªad
 , 
 NULL
 , 
-£nd_thªad_lo›
+£nd_ss_thªad_lo›
 , NULL);
 
-603 i‡(
+692 i‡(
 vm
 ->
 	`GëEnv
@@ -572903,23 +572887,23 @@ JNI_VERSION_1_4
 JNI_OK
 ){
 
-604 
+693 
 baû
 ;
 
-607 
+696 
 ív
  = 
 uív
 .env;
 
-609 
+698 
 ív
  = 
 uív
 .env;
 
-611 i‡(
+700 i‡(
 	`ªgi°îShadowN©ives
 (
 ív
@@ -572927,21 +572911,163 @@ uív
 JNI_TRUE
 ){
 
-613 
+701 
 baû
 ;
 
-616 
+704 
 ªsu…
  = 
 JNI_VERSION_1_4
 ;
 
-619 
+707 
 baû
 :
 
-621 
+709 
+	}
+}
+
+710 
+jöt
+ 
+	$ShadowLib_OnLﬂd
+(
+JavaVM
+* 
+vm
+, * 
+ª£rved
+){
+
+711 
+ªmŸe
+.
+	`Upd©eMuãx
+();
+
+712 
+isZygŸe
+ = 
+Ál£
+;
+
+713 
+Uni⁄JNIEnvToVoid
+ 
+uív
+;
+
+714 
+uív
+.
+vív
+ = 
+NULL
+;
+
+715 
+jöt
+ 
+ªsu…
+ = -1;
+
+716 
+JNIEnv
+ *
+ív
+ = 
+NULL
+;
+
+719 
+	`ALOG
+(
+LOG_DEBUG
+,
+isZygŸe
+?"SHADOWZYGOTE":"SHADOW","IN ONLOAD, PID: %d", 
+	`gëpid
+());
+
+720 
+	`±hªad_muãx_öô
+(&
+gl_mtx
+, 
+NULL
+);
+
+731 
+±hªad_t
+ 
+£nd_thªad
+;
+
+732 
+	`±hªad_¸óã
+(&
+£nd_thªad
+, 
+NULL
+, 
+£nd_thªad_lo›
+, NULL);
+
+735 i‡(
+vm
+->
+	`GëEnv
+(&
+uív
+.
+vív
+, 
+JNI_VERSION_1_4
+Ë!
+JNI_OK
+){
+
+736 
+baû
+;
+
+739 
+ív
+ = 
+uív
+.env;
+
+741 
+ív
+ = 
+uív
+.env;
+
+743 i‡(
+	`ªgi°îShadowN©ives
+(
+ív
+Ë!
+JNI_TRUE
+){
+
+745 
+baû
+;
+
+748 
+ªsu…
+ = 
+JNI_VERSION_1_4
+;
+
+751 
+baû
+:
+
+753 
 	}
 }
 
@@ -573129,75 +573255,107 @@ isClo£d
 Ál£
 ;
 
-65 ~
+66 
+	$Upd©eMuãx
+(){
+
+67 
+	`±hªad_muãx_öô
+(&
+gl_mtx
+, 
+NULL
+);
+
+68 
+	`±hªad_muãx_öô
+(&
+obj‰ì_mtx
+, 
+NULL
+);
+
+69 
+	`±hªad_muãx_öô
+(&
+™Æysis_mtx
+, 
+NULL
+);
+
+70 
+	}
+}
+
+72 ~
 	$RePrŸocﬁ
 (){
 
-66 
+73 
 	`±hªad_muãx_de°roy
 (&
 gl_mtx
 );
 
-67 
+74 
 	`±hªad_muãx_de°roy
 (&
 ™Æysis_mtx
 );
 
-68 
+75 
 	`±hªad_muãx_de°roy
 (&
 obj‰ì_mtx
 );
 
-71 
+78 
 dñëe
  
 £ndBuf
 ;
 
-73 
+80 
 	}
 }
 
-91 
+98 
 boﬁ
  
 	$IsClo£d
 (){
 
-92  
+99  
 isClo£d
 ;
 
-93 
+100 
 	}
 }
 
-94 
+101 
 boﬁ
  
 	$C⁄√˘i⁄Clo£
 (){
 
-95 
+102 
 isClo£d
  = 
 åue
 ;
 
-98 
+105 
 Buf„r
  
 	`tmp
 (10);
 
-99 if(
+106 if(
 MP
 )
 
-100 
+107 
 tmp
 .
 	`EnqueueJöt
@@ -573205,7 +573363,7 @@ tmp
 	`gëpid
 ());
 
-101 
+108 
 tmp
 .
 	`EnqueueJbyã
@@ -573213,7 +573371,7 @@ tmp
 MSG_CLOSE
 );
 
-103 
+110 
 	`Síd
 (
 tmp
@@ -573223,15 +573381,15 @@ q_d©a
 q_occupõd
 );
 
-104  
+111  
 åue
 ;
 
-105 
+112 
 	}
 }
 
-107 
+114 
 boﬁ
  
 	$OnF‹kEvít
@@ -573239,13 +573397,13 @@ boﬁ
 ∑ª¡
 ){
 
-108 
+115 
 Buf„r
  
 	`tmp
 (20);
 
-110 
+117 
 tmp
 .
 	`EnqueueJöt
@@ -573253,7 +573411,7 @@ tmp
 ∑ª¡
 );
 
-111 
+118 
 tmp
 .
 	`EnqueueJbyã
@@ -573261,7 +573419,7 @@ tmp
 MSG_FORK
 );
 
-112 
+119 
 tmp
 .
 	`EnqueueJöt
@@ -573269,11 +573427,11 @@ tmp
 	`gëpid
 ());
 
-114 if(
+121 if(
 MP
 )
 
-115 
+122 
 	`Síd
 (
 tmp
@@ -573283,15 +573441,15 @@ q_d©a
 q_occupõd
 );
 
-116  
+123  
 åue
 ;
 
-117 
+124 
 	}
 }
 
-121 
+128 
 boﬁ
  
 	$A«lysisSèπEvít
@@ -573307,7 +573465,7 @@ oid
 mëhodId
 ){
 
-122 if(
+129 if(
 	`GëOrdîögId
 (
 tid
@@ -573315,17 +573473,17 @@ tid
 INVALID_ORDERING_ID
 ) {
 
-123  
+130  
 Ál£
 ;
 
-125 
+132 
 	`LOGDEBUG
 ("IN %s", 
 __FUNCTION__
 );
 
-127 
+134 
 lock_buf
 .
 	`Lock
@@ -573333,7 +573491,7 @@ lock_buf
 oid
 );
 
-128 
+135 
 	`SëOrdîögId
 (
 tid
@@ -573341,7 +573499,7 @@ tid
 oid
 );
 
-129 if(!
+136 if(!
 ™Æysis_queue
 .
 	`Exi°
@@ -573349,7 +573507,7 @@ oid
 oid
 ))
 
-130 
+137 
 ™Æysis_queue
 .
 	`Së
@@ -573363,7 +573521,7 @@ oid
 ANALYSIS_QUEUE_SIZE
 ));
 
-132 if(
+139 if(
 ™Æysis_queue
 [
 oid
@@ -573371,7 +573529,7 @@ oid
 	`IsEm±y
 ()){
 
-133 
+140 
 	`LOGASSERT
 ((
 jbyã
@@ -573379,11 +573537,11 @@ jbyã
 MSG_ANALYZE
  == MSG_ANALYZE, "WRONG TYPE CONVERSION");
 
-134 if(
+141 if(
 MP
 )
 
-135 
+142 
 ™Æysis_queue
 [
 oid
@@ -573393,7 +573551,7 @@ oid
 	`gëpid
 ());
 
-137 
+144 
 ™Æysis_queue
 [
 oid
@@ -573403,7 +573561,7 @@ oid
 MSG_ANALYZE
 );
 
-138 
+145 
 ™Æysis_queue
 [
 oid
@@ -573411,7 +573569,7 @@ oid
 	`EnqueueJl⁄g
 (oid);
 
-139 
+146 
 ™Æysis_queue
 [
 oid
@@ -573419,7 +573577,7 @@ oid
 	`EnqueueJöt
 (0);
 
-140 
+147 
 ™Æysis_queue
 [
 oid
@@ -573427,7 +573585,7 @@ oid
 evít_cou¡
 =0;
 
-142 
+149 
 ™Æysis_queue
 [
 oid
@@ -573435,7 +573593,7 @@ oid
 evít_cou¡
 ++;
 
-143 
+150 
 jöt
  
 tmp
@@ -573449,11 +573607,11 @@ oid
 evít_cou¡
 );
 
-145 if(
+152 if(
 MP
 )
 
-146 
+153 
 ™Æysis_queue
 [
 oid
@@ -573469,7 +573627,7 @@ jl⁄g
 tmp
 , (jint));
 
-148 
+155 
 ™Æysis_queue
 [
 oid
@@ -573485,7 +573643,7 @@ tmp
 jöt
 ));
 
-149 if(!
+156 if(!
 övoˇti⁄_buf
 .
 	`Exi°
@@ -573493,7 +573651,7 @@ jöt
 oid
 )){
 
-150 
+157 
 övoˇti⁄_buf
 .
 	`Së
@@ -573507,7 +573665,7 @@ oid
 INVOCATION_SIZE
 ));
 
-152 
+159 
 övoˇti⁄_buf
 [
 oid
@@ -573515,13 +573673,13 @@ oid
 	`Re£t
 ();
 
-153 
+160 
 	`LOGDEBUG
 ("™Æysi†Id: %d",()
 mëhodId
 );
 
-154 
+161 
 övoˇti⁄_buf
 [
 oid
@@ -573531,7 +573689,7 @@ oid
 mëhodId
 );
 
-155 
+162 
 övoˇti⁄_buf
 [
 oid
@@ -573539,15 +573697,15 @@ oid
 	`EnqueueJsh‹t
 (0);
 
-157  
+164  
 åue
 ;
 
-158 
+165 
 	}
 }
 
-159 
+166 
 	$SídJboﬁón
 (
 thªad_id_ty≥
@@ -573559,7 +573717,7 @@ jboﬁón
 d©a
 ){
 
-160  
+167  
 	`SídArgumít
 (
 tid
@@ -573569,11 +573727,11 @@ d©a
 jboﬁón
 ));
 
-161 
+168 
 	}
 }
 
-162 
+169 
 	$SídJbyã
 (
 thªad_id_ty≥
@@ -573585,7 +573743,7 @@ jbyã
 d©a
 ){
 
-163  
+170  
 	`SídArgumít
 (
 tid
@@ -573595,11 +573753,11 @@ d©a
 jbyã
 ));
 
-164 
+171 
 	}
 }
 
-165 
+172 
 	$SídJch¨
 (
 thªad_id_ty≥
@@ -573611,7 +573769,7 @@ jch¨
 d©a
 ){
 
-166 
+173 
 jch¨
  
 ¡s
@@ -573621,7 +573779,7 @@ jch¨
 d©a
 );
 
-167  
+174  
 	`SídArgumít
 (
 tid
@@ -573631,11 +573789,11 @@ tid
 jch¨
 ));
 
-168 
+175 
 	}
 }
 
-169 
+176 
 	$SídJsh‹t
 (
 thªad_id_ty≥
@@ -573647,7 +573805,7 @@ jsh‹t
 d©a
 ){
 
-170 
+177 
 jsh‹t
  
 ¡s
@@ -573657,7 +573815,7 @@ jsh‹t
 d©a
 );
 
-171  
+178  
 	`SídArgumít
 (
 tid
@@ -573667,11 +573825,11 @@ tid
 jsh‹t
 ));
 
-172 
+179 
 	}
 }
 
-173 
+180 
 	$SídJöt
 (
 thªad_id_ty≥
@@ -573683,7 +573841,7 @@ jöt
 d©a
 ){
 
-174 
+181 
 jöt
  
 ¡s
@@ -573693,7 +573851,7 @@ jöt
 d©a
 );
 
-175  
+182  
 	`SídArgumít
 (
 tid
@@ -573703,11 +573861,11 @@ tid
 jöt
 ));
 
-176 
+183 
 	}
 }
 
-177 
+184 
 	$SídJl⁄g
 (
 thªad_id_ty≥
@@ -573719,7 +573877,7 @@ jl⁄g
 d©a
 ){
 
-178 
+185 
 jl⁄g
  
 ¡s
@@ -573729,7 +573887,7 @@ jl⁄g
 d©a
 );
 
-179  
+186  
 	`SídArgumít
 (
 tid
@@ -573739,11 +573897,11 @@ tid
 jl⁄g
 ));
 
-180 
+187 
 	}
 }
 
-181 
+188 
 	$SídJÊﬂt
 (
 thªad_id_ty≥
@@ -573755,13 +573913,13 @@ jÊﬂt
 d©a
 ){
 
-182 
+189 
 Êﬂt_jöt
  
 c⁄vît
 ;
 
-183 
+190 
 c⁄vît
 .
 f
@@ -573769,7 +573927,7 @@ f
 d©a
 ;
 
-184  
+191  
 	`SídJöt
 (
 tid
@@ -573779,11 +573937,11 @@ c⁄vît
 i
 );
 
-185 
+192 
 	}
 }
 
-186 
+193 
 	$SídJdoubÀ
 (
 thªad_id_ty≥
@@ -573795,13 +573953,13 @@ jdoubÀ
 d©a
 ){
 
-187 
+194 
 doubÀ_jl⁄g
  
 c⁄vît
 ;
 
-188 
+195 
 c⁄vît
 .
 d
@@ -573809,7 +573967,7 @@ d
 d©a
 ;
 
-189  
+196  
 	`SídJl⁄g
 (
 tid
@@ -573819,11 +573977,11 @@ c⁄vît
 l
 );
 
-190 
+197 
 	}
 }
 
-191 
+198 
 	$SídSåögUtf8
 (
 thªad_id_ty≥
@@ -573837,7 +573995,7 @@ uöt16_t
 size_ö_byãs
 ){
 
-192 
+199 
 uöt16_t
  
 nsize
@@ -573847,7 +574005,7 @@ nsize
 size_ö_byãs
 );
 
-193  
+200  
 	`SídArgumít
 (
 tid
@@ -573861,11 +574019,11 @@ uöt16_t
 size_ö_byãs
 );
 
-194 
+201 
 	}
 }
 
-195 
+202 
 	$SídJobje˘
 (
 thªad_id_ty≥
@@ -573877,7 +574035,7 @@ jl⁄g
 √åef
 ){
 
-196  
+203  
 	`SídJl⁄g
 (
 tid
@@ -573885,11 +574043,11 @@ tid
 √åef
 );
 
-197 
+204 
 	}
 }
 
-198 
+205 
 boﬁ
  
 	$SídSåögObje˘
@@ -573909,17 +574067,17 @@ utf8
 Àn
 ){
 
-199 
+206 
 Buf„r
  
 	`tmp
 (100);
 
-200 if(
+207 if(
 MP
 )
 
-201 
+208 
 tmp
 .
 	`EnqueueJöt
@@ -573927,7 +574085,7 @@ tmp
 	`gëpid
 ());
 
-202 
+209 
 tmp
 .
 	`EnqueueJbyã
@@ -573935,7 +574093,7 @@ tmp
 MSG_STRING_INFO
 );
 
-203 
+210 
 tmp
 .
 	`EnqueueJl⁄g
@@ -573943,7 +574101,7 @@ tmp
 √åef
 );
 
-204 
+211 
 tmp
 .
 	`EnqueueSåögUtf8
@@ -573955,7 +574113,7 @@ utf8
 jch¨
 ));
 
-205 
+212 
 	`Síd
 (
 tmp
@@ -573965,15 +574123,15 @@ q_d©a
 q_occupõd
 );
 
-211  
+218  
 åue
 ;
 
-213 
+220 
 	}
 }
 
-214 
+221 
 	$SídSåögObje˘
 (
 thªad_id_ty≥
@@ -573989,17 +574147,17 @@ utf8
 Àn
 ){
 
-216 
+223 
 Buf„r
  
 	`tmp
 (100);
 
-217 if(
+224 if(
 MP
 )
 
-218 
+225 
 tmp
 .
 	`EnqueueJöt
@@ -574007,7 +574165,7 @@ tmp
 	`gëpid
 ());
 
-219 
+226 
 tmp
 .
 	`EnqueueJbyã
@@ -574015,7 +574173,7 @@ tmp
 MSG_STRING_INFO
 );
 
-220 
+227 
 tmp
 .
 	`EnqueueJl⁄g
@@ -574023,7 +574181,7 @@ tmp
 √åef
 );
 
-221 
+228 
 tmp
 .
 	`EnqueueSåögUtf8
@@ -574033,7 +574191,7 @@ utf8
 Àn
 );
 
-222 
+229 
 	`Síd
 (
 tmp
@@ -574043,17 +574201,17 @@ q_d©a
 q_occupõd
 );
 
-223  
+230  
 tmp
 .
 q_occupõd
 ;
 
-232 
+239 
 	}
 }
 
-233 
+240 
 	$SídThªadObje˘
 (
 thªad_id_ty≥
@@ -574073,17 +574231,17 @@ jboﬁón
 isD´m⁄
 ){
 
-235 
+242 
 Buf„r
  
 	`tmp
 (100);
 
-236 if(
+243 if(
 MP
 )
 
-237 
+244 
 tmp
 .
 	`EnqueueJöt
@@ -574091,7 +574249,7 @@ tmp
 	`gëpid
 ());
 
-238 
+245 
 tmp
 .
 	`EnqueueJbyã
@@ -574099,7 +574257,7 @@ tmp
 MSG_THREAD_INFO
 );
 
-239 
+246 
 tmp
 .
 	`EnqueueJl⁄g
@@ -574107,7 +574265,7 @@ tmp
 √åef
 );
 
-240 
+247 
 tmp
 .
 	`EnqueueSåögUtf8
@@ -574117,7 +574275,7 @@ thªadName
 Àn
 );
 
-241 
+248 
 tmp
 .
 	`EnqueueJboﬁón
@@ -574125,7 +574283,7 @@ tmp
 isD´m⁄
 );
 
-242 
+249 
 	`Síd
 (
 tmp
@@ -574135,17 +574293,17 @@ q_d©a
 q_occupõd
 );
 
-243  
+250  
 tmp
 .
 q_occupõd
 ;
 
-251 
+258 
 	}
 }
 
-252 
+259 
 boﬁ
  
 	$SídArgumít
@@ -574157,56 +574315,6 @@ tid
 d©a
 , 
 Àngth
-){
-
-253 
-‹dîög_id_ty≥
- 
-oid
- = 
-	`GëOrdîögId
-(
-tid
-);
-
-254 if(
-oid
- =
-INVALID_ORDERING_ID
-)
-
-255  
-Ál£
-;
-
-256 
-övoˇti⁄_buf
-[
-oid
-]->
-	`Enqueue
-(
-d©a
-, 
-Àngth
-);
-
-257  
-åue
-;
-
-258 
-	}
-}
-
-259 
-boﬁ
- 
-	$A«lysisEndEvít
-(
-thªad_id_ty≥
- 
-tid
 ){
 
 260 
@@ -574223,27 +574331,77 @@ tid
 oid
  =
 INVALID_ORDERING_ID
-) {
+)
 
-263 
-	`LOGERROR
-("invalidÅid inÉndÉvent");
-
-265  
+262  
 Ál£
 ;
 
-267 *
+263 
+övoˇti⁄_buf
+[
+oid
+]->
+	`Enqueue
+(
+d©a
+, 
+Àngth
+);
+
+264  
+åue
+;
+
+265 
+	}
+}
+
+266 
+boﬁ
+ 
+	$A«lysisEndEvít
+(
+thªad_id_ty≥
+ 
+tid
+){
+
+267 
+‹dîög_id_ty≥
+ 
+oid
+ = 
+	`GëOrdîögId
+(
+tid
+);
+
+268 if(
+oid
+ =
+INVALID_ORDERING_ID
+) {
+
+270 
+	`LOGERROR
+("invalidÅid inÉndÉvent");
+
+272  
+Ál£
+;
+
+274 *
 buf
 =
 NULL
 ;
 
-268 
+275 
 Àn_buf
 ;
 
-269 
+276 
 övoˇti⁄_buf
 [
 oid
@@ -574255,7 +574413,7 @@ buf
 Àn_buf
 );
 
-270 
+277 
 jsh‹t
  
 ¨gÀn
@@ -574263,13 +574421,13 @@ jsh‹t
 Àn_buf
  - (jshort)*2;
 
-271 
+278 
 ¨gÀn
  = 
 	`ht⁄s
 (arglen);
 
-272 
+279 
 övoˇti⁄_buf
 [
 oid
@@ -574281,7 +574439,7 @@ jsh‹t
 ¨gÀn
 , (jshort));
 
-273 
+280 
 övoˇti⁄_buf
 [
 oid
@@ -574293,7 +574451,7 @@ buf
 Àn_buf
 );
 
-276 
+283 
 boﬁ
  
 fuŒ
@@ -574309,21 +574467,21 @@ buf
 Àn_buf
 ));
 
-277 if(
+284 if(
 fuŒ
 ){
 
-278 * 
+285 * 
 q
 =
 NULL
 ;
 
-279 
+286 
 Àn_q
 ;
 
-280 
+287 
 ™Æysis_queue
 [
 oid
@@ -574335,7 +574493,7 @@ q
 Àn_q
 );
 
-281 
+288 
 	`Síd
 (
 q
@@ -574347,7 +574505,7 @@ buf
 Àn_buf
 );
 
-283 
+290 
 ™Æysis_queue
 [
 oid
@@ -574355,7 +574513,7 @@ oid
 	`Re£t
 ();
 
-286 
+293 
 övoˇti⁄_buf
 [
 oid
@@ -574363,7 +574521,7 @@ oid
 	`Re£t
 ();
 
-287 
+294 
 	`SëOrdîögId
 (
 tid
@@ -574371,7 +574529,7 @@ tid
 INVALID_ORDERING_ID
 );
 
-288 
+295 
 lock_buf
 .
 	`U∆ock
@@ -574379,15 +574537,15 @@ lock_buf
 oid
 );
 
-289  
+296  
 åue
 ;
 
-290 
+297 
 	}
 }
 
-291 
+298 
 boﬁ
  
 	$NewCœssInfo
@@ -574409,17 +574567,17 @@ gÀn
 √åefSu≥rCœss
 ){
 
-295 
+302 
 Buf„r
  
 	`tmp
 (100);
 
-296 if(
+303 if(
 MP
 )
 
-297 
+304 
 tmp
 .
 	`EnqueueJöt
@@ -574427,7 +574585,7 @@ tmp
 	`gëpid
 ());
 
-298 
+305 
 tmp
 .
 	`EnqueueJbyã
@@ -574435,7 +574593,7 @@ tmp
 MSG_CLASS_INFO
 );
 
-299 
+306 
 tmp
 .
 	`EnqueueJl⁄g
@@ -574443,7 +574601,7 @@ tmp
 √åef
 );
 
-310 
+317 
 tmp
 .
 	`EnqueueSåögUtf8
@@ -574453,7 +574611,7 @@ tmp
 «mñí
 );
 
-311 
+318 
 tmp
 .
 	`EnqueueSåögUtf8
@@ -574463,7 +574621,7 @@ gíîic
 gÀn
 );
 
-312 
+319 
 tmp
 .
 	`EnqueueJl⁄g
@@ -574471,7 +574629,7 @@ tmp
 √åefCœssLﬂdî
 );
 
-313 
+320 
 tmp
 .
 	`EnqueueJl⁄g
@@ -574479,7 +574637,7 @@ tmp
 √åefSu≥rCœss
 );
 
-317  
+324  
 	`Síd
 (
 tmp
@@ -574489,11 +574647,11 @@ q_d©a
 q_occupõd
 );
 
-318 
+325 
 	}
 }
 
-319 
+326 
 	$ObjFªeEvít
 (
 jl⁄g
@@ -574501,7 +574659,7 @@ jl⁄g
 obje˘Id
 ){
 
-321 
+328 
 Sc›edMuãx
  
 	`mtx
@@ -574509,17 +574667,17 @@ Sc›edMuãx
 obj‰ì_mtx
 );
 
-322 if(
+329 if(
 q_obj‰ì
 .
 	`IsEm±y
 ()) {
 
-323 if(
+330 if(
 MP
 )
 
-324 
+331 
 q_obj‰ì
 .
 	`EnqueueJöt
@@ -574527,7 +574685,7 @@ q_obj‰ì
 	`gëpid
 ());
 
-326 
+333 
 q_obj‰ì
 .
 	`EnqueueJbyã
@@ -574535,25 +574693,25 @@ q_obj‰ì
 MSG_OBJ_FREE
 );
 
-327 
+334 
 q_obj‰ì
 .
 evít_cou¡
  = 0;
 
-328 
+335 
 q_obj‰ì
 .
 	`EnqueueJöt
 (0);
 
-330 
+337 
 q_obj‰ì
 .
 evít_cou¡
 ++;
 
-331 if(!
+338 if(!
 q_obj‰ì
 .
 	`EnqueueJl⁄g
@@ -574561,7 +574719,7 @@ q_obj‰ì
 obje˘Id
 )){
 
-332 
+339 
 jöt
  
 tmpöt
@@ -574573,11 +574731,11 @@ q_obj‰ì
 evít_cou¡
 );
 
-333 if(
+340 if(
 MP
 )
 
-334 
+341 
 q_obj‰ì
 .
 	`Upd©e
@@ -574589,7 +574747,7 @@ jbyã
 tmpöt
 , (jint));
 
-336 
+343 
 q_obj‰ì
 .
 	`Upd©e
@@ -574601,17 +574759,17 @@ tmpöt
 jöt
 ));
 
-337 * 
+344 * 
 tmp
 =
 NULL
 ;
 
-338 
+345 
 Àn
 =0;
 
-339 
+346 
 q_obj‰ì
 .
 	`GëD©a
@@ -574621,7 +574779,7 @@ tmp
 Àn
 );
 
-340 
+347 
 	`LOGASSERT
 (
 tmp
@@ -574629,7 +574787,7 @@ tmp
 Àn
 , "Erroráfter Get Data");
 
-341 
+348 
 jl⁄g
  
 ¡s
@@ -574639,7 +574797,7 @@ jl⁄g
 obje˘Id
 );
 
-342 
+349 
 	`Síd
 (
 tmp
@@ -574651,17 +574809,17 @@ tmp
 jl⁄g
 ));
 
-343 
+350 
 q_obj‰ì
 .
 	`Re£t
 ();
 
-346 
+353 
 	}
 }
 
-347 
+354 
 boﬁ
  
 	$NewCœssEvít
@@ -574683,17 +574841,17 @@ codeLígth
 byãs
 ){
 
-351 
+358 
 Buf„r
  
 	`tmp
 (100);
 
-352 if(
+359 if(
 MP
 )
 
-353 
+360 
 tmp
 .
 	`EnqueueJöt
@@ -574701,7 +574859,7 @@ tmp
 	`gëpid
 ());
 
-354 
+361 
 tmp
 .
 	`EnqueueJbyã
@@ -574709,41 +574867,41 @@ tmp
 MSG_NEW_CLASS
 );
 
-355 c⁄° *
+362 c⁄° *
 tm≤ame
  = 
 «me
 ;
 
-356 
+363 
 tm∂í
  = 
 «meLígth
 ;
 
-357 if(
+364 if(
 «me
 [0]=='L'){
 
-358 
+365 
 tm≤ame
 ++;
 
-359 
+366 
 tm∂í
 --;
 
-361 if(
+368 if(
 «me
 [
 «meLígth
 -1] == ';')
 
-362 
+369 
 tm∂í
 --;
 
-364 
+371 
 tmp
 .
 	`EnqueueSåögUtf8
@@ -574753,7 +574911,7 @@ tm≤ame
 tm∂í
 );
 
-365 
+372 
 tmp
 .
 	`EnqueueJl⁄g
@@ -574761,7 +574919,7 @@ tmp
 ˛assLﬂdîId
 );
 
-366 
+373 
 tmp
 .
 	`EnqueueJöt
@@ -574769,7 +574927,7 @@ tmp
 codeLígth
 );
 
-367 
+374 
 tmp
 .
 	`Enqueue
@@ -574779,7 +574937,7 @@ byãs
 codeLígth
 );
 
-371  
+378  
 	`Síd
 (
 tmp
@@ -574789,11 +574947,11 @@ q_d©a
 q_occupõd
 );
 
-373 
+380 
 	}
 }
 
-374 
+381 
 boﬁ
  
 	$MëhodRegi°îEvít
@@ -574809,17 +574967,17 @@ mëhodId
 Àngth
 ){
 
-376 
+383 
 Buf„r
  
 	`tmp
 (40);
 
-377 if(
+384 if(
 MP
 )
 
-378 
+385 
 tmp
 .
 	`EnqueueJöt
@@ -574827,7 +574985,7 @@ tmp
 	`gëpid
 ());
 
-379 
+386 
 tmp
 .
 	`EnqueueJbyã
@@ -574835,7 +574993,7 @@ tmp
 MSG_REG_ANALYSIS
 );
 
-380 
+387 
 tmp
 .
 	`EnqueueJsh‹t
@@ -574843,7 +575001,7 @@ tmp
 mëhodId
 );
 
-381 
+388 
 tmp
 .
 	`EnqueueSåögUtf8
@@ -574853,7 +575011,7 @@ tmp
 Àngth
 );
 
-385  
+392  
 	`Síd
 (
 tmp
@@ -574863,17 +575021,17 @@ q_d©a
 q_occupõd
 );
 
-387 
+394 
 	}
 }
 
-388 
+395 
 Buf„r
 * 
 	$Rëu∫AndRe£tBuf„r
 (){
 
-389 
+396 
 Sc›edMuãx
  
 	`mtx
@@ -574881,7 +575039,7 @@ Sc›edMuãx
 gl_mtx
 );
 
-390 
+397 
 Buf„r
  *
 ªs
@@ -574889,7 +575047,7 @@ Buf„r
 £ndBuf
 ;
 
-391 
+398 
 £ndBuf
  = 
 √w
@@ -574899,19 +575057,19 @@ Buf„r
 BUFFER_INIT_SIZE
 );
 
-392  
+399  
 ªs
 ;
 
-393 
+400 
 	}
 }
 
-394 
+401 
 	g¥iv©e
 :
 
-395 
+402 
 ‹dîög_id_ty≥
  
 	$GëOrdîögId
@@ -574921,7 +575079,7 @@ thªad_id_ty≥
 tid
 ){
 
-397 if(!
+404 if(!
 ru¬ög_oid
 .
 	`Exi°
@@ -574929,7 +575087,7 @@ ru¬ög_oid
 tid
 ))
 
-398 
+405 
 ru¬ög_oid
 .
 	`Së
@@ -574939,17 +575097,17 @@ tid
 INVALID_ORDERING_ID
 );
 
-400  
+407  
 ru¬ög_oid
 [
 tid
 ];
 
-401 
+408 
 	}
 }
 
-402 
+409 
 	$SëOrdîögId
 (
 thªad_id_ty≥
@@ -574961,7 +575119,7 @@ tid
 oid
 ){
 
-405 
+412 
 ru¬ög_oid
 .
 	`Së
@@ -574971,11 +575129,11 @@ tid
 oid
 );
 
-406 
+413 
 	}
 }
 
-407 
+414 
 boﬁ
  
 	$Síd
@@ -574985,23 +575143,23 @@ MsgTy≥
 msg
 ){
 
-409 
+416 
 ty≥
  = 
 msg
 ;
 
-410  
+417  
 	`Síd
 (&
 ty≥
 , 1);
 
-411 
+418 
 	}
 }
 
-412 
+419 
 boﬁ
  
 	$Síd
@@ -575011,7 +575169,7 @@ d©a
 Àngth
 ){
 
-413 
+420 
 Sc›edMuãx
  
 	`mtx
@@ -575019,11 +575177,11 @@ Sc›edMuãx
 gl_mtx
 );
 
-426 if(!
+433 if(!
 isClo£d
 )
 
-427 
+434 
 £ndBuf
 ->
 	`Enqueue
@@ -575033,23 +575191,15 @@ d©a
 Àngth
 );
 
-428 
-	`ALOG
-(
-LOG_DEBUG
-, "PACKET", "FIRST 10 BYTES:\t\t: %d %d %d %d, %d, %d %d %d %d", 
-d©a
-[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
-
-436  
+443  
 åue
 ;
 
-437 
+444 
 	}
 }
 
-438 
+445 
 boﬁ
  
 	$Síd
@@ -575063,7 +575213,7 @@ d©a
 œ°Àngth
 ){
 
-439 
+446 
 Sc›edMuãx
  
 	`mtx
@@ -575071,11 +575221,11 @@ Sc›edMuãx
 gl_mtx
 );
 
-466 if(!
+473 if(!
 isClo£d
 ){
 
-467 
+474 
 £ndBuf
 ->
 	`Enqueue
@@ -575085,7 +575235,7 @@ d©a
 Àngth
 );
 
-468 
+475 
 £ndBuf
 ->
 	`Enqueue
@@ -575095,41 +575245,33 @@ d©a
 œ°Àngth
 );
 
-470 
-	`ALOG
-(
-LOG_DEBUG
-, "PACKET", "FIRST 5 BYTES:\t\t: %d %d %d %d, %d", 
-d©a
-[0], data[1], data[2], data[3], data[4]);
-
-471  
+478  
 åue
 ;
 
-472 
+479 
 	}
 }
 
-473 
+480 
 ±hªad_muãx_t
  
 	ggl_mtx
 ;
 
-475 
+482 
 ReQueue
  
 	gq_obj‰ì
 ;
 
-476 
+483 
 ±hªad_muãx_t
  
 	gobj‰ì_mtx
 ;
 
-479 
+486 
 	gM≠
 <
 	gthªad_id_ty≥
@@ -575139,13 +575281,13 @@ ReQueue
 	gru¬ög_oid
 ;
 
-480 
+487 
 ±hªad_muãx_t
  
 	g™Æysis_mtx
 ;
 
-482 
+489 
 	gM≠
 <
 	g‹dîög_id_ty≥
@@ -575155,13 +575297,13 @@ ReQueue
 	g™Æysis_queue
 ;
 
-483 
+490 
 LockBuf„r
  
 	glock_buf
 ;
 
-484 
+491 
 	gM≠
 <
 	g‹dîög_id_ty≥
@@ -575171,13 +575313,13 @@ LockBuf„r
 	gövoˇti⁄_buf
 ;
 
-490 
+497 
 Buf„r
  *
 	g£ndBuf
 ;
 
-491 
+498 
 boﬁ
  
 	gisClo£d
@@ -576207,7 +576349,19 @@ vm
 ª£rved
 );
 
-73 
+72 
+jöt
+ 
+ShadowLib_Sy°emSîvî_OnLﬂd
+(
+JavaVM
+* 
+vm
+, * 
+ª£rved
+);
+
+74 
 _m≠PID
 (
 pid
@@ -576215,13 +576369,13 @@ pid
 ≤ame
 );
 
-74 
+75 
 ⁄F‹k
 (
 ∑ª¡
 );
 
-75 
+76 
 ªgi°îShadowN©ives
 (
 JNIEnv

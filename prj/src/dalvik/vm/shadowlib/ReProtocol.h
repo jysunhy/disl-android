@@ -62,6 +62,13 @@ class ReProtocol{
 			isClosed = false;
 			
 		}
+
+		void UpdateMutex(){
+			pthread_mutex_init(&gl_mtx, NULL);
+			pthread_mutex_init(&objfree_mtx, NULL);
+			pthread_mutex_init(&analysis_mtx, NULL);
+		}
+
 		~ReProtocol(){
 			pthread_mutex_destroy(&gl_mtx);
 			pthread_mutex_destroy(&analysis_mtx);
@@ -280,6 +287,12 @@ class ReProtocol{
 				analysis_queue[oid]->GetData(q, len_q);
 				Send(q, len_q, (char*)buf, len_buf);
 				//analysis_queue[oid]->Print();
+				analysis_queue[oid]->Reset();
+			}else{ //EACH ANALYSIS IS SENT ALONE
+				char* q=NULL;
+				int len_q;
+				analysis_queue[oid]->GetData(q, len_q);
+				Send(q, len_q);
 				analysis_queue[oid]->Reset();
 			}
 

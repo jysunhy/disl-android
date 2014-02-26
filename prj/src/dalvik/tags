@@ -2824,7 +2824,7 @@ FINISH	vm/mterp/out/InterpC-x86.cpp	449;"	d	file:
 FINISH	vm/mterp/portable/stubdefs.cpp	37;"	d	file:
 FINISH_BKPT	vm/mterp/out/InterpC-portable.cpp	415;"	d	file:
 FINISH_BKPT	vm/mterp/portable/stubdefs.cpp	45;"	d	file:
-FIRST_SLEEP	vm/Thread.cpp	2449;"	d	file:
+FIRST_SLEEP	vm/Thread.cpp	2458;"	d	file:
 FIVE	dx/tests/091-ssa-const-collector/Blort.java	/^        ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT$/;"	e	enum:Blort.Foo	file:
 FIVE	tests/055-enum-performance/src/SamePackagePrivateEnum.java	/^    ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,$/;"	e	enum:SamePackagePrivateEnum	file:
 FIVE	tests/055-enum-performance/src/SamePackagePublicEnum.java	/^    ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,$/;"	e	enum:SamePackagePublicEnum	file:
@@ -5588,7 +5588,7 @@ MONITOR_EXIT	dx/src/com/android/dx/io/OpcodeInfo.java	/^    public static final 
 MONITOR_EXIT	dx/src/com/android/dx/io/Opcodes.java	/^    public static final int MONITOR_EXIT = 0x1e;$/;"	f	class:Opcodes
 MONITOR_EXIT	dx/src/com/android/dx/rop/code/RegOps.java	/^    public static final int MONITOR_EXIT = 37;$/;"	f	class:RegOps
 MONITOR_EXIT	dx/src/com/android/dx/rop/code/Rops.java	/^    public static final Rop MONITOR_EXIT =$/;"	f	class:Rops
-MORE_SLEEP	vm/Thread.cpp	2450;"	d	file:
+MORE_SLEEP	vm/Thread.cpp	2459;"	d	file:
 MOVE	dexgen/src/com/android/dexgen/dex/code/DalvOps.java	/^    public static final int MOVE = 0x01;$/;"	f	class:DalvOps
 MOVE	dexgen/src/com/android/dexgen/dex/code/Dops.java	/^    public static final Dop MOVE =$/;"	f	class:Dops
 MOVE	dexgen/src/com/android/dexgen/rop/code/RegOps.java	/^    public static final int MOVE = 2;$/;"	f	class:RegOps
@@ -7859,7 +7859,7 @@ SizeOf	dx/src/com/android/dx/dex/SizeOf.java	/^public final class SizeOf {$/;"	c
 SleepyThread	tests/050-sync-test/src/Main.java	/^    SleepyThread(SleepyThread other) {$/;"	m	class:SleepyThread
 SleepyThread	tests/050-sync-test/src/Main.java	/^class SleepyThread extends Thread {$/;"	c
 SlowInit	tests/084-class-init/src/SlowInit.java	/^public class SlowInit {$/;"	c
-Socket	vm/shadowlib/Socket.cpp	/^Socket::Socket() :$/;"	f	class:Socket
+Socket	vm/shadowlib/Socket.cpp	/^Socket::Socket(bool need ) :$/;"	f	class:Socket
 Socket	vm/shadowlib/Socket.h	/^class Socket$/;"	c
 SomeClass	tests/004-annotations/src/android/test/anno/SomeClass.java	/^public class SomeClass {$/;"	c
 SomeClass.class	tests/004-annotations/src/android/test/anno/AnnoFancyMethod.java	/^    Class someClass() default SomeClass.class;$/;"	f	interface:AnnoFancyMethod
@@ -8494,6 +8494,7 @@ UnsortedValue	dx/src/com/android/dx/merge/DexMerger.java	/^            UnsortedV
 UnsortedValue	dx/src/com/android/dx/merge/DexMerger.java	/^        class UnsortedValue implements Comparable<UnsortedValue> {$/;"	c	class:DexMerger.IdMerger
 UnzipToFileResult	libdex/CmdUtils.h	/^enum UnzipToFileResult {$/;"	g
 Update	vm/shadowlib/ReQueue.h	/^		virtual bool Update(int pos, const char* input, int len){$/;"	f	class:BaseQueue
+UpdateMutex	vm/shadowlib/ReProtocol.h	/^		void UpdateMutex(){$/;"	f	class:ReProtocol
 UsageException	dx/src/com/android/dx/command/UsageException.java	/^public class UsageException extends RuntimeException {$/;"	c
 UsageException	tools/dexdeps/src/com/android/dexdeps/UsageException.java	/^public class UsageException extends RuntimeException {$/;"	c
 Useless	tests/068-classloader/src/Useless.java	/^public class Useless implements ICommon {$/;"	c
@@ -20040,6 +20041,7 @@ nativeLibs	vm/Globals.h	/^    HashTable*  nativeLibs;$/;"	m	struct:DvmGlobals
 nativeSize	vm/compiler/Compiler.h	/^    int nativeSize;             \/\/ # of bytes for produced native code$/;"	m	struct:CompilerMethodStats
 needFallThroughBranch	vm/compiler/CompilerIR.h	/^    bool needFallThroughBranch;         \/\/ For blocks ended due to length limit$/;"	m	struct:BasicBlock
 needHeader	vm/alloc/DdmHeap.cpp	/^    bool needHeader;$/;"	m	struct:HeapChunkContext	file:
+needPID	vm/shadowlib/Socket.h	/^  bool needPID;$/;"	m	class:Socket
 needsNewSuccessor	dx/src/com/android/dx/ssa/SsaConverter.java	/^    private static boolean needsNewSuccessor(SsaBasicBlock block,$/;"	m	class:SsaConverter	file:
 needsReturnBarrier	vm/analysis/Optimize.cpp	/^static bool needsReturnBarrier(Method* method)$/;"	f	file:
 negateOpcode	vm/compiler/Loop.cpp	/^static Opcode negateOpcode(Opcode opcode)$/;"	f	file:

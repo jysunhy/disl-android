@@ -7,12 +7,13 @@
 #include "stdio.h"
 #include "Socket.h"
 #include <sched.h>
+#include <cutils/sockets.h>
 
 static ReProtocol remote("/dev/socket/instrument",11218);
 
 static bool isZygote = true;
 
-static Socket *sock = NULL;
+//static Socket *sock = NULL;
 
 static Buffer* zygote_buff;
 //static pthread_t *send_thread;
@@ -166,34 +167,39 @@ void analysisStart__SB
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, ordering_id, analysis_method_id);
 	//dvmDumpAllThreads(false);
 }
-void OpenConnection(){
-	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: open connection");
-	//remote.OpenConnection();
-	if(sock) {
-		return;
-	}
-	sock = new Socket();
-	while(!sock->Connect()){
-		LOGDEBUG("Cannot connect through UDS");
-		sleep(2);
-	}
-	int signal = -3;
-	sock->Send((char*)&signal,sizeof(int));
+/*
+   void OpenConnection(){
+   ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: open connection");
+//remote.OpenConnection();
+if(sock) {
+return;
 }
+sock = new Socket();
+while(!sock->Connect()){
+LOGDEBUG("Cannot connect through UDS");
+sleep(2);
+}
+int signal = -3;
+sock->Send((char*)&signal,sizeof(int));
+}
+*/
 void manuallyOpen
 (JNIEnv * jni_env, jclass this_class) {
-	OpenConnection();
+	//OpenConnection();
 }
 void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
-	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection");
 	//remote.ConnectionClose();
-
-	char tmp = MSG_CLOSE;
-	sock->Send(&tmp, 1);
-	delete sock;
-	sock = NULL;
-	exit(0);
+	   Socket *sock = new Socket();
+	   int pid = getpid();
+		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d %d", getpid(), pid);
+	   pid = htonl(pid);
+	   sock->Send((char*)&pid, sizeof(int));
+	   char tmp = MSG_CLOSE;
+	   sock->Send(&tmp, 1);
+	   delete sock;
+	   sock = NULL;
+	   exit(0);
 }
 void analysisEnd
 (JNIEnv * jni_env, jclass this_class) {
@@ -426,6 +432,8 @@ void vmEndHook(JavaVM* vm){
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in hook %s", __FUNCTION__);
 }
 void objFreeHook(Object* obj, Thread* self){
+	//if(self->isDaemon)
+	//	return;
 	if(obj == NULL)
 		return;
 	if(obj->uuid == 0)
@@ -445,18 +453,30 @@ int classInitHook(ClassObject* co){
 }
 
 /* static void * zygote_send_thread_loop(void * obj) {
-	while(true){
-		ALOG(LOG_DEBUG,"SHADOWDEBUG","IN ZYGOTE WHILE LOOOP");
-		sleep(15);
-		//sched_yield();
-		//std::this_thread::yield();
-	}
-	return NULL;
+   while(true){
+   ALOG(LOG_DEBUG,"SHADOWDEBUG","IN ZYGOTE WHILE LOOOP");
+   sleep(15);
+//sched_yield();
+//std::this_thread::yield();
+}
+return NULL;
 }
 */
 
-static void * send_thread_loop(void * obj) {
+static void * send_ss_thread_loop(void * obj) {
+	int sock_host = -1;
+	int retcode;
+	while(true) {
+		sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
+		if(sock_host <= 0){
+			ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
+			sleep(5);
+		}else
+			break;
+	}
 	Buffer *undecidedBuf = new Buffer(1024);
+	//int signal = -3;
+	//sock->Send((char*)&signal,sizeof(int));
 	while(true){
 		ALOG(LOG_DEBUG,"SHADOWDEBUG","IN WHILE LOOOP");
 		Buffer* tmp = NULL;
@@ -471,9 +491,82 @@ static void * send_thread_loop(void * obj) {
 				break;
 			}
 
-			if(!sock){
-				OpenConnection();
+			if(undecidedBuf){
+				ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING UNDECIDED BUFFER SIZED: %d", undecidedBuf->q_occupied);
+				retcode = send(sock_host, undecidedBuf->q_data, undecidedBuf->q_occupied, 0);
+				while(retcode <0)
+				{
+					while(true) {
+						ALOG (LOG_INFO,"INSTRUMENTSERVER","SEND ERROR RETRYING");
+						sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
+						if(sock_host <= 0){
+							ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
+							sleep(5);
+						}else
+							break;
+					}
+					retcode = send(sock_host, undecidedBuf->q_data, undecidedBuf->q_occupied, 0);
+				}
+			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d retcode: %d", undecidedBuf->q_occupied, retcode);
+
+				delete undecidedBuf;
+				undecidedBuf = NULL;
 			}
+			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", tmp->q_occupied);
+			retcode = send(sock_host,tmp->q_data, tmp->q_occupied, 0);
+			while(retcode <0){
+				ALOG (LOG_INFO,"INSTRUMENTSERVER","SEND ERROR RETRYING");
+				while(true) {
+					sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
+					if(sock_host <= 0){
+						ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
+						sleep(5);
+					}else
+						break;
+				}
+				retcode = send(sock_host,tmp->q_data, tmp->q_occupied, 0);
+			}
+			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d retcode: %d", tmp->q_occupied, retcode);
+		}
+		if(tmp)
+			delete tmp;
+		sleep(2);
+		//if(remote.IsClosed())
+		//	break;
+	}
+	if(undecidedBuf)
+		delete undecidedBuf;
+
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SENDING LOOP END");
+
+	pthread_detach(pthread_self());
+	pthread_exit(NULL);
+
+	return NULL;
+}
+static void * send_thread_loop(void * obj) {
+	Buffer *undecidedBuf = new Buffer(1024);
+	Socket *sock = new Socket();
+	while(!sock->Connect()){
+		LOGDEBUG("Cannot connect through UDS in %s for %d",__FUNCTION__, getpid());
+		sleep(2);
+	}
+	int signal = -3;
+	sock->Send((char*)&signal,sizeof(int));
+	while(true){
+		ALOG(LOG_DEBUG,"SHADOWDEBUG","IN WHILE LOOOP");
+		Buffer* tmp = NULL;
+		tmp = remote.ReturnAndResetBuffer();
+		if(!isDecided){
+			undecidedBuf->Enqueue(tmp->q_data, tmp->q_occupied);
+			ALOG(LOG_DEBUG,"SHADOWDEBUG","PUTTING UNDECIDED EVENTS INTO BUFFER SIZED: %d", undecidedBuf->q_occupied);
+		}else{
+			if(gDvm.isShadow){
+				ALOG(LOG_DEBUG,"SHADOWDEBUG","DROP THE BUFFER FOR UNOBSERVED PROCESS SIZED %d", undecidedBuf->q_occupied);
+				delete tmp;
+				break;
+			}
+
 			if(undecidedBuf){
 				ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING UNDECIDED BUFFER SIZED: %d", undecidedBuf->q_occupied);
 				if(!sock->Send(undecidedBuf->q_data, undecidedBuf->q_occupied)){
@@ -499,7 +592,7 @@ static void * send_thread_loop(void * obj) {
 	}
 	if(undecidedBuf)
 		delete undecidedBuf;
-	
+
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SENDING LOOP END");
 
 	pthread_detach(pthread_self());
@@ -526,7 +619,7 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 	gDvm.freeObjHook = &objFreeHook;
 	gDvm.threadEndHook = &threadEndHook;
 	gDvm.vmEndHook = &vmEndHook;
-	gDvm.classInitHook = &classInitHook;
+	//gDvm.classInitHook = &classInitHook;
 	gDvm.classfileLoadHook = &classfileLoadHook;
 
 	pthread_mutex_init(&gl_mtx, NULL);
@@ -575,9 +668,9 @@ void BeforeFork(){
 	pthread_mutex_unlock(&gl_mtx);
 }
 
-jint ShadowLib_OnLoad(JavaVM* vm, void* reserved){
+jint ShadowLib_SystemServer_OnLoad(JavaVM* vm, void* reserved){
+	remote.UpdateMutex();
 	isZygote = false;
-	sock = NULL;
 	UnionJNIEnvToVoid uenv;
 	uenv.venv = NULL;
 	jint result = -1;
@@ -589,13 +682,56 @@ jint ShadowLib_OnLoad(JavaVM* vm, void* reserved){
 	//if(gDvm.isShadow) {
 
 	//OpenConnection();
-	pthread_mutex_lock(&gDvm.s_mtx);
-	gDvm.newObjHook = &objNewHook;
-	gDvm.freeObjHook = &objFreeHook;
-	gDvm.threadEndHook = &threadEndHook;
-	gDvm.vmEndHook = &vmEndHook;
+	//pthread_mutex_lock(&gDvm.s_mtx);
+	//gDvm.newObjHook = &objNewHook;
+	//gDvm.freeObjHook = &objFreeHook;
+	//gDvm.threadEndHook = &threadEndHook;
+	//gDvm.vmEndHook = &vmEndHook;
 	//gDvm.classInitHook = &classInitHook;
-	pthread_mutex_unlock(&gDvm.s_mtx);
+	//pthread_mutex_unlock(&gDvm.s_mtx);
+	pthread_t send_thread;
+	pthread_create(&send_thread, NULL, send_ss_thread_loop, NULL);
+	//gDvm.classfileLoadHook = &classfileLoadHook;
+
+	if (vm->GetEnv(&uenv.venv, JNI_VERSION_1_4) != JNI_OK){
+		goto bail;
+	}
+
+	env = uenv.env;
+
+	env = uenv.env;
+
+	if (registerShadowNatives(env) != JNI_TRUE){
+		goto bail;
+	}
+
+	result = JNI_VERSION_1_4;
+
+
+bail:
+	return 0;
+}
+jint ShadowLib_OnLoad(JavaVM* vm, void* reserved){
+	remote.UpdateMutex();
+	isZygote = false;
+	UnionJNIEnvToVoid uenv;
+	uenv.venv = NULL;
+	jint result = -1;
+	JNIEnv *env = NULL;
+
+	//gDvm.shadowHook = &testShadowHook;
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN ONLOAD, PID: %d", getpid());
+	pthread_mutex_init(&gl_mtx, NULL);
+	//if(gDvm.isShadow) {
+
+	//OpenConnection();
+	//pthread_mutex_lock(&gDvm.s_mtx);
+	//gDvm.newObjHook = &objNewHook;
+	//gDvm.freeObjHook = &objFreeHook;
+	//gDvm.threadEndHook = &threadEndHook;
+	//gDvm.vmEndHook = &vmEndHook;
+	//gDvm.classInitHook = &classInitHook;
+	//pthread_mutex_unlock(&gDvm.s_mtx);
 	pthread_t send_thread;
 	pthread_create(&send_thread, NULL, send_thread_loop, NULL);
 	//gDvm.classfileLoadHook = &classfileLoadHook;

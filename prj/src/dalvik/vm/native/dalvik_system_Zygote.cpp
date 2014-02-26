@@ -757,7 +757,7 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
 
 			
 		if(isSystemServer)
-			ShadowLib_OnLoad(gDvmJni.jniVm, NULL);
+			ShadowLib_SystemServer_OnLoad(gDvmJni.jniVm, NULL);
 
 
 

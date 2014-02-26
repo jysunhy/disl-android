@@ -103,7 +103,7 @@ int new_sock(){
 	memset(&address, 0, sizeof(struct sockaddr_un));
 
 	address.sun_family = AF_UNIX;
-	snprintf(address.sun_path, UNIX_PATH_MAX, "/dev/socket/instrument");
+	snprintf(address.sun_path, UNIX_PATH_MAX, "/dev/socket/instrument2");
 
 	if(connect(client_socket, 
 				(struct sockaddr *) &address,  

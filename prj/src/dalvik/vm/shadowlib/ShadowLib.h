@@ -69,6 +69,7 @@ typedef int thread_id_type;
 void BeforeFork();
 jint ShadowLib_OnLoad(JavaVM* vm, void* reserved);
 jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved);
+jint ShadowLib_SystemServer_OnLoad(JavaVM* vm, void* reserved);
 
 void _mapPID(int pid, const char* pname);
 void onFork(int parent);
