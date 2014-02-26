@@ -34,6 +34,7 @@
 //#define SERVER_IP "192.168.56.101"
 //#define SERVER_IP "10.0.3.15"
 #define SOCKFILE "/dev/socket/instrument"
+#define SOCKFILE2 "/dev/socket/instrument2"
 #define min(a,b) a>b?b:a
 
 int map_key[300];
@@ -365,6 +366,85 @@ release:
 	return NULL;
 }
 
+
+void* new_thread(void* arg){
+	struct sockaddr_un address;
+	int socket_fd, connection_fd;
+	socklen_t address_length;
+	pid_t child;
+
+
+	socket_fd = socket(PF_UNIX, SOCK_STREAM, 0);
+	if(socket_fd < 0)
+	{
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","create socket error");
+		return 1;
+	} 
+
+	/* start with a clean address structure */
+	memset(&address, 0, sizeof(struct sockaddr_un));                                                                                                                                                                                           
+	address.sun_family = AF_UNIX;
+	snprintf(address.sun_path, UNIX_PATH_MAX, SOCKFILE2);
+	if(bind(socket_fd, 
+				(struct sockaddr *) &address,  
+				sizeof(struct sockaddr_un)) != 0)                                                                                                                                                                                                  
+	{
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","bind socket error");
+		return 1;
+	}
+	char mod[]="0666";
+	chmod(address.sun_path, strtol(mod,0,8));
+
+	if(listen(socket_fd, 5) != 0)
+	{
+		printf("listen() failed\n");
+		return 1;
+	}
+
+
+
+	unsigned int ids;       // holds thread args
+	pthread_attr_t attr;        //  pthread attributes     
+	pthread_t threads;      // Thread ID (used by OS)
+
+	pthread_attr_init (&attr);
+
+	while (TRUE)
+	{
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","my server is ready ...");
+
+		connection_fd = accept(socket_fd,                     
+				(struct sockaddr *) &address,  
+				&address_length);                                                                                                                                                                                      
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","a new client arrives ...");
+
+		if (connection_fd == FALSE)
+		{
+			ALOG (LOG_INFO,"INSTRUMENTSERVER","ERROR - Unable to create socket");
+			continue;
+		}
+
+		else
+		{
+			/* Create a child thread --------------------------------------- */
+			ids = connection_fd;
+			pthread_create (    /* Create a child thread        */
+					&threads,   /* Thread ID (system assigned)  */
+					&attr,  /* Default thread attributes    */
+					my_thread,  /* Thread routine               */
+					&ids);  /* Arguments to be passed       */
+
+		}
+	}
+
+	/* To make sure this "main" returns an integer --- */
+	close (socket_fd);       // close the primary socket
+	pthread_detach(pthread_self());
+	pthread_exit(NULL);
+
+	return NULL;
+}
+
 //===== Main program ========================================================
 int main (void)
 {
@@ -408,8 +488,17 @@ int main (void)
 	unsigned int ids;       // holds thread args
 	pthread_attr_t attr;        //  pthread attributes     
 	pthread_t threads;      // Thread ID (used by OS)
+	unsigned int ids2;       // holds thread args
+	pthread_attr_t attr2;        //  pthread attributes     
+	pthread_t threads2;      // Thread ID (used by OS)
 
 	pthread_attr_init (&attr);
+	pthread_attr_init (&attr2);
+	pthread_create (    /* Create a child thread        */
+					&threads2,   /* Thread ID (system assigned)  */
+					&attr2,  /* Default thread attributes    */
+					new_thread,  /* Thread routine               */
+					&ids2);  /* Arguments to be passed       */
 
 	int sock_host = -1;
 	int retcode;
