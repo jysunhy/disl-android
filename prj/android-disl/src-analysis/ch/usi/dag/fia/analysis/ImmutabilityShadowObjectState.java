@@ -13,15 +13,15 @@ public class ImmutabilityShadowObjectState {
 	private final ImmutabilityShadowClassState iscsForThisObjectsClass;
 
 	private final ImmutabilityShadowFieldState[] fields;
-	
-	public ImmutabilityShadowObjectState(ShadowObject object,
-			String allocationSite) {
+
+	public ImmutabilityShadowObjectState(final ShadowObject object,
+			final String allocationSite) {
 
 		this.allocationSite = allocationSite;
 
-		ShadowClass sClass = object.getShadowClass();
+		final ShadowClass sClass = object.getShadowClass();
 		iscsForThisObjectsClass = ImmutabilityShadowStateHolder.get(sClass).requestClassState(sClass);
-		
+
 		this.className = sClass.getName();
 		this.fields = new ImmutabilityShadowFieldState[
 			iscsForThisObjectsClass.getFieldsMetaInfo().size()];
@@ -31,9 +31,9 @@ public class ImmutabilityShadowObjectState {
 		}
 	}
 
-	private ImmutabilityShadowFieldState getFieldState(ShadowClass ownerClass, String fieldId) {
-		
-		ImmutabilityShadowClassState iscs = ImmutabilityShadowStateHolder.get(ownerClass).requestClassState(ownerClass);
+	private ImmutabilityShadowFieldState getFieldState(final ShadowClass ownerClass, final String fieldId) {
+
+		final ImmutabilityShadowClassState iscs = ImmutabilityShadowStateHolder.get(ownerClass).requestClassState(ownerClass);
 		return fields[iscs.getFieldOrdinalNumber(fieldId)];
 	}
 
@@ -41,13 +41,13 @@ public class ImmutabilityShadowObjectState {
 		return allocationSite;
 	}
 
-	public synchronized void setAllocationSite(String allocationSite) {
+	public synchronized void setAllocationSite(final String allocationSite) {
 		this.allocationSite = allocationSite;
 	}
 
-	public synchronized void onFieldRead(ShadowClass ownerClass, String fieldId, boolean isUnderConstruction) {
+	public synchronized void onFieldRead(final ShadowClass ownerClass, final String fieldId, final boolean isUnderConstruction) {
 
-		ImmutabilityShadowFieldState field = getFieldState(ownerClass, fieldId);
+		final ImmutabilityShadowFieldState field = getFieldState(ownerClass, fieldId);
 
 		if (isUnderConstruction) {
 			field.onFieldReadDuringConstruction();
@@ -56,9 +56,9 @@ public class ImmutabilityShadowObjectState {
 		}
 	}
 
-	public synchronized void onFieldWrite(ShadowClass ownerClass, String fieldId, boolean isUnderConstruction) {
+	public synchronized void onFieldWrite(final ShadowClass ownerClass, final String fieldId, final boolean isUnderConstruction) {
 
-		ImmutabilityShadowFieldState field = getFieldState(ownerClass, fieldId);
+		final ImmutabilityShadowFieldState field = getFieldState(ownerClass, fieldId);
 
 		if (isUnderConstruction) {
 			field.onFieldWriteDuringConstruction();
@@ -67,17 +67,19 @@ public class ImmutabilityShadowObjectState {
 		}
 	}
 
-	public synchronized void dump(PrintStream out) {
+	public synchronized void dump(final PrintStream out) {
 
 		String allocSite = getAllocationSite();
-		if(allocSite == null) allocSite = "?";
+		if(allocSite == null) {
+            allocSite = "?";
+        }
 
 		// report only allocated objects
 		out.append(allocSite).append('\t');
         out.append(className).append('\n');
-		
+
         // do not report fields
-        
+
 //		final char SUBSEP = '\034';
 //
 //		// order of the iteration is according to the ordinal numbers
@@ -89,12 +91,12 @@ public class ImmutabilityShadowObjectState {
 //
 //			out.append(allocSite).append('\t');
 //	        out.append(className).append('\t');
-//			
+//
 //			out.append(fieldName).append('\t');
 //			out.append(Boolean.toString(fieldState.isMutable())).append('\t');
 //			out.append(Boolean.toString(fieldState.zeroInitializationMattered())).append('\n');
 //		}
-//		
+//
 //		out.append('\n');
 	}
 
