@@ -86,8 +86,8 @@ public abstract class DiSLREServer {
 			final DataOutputStream os = new DataOutputStream(
 				new BufferedOutputStream(sock.getOutputStream()));
 
-			REQUEST_LOOP: while (true) {
-                final int processID = is.readInt();
+            REQUEST_LOOP: while (true) {
+                final int processID = is.readInt ();
 				final byte requestNo = is.readByte();
 
                 // TODO pass the inetaddress

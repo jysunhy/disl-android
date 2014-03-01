@@ -27,10 +27,11 @@ public class OnForkHandler implements RequestHandler {
         try {
             final int childPID = is.readInt ();
 
-            final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpaceBlocked (pid);
-
             if (childPID != 0) {
-                shadowAddressSpace.onFork (childPID);
+                ShadowAddressSpace.getShadowAddressSpace (pid).onFork (childPID);
+            } else {
+                // Blocked the child process
+                ShadowAddressSpace.getShadowAddressSpaceBlocked (pid);
             }
         } catch (final IOException e) {
             throw new DiSLREServerException (e);

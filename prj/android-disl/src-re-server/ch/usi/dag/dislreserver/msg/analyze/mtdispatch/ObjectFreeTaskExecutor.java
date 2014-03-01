@@ -8,6 +8,7 @@ import ch.usi.dag.dislreserver.DiSLREServer;
 import ch.usi.dag.dislreserver.exception.DiSLREServerFatalException;
 import ch.usi.dag.dislreserver.msg.analyze.AnalysisResolver;
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.dislreserver.shadow.NetReferenceHelper;
 import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
 
@@ -32,15 +33,17 @@ class ObjectFreeTaskExecutor extends Thread {
 		// TODO free events should be sent to analysis that sees the shadow object
 
         // retrieve shadow object
-        final ShadowObject obj = shadowAddressSpace.getShadowObjectWithoutCreating (objectFreeID);
+        final ShadowObject obj = shadowAddressSpace.getShadowObject (objectFreeID);
+
+        if (DiSLREServer.debug
+            && NetReferenceHelper.get_class_id (objectFreeID) != 2) {
+            System.out.println (Thread.currentThread ().getName ()
+                + ": PROCESS-"
+                + shadowAddressSpace.getContext ().pid () + " Free object "
+                + Long.toHexString (objectFreeID));
+        }
 
         if (obj != null) {
-            if (DiSLREServer.debug) {
-                System.out.println (Thread.currentThread ().getName ()
-                    + ": PROCESS-"
-                    + shadowAddressSpace.getContext ().pid () + " Free object "
-                    + Long.toHexString (objectFreeID));
-            }
 
             // get all analysis objects
             final Set <RemoteAnalysis> raSet = AnalysisResolver.getAllAnalyses ();

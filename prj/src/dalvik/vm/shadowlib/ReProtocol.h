@@ -332,6 +332,15 @@ class ReProtocol{
 		void ObjFreeEvent(jlong objectId){
 			//ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);
 			ScopedMutex mtx(&objfree_mtx);
+			Buffer* tmp = new Buffer(40);
+			tmp->EnqueueJint(getpid());
+			tmp->EnqueueJbyte(MSG_OBJ_FREE);
+			tmp->EnqueueJint(1);
+			tmp->EnqueueJlong(objectId);
+			Send(tmp->q_data, tmp->q_occupied);
+			delete tmp;
+
+			/*
 			if(q_objfree.IsEmpty()) {
 				if(MP)
 					q_objfree.EnqueueJint(getpid());
@@ -356,6 +365,7 @@ class ReProtocol{
 				q_objfree.Reset();
 				return;
 			}
+			*/
 		}
 		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, const char *bytes){
 			//ALOG(LOG_DEBUG,"SHADOW","in %s",__FUNCTION__);

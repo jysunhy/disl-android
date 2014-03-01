@@ -23,7 +23,7 @@ static volatile jint ot_class_id = 1;
 static volatile jlong ot_object_id = 1;
 static volatile jshort method_id = 1;
 
-	Socket *zsock = NULL;
+Socket *zsock = NULL;
 
 //bool gl_bypass=true;
 static bool isDecided = false;
@@ -201,16 +201,16 @@ void manuallyOpen
 void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
 	//remote.ConnectionClose();
-	   Socket *sock = new Socket(false);
-	   int pid = getpid();
-		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d %d", getpid(), pid);
-	   pid = htonl(pid);
-	   sock->Send((char*)&pid, sizeof(int));
-	   char tmp = MSG_CLOSE;
-	   sock->Send(&tmp, 1);
-	   delete sock;
-	   sock = NULL;
-	  // exit(0);
+	Socket *sock = new Socket(false);
+	int pid = getpid();
+	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d %d", getpid(), pid);
+	pid = htonl(pid);
+	sock->Send((char*)&pid, sizeof(int));
+	char tmp = MSG_CLOSE;
+	sock->Send(&tmp, 1);
+	delete sock;
+	sock = NULL;
+	// exit(0);
 }
 void analysisEnd
 (JNIEnv * jni_env, jclass this_class) {
@@ -473,7 +473,7 @@ int classInitHook(ClassObject* co){
 return NULL;
 }
 */
-
+/*
 static void * send_ss_thread_loop(void * obj) {
 	int sock_host = -1;
 	int retcode;
@@ -504,11 +504,36 @@ static void * send_ss_thread_loop(void * obj) {
 
 			if(undecidedBuf){
 				ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING UNDECIDED BUFFER SIZED: %d", undecidedBuf->q_occupied);
-				retcode = send(sock_host, undecidedBuf->q_data, undecidedBuf->q_occupied, 0);
-				while(retcode <0)
-				{
+				if(undecidedBuf->q_occupied >0 ){
+					retcode = send(sock_host, undecidedBuf->q_data, undecidedBuf->q_occupied, 0);
+					while(retcode <0)
+					{
+						while(true) {
+							ALOG (LOG_INFO,"INSTRUMENTSERVER","SEND ERROR RETRYING");
+							sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
+							if(sock_host <= 0){
+								ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
+								sleep(5);
+							}else
+								break;
+						}
+						retcode = send(sock_host, undecidedBuf->q_data, undecidedBuf->q_occupied, 0);
+					}
+					ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d retcode: %d", undecidedBuf->q_occupied, retcode);
+				}else{
+					ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
+
+				}
+
+				delete undecidedBuf;
+				undecidedBuf = NULL;
+			}
+			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", tmp->q_occupied);
+			if(tmp->q_occupied > 0) {
+				retcode = send(sock_host,tmp->q_data, tmp->q_occupied, 0);
+				while(retcode <0){
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","SEND ERROR RETRYING");
 					while(true) {
-						ALOG (LOG_INFO,"INSTRUMENTSERVER","SEND ERROR RETRYING");
 						sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
 						if(sock_host <= 0){
 							ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
@@ -516,28 +541,12 @@ static void * send_ss_thread_loop(void * obj) {
 						}else
 							break;
 					}
-					retcode = send(sock_host, undecidedBuf->q_data, undecidedBuf->q_occupied, 0);
+					retcode = send(sock_host,tmp->q_data, tmp->q_occupied, 0);
 				}
-			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d retcode: %d", undecidedBuf->q_occupied, retcode);
-
-				delete undecidedBuf;
-				undecidedBuf = NULL;
+				ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d retcode: %d", tmp->q_occupied, retcode);
+			}else{
+				ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
 			}
-			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", tmp->q_occupied);
-			retcode = send(sock_host,tmp->q_data, tmp->q_occupied, 0);
-			while(retcode <0){
-				ALOG (LOG_INFO,"INSTRUMENTSERVER","SEND ERROR RETRYING");
-				while(true) {
-					sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
-					if(sock_host <= 0){
-						ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
-						sleep(5);
-					}else
-						break;
-				}
-				retcode = send(sock_host,tmp->q_data, tmp->q_occupied, 0);
-			}
-			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d retcode: %d", tmp->q_occupied, retcode);
 		}
 		if(tmp)
 			delete tmp;
@@ -555,6 +564,7 @@ static void * send_ss_thread_loop(void * obj) {
 
 	return NULL;
 }
+*/
 static void * send_thread_loop(void * obj) {
 	Buffer *undecidedBuf = new Buffer(1024);
 	Socket *sock = new Socket();
@@ -580,19 +590,28 @@ static void * send_thread_loop(void * obj) {
 
 			if(undecidedBuf){
 				ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING UNDECIDED BUFFER SIZED: %d", undecidedBuf->q_occupied);
-				if(!sock->Send(undecidedBuf->q_data, undecidedBuf->q_occupied)){
-					ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND");
-					delete sock;
-					sock = NULL;
+				if(undecidedBuf->q_occupied >0 ){
+					if(!sock->Send(undecidedBuf->q_data, undecidedBuf->q_occupied)){
+						ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND");
+						delete sock;
+						sock = NULL;
+					}
+				}else{
+					ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
 				}
+
 				delete undecidedBuf;
 				undecidedBuf = NULL;
 			}
 			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", tmp->q_occupied);
-			if(!sock->Send(tmp->q_data, tmp->q_occupied)){
-				ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND");
-				delete sock;
-				sock = NULL;
+			if(tmp->q_occupied >0 ){
+				if(!sock->Send(tmp->q_data, tmp->q_occupied)){
+					ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND");
+					delete sock;
+					sock = NULL;
+				}
+			}else {
+				ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
 			}
 		}
 		if(tmp)
@@ -634,7 +653,7 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 	int signal = -3;
 	zsock->Send((char*)&signal,sizeof(int));
 	//OpenConnection();
-	gDvm.newObjHook = &objNewHook;
+	//gDvm.newObjHook = &objNewHook;
 	gDvm.freeObjHook = &objFreeHook;
 	gDvm.threadEndHook = &threadEndHook;
 	gDvm.vmEndHook = &vmEndHook;
@@ -697,7 +716,8 @@ jint ShadowLib_SystemServer_OnLoad(JavaVM* vm, void* reserved){
 	//gDvm.classInitHook = &classInitHook;
 	//pthread_mutex_unlock(&gDvm.s_mtx);
 	pthread_t send_thread;
-	pthread_create(&send_thread, NULL, send_ss_thread_loop, NULL);
+	//pthread_create(&send_thread, NULL, send_ss_thread_loop, NULL);
+	pthread_create(&send_thread, NULL, send_thread_loop, NULL);
 	//gDvm.classfileLoadHook = &classfileLoadHook;
 
 	if (vm->GetEnv(&uenv.venv, JNI_VERSION_1_4) != JNI_OK){

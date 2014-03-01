@@ -448,7 +448,7 @@ public class Worker extends Thread {
                                 ("com.inspur.test;"
                                 +"system_server;"
                                 +"zygote;"
-                                /*+"com.android.providers.calendar;"
+                                +"com.android.providers.calendar;"
                                 +"android.process.acore;"
                                 +"android.process.media;"
                                 +"com.android.systemui;"
@@ -469,7 +469,7 @@ public class Worker extends Thread {
                                 +"com.android.email;"
                                 +"com.android.mms;"
                                 +"com.android.contacts;"
-                                +"com.android.quicksearchbox;"*/
+                                +"com.android.quicksearchbox;"
                                 )
                                 .getBytes ();
 

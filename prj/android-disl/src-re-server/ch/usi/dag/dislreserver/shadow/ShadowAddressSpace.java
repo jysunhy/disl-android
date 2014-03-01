@@ -55,14 +55,14 @@ public class ShadowAddressSpace {
             final ShadowClass clonedClass = (ShadowClass) child.getClonedShadowObject (thisClass);
             child.shadowClasses.put (key, clonedClass);
 
-            if (DiSLREServer.debug) {
-                System.out.println (Thread.currentThread ().getName ()
-                    + ": PROCESS-"
-                    + context.processID + " Forking Shadow Class: "
-                    + clonedClass.getName () + " with net ref "
-                    + Long.toHexString (clonedClass.getNetRef ()) + " to PROCESS-"
-                    + childProcessID);
-            }
+//            if (DiSLREServer.debug) {
+//                System.out.println (Thread.currentThread ().getName ()
+//                    + ": PROCESS-"
+//                    + context.processID + " Forking Shadow Class: "
+//                    + clonedClass.getName () + " with net ref "
+//                    + Long.toHexString (clonedClass.getNetRef ()) + " to PROCESS-"
+//                    + childProcessID);
+//            }
         }
 
         // clone classLoaderMap
@@ -315,7 +315,10 @@ public class ShadowAddressSpace {
             return klass;
         }
 
-        throw new DiSLREServerFatalException ("Unknown class instance");
+        throw new DiSLREServerFatalException (Thread.currentThread ().getName ()
+            + " PROCESS-"
+            + context.processID + ": Unknown class instance "
+            + Integer.toHexString (classID));
     }
 
 
