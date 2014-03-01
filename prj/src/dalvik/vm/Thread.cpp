@@ -1249,8 +1249,8 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
 	//gDvm.isShadow=false;
 	ALOG(LOG_DEBUG,"HAIYANG","IN %s, pid:%d tid:%d name:%s", __FUNCTION__,getpid(),self->threadId, dvmGetThreadName(self).c_str());
 	ALOG(LOG_DEBUG,"HAIYANG","setting self to isShadow: %s", gDvm.isShadow?"true":"false");
-	dvmSetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
-	dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
+	dvmSetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow );
+	dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow );
     int stackSize;
     if (reqStackSize == 0)
         stackSize = gDvm.stackSize;

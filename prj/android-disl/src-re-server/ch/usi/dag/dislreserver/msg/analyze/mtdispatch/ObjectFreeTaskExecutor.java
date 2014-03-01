@@ -30,30 +30,29 @@ class ObjectFreeTaskExecutor extends Thread {
 	private void invokeObjectFreeAnalysisHandlers(final ShadowAddressSpace shadowAddressSpace, final long objectFreeID) {
 
 		// TODO free events should be sent to analysis that sees the shadow object
-	    if (DiSLREServer.debug) {
 
-	        System.out.println (Thread.currentThread ().getName ()
+        // retrieve shadow object
+        final ShadowObject obj = shadowAddressSpace.getShadowObjectWithoutCreating (objectFreeID);
 
-	                       + ": PROCESS-"
+        if (obj != null) {
+            if (DiSLREServer.debug) {
+                System.out.println (Thread.currentThread ().getName ()
+                    + ": PROCESS-"
+                    + shadowAddressSpace.getContext ().pid () + " Free object "
+                    + Long.toHexString (objectFreeID));
+            }
 
-	                        + shadowAddressSpace.getContext ().pid () + " Free object "
+            // get all analysis objects
+            final Set <RemoteAnalysis> raSet = AnalysisResolver.getAllAnalyses ();
 
-	                        + Long.toHexString (objectFreeID));
+            // invoke object free
+            for (final RemoteAnalysis ra : raSet) {
+                ra.objectFree (shadowAddressSpace, obj);
+            }
 
-	                }
-		// retrieve shadow object
-		final ShadowObject obj = shadowAddressSpace.getShadowObject (objectFreeID);
-
-		// get all analysis objects
-		final Set<RemoteAnalysis> raSet = AnalysisResolver.getAllAnalyses();
-
-		// invoke object free
-        for (final RemoteAnalysis ra : raSet) {
-            ra.objectFree (shadowAddressSpace, obj);
+            // release shadow object
+            shadowAddressSpace.freeShadowObject (obj);
         }
-
-		// release shadow object
-		shadowAddressSpace.freeShadowObject(obj);
 	}
 
 

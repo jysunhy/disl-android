@@ -15,10 +15,7 @@ import ch.usi.dag.dislreserver.reqdispatch.RequestDispatcher;
 public abstract class DiSLREServer {
 
 	private static final String PROP_DEBUG = "debug";
-
-	//private static final boolean debug = Boolean.getBoolean (PROP_DEBUG);
-	public static final boolean debug = true;
-
+	public static final boolean debug = Boolean.getBoolean (PROP_DEBUG);
 
 	private static final String PROP_PORT = "dislreserver.port";
 	private static final int DEFAULT_PORT = 11218;
@@ -90,7 +87,6 @@ public abstract class DiSLREServer {
 				new BufferedOutputStream(sock.getOutputStream()));
 
 			REQUEST_LOOP: while (true) {
-
                 final int processID = is.readInt();
 				final byte requestNo = is.readByte();
 
@@ -98,7 +94,6 @@ public abstract class DiSLREServer {
 				if (RequestDispatcher.dispatch (processID, requestNo, is, os, debug)) {
 					break REQUEST_LOOP;
 				}
-
 			}
 
 		} catch (final IOException ioe) {

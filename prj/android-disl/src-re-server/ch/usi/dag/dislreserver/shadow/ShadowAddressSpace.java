@@ -175,6 +175,18 @@ public class ShadowAddressSpace {
     }
 
 
+    public ShadowObject getShadowObjectWithoutCreating (final long net_ref) {
+        final long objID = NetReferenceHelper.get_object_id (net_ref);
+
+        if (objID == 0) {
+            // reserved ID for null
+            return null;
+        }
+
+        return shadowObjects.get (objID);
+    }
+
+
     public void registerShadowObject (final ShadowObject newObj, final boolean debug) {
         if (newObj == null) {
             throw new DiSLREServerFatalException (
@@ -182,14 +194,11 @@ public class ShadowAddressSpace {
         }
 
         if (DiSLREServer.debug) {
+            System.out.println (Thread.currentThread ().getName ()
+                + ": PROCESS-" + context.processID + " Registering object "
+                + Long.toHexString (newObj.getNetRef ()));
+        }
 
-                        System.out.println (Thread.currentThread ().getName ()
-
-                            + ": PROCESS-" + context.processID + " Registering object "
-
-                            + Long.toHexString (newObj.getNetRef ()));
-
-                    }
         final long objID = newObj.getId ();
         final ShadowObject exist = shadowObjects.putIfAbsent (objID, newObj);
 

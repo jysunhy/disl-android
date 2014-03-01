@@ -201,7 +201,7 @@ void manuallyOpen
 void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
 	//remote.ConnectionClose();
-	   Socket *sock = new Socket();
+	   Socket *sock = new Socket(false);
 	   int pid = getpid();
 		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d %d", getpid(), pid);
 	   pid = htonl(pid);
@@ -210,7 +210,7 @@ void manuallyClose
 	   sock->Send(&tmp, 1);
 	   delete sock;
 	   sock = NULL;
-	   exit(0);
+	  // exit(0);
 }
 void analysisEnd
 (JNIEnv * jni_env, jclass this_class) {

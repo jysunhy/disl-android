@@ -13,6 +13,7 @@ public class ICCAnalysisStub {
 
 
     public static void onStartService (final int caller) {
+        System.out.println("STARTING SERVICE "+caller);
         AREDispatch.analysisStart (SS);
         AREDispatch.sendInt (caller);
         AREDispatch.analysisEnd ();
@@ -20,6 +21,7 @@ public class ICCAnalysisStub {
 
 
     public static void onScheduleCreateService (final int caller) {
+        System.out.println("ScheduleCreate SERVICE "+caller);
         AREDispatch.analysisStart (SCS);
         AREDispatch.sendInt (caller);
         AREDispatch.analysisEnd ();
@@ -27,6 +29,7 @@ public class ICCAnalysisStub {
 
 
     public static void actualCreateService () {
+        System.out.println("END SERVICE");
         AREDispatch.analysisStart (SC);
         AREDispatch.analysisEnd ();
     }

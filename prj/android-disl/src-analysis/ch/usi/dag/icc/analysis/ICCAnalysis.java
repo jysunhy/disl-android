@@ -42,16 +42,19 @@ public class ICCAnalysis extends RemoteAnalysis {
 
     public void onStartService (final int caller) {
         get (caller).startServiceReq.incrementAndGet ();
+        System.out.println("MARK: IN START SERVICE");
     }
 
 
     public void onScheduleCreateService (final int caller) {
         get (caller).createServiceReq.incrementAndGet ();
+        System.out.println("MARK: IN SCHEDULE SERVICE");
     }
 
 
     public void actualCreateService (final Context context) {
         get (context.pid ()).createServiceNumber.incrementAndGet ();
+        System.out.println("MARK: IN ACTUAL CREATE SERVICE");
     }
 
 
