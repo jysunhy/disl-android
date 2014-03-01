@@ -5,6 +5,7 @@ import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
+import ch.usi.dag.dislre.AREDispatch;
 import ch.usi.dag.icc.analysis.ICCAnalysisStub;
 
 import com.android.server.am.ProcessRecord;
@@ -19,6 +20,13 @@ public class DiSLClass {
         ICCAnalysisStub.onStartService (Binder.getCallingPid ());
     }
 
+
+    @Before (
+        marker = BodyMarker.class,
+        scope = "MainActivity.substraction")
+    public static void close () {
+        AREDispatch.manuallyClose();
+    }
 
     @Before (
         marker = BodyMarker.class,

@@ -21,7 +21,6 @@ import ch.usi.dag.dislreserver.msg.reganalysis.RegAnalysisHandler;
 import ch.usi.dag.dislreserver.msg.stringinfo.StringInfoHandler;
 import ch.usi.dag.dislreserver.msg.threadend.ThreadEndHandler;
 import ch.usi.dag.dislreserver.msg.threadinfo.ThreadInfoHandler;
-import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 
 public final class RequestDispatcher {
@@ -91,24 +90,24 @@ public final class RequestDispatcher {
 
 	//
 
-	public static boolean dispatch (final ShadowAddressSpace shadowAddressSpace,
-		final byte requestId, final DataInputStream is,
-		final DataOutputStream os, final boolean debug
-	) throws DiSLREServerException {
+    public static boolean dispatch (
+        final int pid, final byte requestId, final DataInputStream is,
+        final DataOutputStream os, final boolean debug
+    ) throws DiSLREServerException {
 		//
 		// Lookup the request handler and process the request using the handler.
 		// Signal to terminate the request loop after handling a close request.
 		//
 		final RequestHandler rh = __dispatchTable [requestId];
 		if (rh != null) {
-			if (debug) {
-				System.out.printf (
-					"DiSL-RE: dispatching request message (%d)(%d) to %s\n",
-					requestId, shadowAddressSpace.getContext ().pid (), rh.getClass ().getSimpleName ()
-				);
-			}
+            if (debug) {
+                System.out.printf (
+                    "DiSL-RE: dispatching request message (%d)(%d) to %s\n", pid,
+                    requestId, rh.getClass ().getSimpleName ()
+                    );
+            }
 
-			rh.handle (shadowAddressSpace, is, os, debug);
+            rh.handle (pid, is, os, debug);
 			return requestId == __REQUEST_ID_CLOSE__;
 
 		} else {

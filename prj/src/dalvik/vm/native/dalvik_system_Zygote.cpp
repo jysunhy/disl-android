@@ -415,14 +415,12 @@ static pid_t forkAndSpecializeCommon_2(const u4* args, bool isSystemServer)
     dvmDumpLoaderStats("zygote");
 
 	BeforeFork();
-	int parent = getpid();
-
     pid = fork();
+	onFork(pid);
 
     if (pid == 0) {
 		_mapPID(getpid(),niceName);
-	free(niceName);
-		onFork(parent);
+		free(niceName);
         int err;
         /* The child process */
 
@@ -607,12 +605,11 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
 
     dvmDumpLoaderStats("zygote");
 	BeforeFork();
-	int parent = getpid();
     pid = fork();
+	onFork(pid);
 
     if (pid == 0) {
 		_mapPID(getpid(),"system_server");
-		onFork(parent);
         int err;
         /* The child process */
 

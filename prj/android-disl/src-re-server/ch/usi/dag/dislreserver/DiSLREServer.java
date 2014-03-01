@@ -10,14 +10,15 @@ import java.net.Socket;
 
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.reqdispatch.RequestDispatcher;
-import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 
 public abstract class DiSLREServer {
 
 	private static final String PROP_DEBUG = "debug";
+
 	//private static final boolean debug = Boolean.getBoolean (PROP_DEBUG);
-	private static final boolean debug = true;
+	public static final boolean debug = true;
+
 
 	private static final String PROP_PORT = "dislreserver.port";
 	private static final int DEFAULT_PORT = 11218;
@@ -93,10 +94,8 @@ public abstract class DiSLREServer {
                 final int processID = is.readInt();
 				final byte requestNo = is.readByte();
 
-                final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpace (
-                    processID, sock.getInetAddress ());
-
-				if (RequestDispatcher.dispatch (shadowAddressSpace, requestNo, is, os, debug)) {
+                // TODO pass the inetaddress
+				if (RequestDispatcher.dispatch (processID, requestNo, is, os, debug)) {
 					break REQUEST_LOOP;
 				}
 

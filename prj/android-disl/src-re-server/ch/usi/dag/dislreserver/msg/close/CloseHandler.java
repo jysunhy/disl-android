@@ -12,26 +12,31 @@ import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 public final class CloseHandler implements RequestHandler {
 
-	@Override
+    @Override
     public void handle (
-		final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os, final boolean debug
-	) {
-	    if (ShadowAddressSpace.removeShadowAddressSpace (shadowAddressSpace)) {
-	        // call exit on all request handlers - waits for all uncompleted actions
-	        for (final RequestHandler handler : RequestDispatcher.getAllHandlers ()) {
-	            handler.exit ();
-	        }
+        final int pid, final DataInputStream is, final DataOutputStream os,
+        final boolean debug
+    ) {
+        final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpaceBlocked (pid);
 
-	        // invoke atExit on all analyses
-	        for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
-	            analysis.atExit (shadowAddressSpace);
-	        }
-	    }
-	}
+        if (ShadowAddressSpace.removeShadowAddressSpace (shadowAddressSpace)) {
+            // call exit on all request handlers - waits for all uncompleted
+            // actions
+            for (final RequestHandler handler : RequestDispatcher.getAllHandlers ()) {
+                handler.exit ();
+            }
 
-	@Override
+            // invoke atExit on all analyses
+            for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
+                analysis.atExit (shadowAddressSpace);
+            }
+        }
+    }
+
+
+    @Override
     public void exit () {
 
-	}
+    }
 
 }

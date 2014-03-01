@@ -1,13 +1,15 @@
 package ch.usi.dag.dislreserver.shadow;
 
-import java.net.InetAddress;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.objectweb.asm.Type;
 
+import ch.usi.dag.dislreserver.DiSLREServer;
 import ch.usi.dag.dislreserver.exception.DiSLREServerFatalException;
+import ch.usi.dag.dislreserver.msg.analyze.AnalysisResolver;
+import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
 
 
 public class ShadowAddressSpace {
@@ -15,19 +17,19 @@ public class ShadowAddressSpace {
     final static ShadowObject BOOTSTRAP_CLASSLOADER = new ShadowObject (
         null, 0, null);
 
-    final ConcurrentHashMap <ShadowObject, ConcurrentHashMap <String, byte []>> classLoaderMap;
+    private final ConcurrentHashMap <ShadowObject, ConcurrentHashMap <String, byte []>> classLoaderMap;
 
-    final ConcurrentHashMap <Long, ShadowObject> shadowObjects;
+    private final ConcurrentHashMap <Long, ShadowObject> shadowObjects;
 
-    final ConcurrentHashMap <Integer, ShadowClass> shadowClasses;
+    private final ConcurrentHashMap <Integer, ShadowClass> shadowClasses;
 
     final Context context;
 
     ShadowClass JAVA_LANG_CLASS;
 
 
-    public ShadowAddressSpace (final int processID, final InetAddress address) {
-        context = new Context (processID, address);
+    public ShadowAddressSpace (final int processID) {
+        context = new Context (processID, null);
 
         shadowObjects = new ConcurrentHashMap <> (10000000);
         classLoaderMap = new ConcurrentHashMap <> (10000);
@@ -39,8 +41,7 @@ public class ShadowAddressSpace {
 
 
     public ShadowAddressSpace onFork (final int childProcessID) {
-        final ShadowAddressSpace child = getShadowAddressSpace (
-            childProcessID, context.address);
+        final ShadowAddressSpace child = new ShadowAddressSpace (childProcessID);
 
         // clone shadowObjects
         for (final Long key : shadowObjects.keySet ()) {
@@ -48,26 +49,19 @@ public class ShadowAddressSpace {
                 key, (ShadowObject) (shadowObjects.get (key).clone ()));
         }
 
-
-     // clone shadowClasses
-        /*for (final Integer key : shadowClasses.keySet ()) {
-            final ShadowClass thisClass= shadowClasses.get (key);
-            try {
-                final ShadowClass clonedClass = (ShadowClass) child.getClonedShadowObject (thisClass);
-                child.shadowClasses.put (key, clonedClass);
-            } catch (final DiSLREServerFatalException e) {
-                System.err.println (key + " " + thisClass.getNetRef ());
-                System.err.println (getShadowObject (thisClass.getNetRef ()).getId ());
-                throw e;
-            }
-        }*/
-
         // clone shadowClasses
         for (final Integer key : shadowClasses.keySet ()) {
             final ShadowClass thisClass = shadowClasses.get (key);
             final ShadowClass clonedClass = (ShadowClass) child.getClonedShadowObject (thisClass);
-            if(clonedClass != null) {
-                child.shadowClasses.put (key, clonedClass);
+            child.shadowClasses.put (key, clonedClass);
+
+            if (DiSLREServer.debug) {
+                System.out.println (Thread.currentThread ().getName ()
+                    + ": PROCESS-"
+                    + context.processID + " Forking Shadow Class: "
+                    + clonedClass.getName () + " with net ref "
+                    + Long.toHexString (clonedClass.getNetRef ()) + " to PROCESS-"
+                    + childProcessID);
             }
         }
 
@@ -110,6 +104,17 @@ public class ShadowAddressSpace {
             }
         }
 
+        for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
+            if (analysis instanceof Forkable) {
+                ((Forkable) analysis).onFork (getContext (), childProcessID);
+            }
+        }
+
+        if (shadowAddressSpaces.putIfAbsent (childProcessID, child) != null) {
+            throw new DiSLREServerFatalException (
+                "Existing child ShadowAddressSpace");
+        }
+
         return child;
     }
 
@@ -145,9 +150,9 @@ public class ShadowAddressSpace {
         }
 
         if (NetReferenceHelper.isClassInstance (net_ref)) {
-            return null;
-            //haiyang
-            //throw new DiSLREServerFatalException ("Unknown class instance "+net_ref);
+            throw new DiSLREServerFatalException (Thread.currentThread ().getName ()
+                + ": Unknown class instance "
+                + Long.toHexString (net_ref));
         } else {
             // Only common shadow object will be generated here
             final ShadowClass klass = getShadowClass (net_ref);
@@ -176,6 +181,15 @@ public class ShadowAddressSpace {
                 "Attempting to register a null as a shadow object");
         }
 
+        if (DiSLREServer.debug) {
+
+                        System.out.println (Thread.currentThread ().getName ()
+
+                            + ": PROCESS-" + context.processID + " Registering object "
+
+                            + Long.toHexString (newObj.getNetRef ()));
+
+                    }
         final long objID = newObj.getId ();
         final ShadowObject exist = shadowObjects.putIfAbsent (objID, newObj);
 
@@ -230,6 +244,11 @@ public class ShadowAddressSpace {
         shadowObjects.remove (obj.getId ());
 
         if (NetReferenceHelper.isClassInstance (obj.getNetRef ())) {
+            if (DiSLREServer.debug) {
+                System.out.println (Thread.currentThread ().getName () + "PROCESS-"
+                    + context.processID + " Removing ShadowClass-"
+                    + Long.toHexString (obj.getNetRef ()));
+            }
             final int classID = NetReferenceHelper.get_class_id (obj.getNetRef ());
             shadowClasses.remove (classID);
         } else if (classLoaderMap.keySet ().contains (obj)) {
@@ -366,6 +385,12 @@ public class ShadowAddressSpace {
         final int classID = NetReferenceHelper.get_class_id (net_ref);
         final ShadowClass exist = shadowClasses.putIfAbsent (classID, klass);
 
+        if (DiSLREServer.debug) {
+            System.out.println (Thread.currentThread ().getName () + ": PROCESS-"
+                + context.processID + " Creating Shadow Class: "
+                + classSignature + " with net ref " + Long.toHexString (net_ref));
+        }
+
         if (exist == null) {
             registerShadowObject (klass, debug);
         } else if (!exist.equals (klass)) {
@@ -386,14 +411,28 @@ public class ShadowAddressSpace {
     private static final ConcurrentHashMap <Integer, ShadowAddressSpace> shadowAddressSpaces = new ConcurrentHashMap <> ();
 
 
-    public static ShadowAddressSpace getShadowAddressSpace (
-        final Integer processID, final InetAddress address) {
+    public static ShadowAddressSpace getShadowAddressSpace (final Integer pid) {
         ShadowAddressSpace shadowAddressSpace = null;
 
-        if ((shadowAddressSpace = shadowAddressSpaces.get (processID)) == null) {
-            shadowAddressSpaces.putIfAbsent (processID, new ShadowAddressSpace (
-                processID, address));
-            shadowAddressSpace = shadowAddressSpaces.get (processID);
+        if ((shadowAddressSpace = shadowAddressSpaces.get (pid)) == null) {
+            final ShadowAddressSpace temp = new ShadowAddressSpace (pid);
+
+            if ((shadowAddressSpace = shadowAddressSpaces.putIfAbsent (pid, temp)) == null) {
+                shadowAddressSpace = temp;
+            }
+        }
+
+        return shadowAddressSpace;
+    }
+
+
+    public static ShadowAddressSpace getShadowAddressSpaceBlocked (final Integer pid) {
+        ShadowAddressSpace shadowAddressSpace;
+
+        while ((shadowAddressSpace = shadowAddressSpaces.get (pid)) == null) {
+            try {
+                Thread.sleep (10);
+            } catch (final InterruptedException e) {}
         }
 
         return shadowAddressSpace;

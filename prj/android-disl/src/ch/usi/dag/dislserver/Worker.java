@@ -455,8 +455,8 @@ public class Worker extends Thread {
                                 +"com.android.inputmethod.latin;"
                                 +"com.android.phone;"
                                 +"com.android.settings;"
-                                +"android.process.acore;"*/
-                                /*+"com.android.smspush;"
+                                +"android.process.acore;"
+                                +"com.android.smspush;"
                                 +"com.android.provision;"
                                 +"com.android.launcher;"
                                 +"com.android.gallery3d;"

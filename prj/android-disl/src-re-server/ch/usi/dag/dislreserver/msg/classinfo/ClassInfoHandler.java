@@ -14,27 +14,23 @@ import ch.usi.dag.dislreserver.shadow.ShadowObject;
 public class ClassInfoHandler implements RequestHandler {
 
     @Override
-    public void handle (
-        final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os,
+    public void handle (final int pid, final DataInputStream is, final DataOutputStream os,
         final boolean debug)
     throws DiSLREServerException {
 
         try {
+            final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpace (pid);
             final long net_ref = is.readLong ();
             final String classSignature = is.readUTF ();
             final String classGenericStr = is.readUTF ();
-            System.out.println ("CLASS INFO "+ classSignature+" "+classGenericStr);
             final ShadowObject classLoader = shadowAddressSpace.getShadowObject (is.readLong ());
 
-            final ShadowClass superClass = (ShadowClass)shadowAddressSpace.getShadowObject (is.readLong ());
+            final ShadowClass superClass = (ShadowClass) shadowAddressSpace.getShadowObject (is.readLong ());
             shadowAddressSpace.createAndRegisterShadowClass (
                 net_ref, superClass, classLoader,
                 classSignature, classGenericStr, debug);
-
         } catch (final IOException e) {
-            //throw new DiSLREServerException (e);
-            //HAIYANG
-            (new DiSLREServerException (e)).printStackTrace ();
+            throw new DiSLREServerException (e);
         }
     }
 

@@ -3,29 +3,30 @@
 	<property file="build.properties" />
 	<property file="disl.version" />
 
-	<path id="buildpath">
-		<pathelement location="${bin}" />
-		<pathelement location="${asm.path}" />
-		<pathelement location="${android.path}" />
-		<pathelement location="${junit.core.path}" />
-		<pathelement location="${junit.hamcrest.path}" />
-		<pathelement location="${dex2jar.ir.lib}" />
-		<pathelement location="${dextools.lib}" />
-		<pathelement location="${dx.lib}" />
-		<pathelement location="${jasmin.lib}" />
-		<pathelement location="${commons.lite.lib}" />
-		<pathelement location="${dexreader.lib}" />
-		<pathelement location="${dextranslator.lib}" />
-		<pathelement location="${dexrename.lib}" />
-	</path>
+        <path id="buildpath">
+                <pathelement location="${bin}" />
+                <pathelement location="${asm.path}" />
+                <pathelement location="${android.path}" />
+                <pathelement location="${junit.core.path}" />
+                <pathelement location="${junit.hamcrest.path}" />
+                <pathelement location="${dex2jar.ir.lib}" />
+                <pathelement location="${dextools.lib}" />
+                <pathelement location="${dx.lib}" />
+                <pathelement location="${jasmin.lib}" />
+                <pathelement location="${commons.lite.lib}" />
+                <pathelement location="${dexreader.lib}" />
+                <pathelement location="${dextranslator.lib}" />
+                <pathelement location="${dexrename.lib}" />
+        </path>
+ 
+        <path id="classpath">
+                <pathelement location="${bin}" />
+                <pathelement location="${asm.path}" />
+                <pathelement location="${android.path}" />
+                <pathelement location="${junit.core.path}" />
+                <pathelement location="${junit.hamcrest.path}" />
+        </path>
 
-	<path id="classpath">
-		<pathelement location="${bin}" />
-		<pathelement location="${asm.path}" />
-		<pathelement location="${android.path}" />
-		<pathelement location="${junit.core.path}" />
-		<pathelement location="${junit.hamcrest.path}" />
-	</path>
 
 	<!-- it automatically compiles all other necessary stuff :) -->
 	<target name="compile-tlvinserter">
@@ -88,7 +89,19 @@
 		<exec executable="make" dir="${src.reagent}" />
 	</target>
 
-	<target name="compile" depends="compile-disl,compile-agent-java,compile-agent-c,compile-reserver,compile-redispatch" />
+	<target name="compile-test" depends="compile-disl,compile-reserver,compile-redispatch">
+		<javac srcdir="${src.test}" destdir="bin" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+		</javac>
+	</target>
+
+	<target name="compile-analysis" depends="compile-disl,compile-reserver,compile-redispatch">
+		<javac srcdir="${src.analysis}" destdir="bin" debug="true" includeAntRuntime="false">
+			<classpath refid="buildpath" />
+		</javac>
+	</target>
+
+	<target name="compile" depends="compile-disl,compile-agent-java,compile-agent-c,compile-test,compile-reserver,compile-redispatch" />
 
 	<target name="package-dislserver" depends="compile-disl">
 		<jar basedir="${bin}" destfile="${build}/disl-server.jar" includes="ch/usi/dag/disl/**,ch/usi/dag/dislserver/**" excludes="ch/usi/dag/disl/test/**,ch/usi/dag/disl/testtools/**">
@@ -142,6 +155,14 @@
 		</jar>
 	</target>
 
+	<target name="package-analysis" depends="compile-analysis">
+		<jar basedir="${bin}" destfile="${build}/disl-analysis.jar" includes="ch/usi/dag/bc/**">
+			<manifest>
+				<attribute name="DiSL-Classes" value="ch.usi.dag.bc.disl.DiSLClass" />
+			</manifest>
+		</jar>
+	</target>
+
 	<target name="package" depends="package-dislserver,package-dislagent-java,package-reserver,package-redispatch,compile-agent-c,compile-reagent" />
 
 	<target name="eclipse-agent" description="creates simple agent jar file for eclipse">
@@ -163,7 +184,7 @@
 		<copy file="${asm.path}" tofile="${build}/${asm.lib}" />
 	</target>
 
-	<target name="prepare-all" depends="package,eclipse,copy-asm" />
+	<target name="prepare-all" depends="package,eclipse,compile-test,copy-asm" />
 
 	<target name="clean">
 		<delete dir="${bin}" />
@@ -193,7 +214,8 @@
 
 	<property name="dist.executables" value="
 		**/find.sh,
-		**/find.bat" />
+		**/find.bat,
+		**/disl.py" />
 
 	<property name="dist.excludes" value="
 		${bin}/**,

@@ -13,10 +13,11 @@ import ch.usi.dag.dislreserver.shadow.ShadowString;
 public class StringInfoHandler implements RequestHandler {
 
 	@Override
-    public void handle(final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os, final boolean debug)
+    public void handle(final int pid, final DataInputStream is, final DataOutputStream os, final boolean debug)
 			throws DiSLREServerException {
 
 		try {
+            final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpace (pid);
 			final long net_ref = is.readLong();
 			final String str = is.readUTF();
 

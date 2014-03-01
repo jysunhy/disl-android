@@ -9,36 +9,44 @@ import ch.usi.dag.dislreserver.msg.analyze.AnalysisHandler;
 import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
 import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
+
 public class ThreadEndHandler implements RequestHandler {
 
-	final AnalysisHandler analysisHandler;
+    final AnalysisHandler analysisHandler;
 
-	public ThreadEndHandler(final AnalysisHandler anlHndl) {
-		analysisHandler = anlHndl;
-	}
 
-	@Override
-    public void handle(final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os, final boolean debug)
-			throws DiSLREServerException {
+    public ThreadEndHandler (final AnalysisHandler anlHndl) {
+        analysisHandler = anlHndl;
+    }
 
-		try {
 
-			final long threadId = is.readLong();
+    @Override
+    public void handle (
+        final int pid, final DataInputStream is, final DataOutputStream os,
+        final boolean debug)
+    throws DiSLREServerException {
 
-			// announce thread end to the analysis handler
-			analysisHandler.threadEnded(shadowAddressSpace, threadId);
+        try {
 
-		} catch (final IOException e) {
-			throw new DiSLREServerException(e);
-		}
-	}
+            final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpace (pid);
+            final long threadId = is.readLong ();
 
-	public void awaitProcessing() {
+            // announce thread end to the analysis handler
+            analysisHandler.threadEnded (shadowAddressSpace, threadId);
 
-	}
+        } catch (final IOException e) {
+            throw new DiSLREServerException (e);
+        }
+    }
 
-	@Override
-    public void exit() {
 
-	}
+    public void awaitProcessing () {
+
+    }
+
+
+    @Override
+    public void exit () {
+
+    }
 }

@@ -111,12 +111,12 @@ class ReProtocol{
 			return true;
 		}
 		
-		bool OnForkEvent(int parent){
+		bool OnForkEvent(int para){
 			Buffer tmp(20);
 			
-			tmp.EnqueueJint(parent);
-			tmp.EnqueueJbyte(MSG_FORK);
 			tmp.EnqueueJint(getpid());
+			tmp.EnqueueJbyte(MSG_FORK);
+			tmp.EnqueueJint(para);
 
 			if(MP)
 				Send(tmp.q_data, tmp.q_occupied);

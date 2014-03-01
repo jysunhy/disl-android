@@ -15,7 +15,6 @@ static bool isZygote = true;
 
 //static Socket *sock = NULL;
 
-static Buffer* zygote_buff;
 //static pthread_t *send_thread;
 //static pthread_t send_zygote_thread;
 
@@ -24,6 +23,7 @@ static volatile jint ot_class_id = 1;
 static volatile jlong ot_object_id = 1;
 static volatile jshort method_id = 1;
 
+	Socket *zsock = NULL;
 
 //bool gl_bypass=true;
 static bool isDecided = false;
@@ -36,6 +36,7 @@ static bool isDecided = false;
 // ******************* REDispatch methods *******************
 
 void _mapPID(int pid, const char* pname){
+	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","MAPPID BYPASS PID: %d NAME: %s", pid, pname);
 	Socket *tmpsock = new Socket(false);
 	while(!tmpsock->Connect()){
 		LOGDEBUG("Cannot connect through UDS in %d", getpid());
@@ -148,11 +149,21 @@ jshort registerMethod
 }
 
 void onFork
-(int parent) {
-	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","ONFORK happens pid-cid: %d-%d",parent, getpid());
-	remote.OnForkEvent(parent);
-
+(int para) {
+	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","ONFORK happens currentid-paraid: %d-%d",getpid(),para);
+	remote.OnForkEvent(para);
+	if(para != 0){
+		//the parent
+		Buffer* zygote_buff;
+		zygote_buff = remote.ReturnAndResetBuffer();
+		ALOG(LOG_DEBUG,"SHADOWDEBUG","BEFORE FORK, BUFF OF ZYGOTE: %d", zygote_buff->q_occupied);
+		zsock->Send(zygote_buff->q_data,zygote_buff->q_occupied);
+		if(zygote_buff)
+			delete zygote_buff;
+		zygote_buff=NULL;
+	}
 }
+
 void analysisStart__S
 (JNIEnv * jni_env, jclass this_class, jshort analysis_method_id) {
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis start for method %d, tid:%d", (int)analysis_method_id,dvmThreadSelf()->threadId);
@@ -601,12 +612,13 @@ static void * send_thread_loop(void * obj) {
 	return NULL;
 }
 jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
+	pthread_mutex_init(&gl_mtx, NULL);
 	isZygote = true;
 	UnionJNIEnvToVoid uenv;
 	uenv.venv = NULL;
 	jint result = -1;
 	JNIEnv *env = NULL;
-	zygote_buff = NULL;
+	//zygote_buff = NULL;
 
 	//gDvm.shadowHook = &testShadowHook;
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN ONLOAD, Zygote PID: %d", getpid());
@@ -614,15 +626,21 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 	if(gDvm.zygote){
 		_mapPID(getpid(),"zygote");
 	}
+	zsock = new Socket();
+	while(!zsock->Connect()){
+		LOGDEBUG("Zygote Cannot connect through UDS");
+		sleep(2);
+	}
+	int signal = -3;
+	zsock->Send((char*)&signal,sizeof(int));
 	//OpenConnection();
 	gDvm.newObjHook = &objNewHook;
 	gDvm.freeObjHook = &objFreeHook;
 	gDvm.threadEndHook = &threadEndHook;
 	gDvm.vmEndHook = &vmEndHook;
 	//gDvm.classInitHook = &classInitHook;
-	gDvm.classfileLoadHook = &classfileLoadHook;
+	//gDvm.classfileLoadHook = &classfileLoadHook;
 
-	pthread_mutex_init(&gl_mtx, NULL);
 
 	if (vm->GetEnv(&uenv.venv, JNI_VERSION_1_4) != JNI_OK){
 		goto bail;
@@ -648,24 +666,13 @@ bail:
 }
 
 void BeforeFork(){
-	pthread_mutex_lock(&gl_mtx);
+	Buffer* zygote_buff;
 	zygote_buff = remote.ReturnAndResetBuffer();
 	ALOG(LOG_DEBUG,"SHADOWDEBUG","BEFORE FORK, BUFF OF ZYGOTE: %d", zygote_buff->q_occupied);
-
-	Socket *zsock = new Socket();
-	while(!zsock->Connect()){
-		LOGDEBUG("Zygote Cannot connect through UDS");
-		sleep(2);
-	}
-	int signal = -3;
-	zsock->Send((char*)&signal,sizeof(int));
-
 	zsock->Send(zygote_buff->q_data,zygote_buff->q_occupied);
-
 	if(zygote_buff)
 		delete zygote_buff;
 	zygote_buff=NULL;
-	pthread_mutex_unlock(&gl_mtx);
 }
 
 jint ShadowLib_SystemServer_OnLoad(JavaVM* vm, void* reserved){

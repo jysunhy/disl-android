@@ -18,8 +18,9 @@ public class ObjectFreeHandler implements RequestHandler {
 	}
 
 	@Override
-    public void handle(final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os, final boolean debug)
+    public void handle(final int pid, final DataInputStream is, final DataOutputStream os, final boolean debug)
 			throws DiSLREServerException {
+
 
 		try {
 
@@ -34,7 +35,8 @@ public class ObjectFreeHandler implements RequestHandler {
 				objFreeIDs[i] = netref;
 			}
 
-			analysisHandler.objectsFreed(shadowAddressSpace, objFreeIDs);
+            analysisHandler.objectsFreed (
+                ShadowAddressSpace.getShadowAddressSpaceBlocked (pid), objFreeIDs);
 
 		} catch (final IOException e) {
 			throw new DiSLREServerException(e);

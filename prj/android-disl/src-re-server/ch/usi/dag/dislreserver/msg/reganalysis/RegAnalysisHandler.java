@@ -7,12 +7,11 @@ import java.io.IOException;
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.msg.analyze.AnalysisResolver;
 import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
-import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 public final class RegAnalysisHandler implements RequestHandler {
 
 	@Override
-    public void handle(final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os,
+    public void handle(final int pid, final DataInputStream is, final DataOutputStream os,
 			final boolean debug) throws DiSLREServerException {
 		try {
 			final short methodId = is.readShort();

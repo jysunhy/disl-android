@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import ch.usi.dag.dislreserver.DiSLREServer;
 import ch.usi.dag.dislreserver.exception.DiSLREServerFatalException;
 import ch.usi.dag.dislreserver.msg.analyze.AnalysisResolver;
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
@@ -29,9 +30,17 @@ class ObjectFreeTaskExecutor extends Thread {
 	private void invokeObjectFreeAnalysisHandlers(final ShadowAddressSpace shadowAddressSpace, final long objectFreeID) {
 
 		// TODO free events should be sent to analysis that sees the shadow object
+	    if (DiSLREServer.debug) {
 
-	    //System.out.println("Object Freeing "+objectFreeID);
+	        System.out.println (Thread.currentThread ().getName ()
 
+	                       + ": PROCESS-"
+
+	                        + shadowAddressSpace.getContext ().pid () + " Free object "
+
+	                        + Long.toHexString (objectFreeID));
+
+	                }
 		// retrieve shadow object
 		final ShadowObject obj = shadowAddressSpace.getShadowObject (objectFreeID);
 

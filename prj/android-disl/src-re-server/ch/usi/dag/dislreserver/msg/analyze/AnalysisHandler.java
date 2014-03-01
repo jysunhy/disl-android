@@ -27,10 +27,10 @@ public final class AnalysisHandler implements RequestHandler {
 
     @Override
     public void handle (
-        final ShadowAddressSpace shadowAddressSpace, final DataInputStream is,
+        final int pid, final DataInputStream is,
         final DataOutputStream os, final boolean debug
     ) throws DiSLREServerException {
-	    // TODO (YZ) pass processID to remote analysis
+        final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpace (pid);
 		try {
 			// get net reference for the thread
 			final long orderingID = is.readLong ();

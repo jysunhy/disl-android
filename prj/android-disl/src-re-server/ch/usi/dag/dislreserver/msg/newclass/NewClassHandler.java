@@ -12,10 +12,11 @@ import ch.usi.dag.dislreserver.shadow.ShadowObject;
 public class NewClassHandler implements RequestHandler {
 
 	@Override
-    public void handle(final ShadowAddressSpace shadowAddressSpace, final DataInputStream is, final DataOutputStream os, final boolean debug)
+    public void handle(final int pid, final DataInputStream is, final DataOutputStream os, final boolean debug)
 			throws DiSLREServerException {
 
-		try {
+        try {
+            final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpace (pid);
 			final String className = is.readUTF();
 			final long oid = is.readLong();
 
@@ -25,7 +26,6 @@ public class NewClassHandler implements RequestHandler {
 			is.readFully(classCode);
 
 			shadowAddressSpace.loadBytecode(classLoader, className, classCode, debug);
-			System.out.println("NEW CLASS "+className);
 		} catch (final IOException e) {
 			throw new DiSLREServerException(e);
 		}
