@@ -1,9 +1,12 @@
 package ch.usi.dag.bc.analysis;
 
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.dislreserver.shadow.Replicable;
 import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
 import ch.usi.dag.dislreserver.shadow.ShadowString;
@@ -11,33 +14,54 @@ import ch.usi.dag.dislreserver.shadow.ShadowString;
 
 public class BCAnalysis extends RemoteAnalysis {
 
-    ConcurrentHashMap <ShadowString, ShadowString> coverages = new ConcurrentHashMap <> ();
+    public static class ClassStatistic implements Replicable {
 
+        int covered;
 
-    public static class ClassStatistic {
-        public int covered;
-
-        public int total;
+        final int total;
 
 
         public ClassStatistic (final int total) {
             this.total = total;
             this.covered = 0;
         }
+
+
+        @Override
+        public Replicable replicate (final ShadowAddressSpace shadowAddressSpace) {
+            return new ClassStatistic (total);
+        }
     }
 
 
-    public static class MethodStatistic {
+    public static class MethodStatistic implements Replicable {
 
-        public ShadowString className;
+        ShadowString className;
 
-        public boolean [] coverage;
+        boolean [] coverage;
 
 
         public MethodStatistic (final ShadowString className, final int local) {
             this.className = className;
             this.coverage = new boolean [local];
         }
+
+
+        private MethodStatistic (
+            final ShadowString className, final boolean [] coverage) {
+            this.className = className;
+            this.coverage = Arrays.copyOf (coverage, coverage.length);
+        }
+
+
+        @Override
+        public Replicable replicate (final ShadowAddressSpace shadowAddressSpace) {
+            return new MethodStatistic (
+                (ShadowString) shadowAddressSpace.getClonedShadowObject (className),
+                coverage);
+
+        }
+
     }
 
 
@@ -45,18 +69,20 @@ public class BCAnalysis extends RemoteAnalysis {
         final ShadowString className, final ShadowString methodID, final int total,
         final int local) {
         if (methodID.getState () == null) {
-            className.setStateIfAbsent (new ClassStatistic (total));
-            methodID.setStateIfAbsent (new boolean [local]);
-            coverages.putIfAbsent (methodID, className);
+            if (className.getState () == null) {
+                className.setStateIfAbsent (new ClassStatistic (total));
+            }
+
+            methodID.setStateIfAbsent (new MethodStatistic (className, local));
         }
     }
 
 
     public void commitBranch (final ShadowString methodID, final int index) {
-        boolean [] status;
+        MethodStatistic status;
 
-        if ((status = methodID.getState (boolean [].class)) != null) {
-            status [index] = true;
+        if ((status = methodID.getState (MethodStatistic.class)) != null) {
+            status.coverage [index] = true;
         }
     }
 
@@ -64,32 +90,37 @@ public class BCAnalysis extends RemoteAnalysis {
     @Override
     public void atExit (final ShadowAddressSpace shadowAddressSpace) {
         final HashSet <ShadowString> classes = new HashSet <> ();
+        final Iterator <Entry <Long, ShadowObject>> iter = shadowAddressSpace.getShadowObjectIterator ();
 
-        for (final ShadowString method : coverages.keySet ()) {
-            final boolean [] coverage = method.getState (boolean [].class);
+        while (iter.hasNext ()) {
 
-            if (coverage == null) {
+            final ShadowObject object = iter.next ().getValue ();
+            final Object state = object.getState ();
+
+            if (state == null) {
                 continue;
-            }
+            } else if (state instanceof ClassStatistic) {
+                classes.add ((ShadowString) object);
+            } else if (state instanceof MethodStatistic) {
+                final MethodStatistic methodStatistic = (MethodStatistic) state;
 
-            int counter = 0;
+                int counter = 0;
 
-            for (final boolean element : coverage) {
-                if (element) {
-                    counter++;
+                for (final boolean element : methodStatistic.coverage) {
+                    if (element) {
+                        counter++;
+                    }
                 }
+
+                methodStatistic.className.getState (ClassStatistic.class).covered += counter;
             }
-
-            final ShadowString klass = coverages.get (method);
-            classes.add (klass);
-
-            klass.getState (ClassStatistic.class).covered += counter;
         }
 
         for (final ShadowString klass : classes) {
             final ClassStatistic statistic = klass.getState (ClassStatistic.class);
 
-            System.out.println ("Result:"+klass.toString ()
+            System.out.println ("PROCESS-"
+                + shadowAddressSpace.getContext ().pid () + ": " + klass.toString ()
                 + " " + statistic.total + " " + statistic.covered);
         }
     }

@@ -5,7 +5,6 @@ import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
-import ch.usi.dag.dislre.AREDispatch;
 import ch.usi.dag.icc.analysis.ICCAnalysisStub;
 
 import com.android.server.am.ProcessRecord;
@@ -23,13 +22,6 @@ public class DiSLClass {
 
     @Before (
         marker = BodyMarker.class,
-        scope = "MainActivity.substraction")
-    public static void close () {
-        AREDispatch.manuallyClose();
-    }
-
-    @Before (
-        marker = BodyMarker.class,
         scope = "com.android.server.am.ActiveServices.realStartServiceLocked")
     public static void onScheduleCreateService (final DynamicContext dc) {
         ICCAnalysisStub.onScheduleCreateService (dc.getMethodArgumentValue (1, ProcessRecord.class).pid);
@@ -41,4 +33,13 @@ public class DiSLClass {
         ICCAnalysisStub.actualCreateService ();
     }
 
+   /* @Before (marker = BodyMarker.class, scope = "MainActivity.substraction")
+    public static void onSystemReady () {
+        ICCAnalysisStub.onSystemReady ();
+    }*/
+
+    @Before (marker = BodyMarker.class, scope = "LauncherApplication.onCreate")
+    public static void onSystemReady () {
+        ICCAnalysisStub.onSystemReady ();
+    }
 }

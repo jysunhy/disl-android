@@ -245,6 +245,7 @@ int main(int argc, char* const argv[])
     for (cp = slashClass; *cp != '\0'; cp++)
         if (*cp == '.')
             *cp = '/';
+    fprintf(stdout, "Dalvik VM FIND class '%s'\n", slashClass);
 
     startClass = env->FindClass(slashClass);
     if (startClass == NULL) {

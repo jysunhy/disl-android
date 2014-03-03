@@ -769,9 +769,11 @@ bool dvmPrepMainThread()
      */
     dvmSetFieldObject(threadObj, gDvm.offJavaLangThread_vmThread,
         vmThreadObj);
-	dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, true);
+	//dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, true);
 
     thread->threadObj = threadObj;
+	//ALOG(LOG_DEBUG,"HAIYANG","SETTING main thread to false");
+	//dvmSetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass, false);
 
     /*
      * Set the "context class loader" field in the system class loader.
@@ -1247,9 +1249,9 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
 
     Thread* self = dvmThreadSelf();
 	//gDvm.isShadow=false;
-	ALOG(LOG_DEBUG,"HAIYANG","IN %s, pid:%d tid:%d name:%s", __FUNCTION__,getpid(),self->threadId, dvmGetThreadName(self).c_str());
-	ALOG(LOG_DEBUG,"HAIYANG","setting self to isShadow: %s", gDvm.isShadow?"true":"false");
-	dvmSetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow );
+	ALOG(LOG_DEBUG,"HAIYANG","IN %s, pid:%d tid:%d name:%s, isShadow:%s, self isDaemon:%s, new isDaemon:%s", __FUNCTION__,getpid(),self->threadId, dvmGetThreadName(self).c_str(), gDvm.isShadow?"true":"false", dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon)?"true":"false", dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_daemon)?"true":"false");
+	//ALOG(LOG_DEBUG,"HAIYANG","setting self to isShadow: %s", gDvm.isShadow?"true":"false");
+	dvmSetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow ||dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon));
 	dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow );
     int stackSize;
     if (reqStackSize == 0)
@@ -1290,6 +1292,8 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
      * because it's handy and we're going to need to grab it again soon
      * anyway.
      */
+
+	ALOG(LOG_DEBUG,"DEADLOCK", "LOCK THREAD LIST");
     dvmLockThreadList(self);
 
     if (dvmGetFieldObject(threadObj, gDvm.offJavaLangThread_vmThread) != NULL) {
@@ -1314,16 +1318,15 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
 	
 	
 	//dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
-	bool tmp = dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass);
-	dvmDumpThread(newThread,false);
-	if(tmp){
-		ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is true in %d:%d", __FUNCTION__,getpid(),newThread->threadId);
-	}else{
-		ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is false in %d:%d", __FUNCTION__,getpid(),newThread->threadId);
-	}
-	if(dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass) != gDvm.isShadow){
-		ALOG(LOG_DEBUG,"HAIYANG","IN %s, set field bypass failed", __FUNCTION__);
-	}
+	//bool tmp = dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass);
+	//if(tmp){
+	//	ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is true in %d:%d", __FUNCTION__,getpid(),newThread->threadId);
+	//}else{
+	//	ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is false in %d:%d", __FUNCTION__,getpid(),newThread->threadId);
+	//}
+	//if(dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass) != gDvm.isShadow){
+	//	ALOG(LOG_DEBUG,"HAIYANG","IN %s, set field bypass failed", __FUNCTION__);
+	//}
 
     /*
      * Thread creation might take a while, so release the lock.
@@ -1445,9 +1448,14 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
     /* Add any existing global modes to the interpBreak control */
     dvmInitializeInterpBreak(newThread);
 
-    if (!dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_daemon))
+    if (!dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_daemon)) {
         gDvm.nonDaemonThreadCount++;        // guarded by thread list lock
-
+	}else{
+		dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, true);
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s, SETTING BYPASS TO TREE IN DAEMON", __FUNCTION__);
+	}
+	dvmDumpThread(newThread,false);
+	dvmDumpThread(self,false);
     dvmUnlockThreadList();
 
     /* change status back to RUNNING, self-suspending if necessary */

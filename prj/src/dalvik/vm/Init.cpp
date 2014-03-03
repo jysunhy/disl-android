@@ -1363,6 +1363,7 @@ std::string dvmStartup(int argc, const char* const argv[],
     if (!dvmPrepMainThread()) {
         return "dvmPrepMainThread failed";
     }
+	ALOG(LOG_DEBUG,"HAIYANG","AFTER dvmPrepMainThread");
 
     /*
      * Make sure we haven't accumulated any tracked references.  The main
@@ -1379,9 +1380,11 @@ std::string dvmStartup(int argc, const char* const argv[],
         return "dvmDebuggerStartup failed";
     }
 
+	ALOG(LOG_INFO, "HAIYANG", "BEFORE GC DAEMONS");
     if (!dvmGcStartupClasses()) {
         return "dvmGcStartupClasses failed";
     }
+	ALOG(LOG_INFO, "HAIYANG", "AFTER GC DAEMONS");
 
     /*
      * Init for either zygote mode or non-zygote mode.  The key difference

@@ -681,7 +681,7 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
         thread->systemTid = dvmGetSysThreadId();
 		bool bypass = dvmGetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass);
 		ALOG(LOG_DEBUG,"HAIYANG","IN %s, pid:%d tid:%d name:%s, bypass: %s", __FUNCTION__,getpid(), thread->threadId, dvmGetThreadName(thread).c_str(), bypass?"true":"false");
-		dvmSetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass, true);
+		//dvmSetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass, true);
 
         /* configure additional debug options */
         enableDebugFeatures(debugFlags);

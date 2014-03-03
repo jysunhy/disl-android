@@ -95,7 +95,7 @@ public class ShadowAddressSpace {
 
             if (state != null) {
                 if (state instanceof Replicable) {
-                    ((Replicable) state).replicate ();
+                    value.setState (((Replicable) state).replicate (child));
 
                 } else {
                     throw new DiSLREServerFatalException (
@@ -124,7 +124,7 @@ public class ShadowAddressSpace {
     }
 
 
-    ShadowObject getClonedShadowObject (final ShadowObject shadowObject) {
+    public ShadowObject getClonedShadowObject (final ShadowObject shadowObject) {
         if (shadowObject == null) {
             return null;
         }

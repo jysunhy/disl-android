@@ -11,9 +11,10 @@ public class ICCAnalysisStub {
 
     public static short SC = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.actualCreateService");
 
+    public static short SR = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.onSystemReady");
+
 
     public static void onStartService (final int caller) {
-        System.out.println("STARTING SERVICE "+caller);
         AREDispatch.analysisStart (SS);
         AREDispatch.sendInt (caller);
         AREDispatch.analysisEnd ();
@@ -21,7 +22,6 @@ public class ICCAnalysisStub {
 
 
     public static void onScheduleCreateService (final int caller) {
-        System.out.println("ScheduleCreate SERVICE "+caller);
         AREDispatch.analysisStart (SCS);
         AREDispatch.sendInt (caller);
         AREDispatch.analysisEnd ();
@@ -29,8 +29,13 @@ public class ICCAnalysisStub {
 
 
     public static void actualCreateService () {
-        System.out.println("END SERVICE");
         AREDispatch.analysisStart (SC);
+        AREDispatch.analysisEnd ();
+    }
+
+
+    public static void onSystemReady () {
+        AREDispatch.analysisStart (SR);
         AREDispatch.analysisEnd ();
     }
 

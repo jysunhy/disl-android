@@ -1,7 +1,6 @@
 package ch.usi.dag.icc.analysis;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
@@ -25,8 +24,6 @@ public class ICCAnalysis extends RemoteAnalysis {
 
     ConcurrentHashMap <Integer, ApplicationStatus> applicationsStatus = new ConcurrentHashMap <> ();
 
-    ConcurrentSkipListSet <ShadowObject> callers = new ConcurrentSkipListSet <> ();
-
 
     private ApplicationStatus get (final Integer caller) {
         ApplicationStatus status;
@@ -42,33 +39,36 @@ public class ICCAnalysis extends RemoteAnalysis {
 
     public void onStartService (final int caller) {
         get (caller).startServiceReq.incrementAndGet ();
-        System.out.println("MARK: IN START SERVICE");
     }
 
 
     public void onScheduleCreateService (final int caller) {
         get (caller).createServiceReq.incrementAndGet ();
-        System.out.println("MARK: IN SCHEDULE SERVICE");
     }
 
 
     public void actualCreateService (final Context context) {
         get (context.pid ()).createServiceNumber.incrementAndGet ();
-        System.out.println("MARK: IN ACTUAL CREATE SERVICE");
+    }
+
+
+    public void onSystemReady () {
+        for (final int pid : applicationsStatus.keySet ()) {
+            final ApplicationStatus status = applicationsStatus.get (pid);
+
+            System.out.println ("PROCESS-" + pid);
+            System.out.println ("# of startService request sent to system_server: "
+                + status.startServiceReq.get ());
+            System.out.println ("# of createService request received from system_server: "
+                + status.createServiceReq.get ());
+            System.out.println ("# of service created in this process: "
+                + status.createServiceNumber.get ());
+        }
     }
 
 
     @Override
     public void atExit (final ShadowAddressSpace shadowAddressSpace) {
-        final int pid = shadowAddressSpace.getContext ().pid ();
-        final ApplicationStatus status = applicationsStatus.get (shadowAddressSpace.getContext ().pid ());
-        System.out.println ("PROCESS-" + pid);
-        System.out.println ("# of startService request sent to system_server: "
-            + status.startServiceReq.get ());
-        System.out.println ("# of createService request received from system_server: "
-            + status.createServiceReq.get ());
-        System.out.println ("# of service created in this process: "
-            + status.createServiceNumber.get ());
     }
 
 

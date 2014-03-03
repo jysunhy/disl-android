@@ -9,6 +9,7 @@ import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
 import ch.usi.dag.disl.marker.BytecodeMarker;
 import ch.usi.dag.disl.staticcontext.MethodStaticContext;
+import ch.usi.dag.dislre.AREDispatch;
 import ch.usi.dag.fia.observe.ImmutabilityAnalysisRE;
 
 public class DiSLClass {
@@ -16,13 +17,16 @@ public class DiSLClass {
     /** CONSTRUCTORS *************************************************************/
 
     @Before(marker = BodyMarker.class, guard = ConstructorGuard.class)
-    public static void beforeConstructor(final DynamicContext dc) {
+    public static void beforeConstructor(final MethodStaticContext sc, final DynamicContext dc) {
+
         ImmutabilityAnalysisRE.constructorStart(dc.getThis());
     }
 
     @After(marker = BodyMarker.class, guard = ConstructorGuard.class)
-    public static void afterConstructor() {
+    public static void afterConstructor(final MethodStaticContext sc) {
+
     	ImmutabilityAnalysisRE.constructorEnd();
+
     }
 
     public static class ConstructorGuard {
@@ -38,6 +42,7 @@ public class DiSLClass {
     @Before(marker=BytecodeMarker.class, args = "getfield")
     public static void beforeFieldRead(final FieldAccessStaticContext sc, final DynamicContext dc, final ClassContext cc) {
 
+        AREDispatch.NativeLog (cc.asClass(sc.getOwner())+ sc.thisMethodFullName());
     	final Object object = dc.getStackValue(0, Object.class);
 
     	if(object != null) {
@@ -47,7 +52,7 @@ public class DiSLClass {
 
     @Before(marker = BytecodeMarker.class, args = "putfield")
     public static void beforeFieldWrite(final FieldAccessStaticContext sc, final DynamicContext dc, final ClassContext cc) {
-
+        AREDispatch.NativeLog (cc.asClass(sc.getOwner())+ sc.thisMethodFullName());
     	final Object object = dc.getStackValue(1, Object.class);
 
         if(object != null) {
@@ -64,7 +69,7 @@ public class DiSLClass {
      * created instances are passed to the runtime <em>prior</em> to initialization.
      */
     @AfterReturning(marker = BytecodeMarker.class, args = "new")
-    public static void objectAllocated(final DynamicContext dc, final AllocationSiteStaticContext sc, final MethodStaticContext msc) {
+    public static void objectAllocated(final ClassContext cc, final DynamicContext dc, final AllocationSiteStaticContext sc, final MethodStaticContext msc) {
         ImmutabilityAnalysisRE.onObjectAllocation(dc.getStackValue(0, Object.class), sc.getAllocationSite());
     }
 
@@ -79,6 +84,7 @@ public class DiSLClass {
     @AfterReturning(marker = BodyMarker.class,
             scope = "java.lang.Object java.lang.reflect.Constructor.newInstance(java.lang.Object[])")
     public static void objectAllocatedThroughReflection(final DynamicContext dc, final AllocationSiteStaticContext sc) {
+        //AREDispatch.NativeLog (sc.thisMethodFullName() +"\t"+ sc.thisMethodDescriptor());
         ImmutabilityAnalysisRE.onObjectAllocation(dc.getStackValue(0, Object.class), sc.getReflectiveAllocationSite());
     }
 

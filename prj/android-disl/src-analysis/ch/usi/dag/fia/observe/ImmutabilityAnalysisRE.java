@@ -6,19 +6,19 @@ import ch.usi.dag.dislre.REDispatch;
 public class ImmutabilityAnalysisRE {
 
     public static short cs = AREDispatch.registerMethod(
-            "analyse.ImmutabilityAnalysis.constructorStart");
+            "ch.usi.dag.fia.analysis.ImmutabilityAnalysis.constructorStart");
 
     public static short ce = AREDispatch.registerMethod(
-            "analyse.ImmutabilityAnalysis.constructorEnd");
+            "ch.usi.dag.fia.analysis.ImmutabilityAnalysis.constructorEnd");
 
     public static short oa = AREDispatch.registerMethod(
-            "analyse.ImmutabilityAnalysis.onObjectAllocation");
+            "ch.usi.dag.fia.analysis.ImmutabilityAnalysis.onObjectAllocation");
 
     public static short fr = AREDispatch.registerMethod(
-            "analyse.ImmutabilityAnalysis.onFieldRead");
+            "ch.usi.dag.fia.analysis.ImmutabilityAnalysis.onFieldRead");
 
     public static short fw = AREDispatch.registerMethod(
-            "analyse.ImmutabilityAnalysis.onFieldWrite");
+            "ch.usi.dag.fia.analysis.ImmutabilityAnalysis.onFieldWrite");
 
 	public static void constructorStart(final Object forObject) {
 

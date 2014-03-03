@@ -3521,6 +3521,8 @@ jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args) {
 
     /* Initialize VM. */
     gDvm.initializing = true;
+	ALOG(LOG_DEBUG,"HAIYANG","GDVM.ISZYGOTE: %s",gDvm.isShadow?"true":"false");
+	ShadowLib_Zygote_OnLoad(gDvmJni.jniVm, NULL);
     std::string status =
             dvmStartup(argc, argv.get(), args->ignoreUnrecognized, (JNIEnv*)pEnv);
     gDvm.initializing = false;
@@ -3540,7 +3542,6 @@ jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args) {
     *p_vm = (JavaVM*) pVM;
     ALOGV("CreateJavaVM succeeded");
 
-	ShadowLib_Zygote_OnLoad(gDvmJni.jniVm, NULL);
 
     return JNI_OK;
 }

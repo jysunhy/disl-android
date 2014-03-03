@@ -35,6 +35,13 @@ static bool isDecided = false;
 
 // ******************* REDispatch methods *******************
 
+void NativeLog(JNIEnv * jni_env, jclass this_class, jstring text){
+	//jsize str_len = jni_env->GetStringUTFLength(text);
+	const char * str = 	jni_env->GetStringUTFChars(text, NULL);
+	ALOG(LOG_INFO,"NATIVELOG", "LOG: %s in %d tid: %d",str, getpid(),dvmThreadSelf()->threadId );
+	jni_env->ReleaseStringUTFChars(text,str);
+}
+
 void _mapPID(int pid, const char* pname){
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","MAPPID BYPASS PID: %d NAME: %s", pid, pname);
 	Socket *tmpsock = new Socket(false);
@@ -52,7 +59,7 @@ void _mapPID(int pid, const char* pname){
 
 	int bp = -2;
 	tmpsock->RecvInt(bp);
-	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","MAPPID BYPASS is:%d PID: %d NAME: %s", bp, pid, pname);
+	//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","MAPPID BYPASS is:%d PID: %d NAME: %s TID:%d", bp, pid, pname,dvmThreadSelf()->threadId);
 	gDvm.isShadow = bp==0?false:true;
 
 
@@ -64,6 +71,8 @@ void _mapPID(int pid, const char* pname){
 		gDvm.threadEndHook = NULL;
 		gDvm.vmEndHook = NULL;
 	}
+	//dvmDumpThread(dvmThreadSelf(),false);
+	//dvmSetFieldBoolean(dvmThreadSelf()->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
 	pthread_mutex_unlock(&gDvm.s_mtx);
 	isDecided = true;
 	delete tmpsock;
@@ -200,8 +209,9 @@ void manuallyOpen
 }
 void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
-	//remote.ConnectionClose();
-	Socket *sock = new Socket(false);
+	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d", getpid());
+	remote.ConnectionClose();
+	/*Socket *sock = new Socket(false);
 	int pid = getpid();
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d %d", getpid(), pid);
 	pid = htonl(pid);
@@ -209,7 +219,7 @@ void manuallyClose
 	char tmp = MSG_CLOSE;
 	sock->Send(&tmp, 1);
 	delete sock;
-	sock = NULL;
+	sock = NULL;*/
 	// exit(0);
 }
 void analysisEnd
@@ -329,6 +339,7 @@ remote.SendJobject(self->threadId, netref);
 
 void sendObjectPlusData
 (JNIEnv * jni_env, jclass this_class, jobject to_send) {
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN %s", __FUNCTION__);
 	//TODO
 	ScopedMutex mtx(&gl_mtx);
 	Thread *self = dvmThreadSelf();
@@ -368,14 +379,16 @@ void sendObjectPlusData
 			remote.SendThreadObject(self->threadId, obj->uuid, "default", strlen("default"), isDaemon);
 		}
 	}
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","PLUS DATA HAS BEEN SENT TO BUFFER");
 
 	remote.SendJobject(self->threadId, netref);
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","__%s ENDED__", __FUNCTION__);
 }
 
 static const char *classPathName = "ch/usi/dag/dislre/AREDispatch";
 
 static JNINativeMethod methods[]= {
-	//{"add", "(II)I", (void*)add},
+	{"NativeLog", "(Ljava/lang/String;)V", (void*)NativeLog},
 	{"mapPID", "(Ljava/lang/String;I)V", (void*)mapPID},
 	{"mapPID", "(Ljava/lang/String;)V", (void*)mapPID_2},
 	{"registerMethod", "(Ljava/lang/String;)S", (void*)registerMethod},
@@ -642,9 +655,9 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 	//gDvm.shadowHook = &testShadowHook;
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN ONLOAD, Zygote PID: %d", getpid());
 
-	if(gDvm.zygote){
+	//if(gDvm.zygote){
 		_mapPID(getpid(),"zygote");
-	}
+	//}
 	zsock = new Socket();
 	while(!zsock->Connect()){
 		LOGDEBUG("Zygote Cannot connect through UDS");
