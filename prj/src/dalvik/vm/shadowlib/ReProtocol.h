@@ -39,7 +39,9 @@ enum MsgType{
 	// sending thread end message
 	MSG_THREAD_END,
 	// sending fork
-	MSG_FORK
+	MSG_FORK,
+	// MAP PID TO PNAME
+	MSG_MAPPID
 };
 
 enum QueueType{
@@ -300,6 +302,14 @@ class ReProtocol{
 			SetOrderingId(tid, INVALID_ORDERING_ID);
 			lock_buf.Unlock(oid);
 			return true;
+		}
+		bool MapPidPname(jint pid, const char* pname){
+			Buffer tmp(100);
+			if(MP)
+				tmp.EnqueueJint(getpid());
+			tmp.EnqueueJbyte(MSG_MAPPID);
+			tmp.EnqueueStringUtf8(pname, strlen(pname));
+			return Send(tmp.q_data, tmp.q_occupied);
 		}
 		bool NewClassInfo(jlong netref, const char* className, int namelen, const char* generic, int glen, jlong netrefClassLoader, jlong netrefSuperClass){
 			//ALOG(LOG_DEBUG,"SHADOW","new class info %s:%lld", className, netref);

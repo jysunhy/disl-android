@@ -5691,7 +5691,8 @@ MP	vm/shadowlib/ReProtocol.h	20;"	d
 MSG_ANALYZE	vm/shadowlib/ReProtocol.h	/^	MSG_ANALYZE,$/;"	e	enum:MsgType
 MSG_CLASS_INFO	vm/shadowlib/ReProtocol.h	/^	MSG_CLASS_INFO,$/;"	e	enum:MsgType
 MSG_CLOSE	vm/shadowlib/ReProtocol.h	/^	MSG_CLOSE,$/;"	e	enum:MsgType
-MSG_FORK	vm/shadowlib/ReProtocol.h	/^	MSG_FORK$/;"	e	enum:MsgType
+MSG_FORK	vm/shadowlib/ReProtocol.h	/^	MSG_FORK,$/;"	e	enum:MsgType
+MSG_MAPPID	vm/shadowlib/ReProtocol.h	/^	MSG_MAPPID$/;"	e	enum:MsgType
 MSG_NEW_CLASS	vm/shadowlib/ReProtocol.h	/^	MSG_NEW_CLASS,$/;"	e	enum:MsgType
 MSG_OBJ_FREE	vm/shadowlib/ReProtocol.h	/^	MSG_OBJ_FREE,$/;"	e	enum:MsgType
 MSG_REG_ANALYSIS	vm/shadowlib/ReProtocol.h	/^	MSG_REG_ANALYSIS,$/;"	e	enum:MsgType
@@ -5915,6 +5916,7 @@ MapItem	dexgen/src/com/android/dexgen/dex/file/MapItem.java	/^public final class
 MapItem	dx/src/com/android/dx/dex/file/MapItem.java	/^    private MapItem(ItemType type, Section section, Item firstItem,$/;"	m	class:MapItem	file:
 MapItem	dx/src/com/android/dx/dex/file/MapItem.java	/^    private MapItem(Section section) {$/;"	m	class:MapItem	file:
 MapItem	dx/src/com/android/dx/dex/file/MapItem.java	/^public final class MapItem extends OffsettedItem {$/;"	c
+MapPidPname	vm/shadowlib/ReProtocol.h	/^		bool MapPidPname(jint pid, const char* pname){$/;"	f	class:ReProtocol
 MapStats	vm/analysis/RegisterMap.cpp	/^struct MapStats {$/;"	s	file:
 Marker	dx/tests/115-merge/testdata/Annotated.java	/^    public @interface Marker {$/;"	i	class:Annotated
 Math_absD	vm/native/java_lang_Math.cpp	/^static void Math_absD(const u4* args, JValue* pResult)$/;"	f	file:

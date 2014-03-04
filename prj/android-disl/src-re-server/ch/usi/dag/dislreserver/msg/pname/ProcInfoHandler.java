@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 
 public class ProcInfoHandler implements RequestHandler {
@@ -15,8 +16,8 @@ public class ProcInfoHandler implements RequestHandler {
         final int pid, final DataInputStream is,
         final DataOutputStream os, final boolean debug) throws DiSLREServerException {
         try {
-            // TODO (YZ) receive process data. remove the following dummy code
-            is.readInt ();
+            final String pname = is.readUTF();
+            ShadowAddressSpace.getShadowAddressSpace (pid).getContext ().setPname (pname);
         } catch (final IOException e) {
             throw new DiSLREServerException (e);
         }

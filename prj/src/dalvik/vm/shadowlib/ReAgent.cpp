@@ -76,6 +76,7 @@ void _mapPID(int pid, const char* pname){
 	pthread_mutex_unlock(&gDvm.s_mtx);
 	isDecided = true;
 	delete tmpsock;
+	remote.MapPidPname(pid, pname);
 }
 
 void mapPID_2

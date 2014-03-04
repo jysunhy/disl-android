@@ -39,11 +39,13 @@ public class ICCAnalysis extends RemoteAnalysis {
 
     public void onStartService (final int caller) {
         get (caller).startServiceReq.incrementAndGet ();
+        System.out.println ("PROCESS-" + caller + " sends request to system_server");
     }
 
 
-    public void onScheduleCreateService (final int caller) {
-        get (caller).createServiceReq.incrementAndGet ();
+    public void onCreateService (final int callee, final boolean isIsolated) {
+        get (callee).createServiceReq.incrementAndGet ();
+        System.out.println ("system_server sents request to PROCESS-" + callee);
     }
 
 
@@ -54,12 +56,13 @@ public class ICCAnalysis extends RemoteAnalysis {
 
     public void onSystemReady () {
         for (final int pid : applicationsStatus.keySet ()) {
+            final String pname = ShadowAddressSpace.getShadowAddressSpace (pid).getContext ().getPname ();
             final ApplicationStatus status = applicationsStatus.get (pid);
 
-            System.out.println ("PROCESS-" + pid);
+            System.out.println ("PROCESS-" + pid + " " + pname);
             System.out.println ("# of startService request sent to system_server: "
                 + status.startServiceReq.get ());
-            System.out.println ("# of createService request received from system_server: "
+            System.out.println ("# of createService request sent from system_server: "
                 + status.createServiceReq.get ());
             System.out.println ("# of service created in this process: "
                 + status.createServiceNumber.get ());

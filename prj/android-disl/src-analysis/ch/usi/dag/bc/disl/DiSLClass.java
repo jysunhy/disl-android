@@ -13,28 +13,25 @@ public class DiSLClass {
     @SyntheticLocal
     public static boolean isBranch = false;
 
-
-    @Before (marker = BodyMarker.class, scope="MainActivity.substraction")
-    public static void Close () {
-        AREDispatch.manuallyClose();
-    }
-
-    @Before (marker = BodyMarker.class, scope="MainActivity.foo")
+    @Before (marker = BodyMarker.class, scope="spec.*.*")
     public static void onMethodEntry (final BCContext bcc) {
+        AREDispatch.NativeLog ("On method entry:"+bcc.thisClassName ()+"\t"+bcc.thisMethodFullNameWithDesc ()+"\t"+bcc.getTotal ()+"\t"+bcc.getLocal ());
         BCAnalysisStub.sendMeta (
             bcc.thisClassName (), bcc.thisMethodFullNameWithDesc (),
             bcc.getTotal (), bcc.getLocal ());
     }
 
 
-    @Before (marker = BranchInstrMarker.class, scope="MainActivity.foo")
+    @Before (marker = BranchInstrMarker.class, scope="spec.*.*")
     public static void beforeBranchInstr () {
+        AREDispatch.NativeLog("before Branch instr setting isBranch to true");
         isBranch = true;
     }
 
 
-    @AfterReturning (marker = BranchInstrMarker.class, scope="MainActivity.foo")
+    @AfterReturning (marker = BranchInstrMarker.class, scope="spec.*.*")
     public static void afterBranchInstr (final BCContext bcc) {
+        AREDispatch.NativeLog("after Branch instr");
         if (isBranch) {
             BCAnalysisStub.commitBranch (
                 bcc.thisMethodFullNameWithDesc (), bcc.getIndex ());
@@ -43,8 +40,9 @@ public class DiSLClass {
     }
 
 
-    @AfterReturning (marker = BranchLabelMarker.class, scope="MainActivity.foo")
+    @AfterReturning (marker = BranchLabelMarker.class, scope="spec.*.*")
     public static void afterBranchLabel (final BCContext bcc) {
+        AREDispatch.NativeLog("after Branch Label");
         if (isBranch) {
             BCAnalysisStub.commitBranch (
                 bcc.thisMethodFullNameWithDesc (), bcc.getIndex ());
@@ -53,10 +51,24 @@ public class DiSLClass {
     }
 
 
-    @AfterReturning (marker = SwitchLabelMarker.class, scope="MainActivity.foo")
+    @AfterReturning (marker = SwitchLabelMarker.class, scope="spec.*.*")
     public static void afterSwitchLabel (final BCContext bcc) {
+        AREDispatch.NativeLog("after Switch Label");
         BCAnalysisStub.commitBranch (
             bcc.thisMethodFullNameWithDesc (), bcc.getIndex ());
     }
+
+
+    /*@Before (marker = BodyMarker.class, scope = "*.onTransact")
+    public static void test (final MethodStaticContext sc, final ArgumentProcessorContext pc){
+        final Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
+        AREDispatch.NativeLog (sc.thisMethodFullName()+"->"+sc.thisMethodDescriptor());
+    }
+
+    @Before (marker = BodyMarker.class, scope = "*.transact")
+    public static void test2 (final MethodStaticContext sc, final ArgumentProcessorContext pc){
+        final Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
+        AREDispatch.NativeLog (sc.thisMethodFullName()+"->"+sc.thisMethodDescriptor());
+    }*/
 
 }
