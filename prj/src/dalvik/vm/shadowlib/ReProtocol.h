@@ -101,7 +101,6 @@ class ReProtocol{
 			return isClosed;
 		}
 		bool ConnectionClose(){
-			isClosed = true;
 			//send all buffers
 			//TODO ADD ALL to BUFFER
 			Buffer tmp(10);
@@ -110,6 +109,7 @@ class ReProtocol{
 			tmp.EnqueueJbyte(MSG_CLOSE);
 			
 			Send(tmp.q_data,tmp.q_occupied);
+			isClosed = true;
 			return true;
 		}
 		
@@ -458,7 +458,7 @@ class ReProtocol{
 			//}
 			if(!isClosed)
 				sendBuf->Enqueue(data,length);
-			//ALOG(LOG_DEBUG, "PACKET", "FIRST 10 BYTES:\t\t: %d %d %d %d, %d, %d %d %d %d", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
+			ALOG(LOG_DEBUG, "PACKET", "FIRST 10 BYTES:\t\t: %d %d %d %d, %d, %d %d %d %d", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
 			//res = sock->Send(data, length);
 
 			//char close = MSG_CLOSE;
@@ -500,7 +500,7 @@ class ReProtocol{
 				sendBuf->Enqueue(data,length);
 				sendBuf->Enqueue(lastdata, lastlength);
 			}
-			//ALOG(LOG_DEBUG, "PACKET", "FIRST 5 BYTES:\t\t: %d %d %d %d, %d", data[0], data[1], data[2], data[3], data[4]);
+			ALOG(LOG_DEBUG, "PACKET", "FIRST 5 BYTES:\t\t: %d %d %d %d, %d", data[0], data[1], data[2], data[3], data[4]);
 			return true;
 		}
 		pthread_mutex_t gl_mtx;

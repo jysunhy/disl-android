@@ -3458,6 +3458,7 @@ jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args) {
     int argc = 0;
     for (int i = 0; i < args->nOptions; i++) {
         const char* optStr = args->options[i].optionString;
+		ALOG(LOG_DEBUG,"HAIYANG","VM ARGS %d %s",i,optStr);
         if (optStr == NULL) {
             dvmFprintf(stderr, "ERROR: CreateJavaVM failed: argument %d was NULL\n", i);
             return JNI_ERR;

@@ -1293,7 +1293,7 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
      * anyway.
      */
 
-	ALOG(LOG_DEBUG,"DEADLOCK", "LOCK THREAD LIST");
+	//ALOG(LOG_DEBUG,"DEADLOCK", "LOCK THREAD LIST");
     dvmLockThreadList(self);
 
     if (dvmGetFieldObject(threadObj, gDvm.offJavaLangThread_vmThread) != NULL) {
@@ -1454,8 +1454,8 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
 		dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, true);
 		ALOG(LOG_DEBUG,"HAIYANG","IN %s, SETTING BYPASS TO TREE IN DAEMON", __FUNCTION__);
 	}
-	dvmDumpThread(newThread,false);
-	dvmDumpThread(self,false);
+	//dvmDumpThread(newThread,false);
+	//dvmDumpThread(self,false);
     dvmUnlockThreadList();
 
     /* change status back to RUNNING, self-suspending if necessary */

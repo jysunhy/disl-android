@@ -55,19 +55,19 @@ public class DiSLClass {
     @Before (marker = BodyMarker.class, scope = "spec.*.*")
     public static void test3 (final MethodStaticContext sc, final ArgumentProcessorContext pc){
         final Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
-        AREDispatch.NativeLog (sc.thisMethodFullName()+"->"+sc.thisMethodDescriptor());
+        AREDispatch.NativeLog (sc.thisMethodFullName());
     }
 
     @Before (marker = BodyMarker.class, scope = "*.onTransact")
     public static void test (final MethodStaticContext sc, final ArgumentProcessorContext pc){
         final Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
-        AREDispatch.NativeLog (sc.thisMethodFullName()+"->"+sc.thisMethodDescriptor());
+        AREDispatch.NativeLog (sc.thisMethodFullName());
     }
 
     @Before (marker = BodyMarker.class, scope = "*.transact")
     public static void test2 (final MethodStaticContext sc, final ArgumentProcessorContext pc){
         final Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
-        AREDispatch.NativeLog (sc.thisMethodFullName()+"->"+sc.thisMethodDescriptor());
+        AREDispatch.NativeLog (sc.thisMethodFullName());
     }
 
 }

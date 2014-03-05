@@ -1200,10 +1200,12 @@ std::string dvmStartup(int argc, const char* const argv[],
     ScopedShutdown scopedShutdown;
 
     assert(gDvm.initializing);
+	ALOG(LOG_DEBUG,"HAIYANG","IN %s",__FUNCTION__);
 
     ALOGV("VM init args (%d):", argc);
     for (int i = 0; i < argc; i++) {
         ALOGV("  %d: '%s'", i, argv[i]);
+		ALOG(LOG_DEBUG,"HAIYANG","\t%d %s", i, argv[i]);
     }
     setCommandLineDefaults();
 

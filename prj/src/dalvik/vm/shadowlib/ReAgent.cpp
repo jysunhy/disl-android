@@ -12,7 +12,7 @@
 static ReProtocol remote("/dev/socket/instrument",11218);
 
 static bool isZygote = true;
-
+char curpname[100] ={0};
 //static Socket *sock = NULL;
 
 //static pthread_t *send_thread;
@@ -24,6 +24,7 @@ static volatile jlong ot_object_id = 1;
 static volatile jshort method_id = 1;
 
 Socket *zsock = NULL;
+Socket *sock = NULL;
 
 //bool gl_bypass=true;
 static bool isDecided = false;
@@ -43,7 +44,9 @@ void NativeLog(JNIEnv * jni_env, jclass this_class, jstring text){
 }
 
 void _mapPID(int pid, const char* pname){
+	memcpy(curpname, pname, strlen(pname)+1);
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","MAPPID BYPASS PID: %d NAME: %s", pid, pname);
+	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","MAPPID BYPASS PID: %d NAME: %s", pid, curpname);
 	Socket *tmpsock = new Socket(false);
 	while(!tmpsock->Connect()){
 		LOGDEBUG("Cannot connect through UDS in %d", getpid());
@@ -161,16 +164,37 @@ jshort registerMethod
 void onFork
 (int para) {
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","ONFORK happens currentid-paraid: %d-%d",getpid(),para);
-	remote.OnForkEvent(para);
+	if(para == 0) {
+		Buffer* zygote_buff;
+		zygote_buff = remote.ReturnAndResetBuffer();
+		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","DROPPING PACKETS FROM PARENT: %d-%d sized %d",getpid(),para, zygote_buff->q_occupied);
+		delete zygote_buff;
+		remote.OnForkEvent(para);
+	}
 	if(para != 0){
 		//the parent
+		pthread_mutex_lock(&gl_mtx);
+		remote.OnForkEvent(para);
 		Buffer* zygote_buff;
 		zygote_buff = remote.ReturnAndResetBuffer();
 		ALOG(LOG_DEBUG,"SHADOWDEBUG","BEFORE FORK, BUFF OF ZYGOTE: %d", zygote_buff->q_occupied);
+		zsock = new Socket();
+		while(!zsock->Connect()){
+			LOGDEBUG("Zygote Cannot connect through UDS");
+			sleep(2);
+		}
+		int signal = -3;
+		zsock->Send((char*)&signal,sizeof(int));
+		int pid = getpid();
+		zsock->Send((char*)&pid,sizeof(int));
+		zsock->Send((char*)&(zygote_buff->q_occupied),sizeof(int));
 		zsock->Send(zygote_buff->q_data,zygote_buff->q_occupied);
 		if(zygote_buff)
 			delete zygote_buff;
 		zygote_buff=NULL;
+		delete zsock;
+		zsock = NULL;
+		pthread_mutex_unlock(&gl_mtx);
 	}
 }
 
@@ -213,14 +237,14 @@ void manuallyClose
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d", getpid());
 	remote.ConnectionClose();
 	/*Socket *sock = new Socket(false);
-	int pid = getpid();
-	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d %d", getpid(), pid);
-	pid = htonl(pid);
-	sock->Send((char*)&pid, sizeof(int));
-	char tmp = MSG_CLOSE;
-	sock->Send(&tmp, 1);
-	delete sock;
-	sock = NULL;*/
+	  int pid = getpid();
+	  ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d %d", getpid(), pid);
+	  pid = htonl(pid);
+	  sock->Send((char*)&pid, sizeof(int));
+	  char tmp = MSG_CLOSE;
+	  sock->Send(&tmp, 1);
+	  delete sock;
+	  sock = NULL;*/
 	// exit(0);
 }
 void analysisEnd
@@ -454,7 +478,33 @@ void threadEndHook(Thread* self){
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in hook %s %d %s", __FUNCTION__, self->threadId, isDaemon?"daemon":"not daemon");
 }
 void vmEndHook(JavaVM* vm){
-	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in hook %s", __FUNCTION__);
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in hook %s for %s", __FUNCTION__, curpname);
+
+	if(!gDvm.isShadow) {
+	if(!strcmp(curpname, "zygote") || !strcmp(curpname, "dalvikvm")) {
+		pthread_mutex_lock(&gl_mtx);
+		remote.ConnectionClose();
+		Buffer* tmp = remote.ReturnAndResetBuffer();
+		zsock = new Socket();
+		while(!zsock->Connect()){
+			LOGDEBUG("Zygote Cannot connect through UDS");
+			sleep(2);
+		}
+		int signal = -3;
+		zsock->Send((char*)&signal,sizeof(int));
+		int pid = getpid();
+		zsock->Send((char*)&pid,sizeof(int));
+		zsock->Send((char*)&(tmp->q_occupied),sizeof(int));
+		zsock->Send((char*)tmp->q_data, tmp->q_occupied);
+		delete zsock;
+		zsock = NULL;
+
+		pthread_mutex_unlock(&gl_mtx);
+		if(tmp)
+			delete tmp;
+	}
+	}
+
 }
 void objFreeHook(Object* obj, Thread* self){
 	//if(self->isDaemon)
@@ -488,88 +538,88 @@ return NULL;
 }
 */
 /*
-static void * send_ss_thread_loop(void * obj) {
-	int sock_host = -1;
-	int retcode;
-	while(true) {
-		sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
-		if(sock_host <= 0){
-			ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
-			sleep(5);
-		}else
-			break;
+   static void * send_ss_thread_loop(void * obj) {
+   int sock_host = -1;
+   int retcode;
+   while(true) {
+   sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
+   if(sock_host <= 0){
+   ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
+   sleep(5);
+   }else
+   break;
+   }
+   Buffer *undecidedBuf = new Buffer(1024);
+//int signal = -3;
+//sock->Send((char*)&signal,sizeof(int));
+while(true){
+ALOG(LOG_DEBUG,"SHADOWDEBUG","IN WHILE LOOOP");
+Buffer* tmp = NULL;
+tmp = remote.ReturnAndResetBuffer();
+if(!isDecided){
+undecidedBuf->Enqueue(tmp->q_data, tmp->q_occupied);
+ALOG(LOG_DEBUG,"SHADOWDEBUG","PUTTING UNDECIDED EVENTS INTO BUFFER SIZED: %d", undecidedBuf->q_occupied);
+}else{
+if(gDvm.isShadow){
+ALOG(LOG_DEBUG,"SHADOWDEBUG","DROP THE BUFFER FOR UNOBSERVED PROCESS SIZED %d", undecidedBuf->q_occupied);
+delete tmp;
+break;
+}
+
+if(undecidedBuf){
+ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING UNDECIDED BUFFER SIZED: %d", undecidedBuf->q_occupied);
+if(undecidedBuf->q_occupied >0 ){
+retcode = send(sock_host, undecidedBuf->q_data, undecidedBuf->q_occupied, 0);
+while(retcode <0)
+{
+while(true) {
+ALOG (LOG_INFO,"INSTRUMENTSERVER","SEND ERROR RETRYING");
+sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
+if(sock_host <= 0){
+ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
+sleep(5);
+}else
+break;
+}
+retcode = send(sock_host, undecidedBuf->q_data, undecidedBuf->q_occupied, 0);
+}
+ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d retcode: %d", undecidedBuf->q_occupied, retcode);
+}else{
+ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
+
+}
+
+delete undecidedBuf;
+undecidedBuf = NULL;
+}
+ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", tmp->q_occupied);
+if(tmp->q_occupied > 0) {
+retcode = send(sock_host,tmp->q_data, tmp->q_occupied, 0);
+while(retcode <0){
+ALOG (LOG_INFO,"INSTRUMENTSERVER","SEND ERROR RETRYING");
+while(true) {
+sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
+if(sock_host <= 0){
+ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
+sleep(5);
+}else
+break;
+}
+retcode = send(sock_host,tmp->q_data, tmp->q_occupied, 0);
+}
+ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d retcode: %d", tmp->q_occupied, retcode);
+}else{
+	ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
+}
+}
+if(tmp)
+	delete tmp;
+	sleep(2);
+	//if(remote.IsClosed())
+	//	break;
 	}
-	Buffer *undecidedBuf = new Buffer(1024);
-	//int signal = -3;
-	//sock->Send((char*)&signal,sizeof(int));
-	while(true){
-		ALOG(LOG_DEBUG,"SHADOWDEBUG","IN WHILE LOOOP");
-		Buffer* tmp = NULL;
-		tmp = remote.ReturnAndResetBuffer();
-		if(!isDecided){
-			undecidedBuf->Enqueue(tmp->q_data, tmp->q_occupied);
-			ALOG(LOG_DEBUG,"SHADOWDEBUG","PUTTING UNDECIDED EVENTS INTO BUFFER SIZED: %d", undecidedBuf->q_occupied);
-		}else{
-			if(gDvm.isShadow){
-				ALOG(LOG_DEBUG,"SHADOWDEBUG","DROP THE BUFFER FOR UNOBSERVED PROCESS SIZED %d", undecidedBuf->q_occupied);
-				delete tmp;
-				break;
-			}
-
-			if(undecidedBuf){
-				ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING UNDECIDED BUFFER SIZED: %d", undecidedBuf->q_occupied);
-				if(undecidedBuf->q_occupied >0 ){
-					retcode = send(sock_host, undecidedBuf->q_data, undecidedBuf->q_occupied, 0);
-					while(retcode <0)
-					{
-						while(true) {
-							ALOG (LOG_INFO,"INSTRUMENTSERVER","SEND ERROR RETRYING");
-							sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
-							if(sock_host <= 0){
-								ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
-								sleep(5);
-							}else
-								break;
-						}
-						retcode = send(sock_host, undecidedBuf->q_data, undecidedBuf->q_occupied, 0);
-					}
-					ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d retcode: %d", undecidedBuf->q_occupied, retcode);
-				}else{
-					ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
-
-				}
-
-				delete undecidedBuf;
-				undecidedBuf = NULL;
-			}
-			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", tmp->q_occupied);
-			if(tmp->q_occupied > 0) {
-				retcode = send(sock_host,tmp->q_data, tmp->q_occupied, 0);
-				while(retcode <0){
-					ALOG (LOG_INFO,"INSTRUMENTSERVER","SEND ERROR RETRYING");
-					while(true) {
-						sock_host = socket_network_client("192.168.1.103", 11218, SOCK_STREAM);
-						if(sock_host <= 0){
-							ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
-							sleep(5);
-						}else
-							break;
-					}
-					retcode = send(sock_host,tmp->q_data, tmp->q_occupied, 0);
-				}
-				ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d retcode: %d", tmp->q_occupied, retcode);
-			}else{
-				ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
-			}
-		}
-		if(tmp)
-			delete tmp;
-		sleep(2);
-		//if(remote.IsClosed())
-		//	break;
-	}
-	if(undecidedBuf)
-		delete undecidedBuf;
+if(undecidedBuf)
+	delete undecidedBuf;
 
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SENDING LOOP END");
 
@@ -577,10 +627,10 @@ static void * send_ss_thread_loop(void * obj) {
 	pthread_exit(NULL);
 
 	return NULL;
-}
+	}
 */
-static void * send_thread_loop(void * obj) {
-	Buffer *undecidedBuf = new Buffer(1024);
+static void * send_zygote_thread_loop(void * obj) {
+	//Buffer *undecidedBuf = new Buffer(1024);
 	Socket *sock = new Socket();
 	while(!sock->Connect()){
 		LOGDEBUG("Cannot connect through UDS in %s for %d",__FUNCTION__, getpid());
@@ -589,8 +639,50 @@ static void * send_thread_loop(void * obj) {
 	int signal = -3;
 	sock->Send((char*)&signal,sizeof(int));
 	while(true){
+		ALOG(LOG_DEBUG,"SHADOWDEBUG","IN  ZYGOTE WHILE LOOOP");
+		Buffer* tmp = NULL;
+		tmp = remote.ReturnAndResetBuffer();
+		{
+			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", tmp->q_occupied);
+			if(tmp->q_occupied >0 ){
+				if(!sock->Send(tmp->q_data, tmp->q_occupied)){
+					ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND");
+					delete sock;
+					sock = NULL;
+				}
+			}else {
+				ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
+			}
+		}
+		if(tmp)
+			delete tmp;
+		sleep(2);
+	}
+
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SENDING LOOP END");
+
+	pthread_detach(pthread_self());
+	pthread_exit(NULL);
+
+	return NULL;
+}
+static void * send_thread_loop(void * obj) {
+	while(!isDecided){
+		sleep(3);
+	}
+	if(gDvm.isShadow){
+		ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SENDING LOOP END");
+
+		pthread_detach(pthread_self());
+		pthread_exit(NULL);
+		return NULL;
+	}
+
+	Buffer *undecidedBuf = new Buffer(1024);
+	while(true){
 		ALOG(LOG_DEBUG,"SHADOWDEBUG","IN WHILE LOOOP");
 		Buffer* tmp = NULL;
+		pthread_mutex_lock(&gl_mtx);
 		tmp = remote.ReturnAndResetBuffer();
 		if(!isDecided){
 			undecidedBuf->Enqueue(tmp->q_data, tmp->q_occupied);
@@ -619,18 +711,30 @@ static void * send_thread_loop(void * obj) {
 			}
 			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", tmp->q_occupied);
 			if(tmp->q_occupied >0 ){
+				sock = new Socket();
+				while(!sock->Connect()){
+					LOGDEBUG("Cannot connect through UDS in %s for %d",__FUNCTION__, getpid());
+					sleep(2);
+				}
+				int signal = -3;
+				sock->Send((char*)&signal,sizeof(int));
+				int pid = getpid();
+				sock->Send((char*)&pid,sizeof(int));
+				sock->Send((char*)&(tmp->q_occupied), sizeof(int));
 				if(!sock->Send(tmp->q_data, tmp->q_occupied)){
 					ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND");
 					delete sock;
 					sock = NULL;
 				}
+				delete sock;
 			}else {
 				ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
 			}
 		}
+		pthread_mutex_unlock(&gl_mtx);
 		if(tmp)
 			delete tmp;
-		sleep(15);
+		sleep(5);
 		//if(remote.IsClosed())
 		//	break;
 	}
@@ -656,9 +760,93 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 	//gDvm.shadowHook = &testShadowHook;
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN ONLOAD, Zygote PID: %d", getpid());
 
+	/* pthread_attr_t thread_attr;
+	   int thread_policy;
+	   struct sched_param thread_param;
+	   int status, rr_min_priority, rr_max_priority;
+
+	   pthread_attr_init(&thread_attr);
+#if defined(_POSIX_THREAD_PRIORITY_SCHEDULING) && !defined(sun)
+pthread_attr_getschedpolicy(&thread_attr, &thread_policy);
+pthread_attr_getschedparam(&thread_attr, &thread_param);
+ALOG(LOG_DEBUG,"HAIYANG","Default policy is %s, priority is %d",
+(thread_policy == SCHED_FIFO ? "FIFO"
+: (thread_policy == SCHED_RR ? "RR"
+: (thread_policy == SCHED_OTHER ? "OTHER"
+: "unknown"))),
+thread_param.sched_priority);
+
+status = pthread_attr_setschedpolicy(&thread_attr, SCHED_RR);
+if(status != 0)
+ALOG(LOG_DEBUG,"HAIYANG","Unable to set SCHED_RR policy.");
+else{
+rr_min_priority = sched_get_priority_min(SCHED_RR);
+if(rr_min_priority == -1)
+errno_abort("Get SCHED_RR min priority");
+rr_max_priority = sched_get_priority_max(SCHED_RR);
+if(rr_max_priority == -1)
+errno_abort("Get SCHED_RR max priority");
+thread_param.sched_priority = (rr_min_priority + rr_max_priority)/2;
+ALOG(LOG_DEBUG,"HAIYANG","SCHED_RR priority range is %d to %d: using %d\n",
+rr_min_priority, rr_max_priority, thread_param.sched_priority);
+pthread_attr_setschedparam(&thread_attr, &thread_param);
+ALOG(LOG_DEBUG,"HAIYANG","Creating thread at RR/%d\n", thread_param.sched_priority);
+pthread_attr_setinheritsched(&thread_attr, PTHREAD_EXPLICIT_SCHED);
+}
+#else
+ALOG(LOG_DEBUG,"HAIYANG","Priority scheduling not supported\n");
+#endif
+*/
+	//
 	//if(gDvm.zygote){
+	if(getpid()<100){
 		_mapPID(getpid(),"zygote");
-	//}
+	}else{
+		_mapPID(getpid(),"dalvikvm");
+		if(false){
+			pthread_t send_thread;
+			pthread_create(&send_thread, NULL, send_zygote_thread_loop, NULL);
+		}
+	}
+//OpenConnection();
+//gDvm.newObjHook = &objNewHook;
+gDvm.freeObjHook = &objFreeHook;
+gDvm.threadEndHook = &threadEndHook;
+gDvm.vmEndHook = &vmEndHook;
+//gDvm.classInitHook = &classInitHook;
+//gDvm.classfileLoadHook = &classfileLoadHook;
+
+
+if (vm->GetEnv(&uenv.venv, JNI_VERSION_1_4) != JNI_OK){
+	goto bail;
+}
+
+env = uenv.env;
+
+env = uenv.env;
+
+if (registerShadowNatives(env) != JNI_TRUE){
+
+	goto bail;
+}
+
+result = JNI_VERSION_1_4;
+
+//pthread_t send_thread;
+//pthread_create(&send_thread, NULL, zygote_send_thread_loop, NULL);
+//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CAN BE PRINTED?");
+
+bail:
+return result;
+}
+
+void BeforeFork(){
+	/*
+	Buffer* zygote_buff;
+	zygote_buff = remote.ReturnAndResetBuffer();
+	ALOG(LOG_DEBUG,"SHADOWDEBUG","BEFORE FORK, BUFF OF ZYGOTE: %d", zygote_buff->q_occupied);
+	if(zygote_buff->q_occupied > 0){
+	pthread_mutex_lock(&gl_mtx);
 	zsock = new Socket();
 	while(!zsock->Connect()){
 		LOGDEBUG("Zygote Cannot connect through UDS");
@@ -666,46 +854,16 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 	}
 	int signal = -3;
 	zsock->Send((char*)&signal,sizeof(int));
-	//OpenConnection();
-	//gDvm.newObjHook = &objNewHook;
-	gDvm.freeObjHook = &objFreeHook;
-	gDvm.threadEndHook = &threadEndHook;
-	gDvm.vmEndHook = &vmEndHook;
-	//gDvm.classInitHook = &classInitHook;
-	//gDvm.classfileLoadHook = &classfileLoadHook;
-
-
-	if (vm->GetEnv(&uenv.venv, JNI_VERSION_1_4) != JNI_OK){
-		goto bail;
-	}
-
-	env = uenv.env;
-
-	env = uenv.env;
-
-	if (registerShadowNatives(env) != JNI_TRUE){
-
-		goto bail;
-	}
-
-	result = JNI_VERSION_1_4;
-
-	//pthread_t send_thread;
-	//pthread_create(&send_thread, NULL, zygote_send_thread_loop, NULL);
-	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CAN BE PRINTED?");
-
-bail:
-	return result;
-}
-
-void BeforeFork(){
-	Buffer* zygote_buff;
-	zygote_buff = remote.ReturnAndResetBuffer();
-	ALOG(LOG_DEBUG,"SHADOWDEBUG","BEFORE FORK, BUFF OF ZYGOTE: %d", zygote_buff->q_occupied);
+	zsock->Send((char*)&(zygote_buff->q_occupied),sizeof(int));
 	zsock->Send(zygote_buff->q_data,zygote_buff->q_occupied);
+	delete zsock;
+	zsock = NULL;
+	pthread_mutex_unlock(&gl_mtx);
+	}
 	if(zygote_buff)
 		delete zygote_buff;
 	zygote_buff=NULL;
+	*/
 }
 
 jint ShadowLib_SystemServer_OnLoad(JavaVM* vm, void* reserved){

@@ -48,14 +48,15 @@ char* pnames[MAX_PROCESS];
 char* observedNames[MAX_PROCESS];
 int observedCnt = 0;
 
+int svmsockets[MAX_PROCESS];
+
 char bufname[1024];
 
 pthread_mutex_t gl_mtx;
 
 void * my_thread (void *arg)
 {
-
-	ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: NEW CLIENT");
+	ALOG (LOG_INFO,"INSTRUMENTSERVER","O: NEW THREAD");
 	unsigned int myClient_s;    //copy socket
 	char buf[BUF_SIZE]; // buffer for socket
 	int retcode;       // Return code
@@ -87,42 +88,60 @@ void * my_thread (void *arg)
 			break;
 		}
 		if(sign4 == -3){
-			ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event");
-			while(true) {
-				sock_host = socket_network_client(SERVER_IP, 11218, SOCK_STREAM);
-				if(sock_host <= 0){
-					ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
-					sleep(10);
-				}else
+
+			int pid;
+			retcode = recv(myClient_s, &pid, sizeof(int), 0);
+			ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event from pid %d", pid);
+
+
+			int i = 0;
+			for(; i < psize; i++){
+				if(pids[i] == pid) {
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event from pid %d name is %s", pid, pnames[i]);
 					break;
+				}
+			}
+			if(i>=psize)
+				ALOG (LOG_INFO,"INSTRUMENTSERVER","pid %d has not been map", pid);
+			if(svmsockets[i] == -1) {
+				while(true) {
+					int thesocket = socket_network_client(SERVER_IP, 11218, SOCK_STREAM);
+					if(thesocket <= 0){
+						ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
+						sleep(10);
+					}else {
+						svmsockets[i] = thesocket;
+						break;
+					}
+				}
 			}
 
+			int len;
+			retcode = recv(myClient_s, &len, sizeof(int), 0);
+					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "get shadow buffer sized %d", len);
 
-			while(true){
+
+			int cnt = 0;
+			while(cnt < len){
 				retcode = recv(myClient_s, buf, BUF_SIZE, 0);
 				if(retcode < 0){
 					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "closed from app");
 					break;
 				}
 				///*
-				retcode = send(sock_host, buf, retcode, 0);
+				retcode = send(svmsockets[i], buf, retcode, 0);
 				if(retcode < 0) {
 					ALOG (LOG_INFO,"INSTRUMENTSERVER","host sock error here");
 					close(myClient_s);
 					break;
 				}
-				//*/
 
-				/*
-				   char tmp[10241];
-				   int i = 0;
-				   for(; i < retcode; i++){
-				   snprintf(tmp+(2*sizeof(int)+2)*i, 2*sizeof(int)+2, "%d:%d ", i, (unsigned int)buf[i]);
-				   }
-				   tmp[retcode*(2+2*sizeof(int))] = 0;
-				   ALOG(LOG_INFO, "INSTRUMENTSERVER", "SHADOW PACKET %s", tmp);
-				   */
+
+				cnt+=retcode;
+
 			}
+		close(myClient_s);
+
 			break;
 		}
 		if(sign4 == -4) {
@@ -139,6 +158,18 @@ void * my_thread (void *arg)
 			pname[pname_len] = 0;
 			recv(myClient_s, &pid, sizeof(int), 0);
 			ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "GET MAPPING PID: %d to NAME: %s", pid, pname);
+				if(psize <= MAX_PROCESS){
+					pids[psize]=pid;
+					char* tmpname = (char*)malloc(pname_len+1);
+					memcpy(tmpname,pname,pname_len);
+					tmpname[pname_len]='\0';
+					pnames[psize]=tmpname;
+					psize++;
+					svmsockets[psize-1] = -1;
+					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "ADDING to map sized now %d", psize);
+				}else{
+					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "more than max processes");
+				}
 			int tmp = 1;
 			int i = 0;
 			for(; i < observedCnt; i++){
@@ -154,7 +185,7 @@ void * my_thread (void *arg)
 
 			send(myClient_s,&tmp,sizeof(int),0);
 
-			if(tmp == 0){
+			if(tmp == 0 || !strcmp(pname,"zygote")){
 
 				struct sockaddr_un address;
 				int socket_fd, connection_fd;
@@ -199,6 +230,8 @@ void * my_thread (void *arg)
 				pthread_t threads;      // Thread ID (used by OS)
 
 				pthread_attr_init (&attr);
+				//if (FALSE)
+				//if (TRUE)
 				while (TRUE)
 				{
 					ALOG (LOG_INFO,"INSTRUMENTSERVER","my server is ready for PID :%d ...", pid);
@@ -226,25 +259,10 @@ void * my_thread (void *arg)
 
 					}
 				}
+				close(socket_fd);
 
 			}
 
-			if(pid != -1) {
-				if(psize <= MAX_PROCESS){
-					pids[psize]=pid;
-					char* tmpname = (char*)malloc(pname_len+1);
-					memcpy(tmpname,pname,pname_len);
-					tmpname[pname_len]='\0';
-					pnames[psize]=tmpname;
-					psize++;
-				}else{
-					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "more than max processes");
-				}
-			}else{
-				//memcpy(bufname,pname,pname_len);
-				//bufname[pname_len]='\0';
-				//ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "GET MAPPING PID: -1 BUFFERING NAME: %s", bufname);
-			}
 			break;		
 		}
 		if(sign4 == -5) {
@@ -361,6 +379,7 @@ release:
 		close (sock_host);
 	sock_host = -1;
 	close (myClient_s); // close the client connection
+	ALOG (LOG_INFO,"INSTRUMENTSERVER","O: NEW THREAD ENDED");
 	pthread_detach(pthread_self());
 	pthread_exit(NULL);
 	return NULL;
@@ -368,6 +387,7 @@ release:
 
 
 void* new_thread(void* arg){
+	ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: NEW THREAD");
 	struct sockaddr_un address;
 	int socket_fd, connection_fd;
 	socklen_t address_length;
@@ -439,6 +459,7 @@ void* new_thread(void* arg){
 
 	/* To make sure this "main" returns an integer --- */
 	close (socket_fd);       // close the primary socket
+	ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: NEW THREAD ENDED");
 	pthread_detach(pthread_self());
 	pthread_exit(NULL);
 

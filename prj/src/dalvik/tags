@@ -11695,6 +11695,7 @@ curMethod	vm/mterp/out/InterpC-x86.cpp	398;"	d	file:
 curOffset	vm/LinearAlloc.h	/^    int     curOffset;          \/* offset where next data goes *\/$/;"	m	struct:LinearAllocHdr
 curOffset	vm/Profile.h	/^    volatile int curOffset;$/;"	m	struct:MethodTraceState
 curRec	vm/hprof/Hprof.h	/^    hprof_record_t curRec;$/;"	m	struct:hprof_context_t
+curpname	vm/shadowlib/ReAgent.cpp	/^char curpname[100] ={0};$/;"	v
 currRunHead	vm/Thread.h	/^    const u2*   currRunHead;    \/\/ Start of run we're building$/;"	m	struct:Thread
 currRunLen	vm/Thread.h	/^    int         currRunLen;     \/\/ Length of run in 16-bit words$/;"	m	struct:Thread
 currTraceHead	vm/Thread.h	/^    const u2*   currTraceHead;  \/\/ Start of the trace we're building$/;"	m	struct:Thread
@@ -21969,6 +21970,7 @@ sendRequest	vm/jdwp/JdwpPriv.h	/^    bool (*sendRequest)(struct JdwpState* state
 sendRequest	vm/jdwp/JdwpSocket.cpp	/^static bool sendRequest(JdwpState* state, ExpandBuf* pReq)$/;"	f	file:
 sendShort	vm/shadowlib/ReAgent.cpp	/^void sendShort$/;"	f
 send_thread_loop	vm/shadowlib/ReAgent.cpp	/^static void * send_thread_loop(void * obj) {$/;"	f	file:
+send_zygote_thread_loop	vm/shadowlib/ReAgent.cpp	/^static void * send_zygote_thread_loop(void * obj) {$/;"	f	file:
 separator	dx/src/com/android/dx/command/dump/BaseDumper.java	/^    private String separator;$/;"	f	class:BaseDumper	file:
 seqNum	vm/compiler/CompilerIR.h	/^    int seqNum;$/;"	m	struct:MIR
 sequenceNumber	vm/compiler/CompilerIR.h	/^    int sequenceNumber;$/;"	m	struct:CompilationUnit
@@ -22353,6 +22355,7 @@ snapshot	dx/src/com/android/dx/dex/code/LocalList.java	/^        public void sna
 snooze	tests/030-bad-finalizer/src/BadFinalizer.java	/^    public static void snooze(int ms) {$/;"	m	class:BadFinalizer
 snooze	tests/036-finalizer/src/Main.java	/^    private static void snooze(int ms) {$/;"	m	class:Main	file:
 snooze	tests/048-server-socket/src/Main.java	/^    private static void snooze(int sec) {$/;"	m	class:Main	file:
+sock	vm/shadowlib/ReAgent.cpp	/^Socket *sock = NULL;$/;"	v
 socketLock	vm/jdwp/JdwpPriv.h	/^    pthread_mutex_t socketLock;     \/* socket synchronization *\/$/;"	m	class:JdwpNetStateBase
 socketTransport	vm/jdwp/JdwpAdb.cpp	/^static const JdwpTransport socketTransport = {$/;"	v	file:
 socketTransport	vm/jdwp/JdwpSocket.cpp	/^static const JdwpTransport socketTransport = {$/;"	v	file:

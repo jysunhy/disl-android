@@ -448,6 +448,7 @@ public class Worker extends Thread {
                                 ("com.inspur.test;"
                                 +"system_server;"
                                 +"zygote;"
+                                +"dalvikvm;"
                                 +"com.android.providers.calendar;"
                                 +"android.process.acore;"
                                 +"android.process.media;"
