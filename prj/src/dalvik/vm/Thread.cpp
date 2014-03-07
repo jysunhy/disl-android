@@ -1249,7 +1249,7 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
 
     Thread* self = dvmThreadSelf();
 	//gDvm.isShadow=false;
-	ALOG(LOG_DEBUG,"HAIYANG","IN %s, pid:%d tid:%d name:%s, isShadow:%s, self isDaemon:%s, new isDaemon:%s", __FUNCTION__,getpid(),self->threadId, dvmGetThreadName(self).c_str(), gDvm.isShadow?"true":"false", dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon)?"true":"false", dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_daemon)?"true":"false");
+	//ALOG(LOG_DEBUG,"HAIYANG","IN %s, pid:%d tid:%d name:%s, isShadow:%s, self isDaemon:%s, new isDaemon:%s", __FUNCTION__,getpid(),self->threadId, dvmGetThreadName(self).c_str(), gDvm.isShadow?"true":"false", dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon)?"true":"false", dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_daemon)?"true":"false");
 	//ALOG(LOG_DEBUG,"HAIYANG","setting self to isShadow: %s", gDvm.isShadow?"true":"false");
 	dvmSetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow ||dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon));
 	dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow );
@@ -1452,7 +1452,7 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
         gDvm.nonDaemonThreadCount++;        // guarded by thread list lock
 	}else{
 		dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, true);
-		ALOG(LOG_DEBUG,"HAIYANG","IN %s, SETTING BYPASS TO TREE IN DAEMON", __FUNCTION__);
+		//ALOG(LOG_DEBUG,"HAIYANG","IN %s, SETTING BYPASS TO TREE IN DAEMON", __FUNCTION__);
 	}
 	//dvmDumpThread(newThread,false);
 	//dvmDumpThread(self,false);

@@ -26,10 +26,11 @@ public final class CloseHandler implements RequestHandler {
                 handler.exit ();
             }
 
-            // invoke atExit on all analyses
-            for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
-                analysis.atExit (shadowAddressSpace);
-            }
+
+        }
+     // invoke atExit on all analyses
+        for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
+            analysis.atExit (shadowAddressSpace);
         }
     }
 

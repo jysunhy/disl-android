@@ -125,7 +125,7 @@ public class Worker extends Thread {
                         //byte [] code = null;
                         final ByteArrayInputStream bin;
                         if (code == null) {
-                            //System.out.println ("new class " + className + " found "+writePath);
+                            System.out.println ("new class " + className + " found "+writePath);
                             if (className.equals ("java/text/SimpleDateFormat")) {
                                 final File tmp = new File ("lib/SimpleDateFormat.class");
                                 is = new FileInputStream (tmp);
@@ -446,9 +446,9 @@ public class Worker extends Thread {
                             if(configMsg){
                                 instrClass =
                                 ("com.inspur.test;"
-                                +"system_server;"
-                                +"zygote;"
                                 +"dalvikvm;"
+                               /* +"system_server;"
+                                +"zygote;"
                                 +"com.android.providers.calendar;"
                                 +"android.process.acore;"
                                 +"android.process.media;"
@@ -470,7 +470,7 @@ public class Worker extends Thread {
                                 +"com.android.email;"
                                 +"com.android.mms;"
                                 +"com.android.contacts;"
-                                +"com.android.quicksearchbox;"
+                                +"com.android.quicksearchbox;"*/
                                 )
                                 .getBytes ();
 

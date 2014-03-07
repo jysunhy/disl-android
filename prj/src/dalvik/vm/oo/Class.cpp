@@ -1443,6 +1443,7 @@ ClassObject* dvmFindSystemClass(const char* descriptor)
     ClassObject* clazz;
 
     clazz = dvmFindSystemClassNoInit(descriptor);
+	//ALOG(LOG_DEBUG,"HAIYANG","IN %s %s",__FUNCTION__, descriptor);
     if (clazz != NULL && clazz->status < CLASS_INITIALIZED) {
         /* initialize class */
         if (!dvmInitClass(clazz)) {

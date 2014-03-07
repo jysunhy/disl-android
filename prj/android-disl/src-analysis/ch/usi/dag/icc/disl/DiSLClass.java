@@ -70,4 +70,9 @@ public class DiSLClass {
         AREDispatch.NativeLog (sc.thisMethodFullName());
     }
 
+   /* @Before (marker = BodyMarker.class, scope = "*.*")
+    public static void test2 (final MethodStaticContext sc){
+        AREDispatch.NativeLog (sc.thisMethodFullName());
+    }*/
+
 }

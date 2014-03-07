@@ -19,6 +19,8 @@
 # endif
 #endif
 
+#define DEBUGMODE 0
+
 class ScopedMutex{
 	public:
 		ScopedMutex(pthread_mutex_t *mtx):local_mtx(mtx){

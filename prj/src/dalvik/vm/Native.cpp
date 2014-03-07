@@ -71,6 +71,7 @@ void dvmResolveNativeMethod(const u4* args, JValue* pResult,
     const Method* method, Thread* self)
 {
     ClassObject* clazz = method->clazz;
+	//ALOG(LOG_DEBUG,"HAIYANG","IN %s %s %s",__FUNCTION__, clazz->descriptor, method->name);
 
     /*
      * If this is a static method, it could be called before the class

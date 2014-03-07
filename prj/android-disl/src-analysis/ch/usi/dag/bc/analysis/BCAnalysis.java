@@ -89,6 +89,7 @@ public class BCAnalysis extends RemoteAnalysis {
 
     @Override
     public void atExit (final ShadowAddressSpace shadowAddressSpace) {
+        System.out.println("EXITING ANALYSIS");
         final HashSet <ShadowString> classes = new HashSet <> ();
         final Iterator <Entry <Long, ShadowObject>> iter = shadowAddressSpace.getShadowObjectIterator ();
 
