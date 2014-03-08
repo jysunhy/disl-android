@@ -1,16 +1,20 @@
 package ch.usi.dag.icc.disl;
 
+import android.os.Binder;
+import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.annotation.Before;
+import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
-import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;
-import ch.usi.dag.disl.processorcontext.ArgumentProcessorMode;
-import ch.usi.dag.disl.staticcontext.MethodStaticContext;
 import ch.usi.dag.dislre.AREDispatch;
+import ch.usi.dag.icc.analysis.ICCAnalysisStub;
+
+import com.android.server.am.ProcessRecord;
+import com.android.server.am.ServiceRecord;
 
 
 public class DiSLClass {
 
-    /*@Before (
+    @Before (
         marker = BodyMarker.class,
         scope = "com.android.server.am.ActivityManagerService.startService")
     public static void onStartService () {
@@ -23,7 +27,7 @@ public class DiSLClass {
         scope = "com.android.server.am.ActivityManagerService.bringUpServiceLocked")
     public static void createService (final DynamicContext dc) {
         ICCAnalysisStub.onCreateService (
-            dc.getStackValue (1, ProcessRecord.class).pid, false);
+            dc.getStackValue (0, ProcessRecord.class).pid, false);
     }
 
 
@@ -45,34 +49,15 @@ public class DiSLClass {
         ICCAnalysisStub.actualCreateService ();
     }
 
+    @Before (marker = BodyMarker.class, scope = "Launcher.onCreate")
+    public static void onSystemReady_2 () {
+        AREDispatch.NativeLog ("SYSTEM_READY IS SENT IN LAUNCHER.ONCREAET");
+    }
 
     @Before (marker = BodyMarker.class, scope = "LauncherApplication.onCreate")
     public static void onSystemReady () {
+        AREDispatch.NativeLog ("SYSTEM_READY IS SENT IN LAUNCHERAPPLICATION.ONCREATE");
         ICCAnalysisStub.onSystemReady ();
-    }*/
-
-
-    @Before (marker = BodyMarker.class, scope = "spec.*.*")
-    public static void test3 (final MethodStaticContext sc, final ArgumentProcessorContext pc){
-        final Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
-        AREDispatch.NativeLog (sc.thisMethodFullName());
     }
-
-    @Before (marker = BodyMarker.class, scope = "*.onTransact")
-    public static void test (final MethodStaticContext sc, final ArgumentProcessorContext pc){
-        final Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
-        AREDispatch.NativeLog (sc.thisMethodFullName());
-    }
-
-    @Before (marker = BodyMarker.class, scope = "*.transact")
-    public static void test2 (final MethodStaticContext sc, final ArgumentProcessorContext pc){
-        final Object[] args = pc.getArgs(ArgumentProcessorMode.METHOD_ARGS);
-        AREDispatch.NativeLog (sc.thisMethodFullName());
-    }
-
-   /* @Before (marker = BodyMarker.class, scope = "*.*")
-    public static void test2 (final MethodStaticContext sc){
-        AREDispatch.NativeLog (sc.thisMethodFullName());
-    }*/
 
 }

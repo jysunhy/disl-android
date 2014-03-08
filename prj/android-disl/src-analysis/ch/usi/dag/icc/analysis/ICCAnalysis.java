@@ -39,13 +39,20 @@ public class ICCAnalysis extends RemoteAnalysis {
 
     public void onStartService (final int caller) {
         get (caller).startServiceReq.incrementAndGet ();
-        System.out.println ("PROCESS-" + caller + " sends request to system_server");
+        System.out.println ("PROCESS-" + caller + " sends StartService request to system_server");
     }
 
 
     public void onCreateService (final int callee, final boolean isIsolated) {
         get (callee).createServiceReq.incrementAndGet ();
-        System.out.println ("system_server sents request to PROCESS-" + callee);
+
+        if (isIsolated) {
+            System.out.println ("system_server enqueues a ScheduleCreateService request to isolated PROCESS-"
+                + callee);
+        } else {
+            System.out.println ("system_server sents ScheduleCreateService request to PROCESS-"
+                + callee);
+        }
     }
 
 

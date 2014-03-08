@@ -9,22 +9,23 @@ import org.objectweb.asm.tree.MethodNode;
 
 import ch.usi.dag.disl.marker.AbstractInsnMarker;
 
+
 public class BranchInstrMarker extends AbstractInsnMarker {
 
-	@Override
-	public List<AbstractInsnNode> markInstruction(final MethodNode methodNode) {
+    @Override
+    public List <AbstractInsnNode> markInstruction (final MethodNode methodNode) {
 
-		final List<AbstractInsnNode> selected = new LinkedList<AbstractInsnNode>();
-		final InsnList ilst = methodNode.instructions;
+        final List <AbstractInsnNode> selected = new LinkedList <AbstractInsnNode> ();
+        final InsnList ilst = methodNode.instructions;
 
-		for (final AbstractInsnNode instruction : ilst.toArray()) {
+        for (final AbstractInsnNode instruction : ilst.toArray ()) {
 
-			if (BCUtil.isCondBranch(instruction)) {
-				selected.add(instruction);
-			}
-		}
+            if (BCUtil.isCondBranch (instruction)) {
+                selected.add (instruction);
+            }
+        }
 
-		return selected;
-	}
+        return selected;
+    }
 
 }

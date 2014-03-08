@@ -169,9 +169,10 @@ void onFork
 (int para) {
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","ONFORK happens currentid-paraid: %d-%d",getpid(),para);
 	if(para == 0) {
+		pthread_mutex_init(&gl_mtx, NULL);//RE INIT LOCK
 		Buffer* zygote_buff;
 		zygote_buff = remote.ReturnAndResetBuffer();
-		//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","DROPPING PACKETS FROM PARENT: %d-%d sized %d",getpid(),para, zygote_buff->q_occupied);
+		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","DROPPING PACKETS FROM PARENT: %d-%d sized %d",getpid(),para, zygote_buff->q_occupied);
 		delete zygote_buff;
 		remote.OnForkEvent(para);
 	}
@@ -256,11 +257,16 @@ void manuallyClose
 void analysisEnd
 (JNIEnv * jni_env, jclass this_class) {
 	if(DEBUGMODE)
-		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis end for method");
+		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis end for method in %d", dvmThreadSelf()->threadId);
+
 	remote.AnalysisEndEvent(dvmThreadSelf()->threadId);
-	if(remote.GetCurrentSize() > 100000){
-		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","SEND ONCE %d", remote.GetCurrentSize());
+	if(remote.GetCurrentSize() > 1000000){
+		pthread_mutex_lock(&gl_mtx);
+		//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","LOCK in %d",dvmThreadSelf()->threadId);
+		//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","SEND ONCE %d", remote.GetCurrentSize());
 		send_once();
+		//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","UNLOCK in %d",dvmThreadSelf()->threadId);
+		pthread_mutex_unlock(&gl_mtx);
 	}
 }
 
@@ -515,8 +521,8 @@ void vmEndHook(JavaVM* vm){
 			zsock->Send((char*)tmp->q_data, tmp->q_occupied);
 			delete zsock;
 			zsock = NULL;
-
 			pthread_mutex_unlock(&gl_mtx);
+
 			if(tmp)
 				delete tmp;
 		}
@@ -685,11 +691,12 @@ static void * send_zygote_thread_loop(void * obj) {
 }
 
 void send_once(){
+	if(remote.GetCurrentSize() <= 1000000)
+		return;
 	Buffer* tmp = NULL;
-	pthread_mutex_lock(&gl_mtx);
 	tmp = remote.ReturnAndResetBuffer();
 	if(tmp->q_occupied >0 ){
-		ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", tmp->q_occupied);
+		ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d in %d:%d", tmp->q_occupied, getpid(), dvmThreadSelf()->threadId);
 		sock = new Socket();
 		while(!sock->Connect()){
 			LOGDEBUG("Cannot connect through UDS in %s for %d",__FUNCTION__, getpid());
@@ -709,7 +716,6 @@ void send_once(){
 	}else {
 		ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
 	}
-	pthread_mutex_unlock(&gl_mtx);
 	if(tmp)
 		delete tmp;
 }
@@ -781,7 +787,7 @@ static void * send_thread_loop(void * obj) {
 		pthread_mutex_unlock(&gl_mtx);
 		if(tmp)
 			delete tmp;
-		sleep(5);
+		sleep(2);
 		//if(remote.IsClosed())
 		//	break;
 	}
@@ -923,7 +929,7 @@ jint ShadowLib_SystemServer_OnLoad(JavaVM* vm, void* reserved){
 
 	//gDvm.shadowHook = &testShadowHook;
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN ONLOAD, PID: %d", getpid());
-	pthread_mutex_init(&gl_mtx, NULL);
+	//pthread_mutex_init(&gl_mtx, NULL);
 	//if(gDvm.isShadow) {
 
 	//OpenConnection();
@@ -967,7 +973,7 @@ jint ShadowLib_OnLoad(JavaVM* vm, void* reserved){
 
 	//gDvm.shadowHook = &testShadowHook;
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN ONLOAD, PID: %d", getpid());
-	pthread_mutex_init(&gl_mtx, NULL);
+	//pthread_mutex_init(&gl_mtx, NULL);
 	//if(gDvm.isShadow) {
 
 	//OpenConnection();

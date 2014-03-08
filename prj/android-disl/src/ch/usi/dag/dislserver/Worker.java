@@ -57,6 +57,8 @@ public class Worker extends Thread {
     private static final boolean EMPTY_INSTR = false;
 
     private static boolean configMsg = true;
+
+    private static boolean appOnly = false;
     // private static final String instrLibPath =
     // "build-test/disl-instr-android.jar";
     // Needed by ANDROID
@@ -89,6 +91,38 @@ public class Worker extends Thread {
     FileNotFoundException {
         Enumeration <JarEntry> entryEnum;
         entryEnum = jf.entries ();
+
+        boolean isLib = false;
+        if(
+        writePath.contains("am.jar")
+        ||writePath.contains ("core.jar")
+        ||writePath.contains("android.policy.jar")
+        ||writePath.contains("android.test.runner.jar")
+        ||writePath.contains("apache-xml.jar")
+        ||writePath.contains("bmgr.jar")
+        ||writePath.contains("bouncycastle.jar")
+        ||writePath.contains("bu.jar")
+        ||writePath.contains("com.android.location.provider.jar")
+        ||writePath.contains("content.jar")
+        ||writePath.contains("core-junit.jar")
+        ||writePath.contains("ext.jar")
+        ||writePath.contains("framework.jar")
+        ||writePath.contains("ime.jar")
+        ||writePath.contains("input.jar")
+        ||writePath.contains("javax.obex.jar")
+        ||writePath.contains("monkey.jar")
+        ||writePath.contains("pm.jar")
+        ||writePath.contains("requestsync.jar")
+        ||writePath.contains("services.jar")
+        ||writePath.contains("svc.jar")
+        ||writePath.contains("uiautomator.jar")
+        ){
+            isLib=true;
+            System.out.println(writePath+" is lib");
+        }else{
+            System.out.println(writePath+" is not lib");
+        }
+
 
         /*
          * final String originalName = jf.getName ().substring ( jf.getName
@@ -137,8 +171,12 @@ public class Worker extends Thread {
                                 bout.write (buffer, 0, bytesRead);
                             }
 
-                            code = instrument (
-                                className, bout.toByteArray ());
+                            if(isLib && appOnly && !className.equals ("java/lang/Thread")) {
+                                code = bout.toByteArray ();
+                            } else {
+                                code = instrument (
+                                    className, bout.toByteArray ());
+                            }
                             // System.out.println
                             // ("**********************************************************");
                             if (code == null) {
@@ -226,9 +264,12 @@ public class Worker extends Thread {
                             byte [] code = null;
                             final String className = curName.substring (
                                 0, curName.lastIndexOf (".class"));
-
-                            code = instrument (
-                                className, bout.toByteArray ());
+                            if(appOnly && isLib) {
+                                code = bout.toByteArray ();
+                            }else{
+                                code = instrument (
+                                    className, bout.toByteArray ());
+                            }
 
                             if (code == null) {
                                 code = bout.toByteArray ();
@@ -447,9 +488,8 @@ public class Worker extends Thread {
                                 instrClass =
                                 ("com.inspur.test;"
                                 +"dalvikvm;"
-                               /* +"system_server;"
+                                +"system_server;"
                                 +"zygote;"
-                                +"com.android.providers.calendar;"
                                 +"android.process.acore;"
                                 +"android.process.media;"
                                 +"com.android.systemui;"
@@ -470,7 +510,7 @@ public class Worker extends Thread {
                                 +"com.android.email;"
                                 +"com.android.mms;"
                                 +"com.android.contacts;"
-                                +"com.android.quicksearchbox;"*/
+                                +"com.android.quicksearchbox;"
                                 )
                                 .getBytes ();
 

@@ -1,6 +1,7 @@
 package ch.usi.dag.bc.disl;
 
 import java.util.LinkedList;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
@@ -14,19 +15,30 @@ import ch.usi.dag.disl.staticcontext.MethodStaticContext;
 
 public class BCContext extends MethodStaticContext {
 
+    ConcurrentHashMap <String, Integer> methodTotalEdges = new ConcurrentHashMap <>();
+
     public String thisMethodFullNameWithDesc () {
         return thisMethodFullName () + thisMethodDescriptor ();
     }
 
 
     public int getTotal () {
-        int counter = 0;
+        Integer total;
 
-        for (final MethodNode methodNode : staticContextData.getClassNode ().methods) {
-            counter += BCUtil.getBranchCount (methodNode);
+        if ((total = methodTotalEdges.get (thisClassName ())) == null) {
+            int counter = 0;
+
+            for (final MethodNode methodNode : staticContextData.getClassNode ().methods) {
+                counter += BCUtil.getBranchCount (methodNode);
+            }
+
+            if ((total = methodTotalEdges.putIfAbsent (thisClassName (), counter)) == null) {
+                System.out.println ("BCC: " + thisClassName () + " " + counter);
+                total = counter;
+            }
         }
 
-        return counter;
+        return total;
     }
 
 

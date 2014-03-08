@@ -45,6 +45,7 @@ int map_value[300];
 int pids[MAX_PROCESS];
 int psize = 0;
 char* pnames[MAX_PROCESS];
+pthread_mutex_t locks[MAX_PROCESS];
 char* observedNames[MAX_PROCESS];
 int observedCnt = 0;
 
@@ -56,7 +57,7 @@ pthread_mutex_t gl_mtx;
 
 void * my_thread (void *arg)
 {
-	ALOG (LOG_INFO,"INSTRUMENTSERVER","O: NEW THREAD");
+	//ALOG (LOG_INFO,"INSTRUMENTSERVER","O: NEW THREAD");
 	unsigned int myClient_s;    //copy socket
 	char buf[BUF_SIZE]; // buffer for socket
 	int retcode;       // Return code
@@ -91,7 +92,7 @@ void * my_thread (void *arg)
 
 			int pid;
 			retcode = recv(myClient_s, &pid, sizeof(int), 0);
-			ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event from pid %d", pid);
+		//	ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event from pid %d", pid);
 
 
 			int i = 0;
@@ -103,6 +104,7 @@ void * my_thread (void *arg)
 			}
 			if(i>=psize)
 				ALOG (LOG_INFO,"INSTRUMENTSERVER","pid %d has not been map", pid);
+			pthread_mutex_lock(&(locks[i]));
 			if(svmsockets[i] == -1) {
 				while(true) {
 					int thesocket = socket_network_client(SERVER_IP, 11218, SOCK_STREAM);
@@ -118,7 +120,7 @@ void * my_thread (void *arg)
 
 			int len;
 			retcode = recv(myClient_s, &len, sizeof(int), 0);
-					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "get shadow buffer sized %d", len);
+			//ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "get shadow buffer sized %d", len);
 
 
 			int cnt = 0;
@@ -129,18 +131,24 @@ void * my_thread (void *arg)
 					break;
 				}
 				///*
-				retcode = send(svmsockets[i], buf, retcode, 0);
-				if(retcode < 0) {
+				int recvsize = send(svmsockets[i], buf, retcode, 0);
+				if(recvsize < 0) {
 					ALOG (LOG_INFO,"INSTRUMENTSERVER","host sock error here");
-					close(myClient_s);
+					break;
+				}
+				if(recvsize != retcode){
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","recv size != sent size");
 					break;
 				}
 
-
 				cnt+=retcode;
+				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "%d bytes has been sent", cnt);
 
 			}
-		close(myClient_s);
+			close(myClient_s);
+			//close(svmsockets[i]);
+			//svmsockets[i]=-1;
+			pthread_mutex_unlock(&(locks[i]) );
 
 			break;
 		}
@@ -166,6 +174,7 @@ void * my_thread (void *arg)
 					pnames[psize]=tmpname;
 					psize++;
 					svmsockets[psize-1] = -1;
+					pthread_mutex_init(&(locks[psize-1]), NULL);
 					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "ADDING to map sized now %d", psize);
 				}else{
 					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "more than max processes");
@@ -239,7 +248,7 @@ void * my_thread (void *arg)
 					connection_fd = accept(socket_fd,                     
 							(struct sockaddr *) &address,  
 							&address_length);                                                                                                                                                                                      
-					ALOG (LOG_INFO,"INSTRUMENTSERVER","a new client arrives ...");
+					//ALOG (LOG_INFO,"INSTRUMENTSERVER","a new client arrives ...");
 
 					if (connection_fd == FALSE)
 					{
@@ -379,7 +388,7 @@ release:
 		close (sock_host);
 	sock_host = -1;
 	close (myClient_s); // close the client connection
-	ALOG (LOG_INFO,"INSTRUMENTSERVER","O: NEW THREAD ENDED");
+	//ALOG (LOG_INFO,"INSTRUMENTSERVER","O: NEW THREAD ENDED");
 	pthread_detach(pthread_self());
 	pthread_exit(NULL);
 	return NULL;
@@ -431,12 +440,12 @@ void* new_thread(void* arg){
 
 	while (TRUE)
 	{
-		ALOG (LOG_INFO,"INSTRUMENTSERVER","my server is ready ...");
+		//ALOG (LOG_INFO,"INSTRUMENTSERVER","my server is ready ...");
 
 		connection_fd = accept(socket_fd,                     
 				(struct sockaddr *) &address,  
 				&address_length);                                                                                                                                                                                      
-		ALOG (LOG_INFO,"INSTRUMENTSERVER","a new client arrives ...");
+		//ALOG (LOG_INFO,"INSTRUMENTSERVER","a new client arrives ...");
 
 		if (connection_fd == FALSE)
 		{
@@ -576,12 +585,12 @@ int main (void)
 
 	while (TRUE)
 	{
-		ALOG (LOG_INFO,"INSTRUMENTSERVER","my server is ready ...");
+		//ALOG (LOG_INFO,"INSTRUMENTSERVER","my server is ready ...");
 
 		connection_fd = accept(socket_fd,                     
 				(struct sockaddr *) &address,  
 				&address_length);                                                                                                                                                                                      
-		ALOG (LOG_INFO,"INSTRUMENTSERVER","a new client arrives ...");
+		//ALOG (LOG_INFO,"INSTRUMENTSERVER","a new client arrives ...");
 
 		if (connection_fd == FALSE)
 		{

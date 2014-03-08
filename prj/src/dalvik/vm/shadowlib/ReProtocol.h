@@ -461,7 +461,7 @@ bool Send(const char* data, int length){
 	//}
 	if(!isClosed)
 		sendBuf->Enqueue(data,length);
-	//ALOG(LOG_DEBUG, "PACKET", "FIRST 10 BYTES:\t\t: %d %d %d %d, %d, %d %d %d %d", data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
+	ALOG(LOG_DEBUG, "PACKET", "TOTAL: %d FIRST 10 BYTES:\t\t: %d %d %d %d, %d, %d %d %d %d", length, data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8]);
 	//res = sock->Send(data, length);
 
 	//char close = MSG_CLOSE;
@@ -503,7 +503,7 @@ bool Send(const char* data, int length, const char* lastdata, int lastlength){
 		sendBuf->Enqueue(data,length);
 		sendBuf->Enqueue(lastdata, lastlength);
 	}
-	//ALOG(LOG_DEBUG, "PACKET", "FIRST 5 BYTES:\t\t: %d %d %d %d, %d", data[0], data[1], data[2], data[3], data[4]);
+	ALOG(LOG_DEBUG, "PACKET", "TOTAL: %d FIRST 5 BYTES:\t\t: %d %d %d %d, %d", length+lastlength, data[0], data[1], data[2], data[3], data[4]);
 	return true;
 }
 pthread_mutex_t gl_mtx;

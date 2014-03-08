@@ -22,11 +22,16 @@ public class BCAnalysisStub {
     }
 
 
-    public static void commitBranch (final String methodID, final int index) {
-        AREDispatch.analysisStart (CB);
-        AREDispatch.sendObjectPlusData (methodID);
-        AREDispatch.sendInt (index);
-        AREDispatch.analysisEnd ();
+    public static void commitBranch (
+        final String methodID, final boolean [] branches) {
+        for (int i = 0; i < branches.length; i++) {
+            if (branches [i]) {
+                AREDispatch.analysisStart (CB);
+                AREDispatch.sendObjectPlusData (methodID);
+                AREDispatch.sendInt (i);
+                AREDispatch.analysisEnd ();
+            }
+        }
     }
 
 }

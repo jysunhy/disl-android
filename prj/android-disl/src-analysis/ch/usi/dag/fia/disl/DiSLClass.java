@@ -80,11 +80,11 @@ public class DiSLClass {
      * {@code Constructor.newInstance(Object...)}; hence, it only instruments the latter. This assumption is true under
      * OpenJDK and possibly other JREs.
      */
-   /* @AfterReturning(marker = BodyMarker.class,
+    @AfterReturning(marker = BodyMarker.class,
             scope = "java.lang.Object java.lang.reflect.Constructor.newInstance(java.lang.Object[])")
     public static void objectAllocatedThroughReflection(final DynamicContext dc, final AllocationSiteStaticContext sc) {
         //AREDispatch.NativeLog (sc.thisMethodFullName() +"\t"+ sc.thisMethodDescriptor());
         ImmutabilityAnalysisRE.onObjectAllocation(dc.getStackValue(0, Object.class), sc.getReflectiveAllocationSite());
-    }*/
+    }
 
 }
