@@ -98,7 +98,7 @@ void * my_thread (void *arg)
 			int i = 0;
 			for(; i < psize; i++){
 				if(pids[i] == pid) {
-					ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event from pid %d name is %s", pid, pnames[i]);
+					//ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event from pid %d name is %s", pid, pnames[i]);
 					break;
 				}
 			}
@@ -120,6 +120,7 @@ void * my_thread (void *arg)
 
 			int len;
 			retcode = recv(myClient_s, &len, sizeof(int), 0);
+			ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event from pid %d name is %s sized %d", pid, pnames[i], len);
 			//ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "get shadow buffer sized %d", len);
 
 
@@ -142,7 +143,7 @@ void * my_thread (void *arg)
 				}
 
 				cnt+=retcode;
-				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "%d bytes has been sent", cnt);
+				//ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "%d bytes has been sent", cnt);
 
 			}
 			close(myClient_s);

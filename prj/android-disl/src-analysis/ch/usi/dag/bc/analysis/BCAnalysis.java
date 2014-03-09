@@ -112,9 +112,9 @@ public class BCAnalysis extends RemoteAnalysis {
                     }
                 }
 
-//                System.out.println ("PROCESS-"
-//                    + shadowAddressSpace.getContext ().pid () + ": " + object.toString ()
-//                    + " " + methodStatistic.coverage.length + " " + counter);
+//                System.out.printf (
+//                    "PROCESS-%d: %s %d %d\n", shadowAddressSpace.getContext ().pid (),
+//                    object.toString (), methodStatistic.coverage.length, counter);
                 methodStatistic.className.getState (ClassStatistic.class).covered += counter;
             }
         }
@@ -122,9 +122,12 @@ public class BCAnalysis extends RemoteAnalysis {
         for (final ShadowString klass : classes) {
             final ClassStatistic statistic = klass.getState (ClassStatistic.class);
 
-            System.out.println ("PROCESS-"
-                + shadowAddressSpace.getContext ().pid () + ": " + klass.toString ()
-                + " " + statistic.total + " " + statistic.covered);
+            System.out.printf (
+                "PROCESS-%d: %s %.2f %d %d\n",
+                shadowAddressSpace.getContext ().pid (),
+                klass.toString (), statistic.total == 0
+                    ? Float.NaN : (((float) statistic.covered) / statistic.total),
+                statistic.total, statistic.covered);
         }
     }
 

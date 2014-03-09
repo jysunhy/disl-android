@@ -17,7 +17,7 @@ public class DiSLClass {
     public static boolean [] branches;
 
 
-    @Before (marker = BodyMarker.class, order=2)
+    @Before (marker = BodyMarker.class, order = 2)
     public static void onMethodEntry (final BCContext bcc) {
         BCAnalysisStub.sendMeta (
             bcc.thisClassName (), bcc.thisMethodFullNameWithDesc (),
@@ -26,13 +26,13 @@ public class DiSLClass {
     }
 
 
-    @Before (marker = BranchInstrMarker.class, order=1)
+    @Before (marker = BranchInstrMarker.class, order = 1)
     public static void beforeBranchInstr () {
         isBranch = true;
     }
 
 
-    @AfterReturning (marker = BranchInstrMarker.class, order=1)
+    @AfterReturning (marker = BranchInstrMarker.class, order = 1)
     public static void afterBranchInstr (final BCContext bcc) {
         if (isBranch) {
             branches [bcc.getIndex ()] = true;
@@ -41,7 +41,13 @@ public class DiSLClass {
     }
 
 
-    @AfterReturning (marker = BranchLabelMarker.class, order=1)
+    @Before (marker = SwitchInsnMarker.class, order = 1)
+    public static void beforeSwitch (final BCContext bcc) {
+        isBranch = true;
+    }
+
+
+    @AfterReturning (marker = BranchLabelMarker.class, order = 1)
     public static void afterBranchLabel (final BCContext bcc) {
         if (isBranch) {
             branches [bcc.getIndex ()] = true;
@@ -50,13 +56,7 @@ public class DiSLClass {
     }
 
 
-    @AfterReturning (marker = SwitchLabelMarker.class, order=1)
-    public static void afterSwitchLabel (final BCContext bcc) {
-        branches [bcc.getIndex ()] = true;
-    }
-
-
-    @After (marker = BodyMarker.class, order=2)
+    @After (marker = BodyMarker.class, order = 2)
     public static void onMethodExit (final BCContext bcc) {
         BCAnalysisStub.commitBranch (
             bcc.thisMethodFullNameWithDesc (), branches);

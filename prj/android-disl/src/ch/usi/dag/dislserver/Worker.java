@@ -58,7 +58,7 @@ public class Worker extends Thread {
 
     private static boolean configMsg = true;
 
-    private static boolean appOnly = false;
+    private static boolean appOnly = true;
     // private static final String instrLibPath =
     // "build-test/disl-instr-android.jar";
     // Needed by ANDROID
@@ -95,7 +95,7 @@ public class Worker extends Thread {
         boolean isLib = false;
         if(
         writePath.contains("am.jar")
-        ||writePath.contains ("core.jar")
+        //||writePath.contains ("core.jar")
         ||writePath.contains("android.policy.jar")
         ||writePath.contains("android.test.runner.jar")
         ||writePath.contains("apache-xml.jar")
@@ -118,9 +118,9 @@ public class Worker extends Thread {
         ||writePath.contains("uiautomator.jar")
         ){
             isLib=true;
-            System.out.println(writePath+" is lib");
+            //System.out.println(writePath+" is lib");
         }else{
-            System.out.println(writePath+" is not lib");
+            //System.out.println(writePath+" is not lib");
         }
 
 
@@ -159,7 +159,7 @@ public class Worker extends Thread {
                         //byte [] code = null;
                         final ByteArrayInputStream bin;
                         if (code == null) {
-                            System.out.println ("new class " + className + " found "+writePath);
+                            //System.out.println ("new class " + className + " found "+writePath);
                             if (className.equals ("java/text/SimpleDateFormat")) {
                                 final File tmp = new File ("lib/SimpleDateFormat.class");
                                 is = new FileInputStream (tmp);
@@ -192,8 +192,8 @@ public class Worker extends Thread {
 
                             bytecodeMap.put (className.replace ('/', '.'), code);
                         } else {
-                            System.out.println ("use class "
-                                + className + " found in map");
+                            //System.out.println ("use class "
+                            //    + className + " found in map");
                         }
                         bin = new ByteArrayInputStream (code);
 
@@ -488,7 +488,7 @@ public class Worker extends Thread {
                                 instrClass =
                                 ("com.inspur.test;"
                                 +"dalvikvm;"
-                                +"system_server;"
+                                /*+"system_server;"
                                 +"zygote;"
                                 +"android.process.acore;"
                                 +"android.process.media;"
@@ -506,7 +506,7 @@ public class Worker extends Thread {
                                 +"com.android.exchange;"
                                 +"com.android.calendar;"
                                 +"com.android.providers.calendar;"
-                                +"android.process.media;"
+                                +"android.process.media;"*/
                                 +"com.android.email;"
                                 +"com.android.mms;"
                                 +"com.android.contacts;"
