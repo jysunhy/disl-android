@@ -58,7 +58,7 @@ public class Worker extends Thread {
 
     private static boolean configMsg = true;
 
-    private static boolean appOnly = true;
+    private static boolean appOnly = false;
     // private static final String instrLibPath =
     // "build-test/disl-instr-android.jar";
     // Needed by ANDROID
@@ -95,7 +95,7 @@ public class Worker extends Thread {
         boolean isLib = false;
         if(
         writePath.contains("am.jar")
-        //||writePath.contains ("core.jar")
+        ||writePath.contains ("core.jar")
         ||writePath.contains("android.policy.jar")
         ||writePath.contains("android.test.runner.jar")
         ||writePath.contains("apache-xml.jar")
@@ -116,6 +116,49 @@ public class Worker extends Thread {
         ||writePath.contains("services.jar")
         ||writePath.contains("svc.jar")
         ||writePath.contains("uiautomator.jar")
+        ||writePath.contains("am.jar")
+||writePath.contains("android.policy.jar")
+||writePath.contains("android.test.runner.jar")
+||writePath.contains("apache-xml.jar")
+||writePath.contains("ApplicationsProvider.apk")
+||writePath.contains("bmgr.jar")
+||writePath.contains("bouncycastle.jar")
+||writePath.contains("bu.jar")
+||writePath.contains("CalendarProvider.apk")
+||writePath.contains("com.android.location.provider.jar")
+||writePath.contains("Contacts.apk")
+||writePath.contains("ContactsProvider.apk")
+||writePath.contains("content.jar")
+||writePath.contains("core.jar")
+||writePath.contains("core-junit.jar")
+||writePath.contains("DownloadProvider.apk")
+||writePath.contains("DrmProvider.apk")
+||writePath.contains("Email.apk")
+||writePath.contains("Exchange2.apk")
+||writePath.contains("ext.jar")
+||writePath.contains("framework.jar")
+||writePath.contains("Gallery2.apk")
+||writePath.contains("ime.jar")
+||writePath.contains("input.jar")
+||writePath.contains("javax.obex.jar")
+||writePath.contains("LatinIME.apk")
+||writePath.contains("Launcher2.apk")
+||writePath.contains("MediaProvider.apk")
+||writePath.contains("monkey.jar")
+||writePath.contains("Phone.apk")
+||writePath.contains("pm.jar")
+||writePath.contains("Provision.apk")
+||writePath.contains("requestsync.jar")
+||writePath.contains("services.jar")
+||writePath.contains("Settings.apk")
+||writePath.contains("SettingsProvider.apk")
+||writePath.contains("svc.jar")
+||writePath.contains("SystemUI.apk")
+||writePath.contains("TelephonyProvider.apk")
+||writePath.contains("uiautomator.jar")
+||writePath.contains("UserDictionaryProvider.apk")
+||writePath.contains("VoiceDialer.apk")
+||writePath.contains("WAPPushManager.apk")
         ){
             isLib=true;
             //System.out.println(writePath+" is lib");
@@ -487,8 +530,11 @@ public class Worker extends Thread {
                             if(configMsg){
                                 instrClass =
                                 ("com.inspur.test;"
-                                +"dalvikvm;"
-                                /*+"system_server;"
+                                +"system_server;"
+                                +"com.android.launcher;"
+                                /*+"dalvikvm;"
+                                +"cx.hell.android.pdfview;"
+                                //+"system_server;"
                                 +"zygote;"
                                 +"android.process.acore;"
                                 +"android.process.media;"
@@ -506,11 +552,19 @@ public class Worker extends Thread {
                                 +"com.android.exchange;"
                                 +"com.android.calendar;"
                                 +"com.android.providers.calendar;"
-                                +"android.process.media;"*/
+                                +"android.process.media;"
                                 +"com.android.email;"
                                 +"com.android.mms;"
                                 +"com.android.contacts;"
-                                +"com.android.quicksearchbox;"
+                                +"com.android.quicksearchbox;"*/
+                                +"com.timsu.astrid;"
+                                +"cx.hell.android.pdfview;"
+                                +"org.connectbot;"
+                                +"org.geometerplus.zlibrary.ui.android;"
+                                +"com.fsck.k9;"
+                                +"com.android.keepass;"
+                                +"org.vudroid;"
+                                +"org.videolan.vlc;"
                                 )
                                 .getBytes ();
 
