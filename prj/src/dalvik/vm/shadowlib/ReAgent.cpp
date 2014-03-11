@@ -896,12 +896,13 @@ static void * send_thread_loop(void * obj) {
 			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d from pid %d", tmp->q_occupied, getpid());
 			forward_to_svm(tmp->q_data, tmp->q_occupied);
 			pthread_mutex_unlock(&gl_mtx);
-			sleep(1);
+			sleep(2);
 		}else {
 			ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
 			pthread_mutex_unlock(&gl_mtx);
 			pthread_cond_wait(&remote.new_event_cond, &remote.gl_mtx);
 			pthread_mutex_unlock(&remote.gl_mtx);
+			sleep(2);
 		}
 		if(tmp)
 			delete tmp;

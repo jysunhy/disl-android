@@ -467,7 +467,7 @@ class ReProtocol{
 			if(needSignal) {
 				pthread_cond_signal(&new_event_cond);
 				ALOG(LOG_DEBUG,"SHADOW","SENDING SIGNAL");
-				sleep(1);
+				//sleep(1);
 			}
 			return true;
 		}
@@ -509,8 +509,8 @@ class ReProtocol{
 			pthread_mutex_unlock(&gl_mtx);
 			if(needSignal) {
 				pthread_cond_signal(&new_event_cond);
-				ALOG(LOG_DEBUG,"SHADOW","SENDING SIGNAL");
-				sleep(1);
+				//ALOG(LOG_DEBUG,"SHADOW","SENDING SIGNAL");
+				//sleep(1);
 			}
 			return true;
 		}

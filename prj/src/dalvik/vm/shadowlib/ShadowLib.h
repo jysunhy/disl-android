@@ -19,7 +19,7 @@
 # endif
 #endif
 
-#define DEBUGMODE 1
+#define DEBUGMODE 0
 
 class ScopedMutex{
 	public:
