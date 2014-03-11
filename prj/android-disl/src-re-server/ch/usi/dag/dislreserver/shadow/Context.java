@@ -3,8 +3,6 @@ package ch.usi.dag.dislreserver.shadow;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map.Entry;
 
 
 public class Context {
@@ -43,7 +41,7 @@ public class Context {
     }
 
 
-    public Iterator <Entry <Long, ShadowObject>> getShadowObjectIterator () {
+    public Iterable <ShadowObject> getShadowObjectIterator () {
         return ShadowAddressSpace.getShadowAddressSpace (processID).getShadowObjectIterator ();
     }
 

@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.zip.GZIPOutputStream;
 
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
@@ -122,17 +120,14 @@ public class ImmutabilityAnalysis extends RemoteAnalysis {
 	}
 
 	@Override
-	public void atExit(final Context context) {
+    public void atExit (final Context context) {
 
-		final Iterator<Entry<Long, ShadowObject>> iter = context.getShadowObjectIterator();
-
-        while (iter.hasNext()) {
-
-        	final ImmutabilityShadowStateHolder issh = iter.next().getValue().getState(ImmutabilityShadowStateHolder.class);
-        	dumpShadowObjectState(issh);
+        for (final ShadowObject value : context.getShadowObjectIterator ()) {
+            final ImmutabilityShadowStateHolder issh = value.getState (ImmutabilityShadowStateHolder.class);
+            dumpShadowObjectState (issh);
         }
 
-        out.close();
-	}
+        out.close ();
+    }
 
 }

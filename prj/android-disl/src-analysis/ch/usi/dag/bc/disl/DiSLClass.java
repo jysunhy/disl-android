@@ -7,6 +7,7 @@ import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.annotation.SyntheticLocal;
 import ch.usi.dag.disl.marker.BodyMarker;
 
+
 public class DiSLClass {
 
     @SyntheticLocal
@@ -65,22 +66,5 @@ public class DiSLClass {
     public static void printAnalysisResult () {
         BCAnalysisStub.printResult ();
     }
-
-    /*@Before (marker = BodyMarker.class, scope="android.test.*.endTest")
-    public static void testStart (final MethodStaticContext sc) {
-        //BCAnalysisStub.printResult ();
-		//AREDispatch.NativeLog("IN TEST START");
-		AREDispatch.NativeLog("IN endTest: "+" "+sc.thisMethodFullName()+" "+sc.thisMethodDescriptor());
-		BCAnalysisStub.printResult ();
-		//AREDispatch.manuallyClose();
-    }
-
-    @Before (marker = BodyMarker.class, scope="android.test.*.tearDown")
-    public static void testEnd (final MethodStaticContext sc) {
-		AREDispatch.NativeLog("IN TEARDOWN: "+" "+sc.thisMethodFullName()+" "+sc.thisMethodDescriptor());
-		BCAnalysisStub.printResult ();
-		//AREDispatch.manuallyClose();
-        //BCAnalysisStub.printResult ();
-    }*/
 
 }

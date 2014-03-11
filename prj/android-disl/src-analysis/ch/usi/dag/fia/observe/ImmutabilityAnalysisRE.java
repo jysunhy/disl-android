@@ -1,24 +1,23 @@
 package ch.usi.dag.fia.observe;
 
 import ch.usi.dag.dislre.AREDispatch;
-import ch.usi.dag.dislre.REDispatch;
 
 public class ImmutabilityAnalysisRE {
 
     public static short cs = AREDispatch.registerMethod(
-            "ch.usi.dag.fia.analysis.ImmutabilityAnalysis.constructorStart");
+            "analyse.ImmutabilityAnalysis.constructorStart");
 
     public static short ce = AREDispatch.registerMethod(
-            "ch.usi.dag.fia.analysis.ImmutabilityAnalysis.constructorEnd");
+            "analyse.ImmutabilityAnalysis.constructorEnd");
 
     public static short oa = AREDispatch.registerMethod(
-            "ch.usi.dag.fia.analysis.ImmutabilityAnalysis.onObjectAllocation");
+            "analyse.ImmutabilityAnalysis.onObjectAllocation");
 
     public static short fr = AREDispatch.registerMethod(
-            "ch.usi.dag.fia.analysis.ImmutabilityAnalysis.onFieldRead");
+            "analyse.ImmutabilityAnalysis.onFieldRead");
 
     public static short fw = AREDispatch.registerMethod(
-            "ch.usi.dag.fia.analysis.ImmutabilityAnalysis.onFieldWrite");
+            "analyse.ImmutabilityAnalysis.onFieldWrite");
 
 	public static void constructorStart(final Object forObject) {
 
@@ -66,6 +65,6 @@ public class ImmutabilityAnalysisRE {
         AREDispatch.sendObjectPlusData(ownerClass);
         AREDispatch.sendObjectPlusData(fieldId);
 
-        REDispatch.analysisEnd();
+        AREDispatch.analysisEnd();
     }
 }

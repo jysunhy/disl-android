@@ -3,8 +3,6 @@ package ch.usi.dag.bc.analysis;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map.Entry;
 
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.dislreserver.shadow.Context;
@@ -93,13 +91,13 @@ public class BCAnalysis extends RemoteAnalysis {
     }
 
 
+    // TODO write map-reduce friendly code
     public void printSPResult (final Context context) {
         final HashSet <ShadowString> classes = new HashSet <> ();
-        final Iterator <Entry <Long, ShadowObject>> iter = context.getShadowObjectIterator ();
 
-        while (iter.hasNext ()) {
+        System.out.println ("############### Methods ###############");
 
-            final ShadowObject object = iter.next ().getValue ();
+        for (final ShadowObject object : context.getShadowObjectIterator ()) {
             final Object state = object.getState ();
 
             if (state == null) {
@@ -110,16 +108,22 @@ public class BCAnalysis extends RemoteAnalysis {
                 final MethodStatistic methodStatistic = (MethodStatistic) state;
 
                 int counter = 0;
+                final StringBuilder bitmap = new StringBuilder ();
 
                 for (final boolean element : methodStatistic.coverage) {
                     if (element) {
                         counter++;
+                        bitmap.append ('1');
+                    } else {
+                        bitmap.append ('0');
                     }
                 }
 
-//                System.out.printf (
-//                    "PROCESS-%d: %s %d %d\n", shadowAddressSpace.getContext ().pid (),
-//                    object.toString (), methodStatistic.coverage.length, counter);
+                System.out.printf (
+                    "PROCESS-%d-METHODS: %s %d %d %s\n", context.pid (),
+                    object.toString (), methodStatistic.coverage.length, counter,
+                    bitmap.toString ());
+
                 methodStatistic.className.getState (ClassStatistic.class).coveredEdge += counter;
                 methodStatistic.className.getState (ClassStatistic.class).coveredMethod++;
             }
@@ -131,11 +135,12 @@ public class BCAnalysis extends RemoteAnalysis {
             final ClassStatistic statistic = klass.getState (ClassStatistic.class);
 
             System.out.printf (
-                "PROCESS-%d: %s %.2f %d %d %d\n", context.pid (), klass.toString (),
+                "PROCESS-%d-CLASSES: %s %d %d %d %.2f\n", context.pid (),
+                klass.toString (),
+                statistic.total, statistic.coveredEdge, statistic.coveredMethod,
                 statistic.total == 0
                     ? Float.NaN
-                    : (((float) statistic.coveredEdge) / statistic.total),
-                statistic.total, statistic.coveredMethod, statistic.coveredEdge);
+                    : (((float) statistic.coveredEdge) / statistic.total));
         }
 
         System.out.println ("############### Package ###############");
@@ -172,14 +177,16 @@ public class BCAnalysis extends RemoteAnalysis {
         for (final String key : packageCovered.keySet ()) {
             final ClassStatistic packageStatistic = packageCovered.get (key);
             System.out.printf (
-                "PROCESS-%d: %s %.2f %d %d %d %d\n",
+                "PROCESS-%d-PACKAGE: %s %d %d %d %d %.2f\n",
                 context.pid (),
                 key,
+                packageStatistic.total,
+                packageStatistic.coveredEdge,
+                packageStatistic.coveredMethod,
+                packageStatistic.coveredClass,
                 packageStatistic.total == 0
                     ? Float.NaN
-                    : (((float) packageStatistic.coveredEdge) / packageStatistic.total),
-                packageStatistic.total, packageStatistic.coveredMethod,
-                packageStatistic.coveredEdge, packageStatistic.coveredClass);
+                    : (((float) packageStatistic.coveredEdge) / packageStatistic.total));
         }
 
         System.out.println ("############### Summary ###############");
@@ -216,14 +223,16 @@ public class BCAnalysis extends RemoteAnalysis {
         for (final String key : summaryCovered.keySet ()) {
             final ClassStatistic packageStatistic = summaryCovered.get (key);
             System.out.printf (
-                "PROCESS-%d: %s %.2f %d %d %d %d\n",
+                "PROCESS-%d-SUMMARY: %s %d %d %d %d %.2f \n",
                 context.pid (),
                 key,
+                packageStatistic.total,
+                packageStatistic.coveredEdge,
+                packageStatistic.coveredMethod,
+                packageStatistic.coveredClass,
                 packageStatistic.total == 0
                     ? Float.NaN
-                    : (((float) packageStatistic.coveredEdge) / packageStatistic.total),
-                packageStatistic.total, packageStatistic.coveredMethod,
-                packageStatistic.coveredEdge, packageStatistic.coveredClass);
+                    : (((float) packageStatistic.coveredEdge) / packageStatistic.total));
         }
     }
 

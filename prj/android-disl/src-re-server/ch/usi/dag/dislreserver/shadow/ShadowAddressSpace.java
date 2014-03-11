@@ -2,8 +2,6 @@ package ch.usi.dag.dislreserver.shadow;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.objectweb.asm.Type;
@@ -312,8 +310,8 @@ public class ShadowAddressSpace {
     }
 
 
-    public Iterator <Entry <Long, ShadowObject>> getShadowObjectIterator () {
-        return shadowObjects.entrySet ().iterator ();
+    public Iterable <ShadowObject> getShadowObjectIterator () {
+        return shadowObjects.values ();
     }
 
 

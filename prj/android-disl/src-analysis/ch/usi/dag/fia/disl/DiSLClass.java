@@ -15,17 +15,14 @@ public class DiSLClass {
 
     /** CONSTRUCTORS *************************************************************/
 
-    @Before(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="org.eembc.grinderbench.*.*")
+    @Before(marker = BodyMarker.class, guard = ConstructorGuard.class)
     public static void beforeConstructor(final DynamicContext dc) {
-
         ImmutabilityAnalysisRE.constructorStart(dc.getThis());
     }
 
-    @After(marker = BodyMarker.class, guard = ConstructorGuard.class, scope="org.eembc.grinderbench.*.*")
+    @After(marker = BodyMarker.class, guard = ConstructorGuard.class)
     public static void afterConstructor() {
-
     	ImmutabilityAnalysisRE.constructorEnd();
-
     }
 
     public static class ConstructorGuard {
@@ -38,10 +35,9 @@ public class DiSLClass {
 
     /** FIELD ACCESSES ***********************************************************/
 
-    @Before(marker=BytecodeMarker.class, args = "getfield", scope="org.eembc.grinderbench.*.*")
+    @Before(marker=BytecodeMarker.class, args = "getfield")
     public static void beforeFieldRead(final FieldAccessStaticContext sc, final DynamicContext dc, final ClassContext cc) {
 
-        //AREDispatch.NativeLog (cc.asClass(sc.getOwner())+ sc.thisMethodFullName());
     	final Object object = dc.getStackValue(0, Object.class);
 
     	if(object != null) {
@@ -49,9 +45,9 @@ public class DiSLClass {
     	}
     }
 
-    @Before(marker = BytecodeMarker.class, args = "putfield", scope="org.eembc.grinderbench.*.*")
+    @Before(marker = BytecodeMarker.class, args = "putfield")
     public static void beforeFieldWrite(final FieldAccessStaticContext sc, final DynamicContext dc, final ClassContext cc) {
-        //AREDispatch.NativeLog (cc.asClass(sc.getOwner())+ sc.thisMethodFullName());
+
     	final Object object = dc.getStackValue(1, Object.class);
 
         if(object != null) {
@@ -67,8 +63,8 @@ public class DiSLClass {
      * Note that this snippet requires that bytecode verification is switched off (<code>-noverify</code>) as the newly
      * created instances are passed to the runtime <em>prior</em> to initialization.
      */
-    @AfterReturning(marker = BytecodeMarker.class, args = "new", scope="org.eembc.grinderbench.*.*")
-    public static void objectAllocated(final DynamicContext dc, final AllocationSiteStaticContext sc) {
+    @AfterReturning(marker = BytecodeMarker.class, args = "new")
+    public static void objectAllocated(final DynamicContext dc, final AllocationSiteStaticContext sc, final MethodStaticContext msc) {
         ImmutabilityAnalysisRE.onObjectAllocation(dc.getStackValue(0, Object.class), sc.getAllocationSite());
     }
 
@@ -83,7 +79,6 @@ public class DiSLClass {
     @AfterReturning(marker = BodyMarker.class,
             scope = "java.lang.Object java.lang.reflect.Constructor.newInstance(java.lang.Object[])")
     public static void objectAllocatedThroughReflection(final DynamicContext dc, final AllocationSiteStaticContext sc) {
-        //AREDispatch.NativeLog (sc.thisMethodFullName() +"\t"+ sc.thisMethodDescriptor());
         ImmutabilityAnalysisRE.onObjectAllocation(dc.getStackValue(0, Object.class), sc.getReflectiveAllocationSite());
     }
 
