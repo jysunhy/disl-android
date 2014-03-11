@@ -10,8 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.exception.DiSLREServerFatalException;
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
-import ch.usi.dag.dislreserver.shadow.Context;
-import ch.usi.dag.dislreserver.shadow.Forkable;
 
 public final class AnalysisResolver {
 	private static final String METHOD_DELIM = ".";
@@ -79,14 +77,14 @@ public final class AnalysisResolver {
 			// resolve analysis method
 			final Method raMethod = __getAnalysisMethod (raInst, methodName);
 
-            if (Forkable.class.isAssignableFrom (raInst.getClass ())) {
-                final Class <?> [] argTypes = raMethod.getParameterTypes ();
-
-                if (!argTypes [argTypes.length - 1].equals (Context.class)) {
-                    throw new DiSLREServerFatalException ("Analysis method "
-                        + methodStr + " does not accept Context as an argument");
-                }
-            }
+//            if (Forkable.class.isAssignableFrom (raInst.getClass ())) {
+//                final Class <?> [] argTypes = raMethod.getParameterTypes ();
+//
+//                if (!argTypes [argTypes.length - 1].equals (Context.class)) {
+//                    throw new DiSLREServerFatalException ("Analysis method "
+//                        + methodStr + " does not accept Context as an argument");
+//                }
+//            }
 
 			return new AnalysisMethodHolder(raInst, raMethod);
 		}

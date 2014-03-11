@@ -50,7 +50,7 @@ class ObjectFreeTaskExecutor extends Thread {
 
             // invoke object free
             for (final RemoteAnalysis ra : raSet) {
-                ra.objectFree (shadowAddressSpace, obj);
+                ra.objectFree (shadowAddressSpace.getContext (), obj);
             }
 
             // release shadow object

@@ -370,6 +370,13 @@ service instrumentserver /sbin/instrumentserver
 on property:ro.kernel.qemu=1
     start instrumentserver
 
+service testclient /sbin/testclient
+    class core
+    disabled
+
+on property:ro.kernel.qemu=1
+    start testclient
+
 service servicemanager /system/bin/servicemanager
     class core
     user system

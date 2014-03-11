@@ -18,19 +18,21 @@ public final class CloseHandler implements RequestHandler {
     ) {
         final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpace (pid);
 
-        if (ShadowAddressSpace.removeShadowAddressSpace (shadowAddressSpace)) {
-            // call exit on all request handlers - waits for all uncompleted
-            // actions
-            // TODO shall we call handler.exit()
+//        if (ShadowAddressSpace.removeShadowAddressSpace (shadowAddressSpace)) {
+//            // call exit on all request handlers - waits for all uncompleted
+//            // actions
+//            // TODO shall we call handler.exit()
 //            for (final RequestHandler handler : RequestDispatcher.getAllHandlers ()) {
 //                handler.exit ();
 //            }
-        }
+//        }
 
         // invoke atExit on all analyses
         for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
-            analysis.atExit (shadowAddressSpace);
+            analysis.atExit (shadowAddressSpace.getContext ());
         }
+
+        ShadowAddressSpace.removeShadowAddressSpace (shadowAddressSpace);
     }
 
 

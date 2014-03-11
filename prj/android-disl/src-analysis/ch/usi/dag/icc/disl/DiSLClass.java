@@ -49,14 +49,35 @@ public class DiSLClass {
         ICCAnalysisStub.actualCreateService ();
     }
 
-    @Before (marker = BodyMarker.class, scope = "Launcher.onCreate")
-    public static void onSystemReady_2 () {
-        AREDispatch.NativeLog ("SYSTEM_READY IS SENT IN LAUNCHER.ONCREAET");
+    /*@Before (marker = BodyMarker.class, scope="*.endTest")
+    public static void testStart (final MethodStaticContext sc) {
+        //BCAnalysisStub.printResult ();
+        //AREDispatch.NativeLog("IN TEST START");
+        AREDispatch.NativeLog("IN TEARDOWN: "+" "+sc.thisMethodFullName()+" "+sc.thisMethodDescriptor());
+        ICCAnalysisStub.onSystemReady ();
+        //AREDispatch.manuallyClose();
+    }
+
+    @Before (marker = BodyMarker.class, scope="*.tearDown")
+    public static void testEnd (final MethodStaticContext sc) {
+        AREDispatch.NativeLog("IN TEARDOWN: "+" "+sc.thisMethodFullName()+" "+sc.thisMethodDescriptor());
+        ICCAnalysisStub.onSystemReady ();
+        //AREDispatch.manuallyClose();
+        //BCAnalysisStub.printResult ();
+    }*/
+
+    @Before (marker = BodyMarker.class, scope = "*.onTransact")
+    public static void test1 () {
+        AREDispatch.NativeLog("IN OnTransact");
+    }
+
+    @Before (marker = BodyMarker.class, scope = "*.transact")
+    public static void test2 () {
+        AREDispatch.NativeLog("IN tansact");
     }
 
     @Before (marker = BodyMarker.class, scope = "LauncherApplication.onCreate")
     public static void onSystemReady () {
-        AREDispatch.NativeLog ("SYSTEM_READY IS SENT IN LAUNCHERAPPLICATION.ONCREATE");
         ICCAnalysisStub.onSystemReady ();
     }
 

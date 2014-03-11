@@ -1,6 +1,6 @@
 package ch.usi.dag.dislreserver.remoteanalysis;
 
-import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
+import ch.usi.dag.dislreserver.shadow.Context;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
 
 /**
@@ -23,7 +23,7 @@ import ch.usi.dag.dislreserver.shadow.ShadowObject;
  */
 public abstract class RemoteAnalysis {
 
-	public abstract void atExit(ShadowAddressSpace shadowAddressSpace);
+	public abstract void atExit(Context context);
 
-	public abstract void objectFree(ShadowAddressSpace shadowAddressSpace, ShadowObject netRef);
+	public abstract void objectFree(Context context, ShadowObject netRef);
 }

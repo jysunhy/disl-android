@@ -3,6 +3,7 @@ package ch.usi.dag.bc.disl;
 import java.util.LinkedList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
@@ -26,15 +27,21 @@ public class BCContext extends MethodStaticContext {
         Integer total;
 
         if ((total = methodTotalEdges.get (thisClassName ())) == null) {
-            int counter = 0;
+            int method = 0;
+            int edge = 0;
 
             for (final MethodNode methodNode : staticContextData.getClassNode ().methods) {
-                counter += BCUtil.getBranchCount (methodNode);
+                edge += BCUtil.getBranchCount (methodNode);
+
+                if ((methodNode.access & Opcodes.ACC_ABSTRACT) == 0
+                    && (methodNode.access & Opcodes.ACC_NATIVE) == 0) {
+                    method++;
+                }
             }
 
-            if ((total = methodTotalEdges.putIfAbsent (thisClassName (), counter)) == null) {
-                System.out.println ("BCC: " + thisClassName () + " " + counter);
-                total = counter;
+            if ((total = methodTotalEdges.putIfAbsent (thisClassName (), edge)) == null) {
+                System.out.printf ("BCC: %s %d %d\n", thisClassName (), method, edge);
+                total = edge;
             }
         }
 

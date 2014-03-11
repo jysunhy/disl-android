@@ -1,5 +1,7 @@
 package ch.usi.dag.dislreserver.shadow;
 
+import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
@@ -55,14 +57,14 @@ public class ShadowAddressSpace {
             final ShadowClass clonedClass = (ShadowClass) child.getClonedShadowObject (thisClass);
             child.shadowClasses.put (key, clonedClass);
 
-//            if (DiSLREServer.debug) {
-//                System.out.println (Thread.currentThread ().getName ()
-//                    + ": PROCESS-"
-//                    + context.processID + " Forking Shadow Class: "
-//                    + clonedClass.getName () + " with net ref "
-//                    + Long.toHexString (clonedClass.getNetRef ()) + " to PROCESS-"
-//                    + childProcessID);
-//            }
+            // if (DiSLREServer.debug) {
+            // System.out.println (Thread.currentThread ().getName ()
+            // + ": PROCESS-"
+            // + context.processID + " Forking Shadow Class: "
+            // + clonedClass.getName () + " with net ref "
+            // + Long.toHexString (clonedClass.getNetRef ()) + " to PROCESS-"
+            // + childProcessID);
+            // }
         }
 
         // clone classLoaderMap
@@ -95,8 +97,24 @@ public class ShadowAddressSpace {
 
             if (state != null) {
                 if (state instanceof Replicable) {
-                    value.setState (((Replicable) state).replicate (child));
+                    value.setState (((Replicable) state).replicate ());
 
+                    // TODO (YZ) test the following code
+                    final Class <?> klass = state.getClass ();
+
+                    for (final Field field : klass.getFields ()) {
+                        if (ShadowObject.class.isAssignableFrom (field.getType ())) {
+                            try {
+                                field.set (
+                                    value,
+                                    child.getClonedShadowObject ((ShadowObject) field.get (value)));
+                            } catch (final IllegalArgumentException e) {
+                                e.printStackTrace ();
+                            } catch (final IllegalAccessException e) {
+                                e.printStackTrace ();
+                            }
+                        }
+                    }
                 } else {
                     throw new DiSLREServerFatalException (
                         "ShadowState is not Replicable");
@@ -106,7 +124,7 @@ public class ShadowAddressSpace {
 
         for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
             if (analysis instanceof Forkable) {
-                ((Forkable) analysis).onFork (getContext (), childProcessID);
+                ((Forkable) analysis).onFork (context, child.context);
             }
         }
 
@@ -421,6 +439,11 @@ public class ShadowAddressSpace {
     // Singleton Utilities
 
     private static final ConcurrentHashMap <Integer, ShadowAddressSpace> shadowAddressSpaces = new ConcurrentHashMap <> ();
+
+
+    public static Collection <ShadowAddressSpace> getAllShadowAddressSpace () {
+        return shadowAddressSpaces.values ();
+    }
 
 
     public static ShadowAddressSpace getShadowAddressSpace (final Integer pid) {

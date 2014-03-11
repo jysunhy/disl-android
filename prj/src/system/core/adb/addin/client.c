@@ -1,120 +1,384 @@
-#include <netinet/in.h> // for sockaddr_in
-#include <sys/types.h> // for socket
-#include <sys/socket.h> // for socket
-#include <stdio.h> // for printf
-#include <stdlib.h> // for exit
-#include <string.h> // for bzero
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/epoll.h>
+#include <errno.h>
 
-#define HELLO_WORLD_SERVER_PORT 6666
-#define BUFFER_SIZE 1024
-#define SERVER_IP "127.0.0.1"
-#define min(a,b) a>b?b:a
+#include <cutils/log.h>
+#include <pthread.h>        /* P-thread implementation        */
+#include <endian.h>
+#include <sys/types.h>      //
+#include <netinet/in.h>     //
+#include <sys/socket.h>     // for socket system calls
+#include <arpa/inet.h>      // for socket system calls (bind)
+#include <sched.h>
+#include <pthread.h>        /* P-thread implementation        */
+#include <signal.h>     /* for signal                     */
+#include <semaphore.h>      /* for p-thread semaphores        */
+#include <sys/un.h>
 
-int main(int argc, char **argv)
+#define MAXEVENTS 12800
+
+#define SVM_IP "192.168.1.103"
+#define SVM_PORT 11218
+#define EPOLL_SOCK "/dev/socket/epoll_sock"
+
+#define MAX_PROCESS 20000
+
+struct GlobalInfo{
+	int totalPackets;
+	int procs;
+}gInfo;
+
+struct ProcInfo {
+	int pid;
+	int svm_sock;
+	int packets_sent;
+	pthread_mutex_t lock;
+}procs[MAX_PROCESS];
+
+
+pthread_mutex_t gl_mtx;
+int svm_conn = -1;
+
+static int get_svm_socket(){
+	int sock_host = -1;
+	int retcode;
+	while(1) {
+		sock_host = socket_network_client(SVM_IP, SVM_PORT, SOCK_STREAM);
+		if(sock_host <= 0){
+			ALOG (LOG_INFO,"INSTRUMENTSERVER","new svm host sock error");
+			sleep(5);
+		}else
+			break;
+	}
+	return sock_host;
+}
+
+	static int
+make_socket_non_blocking (int sfd)
 {
+	int flags, s;
 
-	struct sockaddr_in client_addr;
-	bzero(&client_addr,sizeof(client_addr));
-	client_addr.sin_family = AF_INET;
-	client_addr.sin_addr.s_addr = htons(INADDR_ANY);
-	client_addr.sin_port = htons(0);
-
-	int client_socket = socket(AF_INET,SOCK_STREAM,0);
-	if( client_socket < 0)
+	flags = fcntl (sfd, F_GETFL, 0);
+	if (flags == -1)
 	{
-		printf("Create Socket Failed!\n");
-		exit(1);
+		perror ("fcntl");
+		return -1;
 	}
-	if( bind(client_socket,(struct sockaddr*)&client_addr,sizeof(client_addr)))
+
+	flags |= O_NONBLOCK;
+	s = fcntl (sfd, F_SETFL, flags);
+	if (s == -1)
 	{
-		printf("Client Bind Port Failed!\n");
-		exit(1);
+		perror ("fcntl");
+		return -1;
 	}
 
-	struct sockaddr_in server_addr;
-	bzero(&server_addr,sizeof(server_addr));
-	server_addr.sin_family = AF_INET;
-	if(inet_aton(SERVER_IP,&server_addr.sin_addr) == 0)
+	return 0;
+}
+
+	static int
+create_and_bind () {
+				struct sockaddr_un address;
+				int socket_fd, connection_fd;
+				socklen_t address_length;
+				pid_t child;
+				socket_fd = socket(PF_UNIX, SOCK_STREAM, 0);
+				if(socket_fd < 0)
+				{
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","create socket error");
+					return 1;
+				} 
+				memset(&address, 0, sizeof(struct sockaddr_un));                                                                                                                                                                                           
+				address.sun_family = AF_UNIX;
+				snprintf(address.sun_path, UNIX_PATH_MAX, EPOLL_SOCK);
+				
+				ALOG (LOG_INFO,"INSTRUMENTSERVER","SOCKFILE %s", address.sun_path);
+
+				if(bind(socket_fd, 
+							(struct sockaddr *) &address,  
+							sizeof(struct sockaddr_un)) != 0 ){
+					ALOG (LOG_INFO,"INSTRUMENTSERVER","bind socket for PID error");
+				}
+				char mod[]="0666";
+				chmod(address.sun_path, strtol(mod,0,8));
+				return socket_fd;
+}
+	static int
+_create_and_bind (char *port)
+{
+	struct addrinfo hints;
+	struct addrinfo *result, *rp;
+	int s, sfd;
+
+	memset (&hints, 0, sizeof (struct addrinfo));
+	hints.ai_family = AF_UNSPEC;     /* Return IPv4 and IPv6 choices */
+	hints.ai_socktype = SOCK_STREAM; /* We want a TCP socket */
+	hints.ai_flags = AI_PASSIVE;     /* All interfaces */
+
+	s = getaddrinfo (NULL, port, &hints, &result);
+	if (s != 0)
 	{
-		printf("Server IP Address Error!\n");
-		exit(1);
+		fprintf (stderr, "getaddrinfo: %s\n", gai_strerror (s));
+		return -1;
 	}
-	server_addr.sin_port = htons(HELLO_WORLD_SERVER_PORT);
-	socklen_t server_addr_length = sizeof(server_addr);
-	if(connect(client_socket,(struct sockaddr*)&server_addr, server_addr_length) < 0)
+
+	for (rp = result; rp != NULL; rp = rp->ai_next)
 	{
-		printf("Can Not Connect To %s!\n",SERVER_IP);
-		exit(1);
+		sfd = socket (rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+		if (sfd == -1)
+			continue;
+
+		s = bind (sfd, rp->ai_addr, rp->ai_addrlen);
+		if (s == 0)
+		{
+			/* We managed to bind successfully! */
+			break;
+		}
+
+		close (sfd);
 	}
 
-
-
-
-	FILE* input = fopen(argv[1],"rb");
-	if(!input){
-		printf("openerrr\n");
-		exit(1);
-	}
-	char *content = malloc(10000000);
-	int rc;
-	int filesize=0;
-	while( (rc=fread(content+filesize,sizeof(unsigned char),BUFFER_SIZE, input))!=0)
+	if (rp == NULL)
 	{
-		filesize+=rc;
+		fprintf (stderr, "Could not bind\n");
+		return -1;
 	}
-	fclose(input);
 
-	char buffer[BUFFER_SIZE];
-	char* dex = malloc(10000000);
-	int dex_size=10000000;
+	freeaddrinfo (result);
 
+	return sfd;
+}
+
+void init(){
 	int i = 0;
-	for(; i < 10; i++){
-	int length = 0;
-	printf("sending size:%d!\n",filesize);
-	send(client_socket,&filesize,sizeof(int),0);
-	int cnt = 0;
-	while(cnt < filesize) {
-		length = send(client_socket,content+cnt,min(BUFFER_SIZE,filesize-cnt),0);
-		if(length<=0)
-			goto error;
-		cnt+=length;
+	for(; i < MAX_PROCESS; i++){
+		procs[i].pid = -1;
 	}
-	printf("receiving!\n");
-	length = recv(client_socket, &dex_size, sizeof(int), 0);
-	if(length!=sizeof(int))
-		goto error;
-	cnt = 0;
+}
 
-	//FILE* output=fopen("tmp.dex","wb");
+void * forward_loop (void *arg){
+	unsigned int appsock = *(unsigned int*) arg;
+	return NULL;
+}
+	int
+main (int argc, char *argv[])
+{
+	init();
+	pthread_mutex_init(&gl_mtx, NULL);
+	svm_conn = get_svm_socket();
 
-	while( cnt < dex_size)
+
+	int sfd, s;
+	int efd;
+	struct epoll_event event;
+	struct epoll_event *events;
+
+	// if (argc != 2)
+	//   {
+	//     fprintf (stderr, "Usage: %s [port]\n", argv[0]);
+	//     exit (EXIT_FAILURE);
+	//   }
+
+	//sfd = create_and_bind (argv[1]);
+	//sfd = create_and_bind ("6789");
+	sfd = create_and_bind ();
+	if (sfd == -1)
+		abort ();
+
+	s = make_socket_non_blocking (sfd);
+	if (s == -1)
+		abort ();
+
+	s = listen (sfd, SOMAXCONN);
+	if (s == -1)
 	{
-		length = recv(client_socket,buffer,BUFFER_SIZE,0);
-		if(length <= 0)
-			goto error;
-	//	fwrite(buffer,sizeof(unsigned char), length, output);
-		memcpy(dex+cnt,buffer,length);
-		cnt+=length;
+		perror ("listen");
+		abort ();
 	}
-	printf("receive dex size %d:\n",dex_size);
-	//dex[cnt]=0;
-	if(memcmp(content,dex,dex_size))
-		printf("not equal\n");
-	else
-		printf("equal\n");
 
+	efd = epoll_create (2000);
+	if (efd == -1)
+	{
+		perror ("epoll_create");
+		abort ();
 	}
-	free(content);
-	//fclose(output);
-	
-	if(dex)
-		free(dex);
-	return 0;
-error:
-	if(dex)
-		free(dex);
-	close(client_socket);
-	printf("error happens\n");
-	return 0;
+
+	event.data.fd = sfd;
+	event.events = EPOLLIN | EPOLLET;
+	s = epoll_ctl (efd, EPOLL_CTL_ADD, sfd, &event);
+	if (s == -1)
+	{
+		perror ("epoll_ctl");
+		abort ();
+	}
+
+	/* Buffer where events are returned */
+	events = calloc (MAXEVENTS, sizeof event);
+
+	/* The event loop */
+	while (1)
+	{
+		int n, i;
+
+		n = epoll_wait (efd, events, MAXEVENTS, -1);
+		for (i = 0; i < n; i++)
+		{
+			if ((events[i].events & EPOLLERR) ||
+					(events[i].events & EPOLLHUP) ||
+					(!(events[i].events & EPOLLIN)))
+			{
+				/* An error has occured on this fd, or the socket is not
+				   ready for reading (why were we notified then?) */
+				ALOG(LOG_DEBUG, "EPOLL", "ERROR HERE");
+				fprintf (stderr, "epoll error\n");
+				close (events[i].data.fd);
+				continue;
+			}
+
+			else if (sfd == events[i].data.fd)
+			{
+
+				/* We have a notification on the listening socket, which
+				   means one or more incoming connections. */
+				while (1)
+				{
+					struct sockaddr in_addr;
+					socklen_t in_len;
+					int infd;
+					char hbuf[NI_MAXHOST], sbuf[NI_MAXSERV];
+
+					in_len = sizeof in_addr;
+					infd = accept (sfd, &in_addr, &in_len);
+					if (infd == -1)
+					{
+						if ((errno == EAGAIN) ||
+								(errno == EWOULDBLOCK))
+						{
+							/* We have processed all incoming
+							   connections. */
+							break;
+						}
+						else
+						{
+							perror ("accept");
+							break;
+						}
+					}
+
+					s = getnameinfo (&in_addr, in_len,
+							hbuf, sizeof hbuf,
+							sbuf, sizeof sbuf,
+							NI_NUMERICHOST | NI_NUMERICSERV);
+					if (s == 0)
+					{
+						ALOG(LOG_DEBUG,"EPOLL", "Accepted connection on descriptor %d "
+								"(host=%s, port=%s)\n", infd, hbuf, sbuf);
+					}
+
+					/* Make the incoming socket non-blocking and add it to the
+					   list of fds to monitor. */
+					s = make_socket_non_blocking (infd);
+					if (s == -1)
+						abort ();
+
+					event.data.fd = infd;
+					event.events = EPOLLIN | EPOLLET;
+					s = epoll_ctl (efd, EPOLL_CTL_ADD, infd, &event);
+					if (s == -1)
+					{
+						perror ("epoll_ctl");
+						abort ();
+					}
+				}
+				continue;
+			}
+			else
+			{
+				/* We have data on the fd waiting to be read. Read and
+				   display it. We must read whatever data is available
+				   completely, as we are running in edge-triggered mode
+				   and won't get a notification again for the same
+				   data. */
+				/*pthread_attr_t attr;    
+				  pthread_t thread;      
+				  pthread_attr_init (&attr);
+				  pthread_create (&threads,&attr,forward_loop,&infd);  */
+				int done = 0;
+	//			pthread_mutex_lock(&gl_mtx);
+
+				//int pid = -1;
+				while (1)
+				{
+					ssize_t count;
+					char buf[1024];
+
+					count = read (events[i].data.fd, buf, sizeof buf);
+					/*if((pid == -1) ){
+						if(count < 4) {
+							ALOG(LOG_DEBUG,"EPOLL","STRANGE HERE FIRST 4 BYTES NOT SENT");
+						}else{
+							memcpy(&pid, buf, sizeof(int));
+							pid = htonl(buf);
+							ALOG(LOG_DEBUG,"EPOLL","app connection from pid %d", pid);
+						}
+					}*/
+					if (count == -1)
+					{
+						/* If errno == EAGAIN, that means we have read all
+						   data. So go back to the main loop. */
+						if (errno != EAGAIN)
+						{
+							ALOG(LOG_DEBUG,"EPOLL","ERR IN READ EAGAIN");
+							//     perror ("read");
+							done = 1;
+						}
+						break;
+					}
+					else if (count == 0)
+					{
+						/* End of file. The remote has closed the
+						   connection. */
+						done = 1;
+						ALOG(LOG_DEBUG,"EPOLL","app connection closed", count);
+						break;
+					}
+
+					/* Write the buffer to standard output */
+					int retcode = send(svm_conn, buf, count, 0);
+					ALOG(LOG_DEBUG,"EPOLL","%d sized receivde, svm retcode %d", count, retcode);
+
+					//s = write (1, buf, count);
+					//if (s == -1)
+					//  {
+					//    perror ("write");
+					//    abort ();
+					//  }
+				}
+	//			pthread_mutex_unlock(&gl_mtx);
+
+				if (done)
+				{
+					ALOG(LOG_DEBUG,"EPOLL","Closed connection on descriptor %d\n",
+							events[i].data.fd);
+
+					/* Closing the descriptor will make epoll remove it
+					   from the set of descriptors which are monitored. */
+					close (events[i].data.fd);
+				}
+			}
+		}
+	}
+
+	free (events);
+
+	close (sfd);
+
+	return EXIT_SUCCESS;
 }

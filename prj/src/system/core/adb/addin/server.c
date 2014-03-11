@@ -92,7 +92,7 @@ void * my_thread (void *arg)
 
 			int pid;
 			retcode = recv(myClient_s, &pid, sizeof(int), 0);
-		//	ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event from pid %d", pid);
+			ALOG (LOG_INFO,"SOCKET","receive shadow event from pid %d", pid);
 
 
 			int i = 0;
@@ -103,13 +103,13 @@ void * my_thread (void *arg)
 				}
 			}
 			if(i>=psize)
-				ALOG (LOG_INFO,"INSTRUMENTSERVER","pid %d has not been map", pid);
+				ALOG (LOG_INFO,"SOCKET","pid %d has not been map", pid);
 			pthread_mutex_lock(&(locks[i]));
 			if(svmsockets[i] == -1) {
 				while(true) {
 					int thesocket = socket_network_client(SERVER_IP, 11218, SOCK_STREAM);
 					if(thesocket <= 0){
-						ALOG (LOG_INFO,"INSTRUMENTSERVER","new host sock error");
+						ALOG (LOG_INFO,"SOCKET","new host sock error");
 						sleep(10);
 					}else {
 						svmsockets[i] = thesocket;
@@ -120,32 +120,40 @@ void * my_thread (void *arg)
 
 			int len;
 			retcode = recv(myClient_s, &len, sizeof(int), 0);
-			ALOG (LOG_INFO,"INSTRUMENTSERVER","receive shadow event from pid %d name is %s sized %d", pid, pnames[i], len);
-			//ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "get shadow buffer sized %d", len);
+			ALOG (LOG_INFO,"SOCKET","receive shadow event from pid %d name is %s sized %d", pid, pnames[i], len);
+			if(retcode != sizeof(int)){
+				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "retcode %d != 4", retcode);
+			}
 
 
 			int cnt = 0;
 			while(cnt < len){
-				retcode = recv(myClient_s, buf, BUF_SIZE, 0);
+				retcode = recv(myClient_s, buf, 10000, MSG_WAITALL);
 				if(retcode < 0){
-					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "closed from app");
+					ALOG(LOG_DEBUG,"SOCKET", "closed from app errno %d", errno);
+					break;
+				}
+				if(retcode == 0)
+				{
+					ALOG(LOG_DEBUG,"SOCKET", "error in receiving close it now");
 					break;
 				}
 				///*
 				int recvsize = send(svmsockets[i], buf, retcode, 0);
 				if(recvsize < 0) {
-					ALOG (LOG_INFO,"INSTRUMENTSERVER","host sock error here");
+					ALOG (LOG_INFO,"SOCKET","host sock error here");
 					break;
 				}
 				if(recvsize != retcode){
-					ALOG (LOG_INFO,"INSTRUMENTSERVER","recv size != sent size");
+					ALOG (LOG_INFO,"SOCKET","recv size != sent size");
 					break;
 				}
 
 				cnt+=retcode;
-				//ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "%d bytes has been sent", cnt);
+				ALOG(LOG_DEBUG,"SOCKET", "%d bytes has been sent from pid %d name is %s sized %d",cnt, pid, pnames[i], len);
 
 			}
+				ALOG(LOG_DEBUG,"SOCKET", "%d bytes has been sent to svm from pid %d name is %s sized %d",cnt, pid, pnames[i], len);
 			close(myClient_s);
 			//close(svmsockets[i]);
 			//svmsockets[i]=-1;
@@ -186,6 +194,20 @@ void * my_thread (void *arg)
 				if(!strcmp(pname, observedNames[i])){
 					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "PROCESS NAME: %s is OBSERVED", pname);
 					tmp = 0;
+				}else {
+					if(strlen(pname) > strlen(observedNames[i])){
+						char* tmppname = (char*) malloc(pname_len);
+						memcpy(tmppname, pname, pname_len);
+						tmppname[strlen(observedNames[i])]='\0';
+						if(!strcmp(tmppname, observedNames[i])){
+							if(pname[strlen(observedNames[i])]==':'){
+								ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "PROCESS NAME: %s is sub process that should be OBSERVED", pname);
+								tmp = 0;
+							}
+						}
+						free(tmppname);
+						
+					}
 				}
 			}
 			if(tmp)
@@ -195,7 +217,8 @@ void * my_thread (void *arg)
 
 			send(myClient_s,&tmp,sizeof(int),0);
 
-			if(tmp == 0 || !strcmp(pname,"zygote")){
+			//if(tmp == 0 || !strcmp(pname,"zygote")){
+			if(false){
 
 				struct sockaddr_un address;
 				int socket_fd, connection_fd;
@@ -261,6 +284,14 @@ void * my_thread (void *arg)
 					{
 						/* Create a child thread --------------------------------------- */
 						ids = connection_fd;
+socklen_t sendbuflen = 0;  
+socklen_t len = sizeof(sendbuflen);  
+getsockopt(ids, SOL_SOCKET, SO_RCVBUF, (void*)&sendbuflen, &len);  
+ALOG(LOG_DEBUG, "SOCKET", "default,recvbuf:%d\n", sendbuflen);   
+sendbuflen = 5120000;  
+setsockopt(ids, SOL_SOCKET, SO_RCVBUF, (void*)&sendbuflen, len);  
+getsockopt(ids, SOL_SOCKET, SO_RCVBUF, (void*)&sendbuflen, &len);  
+ALOG(LOG_DEBUG, "SOCKET", "now,recvbuf:%d\n", sendbuflen); 
 						pthread_create (    /* Create a child thread        */
 								&threads,   /* Thread ID (system assigned)  */
 								&attr,  /* Default thread attributes    */

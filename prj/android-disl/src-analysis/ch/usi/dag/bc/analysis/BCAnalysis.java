@@ -1,13 +1,14 @@
 package ch.usi.dag.bc.analysis;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.dislreserver.shadow.Context;
 import ch.usi.dag.dislreserver.shadow.Replicable;
-import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
 import ch.usi.dag.dislreserver.shadow.ShadowString;
 
@@ -16,19 +17,27 @@ public class BCAnalysis extends RemoteAnalysis {
 
     public static class ClassStatistic implements Replicable {
 
-        int covered;
+        int total;
 
-        final int total;
+        // for dumping
+        int coveredClass;
+
+        int coveredMethod;
+
+        int coveredEdge;
 
 
         public ClassStatistic (final int total) {
             this.total = total;
-            this.covered = 0;
+
+            this.coveredClass = 0;
+            this.coveredMethod = 0;
+            this.coveredEdge = 0;
         }
 
 
         @Override
-        public Replicable replicate (final ShadowAddressSpace shadowAddressSpace) {
+        public Replicable replicate () {
             return new ClassStatistic (total);
         }
     }
@@ -55,11 +64,8 @@ public class BCAnalysis extends RemoteAnalysis {
 
 
         @Override
-        public Replicable replicate (final ShadowAddressSpace shadowAddressSpace) {
-            return new MethodStatistic (
-                (ShadowString) shadowAddressSpace.getClonedShadowObject (className),
-                coverage);
-
+        public Replicable replicate () {
+            return new MethodStatistic (className, coverage);
         }
 
     }
@@ -87,10 +93,9 @@ public class BCAnalysis extends RemoteAnalysis {
     }
 
 
-    @Override
-    public void atExit (final ShadowAddressSpace shadowAddressSpace) {
+    public void printSPResult (final Context context) {
         final HashSet <ShadowString> classes = new HashSet <> ();
-        final Iterator <Entry <Long, ShadowObject>> iter = shadowAddressSpace.getShadowObjectIterator ();
+        final Iterator <Entry <Long, ShadowObject>> iter = context.getShadowObjectIterator ();
 
         while (iter.hasNext ()) {
 
@@ -115,26 +120,129 @@ public class BCAnalysis extends RemoteAnalysis {
 //                System.out.printf (
 //                    "PROCESS-%d: %s %d %d\n", shadowAddressSpace.getContext ().pid (),
 //                    object.toString (), methodStatistic.coverage.length, counter);
-                methodStatistic.className.getState (ClassStatistic.class).covered += counter;
+                methodStatistic.className.getState (ClassStatistic.class).coveredEdge += counter;
+                methodStatistic.className.getState (ClassStatistic.class).coveredMethod++;
             }
         }
+
+        System.out.println ("############### Classes ###############");
 
         for (final ShadowString klass : classes) {
             final ClassStatistic statistic = klass.getState (ClassStatistic.class);
 
             System.out.printf (
-                "PROCESS-%d: %s %.2f %d %d\n",
-                shadowAddressSpace.getContext ().pid (),
-                klass.toString (), statistic.total == 0
-                    ? Float.NaN : (((float) statistic.covered) / statistic.total),
-                statistic.total, statistic.covered);
+                "PROCESS-%d: %s %.2f %d %d %d\n", context.pid (), klass.toString (),
+                statistic.total == 0
+                    ? Float.NaN
+                    : (((float) statistic.coveredEdge) / statistic.total),
+                statistic.total, statistic.coveredMethod, statistic.coveredEdge);
+        }
+
+        System.out.println ("############### Package ###############");
+
+        final HashMap <String, ClassStatistic> packageCovered = new HashMap <> ();
+
+        for (final ShadowString klass : classes) {
+            final String className = klass.toString ();
+
+            final int index = className.lastIndexOf ('/');
+
+            final String packageName;
+
+            if (index == -1) {
+                packageName = "default";
+            } else {
+                packageName = className.substring (0, index);
+            }
+
+            ClassStatistic packageStatistic = packageCovered.get (packageName);
+
+            if (packageStatistic == null) {
+                packageStatistic = new ClassStatistic (0);
+                packageCovered.put (packageName, packageStatistic);
+            }
+
+            final ClassStatistic classStatistic = klass.getState (ClassStatistic.class);
+            packageStatistic.total += classStatistic.total;
+            packageStatistic.coveredClass ++;
+            packageStatistic.coveredMethod += classStatistic.coveredMethod;
+            packageStatistic.coveredEdge += classStatistic.coveredEdge;
+        }
+
+        for (final String key : packageCovered.keySet ()) {
+            final ClassStatistic packageStatistic = packageCovered.get (key);
+            System.out.printf (
+                "PROCESS-%d: %s %.2f %d %d %d %d\n",
+                context.pid (),
+                key,
+                packageStatistic.total == 0
+                    ? Float.NaN
+                    : (((float) packageStatistic.coveredEdge) / packageStatistic.total),
+                packageStatistic.total, packageStatistic.coveredMethod,
+                packageStatistic.coveredEdge, packageStatistic.coveredClass);
+        }
+
+        System.out.println ("############### Summary ###############");
+
+        final HashMap <String, ClassStatistic> summaryCovered = new HashMap <> ();
+
+        for (final ShadowString klass : classes) {
+            final String className = klass.toString ();
+
+            final int index = className.indexOf ('/');
+
+            final String summaryName;
+
+            if (index == -1) {
+                summaryName = "default";
+            } else {
+                summaryName = className.substring (0, index);
+            }
+
+            ClassStatistic packageStatistic = summaryCovered.get (summaryName);
+
+            if (packageStatistic == null) {
+                packageStatistic = new ClassStatistic (0);
+                summaryCovered.put (summaryName, packageStatistic);
+            }
+
+            final ClassStatistic classStatistic = klass.getState (ClassStatistic.class);
+            packageStatistic.total += classStatistic.total;
+            packageStatistic.coveredClass ++;
+            packageStatistic.coveredMethod += classStatistic.coveredMethod;
+            packageStatistic.coveredEdge += classStatistic.coveredEdge;
+        }
+
+        for (final String key : summaryCovered.keySet ()) {
+            final ClassStatistic packageStatistic = summaryCovered.get (key);
+            System.out.printf (
+                "PROCESS-%d: %s %.2f %d %d %d %d\n",
+                context.pid (),
+                key,
+                packageStatistic.total == 0
+                    ? Float.NaN
+                    : (((float) packageStatistic.coveredEdge) / packageStatistic.total),
+                packageStatistic.total, packageStatistic.coveredMethod,
+                packageStatistic.coveredEdge, packageStatistic.coveredClass);
+        }
+    }
+
+
+    public void printResult () {
+        for (final Context context : Context.getAllContext ()) {
+            printSPResult (context);
         }
     }
 
 
     @Override
-    public void objectFree (
-        final ShadowAddressSpace shadowAddressSpace, final ShadowObject netRef) {
+    public void atExit (final Context context) {
+        printSPResult (context);
+    }
+
+
+    @Override
+    public void objectFree (final Context context, final ShadowObject netRef) {
     }
 
 }

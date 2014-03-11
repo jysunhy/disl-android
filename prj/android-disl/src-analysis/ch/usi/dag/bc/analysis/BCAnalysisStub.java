@@ -9,6 +9,7 @@ public class BCAnalysisStub {
 
     public static short CB = AREDispatch.registerMethod ("ch.usi.dag.bc.analysis.BCAnalysis.commitBranch");
 
+    public static short PR = AREDispatch.registerMethod ("ch.usi.dag.bc.analysis.BCAnalysis.printResult");
 
     public static void sendMeta (
         final String className, final String methodID, final int total,
@@ -32,6 +33,12 @@ public class BCAnalysisStub {
                 AREDispatch.analysisEnd ();
             }
         }
+    }
+
+
+    public static void printResult () {
+        AREDispatch.analysisStart (PR);
+        AREDispatch.analysisEnd ();
     }
 
 }

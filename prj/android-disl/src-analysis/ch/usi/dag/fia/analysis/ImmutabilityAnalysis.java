@@ -11,7 +11,7 @@ import java.util.Map.Entry;
 import java.util.zip.GZIPOutputStream;
 
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
-import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
+import ch.usi.dag.dislreserver.shadow.Context;
 import ch.usi.dag.dislreserver.shadow.ShadowClass;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
 import ch.usi.dag.dislreserver.shadow.ShadowString;
@@ -115,16 +115,16 @@ public class ImmutabilityAnalysis extends RemoteAnalysis {
 	}
 
 	@Override
-	public void objectFree(final ShadowAddressSpace shadowAddressSpace, final ShadowObject so) {
+	public void objectFree(final Context context, final ShadowObject so) {
 
 		final ImmutabilityShadowStateHolder issh = so.getState(ImmutabilityShadowStateHolder.class);
 		dumpShadowObjectState(issh);
 	}
 
 	@Override
-	public void atExit(final ShadowAddressSpace shadowAddressSpace) {
+	public void atExit(final Context context) {
 
-		final Iterator<Entry<Long, ShadowObject>> iter = shadowAddressSpace.getShadowObjectIterator();
+		final Iterator<Entry<Long, ShadowObject>> iter = context.getShadowObjectIterator();
 
         while (iter.hasNext()) {
 

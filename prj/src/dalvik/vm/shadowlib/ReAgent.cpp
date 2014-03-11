@@ -9,6 +9,136 @@
 #include <sched.h>
 #include <cutils/sockets.h>
 
+#include <sys/types.h>      //  
+#include <netinet/in.h>     //  
+#include <sys/socket.h>     // for socket system calls
+#include <arpa/inet.h>      // for socket system calls (bind)
+#include <sched.h>
+#include <pthread.h>        /* P-thread implementation        */
+#include <signal.h>     /* for signal                     */
+#include <semaphore.h>      /* for p-thread semaphores        */
+#include <sys/un.h>
+
+
+#define SERVER_IP "127.0.0.1"
+
+#define MAX_BUFFER 100000
+#define UNIX_PATH_MAX 108
+
+int gl_svm_socket = -1;
+
+int get_socket(){
+	if(gl_svm_socket > 0){
+		return gl_svm_socket;
+	}
+	struct sockaddr_un address;
+
+	int client_socket = socket(PF_UNIX, SOCK_STREAM, 0);
+	if(client_socket < 0)
+	{
+		ALOG(LOG_INFO,"EPOLL","CL: Create Socket Failed! %d",errno);
+		return -1;
+	}
+
+	/* start with a clean address structure */
+	memset(&address, 0, sizeof(struct sockaddr_un));
+
+	address.sun_family = AF_UNIX;
+	snprintf(address.sun_path, UNIX_PATH_MAX, "/dev/socket/epoll_sock");
+
+	void * tmp = &address;
+
+	if(connect(client_socket, 
+				(struct sockaddr *) tmp,  
+				sizeof(struct sockaddr_un)) != 0)
+	{
+		ALOG(LOG_INFO,"EPOLL","CL: Connect Socket Failed! %d",errno);
+		client_socket = -1;
+		return -1;
+	}
+	gl_svm_socket = client_socket;
+	return client_socket;
+
+	/*
+	struct sockaddr_in client_addr;
+	bzero(&client_addr,sizeof(client_addr));
+	client_addr.sin_family = AF_INET;
+	client_addr.sin_addr.s_addr = htons(INADDR_ANY);
+	client_addr.sin_port = htons(0);
+
+	int client_socket = socket(AF_INET,SOCK_STREAM,0);
+	if( client_socket < 0)
+	{
+		if(client_socket > 0)
+			close(client_socket);
+		client_socket = -1;
+		ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR NEW SOCK ERROR, RETRY");
+		return -1;
+	}
+	void *tmp = &client_addr;
+	if( bind(client_socket,(struct sockaddr*)tmp,sizeof(client_addr)))
+	{
+		if(client_socket > 0)
+			close(client_socket);
+		client_socket = -1;
+		ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR, BIND ERROR RETRY");
+		return -1;
+		//printf("Client Bind Port Failed!\n");
+		//exit(1);
+	}
+
+	struct sockaddr_in server_addr;
+	bzero(&server_addr,sizeof(server_addr));
+	server_addr.sin_family = AF_INET;
+	if(inet_aton(SERVER_IP,&server_addr.sin_addr) == 0)
+	{
+		if(client_socket > 0)
+			close(client_socket);
+		client_socket = -1;
+		ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR,XX RETRY");
+		return -1;
+		//printf("Server IP Address Error!\n");
+		//exit(1);
+	}
+	server_addr.sin_port = htons(6789);
+	socklen_t server_addr_length = sizeof(server_addr);
+	tmp = &server_addr;
+	if(connect(client_socket,(struct sockaddr*)tmp, server_addr_length) < 0)
+	{
+		if(client_socket > 0)
+			close(client_socket);
+		client_socket = -1;
+		ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR, CONNECT ERR, RETRY");
+		return -1;
+	}
+	gl_svm_socket = client_socket;
+	return client_socket;
+	*/
+}
+
+int forward_to_svm(char* buff, int len){
+	int esock = -1;
+	while(esock <=0 ) {
+		esock = get_socket();
+		sleep(2);
+	}
+	/*int pid = getpid();
+	  int retcode = send(esock, &pid, sizeof(int), 0);
+	  if(retcode != sizeof(int)){
+	  ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND 1 : %d", errno);
+	  }*/
+	int pid;
+	memcpy(&pid, buff, sizeof(int));
+	pid = htonl(pid);
+	ALOG(LOG_DEBUG,"EPOLL","FORWARDER TO SEND %d data, for pid %d", len, pid);
+	int retcode = send(esock, buff, len, 0);
+	if(retcode != len){
+		ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND 2 : %d", errno);
+	}
+	//close(esock);
+	ALOG(LOG_DEBUG,"EPOLL","FORWARDER SENT %d data, for pid %d", len, pid);
+	return true;
+}
 
 static ReProtocol remote("/dev/socket/instrument",11218);
 
@@ -19,12 +149,12 @@ char curpname[100] ={0};
 //static pthread_t *send_thread;
 //static pthread_t send_zygote_thread;
 
-static pthread_mutex_t gl_mtx;
+static pthread_mutex_t gl_mtx = PTHREAD_MUTEX_INITIALIZER;
 static volatile jint ot_class_id = 1;
 static volatile jlong ot_object_id = 1;
 static volatile jshort method_id = 1;
 
-Socket *zsock = NULL;
+//Socket *zsock = NULL;
 Socket *sock = NULL;
 void send_once();
 
@@ -38,6 +168,7 @@ static bool isDecided = false;
 
 // ******************* REDispatch methods *******************
 
+void vmEndHook(JavaVM* vm);
 void NativeLog(JNIEnv * jni_env, jclass this_class, jstring text){
 	//jsize str_len = jni_env->GetStringUTFLength(text);
 	const char * str = 	jni_env->GetStringUTFChars(text, NULL);
@@ -168,38 +299,50 @@ jshort registerMethod
 void onFork
 (int para) {
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","ONFORK happens currentid-paraid: %d-%d",getpid(),para);
+	//send_events();
 	if(para == 0) {
 		pthread_mutex_init(&gl_mtx, NULL);//RE INIT LOCK
+		remote.UpdateMutex();
 		Buffer* zygote_buff;
 		zygote_buff = remote.ReturnAndResetBuffer();
+		gl_svm_socket = -1;
 		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","DROPPING PACKETS FROM PARENT: %d-%d sized %d",getpid(),para, zygote_buff->q_occupied);
 		delete zygote_buff;
 		remote.OnForkEvent(para);
 	}
 	if(para != 0){
 		//the parent
-		pthread_mutex_lock(&gl_mtx);
 		remote.OnForkEvent(para);
 		Buffer* zygote_buff;
+		pthread_mutex_lock(&gl_mtx);
 		zygote_buff = remote.ReturnAndResetBuffer();
 		//ALOG(LOG_DEBUG,"SHADOWDEBUG","BEFORE FORK, BUFF OF ZYGOTE: %d", zygote_buff->q_occupied);
-		zsock = new Socket();
-		while(!zsock->Connect()){
-			LOGDEBUG("Zygote Cannot connect through UDS");
-			sleep(2);
-		}
-		int signal = -3;
-		zsock->Send((char*)&signal,sizeof(int));
-		int pid = getpid();
-		zsock->Send((char*)&pid,sizeof(int));
-		zsock->Send((char*)&(zygote_buff->q_occupied),sizeof(int));
-		zsock->Send(zygote_buff->q_data,zygote_buff->q_occupied);
+		/*
+		   zsock = new Socket();
+		   while(!zsock->Connect()){
+		   LOGDEBUG("Zygote Cannot connect through UDS");
+		   sleep(2);
+		   }
+		   int signal = -3;
+		   zsock->Send((char*)&signal,sizeof(int));
+
+
+		   int pid = getpid();
+		   zsock->Send((char*)&pid,sizeof(int));
+		   zsock->Send((char*)&(zygote_buff->q_occupied),sizeof(int));
+		   zsock->Send(zygote_buff->q_data,zygote_buff->q_occupied);
+
+		   delete zsock;
+		   zsock = NULL;
+		   */
+
+		forward_to_svm(zygote_buff->q_data, zygote_buff->q_occupied);
+
+		pthread_mutex_unlock(&gl_mtx);
+
 		if(zygote_buff)
 			delete zygote_buff;
 		zygote_buff=NULL;
-		delete zsock;
-		zsock = NULL;
-		pthread_mutex_unlock(&gl_mtx);
 	}
 }
 
@@ -242,7 +385,8 @@ void manuallyOpen
 void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d", getpid());
-	remote.ConnectionClose();
+	//remote.ConnectionClose();
+	vmEndHook(NULL);
 	/*Socket *sock = new Socket(false);
 	  int pid = getpid();
 	  ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d %d", getpid(), pid);
@@ -260,7 +404,7 @@ void analysisEnd
 		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis end for method in %d", dvmThreadSelf()->threadId);
 
 	remote.AnalysisEndEvent(dvmThreadSelf()->threadId);
-	if(remote.GetCurrentSize() > 1000000){
+	if(remote.GetCurrentSize() > MAX_BUFFER){
 		pthread_mutex_lock(&gl_mtx);
 		//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","LOCK in %d",dvmThreadSelf()->threadId);
 		//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","SEND ONCE %d", remote.GetCurrentSize());
@@ -504,28 +648,33 @@ void vmEndHook(JavaVM* vm){
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in hook %s for %s", __FUNCTION__, curpname);
 
 	if(!gDvm.isShadow) {
-		if(!strcmp(curpname, "zygote") || !strcmp(curpname, "dalvikvm")) {
-			pthread_mutex_lock(&gl_mtx);
-			remote.ConnectionClose();
-			Buffer* tmp = remote.ReturnAndResetBuffer();
-			zsock = new Socket();
-			while(!zsock->Connect()){
-				LOGDEBUG("Zygote Cannot connect through UDS");
-				sleep(2);
-			}
-			int signal = -3;
-			zsock->Send((char*)&signal,sizeof(int));
-			int pid = getpid();
-			zsock->Send((char*)&pid,sizeof(int));
-			zsock->Send((char*)&(tmp->q_occupied),sizeof(int));
-			zsock->Send((char*)tmp->q_data, tmp->q_occupied);
-			delete zsock;
-			zsock = NULL;
-			pthread_mutex_unlock(&gl_mtx);
+		//if(!strcmp(curpname, "zygote") || !strcmp(curpname, "dalvikvm")) {
+		pthread_mutex_lock(&gl_mtx);
+		remote.ConnectionClose();
+		Buffer* tmp = remote.ReturnAndResetBuffer();
 
-			if(tmp)
-				delete tmp;
-		}
+		/*
+		   zsock = new Socket();
+		   while(!zsock->Connect()){
+		   LOGDEBUG("Zygote Cannot connect through UDS");
+		   sleep(2);
+		   }
+		   int signal = -3;
+		   zsock->Send((char*)&signal,sizeof(int));
+		   int pid = getpid();
+		   zsock->Send((char*)&pid,sizeof(int));
+		   zsock->Send((char*)&(tmp->q_occupied),sizeof(int));
+		   zsock->Send((char*)tmp->q_data, tmp->q_occupied);
+		   delete zsock;
+		   zsock = NULL;
+		   */
+		forward_to_svm(tmp->q_data, tmp->q_occupied);
+
+		pthread_mutex_unlock(&gl_mtx);
+
+		if(tmp)
+			delete tmp;
+		//}
 	}
 
 }
@@ -691,28 +840,35 @@ static void * send_zygote_thread_loop(void * obj) {
 }
 
 void send_once(){
-	if(remote.GetCurrentSize() <= 1000000)
+	if(remote.GetCurrentSize() <= MAX_BUFFER)
 		return;
 	Buffer* tmp = NULL;
 	tmp = remote.ReturnAndResetBuffer();
 	if(tmp->q_occupied >0 ){
 		ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d in %d:%d", tmp->q_occupied, getpid(), dvmThreadSelf()->threadId);
-		sock = new Socket();
-		while(!sock->Connect()){
-			LOGDEBUG("Cannot connect through UDS in %s for %d",__FUNCTION__, getpid());
-			sleep(2);
-		}
-		int signal = -3;
-		sock->Send((char*)&signal,sizeof(int));
-		int pid = getpid();
-		sock->Send((char*)&pid,sizeof(int));
-		sock->Send((char*)&(tmp->q_occupied), sizeof(int));
-		if(!sock->Send(tmp->q_data, tmp->q_occupied)){
-			ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND");
-			delete sock;
-			sock = NULL;
-		}
-		delete sock;
+
+		/*
+		   sock = new Socket();
+		   while(!sock->Connect()){
+		   LOGDEBUG("Cannot connect through UDS in %s for %d",__FUNCTION__, getpid());
+		   sleep(2);
+		   }
+		   int signal = -3;
+		   sock->Send((char*)&signal,sizeof(int));
+		   int pid = getpid();
+		   sock->Send((char*)&pid,sizeof(int));
+		   sock->Send((char*)&(tmp->q_occupied), sizeof(int));
+		   if(!sock->Send(tmp->q_data, tmp->q_occupied)){
+		   ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND");
+		   delete sock;
+		   sock = NULL;
+		   }
+		   delete sock;
+		   */
+
+
+		forward_to_svm(tmp->q_data, tmp->q_occupied);
+
 	}else {
 		ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
 	}
@@ -724,75 +880,32 @@ static void * send_thread_loop(void * obj) {
 		sleep(3);
 	}
 	if(gDvm.isShadow){
-		//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SENDING LOOP END");
-
 		pthread_detach(pthread_self());
 		pthread_exit(NULL);
 		return NULL;
 	}
 
-	Buffer *undecidedBuf = new Buffer(1024);
 	while(true){
 		//ALOG(LOG_DEBUG,"SHADOWDEBUG","IN WHILE LOOOP");
 		Buffer* tmp = NULL;
 		pthread_mutex_lock(&gl_mtx);
-		tmp = remote.ReturnAndResetBuffer();
-		if(!isDecided){
-			undecidedBuf->Enqueue(tmp->q_data, tmp->q_occupied);
-			ALOG(LOG_DEBUG,"SHADOWDEBUG","PUTTING UNDECIDED EVENTS INTO BUFFER SIZED: %d", undecidedBuf->q_occupied);
-		}else{
-			if(gDvm.isShadow){
-				ALOG(LOG_DEBUG,"SHADOWDEBUG","DROP THE BUFFER FOR UNOBSERVED PROCESS SIZED %d", undecidedBuf->q_occupied);
-				delete tmp;
-				break;
-			}
-
-			if(undecidedBuf){
-				ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING UNDECIDED BUFFER SIZED: %d", undecidedBuf->q_occupied);
-				if(undecidedBuf->q_occupied >0 ){
-					if(!sock->Send(undecidedBuf->q_data, undecidedBuf->q_occupied)){
-						ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND");
-						delete sock;
-						sock = NULL;
-					}
-				}else{
-					ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
-				}
-
-				delete undecidedBuf;
-				undecidedBuf = NULL;
-			}
-			if(tmp->q_occupied >0 ){
-				ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", tmp->q_occupied);
-				sock = new Socket();
-				while(!sock->Connect()){
-					LOGDEBUG("Cannot connect through UDS in %s for %d",__FUNCTION__, getpid());
-					sleep(2);
-				}
-				int signal = -3;
-				sock->Send((char*)&signal,sizeof(int));
-				int pid = getpid();
-				sock->Send((char*)&pid,sizeof(int));
-				sock->Send((char*)&(tmp->q_occupied), sizeof(int));
-				if(!sock->Send(tmp->q_data, tmp->q_occupied)){
-					ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND");
-					delete sock;
-					sock = NULL;
-				}
-				delete sock;
-			}else {
-				ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
-			}
+		pthread_mutex_lock(&remote.gl_mtx);
+		tmp = remote.ReturnAndResetBufferNolock();
+		if(tmp->q_occupied >0 ){
+			pthread_mutex_unlock(&remote.gl_mtx);
+			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d from pid %d", tmp->q_occupied, getpid());
+			forward_to_svm(tmp->q_data, tmp->q_occupied);
+			pthread_mutex_unlock(&gl_mtx);
+			sleep(1);
+		}else {
+			ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
+			pthread_mutex_unlock(&gl_mtx);
+			pthread_cond_wait(&remote.new_event_cond, &remote.gl_mtx);
+			pthread_mutex_unlock(&remote.gl_mtx);
 		}
-		pthread_mutex_unlock(&gl_mtx);
 		if(tmp)
 			delete tmp;
-		sleep(2);
-		//if(remote.IsClosed())
-		//	break;
 	}
-	if(undecidedBuf)
-		delete undecidedBuf;
 
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SENDING LOOP END");
 
@@ -920,7 +1033,7 @@ void BeforeFork(){
 }
 
 jint ShadowLib_SystemServer_OnLoad(JavaVM* vm, void* reserved){
-	remote.UpdateMutex();
+	//remote.UpdateMutex();
 	isZygote = false;
 	UnionJNIEnvToVoid uenv;
 	uenv.venv = NULL;
@@ -964,7 +1077,7 @@ bail:
 	return 0;
 }
 jint ShadowLib_OnLoad(JavaVM* vm, void* reserved){
-	remote.UpdateMutex();
+	//remote.UpdateMutex();
 	isZygote = false;
 	UnionJNIEnvToVoid uenv;
 	uenv.venv = NULL;

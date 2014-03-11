@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.dislreserver.shadow.Context;
-import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.dislreserver.shadow.ShadowObject;
 
 
@@ -63,7 +62,7 @@ public class ICCAnalysis extends RemoteAnalysis {
 
     public void onSystemReady () {
         for (final int pid : applicationsStatus.keySet ()) {
-            final String pname = ShadowAddressSpace.getShadowAddressSpace (pid).getContext ().getPname ();
+            final String pname = Context.getContext (pid).getPname ();
             final ApplicationStatus status = applicationsStatus.get (pid);
 
             System.out.println ("PROCESS-" + pid + " " + pname);
@@ -78,13 +77,13 @@ public class ICCAnalysis extends RemoteAnalysis {
 
 
     @Override
-    public void atExit (final ShadowAddressSpace shadowAddressSpace) {
+    public void atExit (final Context context) {
     }
 
 
     @Override
     public void objectFree (
-        final ShadowAddressSpace shadowAddressSpace, final ShadowObject netRef) {
+        final Context context, final ShadowObject netRef) {
     }
 
 }

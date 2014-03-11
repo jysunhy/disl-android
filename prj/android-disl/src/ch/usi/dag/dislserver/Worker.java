@@ -58,7 +58,7 @@ public class Worker extends Thread {
 
     private static boolean configMsg = true;
 
-    private static boolean appOnly = false;
+    private static boolean appOnly = true;
     // private static final String instrLibPath =
     // "build-test/disl-instr-android.jar";
     // Needed by ANDROID
@@ -91,6 +91,8 @@ public class Worker extends Thread {
     FileNotFoundException {
         Enumeration <JarEntry> entryEnum;
         entryEnum = jf.entries ();
+
+        System.out.println("Instrumenting Jar: "+writePath);
 
         boolean isLib = false;
         if(
@@ -159,6 +161,13 @@ public class Worker extends Thread {
 ||writePath.contains("UserDictionaryProvider.apk")
 ||writePath.contains("VoiceDialer.apk")
 ||writePath.contains("WAPPushManager.apk")
+||writePath.contains("DeskClock.apk")
+||writePath.contains("Calendar.apk")
+||writePath.contains("Mms.apk")
+||writePath.contains("QuickSearchBox.apk")
+||writePath.contains("DefaultContainerService.apk")
+||writePath.contains("PicoTts.apk")
+||writePath.contains("MusicFX.apk")
         ){
             isLib=true;
             //System.out.println(writePath+" is lib");
@@ -214,7 +223,7 @@ public class Worker extends Thread {
                                 bout.write (buffer, 0, bytesRead);
                             }
 
-                            if(isLib && appOnly && !className.equals ("java/lang/Thread")) {
+                            if(isLib && appOnly && !className.equals ("java/lang/Thread") /*&& !className.contains ("android/test/")*/) {
                                 code = bout.toByteArray ();
                             } else {
                                 code = instrument (
@@ -522,7 +531,7 @@ public class Worker extends Thread {
                         // read java class
                         final String fileName = dexName;
 
-                        if (dexCode.length == 0) // request from disl remote
+                        if (dexCode.length == 0) // request from disl remote&& !className.contains ("android/test/")
                                                  // server querying for loaded
                                                  // bytecode
                         {
@@ -530,12 +539,10 @@ public class Worker extends Thread {
                             if(configMsg){
                                 instrClass =
                                 ("com.inspur.test;"
-                                +"system_server;"
-                                +"com.android.launcher;"
                                 /*+"dalvikvm;"
-                                +"cx.hell.android.pdfview;"
-                                //+"system_server;"
-                                +"zygote;"
+                                +"system_server;"
+                                +"zygote;"*/
+                                /*+"com.android.launcher;"
                                 +"android.process.acore;"
                                 +"android.process.media;"
                                 +"com.android.systemui;"
@@ -557,6 +564,7 @@ public class Worker extends Thread {
                                 +"com.android.mms;"
                                 +"com.android.contacts;"
                                 +"com.android.quicksearchbox;"*/
+
                                 +"com.timsu.astrid;"
                                 +"cx.hell.android.pdfview;"
                                 +"org.connectbot;"

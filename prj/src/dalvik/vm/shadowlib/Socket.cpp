@@ -17,6 +17,8 @@
 #include <arpa/inet.h>
 
 #include <sys/un.h>
+
+#include "DalvikHeader.h"
 #define UNIX_PATH_MAX 108
 #define SERVER_SOCK  "/dev/socket/instrument"
 
@@ -120,17 +122,38 @@ bool Socket::accept ( Socket& new_socket ) const
 		return true;
 }
 
-bool Socket::Send ( const char* s, int length ) const
+bool Socket::Send ( const char* s, int length )
 {
-	int status = ::send ( m_sock, s, length, MSG_NOSIGNAL );
-	if ( status == -1 )
-	{
-		return false;
+	int cnt = 0;
+	int tosend = length;
+	ALOG(LOG_DEBUG,"SOCKET","PACKET SIZED %d in %d TO SEND",length, getpid());
+	while(cnt < length) {
+		int status = ::send ( m_sock, s+cnt, tosend , MSG_NOSIGNAL );
+		if(status == tosend) {
+			break;
+		}
+		if(status < 0){
+				ALOG(LOG_DEBUG,"SOCKETERR", "SEND %d bytes in %d error, ret value %d, error %d",length, getpid(), status, errno);
+			 if(errno == EINTR) {
+				sleep(1);
+				ALOG(LOG_DEBUG,"SOCKETERR", "RESENDING");
+				close(m_sock);
+				Connect();
+				return Send(s, length);
+			 }
+			 if(errno == EAGAIN)
+			 {
+				 sleep(1);
+				 continue;
+			 }
+		}
+		ALOG(LOG_DEBUG,"SOCKETERR", "SEND %d bytes ret value %d continue sending %d", tosend, status, tosend - status);
+		cnt+=status;
+		tosend-=status;
 	}
-	else
-	{
-		return true;
-	}
+	ALOG(LOG_DEBUG,"SOCKET","PACKET SIZED %d in %d SENT SUCCESSFUL",length, getpid());
+	return true;
+
 }
 
 /*bool Socket::send ( const std::string s ) const
@@ -216,6 +239,14 @@ bool Socket::Connect ()
 		//        m_sock = -1; 
 		return false;
 	}   
+socklen_t sendbuflen = 0;  
+socklen_t len = sizeof(sendbuflen);  
+getsockopt(m_sock, SOL_SOCKET, SO_SNDBUF, (void*)&sendbuflen, &len);  
+ALOG(LOG_DEBUG, "SOCKET", "default,sendbuf:%d\n", sendbuflen);   
+sendbuflen = 5120000;  
+setsockopt(m_sock, SOL_SOCKET, SO_SNDBUF, (void*)&sendbuflen, len);  
+getsockopt(m_sock, SOL_SOCKET, SO_SNDBUF, (void*)&sendbuflen, &len);  
+ALOG(LOG_DEBUG, "SOCKET", "now,sendbuf:%d\n", sendbuflen); 
 	return true;
 #else
 	printf("in debug mode \n");
