@@ -99,7 +99,7 @@ create_and_bind () {
 				address.sun_family = AF_UNIX;
 				snprintf(address.sun_path, UNIX_PATH_MAX, EPOLL_SOCK);
 				
-				ALOG (LOG_INFO,"INSTRUMENTSERVER","SOCKFILE %s", address.sun_path);
+				//ALOG (LOG_INFO,"INSTRUMENTSERVER","SOCKFILE %s", address.sun_path);
 
 				if(bind(socket_fd, 
 							(struct sockaddr *) &address,  
@@ -278,8 +278,8 @@ main (int argc, char *argv[])
 							NI_NUMERICHOST | NI_NUMERICSERV);
 					if (s == 0)
 					{
-						ALOG(LOG_DEBUG,"EPOLL", "Accepted connection on descriptor %d "
-								"(host=%s, port=%s)\n", infd, hbuf, sbuf);
+					//	ALOG(LOG_DEBUG,"EPOLL", "Accepted connection on descriptor %d "
+					//			"(host=%s, port=%s)\n", infd, hbuf, sbuf);
 					}
 
 					/* Make the incoming socket non-blocking and add it to the
@@ -352,7 +352,7 @@ main (int argc, char *argv[])
 
 					/* Write the buffer to standard output */
 					int retcode = send(svm_conn, buf, count, 0);
-					ALOG(LOG_DEBUG,"EPOLL","%d sized receivde, svm retcode %d", count, retcode);
+					//ALOG(LOG_DEBUG,"EPOLL","%d sized receivde, svm retcode %d", count, retcode);
 
 					//s = write (1, buf, count);
 					//if (s == -1)
@@ -365,8 +365,8 @@ main (int argc, char *argv[])
 
 				if (done)
 				{
-					ALOG(LOG_DEBUG,"EPOLL","Closed connection on descriptor %d\n",
-							events[i].data.fd);
+					//ALOG(LOG_DEBUG,"EPOLL","Closed connection on descriptor %d\n",
+					//		events[i].data.fd);
 
 					/* Closing the descriptor will make epoll remove it
 					   from the set of descriptors which are monitored. */

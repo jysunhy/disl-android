@@ -54,7 +54,7 @@ class ShadowCommonClass extends ShadowClass {
         }
 
         //HAIYANG current empty
-        System.out.println ("Getting class code:" +name);
+        //System.out.println ("Getting class code:" +name);
         if(name.equals("android.os.StrictMode$8")){
             System.out.println ("debugging here");
         }

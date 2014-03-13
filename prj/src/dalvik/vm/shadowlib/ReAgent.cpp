@@ -60,31 +60,31 @@ int get_socket(){
 	return client_socket;
 
 	/*
-	struct sockaddr_in client_addr;
-	bzero(&client_addr,sizeof(client_addr));
-	client_addr.sin_family = AF_INET;
-	client_addr.sin_addr.s_addr = htons(INADDR_ANY);
-	client_addr.sin_port = htons(0);
+	   struct sockaddr_in client_addr;
+	   bzero(&client_addr,sizeof(client_addr));
+	   client_addr.sin_family = AF_INET;
+	   client_addr.sin_addr.s_addr = htons(INADDR_ANY);
+	   client_addr.sin_port = htons(0);
 
-	int client_socket = socket(AF_INET,SOCK_STREAM,0);
-	if( client_socket < 0)
-	{
-		if(client_socket > 0)
-			close(client_socket);
-		client_socket = -1;
-		ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR NEW SOCK ERROR, RETRY");
-		return -1;
-	}
-	void *tmp = &client_addr;
-	if( bind(client_socket,(struct sockaddr*)tmp,sizeof(client_addr)))
-	{
-		if(client_socket > 0)
-			close(client_socket);
-		client_socket = -1;
-		ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR, BIND ERROR RETRY");
-		return -1;
-		//printf("Client Bind Port Failed!\n");
-		//exit(1);
+	   int client_socket = socket(AF_INET,SOCK_STREAM,0);
+	   if( client_socket < 0)
+	   {
+	   if(client_socket > 0)
+	   close(client_socket);
+	   client_socket = -1;
+	   ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR NEW SOCK ERROR, RETRY");
+	   return -1;
+	   }
+	   void *tmp = &client_addr;
+	   if( bind(client_socket,(struct sockaddr*)tmp,sizeof(client_addr)))
+	   {
+	   if(client_socket > 0)
+	   close(client_socket);
+	   client_socket = -1;
+	   ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR, BIND ERROR RETRY");
+	   return -1;
+	//printf("Client Bind Port Failed!\n");
+	//exit(1);
 	}
 
 	struct sockaddr_in server_addr;
@@ -92,24 +92,24 @@ int get_socket(){
 	server_addr.sin_family = AF_INET;
 	if(inet_aton(SERVER_IP,&server_addr.sin_addr) == 0)
 	{
-		if(client_socket > 0)
-			close(client_socket);
-		client_socket = -1;
-		ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR,XX RETRY");
-		return -1;
-		//printf("Server IP Address Error!\n");
-		//exit(1);
+	if(client_socket > 0)
+	close(client_socket);
+	client_socket = -1;
+	ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR,XX RETRY");
+	return -1;
+	//printf("Server IP Address Error!\n");
+	//exit(1);
 	}
 	server_addr.sin_port = htons(6789);
 	socklen_t server_addr_length = sizeof(server_addr);
 	tmp = &server_addr;
 	if(connect(client_socket,(struct sockaddr*)tmp, server_addr_length) < 0)
 	{
-		if(client_socket > 0)
-			close(client_socket);
-		client_socket = -1;
-		ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR, CONNECT ERR, RETRY");
-		return -1;
+	if(client_socket > 0)
+	close(client_socket);
+	client_socket = -1;
+	ALOG(LOG_DEBUG, "EPOLL", "NEW EPOLL SOCKET ERR, CONNECT ERR, RETRY");
+	return -1;
 	}
 	gl_svm_socket = client_socket;
 	return client_socket;
@@ -551,7 +551,12 @@ void sendObjectPlusData
 		if(DEBUGMODE)
 			ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send string object %s, %d, %d",str, len, utflen);
 
-		remote.SendStringObject(self->threadId, obj->uuid, str, utflen);
+		if(!net_ref_get_spec(obj->uuid)) {
+			remote.SendStringObject(self->threadId, obj->uuid, str, utflen);
+			net_ref_set_spec((jlong*)&(obj->uuid), 1);
+		}else{
+				ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","AVOID SENDING STRING");
+		}
 		delete []str;
 	}
 	if(obj->clazz == gDvm.classJavaLangThread){
@@ -568,7 +573,13 @@ void sendObjectPlusData
 		}else{
 			if(DEBUGMODE)
 				ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send thread object name is null");
-			remote.SendThreadObject(self->threadId, obj->uuid, "default", strlen("default"), isDaemon);
+			if(!net_ref_get_spec(obj->uuid)) {
+				remote.SendThreadObject(self->threadId, obj->uuid, "default", strlen("default"), isDaemon);
+				net_ref_set_spec((jlong*)&(obj->uuid), 1);
+			}else{
+				ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","AVOID SENDING THREAD");
+			}
+
 		}
 	}
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","PLUS DATA HAS BEEN SENT TO BUFFER");

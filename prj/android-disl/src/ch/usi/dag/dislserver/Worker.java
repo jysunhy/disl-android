@@ -207,8 +207,8 @@ public class Worker extends Thread {
                          */
 
                         zos.putNextEntry (nze);
-                        byte [] code = bytecodeMap.get (className.replace ('/', '.'));
-                        //byte [] code = null;
+                        //byte [] code = bytecodeMap.get (className.replace ('/', '.'));
+                        byte [] code = null;
                         final ByteArrayInputStream bin;
                         if (code == null) {
                             //System.out.println ("new class " + className + " found "+writePath);
@@ -330,7 +330,7 @@ public class Worker extends Thread {
                             final byte [] ori = bytecodeMap.get (className.replace ('/', '.'));
                             if(ori != null) {
                                 if(!Arrays.equals (ori, code)){
-                                    System.out.println ("SAME NAME, DIFFERENT CODE FOR "+className);
+                                    //System.out.println ("SAME NAME, DIFFERENT CODE FOR "+className);
                                 }
                             }
 
@@ -455,7 +455,7 @@ public class Worker extends Thread {
                             final byte [] ori = bytecodeMap.get (curClassName.replace ('/', '.').replace ('/', '.'));
                             if(ori != null) {
                                 if(!Arrays.equals (ori, boutinstr.toByteArray ())){
-                                    System.out.println ("SAME NAME, DIFFERENT CODE FOR "+curClassName.replace ('/', '.'));
+                                    //System.out.println ("SAME NAME, DIFFERENT CODE FOR "+curClassName.replace ('/', '.'));
                                 }
                             }
 
