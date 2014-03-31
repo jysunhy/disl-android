@@ -130,13 +130,13 @@ int forward_to_svm(char* buff, int len){
 	int pid;
 	memcpy(&pid, buff, sizeof(int));
 	pid = htonl(pid);
-	ALOG(LOG_DEBUG,"EPOLL","FORWARDER TO SEND %d data, for pid %d", len, pid);
+	//ALOG(LOG_DEBUG,"EPOLL","FORWARDER TO SEND %d data, for pid %d", len, pid);
 	int retcode = send(esock, buff, len, 0);
 	if(retcode != len){
 		ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND 2 : %d", errno);
 	}
 	//close(esock);
-	ALOG(LOG_DEBUG,"EPOLL","FORWARDER SENT %d data, for pid %d", len, pid);
+	//ALOG(LOG_DEBUG,"EPOLL","FORWARDER SENT %d data, for pid %d", len, pid);
 	return true;
 }
 
@@ -198,19 +198,19 @@ void _mapPID(int pid, const char* pname){
 	int bp = -2;
 	tmpsock->RecvInt(bp);
 	//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","MAPPID BYPASS is:%d PID: %d NAME: %s TID:%d", bp, pid, pname,dvmThreadSelf()->threadId);
-	gDvm.isShadow = bp==0?false:true;
+	gDvm.bypass = bp==0?false:true;
 
 
 	pthread_mutex_lock(&gDvm.s_mtx);
-	if(gDvm.isShadow) {
-		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","THIS PROCESS NEED NO HOOKS, SET TO NULL");
+	if(gDvm.bypass) {
+		//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","THIS PROCESS NEED NO HOOKS, SET TO NULL");
 		gDvm.newObjHook = NULL;
 		gDvm.freeObjHook = NULL;
 		gDvm.threadEndHook = NULL;
 		gDvm.vmEndHook = NULL;
 	}
 	//dvmDumpThread(dvmThreadSelf(),false);
-	//dvmSetFieldBoolean(dvmThreadSelf()->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
+	//dvmSetFieldBoolean(dvmThreadSelf()->threadObj, gDvm.offJavaLangThread_bypass, gDvm.bypass);
 	pthread_mutex_unlock(&gDvm.s_mtx);
 	isDecided = true;
 	delete tmpsock;
@@ -221,7 +221,7 @@ void mapPID_2
 (JNIEnv * jni_env, jclass this_class, jstring pname) {
 	jsize str_len = jni_env->GetStringUTFLength(pname);
 	const char * str = 	jni_env->GetStringUTFChars(pname, NULL);
-	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","MAPPING PID: %d NAME: %s", getpid(), str);
+	//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","MAPPING PID: %d NAME: %s", getpid(), str);
 	Socket *tmpsock = new Socket(true);
 	while(!tmpsock->Connect()){
 		LOGDEBUG("Cannot connect through UDS");
@@ -238,13 +238,13 @@ void mapPID_2
 	int bp = -2;
 	tmpsock->RecvInt(bp);
 	//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","BYPASS is:%d PID: %d NAME: %s", bp, getpid(), str);
-	gDvm.isShadow = bp==0?false:true;
+	gDvm.bypass = bp==0?false:true;
 
 
 	jni_env->ReleaseStringUTFChars(pname,str);
 	pthread_mutex_lock(&gDvm.s_mtx);
-	if(gDvm.isShadow) {
-		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","SETTING THE HOOKS TO NULL");
+	if(gDvm.bypass) {
+		//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","SETTING THE HOOKS TO NULL");
 		gDvm.newObjHook = NULL;
 		gDvm.freeObjHook = NULL;
 		gDvm.threadEndHook = NULL;
@@ -258,8 +258,8 @@ void mapPID
 (JNIEnv * jni_env, jclass this_class, jstring pname, jint pid) {
 	//remote.OpenConnection();
 	//jsize str_len = jni_env->GetStringUTFLength(pname);
-	const char * str = 	jni_env->GetStringUTFChars(pname, NULL);
-	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","PID: %d NAME: %s", pid, str);
+	//const char * str = 	jni_env->GetStringUTFChars(pname, NULL);
+	//ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","PID: %d NAME: %s", pid, str);
 	/*
 	   Socket *tmpsock = new Socket();
 	   while(!tmpsock->Connect()){
@@ -290,7 +290,8 @@ jshort registerMethod
 	method_id++;
 	remote.MethodRegisterEvent(dvmThreadSelf()->threadId, method_id, str, str_len);
 	jni_env->ReleaseStringUTFChars(analysis_method_desc,str);
-	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT:register method %s pid:%d tid:%d", tmp, getpid(),dvmThreadSelf()->threadId);
+	if(DEBUGMODE)
+		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT:register method %s pid:%d tid:%d", tmp, getpid(),dvmThreadSelf()->threadId);
 	//pthread_mutex_unlock(&gl_mtx);
 	//dvmDumpThread(dvmThreadSelf(),true);
 	return method_id;
@@ -298,7 +299,8 @@ jshort registerMethod
 
 void onFork
 (int para) {
-	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","ONFORK happens currentid-paraid: %d-%d",getpid(),para);
+	if(DEBUGMODE)
+		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","ONFORK happens currentid-paraid: %d-%d",getpid(),para);
 	//send_events();
 	if(para == 0) {
 		pthread_mutex_init(&gl_mtx, NULL);//RE INIT LOCK
@@ -306,7 +308,8 @@ void onFork
 		Buffer* zygote_buff;
 		zygote_buff = remote.ReturnAndResetBuffer();
 		gl_svm_socket = -1;
-		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","DROPPING PACKETS FROM PARENT: %d-%d sized %d",getpid(),para, zygote_buff->q_occupied);
+		if(DEBUGMODE)
+			ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","DROPPING PACKETS FROM PARENT: %d-%d sized %d",getpid(),para, zygote_buff->q_occupied);
 		delete zygote_buff;
 		remote.OnForkEvent(para);
 	}
@@ -384,6 +387,7 @@ void manuallyOpen
 }
 void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
+	if(DEBUGMODE)
 	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d", getpid());
 	//remote.ConnectionClose();
 	vmEndHook(NULL);
@@ -461,13 +465,13 @@ jlong newClass(ClassObject *obj){
 	}
 	jlong superid = SetAndGetNetref(obj->super);
 	jlong loaderid = SetAndGetNetref(obj->classLoader);
-	obj->uuid = _set_net_reference(ot_object_id++,ot_class_id++,1,1);
+	obj->tag = _set_net_reference(ot_object_id++,ot_class_id++,1,1);
 	char tmp;
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","NEW class found %s id %d, loaderid: %lld, superid: %lld",obj->descriptor, ot_class_id-1, loaderid, superid);
 	remote.NewClassEvent(obj->descriptor, strlen(obj->descriptor), loaderid, 0, &tmp);
-	remote.NewClassInfo(obj->uuid, obj->descriptor, strlen(obj->descriptor), "", 0, loaderid, superid);
-	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","NEW class found %lld:%s",obj->uuid, obj->descriptor);
-	return obj->uuid;
+	remote.NewClassInfo(obj->tag, obj->descriptor, strlen(obj->descriptor), "", 0, loaderid, superid);
+	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","NEW class found %lld:%s",obj->tag, obj->descriptor);
+	return obj->tag;
 }
 
 jlong SetAndGetNetref(Object* obj){
@@ -475,18 +479,18 @@ jlong SetAndGetNetref(Object* obj){
 	if(obj == NULL) //to_send is null or is weak reference which has already been cleared
 	{
 		res = 0;
-	}else if(obj->uuid != 0){
-		res = obj->uuid;
+	}else if(obj->tag != 0){
+		res = obj->tag;
 	}else if(dvmIsClassObject(obj)){
 		res = newClass((ClassObject*)obj);
 	}else {
 		//ASSERT(obj->clazz != NULL,"object class is null");
-		if(obj->clazz->uuid == 0){ //its class not registered
+		if(obj->clazz->tag == 0){ //its class not registered
 			newClass(obj->clazz);
 		}
-		obj->uuid = _set_net_reference(ot_object_id++,net_ref_get_class_id(obj->clazz->uuid),0,0);
-		res = obj->uuid;
-		//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","NEW object found tag:%lld, instance of %s classid %d",obj->uuid, obj->clazz->descriptor,net_ref_get_class_id(obj->uuid));
+		obj->tag = _set_net_reference(ot_object_id++,net_ref_get_class_id(obj->clazz->tag),0,0);
+		res = obj->tag;
+		//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","NEW object found tag:%lld, instance of %s classid %d",obj->tag, obj->clazz->descriptor,net_ref_get_class_id(obj->tag));
 	}
 	return res;
 }
@@ -499,6 +503,7 @@ void sendObject
 	jlong netref = SetAndGetNetref(obj);
 
 	if(obj == NULL){
+	if(DEBUGMODE)
 		ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send NULL object");
 		remote.SendJobject(self->threadId, 0);
 		return;
@@ -510,14 +515,14 @@ void sendObject
 	   const u2* tmp = ((StringObject*)obj)->chars();
 	   const jchar* content = (jchar*)tmp;
 	   ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send string object");
-	   remote.SendStringObject(self->threadId, obj->uuid, content, len);
+	   remote.SendStringObject(self->threadId, obj->tag, content, len);
 	   }
 	   if(obj->clazz == gDvm.classJavaLangThread){
 	   ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send thread object");
 //bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
 //char tmp[16]="abcd";
 //myitoa(self->threadId, tmp, 10);
-//remote.SendThreadObject(self->threadId, obj->uuid, tmp, strlen(tmp), isDaemon);
+//remote.SendThreadObject(self->threadId, obj->tag, tmp, strlen(tmp), isDaemon);
 }
 */
 remote.SendJobject(self->threadId, netref);
@@ -534,6 +539,7 @@ void sendObjectPlusData
 	jlong netref = SetAndGetNetref(obj);
 
 	if(obj == NULL){
+	if(DEBUGMODE)
 		ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send NULL object");
 		remote.SendJobject(self->threadId, 0);
 		return;
@@ -551,10 +557,11 @@ void sendObjectPlusData
 		if(DEBUGMODE)
 			ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send string object %s, %d, %d",str, len, utflen);
 
-		if(!net_ref_get_spec(obj->uuid)) {
-			remote.SendStringObject(self->threadId, obj->uuid, str, utflen);
-			net_ref_set_spec((jlong*)&(obj->uuid), 1);
+		if(!net_ref_get_spec(obj->tag)) {
+			remote.SendStringObject(self->threadId, obj->tag, str, utflen);
+			net_ref_set_spec((jlong*)&(obj->tag), 1);
 		}else{
+	if(DEBUGMODE)
 				ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","AVOID SENDING STRING");
 		}
 		delete []str;
@@ -568,15 +575,16 @@ void sendObjectPlusData
 		if(name!=NULL) {
 			if(DEBUGMODE)
 				ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send thread object name is %s", name);
-			remote.SendThreadObject(self->threadId, obj->uuid, name, strlen(name), isDaemon);
+			remote.SendThreadObject(self->threadId, obj->tag, name, strlen(name), isDaemon);
 			free(name);
 		}else{
 			if(DEBUGMODE)
 				ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send thread object name is null");
-			if(!net_ref_get_spec(obj->uuid)) {
-				remote.SendThreadObject(self->threadId, obj->uuid, "default", strlen("default"), isDaemon);
-				net_ref_set_spec((jlong*)&(obj->uuid), 1);
+			if(!net_ref_get_spec(obj->tag)) {
+				remote.SendThreadObject(self->threadId, obj->tag, "default", strlen("default"), isDaemon);
+				net_ref_set_spec((jlong*)&(obj->tag), 1);
 			}else{
+	if(DEBUGMODE)
 				ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","AVOID SENDING THREAD");
 			}
 
@@ -648,17 +656,19 @@ int registerShadowNatives(JNIEnv *env){
 void objNewHook(Object* obj){
 	//return;
 	SetAndGetNetref(obj);
-	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in hook %s %s %lld", __FUNCTION__, obj->clazz->descriptor, obj->uuid);
+	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in hook %s %s %lld", __FUNCTION__, obj->clazz->descriptor, obj->tag);
 }
 void threadEndHook(Thread* self){
 	//bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
 	bool isDaemon = false;
+	if(DEBUGMODE)
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in hook %s %d %s", __FUNCTION__, self->threadId, isDaemon?"daemon":"not daemon");
 }
 void vmEndHook(JavaVM* vm){
+	if(DEBUGMODE)
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in hook %s for %s", __FUNCTION__, curpname);
 
-	if(!gDvm.isShadow) {
+	if(!gDvm.bypass) {
 		//if(!strcmp(curpname, "zygote") || !strcmp(curpname, "dalvikvm")) {
 		pthread_mutex_lock(&gl_mtx);
 		remote.ConnectionClose();
@@ -694,14 +704,15 @@ void objFreeHook(Object* obj, Thread* self){
 	//	return;
 	if(obj == NULL)
 		return;
-	if(obj->uuid == 0)
+	if(obj->tag == 0)
 		return;
 	SetAndGetNetref(obj);
-	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in FREE hook %s %lld", obj->clazz->descriptor, obj->uuid);
+	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in FREE hook %s %lld", obj->clazz->descriptor, obj->tag);
 	if(!dvmIsClassObject(obj))
-		remote.ObjFreeEvent(obj->uuid);
+		remote.ObjFreeEvent(obj->tag);
 }
 int classfileLoadHook(const char* name, int len){
+	if(DEBUGMODE)
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","LOADING CLASS %s", name);
 	return 1;
 }
@@ -743,7 +754,7 @@ if(!isDecided){
 undecidedBuf->Enqueue(tmp->q_data, tmp->q_occupied);
 ALOG(LOG_DEBUG,"SHADOWDEBUG","PUTTING UNDECIDED EVENTS INTO BUFFER SIZED: %d", undecidedBuf->q_occupied);
 }else{
-if(gDvm.isShadow){
+if(gDvm.bypass){
 ALOG(LOG_DEBUG,"SHADOWDEBUG","DROP THE BUFFER FOR UNOBSERVED PROCESS SIZED %d", undecidedBuf->q_occupied);
 delete tmp;
 break;
@@ -822,18 +833,22 @@ static void * send_zygote_thread_loop(void * obj) {
 	int signal = -3;
 	sock->Send((char*)&signal,sizeof(int));
 	while(true){
+	if(DEBUGMODE)
 		ALOG(LOG_DEBUG,"SHADOWDEBUG","IN  ZYGOTE WHILE LOOOP");
 		Buffer* tmp = NULL;
 		tmp = remote.ReturnAndResetBuffer();
 		{
+	if(DEBUGMODE)
 			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d", tmp->q_occupied);
 			if(tmp->q_occupied >0 ){
 				if(!sock->Send(tmp->q_data, tmp->q_occupied)){
+	if(DEBUGMODE)
 					ALOG(LOG_DEBUG,"SHADOWDEBUG","SERVER ERROR DURING SEND");
 					delete sock;
 					sock = NULL;
 				}
 			}else {
+	if(DEBUGMODE)
 				ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
 			}
 		}
@@ -842,6 +857,7 @@ static void * send_zygote_thread_loop(void * obj) {
 		sleep(2);
 	}
 
+	if(DEBUGMODE)
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SENDING LOOP END");
 
 	pthread_detach(pthread_self());
@@ -856,6 +872,7 @@ void send_once(){
 	Buffer* tmp = NULL;
 	tmp = remote.ReturnAndResetBuffer();
 	if(tmp->q_occupied >0 ){
+	if(DEBUGMODE)
 		ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d in %d:%d", tmp->q_occupied, getpid(), dvmThreadSelf()->threadId);
 
 		/*
@@ -881,6 +898,7 @@ void send_once(){
 		forward_to_svm(tmp->q_data, tmp->q_occupied);
 
 	}else {
+	if(DEBUGMODE)
 		ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
 	}
 	if(tmp)
@@ -890,7 +908,7 @@ static void * send_thread_loop(void * obj) {
 	while(!isDecided){
 		sleep(3);
 	}
-	if(gDvm.isShadow){
+	if(gDvm.bypass){
 		pthread_detach(pthread_self());
 		pthread_exit(NULL);
 		return NULL;
@@ -904,11 +922,13 @@ static void * send_thread_loop(void * obj) {
 		tmp = remote.ReturnAndResetBufferNolock();
 		if(tmp->q_occupied >0 ){
 			pthread_mutex_unlock(&remote.gl_mtx);
+	if(DEBUGMODE)
 			ALOG(LOG_DEBUG,"SHADOWDEBUG","SENDING BUFFER SIZED: %d from pid %d", tmp->q_occupied, getpid());
 			forward_to_svm(tmp->q_data, tmp->q_occupied);
 			pthread_mutex_unlock(&gl_mtx);
 			sleep(2);
 		}else {
+	if(DEBUGMODE)
 			ALOG(LOG_DEBUG,"SHADOWDEBUG","EMPTY BUFFER");
 			pthread_mutex_unlock(&gl_mtx);
 			pthread_cond_wait(&remote.new_event_cond, &remote.gl_mtx);
@@ -919,6 +939,7 @@ static void * send_thread_loop(void * obj) {
 			delete tmp;
 	}
 
+	if(DEBUGMODE)
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SENDING LOOP END");
 
 	pthread_detach(pthread_self());
@@ -947,7 +968,7 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 #if defined(_POSIX_THREAD_PRIORITY_SCHEDULING) && !defined(sun)
 pthread_attr_getschedpolicy(&thread_attr, &thread_policy);
 pthread_attr_getschedparam(&thread_attr, &thread_param);
-ALOG(LOG_DEBUG,"HAIYANG","Default policy is %s, priority is %d",
+ALOG(LOG_DEBUG,"SVM","Default policy is %s, priority is %d",
 (thread_policy == SCHED_FIFO ? "FIFO"
 : (thread_policy == SCHED_RR ? "RR"
 : (thread_policy == SCHED_OTHER ? "OTHER"
@@ -956,7 +977,7 @@ thread_param.sched_priority);
 
 status = pthread_attr_setschedpolicy(&thread_attr, SCHED_RR);
 if(status != 0)
-ALOG(LOG_DEBUG,"HAIYANG","Unable to set SCHED_RR policy.");
+ALOG(LOG_DEBUG,"SVM","Unable to set SCHED_RR policy.");
 else{
 rr_min_priority = sched_get_priority_min(SCHED_RR);
 if(rr_min_priority == -1)
@@ -965,14 +986,14 @@ rr_max_priority = sched_get_priority_max(SCHED_RR);
 if(rr_max_priority == -1)
 errno_abort("Get SCHED_RR max priority");
 thread_param.sched_priority = (rr_min_priority + rr_max_priority)/2;
-ALOG(LOG_DEBUG,"HAIYANG","SCHED_RR priority range is %d to %d: using %d\n",
+ALOG(LOG_DEBUG,"SVM","SCHED_RR priority range is %d to %d: using %d\n",
 rr_min_priority, rr_max_priority, thread_param.sched_priority);
 pthread_attr_setschedparam(&thread_attr, &thread_param);
-ALOG(LOG_DEBUG,"HAIYANG","Creating thread at RR/%d\n", thread_param.sched_priority);
+ALOG(LOG_DEBUG,"SVM","Creating thread at RR/%d\n", thread_param.sched_priority);
 pthread_attr_setinheritsched(&thread_attr, PTHREAD_EXPLICIT_SCHED);
 }
 #else
-ALOG(LOG_DEBUG,"HAIYANG","Priority scheduling not supported\n");
+ALOG(LOG_DEBUG,"SVM","Priority scheduling not supported\n");
 #endif
 */
 	//
@@ -1055,7 +1076,7 @@ jint ShadowLib_SystemServer_OnLoad(JavaVM* vm, void* reserved){
 	//gDvm.shadowHook = &testShadowHook;
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN ONLOAD, PID: %d", getpid());
 	//pthread_mutex_init(&gl_mtx, NULL);
-	//if(gDvm.isShadow) {
+	//if(gDvm.bypass) {
 
 	//OpenConnection();
 	//pthread_mutex_lock(&gDvm.s_mtx);
@@ -1099,7 +1120,7 @@ jint ShadowLib_OnLoad(JavaVM* vm, void* reserved){
 	//gDvm.shadowHook = &testShadowHook;
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN ONLOAD, PID: %d", getpid());
 	//pthread_mutex_init(&gl_mtx, NULL);
-	//if(gDvm.isShadow) {
+	//if(gDvm.bypass) {
 
 	//OpenConnection();
 	//pthread_mutex_lock(&gDvm.s_mtx);

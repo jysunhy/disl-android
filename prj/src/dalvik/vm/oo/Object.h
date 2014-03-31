@@ -214,7 +214,7 @@ struct Object {
      * the comments in Sync.c for a description of its layout.
      */
     u4              lock;
-	u8				uuid;
+	u8				tag;
 };
 
 /*

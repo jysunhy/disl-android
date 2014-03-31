@@ -2963,10 +2963,10 @@ shutdown:
     if (gDvm.verboseShutdown) {
         ALOGD("DestroyJavaVM shutting VM down");
     }
-	pthread_mutex_lock(&gDvm.s_mtx);
-	if(gDvm.vmEndHook)
-		gDvm.vmEndHook(vm);
-	pthread_mutex_unlock(&gDvm.s_mtx);
+    pthread_mutex_lock(&gDvm.s_mtx);
+    if(gDvm.vmEndHook)
+        gDvm.vmEndHook(vm);
+    pthread_mutex_unlock(&gDvm.s_mtx);
     dvmShutdown();
 
     // TODO - free resources associated with JNI-attached daemon threads
@@ -3403,10 +3403,6 @@ jint JNI_GetCreatedJavaVMs(JavaVM** vmBuf, jsize bufLen, jsize* nVMs) {
     return JNI_OK;
 }
 
-void testShadowHook(Object* obj){
-	ALOG(LOG_DEBUG,"HAIYANG","in object hook");
-}
-
 /*
  * Create a new VM instance.
  *
@@ -3444,21 +3440,19 @@ jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args) {
      */
     gDvm.shadowHook = NULL;
     gDvm.newObjHook = NULL;
-	gDvm.freeObjHook = NULL;
-	gDvm.threadEndHook = NULL;
-	gDvm.vmStartHook = NULL;
-	gDvm.vmEndHook = NULL;
-	gDvm.vmInitHook = NULL;
-	gDvm.classfileLoadHook = NULL;
-	gDvm.classInitHook = NULL;
-	gDvm.isShadow = true;
-	pthread_mutex_init(&gDvm.s_mtx,NULL);
-	ALOG(LOG_INFO,"HAIYANG","in %s",__FUNCTION__);
-	//(void (*)(void));
+    gDvm.freeObjHook = NULL;
+    gDvm.threadEndHook = NULL;
+    gDvm.vmStartHook = NULL;
+    gDvm.vmEndHook = NULL;
+    gDvm.vmInitHook = NULL;
+    gDvm.classfileLoadHook = NULL;
+    gDvm.classInitHook = NULL;
+    gDvm.bypass = true;
+    pthread_mutex_init(&gDvm.s_mtx,NULL);
     int argc = 0;
     for (int i = 0; i < args->nOptions; i++) {
         const char* optStr = args->options[i].optionString;
-		ALOG(LOG_DEBUG,"HAIYANG","VM ARGS %d %s",i,optStr);
+        //ALOG(LOG_DEBUG,"SVM","VM ARGS %d %s",i,optStr);
         if (optStr == NULL) {
             dvmFprintf(stderr, "ERROR: CreateJavaVM failed: argument %d was NULL\n", i);
             return JNI_ERR;
@@ -3522,8 +3516,7 @@ jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args) {
 
     /* Initialize VM. */
     gDvm.initializing = true;
-	ALOG(LOG_DEBUG,"HAIYANG","GDVM.ISZYGOTE: %s",gDvm.isShadow?"true":"false");
-	ShadowLib_Zygote_OnLoad(gDvmJni.jniVm, NULL);
+    ShadowLib_Zygote_OnLoad(gDvmJni.jniVm, NULL);
     std::string status =
             dvmStartup(argc, argv.get(), args->ignoreUnrecognized, (JNIEnv*)pEnv);
     gDvm.initializing = false;
@@ -3542,7 +3535,5 @@ jint JNI_CreateJavaVM(JavaVM** p_vm, JNIEnv** p_env, void* vm_args) {
     *p_env = (JNIEnv*) pEnv;
     *p_vm = (JavaVM*) pVM;
     ALOGV("CreateJavaVM succeeded");
-
-
     return JNI_OK;
 }

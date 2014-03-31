@@ -63,7 +63,7 @@ class ShadowCommonClass extends ShadowClass {
         }
         if (classCode == null || classCode.length == 0) {
             try {
-                final Socket socket = new Socket(InetAddress.getByName (null), 6666);
+                final Socket socket = new Socket(InetAddress.getByName (null), Integer.getInteger("dislserver.port", 6666));
                 DataOutputStream os;
                 DataInputStream is;
 

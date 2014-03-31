@@ -37,7 +37,7 @@
 #define O_BINARY 0
 #endif
 
-//HAIYANG
+//SVM
 #define INSTRUMENT true
 #define SYS_INSTRUMENT_PORT    6664
 #include <pthread.h>
@@ -69,90 +69,90 @@ int apk_new_dexsize=-1;
 #define UNIX_PATH_MAX 108
 
 int new_sock(int port){
-	if(client_socket>0) {
-		//	close(client_socket);
-		//	client_socket=-1;
-		return client_socket;
-	}
-	struct sockaddr_un address;
+    if(client_socket>0) {
+        //    close(client_socket);
+        //    client_socket=-1;
+        return client_socket;
+    }
+    struct sockaddr_un address;
 
-	client_socket = socket(PF_UNIX, SOCK_STREAM, 0);
-	if(client_socket < 0)
-	{
-		ALOG(LOG_INFO,"HAIYANG","CL: Create Socket Failed! %d",errno);
-		return -1;
-	}
+    client_socket = socket(PF_UNIX, SOCK_STREAM, 0);
+    if(client_socket < 0)
+    {
+        ALOG(LOG_INFO,"SVM","CL: Create Socket Failed! %d",errno);
+        return -1;
+    }
 
-	/* start with a clean address structure */
-	memset(&address, 0, sizeof(struct sockaddr_un));
+    /* start with a clean address structure */
+    memset(&address, 0, sizeof(struct sockaddr_un));
 
-	address.sun_family = AF_UNIX;
-	snprintf(address.sun_path, UNIX_PATH_MAX, "/dev/socket/instrument2");
+    address.sun_family = AF_UNIX;
+    snprintf(address.sun_path, UNIX_PATH_MAX, "/dev/socket/instrument2");
 
-	if(connect(client_socket, 
-				(struct sockaddr *) &address,  
-				sizeof(struct sockaddr_un)) != 0)
-	{
-		ALOG(LOG_INFO,"HAIYANG","CL: Connect Socket Failed! %d",errno);
-		client_socket = -1;
-	}
-	return client_socket;
+    if(connect(client_socket, 
+                (struct sockaddr *) &address,  
+                sizeof(struct sockaddr_un)) != 0)
+    {
+        ALOG(LOG_INFO,"SVM","CL: Connect Socket Failed! %d",errno);
+        client_socket = -1;
+    }
+    return client_socket;
 
-	/*
-	   ALOG(LOG_INFO,"HAIYANG","CL: Create new Socket!");
-	   struct sockaddr_in client_addr;
-	   bzero(&client_addr,sizeof(client_addr));
-	   client_addr.sin_family = AF_INET;
-	   client_addr.sin_addr.s_addr = htons(INADDR_ANY);
-	   client_addr.sin_port = htons(0);
+    /*
+       ALOG(LOG_INFO,"SVM","CL: Create new Socket!");
+       struct sockaddr_in client_addr;
+       bzero(&client_addr,sizeof(client_addr));
+       client_addr.sin_family = AF_INET;
+       client_addr.sin_addr.s_addr = htons(INADDR_ANY);
+       client_addr.sin_port = htons(0);
 
-	   client_socket = socket(AF_INET,SOCK_STREAM,0);
-	   int times = 0;
-	   while( client_socket < 0)
-	   {
-	   if(times>=0){
-	   ALOG(LOG_INFO,"HAIYANG","CL: Create Socket Failed! %d",errno);
-	   close(client_socket);
-	   client_socket=-1;
-	   return -1;
-	   }
-	   times++;
-	   ALOG(LOG_INFO,"HAIYANG","retry Create Socket!");
-	   sleep(2);
-	   client_socket = socket(AF_INET,SOCK_STREAM,0);
-	   }
-	   if( bind(client_socket,(struct sockaddr*)&client_addr,sizeof(client_addr)))
-	   {
-	   ALOG(LOG_INFO,"HAIYANG","Client Bind Port Failed!");
-	   close(client_socket);
-	   client_socket=-1;
-	   return -1;
-	   }
+       client_socket = socket(AF_INET,SOCK_STREAM,0);
+       int times = 0;
+       while( client_socket < 0)
+       {
+       if(times>=0){
+       ALOG(LOG_INFO,"SVM","CL: Create Socket Failed! %d",errno);
+       close(client_socket);
+       client_socket=-1;
+       return -1;
+       }
+       times++;
+       ALOG(LOG_INFO,"SVM","retry Create Socket!");
+       sleep(2);
+       client_socket = socket(AF_INET,SOCK_STREAM,0);
+       }
+       if( bind(client_socket,(struct sockaddr*)&client_addr,sizeof(client_addr)))
+       {
+       ALOG(LOG_INFO,"SVM","Client Bind Port Failed!");
+       close(client_socket);
+       client_socket=-1;
+       return -1;
+       }
 
-	   struct sockaddr_in server_addr;
-	   bzero(&server_addr,sizeof(server_addr));
-	   server_addr.sin_family = AF_INET;
-	   if(inet_aton(SERVER_IP,&server_addr.sin_addr) == 0)
-	   {
-	   ALOG(LOG_INFO,"HAIYANG","Server IP Address Error!");
-	   close(client_socket);
-	   client_socket=-1;
-	   return -1;
-	   }
-	   server_addr.sin_port = htons(port);
-	   socklen_t server_addr_length = sizeof(server_addr);
-	   int success = 0;
-	   success = connect(client_socket,(struct sockaddr*)&server_addr, server_addr_length);
-	   if(success<0) {
-	   ALOG(LOG_INFO,"HAIYANG","Can Not Connect To %s!",SERVER_IP);
-	   close(client_socket);
-	   client_socket=-1;
-	   return -1;
-	   }
-	   return 0;
-	 */
+       struct sockaddr_in server_addr;
+       bzero(&server_addr,sizeof(server_addr));
+       server_addr.sin_family = AF_INET;
+       if(inet_aton(SERVER_IP,&server_addr.sin_addr) == 0)
+       {
+       ALOG(LOG_INFO,"SVM","Server IP Address Error!");
+       close(client_socket);
+       client_socket=-1;
+       return -1;
+       }
+       server_addr.sin_port = htons(port);
+       socklen_t server_addr_length = sizeof(server_addr);
+       int success = 0;
+       success = connect(client_socket,(struct sockaddr*)&server_addr, server_addr_length);
+       if(success<0) {
+       ALOG(LOG_INFO,"SVM","Can Not Connect To %s!",SERVER_IP);
+       close(client_socket);
+       client_socket=-1;
+       return -1;
+       }
+       return 0;
+     */
 }
-//HAIYANG
+//SVM
 /*
  * Zip file constants.
  */
@@ -196,14 +196,14 @@ int new_sock(int port){
  */
 static int entryToIndex(const ZipArchive* pArchive, const ZipEntry entry)
 {
-	long ent = ((long) entry) - kZipEntryAdj;
-	if (ent < 0 || ent >= pArchive->mHashTableSize ||
-			pArchive->mHashTable[ent].name == NULL)
-	{
-		ALOGW("Zip: invalid ZipEntry %p (%ld)", entry, ent);
-		return -1;
-	}
-	return ent;
+    long ent = ((long) entry) - kZipEntryAdj;
+    if (ent < 0 || ent >= pArchive->mHashTableSize ||
+        pArchive->mHashTable[ent].name == NULL)
+    {
+        ALOGW("Zip: invalid ZipEntry %p (%ld)", entry, ent);
+        return -1;
+    }
+    return ent;
 }
 
 /*
@@ -211,31 +211,31 @@ static int entryToIndex(const ZipArchive* pArchive, const ZipEntry entry)
  */
 static unsigned int computeHash(const char* str, int len)
 {
-	unsigned int hash = 0;
+    unsigned int hash = 0;
 
-	while (len--)
-		hash = hash * 31 + *str++;
+    while (len--)
+        hash = hash * 31 + *str++;
 
-	return hash;
+    return hash;
 }
 
 /*
  * Add a new entry to the hash table.
  */
 static void addToHash(ZipArchive* pArchive, const char* str, int strLen,
-		unsigned int hash)
+    unsigned int hash)
 {
-	const int hashTableSize = pArchive->mHashTableSize;
-	int ent = hash & (hashTableSize - 1);
+    const int hashTableSize = pArchive->mHashTableSize;
+    int ent = hash & (hashTableSize - 1);
 
-	/*
-	 * We over-allocated the table, so we're guaranteed to find an empty slot.
-	 */
-	while (pArchive->mHashTable[ent].name != NULL)
-		ent = (ent + 1) & (hashTableSize-1);
+    /*
+     * We over-allocated the table, so we're guaranteed to find an empty slot.
+     */
+    while (pArchive->mHashTable[ent].name != NULL)
+        ent = (ent + 1) & (hashTableSize-1);
 
-	pArchive->mHashTable[ent].name = str;
-	pArchive->mHashTable[ent].nameLen = strLen;
+    pArchive->mHashTable[ent].name = str;
+    pArchive->mHashTable[ent].nameLen = strLen;
 }
 
 /*
@@ -243,7 +243,7 @@ static void addToHash(ZipArchive* pArchive, const char* str, int strLen,
  */
 static u2 get2LE(unsigned char const* pSrc)
 {
-	return pSrc[0] | (pSrc[1] << 8);
+    return pSrc[0] | (pSrc[1] << 8);
 }
 
 /*
@@ -251,90 +251,90 @@ static u2 get2LE(unsigned char const* pSrc)
  */
 static u4 get4LE(unsigned char const* pSrc)
 {
-	u4 result;
+    u4 result;
 
-	result = pSrc[0];
-	result |= pSrc[1] << 8;
-	result |= pSrc[2] << 16;
-	result |= pSrc[3] << 24;
+    result = pSrc[0];
+    result |= pSrc[1] << 8;
+    result |= pSrc[2] << 16;
+    result |= pSrc[3] << 24;
 
-	return result;
+    return result;
 }
 
 static int mapCentralDirectory0(int fd, const char* debugFileName,
-		ZipArchive* pArchive, off_t fileLength, size_t readAmount, u1* scanBuf)
+        ZipArchive* pArchive, off_t fileLength, size_t readAmount, u1* scanBuf)
 {
-	off_t searchStart = fileLength - readAmount;
+    off_t searchStart = fileLength - readAmount;
 
-	if (lseek(fd, searchStart, SEEK_SET) != searchStart) {
-		ALOGW("Zip: seek %ld failed: %s", (long) searchStart, strerror(errno));
-		return -1;
-	}
-	ssize_t actual = TEMP_FAILURE_RETRY(read(fd, scanBuf, readAmount));
-	if (actual != (ssize_t) readAmount) {
-		ALOGW("Zip: read %zd failed: %s", readAmount, strerror(errno));
-		return -1;
-	}
+    if (lseek(fd, searchStart, SEEK_SET) != searchStart) {
+        ALOGW("Zip: seek %ld failed: %s", (long) searchStart, strerror(errno));
+        return -1;
+    }
+    ssize_t actual = TEMP_FAILURE_RETRY(read(fd, scanBuf, readAmount));
+    if (actual != (ssize_t) readAmount) {
+        ALOGW("Zip: read %zd failed: %s", readAmount, strerror(errno));
+        return -1;
+    }
 
-	/*
-	 * Scan backward for the EOCD magic.  In an archive without a trailing
-	 * comment, we'll find it on the first try.  (We may want to consider
-	 * doing an initial minimal read; if we don't find it, retry with a
-	 * second read as above.)
-	 */
-	int i;
-	for (i = readAmount - kEOCDLen; i >= 0; i--) {
-		if (scanBuf[i] == 0x50 && get4LE(&scanBuf[i]) == kEOCDSignature) {
-			ALOGV("+++ Found EOCD at buf+%d", i);
-			break;
-		}
-	}
-	if (i < 0) {
-		ALOGD("Zip: EOCD not found, %s is not zip", debugFileName);
-		return -1;
-	}
+    /*
+     * Scan backward for the EOCD magic.  In an archive without a trailing
+     * comment, we'll find it on the first try.  (We may want to consider
+     * doing an initial minimal read; if we don't find it, retry with a
+     * second read as above.)
+     */
+    int i;
+    for (i = readAmount - kEOCDLen; i >= 0; i--) {
+        if (scanBuf[i] == 0x50 && get4LE(&scanBuf[i]) == kEOCDSignature) {
+            ALOGV("+++ Found EOCD at buf+%d", i);
+            break;
+        }
+    }
+    if (i < 0) {
+        ALOGD("Zip: EOCD not found, %s is not zip", debugFileName);
+        return -1;
+    }
 
-	off_t eocdOffset = searchStart + i;
-	const u1* eocdPtr = scanBuf + i;
+    off_t eocdOffset = searchStart + i;
+    const u1* eocdPtr = scanBuf + i;
 
-	assert(eocdOffset < fileLength);
+    assert(eocdOffset < fileLength);
 
-	/*
-	 * Grab the CD offset and size, and the number of entries in the
-	 * archive.  Verify that they look reasonable.
-	 */
-	u4 numEntries = get2LE(eocdPtr + kEOCDNumEntries);
-	u4 dirSize = get4LE(eocdPtr + kEOCDSize);
-	u4 dirOffset = get4LE(eocdPtr + kEOCDFileOffset);
+    /*
+     * Grab the CD offset and size, and the number of entries in the
+     * archive.  Verify that they look reasonable.
+     */
+    u4 numEntries = get2LE(eocdPtr + kEOCDNumEntries);
+    u4 dirSize = get4LE(eocdPtr + kEOCDSize);
+    u4 dirOffset = get4LE(eocdPtr + kEOCDFileOffset);
 
-	if ((long long) dirOffset + (long long) dirSize > (long long) eocdOffset) {
-		ALOGW("Zip: bad offsets (dir %ld, size %u, eocd %ld)",
-				(long) dirOffset, dirSize, (long) eocdOffset);
-		return -1;
-	}
-	if (numEntries == 0) {
-		ALOGW("Zip: empty archive?");
-		return -1;
-	}
+    if ((long long) dirOffset + (long long) dirSize > (long long) eocdOffset) {
+        ALOGW("Zip: bad offsets (dir %ld, size %u, eocd %ld)",
+            (long) dirOffset, dirSize, (long) eocdOffset);
+        return -1;
+    }
+    if (numEntries == 0) {
+        ALOGW("Zip: empty archive?");
+        return -1;
+    }
 
-	ALOGV("+++ numEntries=%d dirSize=%d dirOffset=%d",
-			numEntries, dirSize, dirOffset);
+    ALOGV("+++ numEntries=%d dirSize=%d dirOffset=%d",
+        numEntries, dirSize, dirOffset);
 
-	/*
-	 * It all looks good.  Create a mapping for the CD, and set the fields
-	 * in pArchive.
-	 */
-	if (sysMapFileSegmentInShmem(fd, dirOffset, dirSize,
-				&pArchive->mDirectoryMap) != 0)
-	{
-		ALOGW("Zip: cd map failed");
-		return -1;
-	}
+    /*
+     * It all looks good.  Create a mapping for the CD, and set the fields
+     * in pArchive.
+     */
+    if (sysMapFileSegmentInShmem(fd, dirOffset, dirSize,
+            &pArchive->mDirectoryMap) != 0)
+    {
+        ALOGW("Zip: cd map failed");
+        return -1;
+    }
 
-	pArchive->mNumEntries = numEntries;
-	pArchive->mDirectoryOffset = dirOffset;
+    pArchive->mNumEntries = numEntries;
+    pArchive->mDirectoryOffset = dirOffset;
 
-	return 0;
+    return 0;
 }
 
 /*
@@ -346,43 +346,43 @@ static int mapCentralDirectory0(int fd, const char* debugFileName,
  *   mNumEntries
  */
 static int mapCentralDirectory(int fd, const char* debugFileName,
-		ZipArchive* pArchive)
+    ZipArchive* pArchive)
 {
-	/*
-	 * Get and test file length.
-	 */
-	off_t fileLength = lseek(fd, 0, SEEK_END);
-	if (fileLength < kEOCDLen) {
-		ALOGV("Zip: length %ld is too small to be zip", (long) fileLength);
-		return -1;
-	}
+    /*
+     * Get and test file length.
+     */
+    off_t fileLength = lseek(fd, 0, SEEK_END);
+    if (fileLength < kEOCDLen) {
+        ALOGV("Zip: length %ld is too small to be zip", (long) fileLength);
+        return -1;
+    }
 
-	/*
-	 * Perform the traditional EOCD snipe hunt.
-	 *
-	 * We're searching for the End of Central Directory magic number,
-	 * which appears at the start of the EOCD block.  It's followed by
-	 * 18 bytes of EOCD stuff and up to 64KB of archive comment.  We
-	 * need to read the last part of the file into a buffer, dig through
-	 * it to find the magic number, parse some values out, and use those
-	 * to determine the extent of the CD.
-	 *
-	 * We start by pulling in the last part of the file.
-	 */
-	size_t readAmount = kMaxEOCDSearch;
-	if (fileLength < off_t(readAmount))
-		readAmount = fileLength;
+    /*
+     * Perform the traditional EOCD snipe hunt.
+     *
+     * We're searching for the End of Central Directory magic number,
+     * which appears at the start of the EOCD block.  It's followed by
+     * 18 bytes of EOCD stuff and up to 64KB of archive comment.  We
+     * need to read the last part of the file into a buffer, dig through
+     * it to find the magic number, parse some values out, and use those
+     * to determine the extent of the CD.
+     *
+     * We start by pulling in the last part of the file.
+     */
+    size_t readAmount = kMaxEOCDSearch;
+    if (fileLength < off_t(readAmount))
+        readAmount = fileLength;
 
-	u1* scanBuf = (u1*) malloc(readAmount);
-	if (scanBuf == NULL) {
-		return -1;
-	}
+    u1* scanBuf = (u1*) malloc(readAmount);
+    if (scanBuf == NULL) {
+        return -1;
+    }
 
-	int result = mapCentralDirectory0(fd, debugFileName, pArchive,
-			fileLength, readAmount, scanBuf);
+    int result = mapCentralDirectory0(fd, debugFileName, pArchive,
+            fileLength, readAmount, scanBuf);
 
-	free(scanBuf);
-	return result;
+    free(scanBuf);
+    return result;
 }
 
 /*
@@ -393,64 +393,64 @@ static int mapCentralDirectory(int fd, const char* debugFileName,
  */
 static int parseZipArchive(ZipArchive* pArchive)
 {
-	int result = -1;
-	const u1* cdPtr = (const u1*)pArchive->mDirectoryMap.addr;
-	size_t cdLength = pArchive->mDirectoryMap.length;
-	int numEntries = pArchive->mNumEntries;
+    int result = -1;
+    const u1* cdPtr = (const u1*)pArchive->mDirectoryMap.addr;
+    size_t cdLength = pArchive->mDirectoryMap.length;
+    int numEntries = pArchive->mNumEntries;
 
-	/*
-	 * Create hash table.  We have a minimum 75% load factor, possibly as
-	 * low as 50% after we round off to a power of 2.  There must be at
-	 * least one unused entry to avoid an infinite loop during creation.
-	 */
-	pArchive->mHashTableSize = dexRoundUpPower2(1 + (numEntries * 4) / 3);
-	pArchive->mHashTable = (ZipHashEntry*)
-		calloc(pArchive->mHashTableSize, sizeof(ZipHashEntry));
+    /*
+     * Create hash table.  We have a minimum 75% load factor, possibly as
+     * low as 50% after we round off to a power of 2.  There must be at
+     * least one unused entry to avoid an infinite loop during creation.
+     */
+    pArchive->mHashTableSize = dexRoundUpPower2(1 + (numEntries * 4) / 3);
+    pArchive->mHashTable = (ZipHashEntry*)
+            calloc(pArchive->mHashTableSize, sizeof(ZipHashEntry));
 
-	/*
-	 * Walk through the central directory, adding entries to the hash
-	 * table and verifying values.
-	 */
-	const u1* ptr = cdPtr;
-	int i;
-	for (i = 0; i < numEntries; i++) {
-		if (get4LE(ptr) != kCDESignature) {
-			ALOGW("Zip: missed a central dir sig (at %d)", i);
-			goto bail;
-		}
-		if (ptr + kCDELen > cdPtr + cdLength) {
-			ALOGW("Zip: ran off the end (at %d)", i);
-			goto bail;
-		}
+    /*
+     * Walk through the central directory, adding entries to the hash
+     * table and verifying values.
+     */
+    const u1* ptr = cdPtr;
+    int i;
+    for (i = 0; i < numEntries; i++) {
+        if (get4LE(ptr) != kCDESignature) {
+            ALOGW("Zip: missed a central dir sig (at %d)", i);
+            goto bail;
+        }
+        if (ptr + kCDELen > cdPtr + cdLength) {
+            ALOGW("Zip: ran off the end (at %d)", i);
+            goto bail;
+        }
 
-		long localHdrOffset = (long) get4LE(ptr + kCDELocalOffset);
-		if (localHdrOffset >= pArchive->mDirectoryOffset) {
-			ALOGW("Zip: bad LFH offset %ld at entry %d", localHdrOffset, i);
-			goto bail;
-		}
+        long localHdrOffset = (long) get4LE(ptr + kCDELocalOffset);
+        if (localHdrOffset >= pArchive->mDirectoryOffset) {
+            ALOGW("Zip: bad LFH offset %ld at entry %d", localHdrOffset, i);
+            goto bail;
+        }
 
-		unsigned int fileNameLen, extraLen, commentLen, hash;
-		fileNameLen = get2LE(ptr + kCDENameLen);
-		extraLen = get2LE(ptr + kCDEExtraLen);
-		commentLen = get2LE(ptr + kCDECommentLen);
+        unsigned int fileNameLen, extraLen, commentLen, hash;
+        fileNameLen = get2LE(ptr + kCDENameLen);
+        extraLen = get2LE(ptr + kCDEExtraLen);
+        commentLen = get2LE(ptr + kCDECommentLen);
 
-		/* add the CDE filename to the hash table */
-		hash = computeHash((const char*)ptr + kCDELen, fileNameLen);
-		addToHash(pArchive, (const char*)ptr + kCDELen, fileNameLen, hash);
+        /* add the CDE filename to the hash table */
+        hash = computeHash((const char*)ptr + kCDELen, fileNameLen);
+        addToHash(pArchive, (const char*)ptr + kCDELen, fileNameLen, hash);
 
-		ptr += kCDELen + fileNameLen + extraLen + commentLen;
-		if ((size_t)(ptr - cdPtr) > cdLength) {
-			ALOGW("Zip: bad CD advance (%d vs %zd) at entry %d",
-					(int) (ptr - cdPtr), cdLength, i);
-			goto bail;
-		}
-	}
-	ALOGV("+++ zip good scan %d entries", numEntries);
+        ptr += kCDELen + fileNameLen + extraLen + commentLen;
+        if ((size_t)(ptr - cdPtr) > cdLength) {
+            ALOGW("Zip: bad CD advance (%d vs %zd) at entry %d",
+                (int) (ptr - cdPtr), cdLength, i);
+            goto bail;
+        }
+    }
+    ALOGV("+++ zip good scan %d entries", numEntries);
 
-	result = 0;
+    result = 0;
 
 bail:
-	return result;
+    return result;
 }
 
 /*
@@ -466,20 +466,20 @@ bail:
  */
 int dexZipOpenArchive(const char* fileName, ZipArchive* pArchive)
 {
-	int fd, err;
+    int fd, err;
 
-	ALOGV("Opening as zip '%s' %p", fileName, pArchive);
+    ALOGV("Opening as zip '%s' %p", fileName, pArchive);
 
-	memset(pArchive, 0, sizeof(ZipArchive));
+    memset(pArchive, 0, sizeof(ZipArchive));
 
-	fd = open(fileName, O_RDONLY | O_BINARY, 0);
-	if (fd < 0) {
-		err = errno ? errno : -1;
-		ALOGV("Unable to open '%s': %s", fileName, strerror(err));
-		return err;
-	}
+    fd = open(fileName, O_RDONLY | O_BINARY, 0);
+    if (fd < 0) {
+        err = errno ? errno : -1;
+        ALOGV("Unable to open '%s': %s", fileName, strerror(err));
+        return err;
+    }
 
-	return dexZipPrepArchive(fd, fileName, pArchive);
+    return dexZipPrepArchive(fd, fileName, pArchive);
 }
 
 /*
@@ -489,26 +489,26 @@ int dexZipOpenArchive(const char* fileName, ZipArchive* pArchive)
  */
 int dexZipPrepArchive(int fd, const char* debugFileName, ZipArchive* pArchive)
 {
-	int result = -1;
+    int result = -1;
 
-	memset(pArchive, 0, sizeof(*pArchive));
-	pArchive->mFd = fd;
+    memset(pArchive, 0, sizeof(*pArchive));
+    pArchive->mFd = fd;
 
-	if (mapCentralDirectory(fd, debugFileName, pArchive) != 0)
-		goto bail;
+    if (mapCentralDirectory(fd, debugFileName, pArchive) != 0)
+        goto bail;
 
-	if (parseZipArchive(pArchive) != 0) {
-		ALOGV("Zip: parsing '%s' failed", debugFileName);
-		goto bail;
-	}
+    if (parseZipArchive(pArchive) != 0) {
+        ALOGV("Zip: parsing '%s' failed", debugFileName);
+        goto bail;
+    }
 
-	/* success */
-	result = 0;
+    /* success */
+    result = 0;
 
 bail:
-	if (result != 0)
-		dexZipCloseArchive(pArchive);
-	return result;
+    if (result != 0)
+        dexZipCloseArchive(pArchive);
+    return result;
 }
 
 
@@ -519,21 +519,21 @@ bail:
  */
 void dexZipCloseArchive(ZipArchive* pArchive)
 {
-	ALOGV("Closing archive %p", pArchive);
+    ALOGV("Closing archive %p", pArchive);
 
-	if (pArchive->mFd >= 0)
-		close(pArchive->mFd);
+    if (pArchive->mFd >= 0)
+        close(pArchive->mFd);
 
-	sysReleaseShmem(&pArchive->mDirectoryMap);
+    sysReleaseShmem(&pArchive->mDirectoryMap);
 
-	free(pArchive->mHashTable);
+    free(pArchive->mHashTable);
 
-	/* ensure nobody tries to use the ZipArchive after it's closed */
-	pArchive->mDirectoryOffset = -1;
-	pArchive->mFd = -1;
-	pArchive->mNumEntries = -1;
-	pArchive->mHashTableSize = -1;
-	pArchive->mHashTable = NULL;
+    /* ensure nobody tries to use the ZipArchive after it's closed */
+    pArchive->mDirectoryOffset = -1;
+    pArchive->mFd = -1;
+    pArchive->mNumEntries = -1;
+    pArchive->mHashTableSize = -1;
+    pArchive->mHashTable = NULL;
 }
 
 
@@ -544,23 +544,23 @@ void dexZipCloseArchive(ZipArchive* pArchive)
  */
 ZipEntry dexZipFindEntry(const ZipArchive* pArchive, const char* entryName)
 {
-	int nameLen = strlen(entryName);
-	unsigned int hash = computeHash(entryName, nameLen);
-	const int hashTableSize = pArchive->mHashTableSize;
-	int ent = hash & (hashTableSize-1);
+    int nameLen = strlen(entryName);
+    unsigned int hash = computeHash(entryName, nameLen);
+    const int hashTableSize = pArchive->mHashTableSize;
+    int ent = hash & (hashTableSize-1);
 
-	while (pArchive->mHashTable[ent].name != NULL) {
-		if (pArchive->mHashTable[ent].nameLen == nameLen &&
-				memcmp(pArchive->mHashTable[ent].name, entryName, nameLen) == 0)
-		{
-			/* match */
-			return (ZipEntry)(long)(ent + kZipEntryAdj);
-		}
+    while (pArchive->mHashTable[ent].name != NULL) {
+        if (pArchive->mHashTable[ent].nameLen == nameLen &&
+            memcmp(pArchive->mHashTable[ent].name, entryName, nameLen) == 0)
+        {
+            /* match */
+            return (ZipEntry)(long)(ent + kZipEntryAdj);
+        }
 
-		ent = (ent + 1) & (hashTableSize-1);
-	}
+        ent = (ent + 1) & (hashTableSize-1);
+    }
 
-	return NULL;
+    return NULL;
 }
 
 #if 0
@@ -573,20 +573,20 @@ ZipEntry dexZipFindEntry(const ZipArchive* pArchive, const char* entryName)
  */
 ZipEntry findEntryByIndex(ZipArchive* pArchive, int idx)
 {
-	if (idx < 0 || idx >= pArchive->mNumEntries) {
-		ALOGW("Invalid index %d", idx);
-		return NULL;
-	}
+    if (idx < 0 || idx >= pArchive->mNumEntries) {
+        ALOGW("Invalid index %d", idx);
+        return NULL;
+    }
 
-	int ent;
-	for (ent = 0; ent < pArchive->mHashTableSize; ent++) {
-		if (pArchive->mHashTable[ent].name != NULL) {
-			if (idx-- == 0)
-				return (ZipEntry) (ent + kZipEntryAdj);
-		}
-	}
+    int ent;
+    for (ent = 0; ent < pArchive->mHashTableSize; ent++) {
+        if (pArchive->mHashTable[ent].name != NULL) {
+            if (idx-- == 0)
+                return (ZipEntry) (ent + kZipEntryAdj);
+        }
+    }
 
-	return NULL;
+    return NULL;
 }
 #endif
 
@@ -597,107 +597,107 @@ ZipEntry findEntryByIndex(ZipArchive* pArchive, int idx)
  * offset) appear to be bogus.
  */
 int dexZipGetEntryInfo(const ZipArchive* pArchive, ZipEntry entry,
-		int* pMethod, size_t* pUncompLen, size_t* pCompLen, off_t* pOffset,
-		long* pModWhen, long* pCrc32)
+    int* pMethod, size_t* pUncompLen, size_t* pCompLen, off_t* pOffset,
+    long* pModWhen, long* pCrc32)
 {
-	int ent = entryToIndex(pArchive, entry);
-	if (ent < 0)
-		return -1;
+    int ent = entryToIndex(pArchive, entry);
+    if (ent < 0)
+        return -1;
 
-	/*
-	 * Recover the start of the central directory entry from the filename
-	 * pointer.  The filename is the first entry past the fixed-size data,
-	 * so we can just subtract back from that.
-	 */
-	const unsigned char* basePtr = (const unsigned char*)
-		pArchive->mDirectoryMap.addr;
-	const unsigned char* ptr = (const unsigned char*)
-		pArchive->mHashTable[ent].name;
-	off_t cdOffset = pArchive->mDirectoryOffset;
+    /*
+     * Recover the start of the central directory entry from the filename
+     * pointer.  The filename is the first entry past the fixed-size data,
+     * so we can just subtract back from that.
+     */
+    const unsigned char* basePtr = (const unsigned char*)
+        pArchive->mDirectoryMap.addr;
+    const unsigned char* ptr = (const unsigned char*)
+        pArchive->mHashTable[ent].name;
+    off_t cdOffset = pArchive->mDirectoryOffset;
 
-	ptr -= kCDELen;
+    ptr -= kCDELen;
 
-	int method = get2LE(ptr + kCDEMethod);
-	if (pMethod != NULL)
-		*pMethod = method;
+    int method = get2LE(ptr + kCDEMethod);
+    if (pMethod != NULL)
+        *pMethod = method;
 
-	if (pModWhen != NULL)
-		*pModWhen = get4LE(ptr + kCDEModWhen);
-	if (pCrc32 != NULL)
-		*pCrc32 = get4LE(ptr + kCDECRC);
+    if (pModWhen != NULL)
+        *pModWhen = get4LE(ptr + kCDEModWhen);
+    if (pCrc32 != NULL)
+        *pCrc32 = get4LE(ptr + kCDECRC);
 
-	size_t compLen = get4LE(ptr + kCDECompLen);
-	if (pCompLen != NULL)
-		*pCompLen = compLen;
-	size_t uncompLen = get4LE(ptr + kCDEUncompLen);
-	if (pUncompLen != NULL)
-		*pUncompLen = uncompLen;
+    size_t compLen = get4LE(ptr + kCDECompLen);
+    if (pCompLen != NULL)
+        *pCompLen = compLen;
+    size_t uncompLen = get4LE(ptr + kCDEUncompLen);
+    if (pUncompLen != NULL)
+        *pUncompLen = uncompLen;
 
-	/*
-	 * If requested, determine the offset of the start of the data.  All we
-	 * have is the offset to the Local File Header, which is variable size,
-	 * so we have to read the contents of the struct to figure out where
-	 * the actual data starts.
-	 *
-	 * We also need to make sure that the lengths are not so large that
-	 * somebody trying to map the compressed or uncompressed data runs
-	 * off the end of the mapped region.
-	 *
-	 * Note we don't verify compLen/uncompLen if they don't request the
-	 * dataOffset, because dataOffset is expensive to determine.  However,
-	 * if they don't have the file offset, they're not likely to be doing
-	 * anything with the contents.
-	 */
-	if (pOffset != NULL) {
-		long localHdrOffset = (long) get4LE(ptr + kCDELocalOffset);
-		if (localHdrOffset + kLFHLen >= cdOffset) {
-			ALOGW("Zip: bad local hdr offset in zip");
-			return -1;
-		}
+    /*
+     * If requested, determine the offset of the start of the data.  All we
+     * have is the offset to the Local File Header, which is variable size,
+     * so we have to read the contents of the struct to figure out where
+     * the actual data starts.
+     *
+     * We also need to make sure that the lengths are not so large that
+     * somebody trying to map the compressed or uncompressed data runs
+     * off the end of the mapped region.
+     *
+     * Note we don't verify compLen/uncompLen if they don't request the
+     * dataOffset, because dataOffset is expensive to determine.  However,
+     * if they don't have the file offset, they're not likely to be doing
+     * anything with the contents.
+     */
+    if (pOffset != NULL) {
+        long localHdrOffset = (long) get4LE(ptr + kCDELocalOffset);
+        if (localHdrOffset + kLFHLen >= cdOffset) {
+            ALOGW("Zip: bad local hdr offset in zip");
+            return -1;
+        }
 
-		u1 lfhBuf[kLFHLen];
-		if (lseek(pArchive->mFd, localHdrOffset, SEEK_SET) != localHdrOffset) {
-			ALOGW("Zip: failed seeking to lfh at offset %ld", localHdrOffset);
-			return -1;
-		}
-		ssize_t actual =
-			TEMP_FAILURE_RETRY(read(pArchive->mFd, lfhBuf, sizeof(lfhBuf)));
-		if (actual != sizeof(lfhBuf)) {
-			ALOGW("Zip: failed reading lfh from offset %ld", localHdrOffset);
-			return -1;
-		}
+        u1 lfhBuf[kLFHLen];
+        if (lseek(pArchive->mFd, localHdrOffset, SEEK_SET) != localHdrOffset) {
+            ALOGW("Zip: failed seeking to lfh at offset %ld", localHdrOffset);
+            return -1;
+        }
+        ssize_t actual =
+            TEMP_FAILURE_RETRY(read(pArchive->mFd, lfhBuf, sizeof(lfhBuf)));
+        if (actual != sizeof(lfhBuf)) {
+            ALOGW("Zip: failed reading lfh from offset %ld", localHdrOffset);
+            return -1;
+        }
 
-		if (get4LE(lfhBuf) != kLFHSignature) {
-			ALOGW("Zip: didn't find signature at start of lfh, offset=%ld",
-					localHdrOffset);
-			return -1;
-		}
+        if (get4LE(lfhBuf) != kLFHSignature) {
+            ALOGW("Zip: didn't find signature at start of lfh, offset=%ld",
+                localHdrOffset);
+            return -1;
+        }
 
-		off_t dataOffset = localHdrOffset + kLFHLen
-			+ get2LE(lfhBuf + kLFHNameLen) + get2LE(lfhBuf + kLFHExtraLen);
-		if (dataOffset >= cdOffset) {
-			ALOGW("Zip: bad data offset %ld in zip", (long) dataOffset);
-			return -1;
-		}
+        off_t dataOffset = localHdrOffset + kLFHLen
+            + get2LE(lfhBuf + kLFHNameLen) + get2LE(lfhBuf + kLFHExtraLen);
+        if (dataOffset >= cdOffset) {
+            ALOGW("Zip: bad data offset %ld in zip", (long) dataOffset);
+            return -1;
+        }
 
-		/* check lengths */
-		if ((off_t)(dataOffset + compLen) > cdOffset) {
-			ALOGW("Zip: bad compressed length in zip (%ld + %zd > %ld)",
-					(long) dataOffset, compLen, (long) cdOffset);
-			return -1;
-		}
+        /* check lengths */
+        if ((off_t)(dataOffset + compLen) > cdOffset) {
+            ALOGW("Zip: bad compressed length in zip (%ld + %zd > %ld)",
+                (long) dataOffset, compLen, (long) cdOffset);
+            return -1;
+        }
 
-		if (method == kCompressStored &&
-				(off_t)(dataOffset + uncompLen) > cdOffset)
-		{
-			ALOGW("Zip: bad uncompressed length in zip (%ld + %zd > %ld)",
-					(long) dataOffset, uncompLen, (long) cdOffset);
-			return -1;
-		}
+        if (method == kCompressStored &&
+            (off_t)(dataOffset + uncompLen) > cdOffset)
+        {
+            ALOGW("Zip: bad uncompressed length in zip (%ld + %zd > %ld)",
+                (long) dataOffset, uncompLen, (long) cdOffset);
+            return -1;
+        }
 
-		*pOffset = dataOffset;
-	}
-	return 0;
+        *pOffset = dataOffset;
+    }
+    return 0;
 }
 
 /*
@@ -706,161 +706,161 @@ int dexZipGetEntryInfo(const ZipArchive* pArchive, ZipEntry entry,
  */
 static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
 {
-	//ALOG(LOG_INFO, "HAIYANG", "CL: in %s for dex",__FUNCTION__);  
-	void* olddex = malloc(MAX_DEX);
-	void* buffer[BUFFER_SIZE];
-	int length = 0;
-	int oldsize = 0;
-	int newsize = 0;
-	int cnt = 0;
-	int result = -1;
-	static int times = 0;
-	const size_t kBufSize = 32768;
-	unsigned char* readBuf = (unsigned char*) malloc(kBufSize);
-	unsigned char* writeBuf = (unsigned char*) malloc(kBufSize);
-	z_stream zstream;
-	int zerr;
+    //ALOG(LOG_INFO, "SVM", "CL: in %s for dex",__FUNCTION__);  
+    void* olddex = malloc(MAX_DEX);
+    void* buffer[BUFFER_SIZE];
+    int length = 0;
+    int oldsize = 0;
+    int newsize = 0;
+    int cnt = 0;
+    int result = -1;
+    static int times = 0;
+    const size_t kBufSize = 32768;
+    unsigned char* readBuf = (unsigned char*) malloc(kBufSize);
+    unsigned char* writeBuf = (unsigned char*) malloc(kBufSize);
+    z_stream zstream;
+    int zerr;
 
-	if (readBuf == NULL || writeBuf == NULL)
-		goto bail;
+    if (readBuf == NULL || writeBuf == NULL)
+        goto bail;
 
-	/*
-	 * Initialize the zlib stream struct.
-	 */
-	memset(&zstream, 0, sizeof(zstream));
-	zstream.zalloc = Z_NULL;
-	zstream.zfree = Z_NULL;
-	zstream.opaque = Z_NULL;
-	zstream.next_in = NULL;
-	zstream.avail_in = 0;
-	zstream.next_out = (Bytef*) writeBuf;
-	zstream.avail_out = kBufSize;
-	zstream.data_type = Z_UNKNOWN;
+    /*
+     * Initialize the zlib stream struct.
+     */
+    memset(&zstream, 0, sizeof(zstream));
+    zstream.zalloc = Z_NULL;
+    zstream.zfree = Z_NULL;
+    zstream.opaque = Z_NULL;
+    zstream.next_in = NULL;
+    zstream.avail_in = 0;
+    zstream.next_out = (Bytef*) writeBuf;
+    zstream.avail_out = kBufSize;
+    zstream.data_type = Z_UNKNOWN;
 
-	/*
-	 * Use the undocumented "negative window bits" feature to tell zlib
-	 * that there's no zlib header waiting for it.
-	 */
-	zerr = inflateInit2(&zstream, -MAX_WBITS);
-	if (zerr != Z_OK) {
-		if (zerr == Z_VERSION_ERROR) {
-			ALOGE("Installed zlib is not compatible with linked version (%s)",
-					ZLIB_VERSION);
-		} else {
-			ALOGW("Call to inflateInit2 failed (zerr=%d)", zerr);
-		}
-		goto bail;
-	}
-	if(INSTRUMENT) {
+    /*
+     * Use the undocumented "negative window bits" feature to tell zlib
+     * that there's no zlib header waiting for it.
+     */
+    zerr = inflateInit2(&zstream, -MAX_WBITS);
+    if (zerr != Z_OK) {
+        if (zerr == Z_VERSION_ERROR) {
+            ALOGE("Installed zlib is not compatible with linked version (%s)",
+                ZLIB_VERSION);
+        } else {
+            ALOGW("Call to inflateInit2 failed (zerr=%d)", zerr);
+        }
+        goto bail;
+    }
+    if(INSTRUMENT) {
 
-		ALOG(LOG_INFO, "HAIYANG", "in %s for %s", __FUNCTION__, apkname);
-		if(client_socket<0) {
-			if(new_sock(SYS_INSTRUMENT_PORT)<0) {
-				ALOG(LOG_INFO, "HAIYANG", "CL: in %s socket err",__FUNCTION__);  
-				//sleep(1);
-			}
-		}
-	}
+        ALOG(LOG_INFO, "SVM", "in %s for %s", __FUNCTION__, apkname);
+        if(client_socket<0) {
+            if(new_sock(SYS_INSTRUMENT_PORT)<0) {
+                ALOG(LOG_INFO, "SVM", "CL: in %s socket err",__FUNCTION__);  
+                //sleep(1);
+            }
+        }
+    }
 
-	/*
-	 * Loop while we have more to do.
-	 */
-	do {
-		/* read as much as we can */
-		if (zstream.avail_in == 0) {
-			size_t getSize = (compLen > kBufSize) ? kBufSize : compLen;
+    /*
+     * Loop while we have more to do.
+     */
+    do {
+        /* read as much as we can */
+        if (zstream.avail_in == 0) {
+            size_t getSize = (compLen > kBufSize) ? kBufSize : compLen;
 
-			ssize_t actual = TEMP_FAILURE_RETRY(read(inFd, readBuf, getSize));
-			if (actual != (ssize_t) getSize) {
-				ALOGW("Zip: inflate read failed (%d vs %zd)",
-						(int)actual, getSize);
-				goto z_bail;
-			}
+            ssize_t actual = TEMP_FAILURE_RETRY(read(inFd, readBuf, getSize));
+            if (actual != (ssize_t) getSize) {
+                ALOGW("Zip: inflate read failed (%d vs %zd)",
+                    (int)actual, getSize);
+                goto z_bail;
+            }
 
-			compLen -= getSize;
+            compLen -= getSize;
 
-			zstream.next_in = readBuf;
-			zstream.avail_in = getSize;
-		}
+            zstream.next_in = readBuf;
+            zstream.avail_in = getSize;
+        }
 
-		/* uncompress the data */
-		zerr = inflate(&zstream, Z_NO_FLUSH);
-		if (zerr != Z_OK && zerr != Z_STREAM_END) {
-			ALOGW("Zip: inflate zerr=%d (nIn=%p aIn=%u nOut=%p aOut=%u)",
-					zerr, zstream.next_in, zstream.avail_in,
-					zstream.next_out, zstream.avail_out);
-			goto z_bail;
-		}
+        /* uncompress the data */
+        zerr = inflate(&zstream, Z_NO_FLUSH);
+        if (zerr != Z_OK && zerr != Z_STREAM_END) {
+            ALOGW("Zip: inflate zerr=%d (nIn=%p aIn=%u nOut=%p aOut=%u)",
+                zerr, zstream.next_in, zstream.avail_in,
+                zstream.next_out, zstream.avail_out);
+            goto z_bail;
+        }
 
-		/* write when we're full or when we're done */
-		if (zstream.avail_out == 0 ||
-				(zerr == Z_STREAM_END && zstream.avail_out != kBufSize))
-		{
-			size_t writeSize = zstream.next_out - writeBuf;
-			if(!INSTRUMENT || client_socket < 0) {
-				if (sysWriteFully(outFd, writeBuf, writeSize, "Zip inflate") != 0)
-					goto z_bail;
-			}
-			memcpy(olddex+oldsize, writeBuf, writeSize);
-			oldsize+=writeSize;
-			zstream.next_out = writeBuf;
-			zstream.avail_out = kBufSize;
-		}
-	} while (zerr == Z_OK);
-	if(INSTRUMENT && client_socket >= 0) {
-		//ALOG(LOG_INFO, "HAIYANG", "CL: in %s start sending %d bytes",__FUNCTION__,oldsize);  
-		apk_original_dexsize = oldsize;
-		int len = strlen(apkname);
-		send(client_socket, &len, sizeof(int),0);
-		send(client_socket,&oldsize,sizeof(int),0);
-		send(client_socket, apkname, strlen(apkname),0);
-		while(cnt < oldsize) {
-			length = send(client_socket,olddex + cnt,min(BUFFER_SIZE, oldsize-cnt),0);
-			cnt+=length;
-		}
+        /* write when we're full or when we're done */
+        if (zstream.avail_out == 0 ||
+            (zerr == Z_STREAM_END && zstream.avail_out != kBufSize))
+        {
+            size_t writeSize = zstream.next_out - writeBuf;
+            if(!INSTRUMENT || client_socket < 0) {
+                if (sysWriteFully(outFd, writeBuf, writeSize, "Zip inflate") != 0)
+                    goto z_bail;
+            }
+            memcpy(olddex+oldsize, writeBuf, writeSize);
+            oldsize+=writeSize;
+            zstream.next_out = writeBuf;
+            zstream.avail_out = kBufSize;
+        }
+    } while (zerr == Z_OK);
+    if(INSTRUMENT && client_socket >= 0) {
+        //ALOG(LOG_INFO, "SVM", "CL: in %s start sending %d bytes",__FUNCTION__,oldsize);  
+        apk_original_dexsize = oldsize;
+        int len = strlen(apkname);
+        send(client_socket, &len, sizeof(int),0);
+        send(client_socket,&oldsize,sizeof(int),0);
+        send(client_socket, apkname, strlen(apkname),0);
+        while(cnt < oldsize) {
+            length = send(client_socket,olddex + cnt,min(BUFFER_SIZE, oldsize-cnt),0);
+            cnt+=length;
+        }
 
-		length = recv(client_socket, &newsize, sizeof(int), 0);
-		//ALOG(LOG_INFO, "HAIYANG", "CL: in %s get new size %d",__FUNCTION__,newsize);  
-		apk_new_dexsize = newsize;
-		cnt = 0;
-		while( cnt < newsize)
-		{
-			length = recv(client_socket,buffer,BUFFER_SIZE,0);
-			if (sysWriteFully(outFd, buffer, length, "Zip inflate") != 0)
-				goto z_bail;
-			cnt+=length;
-		}
-		int eos = -1;
-		send(client_socket,&eos,sizeof(int),0);
-		close(client_socket);
-		client_socket = -1;
-	}
-	//ALOG(LOG_INFO, "HAIYANG", "in %s get %d buffer",__FUNCTION__, cnt);  
+        length = recv(client_socket, &newsize, sizeof(int), 0);
+        //ALOG(LOG_INFO, "SVM", "CL: in %s get new size %d",__FUNCTION__,newsize);  
+        apk_new_dexsize = newsize;
+        cnt = 0;
+        while( cnt < newsize)
+        {
+            length = recv(client_socket,buffer,BUFFER_SIZE,0);
+            if (sysWriteFully(outFd, buffer, length, "Zip inflate") != 0)
+                goto z_bail;
+            cnt+=length;
+        }
+        int eos = -1;
+        send(client_socket,&eos,sizeof(int),0);
+        close(client_socket);
+        client_socket = -1;
+    }
+    //ALOG(LOG_INFO, "SVM", "in %s get %d buffer",__FUNCTION__, cnt);  
 
-	assert(zerr == Z_STREAM_END);       /* other errors should've been caught */
+    assert(zerr == Z_STREAM_END);       /* other errors should've been caught */
 
-	//ALOG(LOG_INFO, "HAIYANG", "in %s get Zip: (%ld vs %zd)",__FUNCTION__, 
-		//	zstream.total_out, uncompLen);
-	/* paranoia */
-	if (zstream.total_out != uncompLen) {
-		ALOGW("Zip: size mismatch on inflated file (%ld vs %zd)",
-				zstream.total_out, uncompLen);
-		goto z_bail;
-	}
+    //ALOG(LOG_INFO, "SVM", "in %s get Zip: (%ld vs %zd)",__FUNCTION__, 
+        //    zstream.total_out, uncompLen);
+    /* paranoia */
+    if (zstream.total_out != uncompLen) {
+        ALOGW("Zip: size mismatch on inflated file (%ld vs %zd)",
+            zstream.total_out, uncompLen);
+        goto z_bail;
+    }
 
-	result = 0;
+    result = 0;
 
 z_bail:
-	inflateEnd(&zstream);        /* free up any allocated structures */
+    inflateEnd(&zstream);        /* free up any allocated structures */
 
 bail:
-	if(client_socket>0)
-		close(client_socket);
-	client_socket=-1;
-	free(olddex);
-	free(readBuf);
-	free(writeBuf);
-	return result;
+    if(client_socket>0)
+        close(client_socket);
+    client_socket=-1;
+    free(olddex);
+    free(readBuf);
+    free(writeBuf);
+    return result;
 }
 
 /*
@@ -870,41 +870,41 @@ bail:
  * for uncompressed data).
  */
 int dexZipExtractEntryToFile(const ZipArchive* pArchive,
-		const ZipEntry entry, int fd)
+    const ZipEntry entry, int fd)
 {
 
-	//ALOG(LOG_INFO, "HAIYANG", "YYYY in %s for dex %s",__FUNCTION__,pArchive->mHashTable->name);  
-	int result = -1;
-	int ent = entryToIndex(pArchive, entry);
-	if (ent < 0) {
-		ALOGW("Zip: extract can't find entry %p", entry);
-		goto bail;
-	}
+    //ALOG(LOG_INFO, "SVM", "YYYY in %s for dex %s",__FUNCTION__,pArchive->mHashTable->name);  
+    int result = -1;
+    int ent = entryToIndex(pArchive, entry);
+    if (ent < 0) {
+        ALOGW("Zip: extract can't find entry %p", entry);
+        goto bail;
+    }
 
-	int method;
-	size_t uncompLen, compLen;
-	off_t dataOffset;
+    int method;
+    size_t uncompLen, compLen;
+    off_t dataOffset;
 
-	if (dexZipGetEntryInfo(pArchive, entry, &method, &uncompLen, &compLen,
-				&dataOffset, NULL, NULL) != 0)
-	{
-		goto bail;
-	}
-	if (lseek(pArchive->mFd, dataOffset, SEEK_SET) != dataOffset) {
-		ALOGW("Zip: lseek to data at %ld failed", (long) dataOffset);
-		goto bail;
-	}
+    if (dexZipGetEntryInfo(pArchive, entry, &method, &uncompLen, &compLen,
+            &dataOffset, NULL, NULL) != 0)
+    {
+        goto bail;
+    }
+    if (lseek(pArchive->mFd, dataOffset, SEEK_SET) != dataOffset) {
+        ALOGW("Zip: lseek to data at %ld failed", (long) dataOffset);
+        goto bail;
+    }
 
-	if (method == kCompressStored) {
-		if (sysCopyFileToFile(fd, pArchive->mFd, uncompLen) != 0)
-			goto bail;
-	} else {
-		if (inflateToFile(fd, pArchive->mFd, uncompLen, compLen) != 0)
-			goto bail;
-	}
+    if (method == kCompressStored) {
+        if (sysCopyFileToFile(fd, pArchive->mFd, uncompLen) != 0)
+            goto bail;
+    } else {
+        if (inflateToFile(fd, pArchive->mFd, uncompLen, compLen) != 0)
+            goto bail;
+    }
 
-	result = 0;
+    result = 0;
 
 bail:
-	return result;
+    return result;
 }

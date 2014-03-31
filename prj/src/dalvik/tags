@@ -308,7 +308,6 @@ ANNOTATION_DEFAULT_TYPE	dx/src/com/android/dx/dex/file/AnnotationUtils.java	/^  
 API_CURRENT	dx/src/com/android/dx/dex/DexFormat.java	/^    public static final int API_CURRENT = 14;$/;"	f	class:DexFormat
 API_NO_EXTENDED_OPCODES	dx/src/com/android/dx/dex/DexFormat.java	/^    public static final int API_NO_EXTENDED_OPCODES = 13;$/;"	f	class:DexFormat
 APK_LENGTH	libdex/ZipArchive.h	26;"	d
-APP_STL	vm/shadowlib/Application.mk	/^APP_STL := stlport_static # system|stlport_static|stlport_shared|gnustl_static$/;"	m
 APUT	dexgen/src/com/android/dexgen/dex/code/DalvOps.java	/^    public static final int APUT = 0x4b;$/;"	f	class:DalvOps
 APUT	dexgen/src/com/android/dexgen/dex/code/Dops.java	/^    public static final Dop APUT =$/;"	f	class:Dops
 APUT	dexgen/src/com/android/dexgen/rop/code/RegOps.java	/^    public static final int APUT = 39;$/;"	f	class:RegOps
@@ -438,8 +437,8 @@ AddressSetContext	vm/Debugger.cpp	/^struct AddressSetContext {$/;"	s	file:
 AllocObject	vm/Jni.cpp	/^static jobject AllocObject(JNIEnv* env, jclass jclazz) {$/;"	f	file:
 AllocProfState	vm/Profile.h	/^struct AllocProfState {$/;"	s
 AllocRecord	vm/AllocTracker.cpp	/^struct AllocRecord {$/;"	s	file:
-AnalysisEndEvent	vm/shadowlib/ReProtocol.h	/^bool AnalysisEndEvent(thread_id_type tid){$/;"	f	class:ReProtocol
-AnalysisStartEvent	vm/shadowlib/ReProtocol.h	/^bool AnalysisStartEvent(thread_id_type tid, ordering_id_type oid, short methodId){$/;"	f	class:ReProtocol
+AnalysisEndEvent	vm/shadowlib/ReProtocol.h	/^		bool AnalysisEndEvent(thread_id_type tid){$/;"	f	class:ReProtocol
+AnalysisStartEvent	vm/shadowlib/ReProtocol.h	/^		bool AnalysisStartEvent(thread_id_type tid, ordering_id_type oid, short methodId){$/;"	f	class:ReProtocol
 AnnoArrayField	tests/004-annotations/src/android/test/anno/AnnoArrayField.java	/^public @interface AnnoArrayField {$/;"	i
 AnnoFancyConstructor	tests/004-annotations/src/android/test/anno/AnnoFancyConstructor.java	/^public @interface AnnoFancyConstructor {$/;"	i
 AnnoFancyField	tests/004-annotations/src/android/test/anno/AnnoFancyField.java	/^public @interface AnnoFancyField {$/;"	i
@@ -1438,7 +1437,7 @@ ConcreteMethod	dx/src/com/android/dx/cf/code/ConcreteMethod.java	/^public final 
 ConcreteSub	tests/032-concrete-sub/src/ConcreteSub.java	/^public class ConcreteSub extends AbstractBase {$/;"	c
 ConcreteSub2	tests/032-concrete-sub/src/ConcreteSub2.java	/^public class ConcreteSub2 extends AbstractBase {$/;"	c
 Connect	vm/shadowlib/Socket.cpp	/^bool Socket::Connect ()$/;"	f	class:Socket
-ConnectionClose	vm/shadowlib/ReProtocol.h	/^bool ConnectionClose(){$/;"	f	class:ReProtocol
+ConnectionClose	vm/shadowlib/ReProtocol.h	/^		bool ConnectionClose(){$/;"	f	class:ReProtocol
 ConservativeTranslationAdvice	dexgen/src/com/android/dexgen/rop/code/ConservativeTranslationAdvice.java	/^    private ConservativeTranslationAdvice() {$/;"	m	class:ConservativeTranslationAdvice	file:
 ConservativeTranslationAdvice	dexgen/src/com/android/dexgen/rop/code/ConservativeTranslationAdvice.java	/^public final class ConservativeTranslationAdvice$/;"	c
 ConservativeTranslationAdvice	dx/src/com/android/dx/rop/code/ConservativeTranslationAdvice.java	/^    private ConservativeTranslationAdvice() {$/;"	m	class:ConservativeTranslationAdvice	file:
@@ -1664,7 +1663,6 @@ DALVIK_RAWDEXFILE_H_	vm/RawDexFile.h	22;"	d
 DALVIK_REFERENCETABLE_H_	vm/ReferenceTable.h	24;"	d
 DALVIK_REFLECT_REFLECT_H_	vm/reflect/Reflect.h	20;"	d
 DALVIK_REGISTERMAP_H_	vm/analysis/RegisterMap.h	23;"	d
-DALVIK_SHADOWAPI_H_	vm/ShadowAPI.h	2;"	d
 DALVIK_SIGNALCATCHER_H_	vm/SignalCatcher.h	20;"	d
 DALVIK_STDOUTCONVERTER_H_	vm/StdioConverter.h	20;"	d
 DALVIK_STRING_H_	vm/UtfString.h	22;"	d
@@ -2029,7 +2027,6 @@ DalvikJniReturnType	vm/JniInternal.h	/^enum DalvikJniReturnType {$/;"	g
 DalvikNativeClass	vm/Native.h	/^struct DalvikNativeClass {$/;"	s
 DalvikNativeFunc	vm/oo/Object.h	/^typedef void (*DalvikNativeFunc)(const u4* args, JValue* pResult);$/;"	t
 DalvikNativeMethod	vm/Native.h	/^struct DalvikNativeMethod {$/;"	s
-Dalvik_ch_usi_dag_dislre_AREDispatch_test	vm/native/Test.cpp	/^static void Dalvik_ch_usi_dag_dislre_AREDispatch_test(const u4* args, JValue* pResult){$/;"	f	file:
 Dalvik_dalvik_bytecode_OpcodeInfo_isInvoke	vm/native/dalvik_bytecode_OpcodeInfo.cpp	/^static void Dalvik_dalvik_bytecode_OpcodeInfo_isInvoke(const u4* args,$/;"	f	file:
 Dalvik_dalvik_system_DexFile_closeDexFile	vm/native/dalvik_system_DexFile.cpp	/^static void Dalvik_dalvik_system_DexFile_closeDexFile(const u4* args,$/;"	f	file:
 Dalvik_dalvik_system_DexFile_defineClass	vm/native/dalvik_system_DexFile.cpp	/^static void Dalvik_dalvik_system_DexFile_defineClass(const u4* args,$/;"	f	file:
@@ -2825,7 +2822,7 @@ FINISH	vm/mterp/out/InterpC-x86.cpp	449;"	d	file:
 FINISH	vm/mterp/portable/stubdefs.cpp	37;"	d	file:
 FINISH_BKPT	vm/mterp/out/InterpC-portable.cpp	415;"	d	file:
 FINISH_BKPT	vm/mterp/portable/stubdefs.cpp	45;"	d	file:
-FIRST_SLEEP	vm/Thread.cpp	2466;"	d	file:
+FIRST_SLEEP	vm/Thread.cpp	2430;"	d	file:
 FIVE	dx/tests/091-ssa-const-collector/Blort.java	/^        ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT$/;"	e	enum:Blort.Foo	file:
 FIVE	tests/055-enum-performance/src/SamePackagePrivateEnum.java	/^    ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,$/;"	e	enum:SamePackagePrivateEnum	file:
 FIVE	tests/055-enum-performance/src/SamePackagePublicEnum.java	/^    ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,$/;"	e	enum:SamePackagePublicEnum	file:
@@ -3197,7 +3194,7 @@ GEN	vm/analysis/Liveness.cpp	/^static inline void GEN(BitVector* workBits, u4 re
 GENW	vm/analysis/Liveness.cpp	/^static inline void GENW(BitVector* workBits, u4 regIndex)$/;"	f	file:
 GETFIELD	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int GETFIELD = 0xb4;$/;"	f	class:ByteOps
 GETSTATIC	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int GETSTATIC = 0xb2;$/;"	f	class:ByteOps
-GET_ARG	dexopt/OptMain.cpp	338;"	d	file:
+GET_ARG	dexopt/OptMain.cpp	325;"	d	file:
 GET_ARG_LONG	vm/Native.h	86;"	d
 GET_CLASS_FLAG_GROUP	vm/oo/Object.h	101;"	d
 GET_ELEM_N	vm/compiler/CompilerUtility.h	51;"	d
@@ -3545,7 +3542,7 @@ GcSpec	vm/alloc/Heap.h	/^struct GcSpec {$/;"	s
 GenericVisitor	dx/src/com/android/dx/merge/InstructionTransformer.java	/^    private class GenericVisitor implements CodeReader.Visitor {$/;"	c	class:InstructionTransformer
 Get	vm/shadowlib/Map.h	/^		V& Get(const K &key){$/;"	f	class:Map
 GetArrayLength	vm/Jni.cpp	/^static jsize GetArrayLength(JNIEnv* env, jarray jarr) {$/;"	f	file:
-GetCurrentSize	vm/shadowlib/ReProtocol.h	/^int GetCurrentSize(){$/;"	f	class:ReProtocol
+GetCurrentSize	vm/shadowlib/ReProtocol.h	/^		int GetCurrentSize(){$/;"	f	class:ReProtocol
 GetCursor	dexgen/src/com/android/dexgen/util/ByteArray.java	/^    public interface GetCursor {$/;"	i	class:ByteArray
 GetCursor	dx/src/com/android/dx/util/ByteArray.java	/^    public interface GetCursor {$/;"	i	class:ByteArray
 GetData	vm/shadowlib/ReQueue.h	/^		virtual void GetData(char* &data, int &length){$/;"	f	class:BaseQueue
@@ -3560,9 +3557,8 @@ GetMethodID	vm/Jni.cpp	/^static jmethodID GetMethodID(JNIEnv* env, jclass jclazz
 GetNonexistent	tests/064-field-access/src/GetNonexistent.java	/^public class GetNonexistent {$/;"	c
 GetObjectArrayElement	vm/Jni.cpp	/^static jobject GetObjectArrayElement(JNIEnv* env, jobjectArray jarr, jsize index) {$/;"	f	file:
 GetObjectClass	vm/Jni.cpp	/^static jclass GetObjectClass(JNIEnv* env, jobject jobj) {$/;"	f	file:
-GetObjectId	vm/ShadowAPI.cpp	/^long GetObjectId(Thread* self, jobject jo){$/;"	f
 GetObjectRefType	vm/Jni.cpp	/^static jobjectRefType GetObjectRefType(JNIEnv* env, jobject jobj) {$/;"	f	file:
-GetOrderingId	vm/shadowlib/ReProtocol.h	/^ordering_id_type GetOrderingId(thread_id_type tid){$/;"	f	class:ReProtocol
+GetOrderingId	vm/shadowlib/ReProtocol.h	/^		ordering_id_type GetOrderingId(thread_id_type tid){$/;"	f	class:ReProtocol
 GetPrimitiveArrayCritical	vm/Jni.cpp	/^static void* GetPrimitiveArrayCritical(JNIEnv* env, jarray jarr, jboolean* isCopy) {$/;"	f	file:
 GetStaticFieldID	vm/Jni.cpp	/^static jfieldID GetStaticFieldID(JNIEnv* env, jclass jclazz, const char* name, const char* sig) {$/;"	f	file:
 GetStaticMethodID	vm/Jni.cpp	/^static jmethodID GetStaticMethodID(JNIEnv* env, jclass jclazz, const char* name, const char* sig) {$/;"	f	file:
@@ -4825,7 +4821,7 @@ InvalidArgumentException	dx/src/com/android/dx/command/annotool/Main.java	/^    
 InvalidArgumentException	dx/src/com/android/dx/command/annotool/Main.java	/^        InvalidArgumentException(String s) {$/;"	m	class:Main.InvalidArgumentException
 InvalidArgumentException	dx/src/com/android/dx/command/annotool/Main.java	/^    private static class InvalidArgumentException extends Exception {$/;"	c	class:Main
 IsAssignableFrom	vm/Jni.cpp	/^static jboolean IsAssignableFrom(JNIEnv* env, jclass jclazz1, jclass jclazz2) {$/;"	f	file:
-IsClosed	vm/shadowlib/ReProtocol.h	/^bool IsClosed(){$/;"	f	class:ReProtocol
+IsClosed	vm/shadowlib/ReProtocol.h	/^		bool IsClosed(){$/;"	f	class:ReProtocol
 IsEmpty	vm/shadowlib/ReQueue.h	/^		bool IsEmpty(){$/;"	f	class:BaseQueue
 IsInstanceOf	vm/Jni.cpp	/^static jboolean IsInstanceOf(JNIEnv* env, jobject jobj, jclass jclazz) {$/;"	f	file:
 IsSameObject	vm/Jni.cpp	/^static jboolean IsSameObject(JNIEnv* env, jobject jref1, jobject jref2) {$/;"	f	file:
@@ -5146,15 +5142,11 @@ LOCAL_C_INCLUDES	dexlist/Android.mk	/^LOCAL_C_INCLUDES := $(dexdump_c_includes)$
 LOCAL_C_INCLUDES	dexopt/Android.mk	/^    LOCAL_C_INCLUDES := $(local_c_includes)$/;"	m
 LOCAL_C_INCLUDES	dexopt/Android.mk	/^LOCAL_C_INCLUDES := $(local_c_includes)$/;"	m
 LOCAL_C_INCLUDES	dvz/Android.mk	/^LOCAL_C_INCLUDES :=$/;"	m
-LOCAL_DROIDDOC_OPTIONS	dx/bin/Android.mk	/^LOCAL_DROIDDOC_OPTIONS := -hidden$/;"	m
 LOCAL_DROIDDOC_OPTIONS	dx/src/Android.mk	/^LOCAL_DROIDDOC_OPTIONS := -hidden$/;"	m
-LOCAL_EXPORT_C_INCLUDES	vm/Shadow.mk	/^LOCAL_EXPORT_C_INCLUDES := dalvik\/vm$/;"	m
 LOCAL_IS_HOST_MODULE	dx/Android.mk	/^LOCAL_IS_HOST_MODULE := true$/;"	m
-LOCAL_IS_HOST_MODULE	dx/bin/Android.mk	/^LOCAL_IS_HOST_MODULE := true$/;"	m
 LOCAL_IS_HOST_MODULE	dx/src/Android.mk	/^LOCAL_IS_HOST_MODULE := true$/;"	m
 LOCAL_IS_HOST_MODULE	tools/dexdeps/Android.mk	/^LOCAL_IS_HOST_MODULE := true$/;"	m
 LOCAL_IS_HOST_MODULE	vm/Android.mk	/^    LOCAL_IS_HOST_MODULE := true$/;"	m
-LOCAL_JAR_MANIFEST	dx/bin/Android.mk	/^LOCAL_JAR_MANIFEST := ..\/etc\/manifest.txt$/;"	m
 LOCAL_JAR_MANIFEST	dx/src/Android.mk	/^LOCAL_JAR_MANIFEST := ..\/etc\/manifest.txt$/;"	m
 LOCAL_JAR_MANIFEST	tools/dexdeps/src/Android.mk	/^LOCAL_JAR_MANIFEST := ..\/etc\/manifest.txt$/;"	m
 LOCAL_JAVA_LIBRARIES	dx/junit-tests/Android.mk	/^LOCAL_JAVA_LIBRARIES := dx junit$/;"	m
@@ -5173,7 +5165,6 @@ LOCAL_MODULE	dvz/Android.mk	/^LOCAL_MODULE := dvz$/;"	m
 LOCAL_MODULE	dx/Android.mk	/^LOCAL_MODULE := dx$/;"	m
 LOCAL_MODULE	dx/Android.mk	/^LOCAL_MODULE := jasmin$/;"	m
 LOCAL_MODULE	dx/Android.mk	/^LOCAL_MODULE := jasmin.jar$/;"	m
-LOCAL_MODULE	dx/bin/Android.mk	/^LOCAL_MODULE:= dx$/;"	m
 LOCAL_MODULE	dx/junit-tests/Android.mk	/^LOCAL_MODULE:= dx-tests$/;"	m
 LOCAL_MODULE	dx/src/Android.mk	/^LOCAL_MODULE:= dx$/;"	m
 LOCAL_MODULE	libdex/Android.mk	/^LOCAL_MODULE := libdex$/;"	m
@@ -5192,7 +5183,6 @@ LOCAL_MODULE	vm/Android.mk	/^    LOCAL_MODULE := libdvm_sv$/;"	m
 LOCAL_MODULE	vm/Android.mk	/^LOCAL_MODULE := libdvm$/;"	m
 LOCAL_MODULE_CLASS	dx/Android.mk	/^LOCAL_MODULE_CLASS := EXECUTABLES$/;"	m
 LOCAL_MODULE_CLASS	dx/Android.mk	/^LOCAL_MODULE_CLASS := JAVA_LIBRARIES$/;"	m
-LOCAL_MODULE_CLASS	dx/bin/Android.mk	/^LOCAL_MODULE_CLASS := JAVA_LIBRARIES$/;"	m
 LOCAL_MODULE_CLASS	dx/src/Android.mk	/^LOCAL_MODULE_CLASS := JAVA_LIBRARIES$/;"	m
 LOCAL_MODULE_CLASS	tools/dexdeps/Android.mk	/^LOCAL_MODULE_CLASS := EXECUTABLES$/;"	m
 LOCAL_MODULE_CLASS	vm/Android.mk	/^    LOCAL_MODULE_CLASS := EXECUTABLES$/;"	m
@@ -5207,7 +5197,6 @@ LOCAL_MODULE_TAGS	dexopt/Android.mk	/^    LOCAL_MODULE_TAGS := optional$/;"	m
 LOCAL_MODULE_TAGS	dexopt/Android.mk	/^LOCAL_MODULE_TAGS := optional$/;"	m
 LOCAL_MODULE_TAGS	dvz/Android.mk	/^LOCAL_MODULE_TAGS := optional$/;"	m
 LOCAL_MODULE_TAGS	dx/Android.mk	/^LOCAL_MODULE_TAGS := optional$/;"	m
-LOCAL_MODULE_TAGS	dx/bin/Android.mk	/^LOCAL_MODULE_TAGS := optional$/;"	m
 LOCAL_MODULE_TAGS	dx/junit-tests/Android.mk	/^LOCAL_MODULE_TAGS := optional$/;"	m
 LOCAL_MODULE_TAGS	dx/junit-tests/Android.mk	/^LOCAL_MODULE_TAGS := tests$/;"	m
 LOCAL_MODULE_TAGS	dx/src/Android.mk	/^LOCAL_MODULE_TAGS := optional$/;"	m
@@ -5229,7 +5218,6 @@ LOCAL_PATH	dexlist/Android.mk	/^LOCAL_PATH:= $(call my-dir)$/;"	m
 LOCAL_PATH	dexopt/Android.mk	/^LOCAL_PATH:= $(call my-dir)$/;"	m
 LOCAL_PATH	dvz/Android.mk	/^LOCAL_PATH := $(my-dir)$/;"	m
 LOCAL_PATH	dx/Android.mk	/^LOCAL_PATH := $(call my-dir)$/;"	m
-LOCAL_PATH	dx/bin/Android.mk	/^LOCAL_PATH := $(call my-dir)$/;"	m
 LOCAL_PATH	dx/junit-tests/Android.mk	/^LOCAL_PATH := $(call my-dir)$/;"	m
 LOCAL_PATH	dx/src/Android.mk	/^LOCAL_PATH := $(call my-dir)$/;"	m
 LOCAL_PATH	libdex/Android.mk	/^LOCAL_PATH:= $(call my-dir)$/;"	m
@@ -5258,8 +5246,6 @@ LOCAL_SRC_FILES	dexlist/Android.mk	/^LOCAL_SRC_FILES := $(dexdump_src_files)$/;"
 LOCAL_SRC_FILES	dexopt/Android.mk	/^    LOCAL_SRC_FILES := $(local_src_files)$/;"	m
 LOCAL_SRC_FILES	dexopt/Android.mk	/^LOCAL_SRC_FILES := $(local_src_files)$/;"	m
 LOCAL_SRC_FILES	dvz/Android.mk	/^LOCAL_SRC_FILES:= \\$/;"	m
-LOCAL_SRC_FILES	dx/bin/Android.mk	/^LOCAL_SRC_FILES := $(call all-subdir-java-files) $(call all-subdir-html-files)$/;"	m
-LOCAL_SRC_FILES	dx/bin/Android.mk	/^LOCAL_SRC_FILES := $(call all-subdir-java-files)$/;"	m
 LOCAL_SRC_FILES	dx/junit-tests/Android.mk	/^LOCAL_SRC_FILES := $(call all-subdir-java-files)$/;"	m
 LOCAL_SRC_FILES	dx/src/Android.mk	/^LOCAL_SRC_FILES := $(call all-subdir-java-files) $(call all-subdir-html-files)$/;"	m
 LOCAL_SRC_FILES	dx/src/Android.mk	/^LOCAL_SRC_FILES := $(call all-subdir-java-files)$/;"	m
@@ -5271,7 +5257,6 @@ LOCAL_SRC_FILES	tools/gdbjithelper/Android.mk	/^LOCAL_SRC_FILES := gdbjithelper.
 LOCAL_SRC_FILES	tools/hprof-conv/Android.mk	/^LOCAL_SRC_FILES := HprofConv.c$/;"	m
 LOCAL_SRC_FILES	unit-tests/Android.mk	/^LOCAL_SRC_FILES := $(test_src_files)$/;"	m
 LOCAL_SRC_FILES	vm/Dvm.mk	/^LOCAL_SRC_FILES := \\$/;"	m
-LOCAL_SRC_FILES	vm/Shadow.mk	/^LOCAL_SRC_FILES := \\$/;"	m
 LOCAL_STATIC_LIBRARIES	dexdump/Android.mk	/^LOCAL_STATIC_LIBRARIES := $(dexdump_static_libraries) liblog$/;"	m
 LOCAL_STATIC_LIBRARIES	dexdump/Android.mk	/^LOCAL_STATIC_LIBRARIES := $(dexdump_static_libraries)$/;"	m
 LOCAL_STATIC_LIBRARIES	dexlist/Android.mk	/^LOCAL_STATIC_LIBRARIES := $(dexdump_static_libraries) libcutils$/;"	m
@@ -5499,6 +5484,7 @@ MAXHOSTNAME	vm/shadowlib/Socket.h	/^const int MAXHOSTNAME = 200;$/;"	v
 MAXRECV	vm/shadowlib/Socket.h	/^const int MAXRECV = 500;$/;"	v
 MAX_ASSEMBLER_RETRIES	vm/compiler/codegen/arm/Assemble.cpp	25;"	d	file:
 MAX_ASSEMBLER_RETRIES	vm/compiler/codegen/x86/Assemble.cpp	25;"	d	file:
+MAX_BUFFER	vm/shadowlib/ReAgent.cpp	25;"	d	file:
 MAX_CATCH_RANGE	dexgen/src/com/android/dexgen/dex/code/StdCatchBuilder.java	/^    private static final int MAX_CATCH_RANGE = 65535;$/;"	f	class:StdCatchBuilder	file:
 MAX_CATCH_RANGE	dx/src/com/android/dx/dex/code/StdCatchBuilder.java	/^    private static final int MAX_CATCH_RANGE = 65535;$/;"	f	class:StdCatchBuilder	file:
 MAX_CHAINED_SWITCH_CASES	vm/compiler/codegen/CompilerCodegen.h	23;"	d
@@ -5590,7 +5576,7 @@ MONITOR_EXIT	dx/src/com/android/dx/io/OpcodeInfo.java	/^    public static final 
 MONITOR_EXIT	dx/src/com/android/dx/io/Opcodes.java	/^    public static final int MONITOR_EXIT = 0x1e;$/;"	f	class:Opcodes
 MONITOR_EXIT	dx/src/com/android/dx/rop/code/RegOps.java	/^    public static final int MONITOR_EXIT = 37;$/;"	f	class:RegOps
 MONITOR_EXIT	dx/src/com/android/dx/rop/code/Rops.java	/^    public static final Rop MONITOR_EXIT =$/;"	f	class:Rops
-MORE_SLEEP	vm/Thread.cpp	2467;"	d	file:
+MORE_SLEEP	vm/Thread.cpp	2431;"	d	file:
 MOVE	dexgen/src/com/android/dexgen/dex/code/DalvOps.java	/^    public static final int MOVE = 0x01;$/;"	f	class:DalvOps
 MOVE	dexgen/src/com/android/dexgen/dex/code/Dops.java	/^    public static final Dop MOVE =$/;"	f	class:Dops
 MOVE	dexgen/src/com/android/dexgen/rop/code/RegOps.java	/^    public static final int MOVE = 2;$/;"	f	class:RegOps
@@ -5704,9 +5690,6 @@ MSG_THREAD_INFO	vm/shadowlib/ReProtocol.h	/^	MSG_THREAD_INFO,$/;"	e	enum:MsgType
 MTERP_ARCH_KNOWN	vm/Dvm.mk	/^    MTERP_ARCH_KNOWN := true$/;"	m
 MTERP_ARCH_KNOWN	vm/Dvm.mk	/^  MTERP_ARCH_KNOWN := true$/;"	m
 MTERP_ARCH_KNOWN	vm/Dvm.mk	/^MTERP_ARCH_KNOWN := false$/;"	m
-MTERP_ARCH_KNOWN	vm/Shadow.mk	/^    MTERP_ARCH_KNOWN := true$/;"	m
-MTERP_ARCH_KNOWN	vm/Shadow.mk	/^  MTERP_ARCH_KNOWN := true$/;"	m
-MTERP_ARCH_KNOWN	vm/Shadow.mk	/^MTERP_ARCH_KNOWN := false$/;"	m
 MTERP_CONSTANT	vm/mterp/common/asm-constants.h	25;"	d
 MTERP_CONSTANT	vm/mterp/common/asm-constants.h	35;"	d
 MTERP_ENTRY1	vm/mterp/armv5te/entry.S	/^#define MTERP_ENTRY1 \\$/;"	d
@@ -5918,7 +5901,7 @@ MapItem	dexgen/src/com/android/dexgen/dex/file/MapItem.java	/^public final class
 MapItem	dx/src/com/android/dx/dex/file/MapItem.java	/^    private MapItem(ItemType type, Section section, Item firstItem,$/;"	m	class:MapItem	file:
 MapItem	dx/src/com/android/dx/dex/file/MapItem.java	/^    private MapItem(Section section) {$/;"	m	class:MapItem	file:
 MapItem	dx/src/com/android/dx/dex/file/MapItem.java	/^public final class MapItem extends OffsettedItem {$/;"	c
-MapPidPname	vm/shadowlib/ReProtocol.h	/^bool MapPidPname(jint pid, const char* pname){$/;"	f	class:ReProtocol
+MapPidPname	vm/shadowlib/ReProtocol.h	/^		bool MapPidPname(jint pid, const char* pname){$/;"	f	class:ReProtocol
 MapStats	vm/analysis/RegisterMap.cpp	/^struct MapStats {$/;"	s	file:
 Marker	dx/tests/115-merge/testdata/Annotated.java	/^    public @interface Marker {$/;"	i	class:Annotated
 Math_absD	vm/native/java_lang_Math.cpp	/^static void Math_absD(const u4* args, JValue* pResult)$/;"	f	file:
@@ -5988,7 +5971,7 @@ MethodListParser	dx/src/com/android/dx/cf/direct/MethodListParser.java	/^    pub
 MethodListParser	dx/src/com/android/dx/cf/direct/MethodListParser.java	/^final \/*package*\/ class MethodListParser extends MemberListParser {$/;"	c
 MethodRef	tools/dexdeps/src/com/android/dexdeps/MethodRef.java	/^    public MethodRef(String declClass, String[] argTypes, String returnType,$/;"	m	class:MethodRef
 MethodRef	tools/dexdeps/src/com/android/dexdeps/MethodRef.java	/^public class MethodRef {$/;"	c
-MethodRegisterEvent	vm/shadowlib/ReProtocol.h	/^bool MethodRegisterEvent(int threadId, jshort methodId, const char* name, int length){$/;"	f	class:ReProtocol
+MethodRegisterEvent	vm/shadowlib/ReProtocol.h	/^		bool MethodRegisterEvent(int threadId, jshort methodId, const char* name, int length){$/;"	f	class:ReProtocol
 MethodThread	tests/084-class-init/src/Main.java	/^    static class MethodThread extends Thread {$/;"	c	class:Main
 MethodTraceState	vm/Profile.h	/^struct MethodTraceState {$/;"	s
 MethodType	vm/oo/Resolve.h	/^enum MethodType {$/;"	g
@@ -6204,10 +6187,10 @@ NO_UNALIGN_64__UNION	vm/mterp/out/InterpC-portable.cpp	69;"	d	file:
 NO_UNALIGN_64__UNION	vm/mterp/out/InterpC-x86-atom.cpp	69;"	d	file:
 NO_UNALIGN_64__UNION	vm/mterp/out/InterpC-x86.cpp	69;"	d	file:
 NULLS_LAST_ORDER	dx/src/com/android/dx/merge/SortableType.java	/^    public static final Comparator<SortableType> NULLS_LAST_ORDER = new Comparator<SortableType>() {$/;"	f	class:SortableType
-NULL_AND_FREE	vm/oo/Class.cpp	2038;"	d	file:
-NULL_AND_FREE	vm/oo/Class.cpp	2112;"	d	file:
-NULL_AND_LINEAR_FREE	vm/oo/Class.cpp	2046;"	d	file:
-NULL_AND_LINEAR_FREE	vm/oo/Class.cpp	2113;"	d	file:
+NULL_AND_FREE	vm/oo/Class.cpp	2027;"	d	file:
+NULL_AND_FREE	vm/oo/Class.cpp	2101;"	d	file:
+NULL_AND_LINEAR_FREE	vm/oo/Class.cpp	2035;"	d	file:
+NULL_AND_LINEAR_FREE	vm/oo/Class.cpp	2102;"	d	file:
 NUM_DUMPED_WORDS	tools/gdbjithelper/gdbjithelper.c	23;"	d	file:
 NUM_FLAGS	dexdump/DexDump.cpp	257;"	d	file:
 NUM_XOR_PTRS	vm/alloc/TEST/HeapBitmapTest/main.c	310;"	d	file:
@@ -6225,8 +6208,8 @@ NativeWrapper	tests/079-phantom/src/Bitmap.java	/^        public NativeWrapper(i
 NativeWrapper	tests/079-phantom/src/Bitmap.java	/^    static class NativeWrapper {$/;"	c	class:Bitmap
 Nested	dx/tests/115-merge/testdata/Annotated.java	/^        Nested c() default @Nested;$/;"	f	interface:Annotated.Marker
 Nested	dx/tests/115-merge/testdata/Annotated.java	/^    public @interface Nested {$/;"	i	class:Annotated
-NewClassEvent	vm/shadowlib/ReProtocol.h	/^bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, const char *bytes){$/;"	f	class:ReProtocol
-NewClassInfo	vm/shadowlib/ReProtocol.h	/^bool NewClassInfo(jlong netref, const char* className, int namelen, const char* generic, int glen, jlong netrefClassLoader, jlong netrefSuperClass){$/;"	f	class:ReProtocol
+NewClassEvent	vm/shadowlib/ReProtocol.h	/^		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, const char *bytes){$/;"	f	class:ReProtocol
+NewClassInfo	vm/shadowlib/ReProtocol.h	/^		bool NewClassInfo(jlong netref, const char* className, int namelen, const char* generic, int glen, jlong netrefClassLoader, jlong netrefSuperClass){$/;"	f	class:ReProtocol
 NewDirectByteBuffer	vm/Jni.cpp	/^static jobject NewDirectByteBuffer(JNIEnv* env, void* address, jlong capacity) {$/;"	f	file:
 NewGlobalRef	vm/Jni.cpp	/^static jobject NewGlobalRef(JNIEnv* env, jobject jobj) {$/;"	f	file:
 NewLocalRef	vm/Jni.cpp	/^static jobject NewLocalRef(JNIEnv* env, jobject jobj) {$/;"	f	file:
@@ -6619,7 +6602,7 @@ OUT_ARG4	vm/mterp/out/InterpAsm-x86.S	/^#define OUT_ARG4       ( 16)$/;"	d
 OUT_ARG4	vm/mterp/x86/header.S	/^#define OUT_ARG4       ( 16)$/;"	d
 O_BINARY	libdex/CmdUtils.cpp	30;"	d	file:
 O_BINARY	libdex/ZipArchive.cpp	37;"	d	file:
-ObjFreeEvent	vm/shadowlib/ReProtocol.h	/^void ObjFreeEvent(jlong objectId){$/;"	f	class:ReProtocol
+ObjFreeEvent	vm/shadowlib/ReProtocol.h	/^		void ObjFreeEvent(jlong objectId){$/;"	f	class:ReProtocol
 Object	dx/tests/089-dex-define-object/Object.java	/^    public Object() {$/;"	m	class:Object
 Object	dx/tests/089-dex-define-object/Object.java	/^public class Object {$/;"	c
 Object	vm/oo/Object.h	/^struct Object {$/;"	s
@@ -6632,7 +6615,7 @@ OffsettedItem	dexgen/src/com/android/dexgen/dex/file/OffsettedItem.java	/^    pu
 OffsettedItem	dexgen/src/com/android/dexgen/dex/file/OffsettedItem.java	/^public abstract class OffsettedItem extends Item$/;"	c
 OffsettedItem	dx/src/com/android/dx/dex/file/OffsettedItem.java	/^    public OffsettedItem(int alignment, int writeSize) {$/;"	m	class:OffsettedItem
 OffsettedItem	dx/src/com/android/dx/dex/file/OffsettedItem.java	/^public abstract class OffsettedItem extends Item$/;"	c
-OnForkEvent	vm/shadowlib/ReProtocol.h	/^bool OnForkEvent(int para){$/;"	f	class:ReProtocol
+OnForkEvent	vm/shadowlib/ReProtocol.h	/^		bool OnForkEvent(int para){$/;"	f	class:ReProtocol
 OnLoadFunc	vm/Native.cpp	/^typedef int (*OnLoadFunc)(JavaVM*, void*);$/;"	t	file:
 OnLoadState	vm/Native.cpp	/^enum OnLoadState {$/;"	g	file:
 OneLocalsArray	dx/src/com/android/dx/cf/code/OneLocalsArray.java	/^    public OneLocalsArray(int maxLocals) {$/;"	m	class:OneLocalsArray
@@ -7208,7 +7191,8 @@ ResourceEncodingPos	vm/compiler/codegen/arm/ArmLIR.h	/^typedef enum ResourceEnco
 ResourceEncodingPos	vm/compiler/codegen/arm/ArmLIR.h	/^} ResourceEncodingPos;$/;"	t	typeref:enum:ResourceEncodingPos
 ReturnAddress	dx/src/com/android/dx/cf/code/ReturnAddress.java	/^    public ReturnAddress(int subroutineAddress) {$/;"	m	class:ReturnAddress
 ReturnAddress	dx/src/com/android/dx/cf/code/ReturnAddress.java	/^public final class ReturnAddress implements TypeBearer {$/;"	c
-ReturnAndResetBuffer	vm/shadowlib/ReProtocol.h	/^Buffer* ReturnAndResetBuffer(){$/;"	f	class:ReProtocol
+ReturnAndResetBuffer	vm/shadowlib/ReProtocol.h	/^		Buffer* ReturnAndResetBuffer(){$/;"	f	class:ReProtocol
+ReturnAndResetBufferNolock	vm/shadowlib/ReProtocol.h	/^		Buffer* ReturnAndResetBufferNolock(){$/;"	f	class:ReProtocol
 Robin	tests/074-gc-thrash/src/Main.java	/^class Robin extends Thread {$/;"	c
 RootObj	hit/src/com/android/hit/RootObj.java	/^    public RootObj(RootType type) {$/;"	m	class:RootObj
 RootObj	hit/src/com/android/hit/RootObj.java	/^    public RootObj(RootType type, long id) {$/;"	m	class:RootObj
@@ -7294,7 +7278,8 @@ SD_OVER	vm/jdwp/JdwpConstants.h	/^    SD_OVER                 = 1,    \/* step o
 SERIALIZABLE	dexgen/src/com/android/dexgen/rop/type/Type.java	/^    public static final Type SERIALIZABLE = intern("Ljava\/io\/Serializable;");$/;"	f	class:Type
 SERIALIZABLE	dx/src/com/android/dx/rop/type/Type.java	/^    public static final Type SERIALIZABLE = intern("Ljava\/io\/Serializable;");$/;"	f	class:Type
 SERVER_IP	libdex/ZipArchive.cpp	65;"	d	file:
-SERVER_SOCK	vm/shadowlib/Socket.cpp	21;"	d	file:
+SERVER_IP	vm/shadowlib/ReAgent.cpp	23;"	d	file:
+SERVER_SOCK	vm/shadowlib/Socket.cpp	23;"	d	file:
 SETS_CCODES	vm/compiler/codegen/arm/ArmLIR.h	696;"	d
 SET_CLASS_FLAG	vm/oo/Object.h	92;"	d
 SET_METHOD_FLAG	vm/oo/Object.h	115;"	d
@@ -7806,29 +7791,29 @@ Section	dx/src/com/android/dx/io/DexBuffer.java	/^    public final class Section
 SelfVerificationState	vm/interp/InterpState.h	/^enum SelfVerificationState {$/;"	g
 SemiPrivate	tests/024-illegal-access/src/SemiPrivate.java	/^public class SemiPrivate {$/;"	c
 SemiPrivate	tests/024-illegal-access/src2/SemiPrivate.java	/^public class SemiPrivate {$/;"	c
-Send	vm/shadowlib/ReProtocol.h	/^bool Send(MsgType msg){$/;"	f	class:ReProtocol
-Send	vm/shadowlib/ReProtocol.h	/^bool Send(const char* data, int length){$/;"	f	class:ReProtocol
-Send	vm/shadowlib/ReProtocol.h	/^bool Send(const char* data, int length, const char* lastdata, int lastlength){$/;"	f	class:ReProtocol
-Send	vm/shadowlib/Socket.cpp	/^bool Socket::Send ( const char* s, int length ) const$/;"	f	class:Socket
-SendArgument	vm/shadowlib/ReProtocol.h	/^bool SendArgument(thread_id_type tid, const char* data, int length){$/;"	f	class:ReProtocol
-SendJboolean	vm/shadowlib/ReProtocol.h	/^int SendJboolean(thread_id_type tid, jboolean data){$/;"	f	class:ReProtocol
-SendJbyte	vm/shadowlib/ReProtocol.h	/^int SendJbyte(thread_id_type tid, jbyte data){$/;"	f	class:ReProtocol
-SendJchar	vm/shadowlib/ReProtocol.h	/^int SendJchar(thread_id_type tid, jchar data){$/;"	f	class:ReProtocol
-SendJdouble	vm/shadowlib/ReProtocol.h	/^int SendJdouble(thread_id_type tid, jdouble data){$/;"	f	class:ReProtocol
-SendJfloat	vm/shadowlib/ReProtocol.h	/^int SendJfloat(thread_id_type tid, jfloat data){$/;"	f	class:ReProtocol
-SendJint	vm/shadowlib/ReProtocol.h	/^int SendJint(thread_id_type tid, jint data){$/;"	f	class:ReProtocol
-SendJlong	vm/shadowlib/ReProtocol.h	/^int SendJlong(thread_id_type tid, jlong data){$/;"	f	class:ReProtocol
-SendJobject	vm/shadowlib/ReProtocol.h	/^int SendJobject(thread_id_type tid, jlong netref){$/;"	f	class:ReProtocol
-SendJshort	vm/shadowlib/ReProtocol.h	/^int SendJshort(thread_id_type tid, jshort data){$/;"	f	class:ReProtocol
-SendStringObject	vm/shadowlib/ReProtocol.h	/^bool SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){$/;"	f	class:ReProtocol
-SendStringObject	vm/shadowlib/ReProtocol.h	/^int SendStringObject(thread_id_type tid, jlong netref, const char* utf8, int len){$/;"	f	class:ReProtocol
-SendStringUtf8	vm/shadowlib/ReProtocol.h	/^int SendStringUtf8(thread_id_type tid, const char* string_utf8, uint16_t size_in_bytes){$/;"	f	class:ReProtocol
-SendThreadObject	vm/shadowlib/ReProtocol.h	/^int SendThreadObject(thread_id_type tid, jlong netref, const char* threadName, int len, jboolean isDaemon){$/;"	f	class:ReProtocol
+Send	vm/shadowlib/ReProtocol.h	/^		bool Send(MsgType msg){$/;"	f	class:ReProtocol
+Send	vm/shadowlib/ReProtocol.h	/^		bool Send(const char* data, int length){$/;"	f	class:ReProtocol
+Send	vm/shadowlib/ReProtocol.h	/^		bool Send(const char* data, int length, const char* lastdata, int lastlength){$/;"	f	class:ReProtocol
+Send	vm/shadowlib/Socket.cpp	/^bool Socket::Send ( const char* s, int length )$/;"	f	class:Socket
+SendArgument	vm/shadowlib/ReProtocol.h	/^		bool SendArgument(thread_id_type tid, const char* data, int length){$/;"	f	class:ReProtocol
+SendJboolean	vm/shadowlib/ReProtocol.h	/^		int SendJboolean(thread_id_type tid, jboolean data){$/;"	f	class:ReProtocol
+SendJbyte	vm/shadowlib/ReProtocol.h	/^		int SendJbyte(thread_id_type tid, jbyte data){$/;"	f	class:ReProtocol
+SendJchar	vm/shadowlib/ReProtocol.h	/^		int SendJchar(thread_id_type tid, jchar data){$/;"	f	class:ReProtocol
+SendJdouble	vm/shadowlib/ReProtocol.h	/^		int SendJdouble(thread_id_type tid, jdouble data){$/;"	f	class:ReProtocol
+SendJfloat	vm/shadowlib/ReProtocol.h	/^		int SendJfloat(thread_id_type tid, jfloat data){$/;"	f	class:ReProtocol
+SendJint	vm/shadowlib/ReProtocol.h	/^		int SendJint(thread_id_type tid, jint data){$/;"	f	class:ReProtocol
+SendJlong	vm/shadowlib/ReProtocol.h	/^		int SendJlong(thread_id_type tid, jlong data){$/;"	f	class:ReProtocol
+SendJobject	vm/shadowlib/ReProtocol.h	/^		int SendJobject(thread_id_type tid, jlong netref){$/;"	f	class:ReProtocol
+SendJshort	vm/shadowlib/ReProtocol.h	/^		int SendJshort(thread_id_type tid, jshort data){$/;"	f	class:ReProtocol
+SendStringObject	vm/shadowlib/ReProtocol.h	/^		bool SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){$/;"	f	class:ReProtocol
+SendStringObject	vm/shadowlib/ReProtocol.h	/^		int SendStringObject(thread_id_type tid, jlong netref, const char* utf8, int len){$/;"	f	class:ReProtocol
+SendStringUtf8	vm/shadowlib/ReProtocol.h	/^		int SendStringUtf8(thread_id_type tid, const char* string_utf8, uint16_t size_in_bytes){$/;"	f	class:ReProtocol
+SendThreadObject	vm/shadowlib/ReProtocol.h	/^		int SendThreadObject(thread_id_type tid, jlong netref, const char* threadName, int len, jboolean isDaemon){$/;"	f	class:ReProtocol
 Set	vm/shadowlib/Map.h	/^		void Set(const K &key, const V &value) {$/;"	f	class:Map
 SetAndGetNetref	vm/shadowlib/ReAgent.cpp	/^jlong SetAndGetNetref(Object* obj){$/;"	f
 SetFactory	dx/src/com/android/dx/ssa/SetFactory.java	/^public final class SetFactory {$/;"	c
 SetObjectArrayElement	vm/Jni.cpp	/^static void SetObjectArrayElement(JNIEnv* env, jobjectArray jarr, jsize index, jobject jobj) {$/;"	f	file:
-SetOrderingId	vm/shadowlib/ReProtocol.h	/^void SetOrderingId(thread_id_type tid, ordering_id_type oid){$/;"	f	class:ReProtocol
+SetOrderingId	vm/shadowlib/ReProtocol.h	/^		void SetOrderingId(thread_id_type tid, ordering_id_type oid){$/;"	f	class:ReProtocol
 ShadowHeap	vm/interp/Jit.h	/^struct ShadowHeap {$/;"	s
 ShadowLib_OnLoad	vm/shadowlib/ReAgent.cpp	/^jint ShadowLib_OnLoad(JavaVM* vm, void* reserved){$/;"	f
 ShadowLib_SystemServer_OnLoad	vm/shadowlib/ReAgent.cpp	/^jint ShadowLib_SystemServer_OnLoad(JavaVM* vm, void* reserved){$/;"	f
@@ -8368,7 +8353,8 @@ UNIQUE_ERROR	vm/hprof/Hprof.h	23;"	d
 UNIX_PATH_MAX	dexopt/OptMain.cpp	68;"	d	file:
 UNIX_PATH_MAX	libdex/ZipArchive.cpp	69;"	d	file:
 UNIX_PATH_MAX	vm/native/dalvik_system_Zygote.cpp	50;"	d	file:
-UNIX_PATH_MAX	vm/shadowlib/Socket.cpp	20;"	d	file:
+UNIX_PATH_MAX	vm/shadowlib/ReAgent.cpp	26;"	d	file:
+UNIX_PATH_MAX	vm/shadowlib/Socket.cpp	22;"	d	file:
 UNKNOWN	dx/src/com/android/dx/io/IndexType.java	/^    UNKNOWN,$/;"	e	enum:IndexType	file:
 UNKNOWN	hit/src/com/android/hit/RootType.java	/^    UNKNOWN             (3, "unknown"),$/;"	e	enum:RootType	file:
 UNKNOWN_INDEX	tools/dmtracedump/TraceDump.c	193;"	d	file:
@@ -8652,10 +8638,8 @@ WEB_URL	tests/094-pattern/src/Main.java	/^    public static final Pattern WEB_UR
 WEB_URL_STR	tests/094-pattern/src/Main.java	/^    public static final String WEB_URL_STR =$/;"	f	class:Main
 WIDE	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int WIDE = 0xc4;$/;"	f	class:ByteOps
 WITH_COPYING_GC	vm/Dvm.mk	/^WITH_COPYING_GC := $(strip $(WITH_COPYING_GC))$/;"	m
-WITH_COPYING_GC	vm/Shadow.mk	/^WITH_COPYING_GC := $(strip $(WITH_COPYING_GC))$/;"	m
 WITH_JIT	vm/Android.mk	/^    WITH_JIT := false$/;"	m
 WITH_JIT	vm/Dvm.mk	/^WITH_JIT := $(strip $(WITH_JIT))$/;"	m
-WITH_JIT	vm/Shadow.mk	/^WITH_JIT := $(strip $(WITH_JIT))$/;"	m
 WRITE_HPROF_DATA	tests/074-gc-thrash/src/Main.java	/^    private static final boolean WRITE_HPROF_DATA = false;$/;"	f	class:Main	file:
 WRITE_SIZE	dexgen/src/com/android/dexgen/dex/file/AnnotationSetRefItem.java	/^    private static final int WRITE_SIZE = 4;$/;"	f	class:AnnotationSetRefItem	file:
 WRITE_SIZE	dexgen/src/com/android/dexgen/dex/file/ClassDefItem.java	/^    public static final int WRITE_SIZE = 32;$/;"	f	class:ClassDefItem
@@ -8800,6 +8784,7 @@ _IA32	vm/compiler/codegen/x86/ia32/Codegen.cpp	17;"	d	file:
 _J	vm/analysis/CodeVerify.cpp	160;"	d	file:
 _J	vm/analysis/CodeVerify.cpp	237;"	d	file:
 _LIBDEX_DEXOPTDATA	libdex/DexOptData.h	23;"	d
+_LOCAL_SOCEKT_H_	vm/shadowlib/LocalSocket.h	2;"	d
 _N	vm/analysis/CodeVerify.cpp	158;"	d	file:
 _N	vm/analysis/CodeVerify.cpp	235;"	d	file:
 _NETREF_H	vm/shadowlib/Netref.h	2;"	d
@@ -9261,8 +9246,8 @@ anInt	tests/046-reflect/src/Main.java	/^    public int anInt;$/;"	f	class:Target
 analysisEnd	vm/shadowlib/ReAgent.cpp	/^void analysisEnd$/;"	f
 analysisStart__S	vm/shadowlib/ReAgent.cpp	/^void analysisStart__S$/;"	f
 analysisStart__SB	vm/shadowlib/ReAgent.cpp	/^void analysisStart__SB$/;"	f
-analysis_mtx	vm/shadowlib/ReProtocol.h	/^pthread_mutex_t analysis_mtx;$/;"	m	class:ReProtocol
-analysis_queue	vm/shadowlib/ReProtocol.h	/^Map<ordering_id_type, ReQueue*> analysis_queue;$/;"	m	class:ReProtocol
+analysis_mtx	vm/shadowlib/ReProtocol.h	/^		pthread_mutex_t analysis_mtx;$/;"	m	class:ReProtocol
+analysis_queue	vm/shadowlib/ReProtocol.h	/^		Map<ordering_id_type, ReQueue*> analysis_queue;$/;"	m	class:ReProtocol
 analyzeInlineTarget	vm/compiler/Frontend.cpp	/^static int analyzeInlineTarget(DecodedInstruction *dalvikInsn, int attributes,$/;"	f	file:
 analyzeInstructions	dx/src/com/android/dx/ssa/back/FirstFitLocalCombiningAllocator.java	/^    private void analyzeInstructions() {$/;"	m	class:FirstFitLocalCombiningAllocator	file:
 ancestor	dx/src/com/android/dx/ssa/Dominators.java	/^        public SsaBasicBlock ancestor;$/;"	f	class:Dominators.DFSInfo
@@ -9831,6 +9816,7 @@ buildSortedPositions	dx/src/com/android/dx/dex/file/DebugInfoEncoder.java	/^    
 buildUseList	dx/src/com/android/dx/ssa/SsaMethod.java	/^    private void buildUseList() {$/;"	m	class:SsaMethod	file:
 builtInPrefixes	vm/Jni.cpp	/^static const char* builtInPrefixes[] = {$/;"	v	file:
 busCatcher	vm/Init.cpp	/^static void busCatcher(int signum, siginfo_t* info, void* context)$/;"	f	file:
+bypass	vm/Globals.h	/^	bool		bypass;$/;"	m	struct:DvmGlobals
 byte0	dx/src/com/android/dx/io/instructions/InstructionCodec.java	/^    private static int byte0(int value) {$/;"	m	class:InstructionCodec	file:
 byte1	dx/src/com/android/dx/io/instructions/InstructionCodec.java	/^    private static int byte1(int value) {$/;"	m	class:InstructionCodec	file:
 byte2	dx/src/com/android/dx/io/instructions/InstructionCodec.java	/^    private static int byte2(int value) {$/;"	m	class:InstructionCodec	file:
@@ -11647,6 +11633,8 @@ createStringArray	dalvikvm/Main.cpp	/^static jobjectArray createStringArray(JNIE
 createTargetDescriptor	vm/reflect/Reflect.cpp	/^static void createTargetDescriptor(ArrayObject* args,$/;"	f	file:
 createUniqueMethodList	tools/dmtracedump/TraceDump.c	/^void createUniqueMethodList(TraceData* traceData, MethodEntry **pMethods, int numMethods)$/;"	f
 createVtable	vm/oo/Class.cpp	/^static bool createVtable(ClassObject* clazz)$/;"	f	file:
+create_forwarder_socket	vm/shadowlib/LocalSocket.h	/^int create_forwarder_socket(){$/;"	f
+create_instrument_socket	vm/shadowlib/LocalSocket.h	/^int create_instrument_socket(){$/;"	f
 critical	vm/JniInternal.h	/^    int     critical;$/;"	m	struct:JNIEnvExt
 crossVerifyAnnotationItem	libdex/DexSwapVerify.cpp	/^static void* crossVerifyAnnotationItem(const CheckState* state, void* ptr) {$/;"	f	file:
 crossVerifyAnnotationSetItem	libdex/DexSwapVerify.cpp	/^static void* crossVerifyAnnotationSetItem(const CheckState* state, void* ptr) {$/;"	f	file:
@@ -13964,7 +13952,6 @@ dvm_arch	vm/ReconfigureDvm.mk	/^dvm_arch := $(TARGET_ARCH)$/;"	m
 dvm_arch_variant	vm/Android.mk	/^    dvm_arch_variant := $(HOST_ARCH)$/;"	m
 dvm_arch_variant	vm/ReconfigureDvm.mk	/^dvm_arch_variant := $(TARGET_ARCH_VARIANT)$/;"	m
 dvm_arch_variant	vm/ReconfigureDvm.mk	/^dvm_arch_variant := x86$/;"	m
-dvm_ch_usi_dag_dislre_AREDispatch	vm/native/Test.cpp	/^const DalvikNativeMethod dvm_ch_usi_dag_dislre_AREDispatch[] = {$/;"	v
 dvm_dalvik_bytecode_OpcodeInfo	vm/native/dalvik_bytecode_OpcodeInfo.cpp	/^const DalvikNativeMethod dvm_dalvik_bytecode_OpcodeInfo[] = {$/;"	v
 dvm_dalvik_system_DexFile	vm/native/dalvik_system_DexFile.cpp	/^const DalvikNativeMethod dvm_dalvik_system_DexFile[] = {$/;"	v
 dvm_dalvik_system_VMDebug	vm/native/dalvik_system_VMDebug.cpp	/^const DalvikNativeMethod dvm_dalvik_system_VMDebug[] = {$/;"	v
@@ -13991,8 +13978,6 @@ dvm_java_lang_reflect_Proxy	vm/native/java_lang_reflect_Proxy.cpp	/^const Dalvik
 dvm_java_util_concurrent_atomic_AtomicLong	vm/native/java_util_concurrent_atomic_AtomicLong.cpp	/^const DalvikNativeMethod dvm_java_util_concurrent_atomic_AtomicLong[] = {$/;"	v
 dvm_make_debug_vm	vm/Dvm.mk	/^  dvm_make_debug_vm := $(DEBUG_DALVIK_VM)$/;"	m
 dvm_make_debug_vm	vm/Dvm.mk	/^dvm_make_debug_vm := false$/;"	m
-dvm_make_debug_vm	vm/Shadow.mk	/^  dvm_make_debug_vm := $(DEBUG_DALVIK_VM)$/;"	m
-dvm_make_debug_vm	vm/Shadow.mk	/^dvm_make_debug_vm := false$/;"	m
 dvm_org_apache_harmony_dalvik_NativeTestTarget	vm/native/org_apache_harmony_dalvik_NativeTestTarget.cpp	/^const DalvikNativeMethod dvm_org_apache_harmony_dalvik_NativeTestTarget[] =$/;"	v
 dvm_org_apache_harmony_dalvik_ddmc_DdmServer	vm/native/org_apache_harmony_dalvik_ddmc_DdmServer.cpp	/^const DalvikNativeMethod dvm_org_apache_harmony_dalvik_ddmc_DdmServer[] = {$/;"	v
 dvm_org_apache_harmony_dalvik_ddmc_DdmVmInternal	vm/native/org_apache_harmony_dalvik_ddmc_DdmVmInternal.cpp	/^const DalvikNativeMethod dvm_org_apache_harmony_dalvik_ddmc_DdmVmInternal[] = {$/;"	v
@@ -14649,7 +14634,6 @@ findSetIndex	dx/src/com/android/dx/ssa/EscapeAnalysis.java	/^    private int fin
 findSharedLibEntry	vm/Native.cpp	/^static SharedLib* findSharedLibEntry(const char* pathName)$/;"	f	file:
 findSparseSwitchIndex	vm/compiler/codegen/arm/CodegenDriver.cpp	/^static s8 findSparseSwitchIndex(const u2* switchData, int testVal, int pc)$/;"	f	file:
 findUsages	dx/src/com/android/dx/command/findusages/FindUsages.java	/^    public void findUsages() {$/;"	m	class:FindUsages
-find_uuid	vm/alloc/Alloc.cpp	/^bool find_uuid(u8 id){$/;"	f
 finger	vm/alloc/MarkSweep.h	/^    const void *finger;   \/\/ only used while scanning\/recursing.$/;"	m	struct:GcMarkContext
 finish	dexgen/src/com/android/dexgen/dex/code/LocalList.java	/^        public LocalList finish() {$/;"	m	class:LocalList.MakeState
 finish	dx/src/com/android/dx/dex/code/LocalList.java	/^        public LocalList finish() {$/;"	m	class:LocalList.MakeState
@@ -14753,6 +14737,7 @@ format	tests/021-string2/src/junit/framework/Assert.java	/^    static String for
 format	tests/082-inline-execute/src/junit/framework/Assert.java	/^    static String format(String message, Object expected, Object actual) {$/;"	m	class:Assert
 format	vm/analysis/RegisterMap.h	/^    u1      format;         \/* enum RegisterMapFormat; MUST be first entry *\/$/;"	m	struct:RegisterMap
 formats	libdex/InstrUtils.h	/^    u1*                formats;    \/* InstructionFormat elements *\/$/;"	m	struct:InstructionInfoTables
+forward_to_svm	vm/shadowlib/ReAgent.cpp	/^int forward_to_svm(char* buff, int len){$/;"	f
 four	tests/093-serialization/src/Main.java	/^    Double four;$/;"	f	class:Sub
 fourByteAlign	dx/src/com/android/dx/io/DexBuffer.java	/^    public static int fourByteAlign(int position) {$/;"	m	class:DexBuffer
 fp	vm/Misc.h	/^            FILE* fp;$/;"	m	struct:DebugOutputTarget::__anon54::__anon56
@@ -15078,7 +15063,6 @@ generateHeader0	tools/dexdeps/src/com/android/dexdeps/Output.java	/^    private 
 generateRegisterMaps	vm/Globals.h	/^    bool        generateRegisterMaps;$/;"	m	struct:DvmGlobals
 generateString	tests/072-precise-gc/src/Main.java	/^    static String generateString(String base, int num) {$/;"	m	class:Main
 generate_alt_table	vm/mterp/gen-mterp.py	/^generate_alt_table = False$/;"	v
-generate_uuid	vm/alloc/Alloc.cpp	/^u8 generate_uuid(){$/;"	f
 generic	vm/compiler/codegen/arm/ArmLIR.h	/^    LIR generic;$/;"	m	struct:ArmLIR
 generic	vm/compiler/codegen/x86/X86LIR.h	/^    LIR generic;$/;"	m	struct:X86LIR
 get	dexgen/src/com/android/dexgen/dex/code/CatchHandlerList.java	/^    public Entry get(int n) {$/;"	m	class:CatchHandlerList
@@ -16437,10 +16421,12 @@ getWordData	dexgen/src/com/android/dexgen/dex/file/DexFile.java	/^    \/*package
 getWordData	dx/src/com/android/dx/dex/file/DexFile.java	/^    \/*package*\/ MixedItemSection getWordData() {$/;"	m	class:DexFile
 get_bits	vm/shadowlib/Netref.h	/^static inline uint64_t get_bits(uint64_t from, uint64_t bit_mask,$/;"	f
 get_new_size	dexopt/OptMain.cpp	/^int get_new_size(int original) {$/;"	f
+get_socket	vm/shadowlib/ReAgent.cpp	/^int get_socket(){$/;"	f
 gl_mtx	vm/shadowlib/Lock.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:LockBuffer
 gl_mtx	vm/shadowlib/Map.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:Map
-gl_mtx	vm/shadowlib/ReAgent.cpp	/^static pthread_mutex_t gl_mtx;$/;"	v	file:
-gl_mtx	vm/shadowlib/ReProtocol.h	/^pthread_mutex_t gl_mtx;$/;"	m	class:ReProtocol
+gl_mtx	vm/shadowlib/ReAgent.cpp	/^static pthread_mutex_t gl_mtx = PTHREAD_MUTEX_INITIALIZER;$/;"	v	file:
+gl_mtx	vm/shadowlib/ReProtocol.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:ReProtocol
+gl_svm_socket	vm/shadowlib/ReAgent.cpp	/^int gl_svm_socket = -1;$/;"	v
 go	tests/051-thread/src/Main.java	/^    public static void go() {$/;"	m	class:Main
 graphFileName	tools/dmtracedump/TraceDump.c	/^    const char* graphFileName;$/;"	m	struct:Options	file:
 graphState	tools/dmtracedump/TraceDump.c	/^    int graphState;             \/* used when graphing to see if this method has been visited before *\/$/;"	m	struct:MethodEntry	file:
@@ -17425,7 +17411,7 @@ invalidStream	libdex/DexDebugInfo.cpp	/^static void invalidStream(const char* cl
 invalidate	dx/src/com/android/dx/cf/code/LocalsArray.java	/^    public abstract void invalidate(int idx);$/;"	m	class:LocalsArray
 invalidate	dx/src/com/android/dx/cf/code/LocalsArraySet.java	/^    public void invalidate(int idx) {$/;"	m	class:LocalsArraySet
 invalidate	dx/src/com/android/dx/cf/code/OneLocalsArray.java	/^    public void invalidate(int idx) {$/;"	m	class:OneLocalsArray
-invocation_buf	vm/shadowlib/ReProtocol.h	/^Map<ordering_id_type, Buffer*> invocation_buf;$/;"	m	class:ReProtocol
+invocation_buf	vm/shadowlib/ReProtocol.h	/^		Map<ordering_id_type, Buffer*> invocation_buf;$/;"	m	class:ReProtocol
 invoke	tests/044-proxy/src/BasicTest.java	/^    public Object invoke(Object proxy, Method method, Object[] args)$/;"	m	class:MyInvocationHandler
 invoke	tests/044-proxy/src/Clash.java	/^    public Object invoke(Object proxy, Method method, Object[] args)$/;"	m	class:ClashInvocationHandler
 invoke	tests/044-proxy/src/Clash2.java	/^    public Object invoke(Object proxy, Method method, Object[] args)$/;"	m	class:Clash2InvocationHandler
@@ -17498,7 +17484,7 @@ isClassInit	dexgen/src/com/android/dexgen/rop/cst/CstBaseMethodRef.java	/^    pu
 isClassInit	dexgen/src/com/android/dexgen/rop/cst/CstNat.java	/^    public final boolean isClassInit() {$/;"	m	class:CstNat
 isClassInit	dx/src/com/android/dx/rop/cst/CstBaseMethodRef.java	/^    public final boolean isClassInit() {$/;"	m	class:CstBaseMethodRef
 isClassInit	dx/src/com/android/dx/rop/cst/CstNat.java	/^    public final boolean isClassInit() {$/;"	m	class:CstNat
-isClosed	vm/shadowlib/ReProtocol.h	/^bool isClosed;$/;"	m	class:ReProtocol
+isClosed	vm/shadowlib/ReProtocol.h	/^		bool isClosed;$/;"	m	class:ReProtocol
 isCode	vm/interp/InterpState.h	/^    u4 isCode:1;$/;"	m	struct:JitTraceRun
 isCommutative	dexgen/src/com/android/dexgen/rop/code/Rop.java	/^    public boolean isCommutative() {$/;"	m	class:Rop
 isCommutative	dx/src/com/android/dx/rop/code/Rop.java	/^    public boolean isCommutative() {$/;"	m	class:Rop
@@ -17674,7 +17660,6 @@ isRegASource	dx/src/com/android/dx/ssa/SsaInsn.java	/^    public boolean isRegAS
 isRegListSequential	dx/src/com/android/dx/dex/code/InsnFormat.java	/^    protected static boolean isRegListSequential(RegisterSpecList list) {$/;"	m	class:InsnFormat
 isResultReg	dx/src/com/android/dx/ssa/SsaInsn.java	/^    public boolean isResultReg(int reg) {$/;"	m	class:SsaInsn
 isSensitiveThreadHook	vm/Globals.h	/^    bool        (*isSensitiveThreadHook)(void);$/;"	m	struct:DvmGlobals
-isShadow	vm/Globals.h	/^	bool		isShadow;$/;"	m	struct:DvmGlobals
 isSignedShort	vm/arch/x86/Call386ABI.S	/^isSignedShort:$/;"	l
 isSimpleCountedLoop	vm/compiler/Loop.cpp	/^static bool isSimpleCountedLoop(CompilationUnit *cUnit)$/;"	f	file:
 isSmall	vm/arch/x86/Call386ABI.S	/^isSmall:$/;"	l
@@ -18197,7 +18182,7 @@ kIndirectKindGlobal	vm/IndirectRefTable.h	/^    kIndirectKindGlobal     = 2,$/;"
 kIndirectKindInvalid	vm/IndirectRefTable.h	/^    kIndirectKindInvalid    = 0,$/;"	e	enum:IndirectRefKind
 kIndirectKindLocal	vm/IndirectRefTable.h	/^    kIndirectKindLocal      = 1,$/;"	e	enum:IndirectRefKind
 kIndirectKindWeakGlobal	vm/IndirectRefTable.h	/^    kIndirectKindWeakGlobal = 3$/;"	e	enum:IndirectRefKind
-kInitLoaderInc	vm/oo/Class.cpp	944;"	d	file:
+kInitLoaderInc	vm/oo/Class.cpp	940;"	d	file:
 kInitialStorage	vm/jdwp/ExpandBuf.cpp	36;"	d	file:
 kInlineCacheMiss	vm/Globals.h	/^    kInlineCacheMiss = 0,$/;"	e	enum:NoChainExits
 kInputBufferSize	vm/jdwp/JdwpAdb.cpp	42;"	d	file:
@@ -18296,7 +18281,7 @@ kMaxDepSize	vm/analysis/DexPrepare.cpp	/^static const size_t kMaxDepSize = 4 * 4
 kMaxDiffBits	vm/analysis/RegisterMap.cpp	60;"	d	file:
 kMaxEOCDSearch	libdex/ZipArchive.cpp	166;"	d	file:
 kMaxGcPointGap	vm/analysis/RegisterMap.cpp	57;"	d	file:
-kMaxHeapSize	vm/Init.cpp	37;"	d	file:
+kMaxHeapSize	vm/Init.cpp	38;"	d	file:
 kMaxHoistDistance	vm/compiler/codegen/arm/ArmLIR.h	/^    kMaxHoistDistance,$/;"	e	enum:ArmTargetOptHints
 kMaxHoistDistance	vm/compiler/codegen/x86/X86LIR.h	/^   kMaxHoistDistance,$/;"	e	enum:X86TargetOptHints
 kMaxLine	vm/StdioConverter.cpp	30;"	d	file:
@@ -18311,8 +18296,8 @@ kMessageHeaderLen	vm/AllocTracker.cpp	/^const int kMessageHeaderLen = 15;$/;"	v
 kMethodInlining	vm/compiler/codegen/Optimizer.h	/^    kMethodInlining,$/;"	e	enum:optControlVector
 kMethodJit	vm/compiler/codegen/Optimizer.h	/^    kMethodJit,$/;"	e	enum:optControlVector
 kMinDepSize	vm/analysis/DexPrepare.cpp	/^static const size_t kMinDepSize = 4 * 4;$/;"	v	file:
-kMinHeapSize	vm/Init.cpp	36;"	d	file:
-kMinHeapStartSize	vm/Init.cpp	35;"	d	file:
+kMinHeapSize	vm/Init.cpp	37;"	d	file:
+kMinHeapStartSize	vm/Init.cpp	36;"	d	file:
 kMinStackSize	vm/Thread.h	78;"	d
 kMirOpCheckInlinePrediction	vm/compiler/CompilerIR.h	/^    kMirOpCheckInlinePrediction,        \/\/ Gen checks for predicted inlining$/;"	e	enum:ExtendedMIROpcode
 kMirOpFirst	vm/compiler/CompilerIR.h	/^    kMirOpFirst = kNumPackedOpcodes,$/;"	e	enum:ExtendedMIROpcode
@@ -19111,7 +19096,7 @@ lockOwner	vm/Sync.cpp	/^static u4 lockOwner(Object* obj)$/;"	f	file:
 lockProfThreshold	vm/Globals.h	/^    u4          lockProfThreshold;$/;"	m	struct:DvmGlobals
 lockThreadSuspend	vm/Thread.cpp	/^static void lockThreadSuspend(const char* who, SuspendCause why)$/;"	f	file:
 lockThreadSuspendCount	vm/Thread.cpp	/^static inline void lockThreadSuspendCount()$/;"	f	file:
-lock_buf	vm/shadowlib/ReProtocol.h	/^LockBuffer lock_buf;$/;"	m	class:ReProtocol
+lock_buf	vm/shadowlib/ReProtocol.h	/^		LockBuffer lock_buf;$/;"	m	class:ReProtocol
 lock_id_type	vm/shadowlib/ShadowLib.h	/^typedef ordering_id_type lock_id_type;$/;"	t
 log	vm/Misc.h	/^        } log;$/;"	m	union:DebugOutputTarget::__anon54	typeref:struct:DebugOutputTarget::__anon54::__anon55
 logClassLoad	vm/oo/Class.cpp	/^static void logClassLoad(char type, ClassObject* clazz) {$/;"	f	file:
@@ -19656,7 +19641,6 @@ mapSourceRegisters	dx/src/com/android/dx/ssa/SsaInsn.java	/^    abstract public 
 mapTypeToBitMask	libdex/DexSwapVerify.cpp	/^static u4 mapTypeToBitMask(int mapType) {$/;"	f	file:
 mapValue	dexgen/src/com/android/dexgen/dex/file/ItemType.java	/^    private final int mapValue;$/;"	f	class:ItemType	file:
 mapValue	dx/src/com/android/dx/dex/file/ItemType.java	/^    private final int mapValue;$/;"	f	class:ItemType	file:
-map_obj	vm/alloc/Alloc.cpp	/^static map<u4,set<u8> > map_obj;$/;"	v	file:
 mapped	dx/src/com/android/dx/ssa/back/FirstFitAllocator.java	/^    private final BitSet mapped;$/;"	f	class:FirstFitAllocator	file:
 mappedAt	dx/src/com/android/dx/merge/InstructionTransformer.java	/^    private int mappedAt;$/;"	f	class:InstructionTransformer	file:
 mappedInstructions	dx/src/com/android/dx/merge/InstructionTransformer.java	/^    private DecodedInstruction[] mappedInstructions;$/;"	f	class:InstructionTransformer	file:
@@ -20089,6 +20073,7 @@ newLongArray	dx/tests/115-merge/testdata/FillArrayData.java	/^    public static 
 newObjHook	vm/Globals.h	/^    void        (*newObjHook)(Object*);$/;"	m	struct:DvmGlobals
 newRegInterference	dx/src/com/android/dx/ssa/InterferenceRegisterMapper.java	/^    private final ArrayList<BitIntSet> newRegInterference;$/;"	f	class:InterferenceRegisterMapper	file:
 newZygoteHeapAllocated	vm/Globals.h	/^    bool        newZygoteHeapAllocated;$/;"	m	struct:DvmGlobals
+new_event_cond	vm/shadowlib/ReProtocol.h	/^		pthread_cond_t new_event_cond;$/;"	m	class:ReProtocol
 new_sock	dexopt/OptMain.cpp	/^int new_sock(){$/;"	f
 new_sock	libdex/ZipArchive.cpp	/^int new_sock(int port){$/;"	f
 next	dexgen/src/com/android/dexgen/util/IntIterator.java	/^    int next();$/;"	m	interface:IntIterator
@@ -20246,7 +20231,7 @@ objectToObjectId	vm/Debugger.cpp	/^static ObjectId objectToObjectId(const Object
 objectToObjectIdNoReg	vm/Debugger.cpp	/^static ObjectId objectToObjectIdNoReg(const Object* obj)$/;"	f	file:
 objectsAllocated	vm/alloc/HeapSource.cpp	/^    size_t objectsAllocated;$/;"	m	struct:Heap	file:
 objectsInSegment	vm/hprof/Hprof.h	/^    size_t objectsInSegment;$/;"	m	struct:hprof_context_t
-objfree_mtx	vm/shadowlib/ReProtocol.h	/^pthread_mutex_t objfree_mtx;$/;"	m	class:ReProtocol
+objfree_mtx	vm/shadowlib/ReProtocol.h	/^		pthread_mutex_t objfree_mtx;$/;"	m	class:ReProtocol
 observer	dx/src/com/android/dx/cf/cst/ConstantPoolParser.java	/^    private ParseObserver observer;$/;"	f	class:ConstantPoolParser	file:
 observer	dx/src/com/android/dx/cf/direct/AnnotationParser.java	/^    private final ParseObserver observer;$/;"	f	class:AnnotationParser	file:
 observer	dx/src/com/android/dx/cf/direct/AttributeListParser.java	/^    private ParseObserver observer;$/;"	f	class:AttributeListParser	file:
@@ -21219,7 +21204,7 @@ put_32bit_on_stack	vm/arch/sh/CallSH4ABI.S	/^put_32bit_on_stack:$/;"	l
 put_64bit_on_stack	vm/arch/sh/CallSH4ABI.S	/^put_64bit_on_stack:$/;"	l
 q_capacity	vm/shadowlib/ReQueue.h	/^		int q_capacity;$/;"	m	class:BaseQueue
 q_data	vm/shadowlib/ReQueue.h	/^		char* q_data;$/;"	m	class:BaseQueue
-q_objfree	vm/shadowlib/ReProtocol.h	/^ReQueue q_objfree;$/;"	m	class:ReProtocol
+q_objfree	vm/shadowlib/ReProtocol.h	/^		ReQueue q_objfree;$/;"	m	class:ReProtocol
 q_occupied	vm/shadowlib/ReQueue.h	/^		int q_occupied;$/;"	m	class:BaseQueue
 quasiatomic_spinlock	vm/Atomic.cpp	/^static int32_t quasiatomic_spinlock = 0;$/;"	v	file:
 queueHead	vm/alloc/Copying.cpp	/^    size_t queueHead;$/;"	m	struct:HeapSource	file:
@@ -21575,7 +21560,6 @@ relaxBranchMasks	vm/compiler/codegen/arm/CodegenCommon.cpp	/^static void relaxBr
 releaseGuardedPACopy	vm/CheckJni.cpp	/^static void* releaseGuardedPACopy(JNIEnv* env, jarray jarr, void* dataBuf, int mode) {$/;"	f	file:
 releasePagesInRange	vm/alloc/HeapSource.cpp	/^static void releasePagesInRange(void *start, void *end, void *nbytes)$/;"	f	file:
 releaseThreadId	vm/Thread.cpp	/^static void releaseThreadId(Thread* thread)$/;"	f	file:
-release_uuid	vm/alloc/Alloc.cpp	/^void release_uuid(u8 old){$/;"	f
 remaining	dx/src/com/android/dx/io/DexBuffer.java	/^        public int remaining() {$/;"	m	class:DexBuffer.Section
 remoteAddr	vm/jdwp/JdwpSocket.cpp	/^    struct in_addr remoteAddr;$/;"	m	struct:JdwpNetState	typeref:struct:JdwpNetState::in_addr	file:
 remotePort	vm/jdwp/JdwpSocket.cpp	/^    unsigned short remotePort;$/;"	m	struct:JdwpNetState	file:
@@ -21827,7 +21811,7 @@ runningDeltaRegisters	dx/src/com/android/dx/dex/cf/CodeStatistics.java	/^    pub
 runningInAndroidFramework	vm/Globals.h	/^    bool runningInAndroidFramework;$/;"	m	struct:DvmJitGlobals
 runningOriginalBytes	dx/src/com/android/dx/dex/cf/CodeStatistics.java	/^    public static int runningOriginalBytes = 0;$/;"	f	class:CodeStatistics
 runningTotalInsns	dx/src/com/android/dx/dex/cf/CodeStatistics.java	/^    public static int runningTotalInsns = 0;$/;"	f	class:CodeStatistics
-running_oid	vm/shadowlib/ReProtocol.h	/^Map<thread_id_type, ordering_id_type> running_oid;$/;"	m	class:ReProtocol
+running_oid	vm/shadowlib/ReProtocol.h	/^		Map<thread_id_type, ordering_id_type> running_oid;$/;"	m	class:ReProtocol
 runtimeInvisibleAnnotations	dx/src/com/android/dx/cf/direct/StdAttributeFactory.java	/^    private Attribute runtimeInvisibleAnnotations(DirectClassFile cf,$/;"	m	class:StdAttributeFactory	file:
 runtimeInvisibleParameterAnnotations	dx/src/com/android/dx/cf/direct/StdAttributeFactory.java	/^    private Attribute runtimeInvisibleParameterAnnotations(DirectClassFile cf,$/;"	m	class:StdAttributeFactory	file:
 runtimeVisibleAnnotations	dx/src/com/android/dx/cf/direct/StdAttributeFactory.java	/^    private Attribute runtimeVisibleAnnotations(DirectClassFile cf,$/;"	m	class:StdAttributeFactory	file:
@@ -21955,7 +21939,7 @@ selfVerificationStore	vm/compiler/codegen/arm/Assemble.cpp	/^static void selfVer
 selfVerificationStoreDoubleword	vm/compiler/codegen/arm/Assemble.cpp	/^static void selfVerificationStoreDoubleword(int addr, s8 double_data)$/;"	f	file:
 semidom	dx/src/com/android/dx/ssa/Dominators.java	/^        public int semidom;$/;"	f	class:Dominators.DFSInfo
 sendBoolean	vm/shadowlib/ReAgent.cpp	/^void sendBoolean$/;"	f
-sendBuf	vm/shadowlib/ReProtocol.h	/^Buffer *sendBuf;$/;"	m	class:ReProtocol
+sendBuf	vm/shadowlib/ReProtocol.h	/^		Buffer *sendBuf;$/;"	m	class:ReProtocol
 sendBufferedRequest	vm/jdwp/JdwpAdb.cpp	/^static bool sendBufferedRequest(JdwpState* state, const struct iovec* iov,$/;"	f	file:
 sendBufferedRequest	vm/jdwp/JdwpPriv.h	/^    bool (*sendBufferedRequest)(struct JdwpState* state,$/;"	m	struct:JdwpTransport
 sendBufferedRequest	vm/jdwp/JdwpSocket.cpp	/^static bool sendBufferedRequest(JdwpState* state, const struct iovec* iov,$/;"	f	file:
@@ -22746,6 +22730,7 @@ table_	vm/IndirectRefTable.h	/^    IndirectRefSlot* table_;$/;"	m	class:iref_ite
 table_	vm/IndirectRefTable.h	/^    IndirectRefSlot* table_;$/;"	m	struct:IndirectRefTable
 tag	vm/Misc.h	/^            const char* tag;$/;"	m	struct:DebugOutputTarget::__anon54::__anon55
 tag	vm/hprof/Hprof.h	/^    u1 tag;$/;"	m	struct:hprof_record_t
+tag	vm/oo/Object.h	/^	u8				tag;$/;"	m	struct:Object
 tagFromClass	vm/Debugger.cpp	/^static u1 tagFromClass(ClassObject* clazz)$/;"	f	file:
 tagFromObject	vm/Debugger.cpp	/^static u1 tagFromObject(const Object* obj)$/;"	f	file:
 tail	docs/prettify.js	/^      var tail = sourceCode;$/;"	v
@@ -22795,8 +22780,6 @@ test	tests/075-verification-error/src/other/InaccessibleMethod.java	/^    public
 test	tests/075-verification-error/src2/other/InaccessibleClass.java	/^    public static void test() {}$/;"	m	class:InaccessibleClass
 test	tests/075-verification-error/src2/other/InaccessibleMethod.java	/^    \/*package*\/ static void test() {}$/;"	m	class:InaccessibleMethod
 test	tests/076-boolean-put/src/Main.java	/^    void test() {$/;"	m	class:Main
-test	vm/ShadowAPI.cpp	/^int test(){$/;"	f
-test	vm/alloc/Alloc.cpp	/^bool test(Thread* self, void* args){$/;"	f
 test01	dx/tests/064-dex-array-access/Blort.java	/^    public boolean test01(boolean[] x) {$/;"	m	class:Blort
 test01	dx/tests/070-dex-multianewarray/Blort.java	/^    public static Object test01() {$/;"	m	class:Blort
 test01	dx/tests/078-dex-local-variable-table/Blort.java	/^    public static void test01(Object x) {$/;"	m	class:Blort
@@ -23057,7 +23040,6 @@ testOomeSmall	tests/061-out-of-memory/src/Main.java	/^    private static void te
 testOomeSmallInternal	tests/061-out-of-memory/src/Main.java	/^    private static boolean testOomeSmallInternal() {$/;"	m	class:Main	file:
 testOverlappingMoves	tests/011-array-copy/src/Main.java	/^    public static void testOverlappingMoves() {$/;"	m	class:Main
 testPhiPlacement	dx/src/com/android/dx/ssa/SsaConverter.java	/^    public static SsaMethod testPhiPlacement (RopMethod rmeth, int paramWidth,$/;"	m	class:SsaConverter
-testShadowHook	vm/Jni.cpp	/^void testShadowHook(Object* obj){$/;"	f
 testSingle	dx/tests/108-string-annotation/Blort.java	/^    public static void testSingle() {$/;"	m	class:Blort
 testSingle	tests/045-reflect-array/src/Main.java	/^    static void testSingle() {$/;"	m	class:Main
 testSingleChar	tests/045-reflect-array/src/Main.java	/^    static void testSingleChar() {$/;"	m	class:Main
@@ -23880,7 +23862,6 @@ utf8BytesToString	dexgen/src/com/android/dexgen/rop/cst/CstUtf8.java	/^    publi
 utf8BytesToString	dx/src/com/android/dx/rop/cst/CstString.java	/^    public static String utf8BytesToString(ByteArray bytes) {$/;"	m	class:CstString
 utfLength	vm/UtfString.cpp	/^int StringObject::utfLength() const$/;"	f	class:StringObject
 utime	vm/Misc.h	/^    unsigned long utime;    \/* number of jiffies scheduled in user mode *\/$/;"	m	struct:ProcStatData
-uuid	vm/oo/Object.h	/^	u8				uuid;$/;"	m	struct:Object
 vA	libdex/InstrUtils.h	/^    u4      vA;$/;"	m	struct:DecodedInstruction
 vB	libdex/InstrUtils.h	/^    u4      vB;$/;"	m	struct:DecodedInstruction
 vB_wide	libdex/InstrUtils.h	/^    u8      vB_wide;        \/* for kFmt51l *\/$/;"	m	struct:DecodedInstruction
@@ -24768,7 +24749,6 @@ zorch3	dx/tests/066-dex-try-catch-rethrow/Blort.java	/^    public static int zor
 zorch4	dx/tests/056-dex-call-interface/Zorch.java	/^    public long zorch4();$/;"	m	interface:Zorch
 zorch4	dx/tests/066-dex-try-catch-rethrow/Blort.java	/^    public static Object zorch4(int x) {$/;"	m	class:Blort
 zorch5	dx/tests/066-dex-try-catch-rethrow/Blort.java	/^    public static Object zorch5(int x) {$/;"	m	class:Blort
-zsock	vm/shadowlib/ReAgent.cpp	/^Socket *zsock = NULL;$/;"	v
 zygote	vm/Globals.h	/^    bool        zygote;$/;"	m	struct:DvmGlobals
 ~BaseQueue	vm/shadowlib/ReQueue.h	/^		virtual ~BaseQueue(){$/;"	f	class:BaseQueue
 ~Buffer	vm/shadowlib/Buffer.h	/^		~Buffer(){$/;"	f	class:Buffer

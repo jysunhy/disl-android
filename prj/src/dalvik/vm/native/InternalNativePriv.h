@@ -111,6 +111,5 @@ extern const DalvikNativeMethod dvm_org_apache_harmony_dalvik_ddmc_DdmServer[];
 extern const DalvikNativeMethod dvm_org_apache_harmony_dalvik_ddmc_DdmVmInternal[];
 extern const DalvikNativeMethod dvm_org_apache_harmony_dalvik_NativeTestTarget[];
 extern const DalvikNativeMethod dvm_sun_misc_Unsafe[];
-extern const DalvikNativeMethod dvm_ch_usi_dag_dislre_AREDispatch[];
 
 #endif  // DALVIK_NATIVE_INTERNALNATIVEPRIV_H_

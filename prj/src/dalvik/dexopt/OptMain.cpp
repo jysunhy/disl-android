@@ -47,7 +47,7 @@
 #include <stdio.h>
 #include <string.h>
 
-//HAIYANG
+//SVM SUPPORT CODE
 #define INSTRUMENT true
 #define SYS_INSTRUMENT_PORT    6664
 #include <pthread.h>
@@ -70,8 +70,6 @@ int client_socket=-1;
 
 int new_sock();
 int get_new_size(int original) {
-		//ALOG(LOG_INFO,"HAIYANG","get new size use variable %d", apk_new_dexsize);
-
 	if(!INSTRUMENT)
 		return original;
 	while(new_sock() <= 0) {
@@ -82,9 +80,7 @@ int get_new_size(int original) {
 	send(client_socket, &opcode, sizeof(int),0);
 	send(client_socket, &original, sizeof(int),0);
 	recv(client_socket,&result,sizeof(int),0);
-	
 	return result;
-	
 }
 int new_sock(){
 	if(client_socket>0) {
@@ -95,7 +91,7 @@ int new_sock(){
 	client_socket = socket(PF_UNIX, SOCK_STREAM, 0);
 	if(client_socket < 0)
 	{
-		ALOG(LOG_INFO,"HAIYANG","CL: Create Socket Failed! %d",errno);
+		ALOG(LOG_INFO,"SVM","CL: Create Socket Failed! %d",errno);
 		return -1;
 	}
 
@@ -109,13 +105,12 @@ int new_sock(){
 				(struct sockaddr *) &address,  
 				sizeof(struct sockaddr_un)) != 0)
 	{
-		ALOG(LOG_INFO,"HAIYANG","CL: Connect Socket Failed! %d",errno);
+		ALOG(LOG_INFO,"SVM","CL: Connect Socket Failed! %d",errno);
 		client_socket = -1;
 	}
 	return client_socket;
 }
-//HAIYANG
-//end haiyang socket test
+//SVM SUPPORT CODE END
 
 static const char* kClassesDex = "classes.dex";
 
@@ -198,9 +193,9 @@ static int extractAndProcessZip(int zipFd, int cacheFd,
         goto bail;
     }
 
-	//ALOG(LOG_INFO,"HAIYANG","CL: size from %d", uncompLen);
+	//ALOG(LOG_INFO,"SVM","CL: size from %d", uncompLen);
 	uncompLen = get_new_size(uncompLen);
-	//ALOG(LOG_INFO,"HAIYANG","CL: size to %d", uncompLen);
+	//ALOG(LOG_INFO,"SVM","CL: size to %d", uncompLen);
 
     /* Parse the options. */
     if (dexoptFlagStr[0] != '\0') {
@@ -257,7 +252,6 @@ static int extractAndProcessZip(int zipFd, int cacheFd,
     //vmStarted = 1;
 
     /* do the optimization */
-	
     if (!dvmContinueOptimization(cacheFd, dexOffset, uncompLen, debugFileName,
             modWhen, crc32, isBootstrap))
     {
@@ -287,14 +281,7 @@ static int processZipFile(int zipFd, int cacheFd, const char* zipName,
      * Check to see if this is a bootstrap class entry. If so, truncate
      * the path.
      */
-	//const char* bcp;
-	const char* bcp = getenv("BOOTCLASSPATH");
-	/*if(strlen(bcp)==253){
-		bcp = "/system/framework/core2.jar:/system/framework/core-junit.jar:/system/framework/bouncycastle.jar:/system/framework/ext.jar:/system/framework/framework.jar:/system/framework/android.policy.jar:/system/framework/services.jar:/system/framework/apache-xml.jar";
-	}else
-	*/
-//		bcp = tmp;
-	//ALOG(LOG_INFO,"HAIYANG","in %s, get bootclasspath %s",__FUNCTION__, bcp);
+    const char* bcp = getenv("BOOTCLASSPATH");
     if (bcp == NULL) {
         ALOGE("DexOptZ: BOOTCLASSPATH not set");
         return -1;
@@ -599,14 +586,9 @@ static int fromDex(int argc, char* const argv[])
 
     vmStarted = true;
 
-	//if(length == 2027844) {
-	//	ALOG(LOG_INFO,"HAIYANG","hack here from 2027844 to 2028308");
-	//	length = 2028308;
-	//}
-	
-	//ALOG(LOG_INFO,"HAIYANG","CL: size from %d", length);
+	//ALOG(LOG_INFO,"SVM","CL: size from %d", length);
 	length = get_new_size(length);
-	//ALOG(LOG_INFO,"HAIYANG","CL: size to %d", length);
+	//ALOG(LOG_INFO,"SVM","CL: size to %d", length);
 	
     /* do the optimization */
     if (!dvmContinueOptimization(fd, offset, length, debugFileName,
@@ -656,20 +638,20 @@ int main(int argc, char* const argv[])
 		/*
 		for(int i = 0; i < argc; i++){
 
-			//ALOG(LOG_INFO, "HAIYANG", "in dexopt %s", argv[i]);
+			//ALOG(LOG_INFO, "SVM", "in dexopt %s", argv[i]);
 			if(i == argc - 1){
 			}
 		}*/
 
         if (strcmp(argv[1], "--zip") == 0) {
 			strncpy(apkname, argv[4], APK_LENGTH-1);
-			ALOG(LOG_INFO, "HAIYANG", "in dexopt for %s", apkname);
+			ALOG(LOG_INFO, "SVM", "in dexopt for %s", apkname);
             return fromZip(argc, argv);
 		}
         else if (strcmp(argv[1], "--dex") == 0) {
 			strncpy(apkname, argv[6], APK_LENGTH-1);
 			apk_original_dexsize = atoi(argv[5]);
-			ALOG(LOG_INFO, "HAIYANG", "in dexopt for %s sized %d", apkname, apk_original_dexsize);
+			ALOG(LOG_INFO, "SVM", "in dexopt for %s sized %d", apkname, apk_original_dexsize);
             return fromDex(argc, argv);
 		}
         else if (strcmp(argv[1], "--preopt") == 0)

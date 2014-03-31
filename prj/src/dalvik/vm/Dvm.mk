@@ -171,7 +171,6 @@ LOCAL_SRC_FILES := \
 	native/org_apache_harmony_dalvik_ddmc_DdmServer.cpp \
 	native/org_apache_harmony_dalvik_ddmc_DdmVmInternal.cpp \
 	native/sun_misc_Unsafe.cpp \
-	native/Test.cpp \
 	shadowlib/ReAgent.cpp \
 	shadowlib/Socket.cpp \
 	oo/AccessCheck.cpp \

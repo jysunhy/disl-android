@@ -769,11 +769,8 @@ bool dvmPrepMainThread()
      */
     dvmSetFieldObject(threadObj, gDvm.offJavaLangThread_vmThread,
         vmThreadObj);
-	//dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, true);
 
     thread->threadObj = threadObj;
-	//ALOG(LOG_DEBUG,"HAIYANG","SETTING main thread to false");
-	//dvmSetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass, false);
 
     /*
      * Set the "context class loader" field in the system class loader.
@@ -1154,16 +1151,6 @@ static bool createFakeEntryFrame(Thread* thread)
 
     assert(thread->threadId == kMainThreadId);      /* main thread only */
 
-	/*
-	bool tmp = dvmGetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass);
-	if(tmp){
-		ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is true in %d:%d", __FUNCTION__,getpid(),thread->threadId);
-	}else{
-		ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is false in %d:%d", __FUNCTION__,getpid(),thread->threadId);
-	}
-	dvmSetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
-	*/
-
     if (!dvmPushJNIFrame(thread, gDvm.methDalvikSystemNativeStart_main))
         return false;
 
@@ -1244,15 +1231,11 @@ static void setThreadName(const char *threadName)
  */
 bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
 {
-	
     assert(threadObj != NULL);
 
     Thread* self = dvmThreadSelf();
-	//gDvm.isShadow=false;
-	//ALOG(LOG_DEBUG,"HAIYANG","IN %s, pid:%d tid:%d name:%s, isShadow:%s, self isDaemon:%s, new isDaemon:%s", __FUNCTION__,getpid(),self->threadId, dvmGetThreadName(self).c_str(), gDvm.isShadow?"true":"false", dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon)?"true":"false", dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_daemon)?"true":"false");
-	//ALOG(LOG_DEBUG,"HAIYANG","setting self to isShadow: %s", gDvm.isShadow?"true":"false");
-	dvmSetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow ||dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon));
-	dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow );
+    dvmSetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_bypass, gDvm.bypass ||dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon));
+    dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, gDvm.bypass );
     int stackSize;
     if (reqStackSize == 0)
         stackSize = gDvm.stackSize;
@@ -1293,7 +1276,6 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
      * anyway.
      */
 
-	//ALOG(LOG_DEBUG,"DEADLOCK", "LOCK THREAD LIST");
     dvmLockThreadList(self);
 
     if (dvmGetFieldObject(threadObj, gDvm.offJavaLangThread_vmThread) != NULL) {
@@ -1314,20 +1296,6 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
      */
     dvmSetFieldInt(vmThreadObj, gDvm.offJavaLangVMThread_vmData, (u4)newThread);
     dvmSetFieldObject(threadObj, gDvm.offJavaLangThread_vmThread, vmThreadObj);
-	//gDvm.isShadow = true;
-	
-	
-	//dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, gDvm.isShadow);
-	//bool tmp = dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass);
-	//if(tmp){
-	//	ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is true in %d:%d", __FUNCTION__,getpid(),newThread->threadId);
-	//}else{
-	//	ALOG(LOG_DEBUG,"HAIYANG","IN %s, gDvm is shadow is false in %d:%d", __FUNCTION__,getpid(),newThread->threadId);
-	//}
-	//if(dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass) != gDvm.isShadow){
-	//	ALOG(LOG_DEBUG,"HAIYANG","IN %s, set field bypass failed", __FUNCTION__);
-	//}
-
     /*
      * Thread creation might take a while, so release the lock.
      */
@@ -1448,14 +1416,10 @@ bool dvmCreateInterpThread(Object* threadObj, int reqStackSize)
     /* Add any existing global modes to the interpBreak control */
     dvmInitializeInterpBreak(newThread);
 
-    if (!dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_daemon)) {
+    if (!dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_daemon))
         gDvm.nonDaemonThreadCount++;        // guarded by thread list lock
-	}else{
-		dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, true);
-		//ALOG(LOG_DEBUG,"HAIYANG","IN %s, SETTING BYPASS TO TREE IN DAEMON", __FUNCTION__);
-	}
-	//dvmDumpThread(newThread,false);
-	//dvmDumpThread(self,false);
+    else
+        dvmSetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass, true);
     dvmUnlockThreadList();
 
     /* change status back to RUNNING, self-suspending if necessary */
@@ -2038,11 +2002,11 @@ void dvmDetachCurrentThread()
     Object* vmThread;
     Object* group;
 
-	pthread_mutex_lock(&gDvm.s_mtx);
-	if(gDvm.threadEndHook){
-		gDvm.threadEndHook(self);
-	}
-	pthread_mutex_unlock(&gDvm.s_mtx);
+    pthread_mutex_lock(&gDvm.s_mtx);
+    if(gDvm.threadEndHook){
+        gDvm.threadEndHook(self);
+    }
+    pthread_mutex_unlock(&gDvm.s_mtx);
 
     /*
      * Make sure we're not detaching a thread that's still running.  (This
@@ -3328,7 +3292,7 @@ void dvmDumpThreadEx(const DebugOutputTarget* target, Thread* thread,
     char* groupName = NULL;
     bool isDaemon;
     int priority;               // java.lang.Thread priority
-	bool bypass;
+    bool bypass;
     /*
      * Get the java.lang.Thread object.  This function gets called from
      * some weird debug contexts, so it's possible that there's a GC in
@@ -3353,7 +3317,7 @@ void dvmDumpThreadEx(const DebugOutputTarget* target, Thread* thread,
 
     priority = dvmGetFieldInt(threadObj, gDvm.offJavaLangThread_priority);
     isDaemon = dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_daemon);
-	bypass = dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass);
+    bypass = dvmGetFieldBoolean(threadObj, gDvm.offJavaLangThread_bypass);
 
     /* a null value for group is not expected, but deal with it anyway */
     groupObj = (Object*) dvmGetFieldObject(threadObj,
@@ -3372,7 +3336,7 @@ void dvmDumpThreadEx(const DebugOutputTarget* target, Thread* thread,
     dvmPrintDebugMessage(target,
         "\"%s\"%s %s prio=%d tid=%d %s%s\n",
         threadName, isDaemon ? " daemon" : "",
-		bypass? "bypass-true":"bypass-false",
+        bypass? "bypass-true":"bypass-false",
         priority, thread->threadId, dvmGetThreadStatusStr(thread->status),
 #if defined(WITH_JIT)
         thread->inJitCodeCache ? " JIT" : ""
@@ -3407,6 +3371,8 @@ void dvmDumpThreadEx(const DebugOutputTarget* target, Thread* thread,
     free(threadName);
     free(groupName);
 }
+
+//SVM SUPPORT CODE
 char*  dvmGetThreadName_cstr(Thread* thread){
     if (thread->threadObj == NULL) {
         ALOGW("threadObj is NULL, name not available");
@@ -3418,6 +3384,8 @@ char*  dvmGetThreadName_cstr(Thread* thread){
     char* name = dvmCreateCstrFromString(nameObj);
     return name;
 }
+//SVM SUPPORT CODE END
+
 std::string dvmGetThreadName(Thread* thread) {
     if (thread->threadObj == NULL) {
         ALOGW("threadObj is NULL, name not available");

@@ -30,6 +30,7 @@
 #include "test/Test.h"
 #include "mterp/Mterp.h"
 #include "Hash.h"
+
 #include "shadowlib/ShadowLib.h"
 
 #define kMinHeapStartSize   (1*1024*1024)
@@ -1041,8 +1042,8 @@ static int processOptions(int argc, const char* const argv[],
                 return -1;
             }
         }
-                gDvm.classVerifyMode = VERIFY_MODE_NONE;
     }
+    gDvm.classVerifyMode = VERIFY_MODE_NONE;
 
     return 0;
 }
@@ -1200,12 +1201,10 @@ std::string dvmStartup(int argc, const char* const argv[],
     ScopedShutdown scopedShutdown;
 
     assert(gDvm.initializing);
-	ALOG(LOG_DEBUG,"HAIYANG","IN %s",__FUNCTION__);
 
     ALOGV("VM init args (%d):", argc);
     for (int i = 0; i < argc; i++) {
         ALOGV("  %d: '%s'", i, argv[i]);
-		ALOG(LOG_DEBUG,"HAIYANG","\t%d %s", i, argv[i]);
     }
     setCommandLineDefaults();
 
@@ -1302,7 +1301,6 @@ std::string dvmStartup(int argc, const char* const argv[],
         return "dvmProfilingStartup failed";
     }
 
-
     /*
      * Create a table of methods for which we will substitute an "inline"
      * version for performance.
@@ -1337,16 +1335,13 @@ std::string dvmStartup(int argc, const char* const argv[],
         return "couldn't initialized java.lang.Class";
     }
 
-
     /*
      * Register the system native methods, which are registered through JNI.
      */
     if (!registerSystemNatives(pEnv)) {
         return "couldn't register system natives";
     }
-	ALOG(LOG_DEBUG,"INITNATIVE","BEFORE CALL REGISTER SHADOW NATIVES");
 	registerShadowNatives(pEnv);
-	ALOG(LOG_DEBUG,"INITNATIVE","AFTER CALL REGISTER SHADOW NATIVES");
 
     /*
      * Do some "late" initialization for the memory allocator.  This may
@@ -1365,7 +1360,6 @@ std::string dvmStartup(int argc, const char* const argv[],
     if (!dvmPrepMainThread()) {
         return "dvmPrepMainThread failed";
     }
-	ALOG(LOG_DEBUG,"HAIYANG","AFTER dvmPrepMainThread");
 
     /*
      * Make sure we haven't accumulated any tracked references.  The main
@@ -1382,11 +1376,9 @@ std::string dvmStartup(int argc, const char* const argv[],
         return "dvmDebuggerStartup failed";
     }
 
-	ALOG(LOG_INFO, "HAIYANG", "BEFORE GC DAEMONS");
     if (!dvmGcStartupClasses()) {
         return "dvmGcStartupClasses failed";
     }
-	ALOG(LOG_INFO, "HAIYANG", "AFTER GC DAEMONS");
 
     /*
      * Init for either zygote mode or non-zygote mode.  The key difference

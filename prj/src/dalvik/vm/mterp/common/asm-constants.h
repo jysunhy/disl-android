@@ -203,7 +203,7 @@ MTERP_OFFSET(offThread_jniLocal_topCookie, \
 /* Object fields */
 MTERP_OFFSET(offObject_clazz,           Object, clazz, 0)
 MTERP_OFFSET(offObject_lock,            Object, lock, 4)
-MTERP_OFFSET(offObject_uuid,            Object, uuid, 8)
+MTERP_OFFSET(offObject_tag,            Object, tag, 8)
 
 /* Lock shape */
 MTERP_CONSTANT(LW_LOCK_OWNER_SHIFT, 3)

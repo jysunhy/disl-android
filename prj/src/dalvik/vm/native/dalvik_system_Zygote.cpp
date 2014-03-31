@@ -380,8 +380,8 @@ static pid_t forkAndSpecializeCommon_2(const u4* args, bool isSystemServer)
     ArrayObject* gids = (ArrayObject *)args[2];
     u4 debugFlags = args[3];
     ArrayObject *rlimits = (ArrayObject *)args[4];
-	StringObject* niceNameObj = (StringObject* )args[5];
-	char* niceName = dvmCreateCstrFromString(niceNameObj);
+    StringObject* niceNameObj = (StringObject* )args[5];
+    char* niceName = dvmCreateCstrFromString(niceNameObj);
     int64_t permittedCapabilities, effectiveCapabilities;
 
     if (isSystemServer) {
@@ -414,13 +414,13 @@ static pid_t forkAndSpecializeCommon_2(const u4* args, bool isSystemServer)
 
     dvmDumpLoaderStats("zygote");
 
-	BeforeFork();
+    BeforeFork();
     pid = fork();
-	onFork(pid);
+    onFork(pid);
 
     if (pid == 0) {
-		_mapPID(getpid(),niceName);
-		free(niceName);
+        _mapPID(getpid(),niceName);
+        free(niceName);
         int err;
         /* The child process */
 
@@ -497,59 +497,8 @@ static pid_t forkAndSpecializeCommon_2(const u4* args, bool isSystemServer)
         unsetSignalHandler();
         gDvm.zygote = false;
 
-
-		if(false)
-		{
-			struct sockaddr_un address;
-			int client_socket = socket(PF_UNIX, SOCK_STREAM, 0);
-			if(client_socket < 0)
-			{
-				ALOG(LOG_INFO,"HAIYANG","CL: Create Socket Failed! %d",errno);
-				return -1;
-
-			}
-			memset(&address, 0, sizeof(struct sockaddr_un));
-
-			address.sun_family = AF_UNIX;
-			snprintf(address.sun_path, UNIX_PATH_MAX, "/dev/socket/instrument");
-
-			void* tmp=NULL;
-			tmp = &address;
-
-			if(connect(client_socket, 
-						//tmp,
-						//(struct sockaddr *) &address,  
-						(struct sockaddr *) tmp,  
-						sizeof(struct sockaddr_un)) != 0)
-			{
-				ALOG(LOG_INFO,"HAIYANG","CL: Connect Socket Failed! %d",errno);
-				client_socket = -1;
-			}
-			int signal = -5;
-			send(client_socket, &signal, sizeof(int), 0);
-			int pid = getpid();
-			send(client_socket, &pid, sizeof(int),0);
-			int query = -1;
-			recv(client_socket, &query, sizeof(int), 0);
-			ALOG(LOG_INFO,"HAIYANG","Query result is: %s , gDvm is %s",query==0?"false":"true", gDvm.isShadow==false?"false":"true");
-			if(query == 0) {
-				gDvm.isShadow=false;
-			}else{
-				gDvm.isShadow=true;
-			}
-		}
-		ALOG(LOG_DEBUG,"HAIYANG","PROCESS START:\n\t\t\t %s isshadow in new process %d to %s", __FUNCTION__, getpid(), gDvm.isShadow?"true":"false");
-
-		if(gDvm.freeObjHook==NULL)
-			ALOG(LOG_DEBUG,"HAIYANG","FREE OBJ HOOK IS NOT SET");
-		else
-			ALOG(LOG_DEBUG,"HAIYANG","FREE OBJ HOOK IS SET");
-
-			
-		if(!isSystemServer)
-			ShadowLib_OnLoad(gDvmJni.jniVm, NULL);
-
-
+        if(!isSystemServer)
+            ShadowLib_OnLoad(gDvmJni.jniVm, NULL);
 
         if (!dvmInitAfterZygote()) {
             ALOGE("error in post-zygote initialization");
@@ -604,12 +553,12 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
     setSignalHandler();
 
     dvmDumpLoaderStats("zygote");
-	BeforeFork();
+    BeforeFork();
     pid = fork();
-	onFork(pid);
+    onFork(pid);
 
     if (pid == 0) {
-		_mapPID(getpid(),"system_server");
+        _mapPID(getpid(),"system_server");
         int err;
         /* The child process */
 
@@ -679,9 +628,6 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
          */
         Thread* thread = dvmThreadSelf();
         thread->systemTid = dvmGetSysThreadId();
-		bool bypass = dvmGetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass);
-		ALOG(LOG_DEBUG,"HAIYANG","IN %s, pid:%d tid:%d name:%s, bypass: %s", __FUNCTION__,getpid(), thread->threadId, dvmGetThreadName(thread).c_str(), bypass?"true":"false");
-		//dvmSetFieldBoolean(thread->threadObj, gDvm.offJavaLangThread_bypass, true);
 
         /* configure additional debug options */
         enableDebugFeatures(debugFlags);
@@ -689,74 +635,8 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
         unsetSignalHandler();
         gDvm.zygote = false;
 
-/*
-		if(true)
-		{
-			struct sockaddr_un address;
-			int client_socket = socket(PF_UNIX, SOCK_STREAM, 0);
-			if(client_socket < 0)
-			{
-				ALOG(LOG_INFO,"HAIYANG","CL: Create Socket Failed! %d",errno);
-				return -1;
-
-			}
-			memset(&address, 0, sizeof(struct sockaddr_un));
-
-			address.sun_family = AF_UNIX;
-			snprintf(address.sun_path, UNIX_PATH_MAX, "/dev/socket/instrument");
-
-			void* tmp=NULL;
-			tmp = &address;
-
-			if(connect(client_socket, 
-						//tmp,
-						//(struct sockaddr *) &address,  
-						(struct sockaddr *) tmp,  
-						sizeof(struct sockaddr_un)) != 0)
-			{
-				ALOG(LOG_INFO,"HAIYANG","CL: Connect Socket Failed! %d",errno);
-				client_socket = -1;
-			}
-			int signal = -5;
-			send(client_socket, &signal, sizeof(int), 0);
-			int pid = getpid();
-			send(client_socket, &pid, sizeof(int),0);
-			int query = -1;
-			recv(client_socket, &query, sizeof(int), 0);
-			ALOG(LOG_INFO,"HAIYANG","Query result is: %d",query);
-			if(query == 0) {
-				gDvm.isShadow=false;
-			}else{
-				gDvm.isShadow=true;
-			}
-		}else{
-			gDvm.isShadow = false;
-		}
-		*/
-		ALOG(LOG_DEBUG,"HAIYANG","PROCESS START:\n\t\t\t %s isshadow in new process %d to %s", __FUNCTION__, getpid(), gDvm.isShadow?"true":"false");
-/*
-    gDvm.shadowHook = NULL;
-    gDvm.newObjHook = NULL;
-	gDvm.freeObjHook = NULL;
-	gDvm.threadEndHook = NULL;
-	gDvm.vmStartHook = NULL;
-	gDvm.vmEndHook = NULL;
-	gDvm.vmInitHook = NULL;
-	gDvm.classfileLoadHook = NULL;
-	gDvm.classInitHook = NULL;
-*/
-		if(gDvm.freeObjHook==NULL)
-			ALOG(LOG_DEBUG,"HAIYANG","FREE OBJ HOOK IS NOT SET");
-		else
-			ALOG(LOG_DEBUG,"HAIYANG","FREE OBJ HOOK IS SET");
-
-
-
-			
-		if(isSystemServer)
-			ShadowLib_SystemServer_OnLoad(gDvmJni.jniVm, NULL);
-
-
+        if(isSystemServer)
+            ShadowLib_SystemServer_OnLoad(gDvmJni.jniVm, NULL);
 
         if (!dvmInitAfterZygote()) {
             ALOGE("error in post-zygote initialization");

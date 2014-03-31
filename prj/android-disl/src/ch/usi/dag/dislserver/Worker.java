@@ -1,11 +1,13 @@
 package ch.usi.dag.dislserver;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -54,6 +56,16 @@ public class Worker extends Thread {
 
     private static final boolean ANDROID = true; // Boolean.getBoolean(PROP_ANDROID);
 
+    private static final String PROP_PKG_BLACKLIST = "pkg.blacklist";
+    private static final String PKG_BLACKLIST = System.getProperty (PROP_PKG_BLACKLIST,"pkg.blacklist");
+
+    private String blacklist="";
+
+    private static final String PROP_PROC_OBSERVELIST = "proc.observelist";
+    private static final String PROC_OBSERVELIST = System.getProperty (PROP_PROC_OBSERVELIST, "proc.observelist");
+
+    private String observeList="";
+
     private static final boolean EMPTY_INSTR = false;
 
     private static boolean configMsg = true;
@@ -64,8 +76,9 @@ public class Worker extends Thread {
     // Needed by ANDROID
     //private static final String instrLibPath = "example/android/instr/build/disl-instr.jar";
     //private static final String instrLibPath = "test-ia-sapi/build/disl-instr.jar";
-    private static final String instrLibPath = "bin/instr.jar";
-    private static final String specLibPath = "lib/spec-new.jar";
+    private static final String PROP_INSTR_LIB_PATH = "instr.lib";
+    private static final String instrLibPath = System.getProperty (PROP_INSTR_LIB_PATH,"lib/instr.jar");
+    //private static final String specLibPath = "lib/spec-new.jar";
     //private static final String instrLibPath2 = "example/android/instr/build/test_disl-instr.jar";
 
     private static final ConcurrentHashMap <String, byte []> bytecodeMap = new ConcurrentHashMap <String, byte []> ();
@@ -92,89 +105,14 @@ public class Worker extends Thread {
         Enumeration <JarEntry> entryEnum;
         entryEnum = jf.entries ();
 
-        System.out.println("Instrumenting Jar: "+writePath);
+        System.out.println("Instrumenting Jar: "+writePath.substring(13));
 
         boolean isLib = false;
-        if(
-        writePath.contains("am.jar")
-        ||writePath.contains ("core.jar")
-        ||writePath.contains("android.policy.jar")
-        ||writePath.contains("android.test.runner.jar")
-        ||writePath.contains("apache-xml.jar")
-        ||writePath.contains("bmgr.jar")
-        ||writePath.contains("bouncycastle.jar")
-        ||writePath.contains("bu.jar")
-        ||writePath.contains("com.android.location.provider.jar")
-        ||writePath.contains("content.jar")
-        ||writePath.contains("core-junit.jar")
-        ||writePath.contains("ext.jar")
-        ||writePath.contains("framework.jar")
-        ||writePath.contains("ime.jar")
-        ||writePath.contains("input.jar")
-        ||writePath.contains("javax.obex.jar")
-        ||writePath.contains("monkey.jar")
-        ||writePath.contains("pm.jar")
-        ||writePath.contains("requestsync.jar")
-        ||writePath.contains("services.jar")
-        ||writePath.contains("svc.jar")
-        ||writePath.contains("uiautomator.jar")
-        ||writePath.contains("am.jar")
-||writePath.contains("android.policy.jar")
-||writePath.contains("android.test.runner.jar")
-||writePath.contains("apache-xml.jar")
-||writePath.contains("ApplicationsProvider.apk")
-||writePath.contains("bmgr.jar")
-||writePath.contains("bouncycastle.jar")
-||writePath.contains("bu.jar")
-||writePath.contains("CalendarProvider.apk")
-||writePath.contains("com.android.location.provider.jar")
-||writePath.contains("Contacts.apk")
-||writePath.contains("ContactsProvider.apk")
-||writePath.contains("content.jar")
-||writePath.contains("core.jar")
-||writePath.contains("core-junit.jar")
-||writePath.contains("DownloadProvider.apk")
-||writePath.contains("DrmProvider.apk")
-||writePath.contains("Email.apk")
-||writePath.contains("Exchange2.apk")
-||writePath.contains("ext.jar")
-||writePath.contains("framework.jar")
-||writePath.contains("Gallery2.apk")
-||writePath.contains("ime.jar")
-||writePath.contains("input.jar")
-||writePath.contains("javax.obex.jar")
-||writePath.contains("LatinIME.apk")
-||writePath.contains("Launcher2.apk")
-||writePath.contains("MediaProvider.apk")
-||writePath.contains("monkey.jar")
-||writePath.contains("Phone.apk")
-||writePath.contains("pm.jar")
-||writePath.contains("Provision.apk")
-||writePath.contains("requestsync.jar")
-||writePath.contains("services.jar")
-||writePath.contains("Settings.apk")
-||writePath.contains("SettingsProvider.apk")
-||writePath.contains("svc.jar")
-||writePath.contains("SystemUI.apk")
-||writePath.contains("TelephonyProvider.apk")
-||writePath.contains("uiautomator.jar")
-||writePath.contains("UserDictionaryProvider.apk")
-||writePath.contains("VoiceDialer.apk")
-||writePath.contains("WAPPushManager.apk")
-||writePath.contains("DeskClock.apk")
-||writePath.contains("Calendar.apk")
-||writePath.contains("Mms.apk")
-||writePath.contains("QuickSearchBox.apk")
-||writePath.contains("DefaultContainerService.apk")
-||writePath.contains("PicoTts.apk")
-||writePath.contains("MusicFX.apk")
-        ){
-            isLib=true;
-            //System.out.println(writePath+" is lib");
-        }else{
-            //System.out.println(writePath+" is not lib");
-        }
 
+        if(blacklist.contains (writePath.substring(13))){
+            System.out.println(writePath.substring(13)+" is in blacklist");
+            isLib = true;
+        }
 
         /*
          * final String originalName = jf.getName ().substring ( jf.getName
@@ -238,7 +176,7 @@ public class Worker extends Thread {
                             final byte [] ori = bytecodeMap.get (className.replace ('/', '.').replace ('/', '.'));
                             if(ori != null) {
                                 if(!Arrays.equals (ori, code)){
-                                    System.out.println ("SAME NAME, DIFFERENT CODE FOR "+className.replace ('/', '.'));
+ //                                   System.out.println ("SAME NAME, DIFFERENT CODE FOR "+className.replace ('/', '.'));
                                 }
                             }
 
@@ -277,10 +215,10 @@ public class Worker extends Thread {
 
         }
 
-        if (writePath.contains ("inspur")) {
+        /*if (writePath.contains ("inspur")) {
 
 
-            /*// if(true){
+            // if(true){
             final File red = new File ("bin/ch/usi/dag/dislre/AREDispatch.class");
             final FileInputStream fis = new FileInputStream (red);
             zos.putNextEntry (new ZipEntry ("ch/usi/dag/dislre/AREDispatch.class"));
@@ -288,7 +226,7 @@ public class Worker extends Thread {
                 zos.write (buffer, 0, bytesRead);
             }
             zos.closeEntry ();
-            fis.close ();*/
+            fis.close ();
             final JarFile speclib = new JarFile (
                 specLibPath);
             final Enumeration <JarEntry> spec_entries = speclib.entries ();
@@ -363,7 +301,7 @@ public class Worker extends Thread {
 
 
 
-        }
+        }*/
 
         // if (writePath.equals ("instrumented_LongTest2.apk")) {
         //if (writePath.equals ("instrumented_core.jar")) {
@@ -373,7 +311,7 @@ public class Worker extends Thread {
 
 
 
-            final File bp1 = new File ("bin/ch/usi/dag/disl/dynamicbypass/DynamicBypass.class");
+            /*final File bp1 = new File ("bin/ch/usi/dag/disl/dynamicbypass/DynamicBypass.class");
             final FileInputStream fisbp1 = new FileInputStream (bp1);
             zos.putNextEntry (new ZipEntry ("ch/usi/dag/disl/dynamicbypass/DynamicBypass.class"));
             final ByteArrayOutputStream bout1 = new ByteArrayOutputStream ();
@@ -424,61 +362,113 @@ public class Worker extends Thread {
             bytecodeMap.put ("ch/usi/dag/dislre/AREDispatch".replace ('/', '.'), bout4.toByteArray ());
             zos.write (bout4.toByteArray(),0,bout4.size());
             zos.closeEntry ();
-            fis.close ();
+            fis.close ();*/
 
+            {
+                final JarFile instrlib = new JarFile (
+                    instrLibPath);
+                final Enumeration <JarEntry> i_entries = instrlib.entries ();
+                while (i_entries.hasMoreElements ()) {
 
-            final JarFile instrlib = new JarFile (
-                instrLibPath);
-            final Enumeration <JarEntry> i_entries = instrlib.entries ();
-            while (i_entries.hasMoreElements ()) {
-
-                final ZipEntry cur = i_entries.nextElement ();
-                final String curName = cur.getName ();
-                if (curName.startsWith ("META-INF")) {
-                    continue;
-                }
-                final InputStream curis = instrlib.getInputStream (cur);
-                if (!cur.isDirectory ()) {
-                    if (curName.endsWith (".class")) {
-                        try {
-                            final ZipEntry curnze = new ZipEntry (curName);
-                            final String curClassName = curName.substring (
-                                0, curName.lastIndexOf (".class"));
-                            zos.putNextEntry (curnze);
-                            final ByteArrayOutputStream boutinstr = new ByteArrayOutputStream ();
-                            while ((bytesRead = curis.read (buffer)) != -1) {
-                                boutinstr.write (buffer,0,bytesRead);
-                                //zos.write (buffer, 0, bytesRead);
-                            }
-                            zos.write (boutinstr.toByteArray (),0,boutinstr.size());
-
-                            final byte [] ori = bytecodeMap.get (curClassName.replace ('/', '.').replace ('/', '.'));
-                            if(ori != null) {
-                                if(!Arrays.equals (ori, boutinstr.toByteArray ())){
-                                    //System.out.println ("SAME NAME, DIFFERENT CODE FOR "+curClassName.replace ('/', '.'));
+                    final ZipEntry cur = i_entries.nextElement ();
+                    final String curName = cur.getName ();
+                    if (curName.startsWith ("META-INF")) {
+                        continue;
+                    }
+                    final InputStream curis = instrlib.getInputStream (cur);
+                    if (!cur.isDirectory ()) {
+                        if (curName.endsWith (".class")) {
+                            try {
+                                final ZipEntry curnze = new ZipEntry (curName);
+                                final String curClassName = curName.substring (
+                                    0, curName.lastIndexOf (".class"));
+                                zos.putNextEntry (curnze);
+                                final ByteArrayOutputStream boutinstr = new ByteArrayOutputStream ();
+                                while ((bytesRead = curis.read (buffer)) != -1) {
+                                    boutinstr.write (buffer,0,bytesRead);
+                                    //zos.write (buffer, 0, bytesRead);
                                 }
+                                zos.write (boutinstr.toByteArray (),0,boutinstr.size());
+
+                                final byte [] ori = bytecodeMap.get (curClassName.replace ('/', '.').replace ('/', '.'));
+                                if(ori != null) {
+                                    if(!Arrays.equals (ori, boutinstr.toByteArray ())){
+                                        //System.out.println ("SAME NAME, DIFFERENT CODE FOR "+curClassName.replace ('/', '.'));
+                                    }
+                                }
+
+                                bytecodeMap.put (curClassName.replace ('/', '.'), boutinstr.toByteArray ());
+                                zos.closeEntry ();
+                            } catch (final Exception e) {
+                                e.printStackTrace ();
                             }
-
-                            bytecodeMap.put (curClassName.replace ('/', '.'), boutinstr.toByteArray ());
-                            zos.closeEntry ();
-                        } catch (final Exception e) {
-                            e.printStackTrace ();
                         }
+
+                    } else {
+
+                        final ZipEntry curnze = new ZipEntry (curName);
+
+                        zos.putNextEntry (curnze);
+                        while ((bytesRead = curis.read (buffer)) != -1) {
+                            zos.write (buffer, 0, bytesRead);
+                        }
+                        zos.closeEntry ();
                     }
-
-                } else {
-
-                    final ZipEntry curnze = new ZipEntry (curName);
-
-                    zos.putNextEntry (curnze);
-                    while ((bytesRead = curis.read (buffer)) != -1) {
-                        zos.write (buffer, 0, bytesRead);
-                    }
-                    zos.closeEntry ();
                 }
+                instrlib.close ();
             }
-            instrlib.close ();
+            {
+                final JarFile instrlib = new JarFile (
+                    "lib/built-in.jar");
+                final Enumeration <JarEntry> i_entries = instrlib.entries ();
+                while (i_entries.hasMoreElements ()) {
 
+                    final ZipEntry cur = i_entries.nextElement ();
+                    final String curName = cur.getName ();
+                    if (curName.startsWith ("META-INF")) {
+                        continue;
+                    }
+                    final InputStream curis = instrlib.getInputStream (cur);
+                    if (!cur.isDirectory ()) {
+                        if (curName.endsWith (".class")) {
+                            try {
+                                final ZipEntry curnze = new ZipEntry (curName);
+                                final String curClassName = curName.substring (
+                                    0, curName.lastIndexOf (".class"));
+                                zos.putNextEntry (curnze);
+                                final ByteArrayOutputStream boutinstr = new ByteArrayOutputStream ();
+                                while ((bytesRead = curis.read (buffer)) != -1) {
+                                    boutinstr.write (buffer,0,bytesRead);
+                                }
+                                zos.write (boutinstr.toByteArray (),0,boutinstr.size());
+
+                                final byte [] ori = bytecodeMap.get (curClassName.replace ('/', '.').replace ('/', '.'));
+                                if(ori != null) {
+                                    if(!Arrays.equals (ori, boutinstr.toByteArray ())){
+                                        //System.out.println ("SAME NAME, DIFFERENT CODE FOR "+curClassName.replace ('/', '.'));
+                                    }
+                                }
+
+                                bytecodeMap.put (curClassName.replace ('/', '.'), boutinstr.toByteArray ());
+                                zos.closeEntry ();
+                            } catch (final Exception e) {
+                                e.printStackTrace ();
+                            }
+                        }
+
+                    } else {
+
+                        final ZipEntry curnze = new ZipEntry (curName);
+
+                        zos.putNextEntry (curnze);
+                        while ((bytesRead = curis.read (buffer)) != -1) {
+                            zos.write (buffer, 0, bytesRead);
+                        }
+                        zos.closeEntry ();
+                    }
+                }
+                instrlib.close ();
+            }
         }
         zos.finish ();
         zos.close ();
@@ -505,6 +495,29 @@ public class Worker extends Thread {
 
 
     private void instrumentationLoop () throws Exception {
+        {
+            final FileReader reader = new FileReader(PKG_BLACKLIST);
+            final BufferedReader br = new BufferedReader(reader);
+            String s1 = null;
+            while((s1 = br.readLine()) != null) {
+                blacklist += s1;
+                blacklist += ";";
+            }
+            br.close();
+            reader.close();
+        }
+
+        {
+            final FileReader reader = new FileReader(PROC_OBSERVELIST);
+            final BufferedReader br = new BufferedReader(reader);
+            String s1 = null;
+            while((s1 = br.readLine()) != null) {
+                observeList += s1;
+                observeList += ";";
+            }
+            br.close();
+            reader.close();
+        }
 
         try {
 
@@ -538,11 +551,18 @@ public class Worker extends Thread {
                             configMsg = fullPath.toString ().equals ("-");
                             if(configMsg){
                                 instrClass =
-                                ("com.inspur.test;"
-                                /*+"dalvikvm;"
+                                (
+                                observeList
+                                /*""
+
                                 +"system_server;"
-                                +"zygote;"*/
-                                /*+"com.android.launcher;"
+                                 +"dalvikvm;"
+
+
+                                "zygote;"
+
+
+                                +"com.android.launcher;"
                                 +"android.process.acore;"
                                 +"android.process.media;"
                                 +"com.android.systemui;"
@@ -563,16 +583,21 @@ public class Worker extends Thread {
                                 +"com.android.email;"
                                 +"com.android.mms;"
                                 +"com.android.contacts;"
-                                +"com.android.quicksearchbox;"*/
+                                +"com.android.quicksearchbox;"
+                                +"com.svox.pico;"
+                                +"com.android.musicfx;"
+                                +"com.android.defcontainer;"
+
 
                                 +"com.timsu.astrid;"
+                                +"com.inspur.test;"
                                 +"cx.hell.android.pdfview;"
                                 +"org.connectbot;"
                                 +"org.geometerplus.zlibrary.ui.android;"
                                 +"com.fsck.k9;"
                                 +"com.android.keepass;"
                                 +"org.vudroid;"
-                                +"org.videolan.vlc;"
+                                +"org.videolan.vlc;"*/
                                 )
                                 .getBytes ();
 
