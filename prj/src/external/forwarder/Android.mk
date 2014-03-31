@@ -1,0 +1,18 @@
+LOCAL_PATH:= $(call my-dir)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE_TAGS := samples
+LOCAL_SRC_FILES := src/server.c
+LOCAL_MODULE := forwarder
+LOCAL_MODULE_PATH := $(TARGET_OUT_EXECUTABLES)
+LOCAL_STATIC_LIBRARIES := libcutils libc
+include $(BUILD_EXECUTABLE)
+
+include $(CLEAR_VARS)
+LOCAL_MODULE_TAGS := samples
+LOCAL_SRC_FILES := src/client.c
+LOCAL_MODULE := forwarder2
+LOCAL_MODULE_PATH := $(TARGET_OUT_EXECUTABLES)
+LOCAL_STATIC_LIBRARIES := libcutils libc
+include $(BUILD_EXECUTABLE)
+
