@@ -63,6 +63,8 @@ struct DvmDex {
 
     /* lock ensuring mutual exclusion during updates */
     pthread_mutex_t     modLock;
+
+	char name[100];
 };
 
 

@@ -334,6 +334,9 @@ tryArchive:
         ALOGI("Unable to map %s in %s", kDexInJarName, fileName);
         goto bail;
     }
+	memcpy(pDvmDex->name, fileName, strlen(fileName));
+	ALOG(LOG_DEBUG, "HAIYANG", "SETTING THE FILE NAME TO %s", fileName);
+	pDvmDex->name[strlen(fileName)] = '\0';
 
     if (locked) {
         /* unlock the fd */
