@@ -297,7 +297,7 @@ tryArchive:
                     startWhen = dvmGetRelativeTimeUsec();
 					if(DEBUGMODE)
 						ALOG(LOG_DEBUG, "HAIYANG", "IN %s FIRST OPEN ZIP FOR %s",__FUNCTION__,fileName);
-                    result = dexZipExtractEntryToFile(&archive, entry, fd) == 0;
+                    result = dexZipExtractEntryToFileForSVM(&archive, entry, fd) == 0;
                     extractWhen = dvmGetRelativeTimeUsec();
                 }
                 if (result) {

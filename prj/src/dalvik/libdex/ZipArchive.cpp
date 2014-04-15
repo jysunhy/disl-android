@@ -17,10 +17,6 @@
 /*
  * Read-only access to Zip archives, with minimal heap allocation.
  */
-
-
-
-
 #include "ZipArchive.h"
 
 #include <zlib.h>
@@ -33,20 +29,8 @@
 
 #include <JNIHelp.h>        // TEMP_FAILURE_RETRY may or may not be in unistd
 
-#ifndef O_BINARY
-#define O_BINARY 0
-#endif
-
-//SVM
-#define INSTRUMENT true
-#define SYS_INSTRUMENT_PORT    6664
+/************************SVM**************************/
 #include <pthread.h>
-int client_socket=-1;
-static pthread_mutex_t mutex;
-char apkname[APK_LENGTH];
-int apk_original_dexsize=-1;
-int apk_new_dexsize=-1;
-//int inited = 0;
 #include <netinet/in.h>    // for sockaddr_in
 #include <sys/types.h>    // for socket
 #include <sys/socket.h>    // for socket
@@ -56,22 +40,23 @@ int apk_new_dexsize=-1;
 #include <unistd.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-
 #include <sys/un.h>
 
+#define SYS_INSTRUMENT_PORT    6664
 #define BUFFER_SIZE 32768
 #define MAX_DEX 50000000
-//#define SERVER_IP "10.10.6.101"
 #define SERVER_IP "127.0.0.1"
 #define DEX_SIZE 50000000
 #define min(a,b) a>b?b:a
-
 #define UNIX_PATH_MAX 108
+int client_socket=-1;
+static pthread_mutex_t mutex;
+char apkname[APK_LENGTH];
+int apk_original_dexsize=-1;
+int apk_new_dexsize=-1;
 
 int new_sock(int port){
     if(client_socket>0) {
-        //    close(client_socket);
-        //    client_socket=-1;
         return client_socket;
     }
     struct sockaddr_un address;
@@ -97,62 +82,15 @@ int new_sock(int port){
         client_socket = -1;
     }
     return client_socket;
-
-    /*
-       ALOG(LOG_INFO,"SVM","CL: Create new Socket!");
-       struct sockaddr_in client_addr;
-       bzero(&client_addr,sizeof(client_addr));
-       client_addr.sin_family = AF_INET;
-       client_addr.sin_addr.s_addr = htons(INADDR_ANY);
-       client_addr.sin_port = htons(0);
-
-       client_socket = socket(AF_INET,SOCK_STREAM,0);
-       int times = 0;
-       while( client_socket < 0)
-       {
-       if(times>=0){
-       ALOG(LOG_INFO,"SVM","CL: Create Socket Failed! %d",errno);
-       close(client_socket);
-       client_socket=-1;
-       return -1;
-       }
-       times++;
-       ALOG(LOG_INFO,"SVM","retry Create Socket!");
-       sleep(2);
-       client_socket = socket(AF_INET,SOCK_STREAM,0);
-       }
-       if( bind(client_socket,(struct sockaddr*)&client_addr,sizeof(client_addr)))
-       {
-       ALOG(LOG_INFO,"SVM","Client Bind Port Failed!");
-       close(client_socket);
-       client_socket=-1;
-       return -1;
-       }
-
-       struct sockaddr_in server_addr;
-       bzero(&server_addr,sizeof(server_addr));
-       server_addr.sin_family = AF_INET;
-       if(inet_aton(SERVER_IP,&server_addr.sin_addr) == 0)
-       {
-       ALOG(LOG_INFO,"SVM","Server IP Address Error!");
-       close(client_socket);
-       client_socket=-1;
-       return -1;
-       }
-       server_addr.sin_port = htons(port);
-       socklen_t server_addr_length = sizeof(server_addr);
-       int success = 0;
-       success = connect(client_socket,(struct sockaddr*)&server_addr, server_addr_length);
-       if(success<0) {
-       ALOG(LOG_INFO,"SVM","Can Not Connect To %s!",SERVER_IP);
-       close(client_socket);
-       client_socket=-1;
-       return -1;
-       }
-       return 0;
-     */
 }
-//SVM
+
+/************************END SVM**************************/
+
+
+#ifndef O_BINARY
+#define O_BINARY 0
+#endif
+
 /*
  * Zip file constants.
  */
@@ -706,7 +644,156 @@ int dexZipGetEntryInfo(const ZipArchive* pArchive, ZipEntry entry,
  */
 static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
 {
-    //ALOG(LOG_INFO, "SVM", "CL: in %s for dex",__FUNCTION__);  
+    int result = -1;
+    const size_t kBufSize = 32768;
+    unsigned char* readBuf = (unsigned char*) malloc(kBufSize);
+    unsigned char* writeBuf = (unsigned char*) malloc(kBufSize);
+    z_stream zstream;
+    int zerr;
+
+    if (readBuf == NULL || writeBuf == NULL)
+        goto bail;
+
+    /*
+     * Initialize the zlib stream struct.
+     */
+    memset(&zstream, 0, sizeof(zstream));
+    zstream.zalloc = Z_NULL;
+    zstream.zfree = Z_NULL;
+    zstream.opaque = Z_NULL;
+    zstream.next_in = NULL;
+    zstream.avail_in = 0;
+    zstream.next_out = (Bytef*) writeBuf;
+    zstream.avail_out = kBufSize;
+    zstream.data_type = Z_UNKNOWN;
+
+    /*
+     * Use the undocumented "negative window bits" feature to tell zlib
+     * that there's no zlib header waiting for it.
+     */
+    zerr = inflateInit2(&zstream, -MAX_WBITS);
+    if (zerr != Z_OK) {
+        if (zerr == Z_VERSION_ERROR) {
+            ALOGE("Installed zlib is not compatible with linked version (%s)",
+                ZLIB_VERSION);
+        } else {
+            ALOGW("Call to inflateInit2 failed (zerr=%d)", zerr);
+        }
+        goto bail;
+    }
+
+    /*
+     * Loop while we have more to do.
+     */
+    do {
+        /* read as much as we can */
+        if (zstream.avail_in == 0) {
+            size_t getSize = (compLen > kBufSize) ? kBufSize : compLen;
+
+            ssize_t actual = TEMP_FAILURE_RETRY(read(inFd, readBuf, getSize));
+            if (actual != (ssize_t) getSize) {
+                ALOGW("Zip: inflate read failed (%d vs %zd)",
+                    (int)actual, getSize);
+                goto z_bail;
+            }
+
+            compLen -= getSize;
+
+            zstream.next_in = readBuf;
+            zstream.avail_in = getSize;
+        }
+
+        /* uncompress the data */
+        zerr = inflate(&zstream, Z_NO_FLUSH);
+        if (zerr != Z_OK && zerr != Z_STREAM_END) {
+            ALOGW("Zip: inflate zerr=%d (nIn=%p aIn=%u nOut=%p aOut=%u)",
+                zerr, zstream.next_in, zstream.avail_in,
+                zstream.next_out, zstream.avail_out);
+            goto z_bail;
+        }
+
+        /* write when we're full or when we're done */
+        if (zstream.avail_out == 0 ||
+            (zerr == Z_STREAM_END && zstream.avail_out != kBufSize))
+        {
+            size_t writeSize = zstream.next_out - writeBuf;
+            if (sysWriteFully(outFd, writeBuf, writeSize, "Zip inflate") != 0)
+                goto z_bail;
+
+            zstream.next_out = writeBuf;
+            zstream.avail_out = kBufSize;
+        }
+    } while (zerr == Z_OK);
+
+    assert(zerr == Z_STREAM_END);       /* other errors should've been caught */
+
+    /* paranoia */
+    if (zstream.total_out != uncompLen) {
+        ALOGW("Zip: size mismatch on inflated file (%ld vs %zd)",
+            zstream.total_out, uncompLen);
+        goto z_bail;
+    }
+
+    result = 0;
+
+z_bail:
+    inflateEnd(&zstream);        /* free up any allocated structures */
+
+bail:
+    free(readBuf);
+    free(writeBuf);
+    return result;
+}
+
+/*
+ * Uncompress an entry, in its entirety, to an open file descriptor.
+ *
+ * TODO: this doesn't verify the data's CRC, but probably should (especially
+ * for uncompressed data).
+ */
+int dexZipExtractEntryToFile(const ZipArchive* pArchive,
+    const ZipEntry entry, int fd)
+{
+    int result = -1;
+    int ent = entryToIndex(pArchive, entry);
+    if (ent < 0) {
+        ALOGW("Zip: extract can't find entry %p", entry);
+        goto bail;
+    }
+
+    int method;
+    size_t uncompLen, compLen;
+    off_t dataOffset;
+
+    if (dexZipGetEntryInfo(pArchive, entry, &method, &uncompLen, &compLen,
+            &dataOffset, NULL, NULL) != 0)
+    {
+        goto bail;
+    }
+    if (lseek(pArchive->mFd, dataOffset, SEEK_SET) != dataOffset) {
+        ALOGW("Zip: lseek to data at %ld failed", (long) dataOffset);
+        goto bail;
+    }
+
+    if (method == kCompressStored) {
+        if (sysCopyFileToFile(fd, pArchive->mFd, uncompLen) != 0)
+            goto bail;
+    } else {
+        if (inflateToFile(fd, pArchive->mFd, uncompLen, compLen) != 0)
+            goto bail;
+    }
+
+    result = 0;
+
+bail:
+    return result;
+}
+
+
+/********************** Modfied for SVM ***********************/
+
+static int inflateToFileForSVM(int outFd, int inFd, size_t uncompLen, size_t compLen)
+{
     void* olddex = malloc(MAX_DEX);
     void* buffer[BUFFER_SIZE];
     int length = 0;
@@ -751,14 +838,11 @@ static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
         }
         goto bail;
     }
-    if(INSTRUMENT) {
 
-        ALOG(LOG_INFO, "SVM", "in %s for %s", __FUNCTION__, apkname);
-        if(client_socket<0) {
-            if(new_sock(SYS_INSTRUMENT_PORT)<0) {
-                ALOG(LOG_INFO, "SVM", "CL: in %s socket err",__FUNCTION__);  
-                //sleep(1);
-            }
+    ALOG(LOG_INFO, "SVM", "in %s for %s", __FUNCTION__, apkname);
+    if(client_socket<0) {
+        if(new_sock(SYS_INSTRUMENT_PORT)<0) {
+            ALOG(LOG_INFO, "SVM", "CL: in %s socket err",__FUNCTION__);  
         }
     }
 
@@ -797,7 +881,7 @@ static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
             (zerr == Z_STREAM_END && zstream.avail_out != kBufSize))
         {
             size_t writeSize = zstream.next_out - writeBuf;
-            if(!INSTRUMENT || client_socket < 0) {
+            if(client_socket < 0) {
                 if (sysWriteFully(outFd, writeBuf, writeSize, "Zip inflate") != 0)
                     goto z_bail;
             }
@@ -807,8 +891,7 @@ static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
             zstream.avail_out = kBufSize;
         }
     } while (zerr == Z_OK);
-    if(INSTRUMENT && client_socket >= 0) {
-        //ALOG(LOG_INFO, "SVM", "CL: in %s start sending %d bytes",__FUNCTION__,oldsize);  
+    if(client_socket >= 0) {
         apk_original_dexsize = oldsize;
         int len = strlen(apkname);
         send(client_socket, &len, sizeof(int),0);
@@ -820,7 +903,6 @@ static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
         }
 
         length = recv(client_socket, &newsize, sizeof(int), 0);
-        //ALOG(LOG_INFO, "SVM", "CL: in %s get new size %d",__FUNCTION__,newsize);  
         apk_new_dexsize = newsize;
         cnt = 0;
         while( cnt < newsize)
@@ -835,12 +917,9 @@ static int inflateToFile(int outFd, int inFd, size_t uncompLen, size_t compLen)
         close(client_socket);
         client_socket = -1;
     }
-    //ALOG(LOG_INFO, "SVM", "in %s get %d buffer",__FUNCTION__, cnt);  
 
     assert(zerr == Z_STREAM_END);       /* other errors should've been caught */
 
-    //ALOG(LOG_INFO, "SVM", "in %s get Zip: (%ld vs %zd)",__FUNCTION__, 
-        //    zstream.total_out, uncompLen);
     /* paranoia */
     if (zstream.total_out != uncompLen) {
         ALOGW("Zip: size mismatch on inflated file (%ld vs %zd)",
@@ -862,18 +941,9 @@ bail:
     free(writeBuf);
     return result;
 }
-
-/*
- * Uncompress an entry, in its entirety, to an open file descriptor.
- *
- * TODO: this doesn't verify the data's CRC, but probably should (especially
- * for uncompressed data).
- */
-int dexZipExtractEntryToFile(const ZipArchive* pArchive,
+int dexZipExtractEntryToFileForSVM(const ZipArchive* pArchive,
     const ZipEntry entry, int fd)
 {
-
-    //ALOG(LOG_INFO, "SVM", "YYYY in %s for dex %s",__FUNCTION__,pArchive->mHashTable->name);  
     int result = -1;
     int ent = entryToIndex(pArchive, entry);
     if (ent < 0) {
@@ -899,7 +969,7 @@ int dexZipExtractEntryToFile(const ZipArchive* pArchive,
         if (sysCopyFileToFile(fd, pArchive->mFd, uncompLen) != 0)
             goto bail;
     } else {
-        if (inflateToFile(fd, pArchive->mFd, uncompLen, compLen) != 0)
+        if (inflateToFileForSVM(fd, pArchive->mFd, uncompLen, compLen) != 0)
             goto bail;
     }
 

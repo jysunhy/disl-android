@@ -175,6 +175,9 @@ DEX_INLINE long dexGetZipEntryCrc32(const ZipArchive* pArchive,
  */
 int dexZipExtractEntryToFile(const ZipArchive* pArchive,
     const ZipEntry entry, int fd);
+/******** FOR SVM SUPPORT***********/
+int dexZipExtractEntryToFileForSVM(const ZipArchive* pArchive,
+    const ZipEntry entry, int fd);
 
 /*
  * Utility function to compute a CRC-32.

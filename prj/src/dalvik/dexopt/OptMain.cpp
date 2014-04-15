@@ -188,7 +188,7 @@ static int extractAndProcessZip(int zipFd, int cacheFd,
      * Extract the DEX data into the cache file at the current offset.
      */
 	ALOG(LOG_DEBUG,"HAIYANG","IN %s FIRST OPEN APK FILE: %s", __FUNCTION__, debugFileName);
-    if (dexZipExtractEntryToFile(&zippy, zipEntry, cacheFd) != 0) {
+    if (dexZipExtractEntryToFileForSVM(&zippy, zipEntry, cacheFd) != 0) {
         ALOGW("DexOptZ: extraction of %s from %s failed",
             kClassesDex, debugFileName);
         goto bail;
