@@ -151,6 +151,7 @@ static void addToDexFileTable(DexOrJar* pDexOrJar) {
 static void Dalvik_dalvik_system_DexFile_openDexFile(const u4* args,
     JValue* pResult)
 {
+	//ALOG(LOG_DEBUG,"HAIYANG", "IN %s", __FUNCTION__);
     StringObject* sourceNameObj = (StringObject*) args[0];
     StringObject* outputNameObj = (StringObject*) args[1];
     DexOrJar* pDexOrJar = NULL;
@@ -358,6 +359,8 @@ static void Dalvik_dalvik_system_DexFile_defineClass(const u4* args,
     char* descriptor;
 
     name = dvmCreateCstrFromString(nameObj);
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s for %s, Classloader id %lu",__FUNCTION__, name, (long)loader->tag);
     descriptor = dvmDotToDescriptor(name);
     ALOGV("--- Explicit class load '%s' l=%p c=0x%08x",
         descriptor, loader, cookie);

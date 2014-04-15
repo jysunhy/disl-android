@@ -192,7 +192,7 @@ int dvmJarFileOpen(const char* fileName, const char* odexOutputName,
      * TODO: This function has been duplicated and modified to become
      * dvmRawDexFileOpen() in RawDexFile.c. This should be refactored.
      */
-	//ALOG(LOG_INFO,"SVM","XXX in %s, %s, %s, %s", __FUNCTION__, fileName, odexOutputName, isBootstrap?"bootstrap":"no bootstrap");
+	ALOG(LOG_INFO,"SVM","XXX in %s, %s, %s, %s", __FUNCTION__, fileName, odexOutputName, isBootstrap?"bootstrap":"no bootstrap");
 
     ZipArchive archive;
     DvmDex* pDvmDex = NULL;
@@ -236,7 +236,7 @@ int dvmJarFileOpen(const char* fileName, const char* odexOutputName,
         ZipEntry entry;
 
 tryArchive:
-		//ALOG(LOG_INFO,"SVM","YYY in %s, %s, %s, %s", __FUNCTION__, fileName, odexOutputName, isBootstrap?"bootstrap":"no bootstrap");
+		ALOG(LOG_INFO,"SVM","YYY in %s, %s, %s, %s", __FUNCTION__, fileName, odexOutputName, isBootstrap?"bootstrap":"no bootstrap");
 		
 		strncpy(apkname, fileName, APK_LENGTH-1);
         /*
@@ -295,6 +295,8 @@ tryArchive:
 
                 if (result) {
                     startWhen = dvmGetRelativeTimeUsec();
+					if(DEBUGMODE)
+						ALOG(LOG_DEBUG, "HAIYANG", "IN %s FIRST OPEN ZIP FOR %s",__FUNCTION__,fileName);
                     result = dexZipExtractEntryToFile(&archive, entry, fd) == 0;
                     extractWhen = dvmGetRelativeTimeUsec();
                 }
@@ -335,7 +337,8 @@ tryArchive:
         goto bail;
     }
 	memcpy(pDvmDex->name, fileName, strlen(fileName));
-	ALOG(LOG_DEBUG, "HAIYANG", "SETTING THE FILE NAME TO %s", fileName);
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG, "HAIYANG", "SETTING THE FILE NAME TO %s", fileName);
 	pDvmDex->name[strlen(fileName)] = '\0';
 
     if (locked) {

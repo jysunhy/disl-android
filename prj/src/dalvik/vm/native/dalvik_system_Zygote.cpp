@@ -414,7 +414,6 @@ static pid_t forkAndSpecializeCommon_2(const u4* args, bool isSystemServer)
 
     dvmDumpLoaderStats("zygote");
 
-    BeforeFork();
     pid = fork();
     onFork(pid);
 
@@ -553,7 +552,6 @@ static pid_t forkAndSpecializeCommon(const u4* args, bool isSystemServer)
     setSignalHandler();
 
     dvmDumpLoaderStats("zygote");
-    BeforeFork();
     pid = fork();
     onFork(pid);
 

@@ -680,6 +680,7 @@ bool dvmPrepMainForJni(JNIEnv* pEnv)
  */
 bool dvmPrepMainThread()
 {
+	//ALOG(LOG_DEBUG,"HAIYANG","IN %s",__FUNCTION__);
     Thread* thread;
     Object* groupObj;
     Object* threadObj;

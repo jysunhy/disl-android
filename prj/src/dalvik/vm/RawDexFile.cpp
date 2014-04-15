@@ -214,7 +214,8 @@ int dvmRawDexFileOpen(const char* fileName, const char* odexOutputName,
         goto bail;
     }
 	memcpy(pDvmDex->name, fileName, strlen(fileName));
-	ALOG(LOG_DEBUG, "HAIYANG", "SETTING THE FILE NAME TO %s", fileName);
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG, "HAIYANG", "SETTING THE FILE NAME TO %s", fileName);
 	pDvmDex->name[strlen(fileName)] = '\0';
 
     if (locked) {

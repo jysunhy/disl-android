@@ -1044,6 +1044,8 @@ static int processOptions(int argc, const char* const argv[],
         }
     }
     gDvm.classVerifyMode = VERIFY_MODE_NONE;
+	if(DEBUGMODE)
+	    gDvm.verboseClass = true;
 
     return 0;
 }
@@ -1331,6 +1333,8 @@ std::string dvmStartup(int argc, const char* const argv[],
      * which make some calls that throw assertions if the classes they
      * operate on aren't initialized.
      */
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s explicitly initialize java.lang.Class",__FUNCTION__);
     if (!dvmInitClass(gDvm.classJavaLangClass)) {
         return "couldn't initialized java.lang.Class";
     }

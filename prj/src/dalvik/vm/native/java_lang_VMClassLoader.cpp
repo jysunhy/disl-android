@@ -174,9 +174,12 @@ static void Dalvik_java_lang_VMClassLoader_loadClass(const u4* args,
     StringObject* nameObj = (StringObject*) args[0];
     bool resolve = (args[1] != 0);
     ClassObject* clazz;
-
+	char* descriptor = dvmCreateCstrFromString(nameObj);
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG,"HAIYANG", "IN %s for %s", __FUNCTION__, descriptor);
     clazz = dvmFindClassByName(nameObj, NULL, resolve);
     assert(clazz == NULL || dvmIsClassLinked(clazz));
+	free(descriptor);
     RETURN_PTR(clazz);
 }
 

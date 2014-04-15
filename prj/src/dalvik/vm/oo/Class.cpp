@@ -377,6 +377,8 @@ static bool createInitialClasses() {
         return false;
     }
     DVM_OBJECT_INIT(clazz, clazz);
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s, creating java.lang.class ClassObject, which is a type of itself",__FUNCTION__);
     SET_CLASS_FLAG(clazz, ACC_PUBLIC | ACC_FINAL | CLASS_ISCLASS);
     clazz->descriptor = "Ljava/lang/Class;";
     gDvm.classJavaLangClass = clazz;
@@ -388,6 +390,8 @@ static bool createInitialClasses() {
      * different from regular classes.
      */
     bool ok = true;
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s, creating void bool byte ... ClassObject",__FUNCTION__);
     ok &= createPrimitiveType(PRIM_VOID,    &gDvm.typeVoid);
     ok &= createPrimitiveType(PRIM_BOOLEAN, &gDvm.typeBoolean);
     ok &= createPrimitiveType(PRIM_BYTE,    &gDvm.typeByte);
@@ -409,6 +413,8 @@ static bool createInitialClasses() {
 bool dvmClassStartup()
 {
     /* make this a requirement -- don't currently support dirs in path */
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s",__FUNCTION__);
     if (strcmp(gDvm.bootClassPathStr, ".") == 0) {
         ALOGE("ERROR: must specify non-'.' bootclasspath");
         return false;
@@ -438,6 +444,9 @@ bool dvmClassStartup()
      * If it's NULL, we just fall back to the InitiatingLoaderList in the
      * ClassObject, so it's not fatal to fail this allocation.
      */
+
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG,"HAIYANG","In %s Malloc the list for initiating loaders for early classes",__FUNCTION__);
     gDvm.initiatingLoaderList = (InitiatingLoaderList*)
         calloc(ZYGOTE_CLASS_CUTOFF, sizeof(InitiatingLoaderList));
 
@@ -453,8 +462,8 @@ bool dvmClassStartup()
      * Process the bootstrap class path.  This means opening the specified
      * DEX or Jar files and possibly running them through the optimizer.
      */
-    assert(gDvm.bootClassPath == NULL);
-    processClassPath(gDvm.bootClassPathStr, true);
+	assert(gDvm.bootClassPath == NULL);
+	processClassPath(gDvm.bootClassPathStr, true);
 
     if (gDvm.bootClassPath == NULL)
         return false;
@@ -602,6 +611,8 @@ static void getFileNameSuffix(const char* fileName, char* suffixBuf, size_t suff
  */
 static bool prepareCpe(ClassPathEntry* cpe, bool isBootstrap)
 {
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG, "HAIYANG", "IN %s AND CALL dexJarFileOpen or dexRawDexFileOpen for %s",__FUNCTION__, cpe->fileName);
     struct stat sb;
 
     if (stat(cpe->fileName, &sb) < 0) {
@@ -687,6 +698,8 @@ static ClassPathEntry* processClassPath(const char* pathStr, bool isBootstrap)
     /*
      * Set the global pointer so the DEX file dependency stuff can find it.
      */
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s, set gDvm.bootClassPath",__FUNCTION__);
     gDvm.bootClassPath = cpe;
 
     /*
@@ -767,6 +780,7 @@ bail:
 static DvmDex* searchBootPathForClass(const char* descriptor,
     const DexClassDef** ppClassDef)
 {
+	//ALOG(LOG_DEBUG,"HAIYANG","IN %s for %s", __FUNCTION__, descriptor);
     const ClassPathEntry* cpe = gDvm.bootClassPath;
     const DexClassDef* pFoundDef = NULL;
     DvmDex* pFoundFile = NULL;
@@ -1320,6 +1334,7 @@ ClassObject* dvmFindClassNoInit(const char* descriptor,
 static ClassObject* findClassFromLoaderNoInit(const char* descriptor,
     Object* loader)
 {
+	//ALOG(LOG_DEBUG,"HAIYANG","IN %s for %s",__FUNCTION__, descriptor);
     //ALOGI("##### findClassFromLoaderNoInit (%s,%p)",
     //        descriptor, loader);
 
@@ -1339,6 +1354,7 @@ static ClassObject* findClassFromLoaderNoInit(const char* descriptor,
      */
     ClassObject* clazz = dvmLookupClass(descriptor, loader, false);
     if (clazz != NULL) {
+	//ALOG(LOG_DEBUG,"HAIYANG","IN %s %s already loaded", __FUNCTION__, descriptor);
         LOGVV("Already loaded: %s %p", descriptor, loader);
         return clazz;
     } else {
@@ -1374,6 +1390,8 @@ static ClassObject* findClassFromLoaderNoInit(const char* descriptor,
             loader->clazz->vtable[gDvm.voffJavaLangClassLoader_loadClass];
         JValue result;
         dvmCallMethod(self, loadClass, loader, &result, nameObj);
+		if(DEBUGMODE)
+			ALOG(LOG_DEBUG,"HAIYANG","IN %s %s is searching by %s tag:%lu", __FUNCTION__, descriptor, loader->clazz->descriptor, (long)loader->tag);
         clazz = (ClassObject*) result.l;
 
         dvmMethodTraceClassPrepEnd();
@@ -1433,6 +1451,8 @@ ClassObject* dvmDefineClass(DvmDex* pDvmDex, const char* descriptor,
  */
 ClassObject* dvmFindSystemClass(const char* descriptor)
 {
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s for %s",__FUNCTION__, descriptor);
     ClassObject* clazz;
 
     clazz = dvmFindSystemClassNoInit(descriptor);
@@ -1457,6 +1477,7 @@ ClassObject* dvmFindSystemClass(const char* descriptor)
  */
 ClassObject* dvmFindSystemClassNoInit(const char* descriptor)
 {
+	//ALOG(LOG_DEBUG,"HAIYANG","IN %s for %s", __FUNCTION__, descriptor);
     return findClassNoInit(descriptor, NULL, NULL);
 }
 
@@ -1477,6 +1498,7 @@ ClassObject* dvmFindSystemClassNoInit(const char* descriptor)
 static ClassObject* findClassNoInit(const char* descriptor, Object* loader,
     DvmDex* pDvmDex)
 {
+	//ALOG(LOG_DEBUG,"HAIYANG","IN %s for %s", __FUNCTION__, descriptor);
     Thread* self = dvmThreadSelf();
     ClassObject* clazz;
     bool profilerNotified = false;
@@ -1980,7 +2002,10 @@ static ClassObject* loadClassFromDex(DvmDex* pDvmDex,
         // Provide an all-zeroes header for the rest of the loading.
         memset(&header, 0, sizeof(header));
     }
+	pDvmDex->name[99]=0;
 
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG, "HAIYANG", "IN %s for %s classloader %s, dexfile: %s", __FUNCTION__, dexGetClassDescriptor(pDexFile, pClassDef), classLoader==NULL?"NULL":classLoader->clazz->descriptor, pDvmDex->name);
     result = loadClassFromDex0(pDvmDex, pClassDef, &header, pEncodedData,
             classLoader);
 
@@ -4446,6 +4471,8 @@ noverify:
     android_atomic_release_store(CLASS_INITIALIZING,
                                  (int32_t*)(void*)&clazz->status);
     dvmUnlockObject(self, (Object*) clazz);
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG,"HAIYANG","IN %s for %s",__FUNCTION__, clazz->descriptor);
 
     /* init our superclass */
     if (clazz->super != NULL && clazz->super->status != CLASS_INITIALIZED) {

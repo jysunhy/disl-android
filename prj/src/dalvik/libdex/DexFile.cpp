@@ -441,6 +441,7 @@ void dexFileFree(DexFile* pDexFile)
 const DexClassDef* dexFindClass(const DexFile* pDexFile,
     const char* descriptor)
 {
+	//ALOG(LOG_DEBUG,"HAIYANG","IN %s for %s", __FUNCTION__, descriptor);
     const DexClassLookup* pLookup = pDexFile->pClassLookup;
     u4 hash;
     int idx, mask;

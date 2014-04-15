@@ -84,4 +84,6 @@
 #include "InlineNative.h"
 #include "oo/ObjectInlines.h"
 
+#define DEBUGMODE 0
+
 #endif  // DALVIK_DALVIK_H_
