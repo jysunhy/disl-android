@@ -1,11 +1,9 @@
 package ch.usi.dag.icc.disl;
 
-import android.os.Binder;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.marker.BodyMarker;
 import ch.usi.dag.disl.staticcontext.MethodStaticContext;
 import ch.usi.dag.dislre.AREDispatch;
-import ch.usi.dag.icc.analysis.ICCAnalysisStub;
 
 public class DiSLClass {
 
@@ -23,6 +21,18 @@ public class DiSLClass {
 */
 
     @Before (
+        marker = BodyMarker.class,
+        scope = "*.*.loadClass")
+    public static void loadClass (final MethodStaticContext msc) {
+        AREDispatch.NativeLog (msc.thisMethodFullName ());
+    }
+    @Before (
+        marker = BodyMarker.class,
+        scope = "*.*.defineClass")
+    public static void defineClass (final MethodStaticContext msc) {
+        AREDispatch.NativeLog (msc.thisMethodFullName ());
+    }
+    /*@Before (
         marker = BodyMarker.class,
         scope = "android.hardware.input.IInputManager$Stub$Proxy.*")
     public static void callIMProxy (final MethodStaticContext msc) {
@@ -67,24 +77,24 @@ public class DiSLClass {
 
 
 
-/*
+
     @Befere k
 	marke  = BodyMarker.class,
         scope = "android.hardware.input.InputManager.injectInputEvent")
     public static void injectEventInputManager (final MethodStaticContext msc) {
         ICCAnalysisStub.callServiceInClient (msc.thisMethodFullName ());
     }
-*/
 
-    /*@Before (
+
+    @Before (
         marker = BodyMarker.class,
         scope = "java.lang.System.exit")
     public static void exit () {
  //       AREDispatch.manuallyClose();
-    }*/
+    }
 
 
-/*
+
     @Before (
         marker = BodyMarker.class,
         scope = "android.hardware.input.IInputManager$Stub.onTransact")
@@ -101,7 +111,7 @@ public class DiSLClass {
         ICCAnalysisStub.println (msc.thisMethodFullName ());
         System.out.println (msc.thisMethodFullName ());
     }
-*/
+
     @Before (
         marker = BodyMarker.class,
         scope = "com.android.calculator2.Calculator.onCreate")
@@ -154,7 +164,7 @@ public class DiSLClass {
         AREDispatch.NativeLog (msc.thisMethodFullName ());
         ICCAnalysisStub.callService (
             msc.thisMethodFullName (), Binder.getCallingPid ());
-    }
+    }*/
 
 //    @Before (
 //        marker = BodyMarker.class,

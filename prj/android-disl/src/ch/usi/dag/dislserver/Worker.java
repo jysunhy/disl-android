@@ -258,10 +258,18 @@ public class Worker extends Thread {
                             if (code == null) {
                                 if (debug) {
                                     System.out.println (className
-                                        + " cannot be instrumented");
+                                        + " need not be instrumented");
                                 }
                                 code = bout.toByteArray ();
                             }
+
+                            final byte [] ori = bytecodeMap.get (className.replace ('/', '.').replace ('/', '.'));
+                            if(ori != null) {
+                                if(!Arrays.equals (ori, code)){
+                                    System.out.println ("SAME NAME, DIFFERENT CODE FOR "+className.replace ('/', '.'));
+                                }
+                            }
+
                             bytecodeMap.put (className.replace ('/', '.'), code);
                         }
                         bin = new ByteArrayInputStream (code);
