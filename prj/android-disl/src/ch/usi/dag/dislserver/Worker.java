@@ -66,8 +66,8 @@ public class Worker extends Thread {
 
     private static final String PROP_BUILTIN_LIB_PATH = "builtin.lib";
 
-    private static final String builtinLibPath = System.getProperty (
-        PROP_INSTR_LIB_PATH, "lib/built-in.jar");
+    private static final String builtinLibPath = "lib/built-in.jar";
+	//System.getProperty (PROP_INSTR_LIB_PATH, "lib/built-in.jar");
 
     // the code to store the java bytecode which may be needed by the SVM server
     // TODO use DislClass+jarname as cache entry
@@ -108,6 +108,8 @@ public class Worker extends Thread {
 
     private void putExtraClassesIntoJar (
         final ZipOutputStream zos, final JarFile instrlib) throws IOException {
+		System.out.println("IN PUT EXTRA CLASSES");
+		try{
         int bytesRead;
         final byte [] buffer = new byte [8192];
         final Enumeration <JarEntry> i_entries = instrlib.entries ();
@@ -115,6 +117,7 @@ public class Worker extends Thread {
 
             final ZipEntry cur = i_entries.nextElement ();
             final String curName = cur.getName ();
+			System.out.println("this is "+curName);
             if (curName.startsWith ("META-INF")) {
                 continue;
             }
@@ -149,6 +152,9 @@ public class Worker extends Thread {
                 zos.closeEntry ();
             }
         }
+		}catch(Exception e){
+			e.printStackTrace();
+		}
     }
 
 

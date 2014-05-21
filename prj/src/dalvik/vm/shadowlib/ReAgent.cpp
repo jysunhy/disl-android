@@ -91,11 +91,17 @@ void send_once();
 
 static bool isDecided = false;
 
+void DebugFunction(JNIEnv* env){
+	int tid = dvmThreadSelf()->threadId;
+	int tid2 = ((JNIEnvExt*)env)->envThreadId;
+	ALOG(LOG_INFO,"NATIVELOG", "in %s tid: %d, tid2: %d, %s",__FUNCTION__, tid, tid2, tid==tid2?"EQUAL":"DIFF" );
+}
 // ******************* AREDispatch methods *******************
 
 void vmEndHook(JavaVM* vm);
 void NativeLog(JNIEnv * jni_env, jclass this_class, jstring text){
 	const char * str = 	jni_env->GetStringUTFChars(text, NULL);
+	DebugFunction(jni_env);
 	ALOG(LOG_INFO,"NATIVELOG", "LOG: %s in %d tid: %d",str, getpid(),dvmThreadSelf()->threadId );
 	jni_env->ReleaseStringUTFChars(text,str);
 }
@@ -139,6 +145,7 @@ void _mapPID(int pid, const char* pname){
 
 jshort registerMethod
 (JNIEnv * jni_env, jclass this_class, jstring analysis_method_desc) {
+	DebugFunction(jni_env);
 	jsize str_len = jni_env->GetStringUTFLength(analysis_method_desc);
 	const char * str = 	jni_env->GetStringUTFChars(analysis_method_desc, NULL);
 	char tmp[100];
@@ -187,6 +194,7 @@ void onFork
 
 void analysisStart__S
 (JNIEnv * jni_env, jclass this_class, jshort analysis_method_id) {
+	DebugFunction(jni_env);
 	if(DEBUGMODE)
 		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis start for method %d, tid:%d", (int)analysis_method_id,dvmThreadSelf()->threadId);
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, 0, analysis_method_id);
@@ -195,6 +203,7 @@ void analysisStart__S
 void analysisStart__SB
 (JNIEnv * jni_env, jclass this_class, jshort analysis_method_id,
  jbyte ordering_id) {
+	DebugFunction(jni_env);
 	if(DEBUGMODE)
 		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis start for method %d with ordering %d", (int)analysis_method_id, (int)ordering_id);
 	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, ordering_id, analysis_method_id);
@@ -205,12 +214,14 @@ void manuallyOpen
 }
 void manuallyClose
 (JNIEnv * jni_env, jclass this_class) {
+	DebugFunction(jni_env);
 	if(DEBUGMODE)
-	ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d", getpid());
+		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: close connection at %d", getpid());
 	vmEndHook(NULL);
 }
 void analysisEnd
 (JNIEnv * jni_env, jclass this_class) {
+	DebugFunction(jni_env);
 	if(DEBUGMODE)
 		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis end for method in %d", dvmThreadSelf()->threadId);
 
@@ -225,41 +236,49 @@ void analysisEnd
 
 void sendBoolean
 (JNIEnv * jni_env, jclass this_class, jboolean to_send) {
+	DebugFunction(jni_env);
 	remote.SendJboolean(dvmThreadSelf()->threadId, to_send);
 }
 
 void sendByte
 (JNIEnv * jni_env, jclass this_class, jbyte to_send) {
+	DebugFunction(jni_env);
 	remote.SendJbyte(dvmThreadSelf()->threadId, to_send);
 }
 
 void sendChar
 (JNIEnv * jni_env, jclass this_class, jchar to_send) {
+	DebugFunction(jni_env);
 	remote.SendJchar(dvmThreadSelf()->threadId, to_send);
 }
 
 void sendShort
 (JNIEnv * jni_env, jclass this_class, jshort to_send) {
+	DebugFunction(jni_env);
 	remote.SendJshort(dvmThreadSelf()->threadId, to_send);
 }
 
 void sendInt
 (JNIEnv * jni_env, jclass this_class, jint to_send) {
+	DebugFunction(jni_env);
 	remote.SendJint(dvmThreadSelf()->threadId, to_send);
 }
 
 void sendLong
 (JNIEnv * jni_env, jclass this_class, jlong to_send) {
+	DebugFunction(jni_env);
 	remote.SendJlong(dvmThreadSelf()->threadId, to_send);
 }
 
 void sendFloat
 (JNIEnv * jni_env, jclass this_class, jfloat to_send) {
+	DebugFunction(jni_env);
 	remote.SendJfloat(dvmThreadSelf()->threadId, to_send);
 }
 
 void sendDouble
 (JNIEnv * jni_env, jclass this_class, jdouble to_send) {
+	DebugFunction(jni_env);
 	remote.SendJdouble(dvmThreadSelf()->threadId, to_send);
 }
 
@@ -315,6 +334,7 @@ jlong SetAndGetNetref(Object* obj){
 
 void sendObject
 (JNIEnv * jni_env, jclass this_class, jobject to_send) {
+	DebugFunction(jni_env);
 	ScopedMutex mtx(&gl_mtx);
 	Thread *self = dvmThreadSelf();
 	Object* obj = dvmDecodeIndirectRef(self, to_send);
@@ -331,6 +351,7 @@ void sendObject
 
 void sendObjectPlusData
 (JNIEnv * jni_env, jclass this_class, jobject to_send) {
+	DebugFunction(jni_env);
 	if(DEBUGMODE)
 		ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN %s", __FUNCTION__);
 	ScopedMutex mtx(&gl_mtx);
@@ -553,6 +574,24 @@ static void * send_thread_loop(void * obj) {
 
 	return NULL;
 }
+
+int clientTransactionStart(int pid, int tid){
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) starts new transaction", getpid(), dvmThreadSelf()->threadId);
+	return dvmThreadSelf()->threadId;
+};
+int serverTransactionRecv(int pid, int tid, int from_pid, int from_tid){
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SERVER(%d-%d) receives transaction from client(%d-%d)", getpid(), dvmThreadSelf()->threadId, from_pid, from_tid);
+	return dvmThreadSelf()->threadId;
+};
+int serverReplySent(int pid, int tid){
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SERVER(%d-%d) sent reply to client", getpid(), dvmThreadSelf()->threadId);
+	return dvmThreadSelf()->threadId;
+};
+int clientReplyRecv(int pid, int tid, int from_pid, int from_tid){
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) receives reply from server(%d-%d)", getpid(), dvmThreadSelf()->threadId, from_pid, from_tid);
+	return dvmThreadSelf()->threadId;
+};
+
 jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 	pthread_mutex_init(&gl_mtx, NULL);
 	isZygote = true;
@@ -571,6 +610,15 @@ jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 	gDvm.freeObjHook = &objFreeHook;
 	gDvm.threadEndHook = &threadEndHook;
 	gDvm.vmEndHook = &vmEndHook;
+
+	gDvm.clientTransactionStart = clientTransactionStart;
+	gDvm.serverTransactionRecv = serverTransactionRecv;
+	gDvm.serverReplySent = serverReplySent;
+	gDvm.clientReplyRecv = clientReplyRecv;
+
+	char* addr = (((char*)(&gDvm))+sizeof(gDvm));
+	ALOG(LOG_DEBUG,"TESTTMP","ADDR %p-%p %p-%p %p-%p %p-%p",gDvm.clientReplyRecv, *(void **)(addr-8),  gDvm.serverReplySent, *(void**)(addr-12), gDvm.serverTransactionRecv, *(void**)(addr-16), gDvm.clientTransactionStart, *(void**)(addr-20));
+	
 	//HOOK TAHT NOT USED
 	//gDvm.classInitHook = &classInitHook;
 	//gDvm.classfileLoadHook = &classfileLoadHook;

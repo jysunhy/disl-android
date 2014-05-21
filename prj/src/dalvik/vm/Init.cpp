@@ -50,6 +50,7 @@ static bool initZygote();
 
 /* global state */
 struct DvmGlobals gDvm;
+int sizeofDvmGlobals = sizeof(gDvm);
 struct DvmJniGlobals gDvmJni;
 
 /* JIT-specific global state */

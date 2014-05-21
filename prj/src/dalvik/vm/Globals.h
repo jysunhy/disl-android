@@ -727,6 +727,8 @@ struct DvmGlobals {
 
     /* String pointed here will be deposited on the stack frame of dvmAbort */
     const char *lastMessage;
+	bool		bypass;
+	pthread_mutex_t s_mtx;
     void        (*shadowHook)(Object*);
     void        (*newObjHook)(Object*);
     void        (*freeObjHook)(Object*, Thread*);
@@ -736,11 +738,14 @@ struct DvmGlobals {
     void        (*vmInitHook)(JavaVM*);
     int        (*classfileLoadHook)(const char*, int);
     int        (*classInitHook)(ClassObject* clazz);
-	bool		bypass;
-	pthread_mutex_t s_mtx;
+    int			(*clientTransactionStart)(int pid, int tid);
+    int        (*serverTransactionRecv)(int pid, int tid, int from_pid, int from_tid);
+    int        (*serverReplySent)(int pid, int tid);
+    int        (*clientReplyRecv)(int pid, int tid, int from_pid, int from_tid);
 };
 
 extern struct DvmGlobals gDvm;
+extern int sizeofDvmGlobals;
 
 #if defined(WITH_JIT)
 
