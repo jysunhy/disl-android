@@ -182,7 +182,7 @@ void binder_send_reply(struct binder_state *bs,
     data.txn.sender_tid = 1;
     data.txn.sender_pid = getpid();
     data.txn.transaction_id = session.transaction_id;
-	ALOG(LOG_DEBUG,"BINDER","CONTEXT(%d): send reply for transaction(%d)",getpid(), session.transaction_id);
+	ALOG(LOG_DEBUG,"BINDER","CONTEXT(%d:1): send reply for transaction(%d)",getpid(), session.transaction_id);
     if (status) {
         data.txn.flags = TF_STATUS_CODE;
         data.txn.data_size = sizeof(int);
@@ -231,7 +231,7 @@ int binder_parse(struct binder_state *bs, struct binder_io *bio,
                 return -1;
             }
 			session.transaction_id = txn->transaction_id;
-			ALOG(LOG_DEBUG,"BINDER", "CONTEXT(%d): receive transaction(%d) from PID-TID %d:%d", getpid(), txn->transaction_id, txn->sender_pid, txn->sender_tid);
+			ALOG(LOG_DEBUG,"BINDER", "CONTEXT(%d:1): receive transaction(%d) from PID-TID %d:%d", getpid(), txn->transaction_id, txn->sender_pid, txn->sender_tid);
             binder_dump_txn(txn);
             if (func) {
                 unsigned rdata[256/4];
@@ -253,7 +253,7 @@ int binder_parse(struct binder_state *bs, struct binder_io *bio,
                 ALOGE("parse: reply too small!\n");
                 return -1;
             }
-			ALOG(LOG_DEBUG,"BINDER","CONTEXT(%d): receive reply(%d) from PID-TID %d:%d", getpid(), txn->transaction_id, txn->sender_pid, txn->sender_tid);
+			ALOG(LOG_DEBUG,"BINDER","CONTEXT(%d:1): receive reply(%d) from PID-TID %d:%d", getpid(), txn->transaction_id, txn->sender_pid, txn->sender_tid);
             binder_dump_txn(txn);
             if (bio) {
                 bio_init_from_txn(bio, txn);
@@ -342,7 +342,7 @@ int binder_call(struct binder_state *bs,
     writebuf.txn.sender_tid = 1;
     writebuf.txn.transaction_id = ++local_transaction_cnt;
 
-	ALOG(LOG_DEBUG,"BINDER", "CONTEXT(%d): send transaction(%d)", getpid(), local_transaction_cnt);
+	ALOG(LOG_DEBUG,"BINDER", "CONTEXT(%d:1): send transaction(%d)", getpid(), local_transaction_cnt);
 
     bwr.write_size = sizeof(writebuf);
     bwr.write_consumed = 0;

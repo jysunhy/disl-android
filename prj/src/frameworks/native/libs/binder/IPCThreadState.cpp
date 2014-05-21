@@ -722,9 +722,9 @@ status_t IPCThreadState::waitForResponse(Parcel *reply, status_t *acquireResult)
 				if(hook_addr)
 					curTID = (*hook_addr)(getpid(),mMyThreadId, tr.sender_pid, tr.sender_tid);
 				if(reply)
-					ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) receives reply from PID-TID %d:%d for transaction %d", getpid(), curTID, tr.sender_pid, tr.sender_tid, tr.transaction_id);
+					ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) receives reply from (%d:%d) for transaction(%d)", getpid(), curTID, tr.sender_pid, tr.sender_tid, tr.transaction_id);
 				else
-					ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) receives reply(empty) from PID-TID %d:%d for transaction %d", getpid(), curTID, tr.sender_pid, tr.sender_tid, tr.transaction_id);
+					ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) receives reply(empty) from (%d:%d) for transaction(%d)", getpid(), curTID, tr.sender_pid, tr.sender_tid, tr.transaction_id);
 				//}
 	//			ALOG(LOG_DEBUG,"BINDER","try print gDvm %p, %s",&gDvm, *((char**)&gDvm));
                 ALOG_ASSERT(err == NO_ERROR, "Not enough command data for brREPLY");
@@ -1094,9 +1094,9 @@ status_t IPCThreadState::executeCommand(int32_t cmd)
 			if(hook_addr)
 				curTID = (*hook_addr)(getpid(),mMyThreadId,tr.sender_pid, tr.sender_tid);
 			if(hook_addr)
-				ALOG(LOG_DEBUG,"BINDER","Server\t(%d:%d) receives transaction(%d) From PID-TID  %d:%d", getpid(), curTID , tr.transaction_id, tr.sender_pid, tr.sender_tid);
+				ALOG(LOG_DEBUG,"BINDER","Server\t(%d:%d) receives transaction(%d) From PID-TID (%d:%d)", getpid(), curTID , tr.transaction_id, tr.sender_pid, tr.sender_tid);
 			else
-				ALOG(LOG_DEBUG,"BINDER","Native Server\t(%d:%d) receives transaction(%d) From PID-TID  %d:%d", getpid(), curTID , tr.transaction_id, tr.sender_pid, tr.sender_tid);
+				ALOG(LOG_DEBUG,"BINDER","Native Server\t(%d:%d) receives transaction(%d) From PID-TID (%d:%d)", getpid(), curTID , tr.transaction_id, tr.sender_pid, tr.sender_tid);
 
             if ((tr.flags & TF_ONE_WAY) == 0) {
                 LOG_ONEWAY("Sending reply to %d!", mCallingPid);
