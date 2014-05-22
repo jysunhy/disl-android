@@ -363,14 +363,14 @@ service adbd /sbin/adbd
 on property:ro.kernel.qemu=1
     start adbd
 
-service instrumentserver /sbin/instrumentserver
+service instrumentserver /system/bin/forwarder
     class core
     disabled
 
 on property:ro.kernel.qemu=1
     start instrumentserver
 
-service testclient /sbin/testclient
+service testclient /system/bin/forwarder2
     class core
     disabled
 
