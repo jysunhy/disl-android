@@ -28,6 +28,8 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import java.security.*;
+
 import ch.usi.dag.disl.DiSL;
 import ch.usi.dag.disl.exception.DiSLException;
 import ch.usi.dag.disl.util.Constants;
@@ -47,6 +49,7 @@ public class Worker extends Thread {
         PROP_PKG_BLACKLIST, "pkg.blacklist");
 
     private String blacklist = ""; // content read from PKG_BLACKLIST
+	private boolean cacheUsed = true;
 
     // the file containging the names of a list of process names that will be
     // observed
@@ -72,6 +75,7 @@ public class Worker extends Thread {
     // the code to store the java bytecode which may be needed by the SVM server
     // TODO use DislClass+jarname as cache entry
     private static final ConcurrentHashMap <String, byte []> bytecodeMap = new ConcurrentHashMap <String, byte []> ();
+    private static final ConcurrentHashMap <String, byte []> cacheMap = new ConcurrentHashMap <String, byte[]> ();
 
     // not used, but may be needed if we want to set a flag to switch between
     // instrument the core.jar or not
@@ -105,6 +109,18 @@ public class Worker extends Thread {
         this.disl = disl;
     }
 
+	//hash for speed up of duplicate instrumentation
+	//current DiSL class cannot be changed during a single run
+	//in future, if it can be changed during run, we should add also the DiSLClass bytecode as cacheHashKey
+	private String getCacheHash(byte[] bcode/*, byte[] instrcode*/){
+		try{
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			return Arrays.toString(md.digest(bcode));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return Arrays.toString(bcode);
+	}
 
     private void putExtraClassesIntoJar (
         final ZipOutputStream zos, final JarFile instrlib) throws IOException {
@@ -134,7 +150,6 @@ public class Worker extends Thread {
                             boutinstr.write (buffer, 0, bytesRead);
                         }
                         zos.write (boutinstr.toByteArray (), 0, boutinstr.size ());
-
                         bytecodeMap.put (
                             curClassName.replace ('/', '.'),
                             boutinstr.toByteArray ());
@@ -157,7 +172,6 @@ public class Worker extends Thread {
 		}
     }
 
-
     private byte [] instrumentJar (final String jarName, final byte [] dexCode)
     throws IOException,
     FileNotFoundException {
@@ -165,6 +179,15 @@ public class Worker extends Thread {
             System.out.println (jarName);
         }
         byte [] instrClass = null;
+		if(cacheUsed){
+			instrClass = cacheMap.get(getCacheHash(dexCode));
+			if(instrClass != null) {
+		        System.out.println (jarName + " "+getCacheHash(dexCode) + " hits cache");
+				return instrClass;
+			}
+		}
+		
+
         // create tmp file in /tmp
         final File dex2JarFile = File.createTempFile (
             jarName, ".tmp");
@@ -357,6 +380,10 @@ public class Worker extends Thread {
         outputDex.deleteOnExit ();
         realJar.deleteOnExit ();
         dex2JarFile.deleteOnExit ();
+
+		if(cacheUsed){
+			cacheMap.put(getCacheHash(dexCode), instrClass);
+		}
         return instrClass;
     }
 
