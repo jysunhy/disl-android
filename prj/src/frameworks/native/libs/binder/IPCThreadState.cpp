@@ -717,10 +717,10 @@ status_t IPCThreadState::waitForResponse(Parcel *reply, status_t *acquireResult)
                 binder_transaction_data tr;
                 err = mIn.read(&tr, sizeof(tr));
 				char* addr = (((char*)(&gDvm))+sizeofDvmGlobals);
-				int (*hook_addr)(int,int,int,int) = (int(*)(int,int,int,int))(*(void**)(addr-8));
+				int (*hook_addr)(int,int,int) = (int(*)(int,int,int))(*(void**)(addr-8));
 				int curTID = mMyThreadId;
 				if(hook_addr)
-					curTID = (*hook_addr)(getpid(),mMyThreadId, tr.sender_pid, tr.sender_tid);
+					curTID = (*hook_addr)(tr.transaction_id, tr.sender_pid, tr.sender_tid);
 				if(reply)
 					ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) receives reply from (%d:%d) for transaction(%d)", getpid(), curTID, tr.sender_pid, tr.sender_tid, tr.transaction_id);
 				else
@@ -874,14 +874,14 @@ status_t IPCThreadState::writeTransactionData(int32_t cmd, uint32_t binderFlags,
     int32_t handle, uint32_t code, const Parcel& data, status_t* statusBuffer)
 {
 	char* addr = (((char*)(&gDvm))+sizeofDvmGlobals);
-	int (*hook_addr)(int,int); 
+	int (*hook_addr)(int); 
 	if(cmd == BC_REPLY)
-		hook_addr= (int(*)(int,int))(*(void**)(addr-12));
+		hook_addr= (int(*)(int))(*(void**)(addr-12));
 	else
-		hook_addr= (int(*)(int,int))(*(void**)(addr-20));
+		hook_addr= (int(*)(int))(*(void**)(addr-20));
 	int curTID = mMyThreadId;
 	if(hook_addr)
-		curTID = (*hook_addr)(getpid(), curTID);
+		curTID = (*hook_addr)(cmd==BC_REPLY?session_transaction_id:++local_transaction_cnt);
 
     binder_transaction_data tr;
 
@@ -900,7 +900,7 @@ status_t IPCThreadState::writeTransactionData(int32_t cmd, uint32_t binderFlags,
 		else
 			ALOG(LOG_DEBUG,"BINDER","Native Server\t(%d:%d) sends reply for transaction(%d)", getpid(), curTID, session_transaction_id);
 	}else{
-		tr.transaction_id = ++local_transaction_cnt;
+		tr.transaction_id = local_transaction_cnt;
 		if(hook_addr)
 			ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) starts transaction(%d)", getpid(), curTID, local_transaction_cnt);
 		else
@@ -1089,10 +1089,10 @@ status_t IPCThreadState::executeCommand(int32_t cmd)
             
 			int curTID = mMyThreadId;
 			char* addr = (((char*)(&gDvm))+sizeofDvmGlobals);
-			int (*hook_addr)(int,int,int,int) = (int(*)(int,int,int,int))(*(void**)(addr-16));
+			int (*hook_addr)(int,int,int) = (int(*)(int,int,int))(*(void**)(addr-16));
 			session_transaction_id = tr.transaction_id;
 			if(hook_addr)
-				curTID = (*hook_addr)(getpid(),mMyThreadId,tr.sender_pid, tr.sender_tid);
+				curTID = (*hook_addr)(session_transaction_id, tr.sender_pid, tr.sender_tid);
 			if(hook_addr)
 				ALOG(LOG_DEBUG,"BINDER","Server\t(%d:%d) receives transaction(%d) From PID-TID (%d:%d)", getpid(), curTID , tr.transaction_id, tr.sender_pid, tr.sender_tid);
 			else

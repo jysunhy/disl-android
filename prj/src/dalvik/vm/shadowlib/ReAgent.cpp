@@ -575,22 +575,26 @@ static void * send_thread_loop(void * obj) {
 	return NULL;
 }
 
-int clientTransactionStart(int pid, int tid){
+int clientTransactionStart(int transaction_id){
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) starts new transaction", getpid(), dvmThreadSelf()->threadId);
+	ALOG(LOG_DEBUG,"CFG","%d %d %d 0", getpid(), dvmThreadSelf()->threadId, transaction_id);
 	return dvmThreadSelf()->threadId;
-};
-int serverTransactionRecv(int pid, int tid, int from_pid, int from_tid){
+}
+int serverTransactionRecv(int transaction_id, int from_pid, int from_tid){
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SERVER(%d-%d) receives transaction from client(%d-%d)", getpid(), dvmThreadSelf()->threadId, from_pid, from_tid);
+	ALOG(LOG_DEBUG,"CFG","%d %d %d 1 %d %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId);
 	return dvmThreadSelf()->threadId;
-};
-int serverReplySent(int pid, int tid){
+}
+int serverReplySent(int transaction_id){
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SERVER(%d-%d) sent reply to client", getpid(), dvmThreadSelf()->threadId);
+	//ALOG(LOG_DEBUG,"CFG","%d %d %d 2", getpid(), dvmThreadSelf()->threadId, transaction_id);
 	return dvmThreadSelf()->threadId;
-};
-int clientReplyRecv(int pid, int tid, int from_pid, int from_tid){
+}
+int clientReplyRecv(int transaction_id, int from_pid, int from_tid){
 	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) receives reply from server(%d-%d)", getpid(), dvmThreadSelf()->threadId, from_pid, from_tid);
+	ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid);
 	return dvmThreadSelf()->threadId;
-};
+}
 
 jint ShadowLib_Zygote_OnLoad(JavaVM* vm, void* reserved){
 	pthread_mutex_init(&gl_mtx, NULL);
