@@ -40,7 +40,7 @@ public abstract class DiSLServer {
 	public static void main (final String [] args) {
 		try {
 			// use dynamic bypass
-			disl = new DiSL (bypass);
+			//disl = new DiSL (bypass);
 
 			if (debug) {
 				System.out.println ("DiSL: starting instrumentation server...");
@@ -67,7 +67,8 @@ public abstract class DiSLServer {
 
 				final NetMessageReader sc = new NetMessageReader (newClient);
 				aliveWorkers.incrementAndGet ();
-				new Worker (sc, disl).start ();
+				//new Worker (sc, disl).start ();
+				new Worker (sc, new DiSL(bypass)).start ();
 			}
 
 		} catch (final IOException ioe) {

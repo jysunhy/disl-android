@@ -10,6 +10,7 @@ import java.net.Socket;
 
 import ch.usi.dag.dislreserver.exception.DiSLREServerException;
 import ch.usi.dag.dislreserver.reqdispatch.RequestDispatcher;
+import ch.usi.dag.dislreserver.shadow.ShadowAddressSpace;
 
 
 public abstract class DiSLREServer {
@@ -58,6 +59,7 @@ public abstract class DiSLREServer {
                             requestLoop (socket);
                             socket.close ();
                         } catch (final Throwable throwable) {
+							ShadowAddressSpace.cleanup();
                             reportError (throwable);
                         }
 	                };

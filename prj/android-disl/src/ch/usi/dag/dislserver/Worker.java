@@ -112,14 +112,16 @@ public class Worker extends Thread {
 	//hash for speed up of duplicate instrumentation
 	//current DiSL class cannot be changed during a single run
 	//in future, if it can be changed during run, we should add also the DiSLClass bytecode as cacheHashKey
-	private String getCacheHash(byte[] bcode/*, byte[] instrcode*/){
+	private String getCacheHash(byte[] bcode, byte[] dislclassesHash){
 		try{
 			MessageDigest md = MessageDigest.getInstance("MD5");
-			return Arrays.toString(md.digest(bcode));
+			md.update(bcode);
+			md.update(dislclassesHash);
+			return Arrays.toString(md.digest());
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		return Arrays.toString(bcode);
+		return Arrays.toString(bcode)+Arrays.toString(dislclassesHash);
 	}
 
     private void putExtraClassesIntoJar (
@@ -180,9 +182,10 @@ public class Worker extends Thread {
         }
         byte [] instrClass = null;
 		if(cacheUsed){
-			instrClass = cacheMap.get(getCacheHash(dexCode));
+			String key = getCacheHash(dexCode, disl.dislclassesHash);
+			instrClass = cacheMap.get(key);
 			if(instrClass != null) {
-		        System.out.println (jarName + " "+getCacheHash(dexCode) + " hits cache");
+		        System.out.println (jarName + " "+ key + " hits cache");
 				return instrClass;
 			}
 		}
@@ -382,7 +385,7 @@ public class Worker extends Thread {
         dex2JarFile.deleteOnExit ();
 
 		if(cacheUsed){
-			cacheMap.put(getCacheHash(dexCode), instrClass);
+			cacheMap.put(getCacheHash(dexCode, disl.dislclassesHash), instrClass);
 		}
         return instrClass;
     }

@@ -481,4 +481,9 @@ public class ShadowAddressSpace {
         return shadowAddressSpaces.size () == 0;
     }
 
+
+	public static void cleanup(){
+		shadowAddressSpaces.clear();
+	}
+
 }

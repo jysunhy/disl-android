@@ -1,6 +1,8 @@
 package ch.usi.dag.disl;
 
 import java.io.FileOutputStream;
+import java.security.*;
+import java.util.Arrays;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
@@ -84,6 +86,8 @@ public class DiSL {
 
     private final List<Snippet> snippets;
 
+	public byte[] dislclassesHash;
+
     /**
      * DiSL initialization.
      *
@@ -109,6 +113,24 @@ public class DiSL {
         // *** prepare exclusion set ***
         exclusionSet = ExclusionSet.prepare();
 
+		// *** compute hash ***
+		try{
+        	final List<InputStream> dislClasses_forhash = ClassByteLoader.loadDiSLClasses();
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			if(dislClasses_forhash != null) {
+				byte[] buffer = new byte[1024];
+				int numRead = 0;
+		        for (InputStream classIS : dislClasses_forhash) {
+					while((numRead = classIS.read(buffer))>0) {
+						md.update(buffer,0,numRead);
+					}
+					classIS.close();
+		        }
+				dislclassesHash = md.digest();
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
         // *** load disl classes ***
         final List<InputStream> dislClasses = ClassByteLoader.loadDiSLClasses();
 
