@@ -480,6 +480,7 @@ void threadEndHook(Thread* self){
 void vmEndHook(JavaVM* vm){
 	if(DEBUGMODE)
 		ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","in hook %s for %s", __FUNCTION__, curpname);
+	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","VM instance %s-%d  ended", curpname, getpid());
 
 	if(!gDvm.bypass) {
 		pthread_mutex_lock(&gl_mtx);
@@ -575,24 +576,30 @@ static void * send_thread_loop(void * obj) {
 	return NULL;
 }
 
+int64_t getTimeNsec(){
+	struct timespec now;
+	clock_gettime(CLOCK_MONOTONIC, &now);
+	return (int64_t) now.tv_sec*1000000000LL + now.tv_nsec;
+}
+
 int clientTransactionStart(int transaction_id){
-	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) starts new transaction", getpid(), dvmThreadSelf()->threadId);
-	ALOG(LOG_DEBUG,"CFG","%d %d %d 0", getpid(), dvmThreadSelf()->threadId, transaction_id);
+	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) starts new transaction", getpid(), dvmThreadSelf()->threadId);
+	ALOG(LOG_DEBUG,"CFG","%d %d %d 0 %llu", getpid(), dvmThreadSelf()->threadId, transaction_id, getTimeNsec());
 	return dvmThreadSelf()->threadId;
 }
 int serverTransactionRecv(int transaction_id, int from_pid, int from_tid){
-	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SERVER(%d-%d) receives transaction from client(%d-%d)", getpid(), dvmThreadSelf()->threadId, from_pid, from_tid);
-	ALOG(LOG_DEBUG,"CFG","%d %d %d 1 %d %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId);
+	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SERVER(%d-%d) receives transaction from client(%d-%d)", getpid(), dvmThreadSelf()->threadId, from_pid, from_tid);
+	ALOG(LOG_DEBUG,"CFG","%d %d %d 1 %d %d %llu", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, getTimeNsec());
 	return dvmThreadSelf()->threadId;
 }
 int serverReplySent(int transaction_id){
-	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SERVER(%d-%d) sent reply to client", getpid(), dvmThreadSelf()->threadId);
+	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SERVER(%d-%d) sent reply to client", getpid(), dvmThreadSelf()->threadId);
 	//ALOG(LOG_DEBUG,"CFG","%d %d %d 2", getpid(), dvmThreadSelf()->threadId, transaction_id);
 	return dvmThreadSelf()->threadId;
 }
 int clientReplyRecv(int transaction_id, int from_pid, int from_tid){
-	ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) receives reply from server(%d-%d)", getpid(), dvmThreadSelf()->threadId, from_pid, from_tid);
-	ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid);
+	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) receives reply from server(%d-%d)", getpid(), dvmThreadSelf()->threadId, from_pid, from_tid);
+	ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d %llu", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, getTimeNsec());
 	return dvmThreadSelf()->threadId;
 }
 
