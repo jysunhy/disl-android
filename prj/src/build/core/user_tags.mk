@@ -34,8 +34,6 @@ GRANDFATHERED_USER_MODULES += \
 	AdbWinApi \
 	AdbWinUsbApi \
 	adbd \
-	instrumentserver \
-	testclient \
 	aidl \
 	am \
 	android \

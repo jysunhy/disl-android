@@ -303,6 +303,9 @@ struct Thread {
     pthread_mutex_t   callbackMutex;
     SafePointCallback callback;
     void*             callbackArg;
+
+	int	transaction_info_flag;
+	int info_flag;
 };
 
 /* start point for an internal thread; mimics pthread args */

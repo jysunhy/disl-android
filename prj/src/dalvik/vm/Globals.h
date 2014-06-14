@@ -738,10 +738,10 @@ struct DvmGlobals {
     void        (*vmInitHook)(JavaVM*);
     int        (*classfileLoadHook)(const char*, int);
     int        (*classInitHook)(ClassObject* clazz);
-    int			(*clientTransactionStart)(int transaction_id);
-    int        (*serverTransactionRecv)(int transaction_id, int from_pid, int from_tid);
-    int        (*serverReplySent)(int transaction_id);
-    int        (*clientReplyRecv)(int transaction_id, int from_pid, int from_tid);
+    int			(*clientTransactionStart)(int transaction_id, bool isOneway);
+    int        (*serverTransactionRecv)(int transaction_id, int from_pid, int from_tid, bool isOneway);
+    int        (*serverReplySent)(int transaction_id, int from_pid, int from_tid, bool isOneway);
+    int        (*clientReplyRecv)(int transaction_id, int from_pid, int from_tid, bool isOneway);
 };
 
 extern struct DvmGlobals gDvm;

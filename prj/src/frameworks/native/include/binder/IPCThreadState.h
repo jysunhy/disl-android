@@ -122,6 +122,8 @@ private:
             int32_t             mLastTransactionBinderFlags;
 			int					session_transaction_id;
 			int					local_transaction_cnt;
+			int					session_pid;
+			int					session_tid;
 };
 
 }; // namespace android

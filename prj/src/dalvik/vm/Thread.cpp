@@ -872,6 +872,9 @@ static Thread* allocThread(int interpStackSize)
     /* One-time setup for interpreter/JIT state */
     dvmInitInterpreterState(thread);
 
+	thread->transaction_info_flag = 0;
+	thread->info_flag = 0;
+
     return thread;
 }
 
