@@ -60,6 +60,7 @@ public class AREDispatch {
 	public static native void mapPID(String name);
 
 	public static native void NativeLog(String text);
+	public static native void CallAPI(int text);
 	public static native void test();
 
 	//public static native void onFork(int parent);
