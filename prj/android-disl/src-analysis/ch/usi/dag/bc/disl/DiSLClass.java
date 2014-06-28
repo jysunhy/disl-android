@@ -62,9 +62,15 @@ public class DiSLClass {
             bcc.thisMethodFullNameWithDesc (), branches);
     }
 
-    @Before (marker = BodyMarker.class, scope="MainActivity.substraction", order = 2)
-    public static void printAnalysisResult () {
-        BCAnalysisStub.printResult ();
-    }
+//    @Before (marker = BodyMarker.class, scope="System.exit")
+//    public static void printAnalysisResult_0 () {
+//        AREDispatch.NativeLog ("EXIT from System.exit");
+//        BCAnalysisStub.printResult ();
+//    }
+//
+//    @Before (marker = BodyMarker.class, scope="MainActivity.substraction", order = 2)
+//    public static void printAnalysisResult () {
+//        BCAnalysisStub.printResult ();
+//    }
 
 }

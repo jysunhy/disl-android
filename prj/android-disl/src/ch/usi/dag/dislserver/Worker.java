@@ -3,6 +3,8 @@ package ch.usi.dag.dislserver;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,6 +17,7 @@ import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -27,8 +30,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
-import java.security.*;
 
 import ch.usi.dag.disl.DiSL;
 import ch.usi.dag.disl.exception.DiSLException;
@@ -49,7 +50,8 @@ public class Worker extends Thread {
         PROP_PKG_BLACKLIST, "pkg.blacklist");
 
     private String blacklist = ""; // content read from PKG_BLACKLIST
-	private boolean cacheUsed = true;
+
+    private final boolean cacheUsed = true;
 
     // the file containging the names of a list of process names that will be
     // observed
@@ -69,13 +71,16 @@ public class Worker extends Thread {
 
     private static final String PROP_BUILTIN_LIB_PATH = "builtin.lib";
 
-    private static final String builtinLibPath = "lib/built-in.jar";
-	//System.getProperty (PROP_INSTR_LIB_PATH, "lib/built-in.jar");
+    private static final String builtinLibPath = "lib/built-in-emma.jar";
+    //private static final String builtinLibPath = "lib/built-in.jar";
+
+    // System.getProperty (PROP_INSTR_LIB_PATH, "lib/built-in.jar");
 
     // the code to store the java bytecode which may be needed by the SVM server
     // TODO use DislClass+jarname as cache entry
     private static final ConcurrentHashMap <String, byte []> bytecodeMap = new ConcurrentHashMap <String, byte []> ();
-    private static final ConcurrentHashMap <String, byte []> cacheMap = new ConcurrentHashMap <String, byte[]> ();
+
+    private static final ConcurrentHashMap <String, byte []> cacheMap = new ConcurrentHashMap <String, byte []> ();
 
     // not used, but may be needed if we want to set a flag to switch between
     // instrument the core.jar or not
@@ -109,91 +114,273 @@ public class Worker extends Thread {
         this.disl = disl;
     }
 
-	//hash for speed up of duplicate instrumentation
-	//current DiSL class cannot be changed during a single run
-	//in future, if it can be changed during run, we should add also the DiSLClass bytecode as cacheHashKey
-	private String getCacheHash(byte[] bcode, byte[] dislclassesHash){
-		try{
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			md.update(bcode);
-			md.update(dislclassesHash);
-			return Arrays.toString(md.digest());
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		return Arrays.toString(bcode)+Arrays.toString(dislclassesHash);
-	}
+
+    // hash for speed up of duplicate instrumentation
+    // current DiSL class cannot be changed during a single run
+    // in future, if it can be changed during run, we should add also the
+    // DiSLClass bytecode as cacheHashKey
+    private String getCacheHash (final byte [] bcode, final byte [] dislclassesHash) {
+        try {
+            final MessageDigest md = MessageDigest.getInstance ("MD5");
+            md.update (bcode);
+            md.update (dislclassesHash);
+            return Arrays.toString (md.digest ());
+        } catch (final Exception e) {
+            e.printStackTrace ();
+        }
+        return Arrays.toString (bcode) + Arrays.toString (dislclassesHash);
+    }
+
 
     private void putExtraClassesIntoJar (
-        final ZipOutputStream zos, final JarFile instrlib) throws IOException {
-		System.out.println("IN PUT EXTRA CLASSES");
-		try{
-        int bytesRead;
-        final byte [] buffer = new byte [8192];
-        final Enumeration <JarEntry> i_entries = instrlib.entries ();
-        while (i_entries.hasMoreElements ()) {
+        final String originalJarName, final ZipOutputStream zos ,
+        final String extraClassesJarName)
+    throws IOException {
+        final JarFile originalJar = new JarFile (originalJarName);
+        final JarFile extraClassesJar = new JarFile (extraClassesJarName);
 
-            final ZipEntry cur = i_entries.nextElement ();
-            final String curName = cur.getName ();
-			System.out.println("this is "+curName);
-            if (curName.startsWith ("META-INF")) {
-                continue;
-            }
-            final InputStream curis = instrlib.getInputStream (cur);
-            if (!cur.isDirectory ()) {
-                if (curName.endsWith (".class")) {
-                    try {
-                        final ZipEntry curnze = new ZipEntry (curName);
-                        final String curClassName = curName.substring (
-                            0, curName.lastIndexOf (".class"));
-                        zos.putNextEntry (curnze);
-                        final ByteArrayOutputStream boutinstr = new ByteArrayOutputStream ();
-                        while ((bytesRead = curis.read (buffer)) != -1) {
-                            boutinstr.write (buffer, 0, bytesRead);
-                        }
-                        zos.write (boutinstr.toByteArray (), 0, boutinstr.size ());
-                        bytecodeMap.put (
-                            curClassName.replace ('/', '.'),
-                            boutinstr.toByteArray ());
-                        zos.closeEntry ();
-                    } catch (final Exception e) {
-                        e.printStackTrace ();
-                    }
+
+        Enumeration <JarEntry> entryEnum;
+        entryEnum = originalJar.entries ();
+
+        final byte [] buffer = new byte [1024];
+
+        int bytesRead = 0;
+        while (entryEnum.hasMoreElements ()) {
+            final ZipEntry ze = entryEnum.nextElement ();
+            final String entryName = ze.getName ();
+            if (entryName.equals ("java/lang/Thread.class")) {// Java lang
+                                                              // Thread should
+                                                              // be replaced for
+                                                              // the bypass
+                                                              // field
+                final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
+                final InputStream is = originalJar.getInputStream (ze);
+
+                final ZipEntry nze = new ZipEntry (entryName);
+                zos.putNextEntry (nze);
+                while ((bytesRead = is.read (buffer)) != -1) {
+                    bout.write (buffer, 0, bytesRead);
                 }
+                try {
+                    zos.write (instrument (
+                        "java/lang/Thread", bout.toByteArray ()));
+                } catch (final Exception e) {
+                    e.printStackTrace ();
+                }
+
+                zos.closeEntry ();
             } else {
-                final ZipEntry curnze = new ZipEntry (curName);
-                zos.putNextEntry (curnze);
-                while ((bytesRead = curis.read (buffer)) != -1) {
+
+                final InputStream is = originalJar.getInputStream (ze);
+
+                final ZipEntry nze = new ZipEntry (entryName);
+                zos.putNextEntry (nze);
+                while ((bytesRead = is.read (buffer)) != -1) {
                     zos.write (buffer, 0, bytesRead);
                 }
                 zos.closeEntry ();
             }
+
         }
-		}catch(Exception e){
-			e.printStackTrace();
-		}
+
+        putExtraClassesIntoJar (zos, extraClassesJar);
+
+        originalJar.close ();
+        extraClassesJar.close ();
     }
+
+
+    private void putExtraClassesIntoJar (
+        final ZipOutputStream zos, final JarFile instrlib) throws IOException {
+        try {
+            int bytesRead;
+            final byte [] buffer = new byte [8192];
+            final Enumeration <JarEntry> i_entries = instrlib.entries ();
+            while (i_entries.hasMoreElements ()) {
+
+                final ZipEntry cur = i_entries.nextElement ();
+                final String curName = cur.getName ();
+                if (curName.startsWith ("META-INF")) {
+                    continue;
+                }
+                final InputStream curis = instrlib.getInputStream (cur);
+                if (!cur.isDirectory ()) {
+                    if (curName.endsWith (".class")) {
+                        try {
+                            final ZipEntry curnze = new ZipEntry (curName);
+                            final String curClassName = curName.substring (
+                                0, curName.lastIndexOf (".class"));
+                            zos.putNextEntry (curnze);
+                            final ByteArrayOutputStream boutinstr = new ByteArrayOutputStream ();
+                            while ((bytesRead = curis.read (buffer)) != -1) {
+                                boutinstr.write (buffer, 0, bytesRead);
+                            }
+                            zos.write (
+                                boutinstr.toByteArray (), 0, boutinstr.size ());
+                            bytecodeMap.put (
+                                curClassName.replace ('/', '.'),
+                                boutinstr.toByteArray ());
+                            zos.closeEntry ();
+                        } catch (final Exception e) {
+                            e.printStackTrace ();
+                        }
+                    }
+                } else {
+                    try{
+                    final ZipEntry curnze = new ZipEntry (curName);
+                    zos.putNextEntry (curnze);
+                    while ((bytesRead = curis.read (buffer)) != -1) {
+                        zos.write (buffer, 0, bytesRead);
+                    }
+                    zos.closeEntry ();
+                    }catch(final Exception e){
+                        //e.printStackTrace ();
+                        if(debug) {
+                            System.out.println("duplicate entry, ignore");
+                        }
+                    }
+                }
+            }
+        } catch (final Exception e) {
+            e.printStackTrace ();
+        }
+    }
+
+
+    public static long copy (final String srcFilename, final String
+        outFilename)
+    throws IOException {
+        FileInputStream fis = null;
+        DataInputStream dis = null;
+        FileOutputStream fos = null;
+        DataOutputStream out = null;
+        long size = 0;
+        try {
+            final File srcFile = new File (srcFilename);
+            final File outFile = new File (outFilename);
+            fis = new FileInputStream (srcFile);
+            dis = new DataInputStream (fis);
+            fos = new FileOutputStream (outFile);
+            out = new DataOutputStream (fos);
+            int temp;
+            final byte [] b = new byte [2048];
+            while ((temp = dis.read (b)) != -1) {
+                fos.write (b);
+                size += temp;
+            }
+        } catch (final FileNotFoundException ex) {
+            throw ex;
+        } finally {
+            if (fis != null) {
+                fis.close ();
+            }
+            if (out != null) {
+                out.close ();
+            }
+        }
+        return size;
+    }
+
+
+    private byte [] preInstrumentJar (final String jarName, final byte [] dexCode) {
+        File outputDex = null;
+        File realJar = null;
+        byte [] res = null;
+        try {
+
+            final String instrumentedJarName = "preinstrumented_" + jarName;
+            String originalJarName;
+
+            if(blacklist.contains (jarName.substring (0, jarName.lastIndexOf (".")))) {
+                originalJarName = "originals/" + jarName;
+            }else{
+                originalJarName = "preinstrumented/preinstrumented_" + jarName;
+            }
+
+            //originalJarName = "preinstrumented/preinstrumented_" + jarName;
+
+            if (jarName.equals ("core.jar")) {
+                final FileOutputStream fos = new FileOutputStream (instrumentedJarName);
+                final ZipOutputStream zos = new ZipOutputStream (fos);
+
+                putExtraClassesIntoJar (
+                    originalJarName, zos, builtinLibPath);
+
+                zos.finish ();
+                zos.close ();
+                fos.flush ();
+                fos.close ();
+
+            } else {
+                copy (originalJarName, instrumentedJarName);
+            }
+
+            final Class <?> c = Class.forName ("com.android.dx.command.Main");
+            final java.lang.reflect.Method m = c.getMethod (
+                "main", String [].class);
+            realJar = new File (instrumentedJarName);
+            outputDex = new File (realJar.getName ()
+                + ".dex");
+
+            final List <String> ps = new ArrayList <String> ();
+            if (jarName.equals ("ext.jar")
+                || jarName.equals ("core.jar")) {
+                ps.addAll (Arrays.asList (
+                    "--dex", "--core-library", "--no-strict",
+                    "--output=" + outputDex.getCanonicalPath (),
+                    realJar.getCanonicalPath ()));
+            } else {
+                ps.addAll (Arrays.asList (
+                    "--dex", "--no-strict",
+                    "--output=" + outputDex.getCanonicalPath (),
+                    realJar.getCanonicalPath ()));
+            }
+            m.invoke (
+                null, new Object [] { ps.toArray (new String [0]) });
+            res = Files.readAllBytes (Paths.get (outputDex.getAbsolutePath ()));
+        } catch (final Exception e) {
+            System.err.println ("call dx error");
+            e.printStackTrace ();
+        }
+        // now read the instrumented dex file and pass
+        // return it as byte[]
+        if (!debug) {
+            outputDex.deleteOnExit ();
+        }
+        if (res == null) {
+            return res;
+        }
+        return res;
+
+    }
+
 
     private byte [] instrumentJar (final String jarName, final byte [] dexCode)
     throws IOException,
     FileNotFoundException {
-        if(debug) {
+        if (debug) {
             System.out.println (jarName);
         }
         byte [] instrClass = null;
-		if(cacheUsed){
-			String key = getCacheHash(dexCode, disl.dislclassesHash);
-			instrClass = cacheMap.get(key);
-			if(instrClass != null) {
-		        System.out.println (jarName + " "+ key + " hits cache");
-				return instrClass;
-			}
-		}
-		
+        if (cacheUsed) {
+            final String key = getCacheHash (dexCode, disl.dislclassesHash);
+            instrClass = cacheMap.get (key);
+            if (instrClass != null) {
+                System.out.println (jarName + " " + key + " hits cache");
+                return instrClass;
+            }
+        }
 
-        // create tmp file in /tmp
+        // create tmp file in system temporary files
         final File dex2JarFile = File.createTempFile (
             jarName, ".tmp");
+
+        if (debug) {
+            System.out.println ("tmp file stored in "
+                + dex2JarFile.getAbsolutePath ());
+        }
+
         final DexFileReader reader = new DexFileReader (dexCode);
 
         final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
@@ -295,10 +482,12 @@ public class Worker extends Thread {
                                 code = bout.toByteArray ();
                             }
 
-                            final byte [] ori = bytecodeMap.get (className.replace ('/', '.').replace ('/', '.'));
-                            if(ori != null) {
-                                if(!Arrays.equals (ori, code)){
-                                    System.out.println ("SAME NAME, DIFFERENT CODE FOR "+className.replace ('/', '.'));
+                            final byte [] ori = bytecodeMap.get (className.replace (
+                                '/', '.').replace ('/', '.'));
+                            if (ori != null) {
+                                if (!Arrays.equals (ori, code)) {
+                                    System.out.println ("SAME NAME, DIFFERENT CODE FOR "
+                                        + className.replace ('/', '.'));
                                 }
                             }
 
@@ -384,9 +573,9 @@ public class Worker extends Thread {
         realJar.deleteOnExit ();
         dex2JarFile.deleteOnExit ();
 
-		if(cacheUsed){
-			cacheMap.put(getCacheHash(dexCode, disl.dislclassesHash), instrClass);
-		}
+        if (cacheUsed) {
+            cacheMap.put (getCacheHash (dexCode, disl.dislclassesHash), instrClass);
+        }
         return instrClass;
     }
 
@@ -481,6 +670,8 @@ public class Worker extends Thread {
                             }
                         } else {
                             instrClass = instrumentJar (jarName, dexCode);
+                            //instrClass = preInstrumentJar (jarName, dexCode);
+                            // instrClass = dexCode;
                         }
 
                     }
