@@ -318,6 +318,7 @@ struct binder_transaction {
 	int		from_tid;
 	int		from_pid;
 	int		transaction_id;
+	int		transaction_flag;
 };
 
 static void binder_defer_work(struct binder_proc *proc, int defer);
@@ -1402,6 +1403,7 @@ binder_transaction(struct binder_proc *proc, struct binder_thread *thread,
 	e->debug_id = t->debug_id;
 	t->from_tid = tr->sender_tid;
 	t->transaction_id = tr->transaction_id;
+	t->transaction_flag = tr->transaction_flag;
 	t->from_pid = tr->sender_pid;
 
 	if (binder_debug_mask & BINDER_DEBUG_TRANSACTION) {
@@ -2371,11 +2373,13 @@ retry:
 			tr.sender_pid = task_tgid_nr_ns(sender, current->nsproxy->pid_ns);
 			tr.sender_tid = t->from_tid;
 			tr.transaction_id = t->transaction_id;
+			tr.transaction_flag = t->transaction_flag;
 		} else {
 			//tr.sender_pid = 0;
 			tr.sender_pid = t->from_pid;
 			tr.sender_tid = t->from_tid;
 			tr.transaction_id = t->transaction_id;
+			tr.transaction_flag = t->transaction_flag;
 		}
 
 		tr.data_size = t->buffer->data_size;
