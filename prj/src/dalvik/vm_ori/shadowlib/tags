@@ -1,0 +1,296 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ANALYSIS_QUEUE_SIZE	ReProtocol.h	15;"	d
+APP_STL	Application.mk	/^APP_STL := stlport_static # system|stlport_static|stlport_shared|gnustl_static$/;"	m
+ASSERT	DalvikHeader.h	9;"	d
+ASSERT	Debug.h	10;"	d
+AnalysisEndEvent	ReProtocol.h	/^		bool AnalysisEndEvent(thread_id_type tid){$/;"	f	class:ReProtocol
+AnalysisStartEvent	ReProtocol.h	/^		bool AnalysisStartEvent(thread_id_type tid, ordering_id_type oid, short methodId){$/;"	f	class:ReProtocol
+BUFFER_INIT_SIZE	ReProtocol.h	18;"	d
+BUF_SIZE	Buffer.h	4;"	d
+BaseQueue	ReQueue.h	/^		BaseQueue(){$/;"	f	class:BaseQueue
+BaseQueue	ReQueue.h	/^		BaseQueue(int capacity):q_capacity(capacity),q_occupied(0){$/;"	f	class:BaseQueue
+BaseQueue	ReQueue.h	/^class BaseQueue{$/;"	c
+Buffer	Buffer.h	/^		Buffer(int capacity=BUF_SIZE):buf_capacity(capacity),buf_occupied(0){$/;"	f	class:Buffer
+Buffer	Buffer.h	/^class Buffer{$/;"	c
+Buffer	ReQueue.h	/^		Buffer(int capacity):BaseQueue(capacity){}$/;"	f	class:Buffer
+Buffer	ReQueue.h	/^class Buffer: public BaseQueue{$/;"	c
+CLASS_ID_MASK	Netref.h	/^static const uint64_t CLASS_ID_MASK = 0x3FFFFF;$/;"	v
+CLASS_ID_POS	Netref.h	/^static const uint8_t CLASS_ID_POS = 40;$/;"	v
+CLASS_INSTANCE_MASK	Netref.h	/^static const uint64_t CLASS_INSTANCE_MASK = 0x1;$/;"	v
+CLASS_INSTANCE_POS	Netref.h	/^static const uint8_t CLASS_INSTANCE_POS = 62;$/;"	v
+Connect	Socket.cpp	/^bool Socket::Connect ()$/;"	f	class:Socket
+ConnectionClose	ReProtocol.h	/^		bool ConnectionClose(){$/;"	f	class:ReProtocol
+DEBUG	DalvikHeader.h	13;"	d
+DEBUG	Debug.h	14;"	d
+DEFAULT_LOCK_BUFFER	Lock.h	7;"	d
+DEFAULT_MAP_SIZE	Map.h	9;"	d
+DEFAULT_QUEUE_SIZE	ReQueue.h	7;"	d
+DoubleCapacity	Buffer.h	/^		void DoubleCapacity(){$/;"	f	class:Buffer
+DoubleCapacity	ReQueue.h	/^		void DoubleCapacity(){$/;"	f	class:Buffer
+Duplicate	ReQueue.h	/^		Buffer* Duplicate(){$/;"	f	class:Buffer
+ERROR	DalvikHeader.h	11;"	d
+ERROR	Debug.h	12;"	d
+Enqueue	ReQueue.h	/^		virtual int Enqueue(const char* data, int length){$/;"	f	class:BaseQueue
+Enqueue	ReQueue.h	/^		virtual int Enqueue(const char* data, int length){$/;"	f	class:Buffer
+Enqueue	ReQueue.h	/^		virtual int Enqueue(const char* data, int length){$/;"	f	class:ReQueue
+EnqueueJboolean	ReQueue.h	/^		int EnqueueJboolean(jboolean data){$/;"	f	class:BaseQueue
+EnqueueJbyte	ReQueue.h	/^		int EnqueueJbyte(jbyte data){$/;"	f	class:BaseQueue
+EnqueueJchar	ReQueue.h	/^		int EnqueueJchar(jchar data){$/;"	f	class:BaseQueue
+EnqueueJdouble	ReQueue.h	/^		int EnqueueJdouble(jdouble data){$/;"	f	class:BaseQueue
+EnqueueJfloat	ReQueue.h	/^		int EnqueueJfloat(jfloat data){$/;"	f	class:BaseQueue
+EnqueueJint	ReQueue.h	/^		int EnqueueJint(jint data){$/;"	f	class:BaseQueue
+EnqueueJlong	ReQueue.h	/^		int EnqueueJlong(jlong data){$/;"	f	class:BaseQueue
+EnqueueJshort	ReQueue.h	/^		int EnqueueJshort(jshort data){$/;"	f	class:BaseQueue
+EnqueueStringUtf8	ReQueue.h	/^		int EnqueueStringUtf8(const char* string_utf8, uint16_t size_in_bytes){$/;"	f	class:BaseQueue
+Exist	Map.h	/^		bool Exist(const K &key){$/;"	f	class:Map
+Get	Map.h	/^		V& Get(const K &key){$/;"	f	class:Map
+GetData	ReQueue.h	/^		virtual void GetData(char* &data, int &length){$/;"	f	class:BaseQueue
+GetLock	Lock.h	/^		pthread_mutex_t* GetLock(lock_id_type lockid){$/;"	f	class:LockBuffer
+GetOrderingId	ReProtocol.h	/^		ordering_id_type GetOrderingId(thread_id_type tid){$/;"	f	class:ReProtocol
+INVALID_ORDERING_ID	ReProtocol.h	12;"	d
+INVALID_THREAD_ID	ReProtocol.h	13;"	d
+INVOCATION_SIZE	ReProtocol.h	16;"	d
+IsClosed	ReProtocol.h	/^		bool IsClosed(){$/;"	f	class:ReProtocol
+IsEmpty	ReQueue.h	/^		bool IsEmpty(){$/;"	f	class:BaseQueue
+JNI_OnLoad	ReAgent.cpp	/^jint JNI_OnLoad(JavaVM* vm, void* reserved){$/;"	f
+Lock	Lock.h	/^		void Lock(lock_id_type lockid){$/;"	f	class:LockBuffer
+LockBuffer	Lock.h	/^		LockBuffer(int capacity=DEFAULT_LOCK_BUFFER):b_capacity(capacity),b_occupied(0){$/;"	f	class:LockBuffer
+LockBuffer	Lock.h	/^class LockBuffer{$/;"	c
+MAXCONNECTIONS	Socket.h	/^const int MAXCONNECTIONS = 5;$/;"	v
+MAXHOSTNAME	Socket.h	/^const int MAXHOSTNAME = 200;$/;"	v
+MAXRECV	Socket.h	/^const int MAXRECV = 500;$/;"	v
+MSG_ANALYZE	ReProtocol.h	/^	MSG_ANALYZE,$/;"	e	enum:MsgType
+MSG_CLASS_INFO	ReProtocol.h	/^	MSG_CLASS_INFO,$/;"	e	enum:MsgType
+MSG_CLOSE	ReProtocol.h	/^	MSG_CLOSE,$/;"	e	enum:MsgType
+MSG_NEW_CLASS	ReProtocol.h	/^	MSG_NEW_CLASS,$/;"	e	enum:MsgType
+MSG_OBJ_FREE	ReProtocol.h	/^	MSG_OBJ_FREE,$/;"	e	enum:MsgType
+MSG_REG_ANALYSIS	ReProtocol.h	/^	MSG_REG_ANALYSIS,$/;"	e	enum:MsgType
+MSG_STRING_INFO	ReProtocol.h	/^	MSG_STRING_INFO,$/;"	e	enum:MsgType
+MSG_THREAD_END	ReProtocol.h	/^	MSG_THREAD_END$/;"	e	enum:MsgType
+MSG_THREAD_INFO	ReProtocol.h	/^	MSG_THREAD_INFO,$/;"	e	enum:MsgType
+MY_LOG_TAG	DalvikHeader.h	7;"	d
+Map	Map.h	/^		Map(int capacity=DEFAULT_MAP_SIZE):b_capacity(capacity),b_occupied(0){$/;"	f	class:Map
+Map	Map.h	/^class Map{$/;"	c
+MethodRegisterEvent	ReProtocol.h	/^		bool MethodRegisterEvent(int threadId, jshort methodId, const char* name, int length){$/;"	f	class:ReProtocol
+MsgType	ReProtocol.h	/^enum MsgType{$/;"	g
+NewClassEvent	ReProtocol.h	/^		bool NewClassEvent(const char* name, uint16_t nameLength, jlong classLoaderId, jint codeLength, const char *bytes){$/;"	f	class:ReProtocol
+NewClassInfo	ReProtocol.h	/^		bool NewClassInfo(jlong netref, const char* className, int namelen, const char* generic, int glen, jlong netrefClassLoader, jlong netrefSuperClass){$/;"	f	class:ReProtocol
+OBJECT_ID_MASK	Netref.h	/^static const uint64_t OBJECT_ID_MASK = 0xFFFFFFFFFFL;$/;"	v
+OBJECT_ID_POS	Netref.h	/^static const uint8_t OBJECT_ID_POS = 0;$/;"	v
+ObjFreeEvent	ReProtocol.h	/^		void ObjFreeEvent(jlong objectId){$/;"	f	class:ReProtocol
+OpenConnection	ReAgent.cpp	/^void OpenConnection(){$/;"	f
+Print	Map.h	/^		void Print(){$/;"	f	class:Map
+Print	ReQueue.h	/^		virtual void Print(){$/;"	f	class:BaseQueue
+Push	Buffer.h	/^		void Push(const char* data, int len){$/;"	f	class:Buffer
+QUEUE_INVOCATION	ReProtocol.h	/^	QUEUE_INVOCATION,$/;"	e	enum:QueueType
+QUEUE_OBJFREE	ReProtocol.h	/^	QUEUE_OBJFREE$/;"	e	enum:QueueType
+QueueType	ReProtocol.h	/^enum QueueType{$/;"	g
+ReProtocol	ReProtocol.h	/^		ReProtocol(const char* host, int port){$/;"	f	class:ReProtocol
+ReProtocol	ReProtocol.h	/^class ReProtocol{$/;"	c
+ReQueue	ReQueue.h	/^		ReQueue():BaseQueue(){ event_count = 0; }$/;"	f	class:ReQueue
+ReQueue	ReQueue.h	/^		ReQueue(int capacity):BaseQueue(capacity){ event_count = 0; }$/;"	f	class:ReQueue
+ReQueue	ReQueue.h	/^class ReQueue: public BaseQueue{$/;"	c
+Reset	ReQueue.h	/^		virtual void Reset(){$/;"	f	class:BaseQueue
+Reset	ReQueue.h	/^		virtual void Reset(){$/;"	f	class:ReQueue
+ReturnAndResetBuffer	ReProtocol.h	/^		Buffer* ReturnAndResetBuffer(){$/;"	f	class:ReProtocol
+SERVER_SOCK	Socket.cpp	21;"	d	file:
+SPEC_MASK	Netref.h	/^static const uint64_t SPEC_MASK = 0x1;$/;"	v
+SPEC_POS	Netref.h	/^static const uint8_t SPEC_POS = 63;$/;"	v
+ScopedMutex	ShadowLib.h	/^		ScopedMutex(){}$/;"	f	class:ScopedMutex
+ScopedMutex	ShadowLib.h	/^		ScopedMutex(pthread_mutex_t *mtx):local_mtx(mtx){$/;"	f	class:ScopedMutex
+ScopedMutex	ShadowLib.h	/^class ScopedMutex{$/;"	c
+Send	ReProtocol.h	/^		bool Send(MsgType msg){$/;"	f	class:ReProtocol
+Send	ReProtocol.h	/^		bool Send(const char* data, int length){$/;"	f	class:ReProtocol
+Send	ReProtocol.h	/^		bool Send(const char* data, int length, const char* lastdata, int lastlength){$/;"	f	class:ReProtocol
+Send	Socket.cpp	/^bool Socket::Send ( const char* s, int length ) const$/;"	f	class:Socket
+SendArgument	ReProtocol.h	/^		bool SendArgument(thread_id_type tid, const char* data, int length){$/;"	f	class:ReProtocol
+SendJboolean	ReProtocol.h	/^		int SendJboolean(thread_id_type tid, jboolean data){$/;"	f	class:ReProtocol
+SendJbyte	ReProtocol.h	/^		int SendJbyte(thread_id_type tid, jbyte data){$/;"	f	class:ReProtocol
+SendJchar	ReProtocol.h	/^		int SendJchar(thread_id_type tid, jchar data){$/;"	f	class:ReProtocol
+SendJdouble	ReProtocol.h	/^		int SendJdouble(thread_id_type tid, jdouble data){$/;"	f	class:ReProtocol
+SendJfloat	ReProtocol.h	/^		int SendJfloat(thread_id_type tid, jfloat data){$/;"	f	class:ReProtocol
+SendJint	ReProtocol.h	/^		int SendJint(thread_id_type tid, jint data){$/;"	f	class:ReProtocol
+SendJlong	ReProtocol.h	/^		int SendJlong(thread_id_type tid, jlong data){$/;"	f	class:ReProtocol
+SendJobject	ReProtocol.h	/^		int SendJobject(thread_id_type tid, jlong netref){$/;"	f	class:ReProtocol
+SendJshort	ReProtocol.h	/^		int SendJshort(thread_id_type tid, jshort data){$/;"	f	class:ReProtocol
+SendStringObject	ReProtocol.h	/^		bool SendStringObject(thread_id_type tid, jlong netref, const jchar* utf8, int len){$/;"	f	class:ReProtocol
+SendStringObject	ReProtocol.h	/^		int SendStringObject(thread_id_type tid, jlong netref, const char* utf8, int len){$/;"	f	class:ReProtocol
+SendStringUtf8	ReProtocol.h	/^		int SendStringUtf8(thread_id_type tid, const char* string_utf8, uint16_t size_in_bytes){$/;"	f	class:ReProtocol
+SendThreadObject	ReProtocol.h	/^		int SendThreadObject(thread_id_type tid, jlong netref, const char* threadName, int len, jboolean isDaemon){$/;"	f	class:ReProtocol
+Set	Map.h	/^		void Set(const K &key, const V &value) {$/;"	f	class:Map
+SetAndGetNetref	ReAgent.cpp	/^jlong SetAndGetNetref(Object* obj){$/;"	f
+SetOrderingId	ReProtocol.h	/^		void SetOrderingId(thread_id_type tid, ordering_id_type oid){$/;"	f	class:ReProtocol
+Socket	Socket.cpp	/^Socket::Socket() :$/;"	f	class:Socket
+Socket	Socket.h	/^class Socket$/;"	c
+UNIX_PATH_MAX	Socket.cpp	20;"	d	file:
+UnionJNIEnvToVoid	ReAgent.cpp	/^}UnionJNIEnvToVoid;$/;"	t	typeref:union:__anon1	file:
+Unlock	Lock.h	/^		void Unlock(lock_id_type lockid){$/;"	f	class:LockBuffer
+Update	ReQueue.h	/^		virtual bool Update(int pos, const char* input, int len){$/;"	f	class:BaseQueue
+_BUFFER_H_	Buffer.h	2;"	d
+_BUFFPACK_H	JniUtility.h	2;"	d
+_BUFFPACK_H	buffpack.h	2;"	d
+_DALVIKHEADER_H_	DalvikHeader.h	2;"	d
+_DEBUGHEADER_H_	Debug.h	2;"	d
+_DoubleCapacity	Map.h	/^		void _DoubleCapacity(){$/;"	f	class:Map
+_Exist	Map.h	/^		bool _Exist(const K& key){$/;"	f	class:Map
+_Get	Map.h	/^		V& _Get(const K &key){$/;"	f	class:Map
+_NETREF_H	Netref.h	2;"	d
+_REPROTOCOL_H_	ReProtocol.h	2;"	d
+_REQUEUE_H_	ReQueue.h	2;"	d
+_RE_LOCK_H_	Lock.h	2;"	d
+_RE_MAP_H_	Map.h	2;"	d
+_SHADOWLIB_H_	ShadowLib.h	2;"	d
+_SOCKET_H_	Socket.h	4;"	d
+_Set	Map.h	/^		void _Set(const K &key, const V &value) {$/;"	f	class:Map
+_set_net_reference	Netref.h	/^static jlong _set_net_reference(jlong object_id, jint class_id, unsigned char spec, unsigned char cbit) {$/;"	f
+accept	Socket.cpp	/^bool Socket::accept ( Socket& new_socket ) const$/;"	f	class:Socket
+analysisEnd	ReAgent.cpp	/^void analysisEnd$/;"	f
+analysisStart__S	ReAgent.cpp	/^void analysisStart__S$/;"	f
+analysisStart__SB	ReAgent.cpp	/^void analysisStart__SB$/;"	f
+analysis_mtx	ReProtocol.h	/^		pthread_mutex_t analysis_mtx;$/;"	m	class:ReProtocol
+analysis_queue	ReProtocol.h	/^		Map<ordering_id_type, ReQueue*> analysis_queue;$/;"	m	class:ReProtocol
+avail_class_id	Netref.h	/^static volatile jint avail_class_id;$/;"	v
+avail_object_id	Netref.h	/^static volatile jlong avail_object_id;$/;"	v
+b_capacity	Lock.h	/^		int b_capacity;$/;"	m	class:LockBuffer
+b_capacity	Map.h	/^		int b_capacity;$/;"	m	class:Map
+b_ids	Lock.h	/^		lock_id_type *b_ids;$/;"	m	class:LockBuffer
+b_keys	Map.h	/^		K *b_keys;$/;"	m	class:Map
+b_locks	Lock.h	/^		pthread_mutex_t *b_locks;$/;"	m	class:LockBuffer
+b_occupied	Lock.h	/^		int b_occupied;$/;"	m	class:LockBuffer
+b_occupied	Map.h	/^		int b_occupied;$/;"	m	class:Map
+b_values	Map.h	/^		V *b_values;$/;"	m	class:Map
+be64toh	ShadowLib.h	12;"	d
+be64toh	ShadowLib.h	17;"	d
+bind	Socket.cpp	/^bool Socket::bind ( const int port )$/;"	f	class:Socket
+buf_capacity	Buffer.h	/^		char* buf_capacity;$/;"	m	class:Buffer
+buf_data	Buffer.h	/^		char* buf_data;$/;"	m	class:Buffer
+buf_occupied	Buffer.h	/^		char* buf_occupied;$/;"	m	class:Buffer
+classPathName	ReAgent.cpp	/^static const char *classPathName = "ch\/usi\/dag\/dislre\/AREDispatch";$/;"	v	file:
+classfileLoadHook	ReAgent.cpp	/^int classfileLoadHook(const char* name, int len){$/;"	f
+create	Socket.cpp	/^bool Socket::create()$/;"	f	class:Socket
+d	JniUtility.h	/^	double d;$/;"	m	union:double_jlong
+d	ReQueue.h	/^	double d;$/;"	m	union:double_jlong
+d	buffpack.h	/^	double d;$/;"	m	union:double_jlong
+double_jlong	JniUtility.h	/^union double_jlong {$/;"	u
+double_jlong	ReQueue.h	/^union double_jlong {$/;"	u
+double_jlong	buffpack.h	/^union double_jlong {$/;"	u
+env	ReAgent.cpp	/^	JNIEnv* env;$/;"	m	union:__anon1	file:
+event_count	ReQueue.h	/^		jint event_count; \/\/ count how many events accumulated$/;"	m	class:ReQueue
+f	JniUtility.h	/^	float f;$/;"	m	union:float_jint
+f	ReQueue.h	/^	float f;$/;"	m	union:float_jint
+f	buffpack.h	/^	float f;$/;"	m	union:float_jint
+float_jint	JniUtility.h	/^union float_jint {$/;"	u
+float_jint	ReQueue.h	/^union float_jint {$/;"	u
+float_jint	buffpack.h	/^union float_jint {$/;"	u
+get_bits	Netref.h	/^static inline uint64_t get_bits(uint64_t from, uint64_t bit_mask,$/;"	f
+gl_mtx	Lock.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:LockBuffer
+gl_mtx	Map.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:Map
+gl_mtx	ReAgent.cpp	/^pthread_mutex_t gl_mtx;$/;"	v
+gl_mtx	ReProtocol.h	/^		pthread_mutex_t gl_mtx;$/;"	m	class:ReProtocol
+htobe64	JniUtility.h	11;"	d
+htobe64	JniUtility.h	9;"	d
+htobe64	ShadowLib.h	10;"	d
+htobe64	ShadowLib.h	15;"	d
+htobe64	buffpack.h	11;"	d
+htobe64	buffpack.h	9;"	d
+htole64	ShadowLib.h	11;"	d
+htole64	ShadowLib.h	16;"	d
+i	JniUtility.h	/^	jint i;$/;"	m	union:float_jint
+i	ReQueue.h	/^	jint i;$/;"	m	union:float_jint
+i	buffpack.h	/^	jint i;$/;"	m	union:float_jint
+invocation_buf	ReProtocol.h	/^		Map<ordering_id_type, Buffer*> invocation_buf;$/;"	m	class:ReProtocol
+isClosed	ReProtocol.h	/^		bool isClosed;$/;"	m	class:ReProtocol
+is_valid	Socket.h	/^  bool is_valid() const { return m_sock != -1; }$/;"	f	class:Socket
+l	JniUtility.h	/^	jlong l;$/;"	m	union:double_jlong
+l	ReQueue.h	/^	jlong l;$/;"	m	union:double_jlong
+l	buffpack.h	/^	jlong l;$/;"	m	union:double_jlong
+le64toh	ShadowLib.h	13;"	d
+le64toh	ShadowLib.h	18;"	d
+listen	Socket.cpp	/^bool Socket::listen() const$/;"	f	class:Socket
+local_mtx	ShadowLib.h	/^		pthread_mutex_t *local_mtx;$/;"	m	class:ScopedMutex
+lock_buf	ReProtocol.h	/^		LockBuffer lock_buf;$/;"	m	class:ReProtocol
+lock_id_type	ShadowLib.h	/^typedef ordering_id_type lock_id_type;$/;"	t
+m_addr	Socket.h	/^  sockaddr_in m_addr;$/;"	m	class:Socket
+m_sock	Socket.h	/^  int m_sock;$/;"	m	class:Socket
+manuallyClose	ReAgent.cpp	/^void manuallyClose$/;"	f
+manuallyOpen	ReAgent.cpp	/^void manuallyOpen$/;"	f
+mapPID	ReAgent.cpp	/^void mapPID$/;"	f
+method_id	ReAgent.cpp	/^static volatile jshort method_id = 1;$/;"	v	file:
+methods	ReAgent.cpp	/^static JNINativeMethod methods[]= {$/;"	v	file:
+myitoa	ShadowLib.h	/^char *myitoa(int num,char *str,int radix)$/;"	f
+net_ref_get_class_id	Netref.h	/^inline jint net_ref_get_class_id(jlong net_ref) {$/;"	f
+net_ref_get_class_instance_bit	Netref.h	/^inline unsigned char net_ref_get_class_instance_bit(jlong net_ref) {$/;"	f
+net_ref_get_object_id	Netref.h	/^inline jlong net_ref_get_object_id(jlong net_ref) {$/;"	f
+net_ref_get_spec	Netref.h	/^inline unsigned char net_ref_get_spec(jlong net_ref) {$/;"	f
+net_ref_set_class_id	Netref.h	/^inline void net_ref_set_class_id(jlong * net_ref, jint class_id) {$/;"	f
+net_ref_set_class_instance	Netref.h	/^inline void net_ref_set_class_instance(jlong * net_ref, unsigned char cibit) {$/;"	f
+net_ref_set_object_id	Netref.h	/^inline void net_ref_set_object_id(jlong * net_ref, jlong object_id) {$/;"	f
+net_ref_set_spec	Netref.h	/^inline void net_ref_set_spec(jlong * net_ref, unsigned char spec) {$/;"	f
+newClass	ReAgent.cpp	/^jlong newClass(ClassObject *obj){$/;"	f
+objFreeHook	ReAgent.cpp	/^void objFreeHook(Object* obj, Thread* self){$/;"	f
+objNewHook	ReAgent.cpp	/^void objNewHook(Object* obj){$/;"	f
+objfree_mtx	ReProtocol.h	/^		pthread_mutex_t objfree_mtx;$/;"	m	class:ReProtocol
+operator []	Map.h	/^		V& operator[](const K& key){$/;"	f	class:Map
+ordering_id_type	ShadowLib.h	/^typedef long ordering_id_type;$/;"	t
+ot_class_id	ReAgent.cpp	/^static volatile jint ot_class_id = 1;$/;"	v	file:
+ot_object_id	ReAgent.cpp	/^static volatile jlong ot_object_id = 1;$/;"	v	file:
+pack_boolean	JniUtility.h	/^void pack_boolean(Buffer * buff, jboolean to_send) {$/;"	f
+pack_boolean	buffpack.h	/^void pack_boolean(buffer * buff, jboolean to_send) {$/;"	f
+pack_byte	JniUtility.h	/^void pack_byte(Buffer * buff, jbyte to_send) {$/;"	f
+pack_byte	buffpack.h	/^void pack_byte(buffer * buff, jbyte to_send) {$/;"	f
+pack_bytes	JniUtility.h	/^void pack_bytes(Buffer * buff, const void * data, jint size) {$/;"	f
+pack_bytes	buffpack.h	/^void pack_bytes(buffer * buff, const void * data, jint size) {$/;"	f
+pack_char	JniUtility.h	/^void pack_char(Buffer * buff, jchar to_send) {$/;"	f
+pack_char	buffpack.h	/^void pack_char(buffer * buff, jchar to_send) {$/;"	f
+pack_double	JniUtility.h	/^void pack_double(Buffer * buff, jdouble to_send) {$/;"	f
+pack_double	buffpack.h	/^void pack_double(buffer * buff, jdouble to_send) {$/;"	f
+pack_float	JniUtility.h	/^void pack_float(Buffer * buff, jfloat to_send) {$/;"	f
+pack_float	buffpack.h	/^void pack_float(buffer * buff, jfloat to_send) {$/;"	f
+pack_int	JniUtility.h	/^void pack_int(Buffer * buff, jint to_send) {$/;"	f
+pack_int	buffpack.h	/^void pack_int(buffer * buff, jint to_send) {$/;"	f
+pack_long	JniUtility.h	/^void pack_long(Buffer * buff, jlong to_send) {$/;"	f
+pack_long	buffpack.h	/^void pack_long(buffer * buff, jlong to_send) {$/;"	f
+pack_short	JniUtility.h	/^void pack_short(Buffer * buff, jshort to_send) {$/;"	f
+pack_short	buffpack.h	/^void pack_short(buffer * buff, jshort to_send) {$/;"	f
+pack_string_utf8	JniUtility.h	/^void pack_string_utf8(Buffer * buff, const void * string_utf8,$/;"	f
+pack_string_utf8	buffpack.h	/^void pack_string_utf8(buffer * buff, const void * string_utf8,$/;"	f
+q_capacity	ReQueue.h	/^		int q_capacity;$/;"	m	class:BaseQueue
+q_data	ReQueue.h	/^		char* q_data;$/;"	m	class:BaseQueue
+q_objfree	ReProtocol.h	/^		ReQueue q_objfree;$/;"	m	class:ReProtocol
+q_occupied	ReQueue.h	/^		int q_occupied;$/;"	m	class:BaseQueue
+registerMethod	ReAgent.cpp	/^jshort registerMethod$/;"	f
+registerNativeMethods	ReAgent.cpp	/^static int registerNativeMethods(JNIEnv* env, const char* className,$/;"	f	file:
+registerNatives	ReAgent.cpp	/^static int registerNatives(JNIEnv *env){$/;"	f	file:
+running_oid	ReProtocol.h	/^		Map<thread_id_type, ordering_id_type> running_oid;$/;"	m	class:ReProtocol
+sendBoolean	ReAgent.cpp	/^void sendBoolean$/;"	f
+sendBuf	ReProtocol.h	/^		Buffer *sendBuf;$/;"	m	class:ReProtocol
+sendByte	ReAgent.cpp	/^void sendByte$/;"	f
+sendChar	ReAgent.cpp	/^void sendChar$/;"	f
+sendDouble	ReAgent.cpp	/^void sendDouble$/;"	f
+sendFloat	ReAgent.cpp	/^void sendFloat$/;"	f
+sendInt	ReAgent.cpp	/^void sendInt$/;"	f
+sendLong	ReAgent.cpp	/^void sendLong$/;"	f
+sendObject	ReAgent.cpp	/^void sendObject$/;"	f
+sendObjectPlusData	ReAgent.cpp	/^void sendObjectPlusData$/;"	f
+sendShort	ReAgent.cpp	/^void sendShort$/;"	f
+send_thread	ReAgent.cpp	/^static pthread_t send_thread;$/;"	v	file:
+send_thread_loop	ReAgent.cpp	/^static void * send_thread_loop(void * obj) {$/;"	f	file:
+set_bits	Netref.h	/^static inline void set_bits(uint64_t * to, uint64_t bits,$/;"	f
+set_non_blocking	Socket.cpp	/^void Socket::set_non_blocking ( const bool b )$/;"	f	class:Socket
+sock	ReAgent.cpp	/^Socket *sock = NULL;$/;"	v
+threadEndHook	ReAgent.cpp	/^void threadEndHook(Thread* self){$/;"	f
+thread_id_type	ShadowLib.h	/^typedef int thread_id_type;$/;"	t
+venv	ReAgent.cpp	/^	void* venv;$/;"	m	union:__anon1	file:
+vmEndHook	ReAgent.cpp	/^void vmEndHook(JavaVM* vm){$/;"	f
+~BaseQueue	ReQueue.h	/^		virtual ~BaseQueue(){$/;"	f	class:BaseQueue
+~Buffer	Buffer.h	/^		~Buffer(){$/;"	f	class:Buffer
+~LockBuffer	Lock.h	/^		~LockBuffer(){$/;"	f	class:LockBuffer
+~Map	Map.h	/^		~Map(){$/;"	f	class:Map
+~ReProtocol	ReProtocol.h	/^		~ReProtocol(){$/;"	f	class:ReProtocol
+~ScopedMutex	ShadowLib.h	/^		~ScopedMutex(){$/;"	f	class:ScopedMutex
+~Socket	Socket.cpp	/^Socket::~Socket()$/;"	f	class:Socket

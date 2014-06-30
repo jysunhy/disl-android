@@ -18,69 +18,69 @@ ACCESS_FLAGS_STRING	dx/src/com/android/dx/dex/file/AnnotationUtils.java	/^    pr
 ACCESS_FLAGS_UTF	dexgen/src/com/android/dexgen/dex/file/AnnotationUtils.java	/^    private static final CstUtf8 ACCESS_FLAGS_UTF = new CstUtf8("accessFlags");$/;"	f	class:AnnotationUtils	file:
 ACC_ABSTRACT	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_ABSTRACT = 0x0400;$/;"	f	class:AccessFlags
 ACC_ABSTRACT	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_ABSTRACT = 0x0400;$/;"	f	class:AccessFlags
-ACC_ABSTRACT	libdex/DexFile.h	/^    ACC_ABSTRACT     = 0x00000400,       \/\/ class, method, ic$/;"	e	enum:__anon51
+ACC_ABSTRACT	libdex/DexFile.h	/^    ACC_ABSTRACT     = 0x00000400,       \/\/ class, method, ic$/;"	e	enum:__anon4
 ACC_ANNOTATION	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_ANNOTATION = 0x2000;$/;"	f	class:AccessFlags
 ACC_ANNOTATION	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_ANNOTATION = 0x2000;$/;"	f	class:AccessFlags
-ACC_ANNOTATION	libdex/DexFile.h	/^    ACC_ANNOTATION   = 0x00002000,       \/\/ class, ic (1.5)$/;"	e	enum:__anon51
+ACC_ANNOTATION	libdex/DexFile.h	/^    ACC_ANNOTATION   = 0x00002000,       \/\/ class, ic (1.5)$/;"	e	enum:__anon4
 ACC_BRIDGE	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_BRIDGE = 0x0040;$/;"	f	class:AccessFlags
 ACC_BRIDGE	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_BRIDGE = 0x0040;$/;"	f	class:AccessFlags
-ACC_BRIDGE	libdex/DexFile.h	/^    ACC_BRIDGE       = 0x00000040,       \/\/ method (1.5)$/;"	e	enum:__anon51
-ACC_CLASS_MASK	libdex/DexFile.h	/^    ACC_CLASS_MASK =$/;"	e	enum:__anon51
+ACC_BRIDGE	libdex/DexFile.h	/^    ACC_BRIDGE       = 0x00000040,       \/\/ method (1.5)$/;"	e	enum:__anon4
+ACC_CLASS_MASK	libdex/DexFile.h	/^    ACC_CLASS_MASK =$/;"	e	enum:__anon4
 ACC_CONSTRUCTOR	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_CONSTRUCTOR = 0x10000;$/;"	f	class:AccessFlags
 ACC_CONSTRUCTOR	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_CONSTRUCTOR = 0x10000;$/;"	f	class:AccessFlags
-ACC_CONSTRUCTOR	libdex/DexFile.h	/^    ACC_CONSTRUCTOR  = 0x00010000,       \/\/ method (Dalvik only)$/;"	e	enum:__anon51
+ACC_CONSTRUCTOR	libdex/DexFile.h	/^    ACC_CONSTRUCTOR  = 0x00010000,       \/\/ method (Dalvik only)$/;"	e	enum:__anon4
 ACC_DECLARED_SYNCHRONIZED	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_DECLARED_SYNCHRONIZED = 0x20000;$/;"	f	class:AccessFlags
 ACC_DECLARED_SYNCHRONIZED	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_DECLARED_SYNCHRONIZED = 0x20000;$/;"	f	class:AccessFlags
-ACC_DECLARED_SYNCHRONIZED	libdex/DexFile.h	/^    ACC_DECLARED_SYNCHRONIZED =$/;"	e	enum:__anon51
+ACC_DECLARED_SYNCHRONIZED	libdex/DexFile.h	/^    ACC_DECLARED_SYNCHRONIZED =$/;"	e	enum:__anon4
 ACC_ENUM	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_ENUM = 0x4000;$/;"	f	class:AccessFlags
 ACC_ENUM	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_ENUM = 0x4000;$/;"	f	class:AccessFlags
-ACC_ENUM	libdex/DexFile.h	/^    ACC_ENUM         = 0x00004000,       \/\/ class, field, ic (1.5)$/;"	e	enum:__anon51
-ACC_FIELD_MASK	libdex/DexFile.h	/^    ACC_FIELD_MASK =$/;"	e	enum:__anon51
+ACC_ENUM	libdex/DexFile.h	/^    ACC_ENUM         = 0x00004000,       \/\/ class, field, ic (1.5)$/;"	e	enum:__anon4
+ACC_FIELD_MASK	libdex/DexFile.h	/^    ACC_FIELD_MASK =$/;"	e	enum:__anon4
 ACC_FINAL	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_FINAL = 0x0010;$/;"	f	class:AccessFlags
 ACC_FINAL	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_FINAL = 0x0010;$/;"	f	class:AccessFlags
-ACC_FINAL	libdex/DexFile.h	/^    ACC_FINAL        = 0x00000010,       \/\/ class, field, method, ic$/;"	e	enum:__anon51
-ACC_INNER_CLASS_MASK	libdex/DexFile.h	/^    ACC_INNER_CLASS_MASK =$/;"	e	enum:__anon51
+ACC_FINAL	libdex/DexFile.h	/^    ACC_FINAL        = 0x00000010,       \/\/ class, field, method, ic$/;"	e	enum:__anon4
+ACC_INNER_CLASS_MASK	libdex/DexFile.h	/^    ACC_INNER_CLASS_MASK =$/;"	e	enum:__anon4
 ACC_INTERFACE	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_INTERFACE = 0x0200;$/;"	f	class:AccessFlags
 ACC_INTERFACE	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_INTERFACE = 0x0200;$/;"	f	class:AccessFlags
-ACC_INTERFACE	libdex/DexFile.h	/^    ACC_INTERFACE    = 0x00000200,       \/\/ class, ic$/;"	e	enum:__anon51
-ACC_METHOD_MASK	libdex/DexFile.h	/^    ACC_METHOD_MASK =$/;"	e	enum:__anon51
+ACC_INTERFACE	libdex/DexFile.h	/^    ACC_INTERFACE    = 0x00000200,       \/\/ class, ic$/;"	e	enum:__anon4
+ACC_METHOD_MASK	libdex/DexFile.h	/^    ACC_METHOD_MASK =$/;"	e	enum:__anon4
 ACC_MIRANDA	vm/oo/Object.h	/^    ACC_MIRANDA         = 0x8000,       \/\/ method (internal to VM)$/;"	e	enum:AccessFlags
 ACC_NATIVE	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_NATIVE = 0x0100;$/;"	f	class:AccessFlags
 ACC_NATIVE	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_NATIVE = 0x0100;$/;"	f	class:AccessFlags
-ACC_NATIVE	libdex/DexFile.h	/^    ACC_NATIVE       = 0x00000100,       \/\/ method$/;"	e	enum:__anon51
+ACC_NATIVE	libdex/DexFile.h	/^    ACC_NATIVE       = 0x00000100,       \/\/ method$/;"	e	enum:__anon4
 ACC_PRIVATE	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_PRIVATE = 0x0002;$/;"	f	class:AccessFlags
 ACC_PRIVATE	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_PRIVATE = 0x0002;$/;"	f	class:AccessFlags
-ACC_PRIVATE	libdex/DexFile.h	/^    ACC_PRIVATE      = 0x00000002,       \/\/ field, method, ic$/;"	e	enum:__anon51
+ACC_PRIVATE	libdex/DexFile.h	/^    ACC_PRIVATE      = 0x00000002,       \/\/ field, method, ic$/;"	e	enum:__anon4
 ACC_PROTECTED	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_PROTECTED = 0x0004;$/;"	f	class:AccessFlags
 ACC_PROTECTED	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_PROTECTED = 0x0004;$/;"	f	class:AccessFlags
-ACC_PROTECTED	libdex/DexFile.h	/^    ACC_PROTECTED    = 0x00000004,       \/\/ field, method, ic$/;"	e	enum:__anon51
+ACC_PROTECTED	libdex/DexFile.h	/^    ACC_PROTECTED    = 0x00000004,       \/\/ field, method, ic$/;"	e	enum:__anon4
 ACC_PUBLIC	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_PUBLIC = 0x0001;$/;"	f	class:AccessFlags
 ACC_PUBLIC	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_PUBLIC = 0x0001;$/;"	f	class:AccessFlags
-ACC_PUBLIC	libdex/DexFile.h	/^    ACC_PUBLIC       = 0x00000001,       \/\/ class, field, method, ic$/;"	e	enum:__anon51
+ACC_PUBLIC	libdex/DexFile.h	/^    ACC_PUBLIC       = 0x00000001,       \/\/ class, field, method, ic$/;"	e	enum:__anon4
 ACC_STATIC	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_STATIC = 0x0008;$/;"	f	class:AccessFlags
 ACC_STATIC	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_STATIC = 0x0008;$/;"	f	class:AccessFlags
-ACC_STATIC	libdex/DexFile.h	/^    ACC_STATIC       = 0x00000008,       \/\/ field, method, ic$/;"	e	enum:__anon51
+ACC_STATIC	libdex/DexFile.h	/^    ACC_STATIC       = 0x00000008,       \/\/ field, method, ic$/;"	e	enum:__anon4
 ACC_STRICT	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_STRICT = 0x0800;$/;"	f	class:AccessFlags
 ACC_STRICT	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_STRICT = 0x0800;$/;"	f	class:AccessFlags
-ACC_STRICT	libdex/DexFile.h	/^    ACC_STRICT       = 0x00000800,       \/\/ method$/;"	e	enum:__anon51
+ACC_STRICT	libdex/DexFile.h	/^    ACC_STRICT       = 0x00000800,       \/\/ method$/;"	e	enum:__anon4
 ACC_SUPER	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_SUPER = 0x0020;$/;"	f	class:AccessFlags
 ACC_SUPER	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_SUPER = 0x0020;$/;"	f	class:AccessFlags
-ACC_SUPER	libdex/DexFile.h	/^    ACC_SUPER        = 0x00000020,       \/\/ class (not used in Dalvik)$/;"	e	enum:__anon51
+ACC_SUPER	libdex/DexFile.h	/^    ACC_SUPER        = 0x00000020,       \/\/ class (not used in Dalvik)$/;"	e	enum:__anon4
 ACC_SYNCHRONIZED	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_SYNCHRONIZED = 0x0020;$/;"	f	class:AccessFlags
 ACC_SYNCHRONIZED	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_SYNCHRONIZED = 0x0020;$/;"	f	class:AccessFlags
-ACC_SYNCHRONIZED	libdex/DexFile.h	/^    ACC_SYNCHRONIZED = 0x00000020,       \/\/ method (only allowed on natives)$/;"	e	enum:__anon51
+ACC_SYNCHRONIZED	libdex/DexFile.h	/^    ACC_SYNCHRONIZED = 0x00000020,       \/\/ method (only allowed on natives)$/;"	e	enum:__anon4
 ACC_SYNTHETIC	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_SYNTHETIC = 0x1000;$/;"	f	class:AccessFlags
 ACC_SYNTHETIC	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_SYNTHETIC = 0x1000;$/;"	f	class:AccessFlags
-ACC_SYNTHETIC	libdex/DexFile.h	/^    ACC_SYNTHETIC    = 0x00001000,       \/\/ field, method, ic$/;"	e	enum:__anon51
+ACC_SYNTHETIC	libdex/DexFile.h	/^    ACC_SYNTHETIC    = 0x00001000,       \/\/ field, method, ic$/;"	e	enum:__anon4
 ACC_TRANSIENT	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_TRANSIENT = 0x0080;$/;"	f	class:AccessFlags
 ACC_TRANSIENT	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_TRANSIENT = 0x0080;$/;"	f	class:AccessFlags
-ACC_TRANSIENT	libdex/DexFile.h	/^    ACC_TRANSIENT    = 0x00000080,       \/\/ field$/;"	e	enum:__anon51
+ACC_TRANSIENT	libdex/DexFile.h	/^    ACC_TRANSIENT    = 0x00000080,       \/\/ field$/;"	e	enum:__anon4
 ACC_VARARGS	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_VARARGS = 0x0080;$/;"	f	class:AccessFlags
 ACC_VARARGS	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_VARARGS = 0x0080;$/;"	f	class:AccessFlags
-ACC_VARARGS	libdex/DexFile.h	/^    ACC_VARARGS      = 0x00000080,       \/\/ method (1.5)$/;"	e	enum:__anon51
+ACC_VARARGS	libdex/DexFile.h	/^    ACC_VARARGS      = 0x00000080,       \/\/ method (1.5)$/;"	e	enum:__anon4
 ACC_VOLATILE	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static final int ACC_VOLATILE = 0x0040;$/;"	f	class:AccessFlags
 ACC_VOLATILE	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static final int ACC_VOLATILE = 0x0040;$/;"	f	class:AccessFlags
-ACC_VOLATILE	libdex/DexFile.h	/^    ACC_VOLATILE     = 0x00000040,       \/\/ field$/;"	e	enum:__anon51
+ACC_VOLATILE	libdex/DexFile.h	/^    ACC_VOLATILE     = 0x00000040,       \/\/ field$/;"	e	enum:__anon4
 ACONST_NULL	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int ACONST_NULL = 0x01;$/;"	f	class:ByteOps
 ADD	dexgen/src/com/android/dexgen/rop/code/RegOps.java	/^    public static final int ADD = 14;$/;"	f	class:RegOps
 ADD	dx/src/com/android/dx/rop/code/RegOps.java	/^    public static final int ADD = 14;$/;"	f	class:RegOps
@@ -246,10 +246,10 @@ ALIGN_DOWN_TO_PAGE_SIZE	vm/Common.h	61;"	d
 ALIGN_UP	vm/Common.h	58;"	d
 ALIGN_UP_TO_PAGE_SIZE	vm/Common.h	60;"	d
 ALLOCATION_UNIT_SIZE	vm/alloc/DdmHeap.cpp	186;"	d	file:
-ALLOC_ALIGNMENT	vm/alloc/Copying.cpp	/^enum { ALLOC_ALIGNMENT = 8 };$/;"	e	enum:__anon15	file:
-ALLOC_DEFAULT	vm/alloc/Alloc.h	/^    ALLOC_DEFAULT = 0x00,$/;"	e	enum:__anon11
-ALLOC_DONT_TRACK	vm/alloc/Alloc.h	/^    ALLOC_DONT_TRACK = 0x01,  \/* don't add to internal tracking list *\/$/;"	e	enum:__anon11
-ALLOC_NON_MOVING	vm/alloc/Alloc.h	/^    ALLOC_NON_MOVING = 0x02,$/;"	e	enum:__anon11
+ALLOC_ALIGNMENT	vm/alloc/Copying.cpp	/^enum { ALLOC_ALIGNMENT = 8 };$/;"	e	enum:__anon20	file:
+ALLOC_DEFAULT	vm/alloc/Alloc.h	/^    ALLOC_DEFAULT = 0x00,$/;"	e	enum:__anon16
+ALLOC_DONT_TRACK	vm/alloc/Alloc.h	/^    ALLOC_DONT_TRACK = 0x01,  \/* don't add to internal tracking list *\/$/;"	e	enum:__anon16
+ALLOC_NON_MOVING	vm/alloc/Alloc.h	/^    ALLOC_NON_MOVING = 0x02,$/;"	e	enum:__anon16
 ALLOC_SITES	hit/src/com/android/hit/HprofParser.java	/^    private static final int ALLOC_SITES                =   0x06;   \/\/  unused$/;"	f	class:HprofParser	file:
 ALLOW_EXTENDED_OPCODES	dx/src/com/android/dx/dex/code/InsnFormat.java	/^    public static boolean ALLOW_EXTENDED_OPCODES = true;$/;"	f	class:InsnFormat
 ALOAD	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int ALOAD = 0x19;$/;"	f	class:ByteOps
@@ -512,7 +512,6 @@ AnnotationsList	dx/src/com/android/dx/rop/annotation/AnnotationsList.java	/^    
 AnnotationsList	dx/src/com/android/dx/rop/annotation/AnnotationsList.java	/^public final class AnnotationsList$/;"	c
 Another	tests/071-dexfile/src-ex/Another.java	/^    public Another() {$/;"	m	class:Another
 Another	tests/071-dexfile/src-ex/Another.java	/^public class Another {$/;"	c
-AppInfo	vm/Agent.h	/^class AppInfo {$/;"	c
 ArenaMemBlock	vm/compiler/CompilerUtility.h	/^typedef struct ArenaMemBlock {$/;"	s
 ArenaMemBlock	vm/compiler/CompilerUtility.h	/^} ArenaMemBlock;$/;"	t	typeref:struct:ArenaMemBlock
 Args	dx/src/com/android/dx/command/dump/Args.java	/^class Args {$/;"	c
@@ -635,13 +634,13 @@ BBType	vm/compiler/CompilerIR.h	/^} BBType;$/;"	t	typeref:enum:BBType
 BIPUSH	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int BIPUSH = 0x10;$/;"	f	class:ByteOps
 BLACKBERRY	tests/058-enum-order/src/Main.java	/^        CORN, BLUEBERRY, CRANBERRY, BRAN, BLACKBERRY;$/;"	e	enum:Main.Muffin	file:
 BLOCK_ALIGN	vm/LinearAlloc.cpp	69;"	d	file:
-BLOCK_CONTINUED	vm/alloc/Copying.cpp	/^    BLOCK_CONTINUED = 7$/;"	e	enum:__anon14	file:
-BLOCK_FREE	vm/alloc/Copying.cpp	/^    BLOCK_FREE = 0,$/;"	e	enum:__anon14	file:
-BLOCK_FROM_SPACE	vm/alloc/Copying.cpp	/^    BLOCK_FROM_SPACE = 1,$/;"	e	enum:__anon14	file:
+BLOCK_CONTINUED	vm/alloc/Copying.cpp	/^    BLOCK_CONTINUED = 7$/;"	e	enum:__anon19	file:
+BLOCK_FREE	vm/alloc/Copying.cpp	/^    BLOCK_FREE = 0,$/;"	e	enum:__anon19	file:
+BLOCK_FROM_SPACE	vm/alloc/Copying.cpp	/^    BLOCK_FROM_SPACE = 1,$/;"	e	enum:__anon19	file:
 BLOCK_NAME_LEN	vm/compiler/CompilerUtility.h	53;"	d
-BLOCK_SHIFT	vm/alloc/Copying.cpp	/^enum { BLOCK_SHIFT = 9 };$/;"	e	enum:__anon12	file:
-BLOCK_SIZE	vm/alloc/Copying.cpp	/^enum { BLOCK_SIZE = 1 << BLOCK_SHIFT };$/;"	e	enum:__anon13	file:
-BLOCK_TO_SPACE	vm/alloc/Copying.cpp	/^    BLOCK_TO_SPACE = 2,$/;"	e	enum:__anon14	file:
+BLOCK_SHIFT	vm/alloc/Copying.cpp	/^enum { BLOCK_SHIFT = 9 };$/;"	e	enum:__anon17	file:
+BLOCK_SIZE	vm/alloc/Copying.cpp	/^enum { BLOCK_SIZE = 1 << BLOCK_SHIFT };$/;"	e	enum:__anon18	file:
+BLOCK_TO_SPACE	vm/alloc/Copying.cpp	/^    BLOCK_TO_SPACE = 2,$/;"	e	enum:__anon19	file:
 BLUEBERRY	tests/058-enum-order/src/Main.java	/^        CORN, BLUEBERRY, CRANBERRY, BRAN, BLACKBERRY;$/;"	e	enum:Main.Muffin	file:
 BOOLEAN	dexgen/src/com/android/dexgen/rop/cst/CstType.java	/^    public static final CstType BOOLEAN = intern(Type.BOOLEAN_CLASS);$/;"	f	class:CstType
 BOOLEAN	dexgen/src/com/android/dexgen/rop/type/Type.java	/^    public static final Type BOOLEAN = new Type("Z", BT_BOOLEAN);$/;"	f	class:Type
@@ -700,7 +699,6 @@ BT_SHORT	dx/src/com/android/dx/rop/type/Type.java	/^    public static final int 
 BT_VOID	dexgen/src/com/android/dexgen/rop/type/Type.java	/^    public static final int BT_VOID = 0;$/;"	f	class:Type
 BT_VOID	dx/src/com/android/dx/rop/type/Type.java	/^    public static final int BT_VOID = 0;$/;"	f	class:Type
 BUFFER_INIT_SIZE	vm/shadowlib/ReProtocol.h	16;"	d
-BUFFER_SIZE	libdex/SocketBuffer.h	22;"	d
 BUFFER_SIZE	libdex/ZipArchive.cpp	46;"	d	file:
 BUF_SIZE	tools/dmtracedump/CreateTestTrace.c	76;"	d	file:
 BUF_SIZE	vm/shadowlib/Buffer.h	4;"	d
@@ -907,9 +905,6 @@ ByteBlock	dx/src/com/android/dx/cf/code/ByteBlock.java	/^    public ByteBlock(in
 ByteBlock	dx/src/com/android/dx/cf/code/ByteBlock.java	/^public final class ByteBlock implements LabeledItem {$/;"	c
 ByteBlockList	dx/src/com/android/dx/cf/code/ByteBlockList.java	/^    public ByteBlockList(int size) {$/;"	m	class:ByteBlockList
 ByteBlockList	dx/src/com/android/dx/cf/code/ByteBlockList.java	/^public final class ByteBlockList extends LabeledList {$/;"	c
-ByteBuffer	libdex/ByteBuffer.cpp	/^ByteBuffer::ByteBuffer():_capacity(1024),_used(0){$/;"	f	class:ByteBuffer
-ByteBuffer	libdex/ByteBuffer.cpp	/^ByteBuffer::ByteBuffer(int init_size):_capacity(init_size),_used(0){$/;"	f	class:ByteBuffer
-ByteBuffer	libdex/ByteBuffer.h	/^class ByteBuffer{$/;"	c
 ByteCatchList	dexgen/src/com/android/dexgen/rop/ByteCatchList.java	/^    public ByteCatchList(int count) {$/;"	m	class:ByteCatchList
 ByteCatchList	dexgen/src/com/android/dexgen/rop/ByteCatchList.java	/^public final class ByteCatchList extends FixedSizeList {$/;"	c
 ByteCatchList	dx/src/com/android/dx/cf/code/ByteCatchList.java	/^    public ByteCatchList(int count) {$/;"	m	class:ByteCatchList
@@ -1257,6 +1252,7 @@ CTX_METHOD	dx/src/com/android/dx/cf/direct/AttributeFactory.java	/^    public st
 C_KEYWORDS	docs/prettify.js	/^  var C_KEYWORDS = FLOW_CONTROL_KEYWORDS + "auto case char const default " +$/;"	v
 CallABI_ENTER	vm/arch/x86-atom/Call386ABI.S	/^CallABI_ENTER:$/;"	l
 CallABI_EXIT	vm/arch/x86-atom/Call386ABI.S	/^CallABI_EXIT:$/;"	l
+CallAPI	vm/shadowlib/ReAgent.cpp	/^void CallAPI(JNIEnv * jni_env, jclass this_class, jint api){$/;"	f
 CallStack	tools/dmtracedump/TraceDump.c	/^typedef struct CallStack {$/;"	s	file:
 CallStack	tools/dmtracedump/TraceDump.c	/^} CallStack;$/;"	t	typeref:struct:CallStack	file:
 CallsMethod	tools/deadcode.py	/^def CallsMethod(codes, method):$/;"	f
@@ -1404,8 +1400,6 @@ ClassStatus	vm/oo/Object.h	/^enum ClassStatus {$/;"	g
 ClassThree	tests/047-returns/src/Main.java	/^class ClassThree implements Runnable {$/;"	c
 ClassTwo	tests/047-returns/src/Main.java	/^class ClassTwo implements CommonInterface, Runnable {$/;"	c
 Classes	tests/003-omnibus-opcodes/src/Classes.java	/^public class Classes {$/;"	c
-CleanMutex	libdex/ByteBuffer.cpp	/^void ByteBuffer::CleanMutex(){$/;"	f	class:ByteBuffer
-CleanMutex	libdex/SocketBuffer.h	/^		void CleanMutex(){$/;"	f	class:SocketBuffer
 Code	dx/src/com/android/dx/io/Code.java	/^    public Code(int registersSize, int insSize, int outsSize, int debugInfoOffset,$/;"	m	class:Code
 Code	dx/src/com/android/dx/io/Code.java	/^public final class Code {$/;"	c
 CodeAddress	dexgen/src/com/android/dexgen/dex/code/CodeAddress.java	/^    public CodeAddress(SourcePosition position) {$/;"	m	class:CodeAddress
@@ -1579,7 +1573,6 @@ D4	tests/091-deep-interface-hierarchy/src/Main.java	/^    interface D4 extends C
 D5	tests/091-deep-interface-hierarchy/src/Main.java	/^    interface D5 extends C1, C2, C3, C4, C5 {}$/;"	i	class:Main
 DADD	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int DADD = 0x63;$/;"	f	class:ByteOps
 DALOAD	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int DALOAD = 0x31;$/;"	f	class:ByteOps
-DALVIK_AGENT_H	vm/Agent.h	2;"	d
 DALVIK_ALLOCTRACKER_H_	vm/AllocTracker.h	20;"	d
 DALVIK_ALLOC_ALLOC_H_	vm/alloc/Alloc.h	20;"	d
 DALVIK_ALLOC_CARDTABLE_H_	vm/alloc/CardTable.h	24;"	d
@@ -1598,7 +1591,6 @@ DALVIK_BITVECTOR_H_	vm/BitVector.h	21;"	d
 DALVIK_BUG_VERSION	vm/DalvikVersion.h	28;"	d
 DALVIK_CODEVERIFY_H_	vm/analysis/CodeVerify.h	21;"	d
 DALVIK_COMMON_H_	vm/Common.h	21;"	d
-DALVIK_CONNECTION_H	vm/Connection.h	2;"	d
 DALVIK_DALVIK_H_	vm/Dalvik.h	21;"	d
 DALVIK_DDM_H_	vm/Ddm.h	20;"	d
 DALVIK_DEBUGGER_H_	vm/Debugger.h	22;"	d
@@ -1709,47 +1701,47 @@ DBG	vm/arch/arm/CallEABI.S	/^DBG tst     sp, #4                      @ 64-bit al
 DBG	vm/arch/arm/CallEABI.S	/^DBG tst     sp, #7                      @ DEBUG - make sure sp is aligned now$/;"	l
 DBG_ADVANCE_LINE	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_ADVANCE_LINE = 0x02;$/;"	f	interface:DebugInfoConstants
 DBG_ADVANCE_LINE	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_ADVANCE_LINE = 0x02;$/;"	f	interface:DebugInfoConstants
-DBG_ADVANCE_LINE	libdex/DexFile.h	/^    DBG_ADVANCE_LINE         = 0x02,$/;"	e	enum:__anon55
+DBG_ADVANCE_LINE	libdex/DexFile.h	/^    DBG_ADVANCE_LINE         = 0x02,$/;"	e	enum:__anon8
 DBG_ADVANCE_PC	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_ADVANCE_PC = 0x01;$/;"	f	interface:DebugInfoConstants
 DBG_ADVANCE_PC	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_ADVANCE_PC = 0x01;$/;"	f	interface:DebugInfoConstants
-DBG_ADVANCE_PC	libdex/DexFile.h	/^    DBG_ADVANCE_PC           = 0x01,$/;"	e	enum:__anon55
-DBG_BREAKPOINT	vm/Debugger.h	/^    DBG_BREAKPOINT      = 0x01,$/;"	e	enum:__anon45
+DBG_ADVANCE_PC	libdex/DexFile.h	/^    DBG_ADVANCE_PC           = 0x01,$/;"	e	enum:__anon8
+DBG_BREAKPOINT	vm/Debugger.h	/^    DBG_BREAKPOINT      = 0x01,$/;"	e	enum:__anon15
 DBG_END_LOCAL	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_END_LOCAL = 0x05;$/;"	f	interface:DebugInfoConstants
 DBG_END_LOCAL	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_END_LOCAL = 0x05;$/;"	f	interface:DebugInfoConstants
-DBG_END_LOCAL	libdex/DexFile.h	/^    DBG_END_LOCAL            = 0x05,$/;"	e	enum:__anon55
+DBG_END_LOCAL	libdex/DexFile.h	/^    DBG_END_LOCAL            = 0x05,$/;"	e	enum:__anon8
 DBG_END_SEQUENCE	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_END_SEQUENCE = 0x00;$/;"	f	interface:DebugInfoConstants
 DBG_END_SEQUENCE	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_END_SEQUENCE = 0x00;$/;"	f	interface:DebugInfoConstants
-DBG_END_SEQUENCE	libdex/DexFile.h	/^    DBG_END_SEQUENCE         = 0x00,$/;"	e	enum:__anon55
+DBG_END_SEQUENCE	libdex/DexFile.h	/^    DBG_END_SEQUENCE         = 0x00,$/;"	e	enum:__anon8
 DBG_FIRST_SPECIAL	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_FIRST_SPECIAL = 0x0a;$/;"	f	interface:DebugInfoConstants
 DBG_FIRST_SPECIAL	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_FIRST_SPECIAL = 0x0a;$/;"	f	interface:DebugInfoConstants
-DBG_FIRST_SPECIAL	libdex/DexFile.h	/^    DBG_FIRST_SPECIAL        = 0x0a,$/;"	e	enum:__anon55
+DBG_FIRST_SPECIAL	libdex/DexFile.h	/^    DBG_FIRST_SPECIAL        = 0x0a,$/;"	e	enum:__anon8
 DBG_LINE_BASE	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_LINE_BASE = -4;$/;"	f	interface:DebugInfoConstants
 DBG_LINE_BASE	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_LINE_BASE = -4;$/;"	f	interface:DebugInfoConstants
-DBG_LINE_BASE	libdex/DexFile.h	/^    DBG_LINE_BASE            = -4,$/;"	e	enum:__anon55
+DBG_LINE_BASE	libdex/DexFile.h	/^    DBG_LINE_BASE            = -4,$/;"	e	enum:__anon8
 DBG_LINE_RANGE	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_LINE_RANGE = 15;$/;"	f	interface:DebugInfoConstants
 DBG_LINE_RANGE	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_LINE_RANGE = 15;$/;"	f	interface:DebugInfoConstants
-DBG_LINE_RANGE	libdex/DexFile.h	/^    DBG_LINE_RANGE           = 15,$/;"	e	enum:__anon55
-DBG_METHOD_ENTRY	vm/Debugger.h	/^    DBG_METHOD_ENTRY    = 0x04,$/;"	e	enum:__anon45
-DBG_METHOD_EXIT	vm/Debugger.h	/^    DBG_METHOD_EXIT     = 0x08,$/;"	e	enum:__anon45
+DBG_LINE_RANGE	libdex/DexFile.h	/^    DBG_LINE_RANGE           = 15,$/;"	e	enum:__anon8
+DBG_METHOD_ENTRY	vm/Debugger.h	/^    DBG_METHOD_ENTRY    = 0x04,$/;"	e	enum:__anon15
+DBG_METHOD_EXIT	vm/Debugger.h	/^    DBG_METHOD_EXIT     = 0x08,$/;"	e	enum:__anon15
 DBG_RESTART_LOCAL	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_RESTART_LOCAL = 0x06;$/;"	f	interface:DebugInfoConstants
 DBG_RESTART_LOCAL	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_RESTART_LOCAL = 0x06;$/;"	f	interface:DebugInfoConstants
-DBG_RESTART_LOCAL	libdex/DexFile.h	/^    DBG_RESTART_LOCAL        = 0x06,$/;"	e	enum:__anon55
+DBG_RESTART_LOCAL	libdex/DexFile.h	/^    DBG_RESTART_LOCAL        = 0x06,$/;"	e	enum:__anon8
 DBG_SET_EPILOGUE_BEGIN	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_SET_EPILOGUE_BEGIN = 0x08;$/;"	f	interface:DebugInfoConstants
 DBG_SET_EPILOGUE_BEGIN	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_SET_EPILOGUE_BEGIN = 0x08;$/;"	f	interface:DebugInfoConstants
-DBG_SET_EPILOGUE_BEGIN	libdex/DexFile.h	/^    DBG_SET_EPILOGUE_BEGIN   = 0x08,$/;"	e	enum:__anon55
+DBG_SET_EPILOGUE_BEGIN	libdex/DexFile.h	/^    DBG_SET_EPILOGUE_BEGIN   = 0x08,$/;"	e	enum:__anon8
 DBG_SET_FILE	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_SET_FILE = 0x09;$/;"	f	interface:DebugInfoConstants
 DBG_SET_FILE	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_SET_FILE = 0x09;$/;"	f	interface:DebugInfoConstants
-DBG_SET_FILE	libdex/DexFile.h	/^    DBG_SET_FILE             = 0x09,$/;"	e	enum:__anon55
+DBG_SET_FILE	libdex/DexFile.h	/^    DBG_SET_FILE             = 0x09,$/;"	e	enum:__anon8
 DBG_SET_PROLOGUE_END	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_SET_PROLOGUE_END = 0x07;$/;"	f	interface:DebugInfoConstants
 DBG_SET_PROLOGUE_END	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_SET_PROLOGUE_END = 0x07;$/;"	f	interface:DebugInfoConstants
-DBG_SET_PROLOGUE_END	libdex/DexFile.h	/^    DBG_SET_PROLOGUE_END     = 0x07,$/;"	e	enum:__anon55
-DBG_SINGLE_STEP	vm/Debugger.h	/^    DBG_SINGLE_STEP     = 0x02,$/;"	e	enum:__anon45
+DBG_SET_PROLOGUE_END	libdex/DexFile.h	/^    DBG_SET_PROLOGUE_END     = 0x07,$/;"	e	enum:__anon8
+DBG_SINGLE_STEP	vm/Debugger.h	/^    DBG_SINGLE_STEP     = 0x02,$/;"	e	enum:__anon15
 DBG_START_LOCAL	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_START_LOCAL = 0x03;$/;"	f	interface:DebugInfoConstants
 DBG_START_LOCAL	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_START_LOCAL = 0x03;$/;"	f	interface:DebugInfoConstants
-DBG_START_LOCAL	libdex/DexFile.h	/^    DBG_START_LOCAL          = 0x03,$/;"	e	enum:__anon55
+DBG_START_LOCAL	libdex/DexFile.h	/^    DBG_START_LOCAL          = 0x03,$/;"	e	enum:__anon8
 DBG_START_LOCAL_EXTENDED	dexgen/src/com/android/dexgen/dex/file/DebugInfoConstants.java	/^    static final int DBG_START_LOCAL_EXTENDED = 0x04;$/;"	f	interface:DebugInfoConstants
 DBG_START_LOCAL_EXTENDED	dx/src/com/android/dx/dex/file/DebugInfoConstants.java	/^    static final int DBG_START_LOCAL_EXTENDED = 0x04;$/;"	f	interface:DebugInfoConstants
-DBG_START_LOCAL_EXTENDED	libdex/DexFile.h	/^    DBG_START_LOCAL_EXTENDED = 0x04,$/;"	e	enum:__anon55
+DBG_START_LOCAL_EXTENDED	libdex/DexFile.h	/^    DBG_START_LOCAL_EXTENDED = 0x04,$/;"	e	enum:__anon8
 DBUG	tools/hprof-conv/HprofConv.c	31;"	d	file:
 DBUG	tools/hprof-conv/HprofConv.c	33;"	d	file:
 DBUG_MSG	vm/test/TestIndirectRefTable.cpp	27;"	d	file:
@@ -1774,11 +1766,11 @@ DEBUG	dx/src/com/android/dx/ssa/back/SsaToRop.java	/^    private static final bo
 DEBUG	tests/074-gc-thrash/src/Main.java	/^    public static final boolean DEBUG = false;$/;"	f	class:Main
 DEBUGGER	hit/src/com/android/hit/RootType.java	/^    DEBUGGER            (6, "debugger"),$/;"	e	enum:RootType	file:
 DEBUGMODE	vm/Dalvik.h	87;"	d
-DEBUG_ENABLE_ASSERT	vm/native/dalvik_system_Zygote.cpp	/^    DEBUG_ENABLE_ASSERT             = 1 << 2,$/;"	e	enum:__anon2	file:
-DEBUG_ENABLE_CHECKJNI	vm/native/dalvik_system_Zygote.cpp	/^    DEBUG_ENABLE_CHECKJNI           = 1 << 1,$/;"	e	enum:__anon2	file:
-DEBUG_ENABLE_DEBUGGER	vm/native/dalvik_system_Zygote.cpp	/^    DEBUG_ENABLE_DEBUGGER           = 1,$/;"	e	enum:__anon2	file:
-DEBUG_ENABLE_JNI_LOGGING	vm/native/dalvik_system_Zygote.cpp	/^    DEBUG_ENABLE_JNI_LOGGING        = 1 << 4,$/;"	e	enum:__anon2	file:
-DEBUG_ENABLE_SAFEMODE	vm/native/dalvik_system_Zygote.cpp	/^    DEBUG_ENABLE_SAFEMODE           = 1 << 3,$/;"	e	enum:__anon2	file:
+DEBUG_ENABLE_ASSERT	vm/native/dalvik_system_Zygote.cpp	/^    DEBUG_ENABLE_ASSERT             = 1 << 2,$/;"	e	enum:__anon33	file:
+DEBUG_ENABLE_CHECKJNI	vm/native/dalvik_system_Zygote.cpp	/^    DEBUG_ENABLE_CHECKJNI           = 1 << 1,$/;"	e	enum:__anon33	file:
+DEBUG_ENABLE_DEBUGGER	vm/native/dalvik_system_Zygote.cpp	/^    DEBUG_ENABLE_DEBUGGER           = 1,$/;"	e	enum:__anon33	file:
+DEBUG_ENABLE_JNI_LOGGING	vm/native/dalvik_system_Zygote.cpp	/^    DEBUG_ENABLE_JNI_LOGGING        = 1 << 4,$/;"	e	enum:__anon33	file:
+DEBUG_ENABLE_SAFEMODE	vm/native/dalvik_system_Zygote.cpp	/^    DEBUG_ENABLE_SAFEMODE           = 1 << 3,$/;"	e	enum:__anon33	file:
 DEBUG_LOOP	vm/compiler/Loop.cpp	22;"	d	file:
 DEBUG_OPT	vm/compiler/codegen/arm/LocalOptimizations.cpp	22;"	d	file:
 DECODE_ALIAS_INFO_REG	vm/compiler/codegen/arm/ArmLIR.h	157;"	d
@@ -1980,10 +1972,10 @@ DOUBLE_TO_LONG	dx/src/com/android/dx/io/OpcodeInfo.java	/^    public static fina
 DOUBLE_TO_LONG	dx/src/com/android/dx/io/Opcodes.java	/^    public static final int DOUBLE_TO_LONG = 0x8b;$/;"	f	class:Opcodes
 DREM	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int DREM = 0x73;$/;"	f	class:ByteOps
 DRETURN	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int DRETURN = 0xaf;$/;"	f	class:ByteOps
-DRT_SHOW_LIVENESS	vm/analysis/CodeVerify.cpp	/^    DRT_SHOW_LIVENESS   = 0x04,$/;"	e	enum:__anon31	file:
-DRT_SHOW_LOCALS	vm/analysis/CodeVerify.cpp	/^    DRT_SHOW_LOCALS     = 0x02,$/;"	e	enum:__anon31	file:
-DRT_SHOW_REF_TYPES	vm/analysis/CodeVerify.cpp	/^    DRT_SHOW_REF_TYPES  = 0x01,$/;"	e	enum:__anon31	file:
-DRT_SIMPLE	vm/analysis/CodeVerify.cpp	/^    DRT_SIMPLE          = 0,$/;"	e	enum:__anon31	file:
+DRT_SHOW_LIVENESS	vm/analysis/CodeVerify.cpp	/^    DRT_SHOW_LIVENESS   = 0x04,$/;"	e	enum:__anon27	file:
+DRT_SHOW_LOCALS	vm/analysis/CodeVerify.cpp	/^    DRT_SHOW_LOCALS     = 0x02,$/;"	e	enum:__anon27	file:
+DRT_SHOW_REF_TYPES	vm/analysis/CodeVerify.cpp	/^    DRT_SHOW_REF_TYPES  = 0x01,$/;"	e	enum:__anon27	file:
+DRT_SIMPLE	vm/analysis/CodeVerify.cpp	/^    DRT_SIMPLE          = 0,$/;"	e	enum:__anon27	file:
 DSTORE	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int DSTORE = 0x39;$/;"	f	class:ByteOps
 DSTORE_0	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int DSTORE_0 = 0x47;$/;"	f	class:ByteOps
 DSTORE_1	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int DSTORE_1 = 0x48;$/;"	f	class:ByteOps
@@ -2711,7 +2703,7 @@ ExecutionStack	dx/src/com/android/dx/cf/code/ExecutionStack.java	/^    public Ex
 ExecutionStack	dx/src/com/android/dx/cf/code/ExecutionStack.java	/^public final class ExecutionStack extends MutabilityControl {$/;"	c
 ExecutionSubModes	vm/interp/InterpState.h	/^enum ExecutionSubModes {$/;"	g
 Exist	vm/shadowlib/Map.h	/^		bool Exist(const K &key){$/;"	f	class:Map
-ExpandBuf	tools/hprof-conv/HprofConv.c	/^} ExpandBuf;$/;"	t	typeref:struct:__anon46	file:
+ExpandBuf	tools/hprof-conv/HprofConv.c	/^} ExpandBuf;$/;"	t	typeref:struct:__anon11	file:
 ExpandBuf	vm/jdwp/ExpandBuf.cpp	/^struct ExpandBuf {$/;"	s	file:
 ExportedProperty	tests/004-annotations/src/android/test/anno/ExportedProperty.java	/^public @interface ExportedProperty {$/;"	i
 ExtendedMIROpcode	vm/compiler/CompilerIR.h	/^enum ExtendedMIROpcode {$/;"	g
@@ -2834,7 +2826,7 @@ FINISH	vm/mterp/out/InterpC-x86.cpp	449;"	d	file:
 FINISH	vm/mterp/portable/stubdefs.cpp	37;"	d	file:
 FINISH_BKPT	vm/mterp/out/InterpC-portable.cpp	415;"	d	file:
 FINISH_BKPT	vm/mterp/portable/stubdefs.cpp	45;"	d	file:
-FIRST_SLEEP	vm/Thread.cpp	2431;"	d	file:
+FIRST_SLEEP	vm/Thread.cpp	2434;"	d	file:
 FIVE	dx/tests/091-ssa-const-collector/Blort.java	/^        ONE,TWO,THREE,FOUR,FIVE,SIX,SEVEN,EIGHT$/;"	e	enum:Blort.Foo	file:
 FIVE	tests/055-enum-performance/src/SamePackagePrivateEnum.java	/^    ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,$/;"	e	enum:SamePackagePrivateEnum	file:
 FIVE	tests/055-enum-performance/src/SamePackagePublicEnum.java	/^    ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,$/;"	e	enum:SamePackagePublicEnum	file:
@@ -3554,7 +3546,6 @@ GcSpec	vm/alloc/Heap.h	/^struct GcSpec {$/;"	s
 GenericVisitor	dx/src/com/android/dx/merge/InstructionTransformer.java	/^    private class GenericVisitor implements CodeReader.Visitor {$/;"	c	class:InstructionTransformer
 Get	vm/shadowlib/Map.h	/^		V& Get(const K &key){$/;"	f	class:Map
 GetArrayLength	vm/Jni.cpp	/^static jsize GetArrayLength(JNIEnv* env, jarray jarr) {$/;"	f	file:
-GetBuffer	libdex/ByteBuffer.cpp	/^char* ByteBuffer::GetBuffer(int size){$/;"	f	class:ByteBuffer
 GetCurrentSize	vm/shadowlib/ReProtocol.h	/^		int GetCurrentSize(){$/;"	f	class:ReProtocol
 GetCursor	dexgen/src/com/android/dexgen/util/ByteArray.java	/^    public interface GetCursor {$/;"	i	class:ByteArray
 GetCursor	dx/src/com/android/dx/util/ByteArray.java	/^    public interface GetCursor {$/;"	i	class:ByteArray
@@ -3574,7 +3565,6 @@ GetObjectId	vm/ShadowAPI.cpp	/^long GetObjectId(Thread* self, jobject jo){$/;"	f
 GetObjectRefType	vm/Jni.cpp	/^static jobjectRefType GetObjectRefType(JNIEnv* env, jobject jobj) {$/;"	f	file:
 GetOrderingId	vm/shadowlib/ReProtocol.h	/^		ordering_id_type GetOrderingId(thread_id_type tid){$/;"	f	class:ReProtocol
 GetPrimitiveArrayCritical	vm/Jni.cpp	/^static void* GetPrimitiveArrayCritical(JNIEnv* env, jarray jarr, jboolean* isCopy) {$/;"	f	file:
-GetSock	libdex/SocketBuffer.h	/^		int GetSock(){$/;"	f	class:SocketBuffer
 GetStaticFieldID	vm/Jni.cpp	/^static jfieldID GetStaticFieldID(JNIEnv* env, jclass jclazz, const char* name, const char* sig) {$/;"	f	file:
 GetStaticMethodID	vm/Jni.cpp	/^static jmethodID GetStaticMethodID(JNIEnv* env, jclass jclazz, const char* name, const char* sig) {$/;"	f	file:
 GetStringChars	vm/Jni.cpp	/^static const jchar* GetStringChars(JNIEnv* env, jstring jstr, jboolean* isCopy) {$/;"	f	file:
@@ -3991,7 +3981,6 @@ HEAP_SPACE	vm/interp/Jit.h	30;"	d
 HEAP_SUMMARY	hit/src/com/android/hit/HprofParser.java	/^    private static final int HEAP_SUMMARY               =   0x07;$/;"	f	class:HprofParser	file:
 HEAP_TRIM_IDLE_TIME_MS	vm/alloc/HeapSource.cpp	48;"	d	file:
 HEAP_UTILIZATION_MAX	vm/alloc/HeapSource.cpp	40;"	d	file:
-HELLO_WORLD_SERVER_PORT	libdex/SocketBuffer.h	21;"	d
 HPIF_SIZE	vm/alloc/DdmHeap.cpp	54;"	d	file:
 HPIF_WHEN_EVERY_GC	vm/alloc/DdmHeap.cpp	/^    HPIF_WHEN_EVERY_GC = 3$/;"	e	enum:HpifWhen	file:
 HPIF_WHEN_NEVER	vm/alloc/DdmHeap.cpp	/^    HPIF_WHEN_NEVER = 0,$/;"	e	enum:HpifWhen	file:
@@ -4735,7 +4724,6 @@ InaccessibleMethod	tests/075-verification-error/src/other/InaccessibleMethod.jav
 InaccessibleMethod	tests/075-verification-error/src2/other/InaccessibleMethod.java	/^public class InaccessibleMethod {$/;"	c
 InaccessibleSuper	tests/086-null-super/src/Main.java	/^        private static class InaccessibleSuper {}$/;"	c	class:Main.BrokenDexLoader
 InaccessibleSuper	tests/087-gc-after-link/src/Main.java	/^        private static class InaccessibleSuper {}$/;"	c	class:Main.BrokenDexLoader
-IncreaseCapacity	libdex/ByteBuffer.cpp	/^int ByteBuffer::IncreaseCapacity(int newsize){$/;"	f	class:ByteBuffer
 IndentingWriter	dexgen/src/com/android/dexgen/util/IndentingWriter.java	/^    public IndentingWriter(Writer out, int width) {$/;"	m	class:IndentingWriter
 IndentingWriter	dexgen/src/com/android/dexgen/util/IndentingWriter.java	/^    public IndentingWriter(Writer out, int width, String prefix) {$/;"	m	class:IndentingWriter
 IndentingWriter	dexgen/src/com/android/dexgen/util/IndentingWriter.java	/^public final class IndentingWriter extends FilterWriter {$/;"	c
@@ -4759,8 +4747,6 @@ InductionVariableInfo	vm/compiler/Dataflow.h	/^typedef struct InductionVariableI
 InductionVariableInfo	vm/compiler/Dataflow.h	/^} InductionVariableInfo;$/;"	t	typeref:struct:InductionVariableInfo
 Info	dx/src/com/android/dx/io/OpcodeInfo.java	/^        public Info(int opcode, String name, InstructionCodec format,$/;"	m	class:OpcodeInfo.Info
 Info	dx/src/com/android/dx/io/OpcodeInfo.java	/^    public static class Info {$/;"	c	class:OpcodeInfo
-InitMutex	libdex/ByteBuffer.cpp	/^void ByteBuffer::InitMutex(){$/;"	f	class:ByteBuffer
-InitMutex	libdex/SocketBuffer.h	/^		void InitMutex(){$/;"	f	class:SocketBuffer
 InitiatingLoaderList	vm/oo/Object.h	/^struct InitiatingLoaderList {$/;"	s
 InlineOp4Func	vm/InlineNative.h	/^typedef bool (*InlineOp4Func)(u4 arg0, u4 arg1, u4 arg2, u4 arg3,$/;"	t
 InlineOperation	vm/InlineNative.h	/^struct InlineOperation {$/;"	s
@@ -5009,7 +4995,7 @@ JitOptimizationHints	vm/compiler/Compiler.h	/^} JitOptimizationHints;$/;"	t	type
 JitState	vm/interp/InterpState.h	/^enum JitState {$/;"	g
 JitToInterpEntries	vm/interp/InterpState.h	/^struct JitToInterpEntries {$/;"	s
 JitTraceCounter_t	vm/interp/Jit.h	/^typedef s4 JitTraceCounter_t;$/;"	t
-JitTraceDescription	vm/compiler/Compiler.h	/^} JitTraceDescription;$/;"	t	typeref:struct:__anon20
+JitTraceDescription	vm/compiler/Compiler.h	/^} JitTraceDescription;$/;"	t	typeref:struct:__anon49
 JitTraceProfCounters	vm/interp/Jit.h	/^struct JitTraceProfCounters {$/;"	s
 JitTraceRun	vm/interp/InterpState.h	/^struct JitTraceRun {$/;"	s
 JitTranslationInfo	vm/compiler/Compiler.h	/^typedef struct JitTranslationInfo {$/;"	s
@@ -5019,37 +5005,37 @@ JoinMainSub	tests/039-join-main/src/Main.java	/^class JoinMainSub implements Run
 KEEP_FIRST	dx/src/com/android/dx/merge/CollisionPolicy.java	/^    KEEP_FIRST,$/;"	e	enum:CollisionPolicy	file:
 KILL	vm/analysis/Liveness.cpp	/^static inline void KILL(BitVector* workBits, u4 regIndex)$/;"	f	file:
 KILLW	vm/analysis/Liveness.cpp	/^static inline void KILLW(BitVector* workBits, u4 regIndex)$/;"	f	file:
-KIND_ALLOCATED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_ALLOCATED_BYTES        = 1<<1,$/;"	e	enum:__anon3	file:
-KIND_ALLOCATED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_ALLOCATED_OBJECTS      = 1<<0,$/;"	e	enum:__anon3	file:
+KIND_ALLOCATED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_ALLOCATED_BYTES        = 1<<1,$/;"	e	enum:__anon32	file:
+KIND_ALLOCATED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_ALLOCATED_OBJECTS      = 1<<0,$/;"	e	enum:__anon32	file:
 KIND_ALL_COUNTS	vm/native/dalvik_system_VMDebug.cpp	101;"	d	file:
 KIND_ARRAY_1	vm/alloc/DdmHeap.cpp	/^    KIND_ARRAY_1 = 2,$/;"	e	enum:HpsgKind	file:
 KIND_ARRAY_2	vm/alloc/DdmHeap.cpp	/^    KIND_ARRAY_2 = 3,$/;"	e	enum:HpsgKind	file:
 KIND_ARRAY_4	vm/alloc/DdmHeap.cpp	/^    KIND_ARRAY_4 = 4,$/;"	e	enum:HpsgKind	file:
 KIND_ARRAY_8	vm/alloc/DdmHeap.cpp	/^    KIND_ARRAY_8 = 5,$/;"	e	enum:HpsgKind	file:
-KIND_CLASS_INIT_COUNT	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_CLASS_INIT_COUNT       = 1<<5,$/;"	e	enum:__anon3	file:
-KIND_CLASS_INIT_TIME	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_CLASS_INIT_TIME        = 1<<6,$/;"	e	enum:__anon3	file:
+KIND_CLASS_INIT_COUNT	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_CLASS_INIT_COUNT       = 1<<5,$/;"	e	enum:__anon32	file:
+KIND_CLASS_INIT_TIME	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_CLASS_INIT_TIME        = 1<<6,$/;"	e	enum:__anon32	file:
 KIND_CLASS_OBJECT	vm/alloc/DdmHeap.cpp	/^    KIND_CLASS_OBJECT = 1,$/;"	e	enum:HpsgKind	file:
-KIND_EXT_ALLOCATED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_EXT_ALLOCATED_BYTES   = 1<<13,$/;"	e	enum:__anon3	file:
-KIND_EXT_ALLOCATED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_EXT_ALLOCATED_OBJECTS = 1<<12,$/;"	e	enum:__anon3	file:
-KIND_EXT_FREED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_EXT_FREED_BYTES       = 1<<15,$/;"	e	enum:__anon3	file:
-KIND_EXT_FREED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_EXT_FREED_OBJECTS     = 1<<14,$/;"	e	enum:__anon3	file:
-KIND_FREED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_FREED_BYTES            = 1<<3,$/;"	e	enum:__anon3	file:
-KIND_FREED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_FREED_OBJECTS          = 1<<2,$/;"	e	enum:__anon3	file:
-KIND_GC_INVOCATIONS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GC_INVOCATIONS         = 1<<4,$/;"	e	enum:__anon3	file:
-KIND_GLOBAL_ALLOCATED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_ALLOCATED_BYTES     = KIND_ALLOCATED_BYTES,$/;"	e	enum:__anon3	file:
-KIND_GLOBAL_ALLOCATED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_ALLOCATED_OBJECTS   = KIND_ALLOCATED_OBJECTS,$/;"	e	enum:__anon3	file:
-KIND_GLOBAL_CLASS_INIT_COUNT	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_CLASS_INIT_COUNT    = KIND_CLASS_INIT_COUNT,$/;"	e	enum:__anon3	file:
-KIND_GLOBAL_CLASS_INIT_TIME	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_CLASS_INIT_TIME     = KIND_CLASS_INIT_TIME,$/;"	e	enum:__anon3	file:
-KIND_GLOBAL_FREED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_FREED_BYTES         = KIND_FREED_BYTES,$/;"	e	enum:__anon3	file:
-KIND_GLOBAL_FREED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_FREED_OBJECTS       = KIND_FREED_OBJECTS,$/;"	e	enum:__anon3	file:
-KIND_GLOBAL_GC_INVOCATIONS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_GC_INVOCATIONS      = KIND_GC_INVOCATIONS,$/;"	e	enum:__anon3	file:
+KIND_EXT_ALLOCATED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_EXT_ALLOCATED_BYTES   = 1<<13,$/;"	e	enum:__anon32	file:
+KIND_EXT_ALLOCATED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_EXT_ALLOCATED_OBJECTS = 1<<12,$/;"	e	enum:__anon32	file:
+KIND_EXT_FREED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_EXT_FREED_BYTES       = 1<<15,$/;"	e	enum:__anon32	file:
+KIND_EXT_FREED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_EXT_FREED_OBJECTS     = 1<<14,$/;"	e	enum:__anon32	file:
+KIND_FREED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_FREED_BYTES            = 1<<3,$/;"	e	enum:__anon32	file:
+KIND_FREED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_FREED_OBJECTS          = 1<<2,$/;"	e	enum:__anon32	file:
+KIND_GC_INVOCATIONS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GC_INVOCATIONS         = 1<<4,$/;"	e	enum:__anon32	file:
+KIND_GLOBAL_ALLOCATED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_ALLOCATED_BYTES     = KIND_ALLOCATED_BYTES,$/;"	e	enum:__anon32	file:
+KIND_GLOBAL_ALLOCATED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_ALLOCATED_OBJECTS   = KIND_ALLOCATED_OBJECTS,$/;"	e	enum:__anon32	file:
+KIND_GLOBAL_CLASS_INIT_COUNT	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_CLASS_INIT_COUNT    = KIND_CLASS_INIT_COUNT,$/;"	e	enum:__anon32	file:
+KIND_GLOBAL_CLASS_INIT_TIME	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_CLASS_INIT_TIME     = KIND_CLASS_INIT_TIME,$/;"	e	enum:__anon32	file:
+KIND_GLOBAL_FREED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_FREED_BYTES         = KIND_FREED_BYTES,$/;"	e	enum:__anon32	file:
+KIND_GLOBAL_FREED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_FREED_OBJECTS       = KIND_FREED_OBJECTS,$/;"	e	enum:__anon32	file:
+KIND_GLOBAL_GC_INVOCATIONS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_GLOBAL_GC_INVOCATIONS      = KIND_GC_INVOCATIONS,$/;"	e	enum:__anon32	file:
 KIND_NATIVE	vm/alloc/DdmHeap.cpp	/^    KIND_NATIVE = 7,$/;"	e	enum:HpsgKind	file:
 KIND_OBJECT	vm/alloc/DdmHeap.cpp	/^    KIND_OBJECT = 0,$/;"	e	enum:HpsgKind	file:
-KIND_THREAD_ALLOCATED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_THREAD_ALLOCATED_BYTES     = KIND_ALLOCATED_BYTES << 16,$/;"	e	enum:__anon3	file:
-KIND_THREAD_ALLOCATED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_THREAD_ALLOCATED_OBJECTS   = KIND_ALLOCATED_OBJECTS << 16,$/;"	e	enum:__anon3	file:
-KIND_THREAD_FREED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_THREAD_FREED_BYTES         = KIND_FREED_BYTES << 16,$/;"	e	enum:__anon3	file:
-KIND_THREAD_FREED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_THREAD_FREED_OBJECTS       = KIND_FREED_OBJECTS << 16,$/;"	e	enum:__anon3	file:
-KIND_THREAD_GC_INVOCATIONS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_THREAD_GC_INVOCATIONS      = KIND_GC_INVOCATIONS << 16,$/;"	e	enum:__anon3	file:
+KIND_THREAD_ALLOCATED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_THREAD_ALLOCATED_BYTES     = KIND_ALLOCATED_BYTES << 16,$/;"	e	enum:__anon32	file:
+KIND_THREAD_ALLOCATED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_THREAD_ALLOCATED_OBJECTS   = KIND_ALLOCATED_OBJECTS << 16,$/;"	e	enum:__anon32	file:
+KIND_THREAD_FREED_BYTES	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_THREAD_FREED_BYTES         = KIND_FREED_BYTES << 16,$/;"	e	enum:__anon32	file:
+KIND_THREAD_FREED_OBJECTS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_THREAD_FREED_OBJECTS       = KIND_FREED_OBJECTS << 16,$/;"	e	enum:__anon32	file:
+KIND_THREAD_GC_INVOCATIONS	vm/native/dalvik_system_VMDebug.cpp	/^    KIND_THREAD_GC_INVOCATIONS      = KIND_GC_INVOCATIONS << 16,$/;"	e	enum:__anon32	file:
 KIND_UNKNOWN	vm/alloc/DdmHeap.cpp	/^    KIND_UNKNOWN = 6,$/;"	e	enum:HpsgKind	file:
 KNOWN_NULL	dexgen/src/com/android/dexgen/rop/type/Type.java	/^    public static final Type KNOWN_NULL = new Type("<null>", BT_OBJECT);$/;"	f	class:Type
 KNOWN_NULL	dx/src/com/android/dx/rop/type/Type.java	/^    public static final Type KNOWN_NULL = new Type("<null>", BT_OBJECT);$/;"	f	class:Type
@@ -5544,9 +5530,9 @@ METHOD_IS_SETTER	vm/compiler/Compiler.h	152;"	d
 METHOD_IS_THROW_FREE	vm/compiler/Compiler.h	150;"	d
 METHOD_REF	dx/src/com/android/dx/io/IndexType.java	/^    METHOD_REF,$/;"	e	enum:IndexType	file:
 METHOD_STATIC	vm/oo/Resolve.h	/^    METHOD_STATIC,      \/\/ static$/;"	e	enum:MethodType
-METHOD_TRACE_ENTER	vm/Profile.h	/^    METHOD_TRACE_ENTER = 0x00,      \/\/ method entry$/;"	e	enum:__anon26
-METHOD_TRACE_EXIT	vm/Profile.h	/^    METHOD_TRACE_EXIT = 0x01,       \/\/ method exit$/;"	e	enum:__anon26
-METHOD_TRACE_UNROLL	vm/Profile.h	/^    METHOD_TRACE_UNROLL = 0x02,     \/\/ method exited by exception unrolling$/;"	e	enum:__anon26
+METHOD_TRACE_ENTER	vm/Profile.h	/^    METHOD_TRACE_ENTER = 0x00,      \/\/ method entry$/;"	e	enum:__anon14
+METHOD_TRACE_EXIT	vm/Profile.h	/^    METHOD_TRACE_EXIT = 0x01,       \/\/ method exit$/;"	e	enum:__anon14
+METHOD_TRACE_UNROLL	vm/Profile.h	/^    METHOD_TRACE_UNROLL = 0x02,     \/\/ method exited by exception unrolling$/;"	e	enum:__anon14
 METHOD_UNKNOWN	vm/oo/Resolve.h	/^    METHOD_UNKNOWN  = 0,$/;"	e	enum:MethodType
 METHOD_VIRTUAL	vm/oo/Resolve.h	/^    METHOD_VIRTUAL,     \/\/ virtual, super$/;"	e	enum:MethodType
 MIN	vm/Common.h	52;"	d
@@ -5556,7 +5542,7 @@ MIN_VALUE	dexgen/src/com/android/dexgen/dex/code/DalvOps.java	/^    public stati
 MIN_VALUE	dx/src/com/android/dx/io/Opcodes.java	/^    public static final int MIN_VALUE = -1;$/;"	f	class:Opcodes
 MIR	vm/compiler/CompilerIR.h	/^typedef struct MIR {$/;"	s
 MIR	vm/compiler/CompilerIR.h	/^} MIR;$/;"	t	typeref:struct:MIR
-MIROptimizationFlagPositons	vm/compiler/CompilerIR.h	/^} MIROptimizationFlagPositons;$/;"	t	typeref:enum:__anon17
+MIROptimizationFlagPositons	vm/compiler/CompilerIR.h	/^} MIROptimizationFlagPositons;$/;"	t	typeref:enum:__anon55
 MIR_CALLEE	vm/compiler/CompilerIR.h	115;"	d
 MIR_IGNORE_NULL_CHECK	vm/compiler/CompilerIR.h	109;"	d
 MIR_IGNORE_RANGE_CHECK	vm/compiler/CompilerIR.h	111;"	d
@@ -5596,7 +5582,7 @@ MONITOR_EXIT	dx/src/com/android/dx/io/OpcodeInfo.java	/^    public static final 
 MONITOR_EXIT	dx/src/com/android/dx/io/Opcodes.java	/^    public static final int MONITOR_EXIT = 0x1e;$/;"	f	class:Opcodes
 MONITOR_EXIT	dx/src/com/android/dx/rop/code/RegOps.java	/^    public static final int MONITOR_EXIT = 37;$/;"	f	class:RegOps
 MONITOR_EXIT	dx/src/com/android/dx/rop/code/Rops.java	/^    public static final Rop MONITOR_EXIT =$/;"	f	class:Rops
-MORE_SLEEP	vm/Thread.cpp	2432;"	d	file:
+MORE_SLEEP	vm/Thread.cpp	2435;"	d	file:
 MOVE	dexgen/src/com/android/dexgen/dex/code/DalvOps.java	/^    public static final int MOVE = 0x01;$/;"	f	class:DalvOps
 MOVE	dexgen/src/com/android/dexgen/dex/code/Dops.java	/^    public static final Dop MOVE =$/;"	f	class:Dops
 MOVE	dexgen/src/com/android/dexgen/rop/code/RegOps.java	/^    public static final int MOVE = 2;$/;"	f	class:RegOps
@@ -6239,7 +6225,6 @@ NewObject	vm/Jni.cpp	/^static jobject NewObject(JNIEnv* env, jclass jclazz, jmet
 NewObjectA	vm/Jni.cpp	/^static jobject NewObjectA(JNIEnv* env, jclass jclazz, jmethodID methodID, jvalue* args) {$/;"	f	file:
 NewObjectArray	vm/Jni.cpp	/^static jobjectArray NewObjectArray(JNIEnv* env, jsize length,$/;"	f	file:
 NewObjectV	vm/Jni.cpp	/^static jobject NewObjectV(JNIEnv* env, jclass jclazz, jmethodID methodID, va_list args) {$/;"	f	file:
-NewSock	libdex/SocketBuffer.h	/^		int NewSock(){$/;"	f	class:SocketBuffer
 NewString	vm/Jni.cpp	/^static jstring NewString(JNIEnv* env, const jchar* unicodeChars, jsize len) {$/;"	f	file:
 NewStringUTF	vm/Jni.cpp	/^static jstring NewStringUTF(JNIEnv* env, const char* bytes) {$/;"	f	file:
 NewWeakGlobalRef	vm/Jni.cpp	/^static jweak NewWeakGlobalRef(JNIEnv* env, jobject jobj) {$/;"	f	file:
@@ -6790,7 +6775,7 @@ PR_TAG	docs/prettify.js	/^  var PR_TAG = 'tag';$/;"	v
 PR_TYPE	docs/prettify.js	/^  var PR_TYPE = 'typ';$/;"	v
 PR_innerHtmlWorks	docs/prettify.js	/^  var PR_innerHtmlWorks = null;$/;"	v
 PR_normalizedHtml	docs/prettify.js	/^var PR_normalizedHtml;$/;"	v
-PTHREAD_MUTEX_ERRORCHECK	vm/Thread.h	/^enum { PTHREAD_MUTEX_ERRORCHECK = PTHREAD_MUTEX_ERRORCHECK_NP };$/;"	e	enum:__anon4
+PTHREAD_MUTEX_ERRORCHECK	vm/Thread.h	/^enum { PTHREAD_MUTEX_ERRORCHECK = PTHREAD_MUTEX_ERRORCHECK_NP };$/;"	e	enum:__anon22
 PUTFIELD	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int PUTFIELD = 0xb5;$/;"	f	class:ByteOps
 PUTSTATIC	dx/src/com/android/dx/cf/code/ByteOps.java	/^    public static final int PUTSTATIC = 0xb3;$/;"	f	class:ByteOps
 PUT_FIELD	dexgen/src/com/android/dexgen/rop/code/RegOps.java	/^    public static final int PUT_FIELD = 47;$/;"	f	class:RegOps
@@ -7216,7 +7201,6 @@ ReturnAddress	dx/src/com/android/dx/cf/code/ReturnAddress.java	/^    public Retu
 ReturnAddress	dx/src/com/android/dx/cf/code/ReturnAddress.java	/^public final class ReturnAddress implements TypeBearer {$/;"	c
 ReturnAndResetBuffer	vm/shadowlib/ReProtocol.h	/^		Buffer* ReturnAndResetBuffer(){$/;"	f	class:ReProtocol
 ReturnAndResetBufferNolock	vm/shadowlib/ReProtocol.h	/^		Buffer* ReturnAndResetBufferNolock(){$/;"	f	class:ReProtocol
-ReturnBuffer	libdex/ByteBuffer.cpp	/^void ByteBuffer::ReturnBuffer(char* start, int size){$/;"	f	class:ByteBuffer
 Robin	tests/074-gc-thrash/src/Main.java	/^class Robin extends Thread {$/;"	c
 RootObj	hit/src/com/android/hit/RootObj.java	/^    public RootObj(RootType type) {$/;"	m	class:RootObj
 RootObj	hit/src/com/android/hit/RootObj.java	/^    public RootObj(RootType type, long id) {$/;"	m	class:RootObj
@@ -7301,7 +7285,6 @@ SD_OUT	vm/jdwp/JdwpConstants.h	/^    SD_OUT                  = 2,    \/* step ou
 SD_OVER	vm/jdwp/JdwpConstants.h	/^    SD_OVER                 = 1,    \/* step over method calls *\/$/;"	e	enum:JdwpStepDepth
 SERIALIZABLE	dexgen/src/com/android/dexgen/rop/type/Type.java	/^    public static final Type SERIALIZABLE = intern("Ljava\/io\/Serializable;");$/;"	f	class:Type
 SERIALIZABLE	dx/src/com/android/dx/rop/type/Type.java	/^    public static final Type SERIALIZABLE = intern("Ljava\/io\/Serializable;");$/;"	f	class:Type
-SERVER_IP	libdex/SocketBuffer.h	23;"	d
 SERVER_IP	libdex/ZipArchive.cpp	48;"	d	file:
 SERVER_IP	vm/shadowlib/ReAgent.cpp	23;"	d	file:
 SERVER_SOCK	vm/shadowlib/Socket.cpp	23;"	d	file:
@@ -7876,8 +7859,6 @@ SleepyThread	tests/050-sync-test/src/Main.java	/^class SleepyThread extends Thre
 SlowInit	tests/084-class-init/src/SlowInit.java	/^public class SlowInit {$/;"	c
 Socket	vm/shadowlib/Socket.cpp	/^Socket::Socket(bool need ) :$/;"	f	class:Socket
 Socket	vm/shadowlib/Socket.h	/^class Socket$/;"	c
-SocketBuffer	libdex/SocketBuffer.h	/^		SocketBuffer(){$/;"	f	class:SocketBuffer
-SocketBuffer	libdex/SocketBuffer.h	/^class SocketBuffer{$/;"	c
 SomeClass	tests/004-annotations/src/android/test/anno/SomeClass.java	/^public class SomeClass {$/;"	c
 SomeClass.class	tests/004-annotations/src/android/test/anno/AnnoFancyMethod.java	/^    Class someClass() default SomeClass.class;$/;"	f	interface:AnnoFancyMethod
 SortType	dexgen/src/com/android/dexgen/dex/file/MixedItemSection.java	/^    static enum SortType {$/;"	g	class:MixedItemSection
@@ -8036,7 +8017,7 @@ TEMPLATE_INLINE_PROFILING	vm/compiler/template/out/CompilerTemplateAsm-armv7-a-n
 TEMPLATE_INLINE_PROFILING	vm/compiler/template/out/CompilerTemplateAsm-armv7-a.S	/^#define TEMPLATE_INLINE_PROFILING$/;"	d
 TEMPLATE_LAST_MARK	vm/compiler/codegen/arm/armv5te-vfp/ArchVariant.h	/^    TEMPLATE_LAST_MARK,$/;"	e	enum:TemplateOpcode
 TEMPLATE_LAST_MARK	vm/compiler/codegen/arm/armv5te/ArchVariant.h	/^    TEMPLATE_LAST_MARK,$/;"	e	enum:TemplateOpcode
-TEMPLATE_LAST_MARK	vm/compiler/codegen/arm/armv7-a-neon/ArchVariant.h	/^    TEMPLATE_LAST_MARK,$/;"	e	enum:__anon23
+TEMPLATE_LAST_MARK	vm/compiler/codegen/arm/armv7-a-neon/ArchVariant.h	/^    TEMPLATE_LAST_MARK,$/;"	e	enum:__anon53
 TEMPLATE_LAST_MARK	vm/compiler/codegen/arm/armv7-a/ArchVariant.h	/^    TEMPLATE_LAST_MARK,$/;"	e	enum:TemplateOpcode
 TEMPLATE_LAST_MARK	vm/compiler/codegen/x86/ia32/ArchVariant.h	/^    TEMPLATE_LAST_MARK,$/;"	e	enum:TemplateOpcode
 TEN	tests/055-enum-performance/src/SamePackagePrivateEnum.java	/^        TEN, ELEVEN, TWELVE, THIRTEEN, FOURTEEN, FIFTEEN, SIXTEEN,$/;"	e	enum:SamePackagePrivateEnum	file:
@@ -8116,11 +8097,11 @@ THREAD_BLOCK	hit/src/com/android/hit/RootType.java	/^    THREAD_BLOCK        (9,
 THREAD_COUNT	vm/test/AtomicTest.cpp	36;"	d	file:
 THREAD_GROUP_ALL	vm/Debugger.cpp	90;"	d	file:
 THREAD_INITIALIZING	vm/Thread.h	/^    THREAD_INITIALIZING = 5,        \/* allocated, not yet running *\/$/;"	e	enum:ThreadStatus
-THREAD_MAX_PRIORITY	vm/Thread.h	/^    THREAD_MAX_PRIORITY     = 10,$/;"	e	enum:__anon5
-THREAD_MIN_PRIORITY	vm/Thread.h	/^    THREAD_MIN_PRIORITY     = 1,$/;"	e	enum:__anon5
+THREAD_MAX_PRIORITY	vm/Thread.h	/^    THREAD_MAX_PRIORITY     = 10,$/;"	e	enum:__anon23
+THREAD_MIN_PRIORITY	vm/Thread.h	/^    THREAD_MIN_PRIORITY     = 1,$/;"	e	enum:__anon23
 THREAD_MONITOR	vm/Thread.h	/^    THREAD_MONITOR      = 3,        \/* BLOCKED on a monitor *\/$/;"	e	enum:ThreadStatus
 THREAD_NATIVE	vm/Thread.h	/^    THREAD_NATIVE       = 7,        \/* off in a JNI native method *\/$/;"	e	enum:ThreadStatus
-THREAD_NORM_PRIORITY	vm/Thread.h	/^    THREAD_NORM_PRIORITY    = 5,$/;"	e	enum:__anon5
+THREAD_NORM_PRIORITY	vm/Thread.h	/^    THREAD_NORM_PRIORITY    = 5,$/;"	e	enum:__anon23
 THREAD_RUNNING	vm/Thread.h	/^    THREAD_RUNNING      = 1,        \/* RUNNABLE or running now *\/$/;"	e	enum:ThreadStatus
 THREAD_STARTING	vm/Thread.h	/^    THREAD_STARTING     = 6,        \/* started, not yet on thread list *\/$/;"	e	enum:ThreadStatus
 THREAD_SUSPENDED	vm/Thread.h	/^    THREAD_SUSPENDED    = 9,        \/* suspended, usually by GC or debugger *\/$/;"	e	enum:ThreadStatus
@@ -8173,7 +8154,7 @@ TO_SHORT	dx/src/com/android/dx/rop/code/RegOps.java	/^    public static final in
 TO_SHORT	dx/src/com/android/dx/rop/code/Rops.java	/^    public static final Rop TO_SHORT =$/;"	f	class:Rops
 TRACE	vm/alloc/TEST/HeapBitmapTest/main.c	17;"	d	file:
 TRACE	vm/alloc/TEST/HeapBitmapTest/main.c	19;"	d	file:
-TRACE_ALLOC_COUNTS	vm/Profile.h	/^    TRACE_ALLOC_COUNTS      = 0x01,$/;"	e	enum:__anon25
+TRACE_ALLOC_COUNTS	vm/Profile.h	/^    TRACE_ALLOC_COUNTS      = 0x01,$/;"	e	enum:__anon13
 TRACE_HEADER_LEN	vm/Profile.cpp	77;"	d	file:
 TRACE_MAGIC	vm/Profile.cpp	76;"	d	file:
 TRACE_METHOD_ENTER	vm/Profile.h	113;"	d
@@ -8279,7 +8260,7 @@ TargetInsn	dx/src/com/android/dx/dex/code/TargetInsn.java	/^    public TargetIns
 TargetInsn	dx/src/com/android/dx/dex/code/TargetInsn.java	/^public final class TargetInsn extends FixedSizeInsn {$/;"	c
 TemplateOpcode	vm/compiler/codegen/arm/armv5te-vfp/ArchVariant.h	/^enum TemplateOpcode {$/;"	g
 TemplateOpcode	vm/compiler/codegen/arm/armv5te/ArchVariant.h	/^enum TemplateOpcode {$/;"	g
-TemplateOpcode	vm/compiler/codegen/arm/armv7-a-neon/ArchVariant.h	/^} TemplateOpcode;$/;"	t	typeref:enum:__anon23
+TemplateOpcode	vm/compiler/codegen/arm/armv7-a-neon/ArchVariant.h	/^} TemplateOpcode;$/;"	t	typeref:enum:__anon53
 TemplateOpcode	vm/compiler/codegen/arm/armv7-a/ArchVariant.h	/^enum TemplateOpcode {$/;"	g
 TemplateOpcode	vm/compiler/codegen/x86/ia32/ArchVariant.h	/^enum TemplateOpcode {$/;"	g
 TestAnnotations	tests/004-annotations/src/android/test/anno/TestAnnotations.java	/^public class TestAnnotations {$/;"	c
@@ -8496,7 +8477,7 @@ UniformListItem	dexgen/src/com/android/dexgen/dex/file/UniformListItem.java	/^pu
 UniformListItem	dx/src/com/android/dx/dex/file/UniformListItem.java	/^    public UniformListItem(ItemType itemType, List<T> items) {$/;"	m	class:UniformListItem
 UniformListItem	dx/src/com/android/dx/dex/file/UniformListItem.java	/^public final class UniformListItem<T extends OffsettedItem>$/;"	c
 UninitInstanceMap	vm/analysis/CodeVerify.h	/^struct UninitInstanceMap {$/;"	s
-UnionJNIEnvToVoid	vm/shadowlib/ReAgent.cpp	/^}UnionJNIEnvToVoid;$/;"	t	typeref:union:__anon44	file:
+UnionJNIEnvToVoid	vm/shadowlib/ReAgent.cpp	/^}UnionJNIEnvToVoid;$/;"	t	typeref:union:__anon48	file:
 UniqueMethodEntry	tools/dmtracedump/TraceDump.c	/^typedef struct UniqueMethodEntry {$/;"	s	file:
 UniqueMethodEntry	tools/dmtracedump/TraceDump.c	/^} UniqueMethodEntry;$/;"	t	typeref:struct:UniqueMethodEntry	file:
 Unlock	vm/shadowlib/Lock.h	/^		void Unlock(lock_id_type lockid){$/;"	f	class:LockBuffer
@@ -8823,7 +8804,6 @@ _RE_MAP_H_	vm/shadowlib/Map.h	2;"	d
 _S	vm/analysis/CodeVerify.cpp	154;"	d	file:
 _S	vm/analysis/CodeVerify.cpp	231;"	d	file:
 _SHADOWLIB_H_	vm/shadowlib/ShadowLib.h	2;"	d
-_SOCKET_BUFFER_H_	libdex/SocketBuffer.h	2;"	d
 _SOCKET_H_	vm/shadowlib/Socket.h	4;"	d
 _Set	vm/shadowlib/Map.h	/^		void _Set(const K &key, const V &value) {$/;"	f	class:Map
 _U	vm/analysis/CodeVerify.cpp	140;"	d	file:
@@ -8847,10 +8827,8 @@ __attribute	vm/alloc/TEST/HeapBitmapTest/main.c	7;"	d	file:
 __attribute	vm/alloc/TEST/HeapBitmapTest/main.c	9;"	d	file:
 _b	vm/analysis/CodeVerify.cpp	151;"	d	file:
 _b	vm/analysis/CodeVerify.cpp	228;"	d	file:
-_buffer	libdex/ByteBuffer.h	/^	char *_buffer;$/;"	m	class:ByteBuffer
 _c	vm/analysis/CodeVerify.cpp	149;"	d	file:
 _c	vm/analysis/CodeVerify.cpp	226;"	d	file:
-_capacity	libdex/ByteBuffer.h	/^	int _capacity;$/;"	m	class:ByteBuffer
 _d	vm/analysis/CodeVerify.cpp	163;"	d	file:
 _d	vm/analysis/CodeVerify.cpp	240;"	d	file:
 _h	vm/analysis/CodeVerify.cpp	147;"	d	file:
@@ -8861,18 +8839,14 @@ _i	vm/analysis/CodeVerify.cpp	227;"	d	file:
 _j	vm/analysis/CodeVerify.cpp	161;"	d	file:
 _j	vm/analysis/CodeVerify.cpp	238;"	d	file:
 _mapPID	vm/shadowlib/ReAgent.cpp	/^void _mapPID(int pid, const char* pname){$/;"	f
-_mutex	libdex/ByteBuffer.h	/^	pthread_mutex_t *_mutex;$/;"	m	class:ByteBuffer
-_mutex	libdex/SocketBuffer.h	/^		pthread_mutex_t *_mutex;$/;"	m	class:SocketBuffer
 _n	vm/analysis/CodeVerify.cpp	159;"	d	file:
 _n	vm/analysis/CodeVerify.cpp	236;"	d	file:
 _pr_isIE6	docs/prettify.js	/^      \/\\bMSIE 6\\.\/.test(navigator.userAgent);$/;"	f
 _s	vm/analysis/CodeVerify.cpp	153;"	d	file:
 _s	vm/analysis/CodeVerify.cpp	230;"	d	file:
 _set_net_reference	vm/shadowlib/Netref.h	/^static jlong _set_net_reference(jlong object_id, jint class_id, unsigned char spec, unsigned char cbit) {$/;"	f
-_sock_list	libdex/SocketBuffer.h	/^		vector<int> _sock_list;$/;"	m	class:SocketBuffer
 _swap_locks	vm/Atomic.cpp	/^static pthread_mutex_t  _swap_locks[SWAP_LOCK_COUNT];$/;"	v	file:
 _threadSuspendLock	vm/Globals.h	/^    pthread_mutex_t _threadSuspendLock;$/;"	m	struct:DvmGlobals
-_used	libdex/ByteBuffer.h	/^	int _used;$/;"	m	class:ByteBuffer
 _y	vm/analysis/CodeVerify.cpp	145;"	d	file:
 _y	vm/analysis/CodeVerify.cpp	222;"	d	file:
 a	dx/etc/dx.bat	/^set a=%~1$/;"	v
@@ -9153,7 +9127,7 @@ addWorkIfNecessary	dx/src/com/android/dx/cf/code/BasicBlocker.java	/^    private
 addedTo	dexgen/src/com/android/dexgen/dex/file/OffsettedItem.java	/^    private Section addedTo;$/;"	f	class:OffsettedItem	file:
 addedTo	dx/src/com/android/dx/dex/file/OffsettedItem.java	/^    private Section addedTo;$/;"	f	class:OffsettedItem	file:
 addr	libdex/SysUtil.h	/^    void*   addr;           \/* start of data *\/$/;"	m	struct:MemMapping
-addr	vm/analysis/CodeVerify.h	/^        int             addr;   \/* code offset, or -1 for method arg ("this") *\/$/;"	m	struct:UninitInstanceMap::__anon30
+addr	vm/analysis/CodeVerify.h	/^        int             addr;   \/* code offset, or -1 for method arg ("this") *\/$/;"	m	struct:UninitInstanceMap::__anon26
 addr	vm/interp/Interp.cpp	/^    u2*         addr;                   \/* absolute memory address *\/$/;"	m	struct:Breakpoint	file:
 addr	vm/interp/Jit.h	/^    int addr;$/;"	m	struct:InstructionTrace
 addr	vm/interp/Jit.h	/^    int addr;$/;"	m	struct:ShadowHeap
@@ -9211,7 +9185,7 @@ adler	vm/CheckJni.cpp	/^    uLong       adler;$/;"	m	struct:GuardedCopy	file:
 advance	dx/src/com/android/dx/io/instructions/BaseCodeCursor.java	/^    protected final void advance(int amount) {$/;"	m	class:BaseCodeCursor
 advice	dx/src/com/android/dx/cf/code/RopperMachine.java	/^    private final TranslationAdvice advice;$/;"	f	class:RopperMachine	file:
 advice	dx/src/com/android/dx/ssa/Optimizer.java	/^    private static TranslationAdvice advice;$/;"	f	class:Optimizer	file:
-age	vm/compiler/codegen/arm/ArmLIR.h	/^        unsigned int age:4;     \/\/ default is 0, set lazily by the optimizer$/;"	m	struct:ArmLIR::__anon22
+age	vm/compiler/codegen/arm/ArmLIR.h	/^        unsigned int age:4;     \/\/ default is 0, set lazily by the optimizer$/;"	m	struct:ArmLIR::__anon52
 age	vm/compiler/codegen/x86/X86LIR.h	/^    int age;            \/\/ default is 0, set lazily by the optimizer$/;"	m	struct:X86LIR
 aliasInfo	vm/compiler/codegen/arm/ArmLIR.h	/^    int aliasInfo;              \/\/ For Dalvik register & litpool disambiguation$/;"	m	struct:ArmLIR
 aliasInfo	vm/compiler/codegen/x86/X86LIR.h	/^    int aliasInfo;      \/\/ For Dalvik register access & litpool disambiguation$/;"	m	struct:X86LIR
@@ -9420,7 +9394,7 @@ arg	vm/InlineNative.cpp	/^    u4 arg;$/;"	m	union:Convert32	file:
 arg	vm/InlineNative.cpp	/^    u4 arg[2];$/;"	m	union:Convert64	file:
 argArray	vm/Debugger.h	/^    u8* argArray;   \/* will be NULL if numArgs==0 *\/$/;"	m	struct:DebugInvokeReq
 argArrayFromProtoIndex	tools/dexdeps/src/com/android/dexdeps/DexData.java	/^    private String[] argArrayFromProtoIndex(int idx) {$/;"	m	class:DexData	file:
-argCopy	dexlist/DexList.cpp	/^    char*       argCopy;$/;"	m	struct:__anon47	file:
+argCopy	dexlist/DexList.cpp	/^    char*       argCopy;$/;"	m	struct:__anon12	file:
 argCount	dx/src/com/android/dx/cf/code/BaseMachine.java	/^    private int argCount;$/;"	f	class:BaseMachine	file:
 argCount	dx/src/com/android/dx/cf/code/BaseMachine.java	/^    protected final int argCount() {$/;"	m	class:BaseMachine
 argIndex	dexgen/src/com/android/dexgen/dex/code/InsnFormat.java	/^    protected static int argIndex(DalvInsn insn) {$/;"	m	class:InsnFormat
@@ -9740,7 +9714,7 @@ blockIndex	dx/src/com/android/dx/ssa/PhiInsn.java	/^        public final int blo
 blockIndexToRopLabel	dx/src/com/android/dx/ssa/SsaMethod.java	/^    public int blockIndexToRopLabel(int bi) {$/;"	m	class:SsaMethod
 blockLabelList	vm/compiler/CompilerIR.h	/^    void *blockLabelList;$/;"	m	struct:CompilationUnit
 blockList	vm/compiler/CompilerIR.h	/^    GrowableList blockList;$/;"	m	struct:CompilationUnit
-blockListType	vm/compiler/CompilerIR.h	/^        BlockListType blockListType;    \/\/ switch and exception handling$/;"	m	struct:BasicBlock::__anon19
+blockListType	vm/compiler/CompilerIR.h	/^        BlockListType blockListType;    \/\/ switch and exception handling$/;"	m	struct:BasicBlock::__anon57
 blockN	dx/src/com/android/dx/ssa/back/LivenessAnalyzer.java	/^    private SsaBasicBlock blockN;$/;"	f	class:LivenessAnalyzer	file:
 blockQueue	vm/alloc/Copying.cpp	/^    size_t *blockQueue;$/;"	m	struct:HeapSource	file:
 blockSet	dx/src/com/android/dx/cf/code/BasicBlocker.java	/^    private final int[] blockSet;$/;"	f	class:BasicBlocker	file:
@@ -9764,7 +9738,7 @@ blocks	dx/src/com/android/dx/ssa/LocalVariableExtractor.java	/^    private final
 blocks	dx/src/com/android/dx/ssa/SsaMethod.java	/^    private ArrayList<SsaBasicBlock> blocks;$/;"	f	class:SsaMethod	file:
 blocks	dx/src/com/android/dx/ssa/back/IdenticalBlockCombiner.java	/^    private final BasicBlockList blocks;$/;"	f	class:IdenticalBlockCombiner	file:
 blocks	dx/src/com/android/dx/ssa/back/SsaToRop.java	/^        private final ArrayList<SsaBasicBlock> blocks;$/;"	f	class:SsaToRop.PhiVisitor	file:
-blocks	vm/compiler/CompilerIR.h	/^        GrowableList blocks;$/;"	m	struct:BasicBlock::__anon19
+blocks	vm/compiler/CompilerIR.h	/^        GrowableList blocks;$/;"	m	struct:BasicBlock::__anon57
 blort	dx/tests/044-dex-math-ops/Blort.java	/^    public void blort(double d1, double d2) {$/;"	m	class:Blort
 blort	dx/tests/044-dex-math-ops/Blort.java	/^    public void blort(float f1, float f2) {$/;"	m	class:Blort
 blort	dx/tests/044-dex-math-ops/Blort.java	/^    public void blort(int i1, int i2) {$/;"	m	class:Blort
@@ -9814,7 +9788,7 @@ branchToPCR	vm/compiler/Loop.h	/^    LIR *branchToPCR;                   \/\/ br
 branchWorklist	dx/src/com/android/dx/ssa/SCCP.java	/^    private ArrayList<SsaInsn> branchWorklist;$/;"	f	class:SCCP	file:
 branchingness	dexgen/src/com/android/dexgen/rop/code/Rop.java	/^    private final int branchingness;$/;"	f	class:Rop	file:
 branchingness	dx/src/com/android/dx/rop/code/Rop.java	/^    private final int branchingness;$/;"	f	class:Rop	file:
-breakFlags	vm/Thread.h	/^        uint8_t    breakFlags;$/;"	m	struct:InterpBreak::__anon6
+breakFlags	vm/Thread.h	/^        uint8_t    breakFlags;$/;"	m	struct:InterpBreak::__anon24
 breakpointSet	vm/Globals.h	/^    BreakpointSet*  breakpointSet;$/;"	m	struct:DvmGlobals
 breakpoints	vm/interp/Interp.cpp	/^    Breakpoint* breakpoints;$/;"	m	struct:BreakpointSet	file:
 broadcast	vm/Ddm.cpp	/^static void broadcast(int event)$/;"	f	file:
@@ -9964,11 +9938,11 @@ callVisit	dx/src/com/android/dx/io/CodeReader.java	/^    private void callVisit(
 callback	vm/Thread.h	/^    SafePointCallback callback;$/;"	m	struct:Thread
 callbackArg	vm/Thread.h	/^    void*             callbackArg;$/;"	m	struct:Thread
 callbackMutex	vm/Thread.h	/^    pthread_mutex_t   callbackMutex;$/;"	m	struct:Thread
-calleeMethod	vm/compiler/CompilerIR.h	/^        const Method *calleeMethod;$/;"	m	union:MIR::__anon18
+calleeMethod	vm/compiler/CompilerIR.h	/^        const Method *calleeMethod;$/;"	m	union:MIR::__anon56
 callerBlocks	dx/src/com/android/dx/cf/code/Ropper.java	/^        private BitSet callerBlocks;$/;"	f	class:Ropper.Subroutine	file:
 calls	tools/dmtracedump/TraceDump.c	/^    StackEntry  calls[MAX_STACK_DEPTH];$/;"	m	struct:CallStack	file:
 callsiteClass	vm/Thread.h	/^    const ClassObject* callsiteClass;$/;"	m	struct:Thread
-callsiteInfo	vm/compiler/CompilerIR.h	/^        CallsiteInfo *callsiteInfo;$/;"	m	union:MIR::__anon18
+callsiteInfo	vm/compiler/CompilerIR.h	/^        CallsiteInfo *callsiteInfo;$/;"	m	union:MIR::__anon56
 canAllocClass	vm/Jni.cpp	/^static bool canAllocClass(ClassObject* clazz) {$/;"	f	file:
 canConvertTo1nr	vm/analysis/CodeVerify.cpp	/^static bool canConvertTo1nr(RegType srcType, RegType checkType)$/;"	f	file:
 canConvertTo2	vm/analysis/CodeVerify.cpp	/^static bool canConvertTo2(RegType srcType, RegType checkType)$/;"	f	file:
@@ -10024,7 +9998,7 @@ catchesEqual	dx/src/com/android/dx/rop/code/BasicBlockList.java	/^    public boo
 catchesUsed	dx/src/com/android/dx/cf/code/RopperMachine.java	/^    private boolean catchesUsed;$/;"	f	class:RopperMachine	file:
 caught	dx/tests/061-dex-try-catch/Blort.java	/^    public static void caught() {$/;"	m	class:Blort
 caught	vm/jdwp/JdwpEvent.cpp	/^    bool                caught;         \/* ExceptionOnly *\/$/;"	m	struct:ModBasket	file:
-caught	vm/jdwp/JdwpEvent.h	/^        u1          caught;$/;"	m	struct:JdwpEventMod::__anon39
+caught	vm/jdwp/JdwpEvent.h	/^        u1          caught;$/;"	m	struct:JdwpEventMod::__anon43
 cellAddr	vm/compiler/Compiler.h	/^    PredictedChainingCell *cellAddr;    \/* Address to be patched *\/$/;"	m	struct:ICPatchWorkOrder
 cellContent	vm/compiler/Compiler.h	/^    PredictedChainingCell cellContent;  \/* content of the new cell *\/$/;"	m	struct:ICPatchWorkOrder
 cf	dx/src/com/android/dx/cf/direct/AnnotationParser.java	/^    private final DirectClassFile cf;$/;"	f	class:AnnotationParser	file:
@@ -10206,7 +10180,7 @@ classDataOffset	vm/analysis/RegisterMap.h	/^    u4      classDataOffset[1];$/;"	
 classDataOut	dx/src/com/android/dx/merge/DexMerger.java	/^    private final DexBuffer.Section classDataOut;$/;"	f	class:DexMerger	file:
 classDatas	dx/src/com/android/dx/dex/TableOfContents.java	/^    public final Section classDatas = new Section(0x2000);$/;"	f	class:TableOfContents
 classDef	dx/src/com/android/dx/merge/SortableType.java	/^    private ClassDef classDef;$/;"	f	class:SortableType	file:
-classDefOffset	libdex/DexFile.h	/^        int     classDefOffset;         \/\/ in bytes, from start of DEX$/;"	m	struct:DexClassLookup::__anon56
+classDefOffset	libdex/DexFile.h	/^        int     classDefOffset;         \/\/ in bytes, from start of DEX$/;"	m	struct:DexClassLookup::__anon9
 classDefs	dexgen/src/com/android/dexgen/dex/file/ClassDefsSection.java	/^    private final TreeMap<Type, ClassDefItem> classDefs;$/;"	f	class:ClassDefsSection	file:
 classDefs	dexgen/src/com/android/dexgen/dex/file/DexFile.java	/^    private final ClassDefsSection classDefs;$/;"	f	class:DexFile	file:
 classDefs	dx/src/com/android/dx/dex/TableOfContents.java	/^    public final Section classDefs = new Section(0x0006);$/;"	f	class:TableOfContents
@@ -10217,17 +10191,16 @@ classDefsOff	libdex/DexFile.h	/^    u4  classDefsOff;$/;"	m	struct:DexHeader
 classDefsOff	tools/dexdeps/src/com/android/dexdeps/DexData.java	/^        public int classDefsSize, classDefsOff;$/;"	f	class:DexData.HeaderItem
 classDefsSize	libdex/DexFile.h	/^    u4  classDefsSize;$/;"	m	struct:DexHeader
 classDefsSize	tools/dexdeps/src/com/android/dexdeps/DexData.java	/^        public int classDefsSize, classDefsOff;$/;"	f	class:DexData.HeaderItem
-classDesc2Id	vm/Agent.h	/^	map<string, long> classDesc2Id;$/;"	m	class:AppInfo
 classDescriptor	dexdump/DexDump.cpp	/^    const char* classDescriptor;$/;"	m	struct:FieldMethodInfo	file:
 classDescriptor	vm/InlineNative.h	/^    const char*     classDescriptor;$/;"	m	struct:InlineOperation
 classDescriptor	vm/Native.h	/^    const char* classDescriptor;$/;"	m	struct:DalvikNativeClass
 classDescriptor	vm/compiler/Compiler.h	/^    const char *classDescriptor;        \/* Descriptor of the class object *\/$/;"	m	struct:ICPatchWorkOrder
 classDescriptor	vm/compiler/CompilerIR.h	/^    const char *classDescriptor;$/;"	m	struct:CallsiteInfo
 classDescriptorHash	libdex/DexFile.cpp	/^static u4 classDescriptorHash(const char* str)$/;"	f	file:
-classDescriptorHash	libdex/DexFile.h	/^        u4      classDescriptorHash;    \/\/ class descriptor hash code$/;"	m	struct:DexClassLookup::__anon56
+classDescriptorHash	libdex/DexFile.h	/^        u4      classDescriptorHash;    \/\/ class descriptor hash code$/;"	m	struct:DexClassLookup::__anon9
 classDescriptorHash	vm/Native.h	/^    u4          classDescriptorHash;          \/* initialized at runtime *\/$/;"	m	struct:DalvikNativeClass
-classDescriptorOffset	libdex/DexFile.h	/^        int     classDescriptorOffset;  \/\/ in bytes, from start of DEX$/;"	m	struct:DexClassLookup::__anon56
-classExclude	vm/jdwp/JdwpEvent.h	/^    } classExclude;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon37
+classDescriptorOffset	libdex/DexFile.h	/^        int     classDescriptorOffset;  \/\/ in bytes, from start of DEX$/;"	m	struct:DexClassLookup::__anon9
+classExclude	vm/jdwp/JdwpEvent.h	/^    } classExclude;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon41
 classFile	dx/src/com/android/dx/command/dump/BlockDumper.java	/^    protected DirectClassFile classFile;$/;"	f	class:BlockDumper
 classFile	dx/src/com/android/dx/command/dump/DotDumper.java	/^    private DirectClassFile classFile;$/;"	f	class:DotDumper	file:
 classId	vm/jdwp/Jdwp.h	/^    RefTypeId   classId;        \/* method->clazz *\/$/;"	m	struct:JdwpLocation
@@ -10273,7 +10246,7 @@ classLoader	vm/compiler/CompilerIR.h	/^    Object *classLoader;$/;"	m	struct:Cal
 classLoader	vm/oo/Object.h	/^    Object*         classLoader;$/;"	m	struct:ClassObject
 classLoaderOverride	vm/Thread.h	/^    Object*     classLoaderOverride;$/;"	m	struct:Thread
 classLookupAdd	libdex/DexFile.cpp	/^static void classLookupAdd(DexFile* pDexFile, DexClassLookup* pLookup,$/;"	f	file:
-classMatch	vm/jdwp/JdwpEvent.h	/^    } classMatch;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon36
+classMatch	vm/jdwp/JdwpEvent.h	/^    } classMatch;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon40
 className	dexgen/src/com/android/dexgen/rop/type/Type.java	/^    private String className;$/;"	f	class:Type	file:
 className	dx/src/com/android/dx/rop/type/Type.java	/^    private String className;$/;"	f	class:Type	file:
 className	tools/dmtracedump/CreateTestTrace.c	/^    char                *className;$/;"	m	struct:dataRecord	file:
@@ -10285,7 +10258,7 @@ classNameFromTypeIndex	tools/dexdeps/src/com/android/dexdeps/DexData.java	/^    
 classNameOnly	tools/dexdeps/src/com/android/dexdeps/Output.java	/^    static String classNameOnly(String typeName) {$/;"	m	class:Output
 classObjectSize	vm/oo/Class.cpp	/^static size_t classObjectSize(size_t sfieldCount)$/;"	f	file:
 classObjectToRefTypeId	vm/Debugger.cpp	/^static RefTypeId classObjectToRefTypeId(ClassObject* clazz)$/;"	f	file:
-classOnly	vm/jdwp/JdwpEvent.h	/^    } classOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon35
+classOnly	vm/jdwp/JdwpEvent.h	/^    } classOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon39
 classOrgApacheHarmonyDalvikDdmcChunk	vm/Globals.h	/^    ClassObject* classOrgApacheHarmonyDalvikDdmcChunk;$/;"	m	struct:DvmGlobals
 classOrgApacheHarmonyDalvikDdmcDdmServer	vm/Globals.h	/^    ClassObject* classOrgApacheHarmonyDalvikDdmcDdmServer;$/;"	m	struct:DvmGlobals
 classOrgApacheHarmonyLangAnnotationAnnotationFactory	vm/Globals.h	/^    ClassObject* classOrgApacheHarmonyLangAnnotationAnnotationFactory;$/;"	m	struct:DvmGlobals
@@ -10293,13 +10266,13 @@ classOrgApacheHarmonyLangAnnotationAnnotationMember	vm/Globals.h	/^    ClassObje
 classOrgApacheHarmonyLangAnnotationAnnotationMemberArray	vm/Globals.h	/^    ClassObject* classOrgApacheHarmonyLangAnnotationAnnotationMemberArray;$/;"	m	struct:DvmGlobals
 classPathName	vm/shadowlib/ReAgent.cpp	/^static const char *classPathName = "ch\/usi\/dag\/dislre\/AREDispatch";$/;"	v	file:
 classPathStr	vm/Globals.h	/^    char*       classPathStr;$/;"	m	struct:DvmGlobals
-classPattern	vm/jdwp/JdwpEvent.h	/^        char*       classPattern;$/;"	m	struct:JdwpEventMod::__anon36
-classPattern	vm/jdwp/JdwpEvent.h	/^        char*       classPattern;$/;"	m	struct:JdwpEventMod::__anon37
+classPattern	vm/jdwp/JdwpEvent.h	/^        char*       classPattern;$/;"	m	struct:JdwpEventMod::__anon40
+classPattern	vm/jdwp/JdwpEvent.h	/^        char*       classPattern;$/;"	m	struct:JdwpEventMod::__anon41
 classPointerList	vm/compiler/CompilerIR.h	/^    LIR *classPointerList;              \/\/ Relocatable$/;"	m	struct:CompilationUnit
 classSerialNumber	vm/Globals.h	/^    volatile int classSerialNumber;$/;"	m	struct:DvmGlobals
 classString	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static String classString(int flags) {$/;"	m	class:AccessFlags
 classString	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static String classString(int flags) {$/;"	m	class:AccessFlags
-classToFind	dexlist/DexList.cpp	/^    const char* classToFind;$/;"	m	struct:__anon47	file:
+classToFind	dexlist/DexList.cpp	/^    const char* classToFind;$/;"	m	struct:__anon12	file:
 classVerifyMode	vm/Globals.h	/^    DexClassVerifyMode  classVerifyMode;$/;"	m	struct:DvmGlobals
 classes	hit/src/com/android/hit/Queries.java	/^    public static Map<String, Set<ClassObj>> classes(State state,$/;"	m	class:Queries
 classes	tools/dmtracedump/TraceDump.c	/^    ClassEntry *classes;$/;"	m	struct:TraceData	file:
@@ -10308,7 +10281,7 @@ classfileLoadHook	vm/shadowlib/ReAgent.cpp	/^int classfileLoadHook(const char* n
 clazz	vm/AllocTracker.cpp	/^    ClassObject*    clazz;      \/* class allocated in this block *\/$/;"	m	struct:AllocRecord	file:
 clazz	vm/Debugger.h	/^    ClassObject* clazz;$/;"	m	struct:DebugInvokeReq
 clazz	vm/alloc/Alloc.cpp	/^    const ClassObject *clazz;$/;"	m	struct:CountContext	file:
-clazz	vm/analysis/CodeVerify.h	/^        ClassObject*    clazz;  \/* class created at this address *\/$/;"	m	struct:UninitInstanceMap::__anon30
+clazz	vm/analysis/CodeVerify.h	/^        ClassObject*    clazz;  \/* class created at this address *\/$/;"	m	struct:UninitInstanceMap::__anon26
 clazz	vm/compiler/Compiler.h	/^    const ClassObject *clazz;   \/* key for prediction *\/$/;"	m	struct:PredictedChainingCell
 clazz	vm/oo/Object.h	/^    ClassObject*    clazz;          \/* class in which the field is declared *\/$/;"	m	struct:Field
 clazz	vm/oo/Object.h	/^    ClassObject*    clazz;$/;"	m	struct:InterfaceEntry
@@ -10334,9 +10307,11 @@ clearStack	tests/067-preemptive-unpark/src/Main.java	/^    private static void c
 clearWhiteReferences	vm/alloc/Copying.cpp	/^void clearWhiteReferences(Object **list)$/;"	f
 clearWhiteReferences	vm/alloc/MarkSweep.cpp	/^static void clearWhiteReferences(Object **list)$/;"	f	file:
 clearedReferences	vm/alloc/HeapInternal.h	/^    Object *clearedReferences;$/;"	m	struct:GcHeap
-clientReplyRecv	vm/Globals.h	/^    void        (*clientReplyRecv)(int pid, int tid, int from_pid, int from_tid);$/;"	m	struct:DvmGlobals
+clientReplyRecv	vm/Globals.h	/^    int        (*clientReplyRecv)(int transaction_id, int from_pid, int from_tid, bool isOneway);$/;"	m	struct:DvmGlobals
+clientReplyRecv	vm/shadowlib/ReAgent.cpp	/^int clientReplyRecv(int transaction_id, int from_pid, int from_tid, bool isOneWay){$/;"	f
 clientSock	vm/jdwp/JdwpPriv.h	/^    int             clientSock;     \/* active connection to debugger *\/$/;"	m	class:JdwpNetStateBase
-clientTransactionStart	vm/Globals.h	/^    void        (*clientTransactionStart)(int pid, int tid);$/;"	m	struct:DvmGlobals
+clientTransactionStart	vm/Globals.h	/^    int			(*clientTransactionStart)(int transaction_id, bool isOneway);$/;"	m	struct:DvmGlobals
+clientTransactionStart	vm/shadowlib/ReAgent.cpp	/^int clientTransactionStart(int transaction_id, bool isOneWay){$/;"	f
 client_socket	dexopt/OptMain.cpp	/^int client_socket=-1;$/;"	v
 client_socket	libdex/ZipArchive.cpp	/^int client_socket=-1;$/;"	v
 clobberRegBody	vm/compiler/codegen/RallocUtil.cpp	/^static bool clobberRegBody(CompilationUnit *cUnit, RegisterInfo *p,$/;"	f	file:
@@ -11484,7 +11459,7 @@ concat	dx/src/com/android/dx/cf/code/LineNumberList.java	/^    public static Lin
 concat	dx/src/com/android/dx/cf/code/LocalVariableList.java	/^    public static LocalVariableList concat(LocalVariableList list1,$/;"	m	class:LocalVariableList
 concurrentMarkSweep	vm/Globals.h	/^    bool        concurrentMarkSweep;$/;"	m	struct:DvmGlobals
 concurrentStartBytes	vm/alloc/HeapSource.cpp	/^    size_t concurrentStartBytes;$/;"	m	struct:Heap	file:
-conditional	vm/jdwp/JdwpEvent.h	/^    } conditional;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon33
+conditional	vm/jdwp/JdwpEvent.h	/^    } conditional;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon37
 confuseCompilerOptimization	tests/080-oom-throw/src/Main.java	/^        static void confuseCompilerOptimization(InstanceMemEater memEater) {$/;"	m	class:Main.InstanceMemEater
 confuseCompilerOptimization	tests/080-oom-throw/src/Main.java	/^        static void confuseCompilerOptimization(char[][] holder) {$/;"	m	class:Main.ArrayMemEater
 constTypeToRegType	vm/analysis/CodeVerify.cpp	/^static RegType constTypeToRegType(RegType constType)$/;"	f	file:
@@ -11523,10 +11498,10 @@ contentsOut	dx/src/com/android/dx/merge/DexMerger.java	/^    private final Table
 context	dexgen/src/com/android/dexgen/util/ExceptionWithContext.java	/^    private StringBuffer context;$/;"	f	class:ExceptionWithContext	file:
 context	dx/src/com/android/dx/cf/direct/AttributeListParser.java	/^    private final int context;$/;"	f	class:AttributeListParser	file:
 context	dx/src/com/android/dx/util/ExceptionWithContext.java	/^    private StringBuffer context;$/;"	f	class:ExceptionWithContext	file:
-controlAddr	vm/jdwp/JdwpAdb.cpp	/^    } controlAddr;$/;"	m	struct:JdwpNetState	typeref:union:JdwpNetState::__anon43	file:
+controlAddr	vm/jdwp/JdwpAdb.cpp	/^    } controlAddr;$/;"	m	struct:JdwpNetState	typeref:union:JdwpNetState::__anon47	file:
 controlAddrLen	vm/jdwp/JdwpAdb.cpp	/^    socklen_t           controlAddrLen;$/;"	m	struct:JdwpNetState	file:
-controlAddrPlain	vm/jdwp/JdwpAdb.cpp	/^        struct sockaddr     controlAddrPlain;$/;"	m	union:JdwpNetState::__anon43	typeref:struct:JdwpNetState::__anon43::sockaddr	file:
-controlAddrUn	vm/jdwp/JdwpAdb.cpp	/^        struct sockaddr_un  controlAddrUn;$/;"	m	union:JdwpNetState::__anon43	typeref:struct:JdwpNetState::__anon43::sockaddr_un	file:
+controlAddrPlain	vm/jdwp/JdwpAdb.cpp	/^        struct sockaddr     controlAddrPlain;$/;"	m	union:JdwpNetState::__anon47	typeref:struct:JdwpNetState::__anon47::sockaddr	file:
+controlAddrUn	vm/jdwp/JdwpAdb.cpp	/^        struct sockaddr_un  controlAddrUn;$/;"	m	union:JdwpNetState::__anon47	typeref:struct:JdwpNetState::__anon47::sockaddr_un	file:
 controlSock	vm/jdwp/JdwpAdb.cpp	/^    int                 controlSock;$/;"	m	struct:JdwpNetState	file:
 convD	tests/003-omnibus-opcodes/src/FloatMath.java	/^    static double[] convD(int i, long l, float f) {$/;"	m	class:FloatMath
 convF	tests/003-omnibus-opcodes/src/FloatMath.java	/^    static float[] convF(int i, long l, double d) {$/;"	m	class:FloatMath
@@ -11599,10 +11574,10 @@ count	tests/050-sync-test/src/Main.java	/^    private static int count = 0;$/;"	
 count	vm/PointerSet.cpp	/^    u2          count;$/;"	m	struct:PointerSet	file:
 count	vm/StdioConverter.cpp	/^    int     count;$/;"	m	struct:BufferedData	file:
 count	vm/alloc/Alloc.cpp	/^    size_t count;$/;"	m	struct:CountContext	file:
-count	vm/compiler/CompilerIR.h	/^        u1 count[kChainingCellLast]; \/* include one more space for the gap # *\/$/;"	m	union:ChainCellCounts::__anon16
+count	vm/compiler/CompilerIR.h	/^        u1 count[kChainingCellLast]; \/* include one more space for the gap # *\/$/;"	m	union:ChainCellCounts::__anon54
 count	vm/interp/Interp.cpp	/^    int         count;$/;"	m	struct:BreakpointSet	file:
-count	vm/jdwp/JdwpEvent.h	/^        int         count;$/;"	m	struct:JdwpEventMod::__anon32
-count	vm/jdwp/JdwpEvent.h	/^    } count;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon32
+count	vm/jdwp/JdwpEvent.h	/^        int         count;$/;"	m	struct:JdwpEventMod::__anon36
+count	vm/jdwp/JdwpEvent.h	/^    } count;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon36
 countAllocation	vm/alloc/HeapSource.cpp	/^static void countAllocation(Heap *heap, const void *ptr)$/;"	f	file:
 countArgsAndFindReturnType	vm/oo/Object.cpp	/^static inline size_t countArgsAndFindReturnType(const char* descriptor,$/;"	f	file:
 countAssignableInstancesOfClassCallback	vm/alloc/Alloc.cpp	/^static void countAssignableInstancesOfClassCallback(Object *obj, void *arg)$/;"	f	file:
@@ -11696,11 +11671,11 @@ cstComment	dexgen/src/com/android/dexgen/dex/code/InsnFormat.java	/^    protecte
 cstComment	dx/src/com/android/dx/dex/code/InsnFormat.java	/^    protected static String cstComment(DalvInsn insn) {$/;"	m	class:InsnFormat
 cstString	dexgen/src/com/android/dexgen/dex/code/InsnFormat.java	/^    protected static String cstString(DalvInsn insn) {$/;"	m	class:InsnFormat
 cstString	dx/src/com/android/dx/dex/code/InsnFormat.java	/^    protected static String cstString(DalvInsn insn) {$/;"	m	class:InsnFormat
-ctl	vm/Thread.h	/^    } ctl;$/;"	m	union:InterpBreak	typeref:struct:InterpBreak::__anon6
+ctl	vm/Thread.h	/^    } ctl;$/;"	m	union:InterpBreak	typeref:struct:InterpBreak::__anon24
 curBlock	vm/compiler/CompilerIR.h	/^    BasicBlock *curBlock;$/;"	m	struct:CompilationUnit
 curFrame	vm/interp/InterpState.h	/^    u4*             curFrame;   \/\/ Dalvik frame pointer$/;"	m	struct:InterpSaveState
-curHandlerTable	vm/Thread.h	/^        void* curHandlerTable;$/;"	m	struct:InterpBreak::__anon6
-curLen	tools/hprof-conv/HprofConv.c	/^    size_t curLen;$/;"	m	struct:__anon46	file:
+curHandlerTable	vm/Thread.h	/^        void* curHandlerTable;$/;"	m	struct:InterpBreak::__anon24
+curLen	tools/hprof-conv/HprofConv.c	/^    size_t curLen;$/;"	m	struct:__anon11	file:
 curLen	vm/jdwp/ExpandBuf.cpp	/^    int     curLen;$/;"	m	struct:ExpandBuf	file:
 curMethod	vm/mterp/cstubs/enddefs.cpp	6;"	d	file:
 curMethod	vm/mterp/cstubs/stubdefs.cpp	28;"	d	file:
@@ -11734,7 +11709,7 @@ currentHeap	vm/hprof/Hprof.h	/^    HprofHeapId currentHeap;    \/\/ which heap w
 currentMapping	dx/src/com/android/dx/ssa/SsaRenamer.java	/^        private final RegisterSpec[] currentMapping;$/;"	f	class:SsaRenamer.BlockRenamer	file:
 currentMethod	dx/src/com/android/dx/command/findusages/FindUsages.java	/^    private ClassData.Method currentMethod;$/;"	f	class:FindUsages	file:
 currentMethod	dx/src/com/android/dx/command/grep/Grep.java	/^    private ClassData.Method currentMethod;$/;"	f	class:Grep	file:
-currentPc	vm/interp/Stack.h	/^        const u2*   currentPc;$/;"	m	union:StackSaveArea::__anon27
+currentPc	vm/interp/Stack.h	/^        const u2*   currentPc;$/;"	m	union:StackSaveArea::__anon34
 currentPc2	vm/Thread.h	/^    const u2*   currentPc2;$/;"	m	struct:Thread
 currentSize	vm/alloc/Copying.cpp	/^    size_t currentSize;$/;"	m	struct:HeapSource	file:
 cursor	dexgen/src/com/android/dexgen/util/ByteArray.java	/^        private int cursor;$/;"	f	class:ByteArray.MyInputStream	file:
@@ -11809,7 +11784,7 @@ data	dx/src/com/android/dx/io/instructions/FillArrayDataPayloadDecodedInstructio
 data	dx/src/com/android/dx/util/ByteArrayAnnotatedOutput.java	/^    private byte[] data;$/;"	f	class:ByteArrayAnnotatedOutput	file:
 data	vm/Hash.h	/^    void*       data;$/;"	m	struct:HashIter
 data	vm/Hash.h	/^    void* data;$/;"	m	struct:HashEntry
-data	vm/Misc.h	/^    } data;$/;"	m	struct:DebugOutputTarget	typeref:union:DebugOutputTarget::__anon8
+data	vm/Misc.h	/^    } data;$/;"	m	struct:DebugOutputTarget	typeref:union:DebugOutputTarget::__anon28
 data	vm/analysis/RegisterMap.h	/^    u1      data[1];$/;"	m	struct:RegisterMap
 data	vm/analysis/RegisterMap.h	/^    void*       data;$/;"	m	struct:RegisterMapBuilder
 data	vm/interp/Jit.h	/^    int data;$/;"	m	struct:ShadowHeap
@@ -11964,7 +11939,7 @@ depsOffset	libdex/DexFile.h	/^    u4  depsOffset;         \/* offset of optimize
 depth	dx/src/com/android/dx/merge/SortableType.java	/^    private int depth = -1;$/;"	f	class:SortableType	file:
 depth	tools/dmtracedump/TraceDump.c	/^    int depth[MAX_THREADS];$/;"	m	struct:TraceData	file:
 depth	vm/Debugger.h	/^    JdwpStepDepth depth;$/;"	m	struct:StepControl
-depth	vm/jdwp/JdwpEvent.h	/^        int         depth;          \/* JdwpStepDepth *\/$/;"	m	struct:JdwpEventMod::__anon41
+depth	vm/jdwp/JdwpEvent.h	/^        int         depth;          \/* JdwpStepDepth *\/$/;"	m	struct:JdwpEventMod::__anon45
 dequeuePendingReference	vm/alloc/MarkSweep.cpp	/^static Object *dequeuePendingReference(Object **list)$/;"	f	file:
 deriveOpcodeChains	opcode-gen/opcode-gen.awk	/^function deriveOpcodeChains(i, op) {$/;"	f
 desc	dexgen/src/com/android/dexgen/dex/file/DebugInfoDecoder.java	/^    private final Prototype desc;$/;"	f	class:DebugInfoDecoder	file:
@@ -12300,7 +12275,7 @@ dr8	vm/compiler/codegen/arm/ArmLIR.h	/^    dr8 = fr16 + FP_DOUBLE,$/;"	e	enum:Na
 dr9	vm/compiler/codegen/arm/ArmLIR.h	/^    dr9 = fr18 + FP_DOUBLE,$/;"	e	enum:NativeRegisterPool
 drawAt	tests/079-phantom/src/Bitmap.java	/^    public void drawAt(int x, int y) {$/;"	m	class:Bitmap
 dummy	tests/046-reflect/src/Main.java	/^    public List<String> dummy;$/;"	f	class:Main
-dummyForAlignment	vm/compiler/CompilerIR.h	/^        u4 dummyForAlignment;$/;"	m	union:ChainCellCounts::__anon16
+dummyForAlignment	vm/compiler/CompilerIR.h	/^        u4 dummyForAlignment;$/;"	m	union:ChainCellCounts::__anon54
 dump	dexgen/src/com/android/dexgen/util/Hex.java	/^    public static String dump(byte[] arr, int offset, int length,$/;"	m	class:Hex
 dump	dx/src/com/android/dx/command/dump/BlockDumper.java	/^    public static void dump(byte[] bytes, PrintStream out,$/;"	m	class:BlockDumper
 dump	dx/src/com/android/dx/command/dump/BlockDumper.java	/^    public void dump() {$/;"	m	class:BlockDumper
@@ -14175,7 +14150,7 @@ end	dx/src/com/android/dx/cf/code/ByteBlock.java	/^    private final int end;$/;
 end	dx/src/com/android/dx/dex/code/CatchTable.java	/^        private final int end;$/;"	f	class:CatchTable.Entry	file:
 end	dx/src/com/android/dx/util/ByteArrayAnnotatedOutput.java	/^        private int end;$/;"	f	class:ByteArrayAnnotatedOutput.Annotation	file:
 end	vm/IndirectRefTable.h	/^    iterator end() {$/;"	f	struct:IndirectRefTable
-end	vm/compiler/codegen/arm/ArmLIR.h	/^        int end;   \/* end for kFmtBitBlt, 1-bit slice end for FP regs *\/$/;"	m	struct:ArmEncodingMap::__anon21
+end	vm/compiler/codegen/arm/ArmLIR.h	/^        int end;   \/* end for kFmtBitBlt, 1-bit slice end for FP regs *\/$/;"	m	struct:ArmEncodingMap::__anon51
 endAnnotation	dexgen/src/com/android/dexgen/util/AnnotatedOutput.java	/^    public void endAnnotation();$/;"	m	interface:AnnotatedOutput
 endAnnotation	dexgen/src/com/android/dexgen/util/ByteArrayAnnotatedOutput.java	/^    public void endAnnotation() {$/;"	m	class:ByteArrayAnnotatedOutput
 endAnnotation	dx/src/com/android/dx/util/AnnotatedOutput.java	/^    public void endAnnotation();$/;"	m	interface:AnnotatedOutput
@@ -14231,7 +14206,7 @@ entryBlock	vm/compiler/CompilerIR.h	/^    BasicBlock *entryBlock;$/;"	m	struct:C
 entryBlockIndex	dx/src/com/android/dx/ssa/SsaMethod.java	/^    private int entryBlockIndex;$/;"	f	class:SsaMethod	file:
 entryTime	tools/dmtracedump/TraceDump.c	/^    uint64_t    entryTime;$/;"	m	struct:StackEntry	file:
 entryToIndex	libdex/ZipArchive.cpp	/^static int entryToIndex(const ZipArchive* pArchive, const ZipEntry entry)$/;"	f	file:
-env	vm/shadowlib/ReAgent.cpp	/^	JNIEnv* env;$/;"	m	union:__anon44	file:
+env	vm/shadowlib/ReAgent.cpp	/^	JNIEnv* env;$/;"	m	union:__anon48	file:
 envList	vm/JniInternal.h	/^    JNIEnvExt*      envList;$/;"	m	struct:JavaVMExt
 envListLock	vm/JniInternal.h	/^    pthread_mutex_t envListLock;$/;"	m	struct:JavaVMExt
 envThreadId	vm/JniInternal.h	/^    u4      envThreadId;$/;"	m	struct:JNIEnvExt
@@ -14385,7 +14360,7 @@ exceptObj	vm/Debugger.h	/^    ObjectId exceptObj;$/;"	m	struct:DebugInvokeReq
 exception	vm/Thread.h	/^    Object*     exception;$/;"	m	struct:Thread
 exceptionClass	dexgen/src/com/android/dexgen/rop/ByteCatchList.java	/^        private final CstType exceptionClass;$/;"	f	class:ByteCatchList.Item	file:
 exceptionClass	dx/src/com/android/dx/cf/code/ByteCatchList.java	/^        private final CstType exceptionClass;$/;"	f	class:ByteCatchList.Item	file:
-exceptionOnly	vm/jdwp/JdwpEvent.h	/^    } exceptionOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon39
+exceptionOnly	vm/jdwp/JdwpEvent.h	/^    } exceptionOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon43
 exceptionThrown	vm/mterp/c/opcommon.cpp	/^GOTO_TARGET_DECL(exceptionThrown);$/;"	v
 exceptionThrown	vm/mterp/out/InterpC-allstubs.cpp	/^GOTO_TARGET_DECL(exceptionThrown);$/;"	v
 exceptionThrown	vm/mterp/out/InterpC-armv5te-vfp.cpp	/^GOTO_TARGET_DECL(exceptionThrown);$/;"	v
@@ -14438,7 +14413,7 @@ expandedVersion	dx/src/com/android/dx/dex/code/DalvInsn.java	/^    public DalvIn
 explicitize	dexgen/src/com/android/dexgen/dex/code/form/Form35c.java	/^    private static RegisterSpecList explicitize(RegisterSpecList orig) {$/;"	m	class:Form35c	file:
 explicitize	dx/src/com/android/dx/dex/code/form/Form35c.java	/^    private static RegisterSpecList explicitize(RegisterSpecList orig) {$/;"	m	class:Form35c	file:
 exportsOnly	dexdump/DexDump.cpp	/^    bool exportsOnly;$/;"	m	struct:Options	file:
-exprId	vm/jdwp/JdwpEvent.h	/^        u4          exprId;$/;"	m	struct:JdwpEventMod::__anon33
+exprId	vm/jdwp/JdwpEvent.h	/^        u4          exprId;$/;"	m	struct:JdwpEventMod::__anon37
 extendedMIROpNames	vm/compiler/codegen/arm/CodegenDriver.cpp	/^static const char *extendedMIROpNames[kMirOpLast - kMirOpFirst] = {$/;"	v	file:
 extraBlockCount	dx/src/com/android/dx/cf/code/RopperMachine.java	/^    private int extraBlockCount;$/;"	f	class:RopperMachine	file:
 extract	dexgen/src/com/android/dexgen/rop/code/LocalVariableExtractor.java	/^    public static LocalVariableInfo extract(RopMethod method) {$/;"	m	class:LocalVariableExtractor
@@ -14528,7 +14503,7 @@ field8	dx/tests/120-disable-extended-ops/Blort.java	/^    private int field8 = 8
 field9	dx/tests/120-disable-extended-ops/Blort.java	/^    private int field9 = 9;$/;"	f	class:Blort	file:
 fieldAnnotations	dexgen/src/com/android/dexgen/dex/file/AnnotationsDirectoryItem.java	/^    private ArrayList<FieldAnnotationStruct> fieldAnnotations;$/;"	f	class:AnnotationsDirectoryItem	file:
 fieldAnnotations	dx/src/com/android/dx/dex/file/AnnotationsDirectoryItem.java	/^    private ArrayList<FieldAnnotationStruct> fieldAnnotations;$/;"	f	class:AnnotationsDirectoryItem	file:
-fieldId	vm/jdwp/JdwpEvent.h	/^        FieldId     fieldId;$/;"	m	struct:JdwpEventMod::__anon40
+fieldId	vm/jdwp/JdwpEvent.h	/^        FieldId     fieldId;$/;"	m	struct:JdwpEventMod::__anon44
 fieldIdToField	vm/Debugger.cpp	/^static Field* fieldIdToField(RefTypeId refTypeId, FieldId id)$/;"	f	file:
 fieldIds	dexgen/src/com/android/dexgen/dex/file/DexFile.java	/^    private final FieldIdsSection fieldIds;$/;"	f	class:DexFile	file:
 fieldIds	dexgen/src/com/android/dexgen/dex/file/FieldIdsSection.java	/^    private final TreeMap<CstFieldRef, FieldIdItem> fieldIds;$/;"	f	class:FieldIdsSection	file:
@@ -14546,9 +14521,9 @@ fieldIdsSize	tools/dexdeps/src/com/android/dexdeps/DexData.java	/^        public
 fieldIdx	libdex/DexClass.h	/^    u4 fieldIdx;    \/* index to a field_id_item *\/$/;"	m	struct:DexField
 fieldIdx	libdex/DexFile.h	/^    u4  fieldIdx;$/;"	m	struct:DexFieldAnnotationsItem
 fieldIndex	dx/src/com/android/dx/io/ClassData.java	/^        private final int fieldIndex;$/;"	f	class:ClassData.Field	file:
-fieldLoc	vm/compiler/codegen/arm/ArmLIR.h	/^    } fieldLoc[4];$/;"	m	struct:ArmEncodingMap	typeref:struct:ArmEncodingMap::__anon21
+fieldLoc	vm/compiler/codegen/arm/ArmLIR.h	/^    } fieldLoc[4];$/;"	m	struct:ArmEncodingMap	typeref:struct:ArmEncodingMap::__anon51
 fieldNameFromIndex	vm/interp/Interp.cpp	/^static std::string fieldNameFromIndex(const Method* method, int ref,$/;"	f	file:
-fieldOnly	vm/jdwp/JdwpEvent.h	/^    } fieldOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon40
+fieldOnly	vm/jdwp/JdwpEvent.h	/^    } fieldOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon44
 fieldRef	dexgen/src/com/android/dexgen/rop/cst/CstEnumRef.java	/^    private CstFieldRef fieldRef;$/;"	f	class:CstEnumRef	file:
 fieldRef	dx/src/com/android/dx/rop/cst/CstEnumRef.java	/^    private CstFieldRef fieldRef;$/;"	f	class:CstEnumRef	file:
 fieldString	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static String fieldString(int flags) {$/;"	m	class:AccessFlags
@@ -14567,7 +14542,7 @@ file	dx/src/com/android/dx/dex/file/DebugInfoDecoder.java	/^    private final De
 file	dx/src/com/android/dx/dex/file/DebugInfoEncoder.java	/^    private final DexFile file;$/;"	f	class:DebugInfoEncoder	file:
 file	dx/src/com/android/dx/dex/file/Section.java	/^    private final DexFile file;$/;"	f	class:Section	file:
 file	dx/src/com/android/dx/dex/file/ValueEncoder.java	/^    private final DexFile file;$/;"	f	class:ValueEncoder	file:
-file	vm/Misc.h	/^        } file;$/;"	m	union:DebugOutputTarget::__anon8	typeref:struct:DebugOutputTarget::__anon8::__anon10
+file	vm/Misc.h	/^        } file;$/;"	m	union:DebugOutputTarget::__anon28	typeref:struct:DebugOutputTarget::__anon28::__anon30
 fileData	tools/dmtracedump/TraceDump.c	/^    char*        fileData;      \/* contents of the entire file *\/$/;"	m	struct:DataKeys	file:
 fileDataPtr	vm/hprof/Hprof.h	/^    char *fileDataPtr;          \/\/ for open_memstream$/;"	m	struct:hprof_context_t
 fileDataSize	vm/hprof/Hprof.h	/^    size_t fileDataSize;        \/\/ for open_memstream$/;"	m	struct:hprof_context_t
@@ -14722,7 +14697,7 @@ flags	libdex/DexFile.h	/^    u4  flags;              \/* some info flags *\/$/;"
 flags	libdex/InstrUtils.h	/^    OpcodeFlags*       flags;$/;"	m	struct:InstructionInfoTables
 flags	vm/Profile.h	/^    int     flags;$/;"	m	struct:MethodTraceState
 flags	vm/compiler/codegen/arm/ArmLIR.h	/^    int flags;$/;"	m	struct:ArmEncodingMap
-flags	vm/compiler/codegen/arm/ArmLIR.h	/^    } flags;$/;"	m	struct:ArmLIR	typeref:struct:ArmLIR::__anon22
+flags	vm/compiler/codegen/arm/ArmLIR.h	/^    } flags;$/;"	m	struct:ArmLIR	typeref:struct:ArmLIR::__anon52
 flagsToC	opcode-gen/opcode-gen.awk	/^function flagsToC(f, parts, result, i) {$/;"	f
 flippedIfOpcode	dexgen/src/com/android/dexgen/rop/code/RegOps.java	/^    public static int flippedIfOpcode(final int opcode) {$/;"	m	class:RegOps
 flippedIfOpcode	dx/src/com/android/dx/rop/code/RegOps.java	/^    public static int flippedIfOpcode(final int opcode) {$/;"	m	class:RegOps
@@ -14780,7 +14755,7 @@ formats	libdex/InstrUtils.h	/^    u1*                formats;    \/* Instruction
 forward_to_svm	vm/shadowlib/ReAgent.cpp	/^int forward_to_svm(char* buff, int len){$/;"	f
 four	tests/093-serialization/src/Main.java	/^    Double four;$/;"	f	class:Sub
 fourByteAlign	dx/src/com/android/dx/io/DexBuffer.java	/^    public static int fourByteAlign(int position) {$/;"	m	class:DexBuffer
-fp	vm/Misc.h	/^            FILE* fp;$/;"	m	struct:DebugOutputTarget::__anon8::__anon10
+fp	vm/Misc.h	/^            FILE* fp;$/;"	m	struct:DebugOutputTarget::__anon28::__anon30
 fp	vm/compiler/CompilerIR.h	/^    unsigned fp:1;      \/\/ Hint for float\/double$/;"	m	struct:RegLocation
 fp	vm/interp/Jit.h	/^    u4* fp;                     \/* starting fp of jitted region *\/$/;"	m	struct:ShadowSpace
 fp	vm/mterp/cstubs/enddefs.cpp	5;"	d	file:
@@ -14835,7 +14810,7 @@ fr6	vm/compiler/codegen/arm/ArmLIR.h	/^    fr6  =  6 + FP_REG_OFFSET,$/;"	e	enum
 fr7	vm/compiler/codegen/arm/ArmLIR.h	/^    fr7  =  7 + FP_REG_OFFSET,$/;"	e	enum:NativeRegisterPool
 fr8	vm/compiler/codegen/arm/ArmLIR.h	/^    fr8  =  8 + FP_REG_OFFSET,$/;"	e	enum:NativeRegisterPool
 fr9	vm/compiler/codegen/arm/ArmLIR.h	/^    fr9  =  9 + FP_REG_OFFSET,$/;"	e	enum:NativeRegisterPool
-frag	vm/interp/InterpState.h	/^        JitCodeDesc frag;$/;"	m	union:JitTraceRun::__anon28
+frag	vm/interp/InterpState.h	/^        JitCodeDesc frag;$/;"	m	union:JitTraceRun::__anon35
 frame	dx/src/com/android/dx/cf/code/Simulator.java	/^        private Frame frame;$/;"	f	class:Simulator.SimVisitor	file:
 frameDepth	vm/Debugger.h	/^    int frameDepth;$/;"	m	struct:StepControl
 frameIdToFrame	vm/Debugger.cpp	/^static u4* frameIdToFrame(FrameId id)$/;"	f	file:
@@ -14958,7 +14933,7 @@ gOpNames	libdex/DexOpcodes.cpp	/^static const char* gOpNames[kNumPackedOpcodes] 
 gOpcodeFlagsTable	libdex/InstrUtils.cpp	/^static u1 gOpcodeFlagsTable[kNumPackedOpcodes] = {$/;"	v	file:
 gOptions	dexdump/DexDump.cpp	/^struct Options gOptions;$/;"	v	typeref:struct:Options
 gOptions	tools/dmtracedump/TraceDump.c	/^static Options gOptions;$/;"	v	file:
-gParms	dexlist/DexList.cpp	/^} gParms;$/;"	v	typeref:struct:__anon47	file:
+gParms	dexlist/DexList.cpp	/^} gParms;$/;"	v	typeref:struct:__anon12	file:
 gProgName	dexdump/DexDump.cpp	/^static const char* gProgName = "dexdump";$/;"	v	file:
 gProgName	dexlist/DexList.cpp	/^static const char* gProgName = "dexlist";$/;"	v	file:
 gSeenPtrs	vm/alloc/TEST/HeapBitmapTest/main.c	/^static bool gSeenPtrs[NUM_XOR_PTRS];$/;"	v	file:
@@ -16314,6 +16289,7 @@ getThisObject	vm/Debugger.cpp	/^static Object* getThisObject(const u4* framePtr)
 getThread	hit/src/com/android/hit/Heap.java	/^    public final ThreadObj getThread(int serialNumber) {$/;"	m	class:Heap
 getThread	hit/src/com/android/hit/State.java	/^    public final ThreadObj getThread(int serialNumber) {$/;"	m	class:State
 getThreadCpuTimeInUsec	vm/Profile.cpp	/^static inline u8 getThreadCpuTimeInUsec()$/;"	f	file:
+getTimeNsec	vm/shadowlib/ReAgent.cpp	/^int64_t getTimeNsec(){$/;"	f
 getTraceBase	vm/compiler/codegen/arm/Assemble.cpp	/^static inline char *getTraceBase(const JitEntry *p)$/;"	f	file:
 getTraceBuf	vm/native/dalvik_system_VMStack.cpp	/^static int* getTraceBuf(Object* targetThreadObj, size_t* pStackDepth)$/;"	f	file:
 getTraceDescriptionPointer	vm/compiler/codegen/arm/Assemble.cpp	/^static JitTraceDescription* getTraceDescriptionPointer(const char *base)$/;"	f	file:
@@ -17037,7 +17013,6 @@ index	dx/src/com/android/dx/dex/file/IndexedItem.java	/^    private int index;$/
 index	dx/src/com/android/dx/io/instructions/DecodedInstruction.java	/^    private final int index;$/;"	f	class:DecodedInstruction	file:
 index	dx/src/com/android/dx/merge/DexMerger.java	/^            final int index;$/;"	f	class:DexMerger.IdMerger.UnsortedValue
 index	dx/src/com/android/dx/ssa/SsaBasicBlock.java	/^    private int index;$/;"	f	class:SsaBasicBlock	file:
-index	libdex/SocketBuffer.h	/^		int index;$/;"	m	class:SocketBuffer
 index	tools/dmtracedump/TraceDump.c	/^    int index;                  \/* used after sorting to number methods *\/$/;"	m	struct:MethodEntry	file:
 indexListFromLabelList	dx/src/com/android/dx/ssa/SsaMethod.java	/^    public static IntList indexListFromLabelList(BasicBlockList ropBlocks,$/;"	m	class:SsaMethod
 indexMap	dx/src/com/android/dx/merge/DexMerger.java	/^            final IndexMap indexMap;$/;"	f	class:DexMerger.IdMerger.UnsortedValue
@@ -17101,10 +17076,11 @@ inflateToFileForSVM	libdex/ZipArchive.cpp	/^static int inflateToFileForSVM(int o
 inflightBaseAddr	vm/Globals.h	/^    void *inflightBaseAddr;$/;"	m	struct:DvmJitGlobals
 info	dx/src/com/android/dx/ssa/Dominators.java	/^    private final DFSInfo[] info;$/;"	f	class:Dominators	file:
 info	vm/compiler/Compiler.h	/^    void* info;$/;"	m	struct:CompilerWorkOrder
-info	vm/interp/InterpState.h	/^    } info;$/;"	m	struct:JitTraceRun	typeref:union:JitTraceRun::__anon28
+info	vm/interp/InterpState.h	/^    } info;$/;"	m	struct:JitTraceRun	typeref:union:JitTraceRun::__anon35
 info	vm/interp/Jit.h	/^    JitEntryInfo info;$/;"	m	union:JitEntryInfoUnion
 infoFor	tests/085-old-style-inner-class/src/Main.java	/^    private static void infoFor(Class clazz) {$/;"	m	class:Main	file:
 infoWord	vm/interp/Jit.h	/^    volatile int infoWord;$/;"	m	union:JitEntryInfoUnion
+info_flag	vm/Thread.h	/^	int info_flag;$/;"	m	struct:Thread
 init	vm/CheckJni.cpp	/^    void init(JNIEnv* env, int flags, const char* functionName, bool hasMethod) {$/;"	f	class:ScopedCheck	file:
 init	vm/IndirectRefTable.cpp	/^bool IndirectRefTable::init(size_t initialCount,$/;"	f	class:IndirectRefTable
 initByteArray	tests/011-array-copy/src/Main.java	/^    static void initByteArray(byte[] array) {$/;"	m	class:Main
@@ -17199,7 +17175,7 @@ insertPhiNodes	vm/compiler/SSATransformation.cpp	/^static void insertPhiNodes(Co
 insertPlainInsnBefore	dx/src/com/android/dx/ssa/EscapeAnalysis.java	/^    private void insertPlainInsnBefore(SsaInsn insn,$/;"	m	class:EscapeAnalysis	file:
 insertString	vm/Intern.cpp	/^static StringObject* insertString(HashTable* table, u4 key, StringObject* value)$/;"	f	file:
 insertThrowingInsnBefore	dx/src/com/android/dx/ssa/EscapeAnalysis.java	/^    private void insertThrowingInsnBefore(SsaInsn insn,$/;"	m	class:EscapeAnalysis	file:
-insertWrapper	vm/compiler/codegen/arm/ArmLIR.h	/^        bool insertWrapper:1;   \/\/ insert branch to emulate memory accesses$/;"	m	struct:ArmLIR::__anon22
+insertWrapper	vm/compiler/codegen/arm/ArmLIR.h	/^        bool insertWrapper:1;   \/\/ insert branch to emulate memory accesses$/;"	m	struct:ArmLIR::__anon52
 insn	dx/src/com/android/dx/ssa/NormalSsaInsn.java	/^    private Insn insn;$/;"	f	class:NormalSsaInsn	file:
 insnArgString	dexgen/src/com/android/dexgen/dex/code/InsnFormat.java	/^    public abstract String insnArgString(DalvInsn insn);$/;"	m	class:InsnFormat
 insnArgString	dexgen/src/com/android/dexgen/dex/code/form/Form10t.java	/^    public String insnArgString(DalvInsn insn) {$/;"	m	class:Form10t
@@ -17337,7 +17313,7 @@ instanceFields	dx/src/com/android/dx/dex/file/ClassDataItem.java	/^    private f
 instanceFields	dx/src/com/android/dx/io/ClassData.java	/^    private final Field[] instanceFields;$/;"	f	class:ClassData	file:
 instanceFields	libdex/DexClass.h	/^    DexField*          instanceFields;$/;"	m	struct:DexClassData
 instanceFieldsSize	libdex/DexClass.h	/^    u4 instanceFieldsSize;$/;"	m	struct:DexClassDataHeader
-instanceOnly	vm/jdwp/JdwpEvent.h	/^    } instanceOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon42
+instanceOnly	vm/jdwp/JdwpEvent.h	/^    } instanceOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon46
 instancePrototype	dexgen/src/com/android/dexgen/rop/cst/CstBaseMethodRef.java	/^    private Prototype instancePrototype;$/;"	f	class:CstBaseMethodRef	file:
 instancePrototype	dx/src/com/android/dx/rop/cst/CstBaseMethodRef.java	/^    private Prototype instancePrototype;$/;"	f	class:CstBaseMethodRef	file:
 instanceofCache	vm/Globals.h	/^    AtomicCache* instanceofCache;$/;"	m	struct:DvmGlobals
@@ -17660,7 +17636,7 @@ isMutable	dx/src/com/android/dx/util/MutabilityControl.java	/^    public final b
 isNative	dexgen/src/com/android/dexgen/rop/code/AccessFlags.java	/^    public static boolean isNative(int flags) {$/;"	m	class:AccessFlags
 isNative	dx/src/com/android/dx/rop/code/AccessFlags.java	/^    public static boolean isNative(int flags) {$/;"	m	class:AccessFlags
 isNoCodeTag	docs/prettify.js	/^  function isNoCodeTag(tag) {$/;"	f
-isNop	vm/compiler/codegen/arm/ArmLIR.h	/^        bool isNop:1;           \/\/ LIR is optimized away$/;"	m	struct:ArmLIR::__anon22
+isNop	vm/compiler/codegen/arm/ArmLIR.h	/^        bool isNop:1;           \/\/ LIR is optimized away$/;"	m	struct:ArmLIR::__anon52
 isNop	vm/compiler/codegen/x86/X86LIR.h	/^    bool isNop;         \/\/ LIR is optimized away$/;"	m	struct:X86LIR
 isNormalMoveInsn	dx/src/com/android/dx/ssa/NormalSsaInsn.java	/^    public boolean isNormalMoveInsn() {$/;"	m	class:NormalSsaInsn
 isNormalMoveInsn	dx/src/com/android/dx/ssa/SsaInsn.java	/^    public boolean isNormalMoveInsn() {$/;"	m	class:SsaInsn
@@ -18030,13 +18006,13 @@ kChainingCellInvokePredicted	vm/compiler/CompilerIR.h	/^    kChainingCellInvokeP
 kChainingCellInvokeSingleton	vm/compiler/CompilerIR.h	/^    kChainingCellInvokeSingleton,$/;"	e	enum:BBType
 kChainingCellLast	vm/compiler/CompilerIR.h	/^    kChainingCellLast = kChainingCellGap + 1,$/;"	e	enum:BBType
 kChainingCellNormal	vm/compiler/CompilerIR.h	/^    kChainingCellNormal = 0,$/;"	e	enum:BBType
-kChangedPolicy	vm/Thread.h	568;"	d
-kChangedPriority	vm/Thread.h	567;"	d
+kChangedPolicy	vm/Thread.h	571;"	d
+kChangedPriority	vm/Thread.h	570;"	d
 kClassesDex	dexopt/OptMain.cpp	/^static const char* kClassesDex = "classes.dex";$/;"	v	file:
 kClassesDex	libdex/OptInvocation.cpp	/^static const char* kClassesDex = "classes.dex";$/;"	v	file:
 kClearedJniWeakGlobal	vm/IndirectRefTable.h	93;"	d
-kCompressDeflated	libdex/ZipArchive.h	/^    kCompressDeflated   = 8,        \/\/ standard deflate$/;"	e	enum:__anon48
-kCompressStored	libdex/ZipArchive.h	/^    kCompressStored     = 0,        \/\/ no compression$/;"	e	enum:__anon48
+kCompressDeflated	libdex/ZipArchive.h	/^    kCompressDeflated   = 8,        \/\/ standard deflate$/;"	e	enum:__anon1
+kCompressStored	libdex/ZipArchive.h	/^    kCompressStored     = 0,        \/\/ no compression$/;"	e	enum:__anon1
 kCoreReg	vm/compiler/CompilerIR.h	/^    kCoreReg,$/;"	e	enum:RegisterClass
 kCpeDex	vm/oo/Class.h	/^    kCpeDex,$/;"	e	enum:ClassPathEntryKind
 kCpeJar	vm/oo/Class.h	/^    kCpeJar,$/;"	e	enum:ClassPathEntryKind
@@ -18057,54 +18033,54 @@ kDescrInnerClass	vm/reflect/Annotation.cpp	/^static const char* kDescrInnerClass
 kDescrMemberClasses	vm/reflect/Annotation.cpp	/^static const char* kDescrMemberClasses$/;"	v	file:
 kDescrSignature	vm/reflect/Annotation.cpp	/^static const char* kDescrSignature  = "Ldalvik\/annotation\/Signature;";$/;"	v	file:
 kDescrThrows	vm/reflect/Annotation.cpp	/^static const char* kDescrThrows     = "Ldalvik\/annotation\/Throws;";$/;"	v	file:
-kDexAnnotationAnnotation	libdex/DexFile.h	/^    kDexAnnotationAnnotation    = 0x1d,$/;"	e	enum:__anon52
-kDexAnnotationArray	libdex/DexFile.h	/^    kDexAnnotationArray         = 0x1c,$/;"	e	enum:__anon52
-kDexAnnotationBoolean	libdex/DexFile.h	/^    kDexAnnotationBoolean       = 0x1f,$/;"	e	enum:__anon52
-kDexAnnotationByte	libdex/DexFile.h	/^    kDexAnnotationByte          = 0x00,$/;"	e	enum:__anon52
-kDexAnnotationChar	libdex/DexFile.h	/^    kDexAnnotationChar          = 0x03,$/;"	e	enum:__anon52
-kDexAnnotationDouble	libdex/DexFile.h	/^    kDexAnnotationDouble        = 0x11,$/;"	e	enum:__anon52
-kDexAnnotationEnum	libdex/DexFile.h	/^    kDexAnnotationEnum          = 0x1b,$/;"	e	enum:__anon52
-kDexAnnotationField	libdex/DexFile.h	/^    kDexAnnotationField         = 0x19,$/;"	e	enum:__anon52
-kDexAnnotationFloat	libdex/DexFile.h	/^    kDexAnnotationFloat         = 0x10,$/;"	e	enum:__anon52
-kDexAnnotationInt	libdex/DexFile.h	/^    kDexAnnotationInt           = 0x04,$/;"	e	enum:__anon52
-kDexAnnotationLong	libdex/DexFile.h	/^    kDexAnnotationLong          = 0x06,$/;"	e	enum:__anon52
-kDexAnnotationMethod	libdex/DexFile.h	/^    kDexAnnotationMethod        = 0x1a,$/;"	e	enum:__anon52
-kDexAnnotationNull	libdex/DexFile.h	/^    kDexAnnotationNull          = 0x1e,$/;"	e	enum:__anon52
-kDexAnnotationShort	libdex/DexFile.h	/^    kDexAnnotationShort         = 0x02,$/;"	e	enum:__anon52
-kDexAnnotationString	libdex/DexFile.h	/^    kDexAnnotationString        = 0x17,$/;"	e	enum:__anon52
-kDexAnnotationType	libdex/DexFile.h	/^    kDexAnnotationType          = 0x18,$/;"	e	enum:__anon52
-kDexAnnotationValueArgShift	libdex/DexFile.h	/^    kDexAnnotationValueArgShift = 5,$/;"	e	enum:__anon52
-kDexAnnotationValueTypeMask	libdex/DexFile.h	/^    kDexAnnotationValueTypeMask = 0x1f,     \/* low 5 bits *\/$/;"	e	enum:__anon52
-kDexChunkClassLookup	libdex/DexFile.h	/^    kDexChunkClassLookup            = 0x434c4b50,   \/* CLKP *\/$/;"	e	enum:__anon54
-kDexChunkEnd	libdex/DexFile.h	/^    kDexChunkEnd                    = 0x41454e44,   \/* AEND *\/$/;"	e	enum:__anon54
-kDexChunkRegisterMaps	libdex/DexFile.h	/^    kDexChunkRegisterMaps           = 0x524d4150,   \/* RMAP *\/$/;"	e	enum:__anon54
-kDexEndianConstant	libdex/DexFile.h	/^    kDexEndianConstant = 0x12345678,    \/* the endianness indicator *\/$/;"	e	enum:__anon50
+kDexAnnotationAnnotation	libdex/DexFile.h	/^    kDexAnnotationAnnotation    = 0x1d,$/;"	e	enum:__anon5
+kDexAnnotationArray	libdex/DexFile.h	/^    kDexAnnotationArray         = 0x1c,$/;"	e	enum:__anon5
+kDexAnnotationBoolean	libdex/DexFile.h	/^    kDexAnnotationBoolean       = 0x1f,$/;"	e	enum:__anon5
+kDexAnnotationByte	libdex/DexFile.h	/^    kDexAnnotationByte          = 0x00,$/;"	e	enum:__anon5
+kDexAnnotationChar	libdex/DexFile.h	/^    kDexAnnotationChar          = 0x03,$/;"	e	enum:__anon5
+kDexAnnotationDouble	libdex/DexFile.h	/^    kDexAnnotationDouble        = 0x11,$/;"	e	enum:__anon5
+kDexAnnotationEnum	libdex/DexFile.h	/^    kDexAnnotationEnum          = 0x1b,$/;"	e	enum:__anon5
+kDexAnnotationField	libdex/DexFile.h	/^    kDexAnnotationField         = 0x19,$/;"	e	enum:__anon5
+kDexAnnotationFloat	libdex/DexFile.h	/^    kDexAnnotationFloat         = 0x10,$/;"	e	enum:__anon5
+kDexAnnotationInt	libdex/DexFile.h	/^    kDexAnnotationInt           = 0x04,$/;"	e	enum:__anon5
+kDexAnnotationLong	libdex/DexFile.h	/^    kDexAnnotationLong          = 0x06,$/;"	e	enum:__anon5
+kDexAnnotationMethod	libdex/DexFile.h	/^    kDexAnnotationMethod        = 0x1a,$/;"	e	enum:__anon5
+kDexAnnotationNull	libdex/DexFile.h	/^    kDexAnnotationNull          = 0x1e,$/;"	e	enum:__anon5
+kDexAnnotationShort	libdex/DexFile.h	/^    kDexAnnotationShort         = 0x02,$/;"	e	enum:__anon5
+kDexAnnotationString	libdex/DexFile.h	/^    kDexAnnotationString        = 0x17,$/;"	e	enum:__anon5
+kDexAnnotationType	libdex/DexFile.h	/^    kDexAnnotationType          = 0x18,$/;"	e	enum:__anon5
+kDexAnnotationValueArgShift	libdex/DexFile.h	/^    kDexAnnotationValueArgShift = 5,$/;"	e	enum:__anon5
+kDexAnnotationValueTypeMask	libdex/DexFile.h	/^    kDexAnnotationValueTypeMask = 0x1f,     \/* low 5 bits *\/$/;"	e	enum:__anon5
+kDexChunkClassLookup	libdex/DexFile.h	/^    kDexChunkClassLookup            = 0x434c4b50,   \/* CLKP *\/$/;"	e	enum:__anon7
+kDexChunkEnd	libdex/DexFile.h	/^    kDexChunkEnd                    = 0x41454e44,   \/* AEND *\/$/;"	e	enum:__anon7
+kDexChunkRegisterMaps	libdex/DexFile.h	/^    kDexChunkRegisterMaps           = 0x524d4150,   \/* RMAP *\/$/;"	e	enum:__anon7
+kDexEndianConstant	libdex/DexFile.h	/^    kDexEndianConstant = 0x12345678,    \/* the endianness indicator *\/$/;"	e	enum:__anon3
 kDexInJarName	vm/JarFile.cpp	/^static const char* kDexInJarName = "classes.dex";$/;"	v	file:
-kDexNoIndex	libdex/DexFile.h	/^    kDexNoIndex = 0xffffffff,           \/* not a valid index value *\/$/;"	e	enum:__anon50
-kDexParseContinueOnError	libdex/DexFile.h	/^    kDexParseContinueOnError    = (1 << 1),$/;"	e	enum:__anon57
-kDexParseDefault	libdex/DexFile.h	/^    kDexParseDefault            = 0,$/;"	e	enum:__anon57
-kDexParseVerifyChecksum	libdex/DexFile.h	/^    kDexParseVerifyChecksum     = 1,$/;"	e	enum:__anon57
-kDexTypeAnnotationItem	libdex/DexFile.h	/^    kDexTypeAnnotationItem           = 0x2004,$/;"	e	enum:__anon53
-kDexTypeAnnotationSetItem	libdex/DexFile.h	/^    kDexTypeAnnotationSetItem        = 0x1003,$/;"	e	enum:__anon53
-kDexTypeAnnotationSetRefList	libdex/DexFile.h	/^    kDexTypeAnnotationSetRefList     = 0x1002,$/;"	e	enum:__anon53
-kDexTypeAnnotationsDirectoryItem	libdex/DexFile.h	/^    kDexTypeAnnotationsDirectoryItem = 0x2006,$/;"	e	enum:__anon53
-kDexTypeClassDataItem	libdex/DexFile.h	/^    kDexTypeClassDataItem            = 0x2000,$/;"	e	enum:__anon53
-kDexTypeClassDefItem	libdex/DexFile.h	/^    kDexTypeClassDefItem             = 0x0006,$/;"	e	enum:__anon53
-kDexTypeCodeItem	libdex/DexFile.h	/^    kDexTypeCodeItem                 = 0x2001,$/;"	e	enum:__anon53
-kDexTypeDebugInfoItem	libdex/DexFile.h	/^    kDexTypeDebugInfoItem            = 0x2003,$/;"	e	enum:__anon53
-kDexTypeEncodedArrayItem	libdex/DexFile.h	/^    kDexTypeEncodedArrayItem         = 0x2005,$/;"	e	enum:__anon53
-kDexTypeFieldIdItem	libdex/DexFile.h	/^    kDexTypeFieldIdItem              = 0x0004,$/;"	e	enum:__anon53
-kDexTypeHeaderItem	libdex/DexFile.h	/^    kDexTypeHeaderItem               = 0x0000,$/;"	e	enum:__anon53
-kDexTypeMapList	libdex/DexFile.h	/^    kDexTypeMapList                  = 0x1000,$/;"	e	enum:__anon53
-kDexTypeMethodIdItem	libdex/DexFile.h	/^    kDexTypeMethodIdItem             = 0x0005,$/;"	e	enum:__anon53
-kDexTypeProtoIdItem	libdex/DexFile.h	/^    kDexTypeProtoIdItem              = 0x0003,$/;"	e	enum:__anon53
-kDexTypeStringDataItem	libdex/DexFile.h	/^    kDexTypeStringDataItem           = 0x2002,$/;"	e	enum:__anon53
-kDexTypeStringIdItem	libdex/DexFile.h	/^    kDexTypeStringIdItem             = 0x0001,$/;"	e	enum:__anon53
-kDexTypeTypeIdItem	libdex/DexFile.h	/^    kDexTypeTypeIdItem               = 0x0002,$/;"	e	enum:__anon53
-kDexTypeTypeList	libdex/DexFile.h	/^    kDexTypeTypeList                 = 0x1001,$/;"	e	enum:__anon53
-kDexVisibilityBuild	libdex/DexFile.h	/^    kDexVisibilityBuild         = 0x00,     \/* annotation visibility *\/$/;"	e	enum:__anon52
-kDexVisibilityRuntime	libdex/DexFile.h	/^    kDexVisibilityRuntime       = 0x01,$/;"	e	enum:__anon52
-kDexVisibilitySystem	libdex/DexFile.h	/^    kDexVisibilitySystem        = 0x02,$/;"	e	enum:__anon52
+kDexNoIndex	libdex/DexFile.h	/^    kDexNoIndex = 0xffffffff,           \/* not a valid index value *\/$/;"	e	enum:__anon3
+kDexParseContinueOnError	libdex/DexFile.h	/^    kDexParseContinueOnError    = (1 << 1),$/;"	e	enum:__anon10
+kDexParseDefault	libdex/DexFile.h	/^    kDexParseDefault            = 0,$/;"	e	enum:__anon10
+kDexParseVerifyChecksum	libdex/DexFile.h	/^    kDexParseVerifyChecksum     = 1,$/;"	e	enum:__anon10
+kDexTypeAnnotationItem	libdex/DexFile.h	/^    kDexTypeAnnotationItem           = 0x2004,$/;"	e	enum:__anon6
+kDexTypeAnnotationSetItem	libdex/DexFile.h	/^    kDexTypeAnnotationSetItem        = 0x1003,$/;"	e	enum:__anon6
+kDexTypeAnnotationSetRefList	libdex/DexFile.h	/^    kDexTypeAnnotationSetRefList     = 0x1002,$/;"	e	enum:__anon6
+kDexTypeAnnotationsDirectoryItem	libdex/DexFile.h	/^    kDexTypeAnnotationsDirectoryItem = 0x2006,$/;"	e	enum:__anon6
+kDexTypeClassDataItem	libdex/DexFile.h	/^    kDexTypeClassDataItem            = 0x2000,$/;"	e	enum:__anon6
+kDexTypeClassDefItem	libdex/DexFile.h	/^    kDexTypeClassDefItem             = 0x0006,$/;"	e	enum:__anon6
+kDexTypeCodeItem	libdex/DexFile.h	/^    kDexTypeCodeItem                 = 0x2001,$/;"	e	enum:__anon6
+kDexTypeDebugInfoItem	libdex/DexFile.h	/^    kDexTypeDebugInfoItem            = 0x2003,$/;"	e	enum:__anon6
+kDexTypeEncodedArrayItem	libdex/DexFile.h	/^    kDexTypeEncodedArrayItem         = 0x2005,$/;"	e	enum:__anon6
+kDexTypeFieldIdItem	libdex/DexFile.h	/^    kDexTypeFieldIdItem              = 0x0004,$/;"	e	enum:__anon6
+kDexTypeHeaderItem	libdex/DexFile.h	/^    kDexTypeHeaderItem               = 0x0000,$/;"	e	enum:__anon6
+kDexTypeMapList	libdex/DexFile.h	/^    kDexTypeMapList                  = 0x1000,$/;"	e	enum:__anon6
+kDexTypeMethodIdItem	libdex/DexFile.h	/^    kDexTypeMethodIdItem             = 0x0005,$/;"	e	enum:__anon6
+kDexTypeProtoIdItem	libdex/DexFile.h	/^    kDexTypeProtoIdItem              = 0x0003,$/;"	e	enum:__anon6
+kDexTypeStringDataItem	libdex/DexFile.h	/^    kDexTypeStringDataItem           = 0x2002,$/;"	e	enum:__anon6
+kDexTypeStringIdItem	libdex/DexFile.h	/^    kDexTypeStringIdItem             = 0x0001,$/;"	e	enum:__anon6
+kDexTypeTypeIdItem	libdex/DexFile.h	/^    kDexTypeTypeIdItem               = 0x0002,$/;"	e	enum:__anon6
+kDexTypeTypeList	libdex/DexFile.h	/^    kDexTypeTypeList                 = 0x1001,$/;"	e	enum:__anon6
+kDexVisibilityBuild	libdex/DexFile.h	/^    kDexVisibilityBuild         = 0x00,     \/* annotation visibility *\/$/;"	e	enum:__anon5
+kDexVisibilityRuntime	libdex/DexFile.h	/^    kDexVisibilityRuntime       = 0x01,$/;"	e	enum:__anon5
+kDexVisibilitySystem	libdex/DexFile.h	/^    kDexVisibilitySystem        = 0x02,$/;"	e	enum:__anon5
 kDouble	vm/compiler/codegen/arm/ArmLIR.h	/^    kDouble,$/;"	e	enum:OpSize
 kDouble	vm/compiler/codegen/x86/X86LIR.h	/^    kDouble,$/;"	e	enum:OpSize
 kDumpClassClassLoader	vm/oo/Class.h	183;"	d
@@ -18304,14 +18280,14 @@ kLocRetval	vm/compiler/CompilerIR.h	/^    kLocRetval,          \/\/ Return regio
 kLocSpill	vm/compiler/CompilerIR.h	/^    kLocSpill,$/;"	e	enum:RegLocationType
 kLong	vm/compiler/codegen/arm/ArmLIR.h	/^    kLong,$/;"	e	enum:OpSize
 kLong	vm/compiler/codegen/x86/X86LIR.h	/^    kLong,$/;"	e	enum:OpSize
-kMIRCallee	vm/compiler/CompilerIR.h	/^    kMIRCallee,                         \/\/ Instruction is inlined from callee$/;"	e	enum:__anon17
-kMIRIgnoreNullCheck	vm/compiler/CompilerIR.h	/^    kMIRIgnoreNullCheck = 0,$/;"	e	enum:__anon17
-kMIRIgnoreRangeCheck	vm/compiler/CompilerIR.h	/^    kMIRIgnoreRangeCheck,$/;"	e	enum:__anon17
-kMIRInlined	vm/compiler/CompilerIR.h	/^    kMIRInlined,                        \/\/ Invoke is inlined (ie dead)$/;"	e	enum:__anon17
-kMIRInlinedPred	vm/compiler/CompilerIR.h	/^    kMIRInlinedPred,                    \/\/ Invoke is inlined via prediction$/;"	e	enum:__anon17
-kMIRInvokeMethodJIT	vm/compiler/CompilerIR.h	/^    kMIRInvokeMethodJIT,                \/\/ Callee is JIT'ed as a whole method$/;"	e	enum:__anon17
-kMIRNullCheckOnly	vm/compiler/CompilerIR.h	/^    kMIRNullCheckOnly,$/;"	e	enum:__anon17
-kMIRRangeCheckOnly	vm/compiler/CompilerIR.h	/^    kMIRRangeCheckOnly,$/;"	e	enum:__anon17
+kMIRCallee	vm/compiler/CompilerIR.h	/^    kMIRCallee,                         \/\/ Instruction is inlined from callee$/;"	e	enum:__anon55
+kMIRIgnoreNullCheck	vm/compiler/CompilerIR.h	/^    kMIRIgnoreNullCheck = 0,$/;"	e	enum:__anon55
+kMIRIgnoreRangeCheck	vm/compiler/CompilerIR.h	/^    kMIRIgnoreRangeCheck,$/;"	e	enum:__anon55
+kMIRInlined	vm/compiler/CompilerIR.h	/^    kMIRInlined,                        \/\/ Invoke is inlined (ie dead)$/;"	e	enum:__anon55
+kMIRInlinedPred	vm/compiler/CompilerIR.h	/^    kMIRInlinedPred,                    \/\/ Invoke is inlined via prediction$/;"	e	enum:__anon55
+kMIRInvokeMethodJIT	vm/compiler/CompilerIR.h	/^    kMIRInvokeMethodJIT,                \/\/ Callee is JIT'ed as a whole method$/;"	e	enum:__anon55
+kMIRNullCheckOnly	vm/compiler/CompilerIR.h	/^    kMIRNullCheckOnly,$/;"	e	enum:__anon55
+kMIRRangeCheckOnly	vm/compiler/CompilerIR.h	/^    kMIRRangeCheckOnly,$/;"	e	enum:__anon55
 kMagicHandshake	vm/jdwp/JdwpAdb.cpp	44;"	d	file:
 kMagicHandshake	vm/jdwp/JdwpSocket.cpp	40;"	d	file:
 kMagicHandshakeLen	vm/jdwp/JdwpAdb.cpp	45;"	d	file:
@@ -18467,34 +18443,34 @@ kRegPC	vm/compiler/codegen/arm/ArmLIR.h	/^    kRegPC      = 15,$/;"	e	enum:Resou
 kRegSP	vm/compiler/codegen/arm/ArmLIR.h	/^    kRegSP      = 13,$/;"	e	enum:ResourceEncodingPos
 kRegType1nrEND	vm/analysis/CodeVerify.h	85;"	d
 kRegType1nrSTART	vm/analysis/CodeVerify.h	68;"	d
-kRegTypeBoolean	vm/analysis/CodeVerify.h	/^    kRegTypeBoolean,        \/* must be 0 or 1 *\/$/;"	e	enum:__anon29
-kRegTypeByte	vm/analysis/CodeVerify.h	/^    kRegTypeByte,$/;"	e	enum:__anon29
-kRegTypeChar	vm/analysis/CodeVerify.h	/^    kRegTypeChar,$/;"	e	enum:__anon29
-kRegTypeConflict	vm/analysis/CodeVerify.h	/^    kRegTypeConflict,       \/* merge clash makes this reg's type unknowable *\/$/;"	e	enum:__anon29
-kRegTypeConstByte	vm/analysis/CodeVerify.h	/^    kRegTypeConstByte,      \/* const derived byte *\/$/;"	e	enum:__anon29
-kRegTypeConstChar	vm/analysis/CodeVerify.h	/^    kRegTypeConstChar,      \/* const derived char *\/$/;"	e	enum:__anon29
-kRegTypeConstHi	vm/analysis/CodeVerify.h	/^    kRegTypeConstHi,        \/* const derived wide, upper half *\/$/;"	e	enum:__anon29
-kRegTypeConstInteger	vm/analysis/CodeVerify.h	/^    kRegTypeConstInteger,   \/* const derived integer *\/$/;"	e	enum:__anon29
-kRegTypeConstLo	vm/analysis/CodeVerify.h	/^    kRegTypeConstLo,        \/* const derived wide, lower half *\/$/;"	e	enum:__anon29
-kRegTypeConstPosByte	vm/analysis/CodeVerify.h	/^    kRegTypeConstPosByte,   \/* const derived byte, known positive *\/$/;"	e	enum:__anon29
-kRegTypeConstPosShort	vm/analysis/CodeVerify.h	/^    kRegTypeConstPosShort,  \/* const derived short, known positive *\/$/;"	e	enum:__anon29
-kRegTypeConstShort	vm/analysis/CodeVerify.h	/^    kRegTypeConstShort,     \/* const derived short *\/$/;"	e	enum:__anon29
-kRegTypeDoubleHi	vm/analysis/CodeVerify.h	/^    kRegTypeDoubleHi,$/;"	e	enum:__anon29
-kRegTypeDoubleLo	vm/analysis/CodeVerify.h	/^    kRegTypeDoubleLo,$/;"	e	enum:__anon29
-kRegTypeFloat	vm/analysis/CodeVerify.h	/^    kRegTypeFloat,$/;"	e	enum:__anon29
-kRegTypeInteger	vm/analysis/CodeVerify.h	/^    kRegTypeInteger,$/;"	e	enum:__anon29
-kRegTypeLongHi	vm/analysis/CodeVerify.h	/^    kRegTypeLongHi,$/;"	e	enum:__anon29
-kRegTypeLongLo	vm/analysis/CodeVerify.h	/^    kRegTypeLongLo,         \/* lower-numbered register; endian-independent *\/$/;"	e	enum:__anon29
-kRegTypeMAX	vm/analysis/CodeVerify.h	/^    kRegTypeMAX$/;"	e	enum:__anon29
-kRegTypeOne	vm/analysis/CodeVerify.h	/^    kRegTypeOne,            \/* 32-bit 1, could be Boolean, Int, Float *\/$/;"	e	enum:__anon29
-kRegTypePosByte	vm/analysis/CodeVerify.h	/^    kRegTypePosByte,        \/* byte, known positive (can become char) *\/$/;"	e	enum:__anon29
-kRegTypePosShort	vm/analysis/CodeVerify.h	/^    kRegTypePosShort,       \/* short, known positive (can become char) *\/$/;"	e	enum:__anon29
-kRegTypeShort	vm/analysis/CodeVerify.h	/^    kRegTypeShort,$/;"	e	enum:__anon29
-kRegTypeUninit	vm/analysis/CodeVerify.h	/^    kRegTypeUninit = 1,     \/* MUST be odd to distinguish from pointer *\/$/;"	e	enum:__anon29
+kRegTypeBoolean	vm/analysis/CodeVerify.h	/^    kRegTypeBoolean,        \/* must be 0 or 1 *\/$/;"	e	enum:__anon25
+kRegTypeByte	vm/analysis/CodeVerify.h	/^    kRegTypeByte,$/;"	e	enum:__anon25
+kRegTypeChar	vm/analysis/CodeVerify.h	/^    kRegTypeChar,$/;"	e	enum:__anon25
+kRegTypeConflict	vm/analysis/CodeVerify.h	/^    kRegTypeConflict,       \/* merge clash makes this reg's type unknowable *\/$/;"	e	enum:__anon25
+kRegTypeConstByte	vm/analysis/CodeVerify.h	/^    kRegTypeConstByte,      \/* const derived byte *\/$/;"	e	enum:__anon25
+kRegTypeConstChar	vm/analysis/CodeVerify.h	/^    kRegTypeConstChar,      \/* const derived char *\/$/;"	e	enum:__anon25
+kRegTypeConstHi	vm/analysis/CodeVerify.h	/^    kRegTypeConstHi,        \/* const derived wide, upper half *\/$/;"	e	enum:__anon25
+kRegTypeConstInteger	vm/analysis/CodeVerify.h	/^    kRegTypeConstInteger,   \/* const derived integer *\/$/;"	e	enum:__anon25
+kRegTypeConstLo	vm/analysis/CodeVerify.h	/^    kRegTypeConstLo,        \/* const derived wide, lower half *\/$/;"	e	enum:__anon25
+kRegTypeConstPosByte	vm/analysis/CodeVerify.h	/^    kRegTypeConstPosByte,   \/* const derived byte, known positive *\/$/;"	e	enum:__anon25
+kRegTypeConstPosShort	vm/analysis/CodeVerify.h	/^    kRegTypeConstPosShort,  \/* const derived short, known positive *\/$/;"	e	enum:__anon25
+kRegTypeConstShort	vm/analysis/CodeVerify.h	/^    kRegTypeConstShort,     \/* const derived short *\/$/;"	e	enum:__anon25
+kRegTypeDoubleHi	vm/analysis/CodeVerify.h	/^    kRegTypeDoubleHi,$/;"	e	enum:__anon25
+kRegTypeDoubleLo	vm/analysis/CodeVerify.h	/^    kRegTypeDoubleLo,$/;"	e	enum:__anon25
+kRegTypeFloat	vm/analysis/CodeVerify.h	/^    kRegTypeFloat,$/;"	e	enum:__anon25
+kRegTypeInteger	vm/analysis/CodeVerify.h	/^    kRegTypeInteger,$/;"	e	enum:__anon25
+kRegTypeLongHi	vm/analysis/CodeVerify.h	/^    kRegTypeLongHi,$/;"	e	enum:__anon25
+kRegTypeLongLo	vm/analysis/CodeVerify.h	/^    kRegTypeLongLo,         \/* lower-numbered register; endian-independent *\/$/;"	e	enum:__anon25
+kRegTypeMAX	vm/analysis/CodeVerify.h	/^    kRegTypeMAX$/;"	e	enum:__anon25
+kRegTypeOne	vm/analysis/CodeVerify.h	/^    kRegTypeOne,            \/* 32-bit 1, could be Boolean, Int, Float *\/$/;"	e	enum:__anon25
+kRegTypePosByte	vm/analysis/CodeVerify.h	/^    kRegTypePosByte,        \/* byte, known positive (can become char) *\/$/;"	e	enum:__anon25
+kRegTypePosShort	vm/analysis/CodeVerify.h	/^    kRegTypePosShort,       \/* short, known positive (can become char) *\/$/;"	e	enum:__anon25
+kRegTypeShort	vm/analysis/CodeVerify.h	/^    kRegTypeShort,$/;"	e	enum:__anon25
+kRegTypeUninit	vm/analysis/CodeVerify.h	/^    kRegTypeUninit = 1,     \/* MUST be odd to distinguish from pointer *\/$/;"	e	enum:__anon25
 kRegTypeUninitMask	vm/analysis/CodeVerify.h	106;"	d
 kRegTypeUninitShift	vm/analysis/CodeVerify.h	107;"	d
-kRegTypeUnknown	vm/analysis/CodeVerify.h	/^    kRegTypeUnknown = 0,    \/* initial state; use value=0 so calloc works *\/$/;"	e	enum:__anon29
-kRegTypeZero	vm/analysis/CodeVerify.h	/^    kRegTypeZero,           \/* 32-bit 0, could be Boolean, Int, Float, or Ref *\/$/;"	e	enum:__anon29
+kRegTypeUnknown	vm/analysis/CodeVerify.h	/^    kRegTypeUnknown = 0,    \/* initial state; use value=0 so calloc works *\/$/;"	e	enum:__anon25
+kRegTypeZero	vm/analysis/CodeVerify.h	/^    kRegTypeZero,           \/* 32-bit 0, could be Boolean, Int, Float, or Ref *\/$/;"	e	enum:__anon25
 kRegUse0	vm/compiler/codegen/arm/ArmLIR.h	/^    kRegUse0,$/;"	e	enum:ArmOpFeatureFlags
 kRegUse1	vm/compiler/codegen/arm/ArmLIR.h	/^    kRegUse1,$/;"	e	enum:ArmOpFeatureFlags
 kRegUse2	vm/compiler/codegen/arm/ArmLIR.h	/^    kRegUse2,$/;"	e	enum:ArmOpFeatureFlags
@@ -18508,12 +18484,12 @@ kRegisterMapModeTypePrecise	vm/Globals.h	/^    kRegisterMapModeTypePrecise,$/;"	
 kRegisterMapModeUnknown	vm/Globals.h	/^    kRegisterMapModeUnknown = 0,$/;"	e	enum:RegisterMapMode
 kRetryAll	vm/compiler/CompilerIR.h	/^    kRetryAll,$/;"	e	enum:AssemblerStatus
 kRetryHalve	vm/compiler/CompilerIR.h	/^    kRetryHalve$/;"	e	enum:AssemblerStatus
-kSHA1DigestLen	libdex/DexFile.h	/^enum { kSHA1DigestLen = 20,$/;"	e	enum:__anon49
-kSHA1DigestOutputLen	libdex/DexFile.h	/^       kSHA1DigestOutputLen = kSHA1DigestLen*2 +1 };$/;"	e	enum:__anon49
+kSHA1DigestLen	libdex/DexFile.h	/^enum { kSHA1DigestLen = 20,$/;"	e	enum:__anon2
+kSHA1DigestOutputLen	libdex/DexFile.h	/^       kSHA1DigestOutputLen = kSHA1DigestLen*2 +1 };$/;"	e	enum:__anon2
 kST	vm/compiler/codegen/arm/ArmLIR.h	/^    kST = 0xe,$/;"	e	enum:ArmOpDmbOptions
-kSVByte	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVByte,$/;"	e	enum:__anon24	file:
-kSVDoubleword	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVDoubleword,$/;"	e	enum:__anon24	file:
-kSVHalfword	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVHalfword,$/;"	e	enum:__anon24	file:
+kSVByte	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVByte,$/;"	e	enum:__anon50	file:
+kSVDoubleword	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVDoubleword,$/;"	e	enum:__anon50	file:
+kSVHalfword	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVHalfword,$/;"	e	enum:__anon50	file:
 kSVSBackwardBranch	vm/interp/InterpState.h	/^    kSVSBackwardBranch = 8, \/\/ Exiting compiled code with backward branch trace$/;"	e	enum:SelfVerificationState
 kSVSDebugInterp	vm/interp/InterpState.h	/^    kSVSDebugInterp = 9,    \/\/ Normal state restored, running debug interpreter$/;"	e	enum:SelfVerificationState
 kSVSIdle	vm/interp/InterpState.h	/^    kSVSIdle = 0,           \/\/ Idle$/;"	e	enum:SelfVerificationState
@@ -18524,10 +18500,10 @@ kSVSPunt	vm/interp/InterpState.h	/^    kSVSPunt = 2,           \/\/ Exiting comp
 kSVSSingleStep	vm/interp/InterpState.h	/^    kSVSSingleStep = 3,     \/\/ Exiting compiled code by single stepping$/;"	e	enum:SelfVerificationState
 kSVSStart	vm/interp/InterpState.h	/^    kSVSStart = 1,          \/\/ Shadow space set up, running compiled code$/;"	e	enum:SelfVerificationState
 kSVSTraceSelect	vm/interp/InterpState.h	/^    kSVSTraceSelect = 5,    \/\/ Exiting compiled code and compile the next pc$/;"	e	enum:SelfVerificationState
-kSVSignedByte	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVSignedByte,$/;"	e	enum:__anon24	file:
-kSVSignedHalfword	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVSignedHalfword,$/;"	e	enum:__anon24	file:
-kSVVariable	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVVariable,$/;"	e	enum:__anon24	file:
-kSVWord	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVWord,$/;"	e	enum:__anon24	file:
+kSVSignedByte	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVSignedByte,$/;"	e	enum:__anon50	file:
+kSVSignedHalfword	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVSignedHalfword,$/;"	e	enum:__anon50	file:
+kSVVariable	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVVariable,$/;"	e	enum:__anon50	file:
+kSVWord	vm/compiler/codegen/arm/Assemble.cpp	/^    kSVWord,$/;"	e	enum:__anon50	file:
 kSY	vm/compiler/codegen/arm/ArmLIR.h	/^    kSY = 0xf,$/;"	e	enum:ArmOpDmbOptions
 kSetsCCodes	vm/compiler/codegen/arm/ArmLIR.h	/^    kSetsCCodes,$/;"	e	enum:ArmOpFeatureFlags
 kSetsConst	vm/compiler/Dataflow.h	/^    kSetsConst,$/;"	e	enum:DataFlowAttributePos
@@ -18815,7 +18791,7 @@ keyEnd	tools/dmtracedump/CreateTestTrace.c	/^char *keyEnd = "*end\\n";$/;"	v
 keyThreads	tools/dmtracedump/CreateTestTrace.c	/^char *keyThreads =$/;"	v
 keys	dx/src/com/android/dx/io/instructions/SparseSwitchPayloadDecodedInstruction.java	/^    private final int[] keys;$/;"	f	class:SparseSwitchPayloadDecodedInstruction	file:
 kind	vm/compiler/Compiler.h	/^    WorkOrderKind kind;$/;"	m	struct:CompilerWorkOrder
-kind	vm/compiler/codegen/arm/ArmLIR.h	/^        ArmEncodingKind kind;$/;"	m	struct:ArmEncodingMap::__anon21
+kind	vm/compiler/codegen/arm/ArmLIR.h	/^        ArmEncodingKind kind;$/;"	m	struct:ArmEncodingMap::__anon51
 kind	vm/oo/Class.h	/^    ClassPathEntryKind kind;$/;"	m	struct:ClassPathEntry
 kind_	vm/IndirectRefTable.h	/^    IndirectRefKind kind_;$/;"	m	struct:IndirectRefTable
 l	dx/tests/044-dex-math-ops/Blort.java	/^    private volatile long l;$/;"	f	class:Blort	file:
@@ -19070,7 +19046,7 @@ loadValueWide	vm/compiler/codegen/CodegenFactory.cpp	/^static RegLocation loadVa
 loadWordDisp	vm/compiler/codegen/CodegenFactory.cpp	/^static TGT_LIR *loadWordDisp(CompilationUnit *cUnit, int rBase,$/;"	f	file:
 loadedClasses	vm/Globals.h	/^    HashTable*  loadedClasses;$/;"	m	struct:DvmGlobals
 loader	vm/oo/Class.cpp	/^    Object*     loader;$/;"	m	struct:ClassMatchCriteria	file:
-loc	vm/jdwp/JdwpEvent.h	/^        JdwpLocation loc;$/;"	m	struct:JdwpEventMod::__anon38
+loc	vm/jdwp/JdwpEvent.h	/^        JdwpLocation loc;$/;"	m	struct:JdwpEventMod::__anon42
 local	dexgen/src/com/android/dexgen/dex/code/LocalEnd.java	/^    private final RegisterSpec local;$/;"	f	class:LocalEnd	file:
 local	dexgen/src/com/android/dexgen/dex/code/LocalStart.java	/^    private final RegisterSpec local;$/;"	f	class:LocalStart	file:
 local	dexgen/src/com/android/dexgen/rop/code/RegisterSpec.java	/^        private LocalItem local;$/;"	f	class:RegisterSpec.ForComparison	file:
@@ -19090,7 +19066,7 @@ localInfo	dx/src/com/android/dx/command/dexer/Main.java	/^        public boolean
 localInfo	dx/src/com/android/dx/dex/cf/CfOptions.java	/^    public boolean localInfo = false;$/;"	f	class:CfOptions
 localItemToSpec	dexgen/src/com/android/dexgen/rop/code/RegisterSpecSet.java	/^    public RegisterSpec localItemToSpec(LocalItem local) {$/;"	m	class:RegisterSpecSet
 localItemToSpec	dx/src/com/android/dx/rop/code/RegisterSpecSet.java	/^    public RegisterSpec localItemToSpec(LocalItem local) {$/;"	m	class:RegisterSpecSet
-localRefCookie	vm/interp/Stack.h	/^        u4          localRefCookie;$/;"	m	union:StackSaveArea::__anon27
+localRefCookie	vm/interp/Stack.h	/^        u4          localRefCookie;$/;"	m	union:StackSaveArea::__anon34
 localString	dexgen/src/com/android/dexgen/dex/code/LocalStart.java	/^    public static String localString(RegisterSpec spec) {$/;"	m	class:LocalStart
 localString	dx/src/com/android/dx/dex/code/LocalStart.java	/^    public static String localString(RegisterSpec spec) {$/;"	m	class:LocalStart
 localTarget	dx/src/com/android/dx/cf/code/BaseMachine.java	/^    private RegisterSpec localTarget;$/;"	f	class:BaseMachine	file:
@@ -19124,7 +19100,7 @@ location	dx/src/com/android/dx/command/findusages/FindUsages.java	/^    private 
 location	dx/src/com/android/dx/command/grep/Grep.java	/^    private String location() {$/;"	m	class:Grep	file:
 location	vm/compiler/CompilerIR.h	/^    RegLocationType location:2;$/;"	m	struct:RegLocation
 locationMatch	vm/jdwp/JdwpEvent.cpp	/^static inline bool locationMatch(const JdwpLocation* pLoc1,$/;"	f	file:
-locationOnly	vm/jdwp/JdwpEvent.h	/^    } locationOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon38
+locationOnly	vm/jdwp/JdwpEvent.h	/^    } locationOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon42
 lock	vm/Debugger.h	/^    pthread_mutex_t lock;$/;"	m	struct:DebugInvokeReq
 lock	vm/Hash.h	/^    pthread_mutex_t lock;$/;"	m	struct:HashTable
 lock	vm/LinearAlloc.h	/^    pthread_mutex_t lock;       \/* controls updates to this struct *\/$/;"	m	struct:LinearAllocHdr
@@ -19140,7 +19116,7 @@ lockThreadSuspend	vm/Thread.cpp	/^static void lockThreadSuspend(const char* who,
 lockThreadSuspendCount	vm/Thread.cpp	/^static inline void lockThreadSuspendCount()$/;"	f	file:
 lock_buf	vm/shadowlib/ReProtocol.h	/^		LockBuffer lock_buf;$/;"	m	class:ReProtocol
 lock_id_type	vm/shadowlib/ShadowLib.h	/^typedef ordering_id_type lock_id_type;$/;"	t
-log	vm/Misc.h	/^        } log;$/;"	m	union:DebugOutputTarget::__anon8	typeref:struct:DebugOutputTarget::__anon8::__anon9
+log	vm/Misc.h	/^        } log;$/;"	m	union:DebugOutputTarget::__anon28	typeref:struct:DebugOutputTarget::__anon28::__anon29
 logClassLoad	vm/oo/Class.cpp	/^static void logClassLoad(char type, ClassObject* clazz) {$/;"	f	file:
 logClassLoadWithTime	vm/oo/Class.cpp	/^static void logClassLoadWithTime(char type, ClassObject* clazz, u8 time) {$/;"	f	file:
 logContentionEvent	vm/Sync.cpp	/^static void logContentionEvent(Thread *self, u4 waitMs, u4 samplePercent,$/;"	f	file:
@@ -19663,7 +19639,7 @@ map	dx/src/com/android/dx/ssa/BasicRegisterMapper.java	/^    public RegisterSpec
 map	dx/src/com/android/dx/ssa/RegisterMapper.java	/^    public abstract RegisterSpec map(RegisterSpec registerSpec);$/;"	m	class:RegisterMapper
 map	dx/src/com/android/dx/ssa/RegisterMapper.java	/^    public final RegisterSpecList map(RegisterSpecList sources) {$/;"	m	class:RegisterMapper
 map	dx/src/com/android/dx/ssa/SsaRenamer.java	/^            public RegisterSpec map(RegisterSpec registerSpec) {$/;"	m	class:SsaRenamer.BlockRenamer.RenamingMapper
-map	vm/analysis/CodeVerify.h	/^    } map[1];$/;"	m	struct:UninitInstanceMap	typeref:struct:UninitInstanceMap::__anon30
+map	vm/analysis/CodeVerify.h	/^    } map[1];$/;"	m	struct:UninitInstanceMap	typeref:struct:UninitInstanceMap::__anon26
 mapAddr	vm/LinearAlloc.h	/^    char*   mapAddr;            \/* start of mmap()ed region *\/$/;"	m	struct:LinearAllocHdr
 mapCentralDirectory	libdex/ZipArchive.cpp	/^static int mapCentralDirectory(int fd, const char* debugFileName,$/;"	f	file:
 mapCentralDirectory0	libdex/ZipArchive.cpp	/^static int mapCentralDirectory0(int fd, const char* debugFileName,$/;"	f	file:
@@ -19751,7 +19727,7 @@ maxIndent	dexgen/src/com/android/dexgen/util/IndentingWriter.java	/^    private 
 maxIndent	dx/src/com/android/dx/util/IndentingWriter.java	/^    private final int maxIndent;$/;"	f	class:IndentingWriter	file:
 maxLabel	dx/src/com/android/dx/cf/code/Ropper.java	/^    private final int maxLabel;$/;"	f	class:Ropper	file:
 maxLabel	dx/src/com/android/dx/ssa/SsaMethod.java	/^    private int maxLabel;$/;"	f	class:SsaMethod	file:
-maxLen	tools/hprof-conv/HprofConv.c	/^    size_t maxLen;$/;"	m	struct:__anon46	file:
+maxLen	tools/hprof-conv/HprofConv.c	/^    size_t maxLen;$/;"	m	struct:__anon11	file:
 maxLen	vm/jdwp/ExpandBuf.cpp	/^    int     maxLen;$/;"	m	struct:ExpandBuf	file:
 maxLocals	dx/src/com/android/dx/cf/attrib/AttCode.java	/^    private final int maxLocals;$/;"	f	class:AttCode	file:
 maxLocals	dx/src/com/android/dx/cf/code/Ropper.java	/^    private final int maxLocals;$/;"	f	class:Ropper	file:
@@ -19816,8 +19792,8 @@ mergeWithSubroutineCaller	dx/src/com/android/dx/cf/code/Frame.java	/^    public 
 mergeWithSubroutineCaller	dx/src/com/android/dx/cf/code/LocalsArray.java	/^    public abstract LocalsArraySet mergeWithSubroutineCaller$/;"	m	class:LocalsArray
 mergeWithSubroutineCaller	dx/src/com/android/dx/cf/code/LocalsArraySet.java	/^    public LocalsArraySet mergeWithSubroutineCaller$/;"	m	class:LocalsArraySet
 mergeWithSubroutineCaller	dx/src/com/android/dx/cf/code/OneLocalsArray.java	/^    public LocalsArraySet mergeWithSubroutineCaller$/;"	m	class:OneLocalsArray
-meta	vm/compiler/CompilerIR.h	/^    } meta;$/;"	m	struct:MIR	typeref:union:MIR::__anon18
-meta	vm/interp/InterpState.h	/^        void*       meta;$/;"	m	union:JitTraceRun::__anon28
+meta	vm/compiler/CompilerIR.h	/^    } meta;$/;"	m	struct:MIR	typeref:union:MIR::__anon56
+meta	vm/interp/InterpState.h	/^        void*       meta;$/;"	m	union:JitTraceRun::__anon35
 meth	dx/src/com/android/dx/ssa/DomFront.java	/^    private final SsaMethod meth;$/;"	f	class:DomFront	file:
 meth	dx/src/com/android/dx/ssa/Dominators.java	/^    private final SsaMethod meth;$/;"	f	class:Dominators	file:
 methDalvikDdmcServer_broadcast	vm/Globals.h	/^    Method*     methDalvikDdmcServer_broadcast;$/;"	m	struct:DvmGlobals
@@ -19859,14 +19835,14 @@ method	dx/tests/115-merge/testdata/Basic.java	/^    String method() {$/;"	m	clas
 method	dx/tests/115-merge/testdata/TryCatchFinally.java	/^    public static void method() {$/;"	m	class:TryCatchFinally
 method	tools/dmtracedump/TraceDump.c	/^    MethodEntry *method;$/;"	m	struct:StackEntry	file:
 method	tools/dmtracedump/TraceDump.c	/^    struct MethodEntry *method;$/;"	m	struct:TimedMethod	typeref:struct:TimedMethod::MethodEntry	file:
-method	vm/AllocTracker.cpp	/^        const Method* method;   \/* which method we're executing in *\/$/;"	m	struct:AllocRecord::__anon1	file:
+method	vm/AllocTracker.cpp	/^        const Method* method;   \/* which method we're executing in *\/$/;"	m	struct:AllocRecord::__anon21	file:
 method	vm/Debugger.h	/^    Method* method;$/;"	m	struct:DebugInvokeReq
 method	vm/Debugger.h	/^    const Method* method;$/;"	m	struct:StepControl
 method	vm/analysis/CodeVerify.h	/^    const Method*   method;$/;"	m	struct:VerifierData
 method	vm/analysis/Optimize.cpp	/^    Method* method;$/;"	m	struct:InlineSub	file:
 method	vm/compiler/Compiler.h	/^    const Method *method;       \/* to lookup native PC from dalvik PC *\/$/;"	m	struct:PredictedChainingCell
 method	vm/compiler/Compiler.h	/^    const Method *method;       \/\/ Used as hash entry signature$/;"	m	struct:CompilerMethodStats
-method	vm/compiler/Compiler.h	/^    const Method* method;$/;"	m	struct:__anon20
+method	vm/compiler/Compiler.h	/^    const Method* method;$/;"	m	struct:__anon49
 method	vm/compiler/CompilerIR.h	/^    const Method *method;$/;"	m	struct:CallsiteInfo
 method	vm/compiler/CompilerIR.h	/^    const Method *method;$/;"	m	struct:CompilationUnit
 method	vm/interp/Interp.cpp	/^    Method*     method;                 \/* method we're associated with *\/$/;"	m	struct:Breakpoint	file:
@@ -19940,7 +19916,7 @@ methodTable	vm/Globals.h	/^    HashTable *methodTable;$/;"	m	struct:DvmJitGlobal
 methodThatNeedsInvokeRange	dx/tests/093-ssa-invoke-range/Blort.java	/^    static void methodThatNeedsInvokeRange$/;"	m	class:Blort
 methodToCall	vm/Thread.h	/^    const Method*     methodToCall;$/;"	m	struct:Thread
 methodToDump	dx/src/com/android/dx/command/dexer/Main.java	/^        public String methodToDump = null;$/;"	f	class:Main.Arguments
-methodToFind	dexlist/DexList.cpp	/^    const char* methodToFind;$/;"	m	struct:__anon47	file:
+methodToFind	dexlist/DexList.cpp	/^    const char* methodToFind;$/;"	m	struct:__anon12	file:
 methodToMethodId	vm/Debugger.cpp	/^static MethodId methodToMethodId(const Method* meth)$/;"	f	file:
 methodToSlot	vm/reflect/Reflect.cpp	/^static int methodToSlot(const Method* meth)$/;"	f	file:
 methodTrace	vm/Globals.h	/^    MethodTraceState methodTrace;$/;"	m	struct:DvmGlobals
@@ -19968,10 +19944,6 @@ misPredBranchOver	vm/compiler/CompilerIR.h	/^    LIR *misPredBranchOver;$/;"	m	s
 misc	tests/046-reflect/src/Main.java	/^    public void misc() {$/;"	m	class:Target
 misses	vm/AtomicCache.h	/^    int         misses;                 \/* entry was for other keys *\/$/;"	m	struct:AtomicCache
 modCount	vm/jdwp/JdwpEvent.h	/^    int modCount;       \/* #of entries in mods[] *\/$/;"	m	struct:JdwpEvent
-modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon32
-modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon33
-modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon34
-modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon35
 modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon36
 modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon37
 modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon38
@@ -19979,6 +19951,10 @@ modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEven
 modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon40
 modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon41
 modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon42
+modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon43
+modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon44
+modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon45
+modKind	vm/jdwp/JdwpEvent.h	/^        u1          modKind;$/;"	m	struct:JdwpEventMod::__anon46
 modKind	vm/jdwp/JdwpEvent.h	/^    u1      modKind;                \/* JdwpModKind *\/$/;"	m	union:JdwpEventMod
 modLock	vm/DvmDex.h	/^    pthread_mutex_t     modLock;$/;"	m	struct:DvmDex
 modifiedImmediate	vm/compiler/codegen/arm/Thumb2/Factory.cpp	/^static int modifiedImmediate(u4 value)$/;"	f	file:
@@ -20240,7 +20216,7 @@ numExpandedMaps	vm/analysis/RegisterMap.cpp	/^    int numExpandedMaps;$/;"	m	str
 numFPTemps	vm/compiler/codegen/arm/ArmLIR.h	/^    int numFPTemps;$/;"	m	struct:RegisterPool
 numFPTemps	vm/compiler/codegen/x86/X86LIR.h	/^    int numFPTemps;$/;"	m	struct:RegisterPool
 numHeaps	vm/alloc/HeapSource.cpp	/^    size_t numHeaps;$/;"	m	struct:HeapSource	file:
-numHoles	vm/IndirectRefTable.h	/^        u4      numHoles:16;            \/* #of holes in entire table *\/$/;"	m	struct:IRTSegmentState::__anon7
+numHoles	vm/IndirectRefTable.h	/^        u4      numHoles:16;            \/* #of holes in entire table *\/$/;"	m	struct:IRTSegmentState::__anon31
 numInsts	vm/compiler/CompilerIR.h	/^    int numInsts;$/;"	m	struct:CompilationUnit
 numInsts	vm/interp/InterpState.h	/^    unsigned numInsts:8;     \/\/ Number of Byte codes in run$/;"	m	struct:JitCodeDesc
 numItems	vm/Debugger.cpp	/^    int numItems;$/;"	m	struct:DebugCallbackContext	file:
@@ -20262,7 +20238,7 @@ obj	vm/IndirectRefTable.h	/^    Object* obj;        \/* object pointer itself, N
 obj	vm/Sync.cpp	/^    Object*     obj;            \/* what object are we part of [debug only] *\/$/;"	m	struct:Monitor	file:
 objFreeHook	vm/shadowlib/ReAgent.cpp	/^void objFreeHook(Object* obj, Thread* self){$/;"	f
 objNewHook	vm/shadowlib/ReAgent.cpp	/^void objNewHook(Object* obj){$/;"	f
-objectId	vm/jdwp/JdwpEvent.h	/^        ObjectId    objectId;$/;"	m	struct:JdwpEventMod::__anon42
+objectId	vm/jdwp/JdwpEvent.h	/^        ObjectId    objectId;$/;"	m	struct:JdwpEventMod::__anon46
 objectIdToObject	vm/Debugger.cpp	/^static Object* objectIdToObject(ObjectId id)$/;"	f	file:
 objectIsRegistered	vm/Debugger.cpp	/^static bool objectIsRegistered(ObjectId id, RegistryType type)$/;"	f	file:
 objectSize	vm/alloc/Copying.cpp	/^static size_t objectSize(const Object *obj)$/;"	f	file:
@@ -20822,13 +20798,13 @@ parsedArgs	dx/src/com/android/dx/command/dump/Main.java	/^    static Args parsed
 partialOverlap	vm/compiler/codegen/arm/Thumb/Gen.cpp	/^static bool partialOverlap(int sreg1, int sreg2)$/;"	f	file:
 partner	vm/compiler/codegen/arm/ArmLIR.h	/^    int partner;                \/\/ If pair, other reg of pair$/;"	m	struct:RegisterInfo
 partner	vm/compiler/codegen/x86/X86LIR.h	/^    int partner;                \/\/ If pair, other reg of pair$/;"	m	struct:RegisterInfo
-parts	vm/IndirectRefTable.h	/^    } parts;$/;"	m	union:IRTSegmentState	typeref:struct:IRTSegmentState::__anon7
+parts	vm/IndirectRefTable.h	/^    } parts;$/;"	m	union:IRTSegmentState	typeref:struct:IRTSegmentState::__anon31
 path	dx/src/com/android/dx/command/dexer/Main.java	/^        String path;$/;"	f	class:Main.ParallelProcessor
 pathHolder	dexgen/src/com/android/dexgen/util/DexJarMaker.java	/^    private final PathHolder pathHolder;$/;"	f	class:DexJarMaker	file:
 pathName	vm/Native.cpp	/^    char*       pathName;           \/* absolute path to library *\/$/;"	m	struct:SharedLib	file:
 pathname	dx/src/com/android/dx/cf/direct/ClassPathOpener.java	/^    private final String pathname;$/;"	f	class:ClassPathOpener	file:
 patternMatch	vm/jdwp/JdwpEvent.cpp	/^static bool patternMatch(const char* pattern, const char* target)$/;"	f	file:
-pc	vm/AllocTracker.cpp	/^        int         pc;         \/* current execution offset, in 16-bit units *\/$/;"	m	struct:AllocRecord::__anon1	file:
+pc	vm/AllocTracker.cpp	/^        int         pc;         \/* current execution offset, in 16-bit units *\/$/;"	m	struct:AllocRecord::__anon21	file:
 pc	vm/compiler/Compiler.h	/^    const u2* pc;$/;"	m	struct:CompilerWorkOrder
 pc	vm/interp/InterpState.h	/^    const u2*       pc;         \/\/ Dalvik PC$/;"	m	struct:InterpSaveState
 pc	vm/mterp/cstubs/enddefs.cpp	4;"	d	file:
@@ -21086,7 +21062,7 @@ printXml	tools/dexdeps/src/com/android/dexdeps/Output.java	/^    static void pri
 printXmlFields	tools/dexdeps/src/com/android/dexdeps/Output.java	/^    private static void printXmlFields(ClassRef cref) {$/;"	m	class:Output	file:
 printXmlMethods	tools/dexdeps/src/com/android/dexdeps/Output.java	/^    private static void printXmlMethods(ClassRef cref) {$/;"	m	class:Output	file:
 println	dx/src/com/android/dx/command/dump/BaseDumper.java	/^    protected final void println(String s) {$/;"	m	class:BaseDumper
-priority	vm/Misc.h	/^            int priority;$/;"	m	struct:DebugOutputTarget::__anon8::__anon9
+priority	vm/Misc.h	/^            int priority;$/;"	m	struct:DebugOutputTarget::__anon28::__anon29
 priority	vm/Thread.cpp	/^    int priority;$/;"	m	struct:SchedulerStats	file:
 privFloatField	tests/064-field-access/src/Main.java	/^    private float privFloatField;$/;"	f	class:SamePackage	file:
 privGetStr	tests/043-privates/src/Main.java	/^    private String privGetStr() {$/;"	m	class:PrivatePackage	file:
@@ -21520,9 +21496,9 @@ ref	dexgen/src/com/android/dexgen/dex/file/DebugInfoItem.java	/^    private fina
 ref	dx/src/com/android/dx/dex/file/CodeItem.java	/^    private final CstMethodRef ref;$/;"	f	class:CodeItem	file:
 ref	dx/src/com/android/dx/dex/file/DebugInfoItem.java	/^    private final CstMethodRef ref;$/;"	f	class:DebugInfoItem	file:
 refOffsets	vm/oo/Object.h	/^    u4 refOffsets;$/;"	m	struct:ClassObject
-refTypeId	vm/jdwp/JdwpEvent.h	/^        RefTypeId   refTypeId;$/;"	m	struct:JdwpEventMod::__anon35
 refTypeId	vm/jdwp/JdwpEvent.h	/^        RefTypeId   refTypeId;$/;"	m	struct:JdwpEventMod::__anon39
-refTypeId	vm/jdwp/JdwpEvent.h	/^        RefTypeId   refTypeId;$/;"	m	struct:JdwpEventMod::__anon40
+refTypeId	vm/jdwp/JdwpEvent.h	/^        RefTypeId   refTypeId;$/;"	m	struct:JdwpEventMod::__anon43
+refTypeId	vm/jdwp/JdwpEvent.h	/^        RefTypeId   refTypeId;$/;"	m	struct:JdwpEventMod::__anon44
 refTypeIdToClassObject	vm/Debugger.cpp	/^static ClassObject* refTypeIdToClassObject(RefTypeId id)$/;"	f	file:
 referenceClassFlags	vm/alloc/MarkSweep.cpp	/^static int referenceClassFlags(const Object *obj)$/;"	f	file:
 reg	dexgen/src/com/android/dexgen/dex/file/DebugInfoDecoder.java	/^        public int reg;$/;"	f	class:DebugInfoDecoder.LocalEntry
@@ -22009,8 +21985,10 @@ serialNumber	vm/oo/Object.h	/^    u4              serialNumber;$/;"	m	struct:Cla
 serialVersionUID	tests/093-serialization/src/Main.java	/^    private static final long serialVersionUID = 12345;$/;"	f	class:Base	file:
 serialVersionUID	tests/093-serialization/src/Main.java	/^    private static final long serialVersionUID = 54321;$/;"	f	class:Sub	file:
 server	vm/jdwp/Jdwp.h	/^    bool        server;$/;"	m	struct:JdwpStartupParams
-serverReplySent	vm/Globals.h	/^    void        (*serverReplySent)(int pid, int tid);$/;"	m	struct:DvmGlobals
-serverTransactionRecv	vm/Globals.h	/^    void        (*serverTransactionRecv)(int pid, int tid, int from_pid, int from_tid);$/;"	m	struct:DvmGlobals
+serverReplySent	vm/Globals.h	/^    int        (*serverReplySent)(int transaction_id, int from_pid, int from_tid, bool isOneway);$/;"	m	struct:DvmGlobals
+serverReplySent	vm/shadowlib/ReAgent.cpp	/^int serverReplySent(int transaction_id, int from_pid, int from_tid, bool isOneWay){$/;"	f
+serverTransactionRecv	vm/Globals.h	/^    int        (*serverTransactionRecv)(int transaction_id, int from_pid, int from_tid, bool isOneway);$/;"	m	struct:DvmGlobals
+serverTransactionRecv	vm/shadowlib/ReAgent.cpp	/^int serverTransactionRecv(int transaction_id, int from_pid, int from_tid, bool isOneWay){$/;"	f
 set	dexgen/src/com/android/dexgen/dex/code/CatchHandlerList.java	/^    public void set(int n, CstType exceptionType, int handler) {$/;"	m	class:CatchHandlerList
 set	dexgen/src/com/android/dexgen/dex/code/CatchHandlerList.java	/^    public void set(int n, Entry entry) {$/;"	m	class:CatchHandlerList
 set	dexgen/src/com/android/dexgen/dex/code/CatchTable.java	/^    public void set(int n, Entry entry) {$/;"	m	class:CatchTable
@@ -22358,10 +22336,11 @@ size	vm/AllocTracker.cpp	/^    u4              size;       \/* total size reques
 size	vm/Debugger.h	/^    JdwpStepSize size;$/;"	m	struct:StepControl
 size	vm/analysis/RegisterMap.h	/^    size_t      size;$/;"	m	struct:RegisterMapBuilder
 size	vm/compiler/CompilerUtility.h	/^    size_t size;$/;"	m	struct:GrowableListIterator
-size	vm/compiler/codegen/arm/ArmLIR.h	/^        unsigned int size:3;    \/\/ bytes (2 for thumb, 2\/4 for thumb2)$/;"	m	struct:ArmLIR::__anon22
+size	vm/compiler/codegen/arm/ArmLIR.h	/^        unsigned int size:3;    \/\/ bytes (2 for thumb, 2\/4 for thumb2)$/;"	m	struct:ArmLIR::__anon52
 size	vm/compiler/codegen/arm/ArmLIR.h	/^    int size;$/;"	m	struct:ArmEncodingMap
-size	vm/jdwp/JdwpEvent.h	/^        int         size;           \/* JdwpStepSize *\/$/;"	m	struct:JdwpEventMod::__anon41
+size	vm/jdwp/JdwpEvent.h	/^        int         size;           \/* JdwpStepSize *\/$/;"	m	struct:JdwpEventMod::__anon45
 size	vm/reflect/Reflect.h	/^    u4 size;                             \/* number of elements in instance *\/$/;"	m	struct:EncodedArrayIterator
+sizeofDvmGlobals	vm/Init.cpp	/^int sizeofDvmGlobals = sizeof(gDvm);$/;"	v
 skeleton	vm/compiler/codegen/arm/ArmLIR.h	/^    u4 skeleton;$/;"	m	struct:ArmEncodingMap
 skipAnnotationValue	vm/reflect/Annotation.cpp	/^static bool skipAnnotationValue(const ClassObject* clazz, const u1** pPtr)$/;"	f	file:
 skipEncodedAnnotation	vm/reflect/Annotation.cpp	/^static bool skipEncodedAnnotation(const ClassObject* clazz, const u1** pPtr)$/;"	f	file:
@@ -22464,7 +22443,7 @@ stack	tools/dmtracedump/CreateTestTrace.c	/^} stack;$/;"	t	typeref:struct:stack	
 stack	vm/alloc/MarkSweep.h	/^    GcMarkStack stack;$/;"	m	struct:GcMarkContext
 stackCrc	vm/Thread.h	/^    u4          stackCrc;$/;"	m	struct:Thread
 stackDump	tools/dmtracedump/TraceDump.c	/^void stackDump(CallStack *pStack, int top)$/;"	f
-stackElem	vm/AllocTracker.cpp	/^    } stackElem[kMaxAllocRecordStackDepth];$/;"	m	struct:AllocRecord	typeref:struct:AllocRecord::__anon1	file:
+stackElem	vm/AllocTracker.cpp	/^    } stackElem[kMaxAllocRecordStackDepth];$/;"	m	struct:AllocRecord	typeref:struct:AllocRecord::__anon21	file:
 stackElementString	dx/src/com/android/dx/cf/code/ExecutionStack.java	/^    private static String stackElementString(TypeBearer type) {$/;"	m	class:ExecutionStack	file:
 stackOverflowTestSub	tests/018-stack-overflow/src/Main.java	/^    private static void stackOverflowTestSub(double pad1, double pad2,$/;"	m	class:Main	file:
 stackOverflowed	vm/Thread.h	/^    bool        stackOverflowed;$/;"	m	struct:Thread
@@ -22485,7 +22464,7 @@ start	dx/src/com/android/dx/cf/code/ByteBlock.java	/^    private final int start
 start	dx/src/com/android/dx/dex/code/CatchTable.java	/^        private final int start;$/;"	f	class:CatchTable.Entry	file:
 start	dx/src/com/android/dx/util/ByteArray.java	/^    private final int start;$/;"	f	class:ByteArray	file:
 start	dx/src/com/android/dx/util/ByteArrayAnnotatedOutput.java	/^        private final int start;$/;"	f	class:ByteArrayAnnotatedOutput.Annotation	file:
-start	vm/compiler/codegen/arm/ArmLIR.h	/^        int start; \/* start for kFmtBitBlt, 4-bit slice end for FP regs *\/$/;"	m	struct:ArmEncodingMap::__anon21
+start	vm/compiler/codegen/arm/ArmLIR.h	/^        int start; \/* start for kFmtBitBlt, 4-bit slice end for FP regs *\/$/;"	m	struct:ArmEncodingMap::__anon51
 startAddr	libdex/DexFile.h	/^    u4  startAddr;          \/* start address, in 16-bit code units *\/$/;"	m	struct:DexTry
 startAddress	dx/src/com/android/dx/io/Code.java	/^        final int startAddress;$/;"	f	class:Code.Try
 startAddress	libdex/DexDebugInfo.cpp	/^    u2 startAddress;$/;"	m	struct:LocalInfo	file:
@@ -22557,10 +22536,10 @@ stdioConverterLock	vm/Globals.h	/^    pthread_mutex_t stdioConverterLock;$/;"	m	
 stdioConverterReady	vm/Globals.h	/^    bool            stdioConverterReady;$/;"	m	struct:DvmGlobals
 stdioConverterThreadStart	vm/StdioConverter.cpp	/^static void* stdioConverterThreadStart(void* arg)$/;"	f	file:
 stdoutPipe	vm/Globals.h	/^    int             stdoutPipe[2];$/;"	m	struct:DvmGlobals
-step	vm/jdwp/JdwpEvent.h	/^    } step;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon41
+step	vm/jdwp/JdwpEvent.h	/^    } step;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon45
 stepControl	vm/Globals.h	/^    StepControl stepControl;$/;"	m	struct:DvmGlobals
 stime	vm/Misc.h	/^    unsigned long stime;    \/* number of jiffies scheduled in kernel mode *\/$/;"	m	struct:ProcStatData
-storage	tools/hprof-conv/HprofConv.c	/^    unsigned char* storage;$/;"	m	struct:__anon46	file:
+storage	tools/hprof-conv/HprofConv.c	/^    unsigned char* storage;$/;"	m	struct:__anon11	file:
 storage	vm/BitVector.h	/^    u4*     storage;$/;"	m	struct:BitVector
 storage	vm/jdwp/ExpandBuf.cpp	/^    u1*     storage;$/;"	m	struct:ExpandBuf	file:
 storageSize	vm/BitVector.h	/^    u4      storageSize;    \/* current size, in 32-bit words *\/$/;"	m	struct:BitVector
@@ -22680,7 +22659,7 @@ subArrayForLabel	dx/src/com/android/dx/cf/code/LocalsArraySet.java	/^    public 
 subFrameForLabel	dx/src/com/android/dx/cf/code/Frame.java	/^    public Frame subFrameForLabel(int startLabel, int subLabel) {$/;"	m	class:Frame
 subFunc	tests/003-omnibus-opcodes/src/Classes.java	/^    public void subFunc(boolean wantSub) {$/;"	m	class:Classes
 subFunc	tests/003-omnibus-opcodes/src/Classes.java	/^    public void subFunc(boolean wantSub) {$/;"	m	class:MoreClasses
-subMode	vm/Thread.h	/^        uint16_t   subMode;$/;"	m	struct:InterpBreak::__anon6
+subMode	vm/Thread.h	/^        uint16_t   subMode;$/;"	m	struct:InterpBreak::__anon24
 subTest	tests/003-omnibus-opcodes/src/Monitor.java	/^    public synchronized void subTest() {$/;"	m	class:Monitor
 subdirs	Android.mk	/^subdirs := $(addprefix $(LOCAL_PATH)\/,$(addsuffix \/Android.mk, \\$/;"	m
 subdirs	dx/Android.mk	/^subdirs := $(addprefix $(LOCAL_PATH)\/,$(addsuffix \/Android.mk, \\$/;"	m
@@ -22693,7 +22672,7 @@ subroutines	dx/src/com/android/dx/cf/code/Frame.java	/^    private final IntList
 subroutines	dx/src/com/android/dx/cf/code/Ropper.java	/^    private final Subroutine[] subroutines;$/;"	f	class:Ropper	file:
 subset	dx/src/com/android/dx/rop/code/RegisterSpecList.java	/^    public RegisterSpecList subset(BitSet exclusionSet) {$/;"	m	class:RegisterSpecList
 success	tests/067-preemptive-unpark/src/Main.java	/^        public volatile boolean success = false;$/;"	f	class:Main.ParkTester
-successorBlockList	vm/compiler/CompilerIR.h	/^    } successorBlockList;$/;"	m	struct:BasicBlock	typeref:struct:BasicBlock::__anon19
+successorBlockList	vm/compiler/CompilerIR.h	/^    } successorBlockList;$/;"	m	struct:BasicBlock	typeref:struct:BasicBlock::__anon57
 successorList	dx/src/com/android/dx/ssa/SsaBasicBlock.java	/^    private IntList successorList;$/;"	f	class:SsaBasicBlock	file:
 successors	dexgen/src/com/android/dexgen/rop/ByteBlock.java	/^    private final IntList successors;$/;"	f	class:ByteBlock	file:
 successors	dexgen/src/com/android/dexgen/rop/code/BasicBlock.java	/^    private final IntList successors;$/;"	f	class:BasicBlock	file:
@@ -22761,7 +22740,7 @@ systemServerPid	vm/Globals.h	/^    pid_t systemServerPid;$/;"	m	struct:DvmGlobal
 systemTid	vm/Thread.h	/^    pid_t       systemTid;$/;"	m	struct:Thread
 table	dexgen/src/com/android/dexgen/dex/file/CatchStructs.java	/^    private CatchTable table;$/;"	f	class:CatchStructs	file:
 table	dx/src/com/android/dx/dex/file/CatchStructs.java	/^    private CatchTable table;$/;"	f	class:CatchStructs	file:
-table	libdex/DexFile.h	/^    } table[1];$/;"	m	struct:DexClassLookup	typeref:struct:DexClassLookup::__anon56
+table	libdex/DexFile.h	/^    } table[1];$/;"	m	struct:DexClassLookup	typeref:struct:DexClassLookup::__anon9
 table	vm/ReferenceTable.h	/^    Object**        table;              \/* bottom of the list *\/$/;"	m	struct:ReferenceTable
 tableHeader	tools/dmtracedump/TraceDump.c	/^const char* tableHeader =$/;"	v
 tableHeaderMissing	tools/dmtracedump/TraceDump.c	/^const char* tableHeaderMissing =$/;"	v
@@ -22771,7 +22750,7 @@ tableOfContents	dx/src/com/android/dx/io/DexIndexPrinter.java	/^    private fina
 tableSize	vm/Hash.h	/^    int         tableSize;          \/* must be power of 2 *\/$/;"	m	struct:HashTable
 table_	vm/IndirectRefTable.h	/^    IndirectRefSlot* table_;$/;"	m	class:iref_iterator
 table_	vm/IndirectRefTable.h	/^    IndirectRefSlot* table_;$/;"	m	struct:IndirectRefTable
-tag	vm/Misc.h	/^            const char* tag;$/;"	m	struct:DebugOutputTarget::__anon8::__anon9
+tag	vm/Misc.h	/^            const char* tag;$/;"	m	struct:DebugOutputTarget::__anon28::__anon29
 tag	vm/hprof/Hprof.h	/^    u1 tag;$/;"	m	struct:hprof_record_t
 tag	vm/oo/Object.h	/^	u8				tag;$/;"	m	struct:Object
 tagFromClass	vm/Debugger.cpp	/^static u1 tagFromClass(ClassObject* clazz)$/;"	f	file:
@@ -23216,15 +23195,15 @@ threadId	tools/dmtracedump/TraceDump.c	/^    int         threadId;$/;"	m	struct:
 threadId	vm/AllocTracker.cpp	/^    u2              threadId;   \/* simple thread ID; could be recycled *\/$/;"	m	struct:AllocRecord	file:
 threadId	vm/Thread.h	/^    u4          threadId;$/;"	m	struct:Thread
 threadId	vm/jdwp/JdwpEvent.cpp	/^    ObjectId            threadId;       \/* ThreadOnly *\/$/;"	m	struct:ModBasket	file:
-threadId	vm/jdwp/JdwpEvent.h	/^        ObjectId    threadId;$/;"	m	struct:JdwpEventMod::__anon34
-threadId	vm/jdwp/JdwpEvent.h	/^        ObjectId    threadId;$/;"	m	struct:JdwpEventMod::__anon41
+threadId	vm/jdwp/JdwpEvent.h	/^        ObjectId    threadId;$/;"	m	struct:JdwpEventMod::__anon38
+threadId	vm/jdwp/JdwpEvent.h	/^        ObjectId    threadId;$/;"	m	struct:JdwpEventMod::__anon45
 threadIdMap	vm/Globals.h	/^    BitVector*  threadIdMap;$/;"	m	struct:DvmGlobals
 threadList	vm/Globals.h	/^    Thread*     threadList;$/;"	m	struct:DvmGlobals
 threadListLock	vm/Globals.h	/^    pthread_mutex_t threadListLock;$/;"	m	struct:DvmGlobals
 threadName	tools/dmtracedump/TraceDump.c	/^    const char* threadName;$/;"	m	struct:ThreadEntry	file:
 threadObj	vm/Thread.h	/^    Object*     threadObj;$/;"	m	struct:Thread
 threadObjToThread	vm/Debugger.cpp	/^static Thread* threadObjToThread(Object* threadObj)$/;"	f	file:
-threadOnly	vm/jdwp/JdwpEvent.h	/^    } threadOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon34
+threadOnly	vm/jdwp/JdwpEvent.h	/^    } threadOnly;$/;"	m	union:JdwpEventMod	typeref:struct:JdwpEventMod::__anon38
 threadPool	dx/src/com/android/dx/command/dexer/Main.java	/^    private static ExecutorService threadPool;$/;"	f	class:Main	file:
 threadSleepMon	vm/Globals.h	/^    Monitor*    threadSleepMon;$/;"	m	struct:DvmGlobals
 threadStartCond	vm/Globals.h	/^    pthread_cond_t threadStartCond;$/;"	m	struct:DvmGlobals
@@ -23563,7 +23542,7 @@ top	dx/src/com/android/dx/util/IntList.java	/^    public int top() {$/;"	m	class
 top	tools/dmtracedump/TraceDump.c	/^    int         top;$/;"	m	struct:CallStack	file:
 top	vm/alloc/MarkSweep.h	/^    const Object **top;$/;"	m	struct:GcMarkStack
 topExclusive	tools/dmtracedump/TraceDump.c	/^    uint64_t topExclusive;              \/* non-recursive exclusive time *\/$/;"	m	struct:MethodEntry	file:
-topIndex	vm/IndirectRefTable.h	/^        u4      topIndex:16;            \/* index of first unused entry *\/$/;"	m	struct:IRTSegmentState::__anon7
+topIndex	vm/IndirectRefTable.h	/^        u4      topIndex:16;            \/* index of first unused entry *\/$/;"	m	struct:IRTSegmentState::__anon31
 totalAllocationUnits	vm/alloc/DdmHeap.cpp	/^    size_t totalAllocationUnits;$/;"	m	struct:HeapChunkContext	file:
 totalBlocks	vm/alloc/Copying.cpp	/^    size_t totalBlocks;$/;"	m	struct:HeapSource	file:
 totalExpandedMapSize	vm/analysis/RegisterMap.cpp	/^    int totalExpandedMapSize;$/;"	m	struct:MapStats	file:
@@ -23575,7 +23554,7 @@ totalSize	dx/src/com/android/dx/dex/file/Statistics.java	/^        private int t
 totalSize	vm/compiler/CompilerIR.h	/^    int totalSize;                      \/\/ header + code size$/;"	m	struct:CompilationUnit
 totalTraceLen	vm/Thread.h	/^    int         totalTraceLen;  \/\/ Number of Dalvik insts in trace$/;"	m	struct:Thread
 trace	vm/Thread.h	/^    JitTraceRun trace[MAX_JIT_RUN_LEN];$/;"	m	struct:Thread
-trace	vm/compiler/Compiler.h	/^    JitTraceRun trace[0];       \/\/ Variable-length trace descriptors$/;"	m	struct:__anon20
+trace	vm/compiler/Compiler.h	/^    JitTraceRun trace[0];       \/\/ Variable-length trace descriptors$/;"	m	struct:__anon49
 trace	vm/interp/Jit.h	/^    InstructionTrace trace[JIT_MAX_TRACE_LEN]; \/* opcode trace for debugging *\/$/;"	m	struct:ShadowSpace
 traceDesc	vm/compiler/CompilerIR.h	/^    const JitTraceDescription *traceDesc;$/;"	m	struct:CompilationUnit
 traceEnabled	vm/Profile.h	/^    int     traceEnabled;$/;"	m	struct:MethodTraceState
@@ -23586,6 +23565,7 @@ traceMethod	vm/Thread.h	/^    const Method*  traceMethod; \/\/ Starting method o
 traceVersion	vm/Profile.h	/^    int     traceVersion;$/;"	m	struct:MethodTraceState
 trackMonitorEnter	vm/Jni.cpp	/^static void trackMonitorEnter(Thread* self, Object* obj) {$/;"	f	file:
 trackMonitorExit	vm/Jni.cpp	/^static void trackMonitorExit(Thread* self, Object* obj) {$/;"	f	file:
+transaction_info_flag	vm/Thread.h	/^	int	transaction_info_flag;$/;"	m	struct:Thread
 transform	dx/src/com/android/dx/merge/InstructionTransformer.java	/^    public short[] transform(short[] encodedInstructions) throws DexException {$/;"	m	class:InstructionTransformer
 transformAnnotationDirectories	dx/src/com/android/dx/merge/DexMerger.java	/^    private void transformAnnotationDirectories(DexBuffer in, IndexMap indexMap) {$/;"	m	class:DexMerger	file:
 transformAnnotationDirectory	dx/src/com/android/dx/merge/DexMerger.java	/^    private void transformAnnotationDirectory($/;"	m	class:DexMerger	file:
@@ -23761,7 +23741,7 @@ typeVoid	vm/Globals.h	/^    ClassObject* typeVoid;$/;"	m	struct:DvmGlobals
 types	dx/src/com/android/dx/merge/TypeList.java	/^    private final short[] types;$/;"	f	class:TypeList	file:
 types	libdex/DexDataMap.h	/^    u2* types;   \/* corresponding array of item types *\/$/;"	m	struct:DexDataMap
 types	tools/dexdeps/src/com/android/dexdeps/DexData.java	/^        public int types[];             \/\/ contents of type list$/;"	f	class:DexData.ProtoIdItem
-u	vm/compiler/CompilerIR.h	/^    } u;$/;"	m	struct:ChainCellCounts	typeref:union:ChainCellCounts::__anon16
+u	vm/compiler/CompilerIR.h	/^    } u;$/;"	m	struct:ChainCellCounts	typeref:union:ChainCellCounts::__anon54
 u	vm/interp/Jit.h	/^    JitEntryInfoUnion   u;$/;"	m	struct:JitEntry
 u1	dexgen/src/com/android/dexgen/util/Hex.java	/^    public static String u1(int v) {$/;"	m	class:Hex
 u1	dx/src/com/android/dx/util/Hex.java	/^    public static String u1(int v) {$/;"	m	class:Hex
@@ -23781,7 +23761,7 @@ u8	dx/src/com/android/dx/util/Hex.java	/^    public static String u8(long v) {$/
 u8	vm/Common.h	/^typedef uint64_t            u8;$/;"	t
 uNibble	dexgen/src/com/android/dexgen/util/Hex.java	/^    public static String uNibble(int v) {$/;"	m	class:Hex
 uNibble	dx/src/com/android/dx/util/Hex.java	/^    public static String uNibble(int v) {$/;"	m	class:Hex
-uncaught	vm/jdwp/JdwpEvent.h	/^        u1          uncaught;$/;"	m	struct:JdwpEventMod::__anon39
+uncaught	vm/jdwp/JdwpEvent.h	/^        u1          uncaught;$/;"	m	struct:JdwpEventMod::__anon43
 uncaughtException	tests/050-sync-test/src/ThreadDeathHandler.java	/^    public void uncaughtException(Thread t, Throwable e) {$/;"	m	class:ThreadDeathHandler
 uncaughtException	tests/054-uncaught/src/ThreadDeathHandler.java	/^    public void uncaughtException(Thread t, Throwable e) {$/;"	m	class:ThreadDeathHandler
 unchainSingle	vm/compiler/codegen/arm/Assemble.cpp	/^static u4* unchainSingle(JitEntry *trace)$/;"	f	file:
@@ -23833,9 +23813,9 @@ unsignedShiftTest	tests/027-arithmetic/src/Main.java	/^    static void unsignedS
 untweakLoader	vm/analysis/Optimize.cpp	/^static void untweakLoader(ClassObject* referrer, ClassObject* resClass)$/;"	f	file:
 untweakSlot	vm/Debugger.cpp	/^static int untweakSlot(int slot, const void* framePtr)$/;"	f	file:
 unused	libdex/DexFile.h	/^    u2 unused;$/;"	m	struct:DexMapItem
-unused	vm/Thread.h	/^        int8_t     unused;   \/* for future expansion *\/$/;"	m	struct:InterpBreak::__anon6
-unused	vm/Thread.h	/^        void* unused;$/;"	m	struct:InterpBreak::__anon6
-unused	vm/compiler/codegen/arm/ArmLIR.h	/^        unsigned int unused:23;$/;"	m	struct:ArmLIR::__anon22
+unused	vm/Thread.h	/^        int8_t     unused;   \/* for future expansion *\/$/;"	m	struct:InterpBreak::__anon24
+unused	vm/Thread.h	/^        void* unused;$/;"	m	struct:InterpBreak::__anon24
+unused	vm/compiler/codegen/arm/ArmLIR.h	/^        unsigned int unused:23;$/;"	m	struct:ArmLIR::__anon52
 unused	vm/interp/InterpState.h	/^    int             unused;        \/\/ Keep struct size constant$/;"	m	struct:InterpSaveState
 unused	vm/interp/InterpState.h	/^    u4 unused:31;$/;"	m	struct:JitTraceRun
 unused	vm/interp/InterpState.h	/^    void (*unused)(void);  \/\/ Keep structure size constant$/;"	m	struct:JitToInterpEntries
@@ -23942,7 +23922,7 @@ values	dx/src/com/android/dx/io/Annotation.java	/^    private final EncodedValue
 values	dx/src/com/android/dx/util/IntList.java	/^    private int[] values;$/;"	f	class:IntList	file:
 variableTableCb	vm/Debugger.cpp	/^static void variableTableCb (void *cnxt, u2 reg, u4 startAddress,$/;"	f	file:
 varyingWorklist	dx/src/com/android/dx/ssa/SCCP.java	/^    private ArrayList<SsaInsn> varyingWorklist;$/;"	f	class:SCCP	file:
-venv	vm/shadowlib/ReAgent.cpp	/^	void* venv;$/;"	m	union:__anon44	file:
+venv	vm/shadowlib/ReAgent.cpp	/^	void* venv;$/;"	m	union:__anon48	file:
 verbose	dexdump/DexDump.cpp	/^    bool verbose;$/;"	m	struct:Options	file:
 verbose	dexgen/src/com/android/dexgen/util/ByteArrayAnnotatedOutput.java	/^    private boolean verbose;$/;"	f	class:ByteArrayAnnotatedOutput	file:
 verbose	dx/src/com/android/dx/command/dexer/Main.java	/^        public boolean verbose = false;$/;"	f	class:Main.Arguments
@@ -24767,7 +24747,7 @@ xTests	tests/003-omnibus-opcodes/src/Classes.java	/^    static void xTests(Objec
 xarTests	tests/003-omnibus-opcodes/src/Classes.java	/^    static void xarTests(Object xar) {$/;"	m	class:Classes
 xarararTests	tests/003-omnibus-opcodes/src/Classes.java	/^    static void xarararTests(Object xararar) {$/;"	m	class:Classes
 xorCallback	vm/alloc/TEST/HeapBitmapTest/main.c	/^xorCallback(size_t numPtrs, void **ptrs, const void *finger, void *arg)$/;"	f
-xtra	vm/interp/Stack.h	/^    } xtra;$/;"	m	struct:StackSaveArea	typeref:union:StackSaveArea::__anon27
+xtra	vm/interp/Stack.h	/^    } xtra;$/;"	m	struct:StackSaveArea	typeref:union:StackSaveArea::__anon34
 yTests	tests/003-omnibus-opcodes/src/Classes.java	/^    static void yTests(Object y) {$/;"	m	class:Classes
 yarTests	tests/003-omnibus-opcodes/src/Classes.java	/^    static void yarTests(Object yar) {$/;"	m	class:Classes
 yarararTests	tests/003-omnibus-opcodes/src/Classes.java	/^    static void yarararTests(Object yararar) {$/;"	m	class:Classes
@@ -24796,7 +24776,6 @@ zorch5	dx/tests/066-dex-try-catch-rethrow/Blort.java	/^    public static Object 
 zygote	vm/Globals.h	/^    bool        zygote;$/;"	m	struct:DvmGlobals
 ~BaseQueue	vm/shadowlib/ReQueue.h	/^		virtual ~BaseQueue(){$/;"	f	class:BaseQueue
 ~Buffer	vm/shadowlib/Buffer.h	/^		~Buffer(){$/;"	f	class:Buffer
-~ByteBuffer	libdex/ByteBuffer.cpp	/^ByteBuffer::~ByteBuffer(){$/;"	f	class:ByteBuffer
 ~LockBuffer	vm/shadowlib/Lock.h	/^		~LockBuffer(){$/;"	f	class:LockBuffer
 ~Map	vm/shadowlib/Map.h	/^		~Map(){$/;"	f	class:Map
 ~ReProtocol	vm/shadowlib/ReProtocol.h	/^		~ReProtocol(){$/;"	f	class:ReProtocol
@@ -24805,7 +24784,6 @@ zygote	vm/Globals.h	/^    bool        zygote;$/;"	m	struct:DvmGlobals
 ~ScopedMutex	vm/shadowlib/ShadowLib.h	/^		~ScopedMutex(){$/;"	f	class:ScopedMutex
 ~ScopedShutdown	vm/Init.cpp	/^    ~ScopedShutdown() {$/;"	f	class:ScopedShutdown
 ~Socket	vm/shadowlib/Socket.cpp	/^Socket::~Socket()$/;"	f	class:Socket
-~SocketBuffer	libdex/SocketBuffer.h	/^		~SocketBuffer(){$/;"	f	class:SocketBuffer
 Ó	dx/tests/115-merge/testdata/Annotated.java	/^        String a() default "";$/;"	f	interface:Annotated.Marker
 Ó	dx/tests/115-merge/testdata/Annotated.java	/^        String e() default "";$/;"	f	interface:Annotated.Nested
 Ó	tests/004-annotations/src/android/test/anno/AnnoFancyField.java	/^    public String nombre() default "no se";$/;"	f	interface:AnnoFancyField

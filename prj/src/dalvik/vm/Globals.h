@@ -740,8 +740,8 @@ struct DvmGlobals {
     int        (*classInitHook)(ClassObject* clazz);
     int			(*clientTransactionStart)(int transaction_id, bool isOneway);
     int        (*serverTransactionRecv)(int transaction_id, int from_pid, int from_tid, bool isOneway);
-    int        (*serverReplySent)(int transaction_id, int from_pid, int from_tid, bool isOneway);
-    int        (*clientReplyRecv)(int transaction_id, int from_pid, int from_tid, bool isOneway);
+    int        (*serverReplySent)(int transaction_id, int from_pid, int from_tid, bool isOneway, int &t_flag);
+    int        (*clientReplyRecv)(int transaction_id, int from_pid, int from_tid, bool isOneway, int t_flag);
 };
 
 extern struct DvmGlobals gDvm;

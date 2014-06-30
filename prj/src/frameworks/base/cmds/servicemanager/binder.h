@@ -27,6 +27,7 @@ struct binder_txn
     uint32_t sender_pid;
     uint32_t sender_tid;
     uint32_t transaction_id;
+    uint32_t transaction_flag;
     uint32_t sender_euid;
 
     uint32_t data_size;

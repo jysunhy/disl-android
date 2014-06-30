@@ -16,11 +16,15 @@ LOCAL_PATH := $(call my-dir)
 
 subdirs := $(addprefix $(LOCAL_PATH)/,$(addsuffix /Android.mk, \
 		libdex \
+		libdex_ori \
 		vm \
+		vm_ori \
 		dalvikvm \
+		dalvikvm_ori \
 		dexgen \
 		dexlist \
 		dexopt \
+		dexopt_ori \
 		dexdump \
 		dvz \
 		dx \
