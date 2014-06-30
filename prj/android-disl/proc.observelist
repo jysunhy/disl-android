@@ -1,2 +1,4 @@
 com.javacodegeeks.android.androidphonecontactsexample
-dalvikvm
+com.android.contacts
+com.android.email
+dalvik_vm

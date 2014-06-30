@@ -1,12 +1,10 @@
 ApplicationsProvider.apk
 Calendar.apk
 CalendarProvider.apk
-Contacts.apk
 ContactsProvider.apk
 DeskClock.apk
 DownloadProvider.apk
 DrmProvider.apk
-Email.apk
 Exchange2.apk
 Gallery2.apk
 LatinIME.apk
@@ -36,7 +34,7 @@ content.jar
 core-junit.jar
 core.jar
 ext.jar
-framework.jar
+frame_work.jar
 ime.jar
 input.jar
 javax.obex.jar
