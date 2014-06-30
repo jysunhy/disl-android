@@ -130,6 +130,7 @@ struct binder_transaction_data {
 	pid_t		sender_pid;
 	pid_t		sender_tid;
 	int			transaction_id;
+	int			transaction_flag;
 
 	uid_t		sender_euid;
 	size_t		data_size;	/* number of bytes of data */

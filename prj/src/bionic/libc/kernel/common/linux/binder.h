@@ -91,6 +91,7 @@ struct binder_transaction_data {
  pid_t sender_pid;
  pid_t sender_tid;
  pid_t transaction_id;
+ pid_t transaction_flag;
  uid_t sender_euid;
 /* WARNING: DO NOT EDIT, AUTO-GENERATED CODE - SEE TOP FOR INSTRUCTIONS */
  size_t data_size;

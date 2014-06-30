@@ -73,4 +73,11 @@ public class DiSLClass {
 //        BCAnalysisStub.printResult ();
 //    }
 
+  @Before (marker = BodyMarker.class, scope="Activity.onPause")
+  public static void printAnalysisResult () {
+      BCAnalysisStub.printResult ();
+  }
+
+
+
 }

@@ -64,10 +64,10 @@ fi
 #echo "-Analysis Server Port to be set to "$svmPort
 #echo ""
 
-read -p "Instrument Server IP (default-$old3):  " dislIP
+read -p "Instrument Server IP (default-$svmIP):  " dislIP
 if [ "$dislIP" == "" ]
 then
-	dislIP=$old3
+	dislIP=$svmIP
 else
 	dislIP=$dislIP
 fi
