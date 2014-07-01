@@ -93,7 +93,7 @@ public class BCAnalysis extends RemoteAnalysis {
 
     // TODO write map-reduce friendly code
     public void printSPResult (final Context context) {
-        final HashSet <ShadowString> classes = new HashSet <> ();
+        final HashSet <ShadowString> classes = new HashSet <ShadowString> ();
 
         System.out.println ("############### Methods ###############");
 
@@ -145,7 +145,7 @@ public class BCAnalysis extends RemoteAnalysis {
 
         System.out.println ("############### Package ###############");
 
-        final HashMap <String, ClassStatistic> packageCovered = new HashMap <> ();
+        final HashMap <String, ClassStatistic> packageCovered = new HashMap <String, BCAnalysis.ClassStatistic> ();
 
         for (final ShadowString klass : classes) {
             final String className = klass.toString ();
@@ -191,7 +191,7 @@ public class BCAnalysis extends RemoteAnalysis {
 
         System.out.println ("############### Summary ###############");
 
-        final HashMap <String, ClassStatistic> summaryCovered = new HashMap <> ();
+        final HashMap <String, ClassStatistic> summaryCovered = new HashMap <String, BCAnalysis.ClassStatistic>();
 
         for (final ShadowString klass : classes) {
             final String className = klass.toString ();

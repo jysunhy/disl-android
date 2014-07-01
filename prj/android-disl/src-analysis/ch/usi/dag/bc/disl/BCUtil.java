@@ -43,13 +43,13 @@ public class BCUtil {
             return 2;
         } else if (instr instanceof LookupSwitchInsnNode) {
             final LookupSwitchInsnNode lsin = (LookupSwitchInsnNode) instr;
-            final HashSet <LabelNode> labels = new HashSet <> ();
+            final HashSet <LabelNode> labels = new HashSet <LabelNode> ();
             labels.add (lsin.dflt);
             labels.addAll (lsin.labels);
             return labels.size ();
         } else if (instr instanceof TableSwitchInsnNode) {
             final TableSwitchInsnNode tsin = (TableSwitchInsnNode) instr;
-            final HashSet <LabelNode> labels = new HashSet <> ();
+            final HashSet <LabelNode> labels = new HashSet <LabelNode> ();
             labels.add (tsin.dflt);
             labels.addAll (tsin.labels);
             return labels.size ();

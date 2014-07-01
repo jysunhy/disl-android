@@ -31,9 +31,9 @@ public class ShadowAddressSpace {
     public ShadowAddressSpace (final int processID) {
         context = new Context (processID, null);
 
-        shadowObjects = new ConcurrentHashMap <> (10000000);
-        classLoaderMap = new ConcurrentHashMap <> (10000);
-        shadowClasses = new ConcurrentHashMap <> (10000);
+        shadowObjects = new ConcurrentHashMap <Long, ShadowObject> (100);
+        classLoaderMap = new ConcurrentHashMap <ShadowObject, ConcurrentHashMap<String,byte[]>> (100);
+        shadowClasses = new ConcurrentHashMap <Integer, ShadowClass>(100);
 
         classLoaderMap.put (
             BOOTSTRAP_CLASSLOADER, new ConcurrentHashMap <String, byte []> ());
@@ -436,7 +436,7 @@ public class ShadowAddressSpace {
 
     // Singleton Utilities
 
-    private static final ConcurrentHashMap <Integer, ShadowAddressSpace> shadowAddressSpaces = new ConcurrentHashMap <> ();
+    private static final ConcurrentHashMap <Integer, ShadowAddressSpace> shadowAddressSpaces = new ConcurrentHashMap <Integer, ShadowAddressSpace>();
 
 
     public static Collection <ShadowAddressSpace> getAllShadowAddressSpace () {

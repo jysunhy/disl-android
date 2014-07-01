@@ -184,7 +184,7 @@
 		<copy file="${asm.path}" tofile="${build}/${asm.lib}" />
 	</target>
 
-	<target name="prepare-all" depends="package,eclipse,compile-test,copy-asm" />
+	<target name="prepare-all" depends="package,eclipse,compile-test,copy-asm,compile-analysis" />
 
 	<target name="clean">
 		<delete dir="${bin}" />

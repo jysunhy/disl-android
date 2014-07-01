@@ -53,7 +53,7 @@ public class Context {
 
     public static Collection <Context> getAllContext () {
         final Collection <ShadowAddressSpace> shadowAddressSpaces = ShadowAddressSpace.getAllShadowAddressSpace ();
-        final ArrayList <Context> contexts = new ArrayList <> (
+        final ArrayList <Context> contexts = new ArrayList <Context> (
             shadowAddressSpaces.size ());
 
         for (final ShadowAddressSpace shadowAddressSpace : shadowAddressSpaces) {

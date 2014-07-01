@@ -16,7 +16,7 @@ import ch.usi.dag.disl.staticcontext.MethodStaticContext;
 
 public class BCContext extends MethodStaticContext {
 
-    ConcurrentHashMap <String, Integer> methodTotalEdges = new ConcurrentHashMap <>();
+    ConcurrentHashMap <String, Integer> methodTotalEdges = new ConcurrentHashMap <String, Integer>();
 
     public String thisMethodFullNameWithDesc () {
         return thisMethodFullName () + thisMethodDescriptor ();
@@ -79,7 +79,7 @@ public class BCContext extends MethodStaticContext {
                 return index + 1;
             } else if (instr instanceof TableSwitchInsnNode) {
                 final TableSwitchInsnNode tsin = (TableSwitchInsnNode) instr;
-                final LinkedList <LabelNode> list = new LinkedList <> ();
+                final LinkedList <LabelNode> list = new LinkedList <LabelNode> ();
                 list.add (tsin.dflt);
 
                 for (final LabelNode label : tsin.labels) {
@@ -95,7 +95,7 @@ public class BCContext extends MethodStaticContext {
                 }
             } else if (instr instanceof LookupSwitchInsnNode) {
                 final LookupSwitchInsnNode lsin = (LookupSwitchInsnNode) instr;
-                final LinkedList <LabelNode> list = new LinkedList <> ();
+                final LinkedList <LabelNode> list = new LinkedList <LabelNode> ();
                 list.add (lsin.dflt);
 
                 for (final LabelNode label : lsin.labels) {

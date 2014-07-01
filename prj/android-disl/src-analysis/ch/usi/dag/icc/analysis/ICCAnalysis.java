@@ -25,17 +25,17 @@ public class ICCAnalysis extends RemoteAnalysis {
         System.out.println (methodName.toString ());
     }
 
-    ConcurrentHashMap <Integer, AtomicInteger> ssCounters = new ConcurrentHashMap <> ();
+    ConcurrentHashMap <Integer, AtomicInteger> ssCounters = new ConcurrentHashMap <Integer, AtomicInteger> ();
 
-    ConcurrentHashMap <Integer, AtomicInteger> bsCounters = new ConcurrentHashMap <> ();
+    ConcurrentHashMap <Integer, AtomicInteger> bsCounters = new ConcurrentHashMap <Integer, AtomicInteger> ();
 
-    ConcurrentHashMap <Integer, AtomicInteger> saCounters = new ConcurrentHashMap <> ();
+    ConcurrentHashMap <Integer, AtomicInteger> saCounters = new ConcurrentHashMap <Integer, AtomicInteger> ();
 
-    ConcurrentHashMap <Integer, AtomicInteger> scCounters = new ConcurrentHashMap <> ();
+    ConcurrentHashMap <Integer, AtomicInteger> scCounters = new ConcurrentHashMap <Integer, AtomicInteger> ();
 
-    ConcurrentHashMap <Integer, AtomicInteger> btCounters = new ConcurrentHashMap <> ();
+    ConcurrentHashMap <Integer, AtomicInteger> btCounters = new ConcurrentHashMap <Integer, AtomicInteger> ();
 
-    ConcurrentHashMap <Integer, AtomicInteger> otCounters = new ConcurrentHashMap <> ();
+    ConcurrentHashMap <Integer, AtomicInteger> otCounters = new ConcurrentHashMap <Integer, AtomicInteger> ();
 
 
     public void increase (
@@ -89,14 +89,14 @@ public class ICCAnalysis extends RemoteAnalysis {
     }
 
 
-    ConcurrentHashMap <Integer, ConcurrentHashMap <String, AtomicInteger>> allAMSCounters = new ConcurrentHashMap <> ();
+    ConcurrentHashMap <Integer, ConcurrentHashMap <String, AtomicInteger>> allAMSCounters = new ConcurrentHashMap <Integer, ConcurrentHashMap <String, AtomicInteger>> ();
 
 
     public void callService (final ShadowString methodName, final int caller) {
         ConcurrentHashMap <String, AtomicInteger> currentAMSCounters;
 
         if ((currentAMSCounters = allAMSCounters.get (caller)) == null) {
-            final ConcurrentHashMap <String, AtomicInteger> temp = new ConcurrentHashMap <> ();
+            final ConcurrentHashMap <String, AtomicInteger> temp = new ConcurrentHashMap <String, AtomicInteger> ();
 
             if ((currentAMSCounters = allAMSCounters.putIfAbsent (caller, temp)) == null) {
                 currentAMSCounters = temp;
@@ -169,7 +169,7 @@ public class ICCAnalysis extends RemoteAnalysis {
 
         System.out.println ("+++++++++++++++++++++++++++++");
 
-        final ArrayList <Integer> pids = new ArrayList <> (allAMSCounters.keySet ());
+        final ArrayList <Integer> pids = new ArrayList <Integer> (allAMSCounters.keySet ());
         Collections.sort (pids);
 
         for (final Integer pid : pids) {
@@ -180,10 +180,10 @@ public class ICCAnalysis extends RemoteAnalysis {
             //}
 
             final ConcurrentHashMap <String, AtomicInteger> currentAMSCounters = allAMSCounters.get (pid);
-            final ArrayList <String> methodNames = new ArrayList<> (currentAMSCounters.keySet ());
+            final ArrayList <String> methodNames = new ArrayList<String> (currentAMSCounters.keySet ());
             Collections.sort (methodNames);
 
-            final HashMap <String, Integer> classCounters = new HashMap<> ();
+            final HashMap <String, Integer> classCounters = new HashMap<String, Integer> ();
 
             for (final String methodName : methodNames) {
                 final int methodCounter = currentAMSCounters.get (methodName).get ();

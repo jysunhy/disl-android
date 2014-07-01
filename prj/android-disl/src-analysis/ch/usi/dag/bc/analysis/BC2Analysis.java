@@ -14,7 +14,7 @@ public class BC2Analysis extends RemoteAnalysis implements Forkable {
 
     public static class ContextStatistic {
 
-        ConcurrentHashMap <String, ClassStatistic> classStatistics = new ConcurrentHashMap <> ();
+        ConcurrentHashMap <String, ClassStatistic> classStatistics = new ConcurrentHashMap <String, BC2Analysis.ClassStatistic>();
 
 
         public ClassStatistic getClassStatistic (
@@ -50,7 +50,7 @@ public class BC2Analysis extends RemoteAnalysis implements Forkable {
 
     public static class ClassStatistic {
 
-        ConcurrentHashMap <String, boolean []> methodStatistics = new ConcurrentHashMap <> ();
+        ConcurrentHashMap <String, boolean []> methodStatistics = new ConcurrentHashMap <String, boolean[]>();
 
         int totalEdge;
 
@@ -98,7 +98,7 @@ public class BC2Analysis extends RemoteAnalysis implements Forkable {
     }
 
 
-    ConcurrentHashMap <Context, ContextStatistic> contextStatistics = new ConcurrentHashMap <> ();
+    ConcurrentHashMap <Context, ContextStatistic> contextStatistics = new ConcurrentHashMap <Context, BC2Analysis.ContextStatistic> ();
 
 
     private String getClassName (final String methodName) {

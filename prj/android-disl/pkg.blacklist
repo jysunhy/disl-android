@@ -2,6 +2,7 @@ ApplicationsProvider.apk
 Calendar.apk
 CalendarProvider.apk
 ContactsProvider.apk
+Contacts.apk
 DeskClock.apk
 DownloadProvider.apk
 DrmProvider.apk
@@ -11,7 +12,7 @@ LatinIME.apk
 Launcher2.apk
 MediaProvider.apk
 Mms.apk
-Phone.apk
+Ph_one.apk
 Provision.apk
 QuickSearchBox.apk
 Settings.apk
@@ -34,7 +35,7 @@ content.jar
 core-junit.jar
 core.jar
 ext.jar
-frame_work.jar
+framework.jar
 ime.jar
 input.jar
 javax.obex.jar
@@ -44,3 +45,4 @@ requestsync.jar
 services.jar
 svc.jar
 uiautomator.jar
+Email.apk
