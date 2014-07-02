@@ -1,5 +1,6 @@
 package ch.usi.dag.dislserver;
 
+import java.io.File;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -12,6 +13,9 @@ import org.w3c.dom.NodeList;
 
 
 public class DiSLConfig {
+
+    private static final String CONFIG_FILE = System.getProperty (
+        "configfile", "config.xml");
 
     static String default_disl_classes;
 
@@ -77,7 +81,7 @@ public class DiSLConfig {
                         }
                         if (attrNode.getNodeName ().equals ("dislclass")) {
                             newdex.dislClass = attrNode.getTextContent ();
-                            System.out.println (newdex.dislClass);
+                            //System.out.println (newdex.dislClass);
                         }
                         if (attrNode.getNodeName ().equals ("preinstrumented")) {
                             newdex.preinstrumented_path = attrNode.getTextContent ();
@@ -122,7 +126,8 @@ public class DiSLConfig {
     }
 
 
-    public static void parseXml (final String fileName) {
+    public static void parseXml () {
+        final String fileName = CONFIG_FILE;
         System.out.println ("Parsing the XML");
         dexMap = new HashMap <String, Dex> ();
         procMap = new HashMap <String, Proc> ();
@@ -132,7 +137,7 @@ public class DiSLConfig {
         try {
             final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance ();
             final DocumentBuilder db = dbf.newDocumentBuilder ();
-            final Document document = db.parse (fileName);
+            final Document document = db.parse (new File(fileName));
 
             final Element rootElem = document.getDocumentElement ();
             // System.out.println(rootElem.getChildNodes ().getLength ());
@@ -177,7 +182,7 @@ public class DiSLConfig {
 
     public static void main (final String [] args) {
         // TODO Auto-generated method stub
-        parseXml ("test.xml");
+        parseXml ();
     }
 
 }

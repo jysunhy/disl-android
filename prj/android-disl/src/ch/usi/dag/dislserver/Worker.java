@@ -44,6 +44,8 @@ import com.googlecode.dex2jar.v3.DexExceptionHandlerImpl;
 public class Worker extends Thread {
     // Android Specific Code
     // the file containing the names of jars or apks that won't be instrumented
+    private static final boolean ON_ANDROID_DEVICE = Boolean.getBoolean ("on.android");
+
     private static final String PROP_PKG_BLACKLIST = "pkg.blacklist";
 
     private static final String PKG_BLACKLIST = System.getProperty (
@@ -411,7 +413,8 @@ public class Worker extends Thread {
 //                    if(!observe) {
 //                        return null;
 //                    }
-                    newdisl = new DiSL (false,DiSLConfig.default_disl_classes);
+                    //newdisl = new DiSL (false,DiSLConfig.default_disl_classes);
+                    newdisl = new DiSL (true,DiSLConfig.default_disl_classes);
                 }catch (final Exception e){
                     e.printStackTrace ();
                 }
@@ -421,7 +424,8 @@ public class Worker extends Thread {
                     return null;
                 }
                 try {
-                    newdisl = new DiSL(dex.isBootstrapDex, dex.dislClass);
+                    //newdisl = new DiSL(dex.isBootstrapDex, dex.dislClass);
+                    newdisl = new DiSL(true, dex.dislClass);
                 } catch (final DiSLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -457,8 +461,13 @@ public class Worker extends Thread {
         }
 
         // create tmp file in system temporary files
-        final File dex2JarFile = File.createTempFile (
+        File dex2JarFile = null;
+        if(ON_ANDROID_DEVICE) {
+            dex2JarFile = new File("/data/"+jarName+".tmp");
+        } else {
+            dex2JarFile = File.createTempFile (
             jarName, ".tmp");
+        }
 
         if (debug) {
             System.out.println ("tmp file stored in "
@@ -510,9 +519,14 @@ public class Worker extends Thread {
         //    System.out.println ("Skip instrumenting Jar: " + jarName);
         //}
 
-        final String instrumentedJarName = "instrumented_" + jarName;
+        String instrumentedJarName;;
+        if(ON_ANDROID_DEVICE) {
+            instrumentedJarName= "/data/"+ "instrumented_" + jarName;
+        } else {
+            instrumentedJarName= "instrumented_" + jarName;
+        }
+        final File instrumentedJarFile= new File (instrumentedJarName);
 
-        final File instrumentedJarFile = new File (instrumentedJarName);
 
         final FileOutputStream fos = new FileOutputStream (instrumentedJarFile);
         final ZipOutputStream zos = new ZipOutputStream (fos);
@@ -540,8 +554,14 @@ public class Worker extends Thread {
                         if (code == null) {
                             // special case here
                             if (className.equals ("java/text/SimpleDateFormat")) {
-                                final File tmp = new File (
+                                final File tmp;
+                                if(ON_ANDROID_DEVICE) {
+                                    tmp = new File (
+                                    "/system/bin/disldroid/SimpleDateFormat.class");
+                                } else {
+                                    tmp = new File (
                                     "lib/SimpleDateFormat.class");
+                                }
                                 is = new FileInputStream (tmp);
                             }
 
@@ -630,7 +650,7 @@ public class Worker extends Thread {
             final java.lang.reflect.Method m = c.getMethod (
                 "main", String [].class);
             realJar = new File (instrumentedJarName);
-            outputDex = new File (realJar.getName ()
+            outputDex = new File (instrumentedJarName
                 + ".dex");
 
             final List <String> ps = new ArrayList <String> ();
@@ -717,7 +737,7 @@ public class Worker extends Thread {
 
 //        ReadPkgBlackList ();
 //        ReadObserveList ();
-        DiSLConfig.parseXml ("test.xml");
+        DiSLConfig.parseXml ();
 
         try {
 

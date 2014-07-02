@@ -148,6 +148,12 @@ public class DiSL {
 
         for (final InputStream classIS : dislClasses) {
             parser.parse(classIS);
+            try {
+                classIS.close ();
+            } catch (final IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
         // initialize processors
@@ -232,6 +238,12 @@ public class DiSL {
 
         for (final InputStream classIS : dislClasses) {
             parser.parse(classIS);
+            try {
+                classIS.close ();
+            } catch (final IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
         // initialize processors
