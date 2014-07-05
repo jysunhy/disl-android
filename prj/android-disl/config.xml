@@ -6,6 +6,7 @@
 		<dex>
 			<name>AndroidPhoneContactsExample.apk</name>
 			<isbootstrap>false</isbootstrap>
+			<dislclass>bin/ch/usi/dag/icc/disl/DiSLClass.class;bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>core.jar</name>
@@ -37,8 +38,9 @@
 			<isbootstrap>true</isbootstrap>
 		</dex>
 		<dex>
-			<name>Email.apk</name>
-			<preinstrumented>preinstrumented/preinstrumented_Email.apk</preinstrumented>
+			<name>Contacts.apk</name>
+			<isbootstrap>false</isbootstrap>
+			<dislclass>bin/ch/usi/dag/icc/disl/DiSLClass.class;bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 	</dexes>
 	<procs>
@@ -49,7 +51,7 @@
 		</proc>
 		<proc>
 			<procname>zygote</procname>
-			<isobserved>true</isobserved>
+			<isobserved>false</isobserved>
 		</proc>
 		<proc>
 			<procname>system_server</procname>
