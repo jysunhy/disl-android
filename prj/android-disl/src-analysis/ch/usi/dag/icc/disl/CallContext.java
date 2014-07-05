@@ -9,28 +9,28 @@ import ch.usi.dag.disl.staticcontext.MethodStaticContext;
 
 public class CallContext extends MethodStaticContext {
 
-    String permissions[] = new String[]{"android.permission.READ_CONTACTS","android.permission.READ_PHONE_STATE"};
-
-    public int getPermissionBit(final String permission){
-        int pos = 0;
-        for (final String p : permissions) {
-            if(permission.equals (p)) {
-                return 1<<pos;
-            }
-            pos++;
-        }
-        return 0;
-    }
-
-    public String getPermissionString(final int permission){
-        String res = "";
-        for(int i = 0; i < 32; i++){
-            if((permission & (1>>i)) == 1) {
-                res+=permissions[i]+";";
-            }
-        }
-        return res;
-    }
+//    String permissions[] = new String[]{"android.permission.READ_CONTACTS","android.permission.READ_PHONE_STATE"};
+//
+//    public int getPermissionBit(final String permission){
+//        int pos = 0;
+//        for (final String p : permissions) {
+//            if(permission.equals (p)) {
+//                return 1<<pos;
+//            }
+//            pos++;
+//        }
+//        return 0;
+//    }
+//
+//    public String getPermissionString(final int permission){
+//        String res = "";
+//        for(int i = 0; i < 32; i++){
+//            if((permission & (1>>i)) == 1) {
+//                res+=permissions[i]+";";
+//            }
+//        }
+//        return res;
+//    }
 
     public String getType () {
         final AbstractInsnNode instruction = staticContextData.getRegionStart ();

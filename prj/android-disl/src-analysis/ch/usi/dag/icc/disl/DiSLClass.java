@@ -37,7 +37,15 @@ public class DiSLClass {
                 }else if(n.equals ("java.lang.Double")) {
                     AREDispatch.NativeLog(tabs+obj.toString());
                 }else if(n.equals ("java.lang.String")) {
-                    api = msc.getPermissionBit (obj.toString ());
+                    final String permissions[] = new String[]{"android.permission.READ_CONTACTS","android.permission.READ_PHONE_STATE"};
+                    int pos = 0;
+                    for (final String p : permissions) {
+                        if(obj.toString ().equals (p)) {
+                            api = 1<<pos;
+                            break;
+                        }
+                        pos++;
+                    }
                     AREDispatch.NativeLog(tabs+obj.toString());
                 }else {
                     AREDispatch.NativeLog (tabs+n);

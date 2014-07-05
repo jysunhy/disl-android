@@ -18,9 +18,18 @@ public class PermissionDiSLClass {
         marker = BodyMarker.class,
         scope = "*.*")
     public static void after_enter (final CallContext msc){
+
+
         final int permission = AREDispatch.checkThreadPermission ();
         if(permission!=0) {
-            ICCAnalysisStub.permission_alert (msc.thisMethodFullName (), msc.getPermissionString (permission));
+            final String permissions[] = new String[]{"android.permission.READ_CONTACTS","android.permission.READ_PHONE_STATE"};;
+            String res = "";
+            for(int i = 0; i < 32; i++){
+                if((permission & (1>>i)) == 1) {
+                    res+=permissions[i]+";";
+                }
+            }
+            ICCAnalysisStub.permission_alert (msc.thisMethodFullName (), res);
         }
     }
 }
