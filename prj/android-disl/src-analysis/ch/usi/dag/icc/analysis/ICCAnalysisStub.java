@@ -5,14 +5,24 @@ import ch.usi.dag.dislre.AREDispatch;
 
 public class ICCAnalysisStub {
 
-    public static short CSC = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.callServiceInClient");
+    public static short PERMISSION = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.permission_alert");
 
+    public static void permission_alert (final String methodname, final String permission) {
+        AREDispatch.analysisStart (PERMISSION);
+        AREDispatch.sendObjectPlusData (methodname);
+        AREDispatch.sendObjectPlusData (permission);
+        AREDispatch.analysisEnd ();
+    }
+
+
+    public static short CSC = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.callServiceInClient");
 
     public static void callServiceInClient (final String methodName) {
         AREDispatch.analysisStart (CSC);
         AREDispatch.sendObjectPlusData (methodName);
         AREDispatch.analysisEnd ();
     }
+
 
 
 
