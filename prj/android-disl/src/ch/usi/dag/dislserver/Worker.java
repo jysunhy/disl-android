@@ -73,8 +73,8 @@ public class Worker extends Thread {
 
     private static final String PROP_BUILTIN_LIB_PATH = "builtin.lib";
 
-    private static final String builtinLibPath = "lib/built-in-emma.jar";
-    //private static final String builtinLibPath = "lib/built-in.jar";
+    //private static final String builtinLibPath = "lib/built-in-emma.jar";
+    private static final String builtinLibPath = "lib/built-in.jar";
 
     // System.getProperty (PROP_INSTR_LIB_PATH, "lib/built-in.jar");
 
