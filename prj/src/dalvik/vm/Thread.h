@@ -26,6 +26,8 @@
 #include <errno.h>
 #include <cutils/sched_policy.h>
 
+#include <stack>
+
 #if defined(CHECK_MUTEX) && !defined(__USE_UNIX98)
 /* glibc lacks this unless you #define __USE_UNIX98 */
 int pthread_mutexattr_settype(pthread_mutexattr_t *attr, int type);
@@ -305,7 +307,7 @@ struct Thread {
     void*             callbackArg;
 
 	int	transaction_info_flag;
-	int info_flag;
+	std::stack<int> *info_flag;
 };
 
 /* start point for an internal thread; mimics pthread args */

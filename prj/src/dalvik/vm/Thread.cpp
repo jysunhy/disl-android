@@ -873,7 +873,8 @@ static Thread* allocThread(int interpStackSize)
     dvmInitInterpreterState(thread);
 
 	thread->transaction_info_flag = 0;
-	thread->info_flag = 0;
+	thread->info_flag=NULL;
+	//thread->info_flag.push(0);
 
     return thread;
 }

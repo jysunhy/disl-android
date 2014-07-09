@@ -100,11 +100,46 @@ void DebugFunction(JNIEnv* env){
 	*/
 }
 // ******************* AREDispatch methods *******************
+//
+bool init_stack(){
+	ALOG(LOG_INFO,"DEBUG", "%p", dvmThreadSelf());
+	if(!dvmThreadSelf())
+		return false;
+	if(!dvmThreadSelf()->info_flag){
+		dvmThreadSelf()->info_flag = new std::stack<int>();
+		dvmThreadSelf()->info_flag->push(0);
+	}
+	return true;
+}
+void update_thread_info_flag_or(int orflag){
+	
+	if(init_stack()){
+		int oldvalue = dvmThreadSelf()->info_flag->top();
+		int newvalue = oldvalue | orflag;
+	
+		dvmThreadSelf()->info_flag->pop();
+		dvmThreadSelf()->info_flag->push(newvalue);
+	}
+}
 
 void vmEndHook(JavaVM* vm);
+void methodEnter(JNIEnv * jni_env, jclass this_class){
+	if(init_stack()){
+		dvmThreadSelf()->info_flag->push(0);
+	}
+}
+void methodExit(JNIEnv * jni_env, jclass this_class){
+	if(init_stack())
+		dvmThreadSelf()->info_flag->pop();
+}
+int checkThreadPermission(JNIEnv * jni_env, jclass this_class){
+	if(init_stack())
+		return dvmThreadSelf()->info_flag->top();
+	return 0;
+}
 void CallAPI(JNIEnv * jni_env, jclass this_class, jint api){
 	dvmThreadSelf()->transaction_info_flag |= api;
-	dvmThreadSelf()->info_flag |= api;
+	update_thread_info_flag_or(api);
 }
 void NativeLog(JNIEnv * jni_env, jclass this_class, jstring text){
 	const char * str = 	jni_env->GetStringUTFChars(text, NULL);
@@ -426,6 +461,9 @@ static const char *classPathName = "ch/usi/dag/dislre/AREDispatch";
 static JNINativeMethod methods[]= {
 	{"NativeLog", "(Ljava/lang/String;)V", (void*)NativeLog},
 	{"CallAPI", "(I)V", (void*)CallAPI},
+	{"methodEnter", "()V", (void*)methodEnter},
+	{"methodExit", "()V", (void*)methodExit},
+	{"checkThreadPermission", "()I", (void*)checkThreadPermission},
 	{"registerMethod", "(Ljava/lang/String;)S", (void*)registerMethod},
 	{"analysisStart", "(S)V", (void*)analysisStart__S},
 	{"analysisStart", "(SB)V", (void*)analysisStart__SB},
@@ -606,7 +644,8 @@ int serverTransactionRecv(int transaction_id, int from_pid, int from_tid, bool i
 int serverReplySent(int transaction_id, int from_pid, int from_tid, bool isOneWay,int &t_flag){
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SERVER(%d-%d) sent reply to client", getpid(), dvmThreadSelf()->threadId);
 	//add two flags to event
-	if(dvmThreadSelf()->info_flag){
+	init_stack();
+	if(dvmThreadSelf()->info_flag->top()){
 		ALOG(LOG_DEBUG,"LEAKSOURCE","%d %d %d x %d %d %llu %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, getTimeNsec(), isOneWay?1:0);
 	}
 	if(dvmThreadSelf()->transaction_info_flag){
@@ -619,15 +658,17 @@ int serverReplySent(int transaction_id, int from_pid, int from_tid, bool isOneWa
 }
 int clientReplyRecv(int transaction_id, int from_pid, int from_tid, bool isOneWay, int t_flag){
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) receives reply from server(%d-%d)", getpid(), dvmThreadSelf()->threadId, from_pid, from_tid);
+	init_stack();
 
 	int ti_old = dvmThreadSelf()->transaction_info_flag;
-	int i_old =dvmThreadSelf()->info_flag;
+	int i_old =dvmThreadSelf()->info_flag->top();
 	dvmThreadSelf()->transaction_info_flag |= t_flag;
-	dvmThreadSelf()->info_flag |= t_flag;
+	//dvmThreadSelf()->info_flag |= t_flag;
+	update_thread_info_flag_or(t_flag);
 	if(dvmThreadSelf()->transaction_info_flag != ti_old){
 		ALOG(LOG_DEBUG,"DETECT0", "%d %d %d %d %d transact_flag %d | %d -> %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, ti_old, t_flag, ti_old | t_flag);
 	}
-	if(dvmThreadSelf()->info_flag != i_old){
+	if(dvmThreadSelf()->info_flag->top() != i_old){
 		ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d %llu %d %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, getTimeNsec(), isOneWay?1:0, t_flag);
 		ALOG(LOG_DEBUG,"DETECT1", "%d %d %d %d %d thread_flag %d | %d -> %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, i_old, t_flag, i_old | t_flag);
 	}else

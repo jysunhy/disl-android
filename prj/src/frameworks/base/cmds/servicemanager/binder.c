@@ -191,7 +191,7 @@ void binder_send_reply(struct binder_state *bs,
     data.txn.transaction_id = session.transaction_id;
 	data.txn.transaction_flag = 0;
 	ALOG(LOG_DEBUG,"BINDER","CONTEXT(%d:1): send reply for transaction(%d)",getpid(), session.transaction_id);
-	ALOG(LOG_DEBUG,"FFG","%d %d %d 2 %d %d %llu %d", session.pid, session.tid, session.transaction_id, getpid(), 1, getTimeNsec(), data.txn.flags & TF_ONE_WAY);
+	ALOG(LOG_DEBUG,"FFG","%d %d %d 2 %d %d %llu %d 0", session.pid, session.tid, session.transaction_id, getpid(), 1, getTimeNsec(), data.txn.flags & TF_ONE_WAY);
     if (status) {
         data.txn.flags = TF_STATUS_CODE;
         data.txn.data_size = sizeof(int);
@@ -243,7 +243,7 @@ int binder_parse(struct binder_state *bs, struct binder_io *bio,
 			session.pid = txn->sender_pid;
 			session.tid = txn->sender_tid;
 			ALOG(LOG_DEBUG,"BINDER", "CONTEXT(%d:1): receive transaction(%d) from PID-TID %d:%d", getpid(), txn->transaction_id, txn->sender_pid, txn->sender_tid);
-			ALOG(LOG_DEBUG,"FFG","%d %d %d 1 %d %d %llu %d", txn->sender_pid, txn->sender_tid,txn->transaction_id, getpid(), 1, getTimeNsec(), txn->flags & TF_ONE_WAY);
+			ALOG(LOG_DEBUG,"FFG","%d %d %d 1 %d %d %llu %d 0", txn->sender_pid, txn->sender_tid,txn->transaction_id, getpid(), 1, getTimeNsec(), txn->flags & TF_ONE_WAY);
             binder_dump_txn(txn);
             if (func) {
                 unsigned rdata[256/4];
@@ -266,7 +266,7 @@ int binder_parse(struct binder_state *bs, struct binder_io *bio,
                 return -1;
             }
 			ALOG(LOG_DEBUG,"BINDER","CONTEXT(%d:1): receive reply(%d) from PID-TID %d:%d", getpid(), txn->transaction_id, txn->sender_pid, txn->sender_tid);
-			ALOG(LOG_DEBUG,"FFG","%d %d %d 3 %d %d %llu %d", getpid(), 1, txn->transaction_id, txn->sender_pid, txn->sender_tid, getTimeNsec(), txn->flags & TF_ONE_WAY);
+			ALOG(LOG_DEBUG,"FFG","%d %d %d 3 %d %d %llu %d 0", getpid(), 1, txn->transaction_id, txn->sender_pid, txn->sender_tid, getTimeNsec(), txn->flags & TF_ONE_WAY);
             binder_dump_txn(txn);
             if (bio) {
                 bio_init_from_txn(bio, txn);
@@ -356,7 +356,7 @@ int binder_call(struct binder_state *bs,
     writebuf.txn.transaction_id = ++local_transaction_cnt;
 
 	ALOG(LOG_DEBUG,"BINDER", "CONTEXT(%d:1): send transaction(%d)", getpid(), local_transaction_cnt);
-	ALOG(LOG_DEBUG,"FFG","%d %d %d 0 %d %d %llu %d", getpid(), 1, local_transaction_cnt, -1, -1, getTimeNsec(), writebuf.txn.flags & TF_ONE_WAY);
+	ALOG(LOG_DEBUG,"FFG","%d %d %d 0 %d %d %llu %d 0", getpid(), 1, local_transaction_cnt, -1, -1, getTimeNsec(), writebuf.txn.flags & TF_ONE_WAY);
 
     bwr.write_size = sizeof(writebuf);
     bwr.write_consumed = 0;
