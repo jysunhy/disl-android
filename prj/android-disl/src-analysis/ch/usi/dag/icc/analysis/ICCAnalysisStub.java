@@ -7,10 +7,9 @@ public class ICCAnalysisStub {
 
     public static short PERMISSION = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.permission_alert");
 
-    public static void permission_alert (final String methodname, final String permission) {
+    public static void permission_alert (final String alertinfo) {
         AREDispatch.analysisStart (PERMISSION);
-        AREDispatch.sendObjectPlusData (methodname);
-        AREDispatch.sendObjectPlusData (permission);
+        AREDispatch.sendObjectPlusData (alertinfo);
         AREDispatch.analysisEnd ();
     }
 

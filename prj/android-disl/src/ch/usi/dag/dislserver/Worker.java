@@ -74,9 +74,7 @@ public class Worker extends Thread {
     private static final String PROP_BUILTIN_LIB_PATH = "builtin.lib";
 
     //private static final String builtinLibPath = "lib/built-in-emma.jar";
-    private static final String builtinLibPath = "lib/built-in.jar";
-
-    // System.getProperty (PROP_INSTR_LIB_PATH, "lib/built-in.jar");
+    private static final String builtinLibPath = System.getProperty (PROP_BUILTIN_LIB_PATH, "lib/built-in.jar");
 
     // the code to store the java bytecode which may be needed by the SVM server
     // TODO use DislClass+jarname as cache entry

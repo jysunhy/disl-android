@@ -14,8 +14,8 @@ import ch.usi.dag.dislreserver.shadow.ShadowString;
 
 public class ICCAnalysis extends RemoteAnalysis {
 
-    public void permission_alert(final String methodname, final String permission){
-        System.out.println ("Permission use detected in "+methodname+" for "+permission);
+    public void permission_alert(final String alertinfo){
+        System.out.println ("Permission use detected in "+alertinfo);
     }
 
     public void callServiceInClient (

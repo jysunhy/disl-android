@@ -4,9 +4,24 @@
 	<default-observed>true</default-observed>
 	<dexes> 
 		<dex>
+			<name>Contacts.apk</name>
+			<isbootstrap>false</isbootstrap>
+			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+		</dex>
+		<dex>
+			<name>Browser.apk</name>
+			<isbootstrap>false</isbootstrap>
+			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+		</dex>
+		<dex>
+			<name>com.inspur.test2-1.apk</name>
+			<isbootstrap>false</isbootstrap>
+			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+		</dex>
+		<dex>
 			<name>AndroidPhoneContactsExample.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>bin/ch/usi/dag/icc/disl/DiSLClass.class;bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>core.jar</name>
@@ -37,13 +52,18 @@
 			<name>apache-xml.jar</name>
 			<isbootstrap>true</isbootstrap>
 		</dex>
-		<dex>
-			<name>Contacts.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<dislclass>bin/ch/usi/dag/icc/disl/DiSLClass.class;bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
-		</dex>
 	</dexes>
 	<procs>
+		<proc>
+			<procname>com.android.browser</procname>
+			<dexname>Browser.apk</dexname>
+			<isobserved>true</isobserved>
+		</proc>
+		<proc>
+			<procname>com.inspur.test2</procname>
+			<dexname>com.inspur.test2-1.apk</dexname>
+			<isobserved>true</isobserved>
+		</proc>
 		<proc>
 			<procname>com.javacodegeeks.android.androidphonecontactsexample</procname>
 			<dexname>AndroidPhoneContactsExample.apk</dexname>
@@ -120,6 +140,7 @@
 		<proc>
 			<procname>com.android.contacts</procname>
 			<isobserved>true</isobserved>
+			<dexname>Contacts.apk</dexname>
 		</proc>
 		<proc>
 			<procname>android.process.media</procname>
