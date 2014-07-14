@@ -1,6 +1,7 @@
 package ch.usi.dag.bc.analysis;
 
 import java.util.Arrays;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -13,31 +14,76 @@ import ch.usi.dag.dislreserver.shadow.ShadowString;
 
 public class BCAnalysis extends RemoteAnalysis {
 
+    private static float divide (final int a, final int b) {
+        return b == 0 ? Float.NaN : (((float) a) / b);
+    }
+
+
     public static class ClassStatistic implements Replicable {
 
-        int total;
+        int classBranch;
+
+        int classBasicBlock;
 
         // for dumping
         int coveredClass;
 
         int coveredMethod;
 
-        int coveredEdge;
+        int coveredBranches;
+
+        int coveredBasicBlocks;
 
 
-        public ClassStatistic (final int total) {
-            this.total = total;
+        public ClassStatistic (final int classBranch, final int classBasicBlock) {
+            this.classBranch = classBranch;
+            this.classBasicBlock = classBasicBlock;
 
             this.coveredClass = 0;
             this.coveredMethod = 0;
-            this.coveredEdge = 0;
+            this.coveredBranches = 0;
+            this.coveredBasicBlocks = 0;
         }
 
 
         @Override
         public Replicable replicate () {
-            return new ClassStatistic (total);
+            return new ClassStatistic (classBranch, classBasicBlock);
         }
+
+
+        @Override
+        public String toString () {
+            final Formatter formatter = new Formatter ();
+
+            formatter.format ("%d %d %.2f %d %d %.2f %d %d\n",
+                classBranch,
+                coveredBranches,
+                divide (coveredBranches, classBranch),
+                classBasicBlock,
+                coveredBasicBlocks,
+                divide (coveredBasicBlocks, classBasicBlock),
+                coveredMethod,
+                coveredClass);
+
+            final String res = formatter.toString ();
+            formatter.close ();
+
+            return res;
+        }
+
+
+        public void merge (final ClassStatistic classStatistic) {
+            classBranch += classStatistic.classBranch;
+            coveredBranches += classStatistic.coveredBranches;
+
+            classBasicBlock += classStatistic.classBasicBlock;
+            coveredBasicBlocks += classStatistic.coveredBasicBlocks;
+
+            coveredClass++;
+            coveredMethod += classStatistic.coveredMethod;
+        }
+
     }
 
 
@@ -45,39 +91,119 @@ public class BCAnalysis extends RemoteAnalysis {
 
         ShadowString className;
 
-        boolean [] coverage;
+        boolean [] branches;
+
+        boolean [] basicblocks;
+
+        // for dumping
+        int coveredBranches;
+
+        int coveredBasicBlocks;
 
 
-        public MethodStatistic (final ShadowString className, final int local) {
+        public MethodStatistic (
+            final ShadowString className, final int methodBranchCount,
+            final int methodBBCount) {
             this.className = className;
-            this.coverage = new boolean [local];
+            this.branches = new boolean [methodBranchCount];
+            this.basicblocks = new boolean [methodBBCount];
+
+            this.coveredBranches = 0;
+            this.coveredBasicBlocks = 0;
         }
 
 
         private MethodStatistic (
-            final ShadowString className, final boolean [] coverage) {
+            final ShadowString className, final boolean [] branches,
+            final boolean [] basicblocks) {
             this.className = className;
-            this.coverage = Arrays.copyOf (coverage, coverage.length);
+            this.branches = Arrays.copyOf (branches, branches.length);
+            this.basicblocks = Arrays.copyOf (basicblocks, basicblocks.length);
+
+            this.coveredBranches = 0;
+            this.coveredBasicBlocks = 0;
         }
 
 
         @Override
         public Replicable replicate () {
-            return new MethodStatistic (className, coverage);
+            return new MethodStatistic (className, branches, basicblocks);
+        }
+
+
+        public void updateCoverageData () {
+            coveredBranches = 0;
+            coveredBasicBlocks = 0;
+
+            for (final boolean element : branches) {
+                if (element) {
+                    coveredBranches++;
+                }
+            }
+
+            for (final boolean element : basicblocks) {
+                if (element) {
+                    coveredBasicBlocks++;
+                }
+            }
+        }
+
+
+        @Override
+        public String toString () {
+            final Formatter formatter = new Formatter ();
+
+            final StringBuilder branchBitmap = new StringBuilder ();
+
+            for (final boolean element : branches) {
+                if (element) {
+                    branchBitmap.append ('1');
+                } else {
+                    branchBitmap.append ('0');
+                }
+            }
+
+            final StringBuilder basicblockBitmap = new StringBuilder ();
+
+            for (final boolean element : basicblocks) {
+                if (element) {
+                    basicblockBitmap.append ('1');
+                } else {
+                    basicblockBitmap.append ('0');
+                }
+            }
+
+            formatter.format ("%d %d %.2f %d %d %.2f %s %s",
+                branches.length,
+                coveredBranches,
+                divide (coveredBranches, branches.length),
+                basicblocks.length,
+                coveredBasicBlocks,
+                divide (coveredBasicBlocks, basicblocks.length),
+                branchBitmap.toString (),
+                basicblockBitmap.toString ());
+
+            final String res = formatter.toString ();
+            formatter.close ();
+
+            return res;
         }
 
     }
 
 
     public void sendMeta (
-        final ShadowString className, final ShadowString methodID, final int total,
-        final int local) {
+        final ShadowString className, final ShadowString methodID,
+        final int classBranch,
+        final int methodBranch, final int classBasicBlock, final int methodBasicBlock) {
         if (methodID.getState () == null) {
             if (className.getState () == null) {
-                className.setStateIfAbsent (new ClassStatistic (total));
+                className.setStateIfAbsent (new ClassStatistic (
+                    classBranch, classBasicBlock));
             }
 
-            methodID.setStateIfAbsent (new MethodStatistic (className, local));
+            methodID.setStateIfAbsent (new MethodStatistic (
+                className, methodBranch, methodBasicBlock));
         }
     }
 
@@ -86,153 +212,16 @@ public class BCAnalysis extends RemoteAnalysis {
         MethodStatistic status;
 
         if ((status = methodID.getState (MethodStatistic.class)) != null) {
-            status.coverage [index] = true;
+            status.branches [index] = true;
         }
     }
 
 
-    // TODO write map-reduce friendly code
-    public void printSPResult (final Context context) {
-        final HashSet <ShadowString> classes = new HashSet <ShadowString> ();
+    public void commitBasicBlock (final ShadowString methodID, final int index) {
+        MethodStatistic status;
 
-        System.out.println ("############### Methods ###############");
-
-        for (final ShadowObject object : context.getShadowObjectIterator ()) {
-            final Object state = object.getState ();
-
-            if (state == null) {
-                continue;
-            } else if (state instanceof ClassStatistic) {
-                classes.add ((ShadowString) object);
-            } else if (state instanceof MethodStatistic) {
-                final MethodStatistic methodStatistic = (MethodStatistic) state;
-
-                int counter = 0;
-                final StringBuilder bitmap = new StringBuilder ();
-
-                for (final boolean element : methodStatistic.coverage) {
-                    if (element) {
-                        counter++;
-                        bitmap.append ('1');
-                    } else {
-                        bitmap.append ('0');
-                    }
-                }
-
-                System.out.printf (
-                    "PROCESS-%d-METHODS: %s %d %d %s\n", context.pid (),
-                    object.toString (), methodStatistic.coverage.length, counter,
-                    bitmap.toString ());
-
-                methodStatistic.className.getState (ClassStatistic.class).coveredEdge += counter;
-                methodStatistic.className.getState (ClassStatistic.class).coveredMethod++;
-            }
-        }
-
-        System.out.println ("############### Classes ###############");
-
-        for (final ShadowString klass : classes) {
-            final ClassStatistic statistic = klass.getState (ClassStatistic.class);
-
-            System.out.printf (
-                "PROCESS-%d-CLASSES: %s %d %d %d %.2f\n", context.pid (),
-                klass.toString (),
-                statistic.total, statistic.coveredEdge, statistic.coveredMethod,
-                statistic.total == 0
-                    ? Float.NaN
-                    : (((float) statistic.coveredEdge) / statistic.total));
-        }
-
-        System.out.println ("############### Package ###############");
-
-        final HashMap <String, ClassStatistic> packageCovered = new HashMap <String, BCAnalysis.ClassStatistic> ();
-
-        for (final ShadowString klass : classes) {
-            final String className = klass.toString ();
-
-            final int index = className.lastIndexOf ('/');
-
-            final String packageName;
-
-            if (index == -1) {
-                packageName = "default";
-            } else {
-                packageName = className.substring (0, index);
-            }
-
-            ClassStatistic packageStatistic = packageCovered.get (packageName);
-
-            if (packageStatistic == null) {
-                packageStatistic = new ClassStatistic (0);
-                packageCovered.put (packageName, packageStatistic);
-            }
-
-            final ClassStatistic classStatistic = klass.getState (ClassStatistic.class);
-            packageStatistic.total += classStatistic.total;
-            packageStatistic.coveredClass ++;
-            packageStatistic.coveredMethod += classStatistic.coveredMethod;
-            packageStatistic.coveredEdge += classStatistic.coveredEdge;
-        }
-
-        for (final String key : packageCovered.keySet ()) {
-            final ClassStatistic packageStatistic = packageCovered.get (key);
-            System.out.printf (
-                "PROCESS-%d-PACKAGE: %s %d %d %d %d %.2f\n",
-                context.pid (),
-                key,
-                packageStatistic.total,
-                packageStatistic.coveredEdge,
-                packageStatistic.coveredMethod,
-                packageStatistic.coveredClass,
-                packageStatistic.total == 0
-                    ? Float.NaN
-                    : (((float) packageStatistic.coveredEdge) / packageStatistic.total));
-        }
-
-        System.out.println ("############### Summary ###############");
-
-        final HashMap <String, ClassStatistic> summaryCovered = new HashMap <String, BCAnalysis.ClassStatistic>();
-
-        for (final ShadowString klass : classes) {
-            final String className = klass.toString ();
-
-            final int index = className.indexOf ('/');
-
-            final String summaryName;
-
-            if (index == -1) {
-                summaryName = "default";
-            } else {
-                summaryName = className.substring (0, index);
-            }
-
-            ClassStatistic packageStatistic = summaryCovered.get (summaryName);
-
-            if (packageStatistic == null) {
-                packageStatistic = new ClassStatistic (0);
-                summaryCovered.put (summaryName, packageStatistic);
-            }
-
-            final ClassStatistic classStatistic = klass.getState (ClassStatistic.class);
-            packageStatistic.total += classStatistic.total;
-            packageStatistic.coveredClass ++;
-            packageStatistic.coveredMethod += classStatistic.coveredMethod;
-            packageStatistic.coveredEdge += classStatistic.coveredEdge;
-        }
-
-        for (final String key : summaryCovered.keySet ()) {
-            final ClassStatistic packageStatistic = summaryCovered.get (key);
-            System.out.printf (
-                "PROCESS-%d-SUMMARY: %s %d %d %d %d %.2f \n",
-                context.pid (),
-                key,
-                packageStatistic.total,
-                packageStatistic.coveredEdge,
-                packageStatistic.coveredMethod,
-                packageStatistic.coveredClass,
-                packageStatistic.total == 0
-                    ? Float.NaN
-                    : (((float) packageStatistic.coveredEdge) / packageStatistic.total));
+        if ((status = methodID.getState (MethodStatistic.class)) != null) {
+            status.basicblocks [index] = true;
         }
     }
 
@@ -252,6 +241,125 @@ public class BCAnalysis extends RemoteAnalysis {
 
     @Override
     public void objectFree (final Context context, final ShadowObject netRef) {
+    }
+
+
+    private static String getPackageName (final String className) {
+        final int index = className.lastIndexOf ('/');
+
+        if (index == -1) {
+            return "default";
+        } else {
+            return className.substring (0, index);
+        }
+    }
+
+
+    private static String getSummaryName (final String className) {
+        final int index = className.indexOf ('/');
+
+        if (index == -1) {
+            return "default";
+        } else {
+            return className.substring (0, index);
+        }
+    }
+
+
+    // TODO write map-reduce friendly code
+    public void printSPResult (final Context context) {
+        final HashSet <ShadowString> classes = new HashSet <ShadowString> ();
+
+        System.out.println ("############### Methods ###############");
+
+        for (final ShadowObject object : context.getShadowObjectIterator ()) {
+            final Object state = object.getState ();
+
+            if (state == null) {
+                continue;
+            } else if (state instanceof ClassStatistic) {
+                classes.add ((ShadowString) object);
+            } else if (state instanceof MethodStatistic) {
+                final MethodStatistic methodStatistic = (MethodStatistic) state;
+                methodStatistic.updateCoverageData ();
+
+                System.out.printf (
+                    "PROCESS-%d-METHODS: %s %s\n",
+                    context.pid (),
+                    object.toString (),
+                    methodStatistic.toString ());
+
+                final ClassStatistic classStatistic = methodStatistic.className.getState (ClassStatistic.class);
+
+                classStatistic.coveredBranches += methodStatistic.coveredBranches;
+                classStatistic.coveredBasicBlocks += methodStatistic.coveredBasicBlocks;
+                classStatistic.coveredMethod++;
+            }
+        }
+
+        System.out.println ("############### Classes ###############");
+
+        for (final ShadowString klass : classes) {
+            final ClassStatistic statistic = klass.getState (ClassStatistic.class);
+
+            System.out.printf (
+                "PROCESS-%d-CLASSES: %s %s\n",
+                context.pid (),
+                klass.toString (),
+                statistic.toString ());
+        }
+
+        System.out.println ("############### Package ###############");
+
+        final HashMap <String, ClassStatistic> packageCovered = new HashMap <String, ClassStatistic> ();
+
+        for (final ShadowString klass : classes) {
+            final String packageName = getPackageName (klass.toString ());
+            ClassStatistic packageStatistic = packageCovered.get (packageName);
+
+            if (packageStatistic == null) {
+                packageStatistic = new ClassStatistic (0, 0);
+                packageCovered.put (packageName, packageStatistic);
+            }
+
+            final ClassStatistic classStatistic = klass.getState (ClassStatistic.class);
+            packageStatistic.merge (classStatistic);
+        }
+
+        for (final String key : packageCovered.keySet ()) {
+            final ClassStatistic packageStatistic = packageCovered.get (key);
+            System.out.printf (
+                "PROCESS-%d-PACKAGE: %s %s\n",
+                context.pid (),
+                key,
+                packageStatistic.toString ());
+        }
+
+        System.out.println ("############### Summary ###############");
+
+        final HashMap <String, ClassStatistic> summaryCovered = new HashMap <String, ClassStatistic> ();
+
+        for (final ShadowString klass : classes) {
+            final String summaryName = getSummaryName (klass.toString ());
+            ClassStatistic packageStatistic = summaryCovered.get (summaryName);
+
+            if (packageStatistic == null) {
+                packageStatistic = new ClassStatistic (0, 0);
+                summaryCovered.put (summaryName, packageStatistic);
+            }
+
+            final ClassStatistic classStatistic = klass.getState (ClassStatistic.class);
+            packageStatistic.merge (classStatistic);
+        }
+
+        for (final String key : summaryCovered.keySet ()) {
+            final ClassStatistic packageStatistic = packageCovered.get (key);
+            System.out.printf (
+                "PROCESS-%d-PACKAGE: %s %s\n",
+                context.pid (),
+                key,
+                packageStatistic.toString ());
+        }
     }
 
 }

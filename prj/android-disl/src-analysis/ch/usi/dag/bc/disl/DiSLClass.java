@@ -5,6 +5,7 @@ import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.annotation.SyntheticLocal;
+import ch.usi.dag.disl.marker.BasicBlockMarker;
 import ch.usi.dag.disl.marker.BodyMarker;
 
 
@@ -16,13 +17,25 @@ public class DiSLClass {
     @SyntheticLocal
     public static boolean [] branches;
 
+    @SyntheticLocal
+    public static boolean [] basicblocks;
+
 
     @Before (marker = BodyMarker.class, order = 2)
-    public static void onMethodEntry (final BCContext bcc) {
+    public static void onMethodEntry (
+        final BCContext bcc, final BBCContext bbcc) {
         BCAnalysisStub.sendMeta (
             bcc.thisClassName (), bcc.thisMethodFullNameWithDesc (),
-            bcc.getTotal (), bcc.getLocal ());
-        branches = new boolean [bcc.getLocal ()];
+            bcc.getClassBranchCount (), bcc.getMethodBranchCount (),
+            bbcc.getClassBBCount (), bbcc.getMethodBBCount ());
+        branches = new boolean [bcc.getMethodBranchCount ()];
+        basicblocks = new boolean [bbcc.getMethodBBCount ()];
+    }
+
+
+    @Before (marker = BasicBlockMarker.class, order = 1)
+    public static void beforeBB (final BBCContext bbcc) {
+        basicblocks [bbcc.getMethodBBindex ()] = true;
     }
 
 
@@ -60,24 +73,14 @@ public class DiSLClass {
     public static void onMethodExit (final BCContext bcc) {
         BCAnalysisStub.commitBranch (
             bcc.thisMethodFullNameWithDesc (), branches);
+        BCAnalysisStub.commitBasicBlock (
+            bcc.thisMethodFullNameWithDesc (), basicblocks);
     }
 
-//    @Before (marker = BodyMarker.class, scope="System.exit")
-//    public static void printAnalysisResult_0 () {
-//        AREDispatch.NativeLog ("EXIT from System.exit");
-//        BCAnalysisStub.printResult ();
-//    }
-//
-//    @Before (marker = BodyMarker.class, scope="MainActivity.substraction", order = 2)
-//    public static void printAnalysisResult () {
-//        BCAnalysisStub.printResult ();
-//    }
 
-  @Before (marker = BodyMarker.class, scope="Activity.onPause")
-  public static void printAnalysisResult () {
-      BCAnalysisStub.printResult ();
-  }
-
-
+    @Before (marker = BodyMarker.class, scope = "foo.bar", order = 2)
+    public static void printAnalysisResult () {
+        BCAnalysisStub.printResult ();
+    }
 
 }

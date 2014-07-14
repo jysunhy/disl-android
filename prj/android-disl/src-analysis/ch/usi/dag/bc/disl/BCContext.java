@@ -23,7 +23,7 @@ public class BCContext extends MethodStaticContext {
     }
 
 
-    public int getTotal () {
+    public int getClassBranchCount () {
         Integer total;
 
         if ((total = methodTotalEdges.get (thisClassName ())) == null) {
@@ -49,7 +49,7 @@ public class BCContext extends MethodStaticContext {
     }
 
 
-    public int getLocal () {
+    public int getMethodBranchCount () {
         return BCUtil.getBranchCount (staticContextData.getMethodNode ());
     }
 
