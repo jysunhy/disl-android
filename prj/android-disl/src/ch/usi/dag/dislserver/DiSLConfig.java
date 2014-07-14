@@ -1,6 +1,9 @@
 package ch.usi.dag.dislserver;
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -10,6 +13,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import com.android.dx.util.ByteArrayAnnotatedOutput;
 
 
 public class DiSLConfig {
@@ -125,9 +130,42 @@ public class DiSLConfig {
         }
     }
 
+    private static byte[] xmlcontent = null;
 
-    public static void parseXml () {
+    public static boolean parseXml () {
         final String fileName = CONFIG_FILE;
+        try{
+            final File xmlFile = new File(fileName);
+            FileInputStream fis = null;
+            DataInputStream dis = null;
+            fis = new FileInputStream (xmlFile);
+            dis = new DataInputStream (fis);
+
+            final ByteArrayAnnotatedOutput bout = new ByteArrayAnnotatedOutput ();
+
+            int temp;
+            int size = 0;
+            final byte [] b = new byte [2048];
+            while ((temp = dis.read (b)) != -1) {
+                bout.write (b,0,temp);
+                size += temp;
+            }
+            if(xmlcontent == null) {
+                xmlcontent = bout.toByteArray ();
+            }else{
+                if(xmlcontent.length != bout.toByteArray ().length) {
+                    return false;
+                }
+                if(!Arrays.toString(xmlcontent).equals (Arrays.toString (bout.toByteArray ()))){
+                    return false;
+                }else{
+                    xmlcontent = bout.toByteArray ();
+                }
+            }
+        }catch(final Exception e){
+            e.printStackTrace ();
+        }
+
         System.out.println ("Parsing the XML");
         dexMap = new HashMap <String, Dex> ();
         procMap = new HashMap <String, Proc> ();
@@ -177,6 +215,7 @@ public class DiSLConfig {
         } catch (final Exception e) {
             e.printStackTrace ();
         }
+        return true;
     }
 
 
@@ -186,3 +225,4 @@ public class DiSLConfig {
     }
 
 }
+

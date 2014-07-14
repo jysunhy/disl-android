@@ -45,13 +45,14 @@ public class DiSLClass {
 					}else if(n.equals ("java.lang.String")) {
 						final String permissions[] =
 							new String[]{
-								"android.permission.ACCESS_ALL_DOWNLOADS"
+									"android.permission.WRITE_SMS"
+									,"android.permission.SEND_SMS"
+									,"android.permission.ACCESS_ALL_DOWNLOADS"
 									,"android.permission.ACCESS_COARSE_LOCATION"
 									,"android.permission.ACCESS_DOWNLOAD_MANAGER"
 									,"android.permission.ACCESS_FINE_LOCATION"
 									,"android.permission.ACCESS_NETWORK_STATE"
 									,"android.permission.ACCESS_WIFI_STATE"
-									,"android.permission.ASEC_ACCESS"
 									,"android.permission.CHANGE_COMPONENT_ENABLED_STATE"
 									,"android.permission.CHANGE_CONFIGURATION"
 									,"android.permission.CHANGE_WIFI_STATE"
@@ -76,7 +77,6 @@ public class DiSLClass {
 									,"android.permission.WRITE_APN_SETTINGS"
 									,"android.permission.WRITE_SECURE_SETTINGS"
 									,"android.permission.WRITE_SETTINGS"
-									,"android.permission.WRITE_SMS"
 
 									,"android.permission.STATUS_BAR"
 									,"android.permission.STATUS_BAR_SERVICE"
@@ -93,6 +93,7 @@ public class DiSLClass {
 									,"android.permission.WAKE_LOCK"
 									,"android.permission.BROADCAST_PACKAGE_REMOVED"
 									,"android.permission.BROADCAST_STICKY"
+									,"android.permission.ASEC_ACCESS"
 							};
 						int pos = 0;
 						for (final String p : permissions) {

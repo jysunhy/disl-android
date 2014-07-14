@@ -4,9 +4,28 @@
 	<default-observed>true</default-observed>
 	<dexes> 
 		<dex>
-			<name>Contacts.apk</name>
+			<name>de.ecspride-1.apk</name>
 			<isbootstrap>false</isbootstrap>
 			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+		</dex>
+		<dex>
+			<name>de.ecspride-2.apk</name>
+			<isbootstrap>false</isbootstrap>
+			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+		</dex>
+		<dex>
+			<name>de.ecspride-3.apk</name>
+			<isbootstrap>false</isbootstrap>
+			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+		</dex>
+		<dex>
+			<name>de.ecspride-4.apk</name>
+			<isbootstrap>false</isbootstrap>
+			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+		</dex>
+		<dex>
+			<name>Contacts.apk</name>
+			<isbootstrap>false</isbootstrap>
 		</dex>
 		<dex>
 			<name>Browser.apk</name>
@@ -54,6 +73,14 @@
 		</dex>
 	</dexes>
 	<procs>
+		<proc>
+			<procname>com.typ3studios.easybutton</procname>
+			<isobserved>true</isobserved>
+		</proc>
+		<proc>
+			<procname>de.ecspride</procname>
+			<isobserved>true</isobserved>
+		</proc>
 		<proc>
 			<procname>com.android.browser</procname>
 			<dexname>Browser.apk</dexname>

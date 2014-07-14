@@ -735,7 +735,10 @@ public class Worker extends Thread {
 
 //        ReadPkgBlackList ();
 //        ReadObserveList ();
-        DiSLConfig.parseXml ();
+        if(!DiSLConfig.parseXml ()){
+			System.out.println("Update DiSL classes");
+			dislMap.clear();
+		}
 
         try {
 
