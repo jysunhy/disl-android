@@ -1,5 +1,6 @@
 package ch.usi.dag.dislserver;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,8 +14,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import com.android.dx.util.ByteArrayAnnotatedOutput;
 
 
 public class DiSLConfig {
@@ -141,7 +140,7 @@ public class DiSLConfig {
             fis = new FileInputStream (xmlFile);
             dis = new DataInputStream (fis);
 
-            final ByteArrayAnnotatedOutput bout = new ByteArrayAnnotatedOutput ();
+            final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
 
             int temp;
             int size = 0;
