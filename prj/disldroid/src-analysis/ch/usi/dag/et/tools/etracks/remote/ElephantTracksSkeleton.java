@@ -1,13 +1,10 @@
 package ch.usi.dag.et.tools.etracks.remote;
 
-import java.util.Iterator;
-import java.util.Map.Entry;
-
-import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
-import ch.usi.dag.dislreserver.shadow.ShadowClass;
-import ch.usi.dag.dislreserver.shadow.ShadowObject;
-import ch.usi.dag.dislreserver.shadow.ShadowObjectTable;
-import ch.usi.dag.dislreserver.shadow.ShadowString;
+import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.disldroidreserver.shadow.Context;
+import ch.usi.dag.disldroidreserver.shadow.ShadowClass;
+import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
+import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 import ch.usi.dag.et.tools.etracks.remote.trace.TraceRecorder;
 import ch.usi.dag.et.tools.etracks.util.Config;
 import ch.usi.dag.et.tools.etracks.util.LogicalClock;
@@ -278,7 +275,7 @@ public final class ElephantTracksSkeleton extends RemoteAnalysis /* XXX: why not
     /* ***********************************************************************/
 
     @Override
-    public void objectFree (final ShadowObject object) {
+    public void objectFree (final Context context, final ShadowObject object) {
         final long time = LogicalClock.current ();
         __out__.format ("%08d:objectFree: %s\n",
             time, __shadowToString (object)
@@ -305,25 +302,20 @@ public final class ElephantTracksSkeleton extends RemoteAnalysis /* XXX: why not
     }
 
     @Override
-    public void atExit () {
-    	final long currentTime = LogicalClock.current ();   	
-    	Iterator<Entry<Long, ShadowObject>> leftObjectsMap = ShadowObjectTable.getIterator();
-    	Entry<Long,ShadowObject> entry;
-    	ShadowObject leftObject;
-    	ShadowState state;
-    	
-    	while (leftObjectsMap.hasNext()) {
-    		entry = leftObjectsMap.next();
-    		leftObject = entry.getValue();
-    		state = leftObject.getState (ShadowState.class);
-    		if (state == null) {
+    public void atExit (final Context context) {
+    	final long currentTime = LogicalClock.current ();
+
+    	for (final ShadowObject leftObject : context.getShadowObjectIterator ()) {
+            ShadowState state = leftObject.getState (ShadowState.class);
+            if (state == null) {
                 state = __onObjectAllocation (currentTime, leftObject, -1, -1);
             }
-    		long deathTime =  state.handleShadowDeath ();
-    		__out__.format ("%08d:objectFree: %s\n",
-    				currentTime, __shadowToString (leftObject));
-    		__recorder.recordObjectDeath (deathTime,  leftObject.getId ());
+            final long deathTime =  state.handleShadowDeath ();
+            __out__.format ("%08d:objectFree: %s\n",
+                    currentTime, __shadowToString (leftObject));
+            __recorder.recordObjectDeath (deathTime,  leftObject.getId ());
     	}
+
     	System.out.println("Freed at death time: " + currentTime);
         __out__.format ("%08d:atExit\n", LogicalClock.current ());
         __recorder.dumpRecords (Config.traceFile ());
@@ -400,5 +392,4 @@ public final class ElephantTracksSkeleton extends RemoteAnalysis /* XXX: why not
     static Outputter getOutput () {
         return __out__;
     }
-
 }

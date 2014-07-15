@@ -852,7 +852,7 @@
 
 	<target name="compile" depends="compile-disl,compile-disl-agent,compile-shvm,compile-shvm-agent,compile-analysis" description="Compiles DiSL, Shadow VM, and the JVM agents for both." />
 
-	<target name="build" depends="build-disl,build-shvm,copy-asm,build-analysis,build-builtin,build-android-shvm" description="Builds DiSL and Shadow VM, without documentation." />
+	<target name="build" depends="build-disl,build-shvm,copy-asm,build-builtin,build-android-shvm,build-analysis" description="Builds DiSL and Shadow VM, without documentation." />
 
 	<target name="eclipse" depends="build-eclipse-agent,build-disl-bypass" description="Creates libraries for developing DiSL under Eclipse." />
 

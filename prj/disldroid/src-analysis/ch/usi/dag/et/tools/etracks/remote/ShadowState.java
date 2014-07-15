@@ -3,9 +3,9 @@ package ch.usi.dag.et.tools.etracks.remote;
 import java.util.Iterator;
 import java.util.Map;
 
-import ch.usi.dag.dislreserver.shadow.ShadowClass;
-import ch.usi.dag.dislreserver.shadow.ShadowObject;
-import ch.usi.dag.dislreserver.shadow.ShadowString;
+import ch.usi.dag.disldroidreserver.shadow.ShadowClass;
+import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
+import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 import ch.usi.dag.et.tools.etracks.util.Outputter;
 import ch.usi.dag.util.Maps;
 
