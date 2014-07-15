@@ -450,9 +450,6 @@
 	</target>
 
 	<target name="build-android-shvm" depends="compile-android-shvm,build-shvm-dispatch">
-		<local name="shvm.server.class" />
-		<find-class property="shvm.server.class" dir="${build.shvm}" name="DiSLREServer" />
-
 		<jar destfile="${out.lib}/${android.shvm.lib}">
 			<manifest>
 				<attribute name="Class-Path" value="${asm.lib}" />
