@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.security.MessageDigest;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -83,6 +84,9 @@ public final class DiSL {
 
     private final List<Snippet> snippets;
 
+	//HY signature bytes for a disl instance
+	public byte[] dislclassesHash;
+
     /**
      * DiSL initialization.
      *
@@ -108,6 +112,25 @@ public final class DiSL {
         // *** prepare exclusion set ***
         exclusionSet = ExclusionSet.prepare();
 
+		// *** HY: compute signature for this disl ***
+		try{
+        	final List<InputStream> dislClasses_forhash = ClassByteLoader.loadDiSLClasses();
+			final MessageDigest md = MessageDigest.getInstance("MD5");
+			if(dislClasses_forhash != null) {
+				final byte[] buffer = new byte[1024];
+				int numRead = 0;
+		        for (final InputStream classIS : dislClasses_forhash) {
+					while((numRead = classIS.read(buffer))>0) {
+						md.update(buffer,0,numRead);
+					}
+					classIS.close();
+		        }
+				dislclassesHash = md.digest();
+			}
+		}catch(final Exception e){
+			e.printStackTrace();
+		}
+
         // *** load disl classes ***
         final List<InputStream> dislClasses = ClassByteLoader.loadDiSLClasses();
 
@@ -126,6 +149,103 @@ public final class DiSL {
 
         for (final InputStream classIS : dislClasses) {
             parser.parse(classIS);
+            try {
+                classIS.close ();
+            } catch (final IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+
+        // initialize processors
+        final Map<Type, Proc> processors = parser.getProcessors();
+        for (final Proc processor : processors.values()) {
+            processor.init(parser.getAllLocalVars());
+        }
+
+        final List<Snippet> parsedSnippets = parser.getSnippets();
+
+        // initialize snippets
+        for (final Snippet snippet : parsedSnippets) {
+            snippet.init(parser.getAllLocalVars(), processors, exceptHandler,
+                    useDynamicBypass);
+        }
+
+        // initialize snippets variable
+        // - this is set when everything is ok
+        // - it serves as initialization flag
+        snippets = parsedSnippets;
+
+        // TODO put checker here
+        // like After should catch normal and abnormal execution
+        // but if you are using After (AfterThrowing) with BasicBlockMarker
+        // or InstructionMarker that doesn't throw exception, then it is
+        // probably something, you don't want - so just warn the user
+        // also it can warn about unknown opcodes if you let user to
+        // specify this for InstructionMarker
+    }
+
+	//HY: DiSL is decided by dislclass + excllist
+    public DiSL(final boolean useDynamicBypass, final String dislClassPaths, final String exclListPath) throws DiSLException {
+
+        this.useDynamicBypass = useDynamicBypass;
+
+        // *** resolve transformer ***
+        transformer = resolveTransformer();
+
+        // transfomer output propagation
+        if (transformer == null) {
+            transPropagateUninstr = false;
+        } else {
+            transPropagateUninstr =
+                    transformer.propagateUninstrumentedClasses();
+        }
+
+        // *** prepare exclusion set ***
+        exclusionSet = ExclusionSet.prepare();
+
+        // *** compute hash ***
+        try{
+            final List<InputStream> dislClasses_forhash = ClassByteLoader.loadDiSLClasses(dislClassPaths);
+            final MessageDigest md = MessageDigest.getInstance("MD5");
+            if(dislClasses_forhash != null) {
+                final byte[] buffer = new byte[1024];
+                int numRead = 0;
+                for (final InputStream classIS : dislClasses_forhash) {
+                    while((numRead = classIS.read(buffer))>0) {
+                        md.update(buffer,0,numRead);
+                    }
+                    classIS.close();
+                }
+                dislclassesHash = md.digest();
+            }
+        }catch(final Exception e){
+            e.printStackTrace();
+        }
+        // *** load disl classes ***
+        final List<InputStream> dislClasses = ClassByteLoader.loadDiSLClasses(dislClassPaths);
+
+        if (dislClasses == null) {
+            throw new InitException("Cannot load DiSL classes. Please set"
+                    + " the property " + ClassByteLoader.PROP_DISL_CLASSES
+                    + " or supply jar with DiSL classes"
+                    + " and proper manifest");
+        }
+
+        // *** parse disl classes ***
+        // - create snippets
+        // - create static context methods
+
+        final ClassParser parser = new ClassParser();
+
+        for (final InputStream classIS : dislClasses) {
+            parser.parse(classIS);
+            try {
+                classIS.close ();
+            } catch (final IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
         // initialize processors
@@ -438,7 +558,7 @@ public final class DiSL {
 
                 // prepare dynamic bypass thread local variable
                 final ThreadLocalVar tlv = new ThreadLocalVar(null, "bypass",
-                        Type.getType(boolean.class), false);
+                        Type.getType(boolean.class), true);
                 tlv.setDefaultValue(0);
                 insertTLVs.add(tlv);
             }

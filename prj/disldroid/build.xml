@@ -47,6 +47,26 @@
 		<pathelement location="${build.shvm}" />
 		<pathelement location="${build.shvm.dispatch}" />
 	</path>
+	<!-- 
+		 For android
+	-->
+	<path id="dex2jar.classpath">
+		<pathelement location="${dex2jar.ir.lib}" />
+		<pathelement location="${dextools.lib}" />
+		<pathelement location="${dx.lib}" />
+		<pathelement location="${jasmin.lib}" />
+		<pathelement location="${commons.lite.lib}" />
+		<pathelement location="${dexreader.lib}" />
+		<pathelement location="${dextranslator.lib}" />
+		<pathelement location="${dexrename.lib}" />
+	</path>
+	<path id="framework.classpath">
+		<pathelement location="${android.path}" />
+	</path>
+	<path id="android.shvm.classpath">
+		<pathelement location="${build.android.shvm}" />
+		<pathelement location="${build.shvm.dispatch}" />
+	</path>
 
 
 	<!-- Initialization -->
@@ -201,6 +221,17 @@
 		</jar>
 	</target>
 
+	<!-- Lib for putting into android core.jar -->
+	<target name="build-builtin" depends="compile-disl-bypass, compile-shvm-dispatch">
+		<union id="disl.builtin.files">
+			<fileset dir="${build.disl.bypass}/dynamic" includes="**/BypassCheck.class" />
+			<fileset dir="${build.disl.bypass}/dynamic" includes="**/DynamicBypass.class" />
+			<fileset dir="${build.shvm.dispatch}/" includes="**/AREDispatch.class" />
+		</union>
+		<jar destfile="${out.lib}/${builtin.lib}">
+			<resources refid="disl.builtin.files" />
+		</jar>
+	</target>
 
 	<!-- Shared utility code -->
 
@@ -221,6 +252,7 @@
 				<path refid="disl.bypass.classpath" />
 				<path refid="util.classpath" />
 				<path refid="asm.classpath" />
+				<path refid="dex2jar.classpath" />
 			</classpath>
 		</javac>
 	</target>
@@ -391,7 +423,6 @@
 		</javac>
 	</target>
 
-
 	<target name="build-shvm" depends="compile-shvm,build-shvm-dispatch">
 		<local name="shvm.server.class" />
 		<find-class property="shvm.server.class" dir="${build.shvm}" name="DiSLREServer" />
@@ -408,6 +439,31 @@
 		</jar>
 	</target>
 
+	<!-- Shadow VM For Android-->
+	<target name="compile-android-shvm" depends="compile-util,compile-shvm-dispatch">
+		<mkdir dir="${build.android.shvm}" />
+		<javac destdir="${build.android.shvm}" srcdir="${src.android.shvm}" debug="true">
+			<classpath refid="util.classpath" />
+			<classpath refid="asm.classpath" />
+		</javac>
+	</target>
+
+	<target name="build-android-shvm" depends="compile-android-shvm,build-shvm-dispatch">
+		<local name="shvm.server.class" />
+		<find-class property="shvm.server.class" dir="${build.shvm}" name="DiSLREServer" />
+
+		<jar destfile="${out.lib}/${android.shvm.lib}">
+			<manifest>
+				<attribute name="Class-Path" value="${asm.lib}" />
+				<attribute name="Main-Class" value="${shvm.server.class}" />
+				<attribute name="DiSL-Version" value="${disl.version}" />
+			</manifest>
+
+			<fileset dir="${build.util}" />
+			<fileset dir="${build.android.shvm}" />
+		</jar>
+	</target>
+
 	<!-- Shadow VM agent -->
 
 	<target name="compile-shvm-agent" depends="determine-lib-names">
@@ -421,6 +477,22 @@
 		<copy file="${src.shvm.agent}/${shvm.agent.lib}" todir="${out.lib}" />
 	</target>
 
+	<!-- Analysis -->
+
+	<target name="compile-analysis" depends="compile-util, compile-disl, compile-shvm, compile-shvm-dispatch, compile-android-shvm">
+		<mkdir dir="${build.analysis}" />
+		<javac destdir="${build.analysis}" srcdir="${src.analysis}" debug="true">
+			<classpath refid="asm.classpath" />
+			<classpath refid="android.shvm.classpath" />
+			<classpath refid="disl.classpath" />
+		</javac>
+	</target>
+
+	<target name="build-analysis" depends="build-shvm-dispatch, compile-analysis">
+		<jar destfile="${out.lib}/${analysis.lib}">
+			<fileset dir="${build.analysis}" />
+		</jar>
+	</target>
 
 	<!-- JUnit tests and DiSL/Shadow VM test suites -->
 
@@ -778,9 +850,9 @@
 
 	<!-- Summary targets -->
 
-	<target name="compile" depends="compile-disl,compile-disl-agent,compile-shvm,compile-shvm-agent" description="Compiles DiSL, Shadow VM, and the JVM agents for both." />
+	<target name="compile" depends="compile-disl,compile-disl-agent,compile-shvm,compile-shvm-agent,compile-analysis" description="Compiles DiSL, Shadow VM, and the JVM agents for both." />
 
-	<target name="build" depends="build-disl,build-disl-agent,build-shvm,build-shvm-agent,copy-asm" description="Builds DiSL and Shadow VM, without documentation." />
+	<target name="build" depends="build-disl,build-disl-agent,build-shvm,build-shvm-agent,copy-asm,build-analysis,build-builtin,build-android-shvm" description="Builds DiSL and Shadow VM, without documentation." />
 
 	<target name="eclipse" depends="build-eclipse-agent,build-disl-bypass" description="Creates libraries for developing DiSL under Eclipse." />
 

@@ -55,6 +55,46 @@ public abstract class ClassByteLoader {
 		}
 	}
 
+	//HY: read disl class from specified path
+    public static List <InputStream> loadDiSLClasses (final String dislClassPaths)
+    throws InitException {
+
+        try {
+
+            List <InputStream> result = loadClassesFromPaths (dislClassPaths);
+
+            if (result == null) {
+                result = loadClassesFromManifest ();
+            }
+
+            return result;
+
+        } catch (final IOException e) {
+            throw new InitException (e);
+        } catch (final ManifestInfoException e) {
+            throw new InitException (e);
+        }
+    }
+
+    private static List <InputStream> loadClassesFromPaths (final String dislClassPaths)
+    throws IOException {
+
+        final String classesList = dislClassPaths;
+
+        // no classes found
+        if ((classesList == null) || classesList.isEmpty ()) {
+            return null;
+        }
+        // get streams from class names
+        final List <InputStream> dislClasses = new LinkedList <InputStream> ();
+        for (final String fileName : classesList.split (DISL_CLASSES_DELIM)) {
+            final File file = new File (fileName);
+            dislClasses.add (new FileInputStream (file));
+        }
+        return dislClasses;
+
+    }
+
 	private static List<InputStream> loadClassesFromProperty()
 			throws IOException {
 		

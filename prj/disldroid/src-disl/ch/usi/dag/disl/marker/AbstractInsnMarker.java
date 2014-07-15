@@ -9,7 +9,7 @@ import org.objectweb.asm.tree.MethodNode;
 import ch.usi.dag.disl.snippet.Shadow.WeavingRegion;
 
 
-abstract class AbstractInsnMarker extends AbstractMarker {
+public abstract class AbstractInsnMarker extends AbstractMarker {
 
     @Override
     public final List <MarkedRegion> mark (final MethodNode methodNode) {
