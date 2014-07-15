@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<default-dislclass>bin/ch/usi/dag/icc/disl/DiSLClass.class</default-dislclass>
+	<default-dislclass>output/build/analysis/ch/usi/dag/icc/disl/DiSLClass.class</default-dislclass>
 	<default-observed>true</default-observed>
 	<dexes> 
 		<dex>
 			<name>de.ecspride-1.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>de.ecspride-2.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>de.ecspride-3.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>de.ecspride-4.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>Contacts.apk</name>
@@ -30,17 +30,17 @@
 		<dex>
 			<name>Browser.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>com.inspur.test2-1.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>AndroidPhoneContactsExample.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>bin/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>core.jar</name>
