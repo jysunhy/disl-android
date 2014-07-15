@@ -485,7 +485,7 @@
 			<classpath refid="asm.classpath" />
 			<classpath refid="android.shvm.classpath" />
 			<classpath refid="disl.classpath" />
-			<classpath refid="android.path" />
+			<classpath refid="framework.classpath" />
 		</javac>
 	</target>
 
