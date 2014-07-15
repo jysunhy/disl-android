@@ -5,11 +5,11 @@ import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
-import ch.usi.dag.dislreserver.shadow.Context;
-import ch.usi.dag.dislreserver.shadow.Replicable;
-import ch.usi.dag.dislreserver.shadow.ShadowObject;
-import ch.usi.dag.dislreserver.shadow.ShadowString;
+import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.disldroidreserver.shadow.Context;
+import ch.usi.dag.disldroidreserver.shadow.Replicable;
+import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
+import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 
 public class BCAnalysis extends RemoteAnalysis {
