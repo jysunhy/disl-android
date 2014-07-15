@@ -1,0 +1,61 @@
+<!--
+	This build file is intended to be included
+	from a build.xml file in each example directory.
+-->
+<project name="example">
+	<property name="build.sysclasspath" value="ignore" />
+	<dirname property="examples.basedir" file="${ant.file.example}" />
+
+	<property file="${examples.basedir}/build-override.properties" />
+	<property file="${examples.basedir}/build.properties" />
+
+	<path id="inst.classpath">
+		<pathelement location="${disl.server.path}" />
+		<pathelement location="${shvm.server.path}" />
+		<pathelement location="${shvm.dispatch.path}" />
+	</path>
+
+
+	<target name="build-app" description="Compiles and packages the application.">
+		<mkdir dir="${build.app}" />
+		<javac srcdir="${src.app}" destdir="${build.app}" debug="true" includeAntRuntime="false" />
+
+		<jar destfile="${app.path}" basedir="${build.app}">
+			<manifest>
+				<attribute name="Main-Class" value="Main" />
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="build-inst" description="Compiles and packages the instrumentation.">
+		<mkdir dir="${build.inst}" />
+		<javac srcdir="${src.inst}" destdir="${build.inst}" debug="true" includeAntRuntime="false">
+			<classpath refid="inst.classpath" />
+		</javac>
+
+		<jar destfile="${inst.path}" basedir="${build.inst}" excludes="MANIFEST.MF" manifest="${src.inst}/MANIFEST.MF" />
+	</target>
+
+
+	<target name="build" depends="build-app,build-inst" />
+
+
+	<target name="run" depends="build">
+		<exec executable="${disl.launcher.path}">
+			<arg value="-d" />
+			<arg value="${disl.home}" />
+			<arg value="-cse" />
+			<!-- <arg value="-c_out=client.out" /> -->
+			<!-- <arg value="-e_out=evaluation.out" /> -->
+			<arg value="--" />
+			<arg value="${inst.path}" />
+			<arg value="-jar" />
+			<arg value="${app.path}" />
+		</exec>
+	</target>
+
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+</project>

@@ -1,0 +1,147 @@
+================================================================================
+= DiSL SETUP EXAMPLE
+================================================================================
+
+These examples demonstrate fthe basic features of DiSL. In addition, they
+provide basic guidelines on how to package the instrumentation classes and how
+to run the instrumented application using a simple launcher script that takes
+care of starting the necessary Java virtual machines.
+
+
+--------------------------------------------------------------------------------
+-- smoke
+--------------------------------------------------------------------------------
+
+The simplest of the examples. The application prints a "hello" message from the
+main and exits while DiSL instruments the entry and exit of the main method and
+prints more text around the "hello".
+
+The code in the function annotated with "@After" and "@Before" is a snippet.
+That's the code that is according to information specified in the annotation
+instrumented into the client application class' code.
+
+
+--------------------------------------------------------------------------------
+-- scope
+--------------------------------------------------------------------------------
+
+This example demonstrates the scoping features. That means the ways how can the
+instrumentation application filter application methods based on class-name,
+method-name, parameter-types and return-type and instrument just the right
+methods. For example those from specified package, class or just those
+returning the right types or accepting the right parameters or a combination of
+these
+
+
+--------------------------------------------------------------------------------
+-- marker
+--------------------------------------------------------------------------------
+
+This example shows how to place instrumentation code on different locations
+across methods. That means one can, using scopes, declare methods that should
+be processed. But the marker enables to specify where exactly the code should
+be placed.
+
+The code might be added at the method body level (BodyMarker), basic block
+level (BasicBlockMarker) or even instruction level (e.g.
+MethodInvocationMarker). The marker essentially splits the method body into
+instrumentation regions. There are some already predefined markers but custom
+markers might be created. Creation of custom marker is also shown in the
+example.
+
+The marker basically goes trough (scoped) method code and whenever it finds a
+region between two instruction interesting it marks it. However, the marker
+must be cauties to mark all possible entries and exits of such region (goto,
+return, throw, ..).
+
+Then there are region specifiers. They specifiy at which entry or exit of the
+region the code should be placed. There is (After), (Before), (AfterReturning),
+(AfterThrow).
+
+
+--------------------------------------------------------------------------------
+-- guard
+--------------------------------------------------------------------------------
+
+This is another way to select a region for instrumentation. A snippet
+annotation might specify a guard class that has a guard method which decides
+whether a snippet will or will not be included.
+
+
+--------------------------------------------------------------------------------
+-- static
+--------------------------------------------------------------------------------
+
+This example shows how to use a static context information in snippets or guard
+methods. A static context is information derived from the original method's
+code. There are multiples classes implementing "StaticContext" interface that
+provide various information from static analysis of the code. It's also
+demonstrated how to implement and use custom static contexts.
+
+A snippet method might accept unspecified number of static contexts in any
+order that can be used in the snippet.
+
+For example static context might tell how many instructions there are in the
+method or if it contains a loop.
+
+
+--------------------------------------------------------------------------------
+-- dynamic
+--------------------------------------------------------------------------------
+
+This example shows how snippets can use also runtime information. For example
+values of local variables, object instance in member methods, method arguments
+or current exceptions.
+
+
+--------------------------------------------------------------------------------
+-- dispatch
+--------------------------------------------------------------------------------
+
+This example shows how to evaluate instrumented code on evaluation jvm. For
+more details try running this example directly using "disl.py" and supplying
+'c_out' and 'e_out' options.
+
+
+================================================================================
+= HOW TO RUN THE EXAMPLES
+================================================================================
+
+If you are using a source DiSL distribution, first compile DiSL by running
+"ant" in the top-level directory (see README). You can skip this step if you
+are using a binary distribution of DiSL.
+
+In the "examples" directory, choose an example you want to run, e.g., "smoke",
+enter the corresponding directory, and execute "ant run".
+
+This command builds and packages the application and the instrumentation
+classes and then, using the laucher script, starts the DiSL instrumentation
+server and later on the application VM.
+
+The output of the application as well as that of the applied instrumentation
+should be visible on the console.
+
+When compiled, the example can be also run using the "disl.py" launcher script
+found in the "bin" directory, which allows specifying more options. To learn
+more about the launcher script, run "disl.py -h" in the "bin" directory.
+
+
+================================================================================
+= NOTE
+================================================================================
+
+If you want to use "disl.py" to run your application, don't forget to either
+set the DISL_HOME variable, or use the "-d" option to pass the DiSL home
+directory to the "disl.py" launcher script.
+
+
+================================================================================
+= NOTE
+================================================================================
+
+If you want to include use some library in your instrumentation you should
+insert it directly to the instrumentation jar using jarjar.
+http://code.google.com/p/jarjar/
+
+Alternatively, you can provide the library's classpath to the "disl.py"
+utility.
