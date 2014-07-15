@@ -5,11 +5,11 @@ import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
-import ch.usi.dag.disldroidreserver.shadow.Context;
-import ch.usi.dag.disldroidreserver.shadow.Replicable;
-import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
-import ch.usi.dag.disldroidreserver.shadow.ShadowString;
+import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.dislreserver.shadow.Context;
+import ch.usi.dag.dislreserver.shadow.Replicable;
+import ch.usi.dag.dislreserver.shadow.ShadowObject;
+import ch.usi.dag.dislreserver.shadow.ShadowString;
 
 
 public class BCAnalysis extends RemoteAnalysis {
@@ -56,7 +56,7 @@ public class BCAnalysis extends RemoteAnalysis {
         public String toString () {
             final Formatter formatter = new Formatter ();
 
-            formatter.format ("%d %d %.2f %d %d %.2f %d %d\n",
+            formatter.format ("%d %d %.2f %d %d %.2f %d %d",
                 classBranch,
                 coveredBranches,
                 divide (coveredBranches, classBranch),
@@ -268,7 +268,7 @@ public class BCAnalysis extends RemoteAnalysis {
 
     // TODO write map-reduce friendly code
     public void printSPResult (final Context context) {
-        final HashSet <ShadowString> classes = new HashSet <ShadowString> ();
+        final HashSet <ShadowString> classes = new HashSet <> ();
 
         System.out.println ("############### Methods ###############");
 
@@ -311,7 +311,7 @@ public class BCAnalysis extends RemoteAnalysis {
 
         System.out.println ("############### Package ###############");
 
-        final HashMap <String, ClassStatistic> packageCovered = new HashMap <String, ClassStatistic> ();
+        final HashMap <String, ClassStatistic> packageCovered = new HashMap <> ();
 
         for (final ShadowString klass : classes) {
             final String packageName = getPackageName (klass.toString ());
@@ -337,7 +337,7 @@ public class BCAnalysis extends RemoteAnalysis {
 
         System.out.println ("############### Summary ###############");
 
-        final HashMap <String, ClassStatistic> summaryCovered = new HashMap <String, ClassStatistic> ();
+        final HashMap <String, ClassStatistic> summaryCovered = new HashMap <> ();
 
         for (final ShadowString klass : classes) {
             final String summaryName = getSummaryName (klass.toString ());
@@ -353,9 +353,9 @@ public class BCAnalysis extends RemoteAnalysis {
         }
 
         for (final String key : summaryCovered.keySet ()) {
-            final ClassStatistic packageStatistic = packageCovered.get (key);
+            final ClassStatistic packageStatistic = summaryCovered.get (key);
             System.out.printf (
-                "PROCESS-%d-PACKAGE: %s %s\n",
+                "PROCESS-%d-SUMMARY: %s %s\n",
                 context.pid (),
                 key,
                 packageStatistic.toString ());

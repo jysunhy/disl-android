@@ -3,11 +3,11 @@ package ch.usi.dag.bc.analysis;
 import java.util.Arrays;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
-import ch.usi.dag.disldroidreserver.shadow.Context;
-import ch.usi.dag.disldroidreserver.shadow.Forkable;
-import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
-import ch.usi.dag.disldroidreserver.shadow.ShadowString;
+import ch.usi.dag.dislreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.dislreserver.shadow.Context;
+import ch.usi.dag.dislreserver.shadow.Forkable;
+import ch.usi.dag.dislreserver.shadow.ShadowObject;
+import ch.usi.dag.dislreserver.shadow.ShadowString;
 
 
 public class BC2Analysis extends RemoteAnalysis implements Forkable {
