@@ -227,6 +227,7 @@
 			<fileset dir="${build.disl.bypass}/dynamic" includes="**/BypassCheck.class" />
 			<fileset dir="${build.disl.bypass}/dynamic" includes="**/DynamicBypass.class" />
 			<fileset dir="${build.shvm.dispatch}/" includes="**/AREDispatch.class" />
+			<fileset dir="${build.util}" />
 		</union>
 		<jar destfile="${out.lib}/${builtin.lib}">
 			<resources refid="disl.builtin.files" />
