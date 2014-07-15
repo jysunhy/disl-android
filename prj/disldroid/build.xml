@@ -485,6 +485,7 @@
 			<classpath refid="asm.classpath" />
 			<classpath refid="android.shvm.classpath" />
 			<classpath refid="disl.classpath" />
+			<classpath refid="android.path" />
 		</javac>
 	</target>
 
@@ -852,7 +853,7 @@
 
 	<target name="compile" depends="compile-disl,compile-disl-agent,compile-shvm,compile-shvm-agent,compile-analysis" description="Compiles DiSL, Shadow VM, and the JVM agents for both." />
 
-	<target name="build" depends="build-disl,build-disl-agent,build-shvm,build-shvm-agent,copy-asm,build-analysis,build-builtin,build-android-shvm" description="Builds DiSL and Shadow VM, without documentation." />
+	<target name="build" depends="build-disl,build-shvm,copy-asm,build-analysis,build-builtin,build-android-shvm" description="Builds DiSL and Shadow VM, without documentation." />
 
 	<target name="eclipse" depends="build-eclipse-agent,build-disl-bypass" description="Creates libraries for developing DiSL under Eclipse." />
 
