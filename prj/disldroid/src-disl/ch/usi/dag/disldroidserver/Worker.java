@@ -775,7 +775,9 @@ public class Worker extends Thread {
                                 final Collection<DiSLConfig.Proc> list =DiSLConfig.procMap.values ();
                                 final Iterator<DiSLConfig.Proc> iter = list.iterator ();
                                 while(iter.hasNext ()){
-                                    observeList += iter.next ().procname+";";
+									DiSLConfig.Proc tmp = iter.next();
+									if(tmp.isObserved)
+                                    	observeList += tmp.procname+";";
                                 }
                                 instrClass = observeList.getBytes ();
                             } else {

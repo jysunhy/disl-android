@@ -62,6 +62,7 @@
 		<dex>
 			<name>framework.jar</name>
 			<isbootstrap>true</isbootstrap>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>services.jar</name>

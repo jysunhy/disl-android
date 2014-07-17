@@ -1,6 +1,6 @@
 package ch.usi.dag.et.tools.etracks.local;
 
-import ch.usi.dag.dislre.REDispatch;
+import ch.usi.dag.dislre.AREDispatch;
 import ch.usi.dag.et.tools.etracks.util.Outputter;
 
 
@@ -19,7 +19,7 @@ final class ElephantTracksStub {
     }
 
 
-    private static final Outputter __out__ = Outputter.create ("stub.log").mute ();
+    private static final Outputter __out__ = Outputter.NULL;//Outputter.create ("/data/stub.log").mute ();
 
     private static final byte __ORDERING_ID__ = 0;
 
@@ -36,14 +36,16 @@ final class ElephantTracksStub {
         __out__.format ("%08d:onObjectAllocation: %s, size %d, thread %d\n",
             time, __toString (object), size, threadId
         );
-        REDispatch.analysisStart (__onObjectAllocationId__, __ORDERING_ID__);
+		AREDispatch.NativeLog("IN 1");
+        AREDispatch.analysisStart (__onObjectAllocationId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (object);
-            REDispatch.sendLong (size);
-            REDispatch.sendLong (threadId);
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (object);
+            AREDispatch.sendLong (size);
+            AREDispatch.sendLong (threadId);
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
+		AREDispatch.NativeLog("OUT 1");
     }
 
     //
@@ -57,15 +59,17 @@ final class ElephantTracksStub {
         __out__.format ("%08d:onReferenceArrayAllocation: %s [%d], size %d, thread %d\n",
             time, __toString (object), length, size, threadId
         );
-        REDispatch.analysisStart (__onReferenceArrayAllocationId__, __ORDERING_ID__);
+		AREDispatch.NativeLog("IN 2");
+        AREDispatch.analysisStart (__onReferenceArrayAllocationId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (object);
-            REDispatch.sendLong (size);
-            REDispatch.sendInt (length);
-            REDispatch.sendLong (threadId);
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (object);
+            AREDispatch.sendLong (size);
+            AREDispatch.sendInt (length);
+            AREDispatch.sendLong (threadId);
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
+		AREDispatch.NativeLog("OUT 2");
     }
 
     //
@@ -78,13 +82,15 @@ final class ElephantTracksStub {
         __out__.format ("%08d:onObjectUse1: %s, thread %d\n",
             time, __toString (object1), threadId
         );
-        REDispatch.analysisStart (__onObjectUse1Id__, __ORDERING_ID__);
+		AREDispatch.NativeLog("IN 3");
+        AREDispatch.analysisStart (__onObjectUse1Id__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (object1);
-            REDispatch.sendLong (threadId);
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (object1);
+            AREDispatch.sendLong (threadId);
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
+		AREDispatch.NativeLog("OUT 3");
     }
 
 
@@ -96,14 +102,16 @@ final class ElephantTracksStub {
         __out__.format ("%08d:onObjectUse2: %s, %s, thread %d\n",
             time, __toString (object1), __toString (object2), threadId
         );
-        REDispatch.analysisStart (__onObjectUse2Id__, __ORDERING_ID__);
+		AREDispatch.NativeLog("IN 4");
+        AREDispatch.analysisStart (__onObjectUse2Id__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (object1);
-            REDispatch.sendObject (object2);
-            REDispatch.sendLong (threadId);
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (object1);
+            AREDispatch.sendObject (object2);
+            AREDispatch.sendLong (threadId);
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
+		AREDispatch.NativeLog("OUT 4");
     }
 
     //
@@ -119,16 +127,18 @@ final class ElephantTracksStub {
             __toString (oldTarget), __toString (newTarget), threadId
         );
 
-        REDispatch.analysisStart (__onReferenceElementUpdateId__, __ORDERING_ID__);
+		AREDispatch.NativeLog("IN 5");
+        AREDispatch.analysisStart (__onReferenceElementUpdateId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (owner);
-            REDispatch.sendInt (elementIndex);
-            REDispatch.sendObject (oldTarget);
-            REDispatch.sendObject (newTarget);
-            REDispatch.sendLong (threadId);
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (owner);
+            AREDispatch.sendInt (elementIndex);
+            AREDispatch.sendObject (oldTarget);
+            AREDispatch.sendObject (newTarget);
+            AREDispatch.sendLong (threadId);
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
+		AREDispatch.NativeLog("OUT 5");
     }
 
 
@@ -143,16 +153,18 @@ final class ElephantTracksStub {
             __toString (oldTarget), __toString (newTarget), threadId
         );
 
-        REDispatch.analysisStart (__onInstanceReferenceFieldUpdateId__, __ORDERING_ID__);
+		AREDispatch.NativeLog("IN 6");
+        AREDispatch.analysisStart (__onInstanceReferenceFieldUpdateId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (owner);
-            REDispatch.sendObjectPlusData (fieldName);
-            REDispatch.sendObject (oldTarget);
-            REDispatch.sendObject (newTarget);
-            REDispatch.sendLong (threadId);
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (owner);
+            AREDispatch.sendObjectPlusData (fieldName);
+            AREDispatch.sendObject (oldTarget);
+            AREDispatch.sendObject (newTarget);
+            AREDispatch.sendLong (threadId);
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
+		AREDispatch.NativeLog("OUT 6");
     }
 
 
@@ -167,16 +179,18 @@ final class ElephantTracksStub {
             __toString (oldTarget), __toString (newTarget), threadId
         );
 
-        REDispatch.analysisStart (__onStaticReferenceFieldUpdateId__, __ORDERING_ID__);
+		AREDispatch.NativeLog("IN 7");
+        AREDispatch.analysisStart (__onStaticReferenceFieldUpdateId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObjectPlusData (ownerClass);
-            REDispatch.sendObjectPlusData (fieldName);
-            REDispatch.sendObject (oldTarget);
-            REDispatch.sendObject (newTarget);
-            REDispatch.sendLong (threadId);
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObjectPlusData (ownerClass);
+            AREDispatch.sendObjectPlusData (fieldName);
+            AREDispatch.sendObject (oldTarget);
+            AREDispatch.sendObject (newTarget);
+            AREDispatch.sendLong (threadId);
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
+		AREDispatch.NativeLog("OUT 7");
     }
 
     //
@@ -190,14 +204,16 @@ final class ElephantTracksStub {
         __out__.format ("%08d:onMethodEntry: method %x, receiver %s, thread %d\n",
             time, methodId, __toString (receiver), threadId
         );
-        REDispatch.analysisStart (__onMethodEntryId__, __ORDERING_ID__);
+		AREDispatch.NativeLog("IN 8");
+        AREDispatch.analysisStart (__onMethodEntryId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendInt (methodId);
-            REDispatch.sendObject (receiver);
-            REDispatch.sendLong (threadId);
+            AREDispatch.sendLong (time);
+            AREDispatch.sendInt (methodId);
+            AREDispatch.sendObject (receiver);
+            AREDispatch.sendLong (threadId);
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
+		AREDispatch.NativeLog("OUT 8");
     }
 
 
@@ -210,14 +226,16 @@ final class ElephantTracksStub {
         __out__.format ("%08d:onMethodExit: method %x, receiver %s, thread %d\n",
             time, methodId, __toString (receiver), threadId
         );
-        REDispatch.analysisStart (__onMethodExitId__, __ORDERING_ID__);
+		AREDispatch.NativeLog("IN 9");
+        AREDispatch.analysisStart (__onMethodExitId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendInt (methodId);
-            REDispatch.sendObject (receiver);
-            REDispatch.sendLong (threadId);
+            AREDispatch.sendLong (time);
+            AREDispatch.sendInt (methodId);
+            AREDispatch.sendObject (receiver);
+            AREDispatch.sendLong (threadId);
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
+		AREDispatch.NativeLog("OUT 9");
     }
 
     //
@@ -230,13 +248,15 @@ final class ElephantTracksStub {
         __out__.format ("%08d:onStaticMethodEntry: method %x, thread %d\n",
             time, methodId, threadId
         );
-        REDispatch.analysisStart (__onStaticMethodEntryId__, __ORDERING_ID__);
+		AREDispatch.NativeLog("IN 10");
+        AREDispatch.analysisStart (__onStaticMethodEntryId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendInt (methodId);
-            REDispatch.sendLong (threadId);
+            AREDispatch.sendLong (time);
+            AREDispatch.sendInt (methodId);
+            AREDispatch.sendLong (threadId);
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
+		AREDispatch.NativeLog("OUT 10");
     }
 
 
@@ -248,13 +268,15 @@ final class ElephantTracksStub {
         __out__.format ("%08d:onStaticMethodExit: method %x, thread %d\n",
             time, methodId, threadId
         );
-        REDispatch.analysisStart (__onStaticMethodExitId__, __ORDERING_ID__);
+		AREDispatch.NativeLog("IN 11");
+        AREDispatch.analysisStart (__onStaticMethodExitId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendInt (methodId);
-            REDispatch.sendLong (threadId);
+            AREDispatch.sendLong (time);
+            AREDispatch.sendInt (methodId);
+            AREDispatch.sendLong (threadId);
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
+		AREDispatch.NativeLog("OUT 11");
     }
 
     //
@@ -282,14 +304,14 @@ final class ElephantTracksStub {
 
         final Method method = Reflection.findClassMethod (remoteClass, methodName);
         if (method != null) {
-            return REDispatch.registerMethod (method.getName ());
+            return AREDispatch.registerMethod (method.getName ());
         } else {
             throw new RuntimeException (String.format (
                 "no method '%s' in class '$%s'", methodName, remoteClass.getName ())
             );
         }
         */
-        return REDispatch.registerMethod (__REMOTE_CLASS_NAME__ +"."+ methodName);
+        return AREDispatch.registerMethod (__REMOTE_CLASS_NAME__ +"."+ methodName);
     }
 
 }
