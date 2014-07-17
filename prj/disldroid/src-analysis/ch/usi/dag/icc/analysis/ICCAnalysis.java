@@ -14,8 +14,8 @@ import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 public class ICCAnalysis extends RemoteAnalysis {
 
-    public void permission_alert(final ShadowString alertinfo){
-        System.out.println ("Permission use detected in "+alertinfo.toString ());
+    public void permission_alert(final Context context, final ShadowString alertinfo){
+        System.out.println ("Permission use detected in process "+context.pid()+" at method "+alertinfo.toString ());
     }
 
     public void callServiceInClient (

@@ -126,9 +126,9 @@ public class PermissionDiSLClass {
 	//		if(permission_stk==null)
 	//			permission_stk = new Stack <Integer> ();
 	//		permission_stk.push (0);
-			if(msc.thisClassSuperName ().contains ("Activity")) {
+			//if(msc.thisClassSuperName ().contains ("Activity")) {
 				AREDispatch.methodEnter ();
-			}
+			//}
 		}
 
 	@After (
