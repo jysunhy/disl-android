@@ -4,22 +4,17 @@
 	<default-observed>true</default-observed>
 	<dexes> 
 		<dex>
+			<name>org.cert.sendsms-1.apk</name>
+			<isbootstrap>false</isbootstrap>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+		</dex>
+		<dex>
+			<name>org.cert.echoer-1.apk</name>
+			<isbootstrap>false</isbootstrap>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
+		</dex>
+		<dex>
 			<name>de.ecspride-1.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>de.ecspride-2.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>de.ecspride-3.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>de.ecspride-4.apk</name>
 			<isbootstrap>false</isbootstrap>
 			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
@@ -74,6 +69,14 @@
 		</dex>
 	</dexes>
 	<procs>
+		<proc>
+			<procname>org.cert.sendsms</procname>
+			<isobserved>true</isobserved>
+		</proc>
+		<proc>
+			<procname>org.cert.echoer</procname>
+			<isobserved>true</isobserved>
+		</proc>
 		<proc>
 			<procname>com.typ3studios.easybutton</procname>
 			<isobserved>true</isobserved>

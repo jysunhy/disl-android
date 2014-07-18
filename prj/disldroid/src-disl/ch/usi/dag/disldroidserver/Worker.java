@@ -105,7 +105,7 @@ public class Worker extends Thread {
     private final NetMessageReader sc;
 
     private DiSL disl = null;
-    private final HashMap<String, DiSL> dislMap = new HashMap <String, DiSL>();
+    private HashMap<String, DiSL> dislMap = new HashMap <String, DiSL>();
 
     private final AtomicLong instrumentationTime = new AtomicLong ();
 
@@ -735,7 +735,7 @@ public class Worker extends Thread {
 //        ReadObserveList ();
         if(!DiSLConfig.parseXml ()){
 			System.out.println("Update DiSL classes");
-			dislMap.clear();
+			dislMap = new HashMap <String, DiSL>();
 		}
 
         try {
