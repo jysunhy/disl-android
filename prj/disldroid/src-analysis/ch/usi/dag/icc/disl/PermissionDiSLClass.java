@@ -17,7 +17,8 @@ public class PermissionDiSLClass {
 	@Before (
 			marker = BodyMarker.class,
 			scope = "*.*",
-			guard = ScopeGuard.class)
+			guard = ScopeGuard.class,
+			order = 10)
 		public static void before_enter (final CallContext msc){
 			AREDispatch.methodEnter ();
 		}
@@ -25,7 +26,8 @@ public class PermissionDiSLClass {
 	@After (
 			marker = BodyMarker.class,
 			scope = "*.*",
-			guard = ScopeGuard.class)
+			guard = ScopeGuard.class,
+			order = 10)
 		public static void after_enter (final CallContext msc){
 			final int permission = AREDispatch.checkThreadPermission ();
 			if(permission != 0) {
