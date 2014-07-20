@@ -8,7 +8,8 @@ public class ScopeGuard {
 
     @GuardMethod
     public static boolean isApplicable(final MethodStaticContext msc) {
-        return msc.thisClassName ().contains ("Activity") || msc.thisClassSuperName ().contains("Activity");
+		//return msc.thisClassName ().contains ("Activity") || msc.thisClassSuperName ().contains("Activity");
+		return true;
     }
 }
 

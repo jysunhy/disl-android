@@ -41,6 +41,8 @@ public class DiSLConfig {
 
         public String preinstrumented_path = "";
 
+		public boolean bypass = true;
+
         public void print () {
             System.out.println (dexname +":"+ isBootstrapDex +":"+ dislClass);
         }
@@ -82,6 +84,9 @@ public class DiSLConfig {
                         }
                         if (attrNode.getNodeName ().equals ("isbootstrap")) {
                             newdex.isBootstrapDex = Boolean.parseBoolean (attrNode.getTextContent ());
+                        }
+                        if (attrNode.getNodeName ().equals ("bypass")) {
+                            newdex.bypass = Boolean.parseBoolean (attrNode.getTextContent ());
                         }
                         if (attrNode.getNodeName ().equals ("dislclass")) {
                             newdex.dislClass = attrNode.getTextContent ();

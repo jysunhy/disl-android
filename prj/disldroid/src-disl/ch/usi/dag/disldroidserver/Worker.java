@@ -420,8 +420,8 @@ public class Worker extends Thread {
                     return null;
                 }
                 try {
-                    //newdisl = new DiSL(dex.isBootstrapDex, dex.dislClass);
-                    newdisl = new DiSL(true, dex.dislClass,"");
+                    newdisl = new DiSL(dex.bypass, dex.dislClass,"");
+                    //newdisl = new DiSL(true, dex.dislClass,"");
                 } catch (final DiSLException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
@@ -852,6 +852,8 @@ public class Worker extends Thread {
 
     private byte [] instrument (String className, final byte [] origCode, final DiSL disl)
     throws DiSLServerException, DiSLException {
+		if(debug)
+			System.out.println("instrumenting "+className);
 
         // backup for empty class name
         if (className == null || className.isEmpty ()) {

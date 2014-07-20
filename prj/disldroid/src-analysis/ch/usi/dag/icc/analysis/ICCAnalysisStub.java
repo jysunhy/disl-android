@@ -5,11 +5,39 @@ import ch.usi.dag.dislre.AREDispatch;
 
 public class ICCAnalysisStub {
 
+    public static short DYNAMIC = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.dynamic_alert");
+
+    public static void dynamic_alert (final String name, final String location) {
+        AREDispatch.analysisStart (DYNAMIC);
+        AREDispatch.sendObjectPlusData (name);
+        AREDispatch.sendObjectPlusData (location);
+        AREDispatch.analysisEnd ();
+    }
+
+    public static short SOURCE = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.source_alert");
+
+    public static void source_alert (final String name, final String location) {
+        AREDispatch.analysisStart (SOURCE);
+        AREDispatch.sendObjectPlusData (name);
+        AREDispatch.sendObjectPlusData (location);
+        AREDispatch.analysisEnd ();
+    }
+
+    public static short SINK = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.sink_alert");
+
+    public static void sink_alert (final String name, final String location) {
+        AREDispatch.analysisStart (SINK);
+        AREDispatch.sendObjectPlusData (name);
+        AREDispatch.sendObjectPlusData (location);
+        AREDispatch.analysisEnd ();
+    }
+
     public static short PERMISSION = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.permission_alert");
 
-    public static void permission_alert (final String alertinfo) {
+    public static void permission_alert (final int permission, final String info) {
         AREDispatch.analysisStart (PERMISSION);
-        AREDispatch.sendObjectPlusData (alertinfo);
+        AREDispatch.sendInt (permission);
+        AREDispatch.sendObjectPlusData (info);
         AREDispatch.analysisEnd ();
     }
 

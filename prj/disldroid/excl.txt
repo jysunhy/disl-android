@@ -2,3 +2,4 @@ java.lang.ref.FinalizerReference.*
 java.lang.ref.Reference.*
 java.lang.ref.ReferenceQueue.*
 java.lang.Class.*
+com.google.android.util.*.*
