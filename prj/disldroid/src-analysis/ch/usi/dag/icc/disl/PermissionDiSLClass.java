@@ -45,6 +45,19 @@ public class PermissionDiSLClass {
         final android.content.Intent intent = (Intent)args[0];
         intent.putExtra ("specialtag", "123");
     }
+
+	@Before (
+        marker = BytecodeMarker.class,
+        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+        guard = SetActivityResultGuard.class)
+    public static void setActivityResult (final CallContext ac, final ArgumentProcessorContext pc) {
+        final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
+        AREDispatch.NativeLog ("in set activity result");
+        AREDispatch.NativeLog (Integer.toString (args.length));
+        final android.content.Intent intent = (Intent)args[1];
+        intent.putExtra ("specialtag", "456");
+    }
+
 	@After (
         marker = BodyMarker.class,
         scope = "*.onCreate")
@@ -52,8 +65,24 @@ public class PermissionDiSLClass {
         AREDispatch.NativeLog ("in activity on create");
         final Intent intent = dc.getLocalVariableValue (0, Activity.class).getIntent ();
         if(intent.hasExtra("specialtag")) {
-            if(intent.getExtras().getString("specialtag") !=null){
-                AREDispatch.NativeLog ("HAHA get the special tag");
+            final String tag = intent.getExtras().getString("specialtag");
+            if(tag !=null){
+                AREDispatch.NativeLog ("HAHA get the special tag "+tag);
+            }
+        }
+    }
+
+	@After (
+        marker = BodyMarker.class,
+        scope = "*.onActivityResult")
+    public static void onActivityResult (final CallContext ac, final ArgumentProcessorContext pc) {
+        AREDispatch.NativeLog ("in on activity result");
+        final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
+        final Intent intent = (Intent)args[2];
+        if(intent.hasExtra("specialtag")) {
+            final String tag = intent.getExtras().getString("specialtag");
+            if(tag !=null){
+                AREDispatch.NativeLog ("HAHA get the special tag "+tag);
             }
         }
     }
