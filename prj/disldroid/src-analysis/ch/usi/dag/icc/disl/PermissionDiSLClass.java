@@ -74,15 +74,17 @@ public class PermissionDiSLClass {
 
 	@After (
         marker = BodyMarker.class,
-        scope = "*.onActivityResult")
+        scope = "*Activity.onActivityResult")
     public static void onActivityResult (final CallContext ac, final ArgumentProcessorContext pc) {
         AREDispatch.NativeLog ("in on activity result");
         final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
-        final Intent intent = (Intent)args[2];
-        if(intent.hasExtra("specialtag")) {
-            final String tag = intent.getExtras().getString("specialtag");
-            if(tag !=null){
-                AREDispatch.NativeLog ("HAHA get the special tag "+tag);
+        if(args.length==3){
+            final Intent intent = (Intent)args[2];
+            if(intent.hasExtra("specialtag")) {
+                final String tag = intent.getExtras().getString("specialtag");
+                if(tag !=null){
+                    AREDispatch.NativeLog ("HAHA get the special tag "+tag);
+                }
             }
         }
     }
