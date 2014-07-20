@@ -1,18 +1,17 @@
 package ch.usi.dag.icc.disl;
 
-import java.util.Stack;
-
+import android.app.Activity;
+import android.content.Intent;
 import ch.usi.dag.disl.annotation.After;
-import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.annotation.AfterReturning;
-import ch.usi.dag.disl.annotation.ThreadLocal;
+import ch.usi.dag.disl.annotation.Before;
+import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
 import ch.usi.dag.disl.marker.BytecodeMarker;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorMode;
 import ch.usi.dag.dislre.AREDispatch;
 import ch.usi.dag.icc.analysis.ICCAnalysisStub;
-import android.widget.Toast;
 
 public class PermissionDiSLClass {
 	@Before (
@@ -34,6 +33,30 @@ public class PermissionDiSLClass {
 			}
 			AREDispatch.methodExit ();
 		}
+
+	@Before (
+        marker = BytecodeMarker.class,
+        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+        guard = StartActivityForResultGuard.class)
+    public static void startActivityForResult (final CallContext ac, final ArgumentProcessorContext pc) {
+        final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
+        AREDispatch.NativeLog ("in start activity for result test");
+        AREDispatch.NativeLog (Integer.toString (args.length));
+        final android.content.Intent intent = (Intent)args[0];
+        intent.putExtra ("specialtag", "123");
+    }
+	@After (
+        marker = BodyMarker.class,
+        scope = "*.onCreate")
+    public static void onActivityCreate (final DynamicContext dc, final CallContext ac) {
+        AREDispatch.NativeLog ("in activity on create");
+        final Intent intent = dc.getLocalVariableValue (0, Activity.class).getIntent ();
+        if(intent.hasExtra("specialtag")) {
+            if(intent.getExtras().getString("specialtag") !=null){
+                AREDispatch.NativeLog ("HAHA get the special tag");
+            }
+        }
+    }
 
 	@Before (
 			marker = BytecodeMarker.class,
@@ -61,9 +84,28 @@ public class PermissionDiSLClass {
 			marker = BytecodeMarker.class,
 			args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
 			guard = DynamicGuard.class)
-		public static void afterDynamicInvoke (final CallContext ac) {
+		public static void afterDynamicInvoke (final CallContext ac,final ArgumentProcessorContext pc) {
+	        final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
+	        String arg="";
+	        for (final Object obj : args) {
+	            if(obj == null){
+                    continue;
+                }
+                final String n = obj.getClass().getCanonicalName();
+                if (obj instanceof Object[]){
+                    continue;
+                }else{
+                    if(n.equals ("java.lang.Integer")) {
+                    }else if(n.equals ("java.lang.Float")) {
+                    }else if(n.equals ("java.lang.Double")) {
+                    }else if(n.equals ("java.lang.String")) {
+                        arg = obj.toString ();
+                        break;
+                    }
+                }
+	        }
 			final String methodName = ac.getCallee ();
-			ICCAnalysisStub.dynamic_alert (methodName, ac.thisMethodFullName());
+			ICCAnalysisStub.dynamic_alert (methodName, ac.thisMethodFullName(), arg);
 		}
 
 	@AfterReturning (
@@ -87,7 +129,7 @@ public class PermissionDiSLClass {
 	@Before (
 			marker = BodyMarker.class,
 			scope = "*.check*Permission*")
-		public static void api_0 (
+		public static void detectPermission (
 				final CallContext msc, final ArgumentProcessorContext pc) {
 			AREDispatch.NativeLog (msc.thisMethodFullName ());
 			final Object [] args = pc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
@@ -168,10 +210,11 @@ public class PermissionDiSLClass {
 						int pos = 0;
 						for (final String p : permissions) {
 							if(obj.toString ().equals (p)) {
-								if(pos >= 31)
-									api = 1<<31;
-								else
-									api = 1<<pos;
+								if(pos >= 31) {
+                                    api = 1<<31;
+                                } else {
+                                    api = 1<<pos;
+                                }
 								break;
 							}
 							pos++;

@@ -14,8 +14,8 @@ import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 public class ICCAnalysis extends RemoteAnalysis {
 
-	public void dynamic_alert(final Context context, final ShadowString name, final ShadowString location){
-		System.out.println("Proc("+context.pid()+":"+context.getPname ()+") Dynamic ##"+name.toString()+"## detected in "+location.toString());
+	public void dynamic_alert(final Context context, final ShadowString name, final ShadowString location, final ShadowString args){
+		System.out.println("Proc("+context.pid()+":"+context.getPname ()+") Dynamic ##"+name.toString()+"## detected in "+location.toString()+" with args "+args);
 	}
 	public void source_alert(final Context context, final ShadowString name, final ShadowString location){
 		System.out.println("Proc("+context.pid()+":"+context.getPname ()+") Source ##"+name.toString()+"## detected in "+location.toString());

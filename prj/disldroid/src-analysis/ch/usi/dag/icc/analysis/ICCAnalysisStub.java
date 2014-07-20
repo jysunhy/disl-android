@@ -7,10 +7,11 @@ public class ICCAnalysisStub {
 
     public static short DYNAMIC = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.dynamic_alert");
 
-    public static void dynamic_alert (final String name, final String location) {
+    public static void dynamic_alert (final String name, final String location, final String args) {
         AREDispatch.analysisStart (DYNAMIC);
         AREDispatch.sendObjectPlusData (name);
         AREDispatch.sendObjectPlusData (location);
+        AREDispatch.sendObjectPlusData (args);
         AREDispatch.analysisEnd ();
     }
 
