@@ -21,9 +21,9 @@ public class DiSLConfig {
     private static final String CONFIG_FILE = System.getProperty (
         "configfile", "config.xml");
 
-    static String default_disl_classes;
+    static String default_disl_classes = "";
 
-    static boolean default_proc_observed;
+    static boolean default_proc_observed = false;
 
     public static HashMap <String, Dex> dexMap;
     public static HashMap <String, Proc> procMap;
