@@ -157,11 +157,8 @@ public class DiSLConfig {
             if(xmlcontent == null) {
                 xmlcontent = bout.toByteArray ();
             }else{
-                if(xmlcontent.length != bout.toByteArray ().length) {
-                    return false;
-                }
-                if(!Arrays.toString(xmlcontent).equals (Arrays.toString (bout.toByteArray ()))){
-                    return false;
+                if(xmlcontent.length == bout.toByteArray ().length && Arrays.toString(xmlcontent).equals (Arrays.toString (bout.toByteArray ()))){
+					return true;
                 }else{
                     xmlcontent = bout.toByteArray ();
                 }
@@ -219,7 +216,7 @@ public class DiSLConfig {
         } catch (final Exception e) {
             e.printStackTrace ();
         }
-        return true;
+        return false;
     }
 
 

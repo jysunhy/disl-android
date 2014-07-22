@@ -558,8 +558,8 @@ public final class DiSL {
 
                 // prepare dynamic bypass thread local variable
                 final ThreadLocalVar tlv = new ThreadLocalVar(null, "bypass",
-                        Type.getType(boolean.class), true);
-                tlv.setDefaultValue(0);
+                        Type.getType(boolean.class), false);
+                tlv.setDefaultValue(1);
                 insertTLVs.add(tlv);
             }
 
