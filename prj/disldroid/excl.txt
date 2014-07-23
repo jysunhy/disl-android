@@ -1,3 +1,4 @@
+java.lang.Object.*
 java.lang.ref.FinalizerReference.*
 java.lang.ref.Reference.*
 java.lang.ref.ReferenceQueue.*

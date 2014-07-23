@@ -274,7 +274,8 @@ public class Worker extends Thread {
                 }
                 fis.close ();
                 dis.close ();
-                System.out.println(file.getAbsolutePath ()+"a"+size);
+				if(debug)
+                	System.out.println(file.getAbsolutePath ()+"a"+size);
             }catch (final Exception e){
                 e.printStackTrace ();
             }
@@ -451,7 +452,8 @@ public class Worker extends Thread {
             }
             instrClass = cacheMap.get (key);
             if (instrClass != null) {
-                System.out.println (jarName + " " + key + " hits cache");
+				if(debug)
+ 	               System.out.println (jarName + " " + key + " hits cache");
                 return instrClass;
             }
         }
@@ -588,7 +590,8 @@ public class Worker extends Thread {
                                 '/', '.').replace ('/', '.'));
                             if (ori != null) {
                                 if (!Arrays.equals (ori, code)) {
-                                    System.out.println ("SAME NAME, DIFFERENT CODE FOR "
+									if(debug)
+ 	                                   System.out.println ("SAME NAME, DIFFERENT CODE FOR "
                                         + className.replace ('/', '.'));
                                 }
                             }
@@ -734,7 +737,8 @@ public class Worker extends Thread {
 //        ReadPkgBlackList ();
 //        ReadObserveList ();
         if(!DiSLConfig.parseXml ()){
-			System.out.println("Update DiSL classes");
+			if(debug)
+				System.out.println("Update DiSL classes");
 			dislMap = new HashMap <String, DiSL>();
 		}
 
@@ -756,7 +760,8 @@ public class Worker extends Thread {
                     {
                         final String fullPath =new String (
                             nm.getControl ());
-                        System.out.println(fullPath);
+						if(debug)
+ 	                       System.out.println(fullPath);
 
                         final byte [] dexCode = nm.getClassCode ();
 

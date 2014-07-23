@@ -144,6 +144,23 @@ public class PermissionDiSLClass {
 	@AfterReturning (
 			marker = BytecodeMarker.class,
 			args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+			guard = APISinkGuard.class)
+		public static void afterAPISinkInvoke (final CallContext ac, final ArgumentProcessorContext pc) {
+	        final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
+			ICCAnalysisStub.taint_sink(args[2], ac.getCallee(), ac.thisMethodFullName());
+		}
+
+	@AfterReturning (
+			marker = BytecodeMarker.class,
+			args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+			guard = APISourceGuard.class)
+		public static void afterAPISourceInvoke (final DynamicContext dc, final CallContext ac) {
+			ICCAnalysisStub.taint_object(dc.getStackValue(0, String.class), ac.getCallee(), ac.thisMethodFullName());
+		}
+
+	@AfterReturning (
+			marker = BytecodeMarker.class,
+			args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
 			guard = SourceGuard.class)
 		public static void afterSourceInvoke (final CallContext ac) {
 			final String methodName = ac.getCallee ();

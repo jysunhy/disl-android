@@ -5,6 +5,26 @@ import ch.usi.dag.dislre.AREDispatch;
 
 public class ICCAnalysisStub {
 
+    public static short TAINTSINK= AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_sink");
+
+    public static void taint_sink(final Object obj, final String name, final String location) {
+        AREDispatch.analysisStart (TAINTSINK);
+        AREDispatch.sendObject(obj);
+        AREDispatch.sendObjectPlusData (name);
+        AREDispatch.sendObjectPlusData (location);
+        AREDispatch.analysisEnd ();
+    }
+
+    public static short TAINTOBJECT = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_object");
+
+    public static void taint_object(final Object obj, final String name, final String location) {
+        AREDispatch.analysisStart (TAINTOBJECT);
+        AREDispatch.sendObject(obj);
+        AREDispatch.sendObjectPlusData (name);
+        AREDispatch.sendObjectPlusData (location);
+        AREDispatch.analysisEnd ();
+    }
+
     public static short DYNAMIC = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.dynamic_alert");
 
     public static void dynamic_alert (final String name, final String location, final String args) {

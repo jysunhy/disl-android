@@ -167,7 +167,7 @@ public class DiSLConfig {
             e.printStackTrace ();
         }
 
-        System.out.println ("Parsing the XML");
+ //       System.out.println ("Parsing the XML");
         dexMap = new HashMap <String, Dex> ();
         procMap = new HashMap <String, Proc> ();
         dex2procMap = new HashMap <String, Proc> ();
