@@ -41,7 +41,7 @@ public class TaintDiSLClass {
         intent.putExtra ("svm_tid", AREDispatch.getThisThreadId ());
     }
 
-    @Before (
+    @AfterReturning (
         marker = BytecodeMarker.class,
         args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
         guard = Guard.ActivityGetIntentGuard.class)
