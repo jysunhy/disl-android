@@ -67,6 +67,10 @@ public class AREDispatch {
 	public static native void methodEnter();
 	public static native void methodExit();
 
+	public static native long getObjectId(Object obj);
+	public static native int getThisThreadId();
+	public static native int getThisProcId();
+
 	public static native void test();
 
 	//public static native void onFork(int parent);

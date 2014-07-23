@@ -14,12 +14,22 @@ import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 public class ICCAnalysis extends RemoteAnalysis {
 
-	public void taint_sink(final Context context, final ShadowObject obj, final ShadowString name, ShadowString location){
+    public void taint_propagate(final Context context, final ShadowObject from,final ShadowObject to, final ShadowString name, final ShadowString location){
+        System.out.println("Proc("+context.pid()+":"+context.getPname ()+") tainted from Object ##"+from.getId()+"## to ##"+to.getId()+"## when invoking " + name + " in "+location);
+    }
+
+    public void taint_propagate2(final Context context, final long from, final int fromPid, final ShadowObject to, final ShadowString name, final ShadowString location){
+        System.out.println("Proc("+context.pid()+":"+context.getPname ()+") tainted from Object ##"+from+"("+fromPid+")## to ##"+to.getId()+"## when invoking " + name + " in "+location);
+    }
+
+	public void taint_sink(final Context context, final ShadowObject obj, final ShadowString name, final ShadowString location){
 		System.out.println("Proc("+context.pid()+":"+context.getPname ()+") tainted Object ##"+obj.getId()+"## is leaked when invoking " + name + " in "+location);
 	}
-	public void taint_object(final Context context, final ShadowObject obj, final ShadowString name, ShadowString location){
-		System.out.println("Proc("+context.pid()+":"+context.getPname ()+") Object ##"+obj.getId()+"## is tainted when invoking " + name + " in "+location);
+	public void taint_source(final Context context, final ShadowObject obj, final int flag, final ShadowString name, final ShadowString location){
+		System.out.println("Proc("+context.pid()+":"+context.getPname ()+") Object ##"+obj.getId()+"## is tainted with flag "+flag+" when invoking " + name + " in "+location);
 	}
+
+
 	public void dynamic_alert(final Context context, final ShadowString name, final ShadowString location, final ShadowString args){
 		System.out.println("Proc("+context.pid()+":"+context.getPname ()+") Dynamic ##"+name.toString()+"## detected in "+location.toString()+" with args "+args);
 	}

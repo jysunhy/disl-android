@@ -5,6 +5,29 @@ import ch.usi.dag.dislre.AREDispatch;
 
 public class ICCAnalysisStub {
 
+    public static short TAINTPROPAGATE= AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_propagate");
+
+    public static void taint_propagate(final Object from, final Object to, final String name, final String location) {
+        AREDispatch.analysisStart (TAINTPROPAGATE);
+        AREDispatch.sendObject(from);
+        AREDispatch.sendObject(to);
+        AREDispatch.sendObjectPlusData (name);
+        AREDispatch.sendObjectPlusData (location);
+        AREDispatch.analysisEnd ();
+    }
+
+    public static short TAINTPROPAGATE2= AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_propagate2");
+
+    public static void taint_propagate2(final long from, final int frompid, final Object to, final String name, final String location) {
+        AREDispatch.analysisStart (TAINTPROPAGATE2);
+        AREDispatch.sendLong (from);
+        AREDispatch.sendInt (frompid);
+        AREDispatch.sendObject(to);
+        AREDispatch.sendObjectPlusData (name);
+        AREDispatch.sendObjectPlusData (location);
+        AREDispatch.analysisEnd ();
+    }
+
     public static short TAINTSINK= AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_sink");
 
     public static void taint_sink(final Object obj, final String name, final String location) {
@@ -15,11 +38,12 @@ public class ICCAnalysisStub {
         AREDispatch.analysisEnd ();
     }
 
-    public static short TAINTOBJECT = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_object");
+    public static short TAINTOBJECT = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_source");
 
-    public static void taint_object(final Object obj, final String name, final String location) {
+    public static void taint_source(final Object obj, final int flag, final String name, final String location) {
         AREDispatch.analysisStart (TAINTOBJECT);
         AREDispatch.sendObject(obj);
+        AREDispatch.sendInt (flag);
         AREDispatch.sendObjectPlusData (name);
         AREDispatch.sendObjectPlusData (location);
         AREDispatch.analysisEnd ();
