@@ -45,10 +45,9 @@ public class TaintDiSLClass {
         marker = BytecodeMarker.class,
         args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
         guard = Guard.ActivityGetIntentGuard.class)
-    public static void getIntent (final CallContext ac, final ArgumentProcessorContext pc) {
-        final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
+    public static void getIntent (final CallContext ac, final DynamicContext dc) {
         AREDispatch.NativeLog ("calling get intent");
-        final android.content.Intent intent = (Intent) pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS);
+        final android.content.Intent intent = dc.getStackValue(0, Intent.class);
         if(intent.hasExtra("svm_specialtag")) {
             ICCAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), intent, ac.getCallee (), ac.thisMethodFullName ());
         }
@@ -91,12 +90,16 @@ public class TaintDiSLClass {
         final Object [] args = pc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
         if(args.length==3){
             final Intent intent = (Intent)args[2];
-            if(intent.hasExtra("svm_specialtag")) {
-                final String tag = intent.getExtras().getString("specialtag");
-                if(tag !=null){
-                    AREDispatch.NativeLog ("HAHA get the special tag "+tag);
+            if(intent == null){
+
+            }else{
+                if(intent.hasExtra("svm_specialtag")) {
+                    final String tag = intent.getExtras().getString("specialtag");
+                    if(tag !=null){
+                        AREDispatch.NativeLog ("HAHA get the special tag "+tag);
+                    }
+                    ICCAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), intent, ac.getCallee (), ac.thisMethodFullName ());
                 }
-                ICCAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), intent, ac.getCallee (), ac.thisMethodFullName ());
             }
         }
     }
