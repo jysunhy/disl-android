@@ -1,6 +1,6 @@
 package ch.usi.dag.et2.tools.etracks.local;
 
-import ch.usi.dag.dislre.REDispatch;
+import ch.usi.dag.dislre.AREDispatch;
 
 
 /**
@@ -22,21 +22,21 @@ public final class ElephantTracksStub {
     private static final byte __ORDERING_ID__ = 0;
 
     //
-    
-    private static final short __onObjectAllocationId__ = REDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onObjectAllocation");
-    private static final short __onReferenceArrayAllocationId__ = REDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onReferenceArrayAllocation");
-    
-    private static final short __onObjectUse1Id__  = REDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onObjectUse1");
-    private static final short __onObjectUse2Id__  = REDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onObjectUse2");
 
-    private static final short __onReferenceElementUpdateId__ = REDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onReferenceElementUpdate");
-    private static final short __onInstanceReferenceFieldUpdateId__ = REDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onInstanceReferenceFieldUpdate");
-    private static final short __onStaticReferenceFieldUpdateId__ = REDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onStaticReferenceFieldUpdate");
+    private static final short __onObjectAllocationId__ = AREDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onObjectAllocation");
+    private static final short __onReferenceArrayAllocationId__ = AREDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onReferenceArrayAllocation");
 
-    private static final short __onMethodEntryId__ = REDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onMethodEntry");
-    private static final short __onMethodExitId__ = REDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onMethodExit");
-    private static final short __onStaticMethodEntryId__ = REDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onStaticMethodEntry");
-    private static final short __onStaticMethodExitId__ = REDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onStaticMethodExit");
+    private static final short __onObjectUse1Id__  = AREDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onObjectUse1");
+    private static final short __onObjectUse2Id__  = AREDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onObjectUse2");
+
+    private static final short __onReferenceElementUpdateId__ = AREDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onReferenceElementUpdate");
+    private static final short __onInstanceReferenceFieldUpdateId__ = AREDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onInstanceReferenceFieldUpdate");
+    private static final short __onStaticReferenceFieldUpdateId__ = AREDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onStaticReferenceFieldUpdate");
+
+    private static final short __onMethodEntryId__ = AREDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onMethodEntry");
+    private static final short __onMethodExitId__ = AREDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onMethodExit");
+    private static final short __onStaticMethodEntryId__ = AREDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onStaticMethodEntry");
+    private static final short __onStaticMethodExitId__ = AREDispatch.registerMethod ("ch.usi.dag.et2.tools.etracks.remote.ElephantTracksSkeleton.onStaticMethodExit");
 
     //
 
@@ -44,29 +44,29 @@ public final class ElephantTracksStub {
     public static void onObjectAllocation (
         final long time, final Object object
     ) {
-        REDispatch.analysisStart (__onObjectAllocationId__, __ORDERING_ID__);
+        AREDispatch.analysisStart (__onObjectAllocationId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (object);
-            REDispatch.sendObjectSize (object);
-            REDispatch.sendCurrentThread ();
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (object);
+            AREDispatch.sendObjectSize (object);
+            AREDispatch.sendCurrentThread ();
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
     }
 
 
     public static void onReferenceArrayAllocation (
         final long time, final Object object, final int length
     ) {
-        REDispatch.analysisStart (__onReferenceArrayAllocationId__, __ORDERING_ID__);
+        AREDispatch.analysisStart (__onReferenceArrayAllocationId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (object);
-            REDispatch.sendObjectSize (object);
-            REDispatch.sendInt (length); 
-            REDispatch.sendCurrentThread ();
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (object);
+            AREDispatch.sendObjectSize (object);
+            AREDispatch.sendInt (length);
+            AREDispatch.sendCurrentThread ();
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
     }
 
     //
@@ -74,27 +74,27 @@ public final class ElephantTracksStub {
     public static void onObjectUse1 (
         final long time, final Object object1
     ) {
-        REDispatch.analysisStart (__onObjectUse1Id__, __ORDERING_ID__);
+        AREDispatch.analysisStart (__onObjectUse1Id__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (object1);
-            REDispatch.sendCurrentThread ();
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (object1);
+            AREDispatch.sendCurrentThread ();
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
     }
 
 
     public static void onObjectUse2 (
         final long time, final Object object1, final Object object2
     ) {
-        REDispatch.analysisStart (__onObjectUse2Id__, __ORDERING_ID__);
+        AREDispatch.analysisStart (__onObjectUse2Id__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (object1);
-            REDispatch.sendObject (object2);
-            REDispatch.sendCurrentThread ();
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (object1);
+            AREDispatch.sendObject (object2);
+            AREDispatch.sendCurrentThread ();
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
     }
 
     //
@@ -104,34 +104,34 @@ public final class ElephantTracksStub {
         final long time, final Object owner, final int elementIndex,
         final Object oldTarget, final Object newTarget
     ) {
-        REDispatch.analysisStart (__onReferenceElementUpdateId__, __ORDERING_ID__);
+        AREDispatch.analysisStart (__onReferenceElementUpdateId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (owner);
-            REDispatch.sendInt (elementIndex);
-            REDispatch.sendObject (oldTarget);
-            REDispatch.sendObject (newTarget);
-            REDispatch.sendCurrentThread ();
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (owner);
+            AREDispatch.sendInt (elementIndex);
+            AREDispatch.sendObject (oldTarget);
+            AREDispatch.sendObject (newTarget);
+            AREDispatch.sendCurrentThread ();
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
     }
 
 
-    
+
     public static void onInstanceReferenceFieldUpdate (
         final long time, final Object owner, final String fieldName,
         final Object oldTarget, final Object newTarget
     ) {
-        REDispatch.analysisStart (__onInstanceReferenceFieldUpdateId__, __ORDERING_ID__);
+        AREDispatch.analysisStart (__onInstanceReferenceFieldUpdateId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObject (owner);
-            REDispatch.sendObjectPlusData (fieldName);
-            REDispatch.sendObject (oldTarget);
-            REDispatch.sendObject (newTarget);
-            REDispatch.sendCurrentThread ();
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObject (owner);
+            AREDispatch.sendObjectPlusData (fieldName);
+            AREDispatch.sendObject (oldTarget);
+            AREDispatch.sendObject (newTarget);
+            AREDispatch.sendCurrentThread ();
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
     }
 
 
@@ -139,16 +139,16 @@ public final class ElephantTracksStub {
         final long time, final Class <?> ownerClass, final String fieldName,
         final Object oldTarget, final Object newTarget
     ) {
-        REDispatch.analysisStart (__onStaticReferenceFieldUpdateId__, __ORDERING_ID__);
+        AREDispatch.analysisStart (__onStaticReferenceFieldUpdateId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendObjectPlusData (ownerClass);
-            REDispatch.sendObjectPlusData (fieldName);
-            REDispatch.sendObject (oldTarget);
-            REDispatch.sendObject (newTarget);
-            REDispatch.sendCurrentThread ();
+            AREDispatch.sendLong (time);
+            AREDispatch.sendObjectPlusData (ownerClass);
+            AREDispatch.sendObjectPlusData (fieldName);
+            AREDispatch.sendObject (oldTarget);
+            AREDispatch.sendObject (newTarget);
+            AREDispatch.sendCurrentThread ();
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
     }
 
     //
@@ -157,54 +157,54 @@ public final class ElephantTracksStub {
     public static void onMethodEntry (
         final long time, final int methodId, final Object receiver
     ) {
-        REDispatch.analysisStart (__onMethodEntryId__, __ORDERING_ID__);
+        AREDispatch.analysisStart (__onMethodEntryId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendInt (methodId);
-            REDispatch.sendObject (receiver);
-            REDispatch.sendCurrentThread ();
+            AREDispatch.sendLong (time);
+            AREDispatch.sendInt (methodId);
+            AREDispatch.sendObject (receiver);
+            AREDispatch.sendCurrentThread ();
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
     }
 
 
     public static void onMethodExit (
         final long time, final int methodId, final Object receiver
     ) {
-        REDispatch.analysisStart (__onMethodExitId__, __ORDERING_ID__);
+        AREDispatch.analysisStart (__onMethodExitId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendInt (methodId);
-            REDispatch.sendObject (receiver);
-            REDispatch.sendCurrentThread ();
+            AREDispatch.sendLong (time);
+            AREDispatch.sendInt (methodId);
+            AREDispatch.sendObject (receiver);
+            AREDispatch.sendCurrentThread ();
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
     }
 
 
     public static void onStaticMethodEntry (
         final long time, final int methodId
     ) {
-        REDispatch.analysisStart (__onStaticMethodEntryId__, __ORDERING_ID__);
+        AREDispatch.analysisStart (__onStaticMethodEntryId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendInt (methodId);
-            REDispatch.sendCurrentThread ();
+            AREDispatch.sendLong (time);
+            AREDispatch.sendInt (methodId);
+            AREDispatch.sendCurrentThread ();
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
     }
 
 
     public static void onStaticMethodExit (
         final long time, final int methodId
     ) {
-        REDispatch.analysisStart (__onStaticMethodExitId__, __ORDERING_ID__);
+        AREDispatch.analysisStart (__onStaticMethodExitId__, __ORDERING_ID__);
 
-            REDispatch.sendLong (time);
-            REDispatch.sendInt (methodId);
-            REDispatch.sendCurrentThread ();
+            AREDispatch.sendLong (time);
+            AREDispatch.sendInt (methodId);
+            AREDispatch.sendCurrentThread ();
 
-        REDispatch.analysisEnd ();
+        AREDispatch.analysisEnd ();
     }
 
 }

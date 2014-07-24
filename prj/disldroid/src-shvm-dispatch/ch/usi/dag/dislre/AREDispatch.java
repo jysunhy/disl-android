@@ -73,6 +73,10 @@ public class AREDispatch {
 
 	public static native void test();
 
+	public static native void sendObjectSize(Object obj);
+
+	public static native void sendCurrentThread();
+
 	//public static native void onFork(int parent);
 
 	/*static{
