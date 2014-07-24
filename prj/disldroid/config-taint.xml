@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<default-dislclass>output/build/analysis/ch/usi/dag/icc/disl/DiSLClass.class</default-dislclass>
+	<default-dislclass></default-dislclass>
 	<default-observed>true</default-observed>
 	<dexes> 
 		<dex>
 			<name>WriteFile.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>SendSMS.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>dynamicloaded.jar</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>Echoer.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>de.ecspride-1.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>Contacts.apk</name>
@@ -39,17 +39,17 @@
 		<dex>
 			<name>Browser.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>com.inspur.test2-1.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>AndroidPhoneContactsExample.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>core.jar</name>
@@ -71,7 +71,6 @@
 		<dex>
 			<name>framework.jar</name>
 			<isbootstrap>true</isbootstrap>
-			<!--<dislclass>output/build/analysis/ch/usi/dag/icc/disl/TaintDiSLClass.class</dislclass>-->
 		</dex>
 		<dex>
 			<name>services.jar</name>
