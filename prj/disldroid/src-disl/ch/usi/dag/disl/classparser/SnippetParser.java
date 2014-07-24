@@ -64,12 +64,12 @@ class SnippetParser extends AbstractParser {
         for (MethodNode method : classNode.methods) {
 
             // skip the constructor
-            if (method.name.equals(Constants.CONSTRUCTOR_NAME)) {
+            if (Constants.isConstructorName (method.name)) {
                 continue;
             }
 
             // skip static initializer
-            if (method.name.equals(Constants.STATIC_INIT_NAME)) {
+            if (Constants.isInitializerName (method.name)) {
                 continue;
             }
 

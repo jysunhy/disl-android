@@ -44,8 +44,7 @@ public class NewObjMarker extends AbstractDWRMarker {
 
                 MethodInsnNode min = (MethodInsnNode) instruction;
 
-                if (min.name.equals(Constants.CONSTRUCTOR_NAME)) {
-
+                if (Constants.isConstructorName (min.name)) {
                     regions.add(new MarkedRegion(instruction, instruction));
                 }
             }

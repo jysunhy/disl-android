@@ -1,5 +1,6 @@
 package ch.usi.dag.disl.test.utils;
 
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
 import java.io.File;
@@ -19,7 +20,7 @@ public abstract class Runner {
 
     protected static final Duration _INIT_TIME_LIMIT_ = Duration.of (3, SECONDS);
     protected static final Duration _TEST_TIME_LIMIT_ = Duration.of (60, SECONDS);
-    protected static final Duration _WATCH_DELAY_ = Duration.of (100, TimeUnit.MILLISECONDS);
+    protected static final Duration _WATCH_DELAY_ = Duration.of (100, MILLISECONDS);
 
     protected static final String _ENV_JAVA_HOME_ = "JAVA_HOME";
     protected static final String _JAVA_COMMAND_ = __getJavaCommand ();

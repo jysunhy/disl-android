@@ -11,6 +11,7 @@ import ch.usi.dag.dislreserver.reqdispatch.RequestHandler;
 
 public final class CloseHandler implements RequestHandler {
 
+    @Override
     public void handle (
         final DataInputStream is, final DataOutputStream os, final boolean debug
     ) {
@@ -21,12 +22,27 @@ public final class CloseHandler implements RequestHandler {
 
         // invoke atExit on all analyses
         for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
-            analysis.atExit ();
+            try {
+                analysis.atExit ();
+
+            } catch (final Exception e) {
+                // report error during analysis invocation
+                System.err.format (
+                    "DiSL-RE: exception in analysis %s.atExit(): %s\n",
+                    analysis.getClass ().getName (), e.getMessage ()
+                );
+
+                final Throwable cause = e.getCause ();
+                if (cause != null) {
+                    cause.printStackTrace (System.err);
+                }
+            }
         }
     }
 
+    @Override
     public void exit () {
-
+        // empty
     }
 
 }

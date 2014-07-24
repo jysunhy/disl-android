@@ -1,5 +1,7 @@
 package ch.usi.dag.dislreserver.shadow;
 
+import java.util.Formatter;
+
 // TODO ShadowString should better handle if String data are not send
 //      over network - throw a runtime exception ??
 public class ShadowString extends ShadowObject {
@@ -50,4 +52,19 @@ public class ShadowString extends ShadowObject {
         //
         return super.hashCode ();
     }
+
+    //
+
+    @Override
+    public void formatTo (
+        final Formatter formatter,
+        final int flags, final int width, final int precision
+    ) {
+        super.formatTo (formatter, flags, width, precision);
+
+        if (value != null) {
+            formatter.format (" <%s>", value);
+        }
+    }
+
 }

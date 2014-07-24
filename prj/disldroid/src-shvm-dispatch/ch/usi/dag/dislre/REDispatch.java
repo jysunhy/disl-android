@@ -42,6 +42,8 @@ public class REDispatch {
     public static native void sendLong(long longToSend);
     public static native void sendObject(Object objToSend);
     public static native void sendObjectPlusData(Object objToSend);
+    public static native void sendObjectSize(Object objToSend);
+    public static native void sendCurrentThread();
 
     // Methods use similar logic as Float.floatToIntBits() and
     // Double.doubleToLongBits() but implemented in the native code

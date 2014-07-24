@@ -38,7 +38,21 @@ class ObjectFreeTaskExecutor extends Thread {
 
         // invoke object free
         for (RemoteAnalysis ra : raSet) {
-            ra.objectFree(obj);
+            try {
+                ra.objectFree(obj);
+
+            } catch (final Exception e) {
+                // report error during analysis invocation
+                System.err.format (
+                    "DiSL-RE: exception in analysis %s.objectFree(): %s\n",
+                    ra.getClass ().getName (), e.getMessage ()
+                );
+
+                final Throwable cause = e.getCause ();
+                if (cause != null) {
+                    cause.printStackTrace (System.err);
+                }
+            }
         }
 
         // release shadow object

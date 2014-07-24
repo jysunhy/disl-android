@@ -11,10 +11,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.objectweb.asm.Label;
-import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.Type;
-import org.objectweb.asm.commons.AdviceAdapter;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
@@ -841,56 +839,6 @@ public abstract class AsmHelper {
         final Type methodType  = Type.getMethodType (boxType, primitiveType);
 
         return invokeStatic (boxType, "valueOf", methodType);
-    }
-
-
-    // Get the first valid mark of a method.
-    // For a constructor, the return value will be the instruction after
-    // the object initialization.
-    public static AbstractInsnNode findFirstValidMark(final MethodNode method) {
-        AbstractInsnNode first = method.instructions.getFirst();
-
-        // This is not a constructor. Just return the first instruction
-        if (!method.name.equals(Constants.CONSTRUCTOR_NAME)) {
-            return first;
-        }
-
-        // AdviceAdapter will help us with identifying the proper place where
-        // the constructor to super is called
-
-        // just need an object that will hold a value
-        // - we need access to the changeable boolean via reference
-        class DataHolder {
-            boolean trigger = false;
-        }
-        final DataHolder dh = new DataHolder();
-
-        final MethodVisitor emptyVisitor = new MethodVisitor (Opcodes.ASM4) {};
-        final AdviceAdapter adapter = new AdviceAdapter (
-            Opcodes.ASM4, emptyVisitor,
-            method.access, method.name, method.desc
-        ) {
-            @Override
-            public void onMethodEnter () {
-                dh.trigger = true;
-            }
-        };
-
-        // Iterate instruction list till the instruction right after the
-        // object initialization
-        adapter.visitCode();
-
-        for (final AbstractInsnNode node : Insns.selectAll (method.instructions)) {
-            node.accept(adapter);
-
-            // first instruction will be instruction after constructor call
-            if (dh.trigger) {
-                first = node.getNext();
-                break;
-            }
-        }
-
-        return first;
     }
 
     //

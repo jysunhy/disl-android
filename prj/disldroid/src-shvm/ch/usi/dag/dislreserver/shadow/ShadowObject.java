@@ -94,7 +94,9 @@ public class ShadowObject implements Formattable {
         final Formatter formatter,
         final int flags, final int width, final int precision
     ) {
-        formatter.format ("%s@%x", (shadowClass != null) ? shadowClass.getName () : "<missing>", shadowId);
+        formatter.format ("%s@%x", (shadowClass != null) ? 
+            shadowClass.getName () : "<missing>", shadowId
+        );
     }
 
 }

@@ -1,39 +1,41 @@
 package ch.usi.dag.dislreserver.msg.analyze;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
-public class AnalysisInvocation {
 
-    private Method analysisMethod;
-    private Object analysisInstance;
-    private List<Object> args;
+public final class AnalysisInvocation {
+
+    private final Method __method;
+    private final Object __target;
+    private final Object [] __args;
+
+    //
 
     public AnalysisInvocation (
-        Method analysisMethod, Object analysisInstance,
-        List<Object> args
+        final Method method, final Object target, final Object [] args
     ) {
-        super();
-        this.analysisMethod = analysisMethod;
-        this.analysisInstance = analysisInstance;
-        this.args = args;
+        __method = method;
+        __target = target;
+        __args = args;
     }
 
     public void invoke () {
         try {
-            analysisMethod.invoke (analysisInstance, args.toArray());
+            __method.invoke (__target, __args);
 
         } catch (final Exception e) {
             // report error during analysis invocation
-            final Throwable cause = e.getCause ();
 
             System.err.format (
-                "DiSL-RE: exception in analysis %s.%s(): ",
-                analysisMethod.getDeclaringClass ().getName (),
-                analysisMethod.getName ()
+                "DiSL-RE: exception in analysis %s.%s(): %s\n",
+                __method.getDeclaringClass ().getName (),
+                __method.getName (), e
             );
 
-            cause.printStackTrace();
+            final Throwable cause = e.getCause ();
+            if (cause != null) {
+                cause.printStackTrace (System.err);
+            }
         }
     }
 }

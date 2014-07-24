@@ -8,12 +8,12 @@ import ch.usi.dag.dislreserver.DiSLREServerFatalException;
 
 public class ShadowObjectTable {
 
-    private static final int INITIAL_TABLE_SIZE = 10000000;
-    private static ConcurrentHashMap<Long, ShadowObject> shadowObjects;
-
-    static {
+    private static final int INITIAL_TABLE_SIZE = 10_000_000;
+    
+    private static ConcurrentHashMap<Long, ShadowObject> 
         shadowObjects = new ConcurrentHashMap<Long, ShadowObject>(INITIAL_TABLE_SIZE);
-    }
+
+    //
 
     public static void register(ShadowObject newObj, boolean debug) {
 
@@ -132,5 +132,14 @@ public class ShadowObjectTable {
     //TODO: find a more elegant way to allow users to traverse the shadow object table
     public static Iterator<Entry<Long, ShadowObject>> getIterator() {
         return shadowObjects.entrySet().iterator();
+    }
+
+    public static Iterable <ShadowObject> objects () {
+        return new Iterable <ShadowObject>() {
+            @Override
+            public Iterator <ShadowObject> iterator () {
+                return shadowObjects.values ().iterator ();
+            }
+        };
     }
 }

@@ -31,7 +31,7 @@
 #ifdef NDEBUG
 #  define dprintf(args...) do {} while (0)
 #else
-#  define dprintf(args...) fprintf (stdout, args)
+#  define dprintf(args...) fprintf (stdout, args); fflush (stdout)
 #endif
 
 

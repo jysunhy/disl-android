@@ -61,7 +61,7 @@ abstract class AbstractParser {
         for (MethodNode method : dislClass.methods) {
 
             // get the code
-            if (method.name.equals(Constants.STATIC_INIT_NAME)) {
+            if (Constants.isInitializerName (method.name)) {
                 cinit = method;
                 break;
             }

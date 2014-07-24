@@ -1,5 +1,7 @@
 package ch.usi.dag.dislreserver.shadow;
 
+import java.util.Formatter;
+
 public abstract class ShadowClass extends ShadowObject {
 
     private final int          classId;
@@ -55,28 +57,31 @@ public abstract class ShadowClass extends ShadowObject {
 
     public abstract ShadowClass getSuperclass();
 
+    //
+    
     @Override
-    public boolean equals(Object obj) {
-
-        if (!(obj instanceof ShadowClass)) {
-            return false;
-        }
-
-        ShadowClass sClass = (ShadowClass) obj;
-
-        if (getName().equals(sClass.getName())
-                && getShadowClassLoader().equals(sClass.getShadowClassLoader())) {
-            return true;
+    public boolean equals (final Object object) {
+        if (object instanceof ShadowClass) {
+            final ShadowClass that = (ShadowClass) object;
+            if (this.getName ().equals (that.getName ())) {
+                return this.getShadowClassLoader ().equals (that.getShadowClassLoader ());
+            }
         }
 
         return false;
     }
 
+
     @Override
     public int hashCode() {
-        throw new UnsupportedOperationException("overriden equals, not overriden hashCode");
+        //
+        // TODO LB: Check ShadowClass.hashCode() -- it's needed.
+        //
+        return super.hashCode ();
     }
 
+    //
+    
     public abstract FieldInfo[] getFields();
 
     public abstract FieldInfo getField(String fieldName)
@@ -145,4 +150,15 @@ public abstract class ShadowClass extends ShadowObject {
         return buf.toString();
     }
 
+    //
+    
+    @Override
+    public void formatTo (
+        final Formatter formatter,
+        final int flags, final int width, final int precision
+    ) {
+        // FIXME LB: ShadowClass instances do not have a ShadowClass (of Class)
+        formatter.format ("java.lang.Class@%d <%s>", getId (), getName ());
+    }
+    
 }

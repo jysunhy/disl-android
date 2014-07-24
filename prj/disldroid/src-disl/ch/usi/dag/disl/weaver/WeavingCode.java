@@ -157,10 +157,12 @@ public class WeavingCode {
                 //               LDC (String class name)
                 // invokeInsn => INVOKEINTERFACE
                 //
-                final AbstractInsnNode ldcInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
+                final AbstractInsnNode classNameInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
                 final String internalName = __expectStringConstLoad (
-                    ldcInsn, "ClassContext", methodName, "internalName"
+                    classNameInsn, "ClassContext", methodName, "internalName"
                 );
+
+                // TODO Check that the literal is actually an internal name.
 
                 //
                 // Convert the literal to a type and replace the LDC of the
@@ -170,8 +172,8 @@ public class WeavingCode {
                 final Type type = Type.getObjectType (internalName);
                 insns.insert (invokeInsn, new LdcInsnNode (type));
 
-                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (ldcInsn), insns);
-                insns.remove (ldcInsn);
+                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (classNameInsn), insns);
+                insns.remove (classNameInsn);
                 insns.remove (invokeInsn);
 
             } else {
@@ -273,20 +275,20 @@ public class WeavingCode {
             } else if ("getStackValue".equals (methodName)) {
                 //
                 //               ALOAD (DynamicContext interface reference)
-                //               ICONST/BIPUSH (stack item index)
+                //               ICONST/BIPUSH/LDC (stack item index)
                 //               LDC/GETSTATIC (expected object type)
                 // invokeInsn => INVOKEINTERFACE
                 //
-                final AbstractInsnNode ldcInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
-                final AbstractInsnNode iconstInsn = Insns.REVERSE.nextRealInsn (ldcInsn);
+                final AbstractInsnNode valueTypeInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
+                final AbstractInsnNode itemIndexInsn = Insns.REVERSE.nextRealInsn (valueTypeInsn);
 
                 final Type expectedType = __expectTypeConstLoad (
-                    ldcInsn, "DynamicContext", methodName, "type"
+                    valueTypeInsn, "DynamicContext", methodName, "type"
                 );
 
                 if (basicFrame != null) {
                     final int itemIndex = __expectIntConstLoad (
-                        iconstInsn, "DynamicContext", methodName, "itemIndex"
+                        itemIndexInsn, "DynamicContext", methodName, "itemIndex"
                     );
 
                     final int itemCount = basicFrame.getStackSize();
@@ -334,9 +336,9 @@ public class WeavingCode {
                 __boxIfPrimitiveBefore (expectedType, insnAfterInvoke, insns);
 
                 // Remove the invocation sequence.
-                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (iconstInsn), insns);
-                insns.remove (iconstInsn);
-                insns.remove (ldcInsn);
+                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (itemIndexInsn), insns);
+                insns.remove (itemIndexInsn);
+                insns.remove (valueTypeInsn);
                 insns.remove (invokeInsn);
 
                 __removeIfCheckCast (insnAfterInvoke, insns);
@@ -344,12 +346,12 @@ public class WeavingCode {
             } else if ("getMethodArgumentValue".equals (methodName)) {
                 //
                 //               ALOAD (DynamicContext interface reference)
-                //               ICONST/BIPUSH (argument index)
+                //               ICONST/BIPUSH/LDC (argument index)
                 //               LDC/GETSTATIC (expected object type)
                 // invokeInsn => INVOKEINTERFACE
                 //
-                final AbstractInsnNode ldcInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
-                final AbstractInsnNode iconstInsn = Insns.REVERSE.nextRealInsn (ldcInsn);
+                final AbstractInsnNode valueTypeInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
+                final AbstractInsnNode paramIndexInsn = Insns.REVERSE.nextRealInsn (valueTypeInsn);
 
                 if (basicFrame == null) {
                     // TODO warn user that weaving location is unreachable.
@@ -358,7 +360,7 @@ public class WeavingCode {
 
                 // Prevent accessing invalid arguments.
                 final int paramIndex = __expectIntConstLoad (
-                    iconstInsn, "DynamicContext", methodName, "argumentIndex"
+                    paramIndexInsn, "DynamicContext", methodName, "argumentIndex"
                 );
 
                 final int paramCount = Type.getArgumentTypes (method.desc).length;
@@ -372,7 +374,7 @@ public class WeavingCode {
 
                 // Check that the expected type matches the actual argument type.
                 final Type expectedType = __expectTypeConstLoad (
-                    ldcInsn, "DynamicContext", methodName, "type"
+                    valueTypeInsn, "DynamicContext", methodName, "type"
                 );
 
                 final int paramSlot = AsmHelper.getParameterSlot (method, paramIndex);
@@ -393,9 +395,9 @@ public class WeavingCode {
                 __boxIfPrimitiveBefore (expectedType, insnAfterInvoke, insns);
 
                 // Remove the invocation sequence.
-                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (iconstInsn), insns);
-                insns.remove (iconstInsn);
-                insns.remove (ldcInsn);
+                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (paramIndexInsn), insns);
+                insns.remove (paramIndexInsn);
+                insns.remove (valueTypeInsn);
                 insns.remove (invokeInsn);
 
                 __removeIfCheckCast (insnAfterInvoke, insns);
@@ -403,12 +405,12 @@ public class WeavingCode {
             } else if ("getLocalVariableValue".equals (methodName)) {
                 //
                 //               ALOAD (DynamicContext interface reference)
-                //               ICONST/BIPUSH (variable slot argument)
+                //               ICONST/BIPUSH/LDC (variable slot argument)
                 //               LDC/GETSTATIC (expected object type)
                 // invokeInsn => INVOKEINTERFACE
                 //
-                final AbstractInsnNode ldcInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
-                final AbstractInsnNode iconstInsn = Insns.REVERSE.nextRealInsn (ldcInsn);
+                final AbstractInsnNode valueTypeInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
+                final AbstractInsnNode slotIndexInsn = Insns.REVERSE.nextRealInsn (valueTypeInsn);
 
                 if (basicFrame == null) {
                     // TODO warn user that weaving location is unreachable.
@@ -417,7 +419,7 @@ public class WeavingCode {
 
                 // Prevent accessing invalid variable slots.
                 final int varSlot = __expectIntConstLoad (
-                    iconstInsn, "DynamicContext", methodName, "slotIndex"
+                    slotIndexInsn, "DynamicContext", methodName, "slotIndex"
                 );
 
                 final int varSlotCount = basicFrame.getLocals ();
@@ -431,7 +433,7 @@ public class WeavingCode {
 
                 // Check that the expected type matches the actual argument type.
                 final Type expectedType = __expectTypeConstLoad (
-                    ldcInsn, "DynamicContext", methodName, "type"
+                    valueTypeInsn, "DynamicContext", methodName, "type"
                 );
                 final Type actualType = basicFrame.getLocal (varSlot).getType ();
 
@@ -450,9 +452,9 @@ public class WeavingCode {
                 __boxIfPrimitiveBefore (expectedType, insnAfterInvoke, insns);
 
                 // Remove the invocation sequence.
-                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (iconstInsn), insns);
-                insns.remove (iconstInsn);
-                insns.remove (ldcInsn);
+                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (slotIndexInsn), insns);
+                insns.remove (slotIndexInsn);
+                insns.remove (valueTypeInsn);
                 insns.remove (invokeInsn);
 
                 __removeIfCheckCast (insnAfterInvoke, insns);
@@ -469,12 +471,12 @@ public class WeavingCode {
                 //               LDC/GETSTATIC (field type)
                 // invokeInsn => INVOKEINTERFACE
                 //
-                final AbstractInsnNode fieldTypeLdcInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
-                final AbstractInsnNode fieldNameLdcInsn = Insns.REVERSE.nextRealInsn (fieldTypeLdcInsn);
-                final AbstractInsnNode ownerTypeLdcInsn = Insns.REVERSE.nextRealInsn (fieldNameLdcInsn);
+                final AbstractInsnNode fieldTypeInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
+                final AbstractInsnNode fieldNameInsn = Insns.REVERSE.nextRealInsn (fieldTypeInsn);
+                final AbstractInsnNode ownerTypeInsn = Insns.REVERSE.nextRealInsn (fieldNameInsn);
 
                 final Type fieldType = __expectTypeConstLoad (
-                    fieldTypeLdcInsn, "DynamicContext", methodName, "fieldType"
+                    fieldTypeInsn, "DynamicContext", methodName, "fieldType"
                 );
 
                 //
@@ -484,11 +486,11 @@ public class WeavingCode {
                 //
 
                 final String fieldName = __expectStringConstLoad (
-                    fieldNameLdcInsn, "DynamicContext", methodName, "fieldName"
+                    fieldNameInsn, "DynamicContext", methodName, "fieldName"
                 );
 
                 final Type ownerType = __expectTypeConstLoad (
-                    ownerTypeLdcInsn, "DynamicContext", methodName, "ownerType"
+                    ownerTypeInsn, "DynamicContext", methodName, "ownerType"
                 );
 
                 insns.insertBefore (insnAfterInvoke, AsmHelper.getField (ownerType, fieldName, fieldType));
@@ -499,14 +501,14 @@ public class WeavingCode {
                 //
                 // BUT, keep the owner reference load instruction.
                 //
-                final AbstractInsnNode ownerLoadInsn = Insns.REVERSE.nextRealInsn (ownerTypeLdcInsn);
+                final AbstractInsnNode ownerLoadInsn = Insns.REVERSE.nextRealInsn (ownerTypeInsn);
                 final AbstractInsnNode ifaceLoadInsn = Insns.REVERSE.nextRealInsn (ownerLoadInsn);
 
                 __removeInsn  (Insn.ALOAD, ifaceLoadInsn, insns);
                 // keep the owner load instruction
-                insns.remove (ownerTypeLdcInsn);
-                insns.remove (fieldNameLdcInsn);
-                insns.remove (fieldTypeLdcInsn);
+                insns.remove (ownerTypeInsn);
+                insns.remove (fieldNameInsn);
+                insns.remove (fieldTypeInsn);
                 insns.remove (invokeInsn);
 
                 __removeIfCheckCast (insnAfterInvoke, insns);
@@ -524,14 +526,14 @@ public class WeavingCode {
                 //               LDC/GETSTATIC (expected value type)
                 // invokeInsn => INVOKEINTERFACE
                 //
-                final AbstractInsnNode valueTypeLdcInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
-                final AbstractInsnNode fieldDescLdcInsn = Insns.REVERSE.nextRealInsn (valueTypeLdcInsn);
-                final AbstractInsnNode fieldNameLdcInsn = Insns.REVERSE.nextRealInsn (fieldDescLdcInsn);
-                final AbstractInsnNode ownerNameLdcInsn = Insns.REVERSE.nextRealInsn (fieldNameLdcInsn);
+                final AbstractInsnNode valueTypeInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
+                final AbstractInsnNode fieldDescInsn = Insns.REVERSE.nextRealInsn (valueTypeInsn);
+                final AbstractInsnNode fieldNameInsn = Insns.REVERSE.nextRealInsn (fieldDescInsn);
+                final AbstractInsnNode ownerNameInsn = Insns.REVERSE.nextRealInsn (fieldNameInsn);
 
                 // TODO Check that the expected type matches the described field type.
                 final Type valueType = __expectTypeConstLoad (
-                    valueTypeLdcInsn, "DynamicContext", methodName, "type"
+                    valueTypeInsn, "DynamicContext", methodName, "type"
                 );
 
                 //
@@ -540,15 +542,15 @@ public class WeavingCode {
                 // unnecessary boxing later.
                 //
                 final String fieldDesc = __expectStringConstLoad (
-                    fieldDescLdcInsn, "DynamicContext", methodName, "fieldDesc"
+                    fieldDescInsn, "DynamicContext", methodName, "fieldDesc"
                 );
 
                 final String fieldName = __expectStringConstLoad (
-                    fieldNameLdcInsn, "DynamicContext", methodName, "fieldName"
+                    fieldNameInsn, "DynamicContext", methodName, "fieldName"
                 );
 
                 final String ownerName = __expectStringConstLoad (
-                    ownerNameLdcInsn, "DynamicContext", methodName, "ownerName"
+                    ownerNameInsn, "DynamicContext", methodName, "ownerName"
                 );
 
                 insns.insertBefore (insnAfterInvoke, AsmHelper.getField (ownerName, fieldName, fieldDesc));
@@ -559,15 +561,15 @@ public class WeavingCode {
                 //
                 // BUT, keep the owner reference load instruction.
                 //
-                final AbstractInsnNode ownerLoadInsn = Insns.REVERSE.nextRealInsn (ownerNameLdcInsn);
+                final AbstractInsnNode ownerLoadInsn = Insns.REVERSE.nextRealInsn (ownerNameInsn);
                 final AbstractInsnNode ifaceLoadInsn = Insns.REVERSE.nextRealInsn (ownerLoadInsn);
 
                 __removeInsn  (Insn.ALOAD, ifaceLoadInsn, insns);
                 // keep the owner load instruction
-                insns.remove (ownerNameLdcInsn);
-                insns.remove (fieldNameLdcInsn);
-                insns.remove (fieldDescLdcInsn);
-                insns.remove (valueTypeLdcInsn);
+                insns.remove (ownerNameInsn);
+                insns.remove (fieldNameInsn);
+                insns.remove (fieldDescInsn);
+                insns.remove (valueTypeInsn);
                 insns.remove (invokeInsn);
 
                 __removeIfCheckCast (insnAfterInvoke, insns);
@@ -583,22 +585,22 @@ public class WeavingCode {
                 //               LDC/GETSTATIC (field type)
                 // invokeInsn => INVOKEINTERFACE
                 //
-                final AbstractInsnNode fieldTypeLdcInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
-                final AbstractInsnNode fieldNameLdcInsn = Insns.REVERSE.nextRealInsn (fieldTypeLdcInsn);
-                final AbstractInsnNode ownerTypeLdcInsn = Insns.REVERSE.nextRealInsn (fieldNameLdcInsn);
+                final AbstractInsnNode fieldTypeInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
+                final AbstractInsnNode fieldNameInsn = Insns.REVERSE.nextRealInsn (fieldTypeInsn);
+                final AbstractInsnNode ownerTypeInsn = Insns.REVERSE.nextRealInsn (fieldNameInsn);
 
                 //
 
                 final Type ownerType = __expectTypeConstLoad (
-                    ownerTypeLdcInsn, "DynamicContext", methodName, "ownerType"
+                    ownerTypeInsn, "DynamicContext", methodName, "ownerType"
                 );
 
                 final String fieldName = __expectStringConstLoad (
-                    fieldNameLdcInsn, "DynamicContext", methodName, "fieldName"
+                    fieldNameInsn, "DynamicContext", methodName, "fieldName"
                 );
 
                 final Type fieldType = __expectTypeConstLoad (
-                    fieldTypeLdcInsn, "DynamicContext", methodName, "fieldType"
+                    fieldTypeInsn, "DynamicContext", methodName, "fieldType"
                 );
 
                 //
@@ -611,10 +613,10 @@ public class WeavingCode {
                 __boxIfPrimitiveBefore (fieldType, insnAfterInvoke, insns);
 
                 // Remove the invocation sequence.
-                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (ownerTypeLdcInsn), insns);
-                insns.remove (ownerTypeLdcInsn);
-                insns.remove (fieldNameLdcInsn);
-                insns.remove (fieldTypeLdcInsn);
+                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (ownerTypeInsn), insns);
+                insns.remove (ownerTypeInsn);
+                insns.remove (fieldNameInsn);
+                insns.remove (fieldTypeInsn);
                 insns.remove (invokeInsn);
 
                 __removeIfCheckCast (insnAfterInvoke, insns);
@@ -631,14 +633,14 @@ public class WeavingCode {
                 //               LDC/GETSTATIC (expected value type)
                 // invokeInsn => INVOKEINTERFACE
                 //
-                final AbstractInsnNode valueTypeLdcInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
-                final AbstractInsnNode fieldDescLdcInsn = Insns.REVERSE.nextRealInsn (valueTypeLdcInsn);
-                final AbstractInsnNode fieldNameLdcInsn = Insns.REVERSE.nextRealInsn (fieldDescLdcInsn);
-                final AbstractInsnNode ownerNameLdcInsn = Insns.REVERSE.nextRealInsn (fieldNameLdcInsn);
+                final AbstractInsnNode valueTypeInsn = Insns.REVERSE.nextRealInsn (invokeInsn);
+                final AbstractInsnNode fieldDescInsn = Insns.REVERSE.nextRealInsn (valueTypeInsn);
+                final AbstractInsnNode fieldNameInsn = Insns.REVERSE.nextRealInsn (fieldDescInsn);
+                final AbstractInsnNode ownerNameInsn = Insns.REVERSE.nextRealInsn (fieldNameInsn);
 
                 // TODO Check that the expected type matches the described field type.
                 final Type valueType = __expectTypeConstLoad (
-                    valueTypeLdcInsn, "DynamicContext", methodName, "valueType"
+                    valueTypeInsn, "DynamicContext", methodName, "valueType"
                 );
 
                 //
@@ -647,26 +649,26 @@ public class WeavingCode {
                 // unnecessary boxing later.
                 //
                 final String fieldDesc = __expectStringConstLoad (
-                    fieldDescLdcInsn, "DynamicContext", methodName, "fieldDesc"
+                    fieldDescInsn, "DynamicContext", methodName, "fieldDesc"
                 );
 
                 final String fieldName = __expectStringConstLoad (
-                    fieldNameLdcInsn, "DynamicContext", methodName, "fieldName"
+                    fieldNameInsn, "DynamicContext", methodName, "fieldName"
                 );
 
                 final String ownerName = __expectStringConstLoad (
-                    ownerNameLdcInsn, "DynamicContext", methodName, "ownerName"
+                    ownerNameInsn, "DynamicContext", methodName, "ownerName"
                 );
 
                 insns.insertBefore (insnAfterInvoke, AsmHelper.getStatic (ownerName, fieldName, fieldDesc));
                 __boxIfPrimitiveBefore (Type.getType (fieldDesc), insnAfterInvoke, insns);
 
                 // Remove the invocation sequence.
-                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (ownerNameLdcInsn), insns);
-                insns.remove (ownerNameLdcInsn);
-                insns.remove (fieldNameLdcInsn);
-                insns.remove (fieldDescLdcInsn);
-                insns.remove (valueTypeLdcInsn);
+                __removeInsn (Insn.ALOAD, Insns.REVERSE.nextRealInsn (ownerNameInsn), insns);
+                insns.remove (ownerNameInsn);
+                insns.remove (fieldNameInsn);
+                insns.remove (fieldDescInsn);
+                insns.remove (valueTypeInsn);
                 insns.remove (invokeInsn);
 
                 __removeIfCheckCast (insnAfterInvoke, insns);

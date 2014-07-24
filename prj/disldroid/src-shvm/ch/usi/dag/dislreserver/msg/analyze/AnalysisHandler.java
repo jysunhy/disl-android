@@ -84,25 +84,30 @@ public final class AnalysisHandler implements RequestHandler {
             final short argsLength = is.readShort ();
             if (argsLength < 0) {
                 throw new DiSLREServerException (String.format (
-                    "invalid value of marshalled argument data length for analysis method %d (%s.%s): %d",
+                    "invalid length of marshaled argument data for analysis method %d (%s.%s): %d",
                     methodId, method.getDeclaringClass ().getName (),
                     method.getName (), argsLength
                 ));
             }
 
             // read argument values data according to argument types
-            int readLength = 0;
-            final List <Object> args = new LinkedList <Object> ();
-            for (Class <?> argClass : method.getParameterTypes ()) {
-                readLength += unmarshalAndCollectArgument (
-                    is, argClass, method, args
+            final Class <?> [] paramTypes = method.getParameterTypes ();
+            final Object [] args = new Object [paramTypes.length];
+            
+            int argsRead = 0;
+            int argIndex = 0;
+            for (final Class <?> argClass : paramTypes) {
+                argsRead += unmarshalArgument (
+                    is, argClass, method, argIndex, args
                 );
+                
+                argIndex += 1;
             }
 
-            if (readLength != argsLength) {
+            if (argsRead != argsLength) {
                 throw new DiSLREServerException (String.format (
                     "received %d, but unmarshalled %d bytes of argument data for analysis method %d (%s.%s)",
-                    argsLength, readLength, methodId, method.getDeclaringClass ().getName (),
+                    argsLength, argsRead, methodId, method.getDeclaringClass ().getName (),
                     method.getName ()
                 ));
             }
@@ -116,6 +121,7 @@ public final class AnalysisHandler implements RequestHandler {
                     method.getName()
                 );
             }
+            
             return new AnalysisInvocation (
                 method, amh.getAnalysisInstance (), args
             );
@@ -128,61 +134,55 @@ public final class AnalysisHandler implements RequestHandler {
     }
 
 
-    private int unmarshalAndCollectArgument (
+    private int unmarshalArgument (
         final DataInputStream is, final Class <?> argClass,
-        final Method analysisMethod, List <Object> args
+        final Method analysisMethod, final int index, final Object [] args
     ) throws IOException, DiSLREServerException {
 
-        if (argClass.equals (boolean.class)) {
-            args.add (is.readBoolean ());
+        if (boolean.class.equals (argClass)) {
+            args [index] = is.readBoolean ();
             return Byte.SIZE / Byte.SIZE;
         }
 
-        if (argClass.equals (char.class)) {
-            args.add (is.readChar ());
+        if (char.class.equals (argClass)) {
+            args [index] = is.readChar ();
             return Character.SIZE / Byte.SIZE;
         }
 
-        if (argClass.equals (byte.class)) {
-            args.add (is.readByte ());
+        if (byte.class.equals (argClass)) {
+            args [index] = is.readByte ();
             return Byte.SIZE / Byte.SIZE;
         }
 
-        if (argClass.equals (short.class)) {
-            args.add (is.readShort ());
+        if (short.class.equals (argClass)) {
+            args [index] = is.readShort ();
             return Short.SIZE / Byte.SIZE;
         }
 
-        if (argClass.equals (int.class)) {
-            args.add (is.readInt ());
+        if (int.class.equals (argClass)) {
+            args [index] = is.readInt ();
             return Integer.SIZE / Byte.SIZE;
         }
 
-        if (argClass.equals (long.class)) {
-            args.add (is.readLong ());
+        if (long.class.equals (argClass)) {
+            args [index] = is.readLong ();
             return Long.SIZE / Byte.SIZE;
         }
 
-        if (argClass.equals (float.class)) {
-            args.add (is.readFloat ());
+        if (float.class.equals (argClass)) {
+            args [index] = is.readFloat ();
             return Float.SIZE / Byte.SIZE;
         }
 
-        if (argClass.equals (double.class)) {
-            args.add (is.readDouble ());
+        if (double.class.equals (argClass)) {
+            args [index] = is.readDouble ();
             return Double.SIZE / Byte.SIZE;
         }
 
-        if (ShadowObject.class.isAssignableFrom(argClass)) {
-            long net_ref = is.readLong();
-
-            // null handling
-            if (net_ref == 0) {
-                args.add(null);
-            } else {
-                args.add(ShadowObjectTable.get(net_ref));
-            }
-
+        if (ShadowObject.class.isAssignableFrom (argClass)) {
+            // zero tag means null
+            final long tag = is.readLong();
+            args [index] = (tag == 0) ? null : ShadowObjectTable.get (tag);
             return Long.SIZE / Byte.SIZE;
         }
 
