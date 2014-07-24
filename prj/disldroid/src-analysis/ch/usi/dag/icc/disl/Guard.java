@@ -147,4 +147,31 @@ public class Guard {
             return false;
         }
     }
+    public static class IntentGetExtrasGuard {
+        @GuardMethod
+        public static boolean isApplicable (final CallContext msc) {
+            final String name = msc.getCallee ();
+            final String list[] = { "Intent.getExtras" };
+            for (final String element : list) {
+                if (name.contains (element)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public static class IntentBundleGetString {
+        @GuardMethod
+        public static boolean isApplicable (final CallContext msc) {
+            final String name = msc.getCallee ();
+            final String list[] = { "Bundle.getString" };
+            for (final String element : list) {
+                if (name.contains (element)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 }

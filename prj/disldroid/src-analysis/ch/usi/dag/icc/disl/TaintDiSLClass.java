@@ -53,6 +53,26 @@ public class TaintDiSLClass {
         }
     }
 
+    @AfterReturning (
+        marker = BytecodeMarker.class,
+        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+        guard = Guard.IntentGetExtrasGuard.class)
+    public static void getIntentExtras (final CallContext ac, final DynamicContext dc, final ArgumentProcessorContext pc) {
+        AREDispatch.NativeLog ("calling get intent extra");
+        final Object bundle = dc.getStackValue(0, Object.class);
+        ICCAnalysisStub.taint_propagate (pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS), bundle, ac.getCallee (), ac.thisMethodFullName ());
+    }
+
+    @AfterReturning (
+        marker = BytecodeMarker.class,
+        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+        guard = Guard.IntentBundleGetString.class)
+    public static void getIntentBundleString (final CallContext ac, final DynamicContext dc, final ArgumentProcessorContext pc) {
+        AREDispatch.NativeLog ("calling get intent extra");
+        final Object str = dc.getStackValue(0, Object.class);
+        ICCAnalysisStub.taint_propagate (pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS), str, ac.getCallee (), ac.thisMethodFullName ());
+    }
+
     @Before (
         marker = BytecodeMarker.class,
         args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
