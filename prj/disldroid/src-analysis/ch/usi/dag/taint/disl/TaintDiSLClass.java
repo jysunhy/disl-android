@@ -1,4 +1,4 @@
-package ch.usi.dag.icc.disl;
+package ch.usi.dag.taint.disl;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,7 +11,7 @@ import ch.usi.dag.disl.marker.BytecodeMarker;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorMode;
 import ch.usi.dag.dislre.AREDispatch;
-import ch.usi.dag.icc.analysis.ICCAnalysisStub;
+import ch.usi.dag.taint.analysis.TaintAnalysisStub;
 
 public class TaintDiSLClass {
     @Before (
@@ -22,8 +22,8 @@ public class TaintDiSLClass {
         final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
         AREDispatch.NativeLog ("put field into intent");
         final android.content.Intent intent = (Intent) pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS);
-        ICCAnalysisStub.taint_propagate (args[0], intent, ac.getCallee (), ac.thisMethodFullName ());
-        ICCAnalysisStub.taint_propagate (args[1], intent, ac.getCallee (), ac.thisMethodFullName ());
+        TaintAnalysisStub.taint_propagate (args[0], intent, ac.getCallee (), ac.thisMethodFullName ());
+        TaintAnalysisStub.taint_propagate (args[1], intent, ac.getCallee (), ac.thisMethodFullName ());
     }
 
     @Before (
@@ -35,6 +35,7 @@ public class TaintDiSLClass {
         AREDispatch.NativeLog ("in start activity for result test");
         AREDispatch.NativeLog (Integer.toString (args.length));
         final android.content.Intent intent = (Intent)args[0];
+        TaintAnalysisStub.taint_prepare (intent, ac.getCallee (), ac.thisMethodFullName ());
         intent.putExtra ("svm_specialtag", "123");
         intent.putExtra ("svm_intentid", AREDispatch.getObjectId (intent));
         intent.putExtra ("svm_pid", AREDispatch.getThisProcId ());
@@ -49,7 +50,7 @@ public class TaintDiSLClass {
         AREDispatch.NativeLog ("calling get intent");
         final android.content.Intent intent = dc.getStackValue(0, Intent.class);
         if(intent.hasExtra("svm_specialtag")) {
-            ICCAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), intent, ac.getCallee (), ac.thisMethodFullName ());
+            TaintAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), intent, ac.getCallee (), ac.thisMethodFullName ());
         }
     }
 
@@ -60,7 +61,7 @@ public class TaintDiSLClass {
     public static void getIntentExtras (final CallContext ac, final DynamicContext dc, final ArgumentProcessorContext pc) {
         AREDispatch.NativeLog ("calling get intent extra");
         final Object bundle = dc.getStackValue(0, Object.class);
-        ICCAnalysisStub.taint_propagate (pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS), bundle, ac.getCallee (), ac.thisMethodFullName ());
+        TaintAnalysisStub.taint_propagate (pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS), bundle, ac.getCallee (), ac.thisMethodFullName ());
     }
 
     @AfterReturning (
@@ -70,7 +71,7 @@ public class TaintDiSLClass {
     public static void getIntentBundleString (final CallContext ac, final DynamicContext dc, final ArgumentProcessorContext pc) {
         AREDispatch.NativeLog ("calling get intent extra");
         final Object str = dc.getStackValue(0, Object.class);
-        ICCAnalysisStub.taint_propagate (pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS), str, ac.getCallee (), ac.thisMethodFullName ());
+        TaintAnalysisStub.taint_propagate (pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS), str, ac.getCallee (), ac.thisMethodFullName ());
     }
 
     @Before (
@@ -82,6 +83,7 @@ public class TaintDiSLClass {
         AREDispatch.NativeLog ("in set activity result");
         AREDispatch.NativeLog (Integer.toString (args.length));
         final android.content.Intent intent = (Intent)args[1];
+        TaintAnalysisStub.taint_prepare (intent, ac.getCallee (), ac.thisMethodFullName ());
         intent.putExtra ("svm_specialtag", "456");
         intent.putExtra ("svm_intentid", AREDispatch.getObjectId (intent));
         intent.putExtra ("svm_pid", AREDispatch.getThisProcId ());
@@ -118,7 +120,7 @@ public class TaintDiSLClass {
                     if(tag !=null){
                         AREDispatch.NativeLog ("HAHA get the special tag "+tag);
                     }
-                    ICCAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), intent, ac.getCallee (), ac.thisMethodFullName ());
+                    TaintAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), intent, ac.getCallee (), ac.thisMethodFullName ());
                 }
             }
         }
@@ -149,7 +151,7 @@ public class TaintDiSLClass {
             }
         }
         final String methodName = ac.getCallee ();
-        ICCAnalysisStub.dynamic_alert (methodName, ac.thisMethodFullName(), arg);
+        TaintAnalysisStub.dynamic_alert (methodName, ac.thisMethodFullName(), arg);
     }
     @AfterReturning (
             marker = BytecodeMarker.class,
@@ -176,7 +178,7 @@ public class TaintDiSLClass {
                 }
             }
             final String methodName = ac.getCallee ();
-            ICCAnalysisStub.dynamic_alert (methodName, ac.thisMethodFullName(), arg);
+            TaintAnalysisStub.dynamic_alert (methodName, ac.thisMethodFullName(), arg);
         }
 
     @AfterReturning (
@@ -184,7 +186,7 @@ public class TaintDiSLClass {
         args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
         guard = Guard.APISourceGuard.class)
     public static void afterAPISourceInvoke (final DynamicContext dc, final CallContext ac) {
-        ICCAnalysisStub.taint_source(dc.getStackValue(0, String.class),1, ac.getCallee(), ac.thisMethodFullName());
+        TaintAnalysisStub.taint_source(dc.getStackValue(0, String.class),1, ac.getCallee(), ac.thisMethodFullName());
     }
 
     @AfterReturning (
@@ -193,7 +195,7 @@ public class TaintDiSLClass {
             guard = Guard.APISinkGuard.class)
         public static void afterAPISinkInvoke (final CallContext ac, final ArgumentProcessorContext pc) {
             final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
-            ICCAnalysisStub.taint_sink(args[2], ac.getCallee(), ac.thisMethodFullName());
+            TaintAnalysisStub.taint_sink(args[2], ac.getCallee(), ac.thisMethodFullName());
         }
 
     @AfterReturning (
@@ -202,7 +204,7 @@ public class TaintDiSLClass {
             guard = Guard.IOSourceGuard.class)
         public static void afterIOSourceInvoke (final CallContext ac) {
             final String methodName = ac.getCallee ();
-            ICCAnalysisStub.source_alert (methodName, ac.thisMethodFullName());
+            TaintAnalysisStub.source_alert (methodName, ac.thisMethodFullName());
         }
 
     @AfterReturning (
@@ -211,6 +213,6 @@ public class TaintDiSLClass {
             guard = Guard.IOSinkGuard.class)
         public static void afterIOSinkInvoke (final CallContext ac) {
             final String methodName = ac.getCallee ();
-            ICCAnalysisStub.sink_alert (methodName, ac.thisMethodFullName());
+            TaintAnalysisStub.sink_alert (methodName, ac.thisMethodFullName());
         }
 }
