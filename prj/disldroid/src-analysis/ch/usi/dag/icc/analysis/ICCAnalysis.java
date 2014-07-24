@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
+import ch.usi.dag.disldroidreserver.shadow.NetReferenceHelper;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
 import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
@@ -18,8 +19,11 @@ public class ICCAnalysis extends RemoteAnalysis {
         System.out.println("Proc("+context.pid()+":"+context.getPname ()+") tainted from Object ##"+from.getId()+"## to ##"+to.getId()+"## when invoking " + name + " in "+location);
     }
 
+    public void taint_prepare(final Context context, final ShadowObject from, final ShadowString name, final ShadowString location){
+        System.out.println("Proc("+context.pid()+":"+context.getPname ()+") sending Object ##"+from.getId ()+"## when invoking " + name + " in "+location);
+    }
     public void taint_propagate2(final Context context, final long from, final int fromPid, final ShadowObject to, final ShadowString name, final ShadowString location){
-        System.out.println("Proc("+context.pid()+":"+context.getPname ()+") tainted from Object ##"+from+"("+fromPid+")## to ##"+to.getId()+"## when invoking " + name + " in "+location);
+        System.out.println("Proc("+context.pid()+":"+context.getPname ()+") tainted from Object ##"+NetReferenceHelper.get_object_id (from)+"("+fromPid+")## to ##"+to.getId()+"## when invoking " + name + " in "+location);
     }
 
 	public void taint_sink(final Context context, final ShadowObject obj, final ShadowString name, final ShadowString location){
