@@ -5,7 +5,7 @@ import ch.usi.dag.dislre.AREDispatch;
 
 public class TaintAnalysisStub {
 
-    public static short TAINTPREPARE= AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_prepare");
+    public static short TAINTPREPARE= AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.taint_prepare");
 
     public static void taint_prepare(final Object from, final String name, final String location) {
         AREDispatch.analysisStart (TAINTPREPARE);
@@ -15,7 +15,7 @@ public class TaintAnalysisStub {
         AREDispatch.analysisEnd ();
     }
 
-    public static short TAINTPROPAGATE= AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_propagate");
+    public static short TAINTPROPAGATE= AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.taint_propagate");
 
     public static void taint_propagate(final Object from, final Object to, final String name, final String location) {
         AREDispatch.analysisStart (TAINTPROPAGATE);
@@ -26,7 +26,7 @@ public class TaintAnalysisStub {
         AREDispatch.analysisEnd ();
     }
 
-    public static short TAINTPROPAGATE2= AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_propagate2");
+    public static short TAINTPROPAGATE2= AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.taint_propagate2");
 
     public static void taint_propagate2(final long from, final int frompid, final Object to, final String name, final String location) {
         AREDispatch.analysisStart (TAINTPROPAGATE2);
@@ -38,7 +38,7 @@ public class TaintAnalysisStub {
         AREDispatch.analysisEnd ();
     }
 
-    public static short TAINTSINK= AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_sink");
+    public static short TAINTSINK= AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.taint_sink");
 
     public static void taint_sink(final Object obj, final String name, final String location) {
         AREDispatch.analysisStart (TAINTSINK);
@@ -48,7 +48,7 @@ public class TaintAnalysisStub {
         AREDispatch.analysisEnd ();
     }
 
-    public static short TAINTOBJECT = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.taint_source");
+    public static short TAINTOBJECT = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.taint_source");
 
     public static void taint_source(final Object obj, final int flag, final String name, final String location) {
         AREDispatch.analysisStart (TAINTOBJECT);
@@ -59,7 +59,7 @@ public class TaintAnalysisStub {
         AREDispatch.analysisEnd ();
     }
 
-    public static short DYNAMIC = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.dynamic_alert");
+    public static short DYNAMIC = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.dynamic_alert");
 
     public static void dynamic_alert (final String name, final String location, final String args) {
         AREDispatch.analysisStart (DYNAMIC);
@@ -69,7 +69,7 @@ public class TaintAnalysisStub {
         AREDispatch.analysisEnd ();
     }
 
-    public static short SOURCE = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.source_alert");
+    public static short SOURCE = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.source_alert");
 
     public static void source_alert (final String name, final String location) {
         AREDispatch.analysisStart (SOURCE);
@@ -78,7 +78,7 @@ public class TaintAnalysisStub {
         AREDispatch.analysisEnd ();
     }
 
-    public static short SINK = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.sink_alert");
+    public static short SINK = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.sink_alert");
 
     public static void sink_alert (final String name, final String location) {
         AREDispatch.analysisStart (SINK);
@@ -87,7 +87,7 @@ public class TaintAnalysisStub {
         AREDispatch.analysisEnd ();
     }
 
-    public static short PERMISSION = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.permission_alert");
+    public static short PERMISSION = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.permission_alert");
 
     public static void permission_alert (final int permission, final String info) {
         AREDispatch.analysisStart (PERMISSION);
@@ -97,7 +97,7 @@ public class TaintAnalysisStub {
     }
 
 
-    public static short CSC = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.callServiceInClient");
+    public static short CSC = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.callServiceInClient");
 
     public static void callServiceInClient (final String methodName) {
         AREDispatch.analysisStart (CSC);
@@ -108,7 +108,7 @@ public class TaintAnalysisStub {
 
 
 
-    public static short PL = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.println");
+    public static short PL = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.println");
 
 
     public static void println (final String methodName) {
@@ -118,19 +118,19 @@ public class TaintAnalysisStub {
     }
 
 
-    public static short SS = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.onStartService");
+    public static short SS = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.onStartService");
 
-    public static short BS = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.onBindService");
+    public static short BS = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.onBindService");
 
-    public static short SA = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.onStartActivity");
+    public static short SA = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.onStartActivity");
 
-    public static short SR = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.onSystemReady");
+    public static short SR = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.onSystemReady");
 
-    public static short SC = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.onServiceConstructor");
+    public static short SC = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.onServiceConstructor");
 
-    public static short BT = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.onBinderTransact");
+    public static short BT = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.onBinderTransact");
 
-    public static short OT = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.onBinderOnTransact");
+    public static short OT = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.onBinderOnTransact");
 
 
     public static void onStartService (final int caller) {
@@ -178,7 +178,7 @@ public class TaintAnalysisStub {
     }
 
 
-    public static short CS = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.callService");
+    public static short CS = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.callService");
 
 
     public static void callService (
@@ -190,7 +190,7 @@ public class TaintAnalysisStub {
     }
 
 
-    public static short CP = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.onCheckPermission");
+    public static short CP = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.onCheckPermission");
 
 
     public static void onCheckPermission (final int caller, final String permission) {
@@ -201,7 +201,7 @@ public class TaintAnalysisStub {
     }
 
 
-    public static short GCP = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.onGetContentProvider");
+    public static short GCP = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.onGetContentProvider");
 
 
     public static void onGetContentProvider (final int caller, final String name) {
@@ -214,7 +214,7 @@ public class TaintAnalysisStub {
 
 
 
-//    public static short CS = AREDispatch.registerMethod ("ch.usi.dag.icc.analysis.ICCAnalysis.onCreateService");
+//    public static short CS = AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.onCreateService");
 //
 //
 //
