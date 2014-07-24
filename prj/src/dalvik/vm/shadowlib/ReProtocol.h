@@ -223,7 +223,6 @@ class ReProtocol{
 			//TODO & NOTE
 			//currently, because fork will introduce a problem that the analysis_queue contatining events from two different pids
 			//to avoid so currently we send a single event a time, and the analysis_count is always 1
-			full = false;
 			if(full){
 				char* q=NULL;
 				int len_q;

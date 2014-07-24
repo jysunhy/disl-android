@@ -25,6 +25,8 @@
 #define MAX_BUFFER 100000
 #define UNIX_PATH_MAX 108
 
+jlong SetAndGetNetref(Object* obj);
+
 int gl_svm_socket = -1;
 
 int get_socket(){
@@ -84,7 +86,7 @@ char curpname[100] ={0};
 static pthread_mutex_t gl_mtx = PTHREAD_MUTEX_INITIALIZER;
 static volatile jint ot_class_id = 1;
 static volatile jlong ot_object_id = 1;
-static volatile jshort method_id = 1;
+static volatile jshort method_id = 0;
 
 Socket *sock = NULL;
 void send_once();
@@ -102,13 +104,15 @@ void DebugFunction(JNIEnv* env){
 // ******************* AREDispatch methods *******************
 //
 bool init_stack(){
-	ALOG(LOG_INFO,"DEBUG", "%p", dvmThreadSelf());
+	ALOG(LOG_DEBUG,"DEBUG","IN INIT STACK");
 	if(!dvmThreadSelf())
 		return false;
 	if(!dvmThreadSelf()->info_flag){
+		ALOG(LOG_DEBUG,"DEBUG","NEW STACK IN INIT STACK");
 		dvmThreadSelf()->info_flag = new std::stack<int>();
 		dvmThreadSelf()->info_flag->push(0);
 	}
+	ALOG(LOG_DEBUG,"DEBUG","INIT STACK RETURN TRUE");
 	return true;
 }
 void update_thread_info_flag_or(int orflag){
@@ -133,6 +137,7 @@ void methodExit(JNIEnv * jni_env, jclass this_class){
 		dvmThreadSelf()->info_flag->pop();
 }
 int checkThreadPermission(JNIEnv * jni_env, jclass this_class){
+	ALOG(LOG_DEBUG,"DEBUG","IN CHECK THREAD PERMISSION");
 	if(init_stack())
 		return dvmThreadSelf()->info_flag->top();
 	return 0;
@@ -140,6 +145,20 @@ int checkThreadPermission(JNIEnv * jni_env, jclass this_class){
 void CallAPI(JNIEnv * jni_env, jclass this_class, jint api){
 	dvmThreadSelf()->transaction_info_flag |= api;
 	update_thread_info_flag_or(api);
+}
+jlong getObjectId(JNIEnv * jni_env, jclass this_class, jobject jobj){
+	ScopedMutex mtx(&gl_mtx);
+	Thread *self = dvmThreadSelf();
+	Object* obj = dvmDecodeIndirectRef(self, jobj);
+	jlong netref = SetAndGetNetref(obj);
+	return netref;
+}
+jint getThisThreadId(JNIEnv * jni_env, jclass this_class){
+	Thread *self = dvmThreadSelf();
+	return (jint)self->threadId;
+}
+jint getThisProcId(JNIEnv * jni_env, jclass this_class){
+	return getpid();
 }
 void NativeLog(JNIEnv * jni_env, jclass this_class, jstring text){
 	const char * str = 	jni_env->GetStringUTFChars(text, NULL);
@@ -324,9 +343,9 @@ void sendDouble
 	remote.SendJdouble(dvmThreadSelf()->threadId, to_send);
 }
 
-jlong SetAndGetNetref(Object* obj);
 
 void printDebug(ClassObject* obj){
+	/*
 	if(obj == NULL)
 		return;
 	if(obj->classLoader) {
@@ -336,7 +355,7 @@ void printDebug(ClassObject* obj){
 	}
 	else{
 		ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","Class %s has loader NULL",obj->descriptor);
-	}
+	}*/
 }
 
 jlong newClass(ClassObject *obj){
@@ -347,8 +366,8 @@ jlong newClass(ClassObject *obj){
 	jlong loaderid = SetAndGetNetref(obj->classLoader);
 	obj->tag = _set_net_reference(ot_object_id++,ot_class_id++,1,1);
 	char tmp;
-	if(DEBUGMODE)
-		printDebug(obj);
+	//if(DEBUGMODE)
+	//	printDebug(obj);
 	//NewClass may be removed
 	remote.NewClassEvent(obj->descriptor, strlen(obj->descriptor), loaderid, 0, &tmp);
 	remote.NewClassInfo(obj->tag, obj->descriptor, strlen(obj->descriptor), "", 0, loaderid, superid);
@@ -374,6 +393,68 @@ jlong SetAndGetNetref(Object* obj){
 	return res;
 }
 
+void sendCurrentThread
+(JNIEnv * jni_env, jclass this_class) {
+	if(DEBUGMODE)
+		ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","IN %s", __FUNCTION__);
+	ScopedMutex mtx(&gl_mtx);
+	Thread *self = dvmThreadSelf();
+	Object* obj = NULL;
+   	if(self)
+		obj	= self->threadObj;
+	jlong netref = SetAndGetNetref(obj);
+
+	if(obj == NULL){
+		if(DEBUGMODE)
+			ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send NULL object");
+		remote.SendJobject(self->threadId, 0);
+		return;
+	}
+	if(obj->clazz == gDvm.classJavaLangThread){
+		if(DEBUGMODE)
+			ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send thread object");
+		//TODO isDaemon is not set to false for all
+		//bool isDaemon = dvmGetFieldBoolean(self->threadObj, gDvm.offJavaLangThread_daemon);
+		bool isDaemon = false;
+		char *name =  dvmGetThreadName_cstr(self);
+		if(name!=NULL) {
+			if(DEBUGMODE)
+				ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send thread object name is %s", name);
+			remote.SendThreadObject(self->threadId, obj->tag, name, strlen(name), isDaemon);
+			free(name);
+		}else{
+			if(DEBUGMODE)
+				ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send thread object name is null");
+			if(!net_ref_get_spec(obj->tag)) {
+				remote.SendThreadObject(self->threadId, obj->tag, "default", strlen("default"), isDaemon);
+				net_ref_set_spec((jlong*)&(obj->tag), 1);
+			}else{
+				if(DEBUGMODE)
+					ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","AVOID SENDING THREAD");
+			}
+
+		}
+	}else{
+		if(DEBUGMODE)
+			ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","ERROR SHOULD SEND thread object");
+	}
+	remote.SendJobject(self->threadId, netref);
+}
+void sendObjectSize
+(JNIEnv * jni_env, jclass this_class, jobject to_send) {
+	DebugFunction(jni_env);
+	ScopedMutex mtx(&gl_mtx);
+	Thread *self = dvmThreadSelf();
+	Object* obj = dvmDecodeIndirectRef(self, to_send);
+
+	if(obj == NULL){
+		if(DEBUGMODE)
+			ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","send NULL object");
+		remote.SendJlong(self->threadId, 0);
+		return;
+	}
+	remote.SendJlong(self->threadId, obj->clazz->objectSize);
+}
 void sendObject
 (JNIEnv * jni_env, jclass this_class, jobject to_send) {
 	DebugFunction(jni_env);
@@ -459,6 +540,9 @@ void sendObjectPlusData
 static const char *classPathName = "ch/usi/dag/dislre/AREDispatch";
 
 static JNINativeMethod methods[]= {
+	{"getObjectId", "(Ljava/lang/Object;)J", (void*)getObjectId},
+	{"getThisThreadId", "()I", (void*)getThisThreadId},
+	{"getThisProcId", "()I", (void*)getThisProcId},
 	{"NativeLog", "(Ljava/lang/String;)V", (void*)NativeLog},
 	{"CallAPI", "(I)V", (void*)CallAPI},
 	{"methodEnter", "()V", (void*)methodEnter},
@@ -478,6 +562,8 @@ static JNINativeMethod methods[]= {
 	{"sendDouble", "(D)V", (void*)sendDouble},
 	{"sendObject", "(Ljava/lang/Object;)V", (void*)sendObject},
 	{"sendObjectPlusData", "(Ljava/lang/Object;)V", (void*)sendObjectPlusData},
+	{"sendObjectSize", "(Ljava/lang/Object;)V", (void*)sendObjectSize},
+	{"sendCurrentThread", "()V", (void*)sendCurrentThread},
 	{"manuallyClose", "()V", (void*)manuallyClose},
 };
 
