@@ -1,8 +1,6 @@
 package ch.usi.dag.taint.disl;
 
-import android.app.Activity;
 import android.content.Intent;
-import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.dynamiccontext.DynamicContext;
@@ -36,10 +34,12 @@ public class TaintDiSLClass {
         AREDispatch.NativeLog (Integer.toString (args.length));
         final android.content.Intent intent = (Intent)args[0];
         TaintAnalysisStub.taint_prepare (intent, ac.getCallee (), ac.thisMethodFullName ());
-        intent.putExtra ("svm_specialtag", "123");
-        intent.putExtra ("svm_intentid", AREDispatch.getObjectId (intent));
-        intent.putExtra ("svm_pid", AREDispatch.getThisProcId ());
-        intent.putExtra ("svm_tid", AREDispatch.getThisThreadId ());
+        if(intent != null){
+            intent.putExtra ("svm_specialtag", "123");
+            intent.putExtra ("svm_intentid", AREDispatch.getObjectId (intent));
+            intent.putExtra ("svm_pid", AREDispatch.getThisProcId ());
+            intent.putExtra ("svm_tid", AREDispatch.getThisThreadId ());
+        }
     }
 
     @AfterReturning (
@@ -49,8 +49,10 @@ public class TaintDiSLClass {
     public static void getIntent (final CallContext ac, final DynamicContext dc) {
         AREDispatch.NativeLog ("calling get intent");
         final android.content.Intent intent = dc.getStackValue(0, Intent.class);
-        if(intent.hasExtra("svm_specialtag")) {
-            TaintAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), intent, ac.getCallee (), ac.thisMethodFullName ());
+        if(intent != null){
+            if(intent.hasExtra("svm_specialtag")) {
+                TaintAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), intent, ac.getCallee (), ac.thisMethodFullName ());
+            }
         }
     }
 
@@ -90,19 +92,21 @@ public class TaintDiSLClass {
         intent.putExtra ("svm_tid", AREDispatch.getThisThreadId ());
     }
 
-    @After (
-        marker = BodyMarker.class,
-        scope = "*.onCreate")
-    public static void onActivityCreate (final DynamicContext dc, final CallContext ac) {
-        AREDispatch.NativeLog ("in activity on create");
-        final Intent intent = dc.getLocalVariableValue (0, Activity.class).getIntent ();
-        if(intent.hasExtra("svm_specialtag")) {
-            final String tag = intent.getExtras().getString("specialtag");
-            if(tag !=null){
-                AREDispatch.NativeLog ("HAHA get the special tag "+tag);
-            }
-        }
-    }
+//    @After (
+//        marker = BodyMarker.class,
+//        scope = "*.onCreate")
+//    public static void onActivityCreate (final DynamicContext dc, final CallContext ac) {
+//        AREDispatch.NativeLog ("in activity on create");
+//        final Intent intent = dc.getLocalVariableValue (0, Activity.class).getIntent ();
+//        if(intent!=null){
+//            if(intent.hasExtra("svm_specialtag")) {
+//                final String tag = intent.getExtras().getString("specialtag");
+//                if(tag !=null){
+//                    AREDispatch.NativeLog ("HAHA get the special tag "+tag);
+//                }
+//            }
+//        }
+//    }
 
     @Before (
         marker = BodyMarker.class,
@@ -195,7 +199,9 @@ public class TaintDiSLClass {
             guard = Guard.APISinkGuard.class)
         public static void afterAPISinkInvoke (final CallContext ac, final ArgumentProcessorContext pc) {
             final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
-            TaintAnalysisStub.taint_sink(args[2], ac.getCallee(), ac.thisMethodFullName());
+            if(args.length>2){
+                TaintAnalysisStub.taint_sink(args[2], ac.getCallee(), ac.thisMethodFullName());
+            }
         }
 
     @AfterReturning (
