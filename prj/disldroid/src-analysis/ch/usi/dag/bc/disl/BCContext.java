@@ -40,7 +40,7 @@ public class BCContext extends MethodStaticContext {
             }
 
             if ((total = methodTotalEdges.putIfAbsent (thisClassName (), edge)) == null) {
-                System.out.printf ("BCC: %s %d %d\n", thisClassName (), edge, method);
+//               System.out.printf ("BCC: %s %d %d\n", thisClassName (), edge, method);
                 total = edge;
             }
         }
