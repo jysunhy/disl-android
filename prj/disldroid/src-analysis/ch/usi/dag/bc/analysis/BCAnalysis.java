@@ -73,6 +73,22 @@ public class BCAnalysis extends RemoteAnalysis {
         }
 
 
+        public String toTexString () {
+            final Formatter formatter = new Formatter ();
+
+            formatter.format (" &  %.2f  &  %.2f  &  %d  &  %d",
+                divide (coveredBranches, classBranch),
+                divide (coveredBasicBlocks, classBasicBlock),
+                coveredMethod,
+                coveredClass);
+
+            final String res = formatter.toString ();
+            formatter.close ();
+
+            return res;
+        }
+
+
         public void merge (final ClassStatistic classStatistic) {
             classBranch += classStatistic.classBranch;
             coveredBranches += classStatistic.coveredBranches;
@@ -333,6 +349,16 @@ public class BCAnalysis extends RemoteAnalysis {
                 context.pid (),
                 key,
                 packageStatistic.toString ());
+        }
+
+        System.out.println ("############### Tex Output ###############");
+
+        for (final String key : packageCovered.keySet ()) {
+            final ClassStatistic packageStatistic = packageCovered.get (key);
+            System.out.printf (
+                "%s %s \\\\\n",
+                key,
+                packageStatistic.toTexString ());
         }
 
         System.out.println ("############### Summary ###############");

@@ -35,6 +35,7 @@
 		<dex>
 			<name>Contacts.apk</name>
 			<isbootstrap>false</isbootstrap>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>Browser.apk</name>
