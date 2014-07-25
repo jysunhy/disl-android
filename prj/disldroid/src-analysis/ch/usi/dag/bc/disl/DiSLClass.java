@@ -7,6 +7,9 @@ import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.annotation.SyntheticLocal;
 import ch.usi.dag.disl.marker.BasicBlockMarker;
 import ch.usi.dag.disl.marker.BodyMarker;
+import ch.usi.dag.disl.marker.BytecodeMarker;
+import ch.usi.dag.dislre.AREDispatch;
+import ch.usi.dag.icc.disl.CallContext;
 
 
 public class DiSLClass {
@@ -20,6 +23,14 @@ public class DiSLClass {
     @SyntheticLocal
     public static boolean [] basicblocks;
 
+    @Before (
+        marker = BytecodeMarker.class,
+        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+        guard = ExitGuard.class)
+    public static void beforeInvoke (final CallContext ac) {
+        final String methodName = ac.getCallee ();
+      AREDispatch.NativeLog ("Before method call"+methodName);
+    }
 
     @Before (marker = BodyMarker.class, order = 2)
     public static void onMethodEntry (

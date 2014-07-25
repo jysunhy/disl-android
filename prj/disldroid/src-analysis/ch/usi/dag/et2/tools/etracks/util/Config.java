@@ -11,7 +11,7 @@ public final class Config {
 
     private static final String __CONF_TRACE_FILE__ = "traceFile";
 
-    private static final String __DEFAULT_TRACE_FILE__ = "etracks.trace";
+    private static final String __DEFAULT_TRACE_FILE__ = "/data/data/etracks.trace";
 
     //
 
