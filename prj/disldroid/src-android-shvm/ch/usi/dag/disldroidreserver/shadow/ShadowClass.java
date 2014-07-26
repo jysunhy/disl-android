@@ -78,7 +78,8 @@ public abstract class ShadowClass extends ShadowObject {
 
     @Override
     public int hashCode() {
-        throw new UnsupportedOperationException("overriden equals, not overriden hashCode");
+        //throw new UnsupportedOperationException("overriden equals, not overriden hashCode");
+        return super.hashCode ();
     }
 
     public abstract FieldInfo[] getFields();

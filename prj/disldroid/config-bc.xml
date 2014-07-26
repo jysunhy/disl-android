@@ -5,8 +5,6 @@
 	<dexes> 
 		<dex>
 			<name>_bench1.jar</name>
-			<bypass>false</bypass>
-			<preinstrumented>preinstrumented/preinstrumented_bench1.jar</preinstrumented>
 		</dex>
 		<dex>
 			<name>core.jar</name>
