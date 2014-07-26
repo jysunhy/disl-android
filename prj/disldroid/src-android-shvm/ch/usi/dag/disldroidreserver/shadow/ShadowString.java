@@ -47,7 +47,8 @@ public class ShadowString extends ShadowObject {
     public int hashCode () {
         // throw new
         // UnsupportedOperationException("overriden equals, not overriden hashCode");
-        return value == null ? 0 : value.hashCode ();
+        //return value == null ? 0 : value.hashCode ();
+        return super.hashCode ();
     }
 
 }
