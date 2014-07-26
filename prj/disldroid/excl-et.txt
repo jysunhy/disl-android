@@ -1,0 +1,23 @@
+java.lang.Class.*
+java.lang.ClassLoader.*
+java.lang.Thread.*
+java.lang.String.*
+java.lang.System.*
+
+java.lang.ref.FinalizerReference.*
+java.lang.ref.Reference.*
+java.lang.ref.ReferenceQueue.*
+com.google.android.util.*.*
+
+java.lang.instrument.*.*
+java.lang.invoke.*.*
+java.lang.reflect.*.*
+java.lang.ref.*.*
+
+# These work :-) 
+
+java.security.*.*
+java.util.*.*
+
+sun.misc.*.*
+sun.reflect.*.*

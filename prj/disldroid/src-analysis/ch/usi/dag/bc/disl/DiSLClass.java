@@ -23,6 +23,7 @@ public class DiSLClass {
     @SyntheticLocal
     public static boolean [] basicblocks;
 
+/*
     @Before (
         marker = BytecodeMarker.class,
         args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
@@ -31,6 +32,7 @@ public class DiSLClass {
         final String methodName = ac.getCallee ();
       AREDispatch.NativeLog ("Before method call"+methodName);
     }
+*/
 
     @Before (marker = BodyMarker.class, order = 2)
     public static void onMethodEntry (

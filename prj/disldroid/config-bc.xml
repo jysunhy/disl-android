@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<default-dislclass>output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectUses$ReferenceArgumentProcessor.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectAllocations.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectUses.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ReferenceUpdates.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/MethodInvocations.class</default-dislclass>
-	<default-dislclass2>output/build/analysis/ch/usi/dag/bc/disl/DiSLClass.class</default-dislclass2>
+	<default-dislclass>output/build/analysis/ch/usi/dag/bc/disl/DiSLClass.class</default-dislclass>
 	<default-observed>true</default-observed>
 	<dexes> 
 		<dex>
-			<name>bench1_pre.jar</name>
-			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
+			<name>_bench1.jar</name>
+			<bypass>false</bypass>
+			<preinstrumented>preinstrumented/preinstrumented_bench1.jar</preinstrumented>
 		</dex>
 		<dex>
 			<name>core.jar</name>
 			<isbootstrap>true</isbootstrap>
+			<dislclass></dislclass>
 		</dex>
 		<dex>
 			<name>core-junit.jar</name>
