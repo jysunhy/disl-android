@@ -4,6 +4,10 @@
 	<default-observed>true</default-observed>
 	<dexes> 
 		<dex>
+			<name>bench-jacoco.jar</name>
+			<dislclass></dislclass>
+		</dex>
+		<dex>
 			<name>bench-dvm.jar</name>
 			<bypass>false</bypass>
 		</dex>
