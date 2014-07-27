@@ -4,7 +4,8 @@
 	<default-observed>true</default-observed>
 	<dexes> 
 		<dex>
-			<name>_bench1.jar</name>
+			<name>bench-dvm.jar</name>
+			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>core.jar</name>

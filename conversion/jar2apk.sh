@@ -4,7 +4,7 @@ echo "argv[1] -> instrumented.jar"
 echo "argv[2] -> original.apk"
 echo "output instrumented.apk to bin/"
 
-DEX2JAR_PATH="/home/user/dex2jar-0.0.9.15"
+DEX2JAR_PATH="/home/sunh/disl3.0/disl-android/lib/dex2jar-0.0.9.15"
 
 mkdir -p bin
 
