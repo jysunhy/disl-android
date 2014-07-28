@@ -173,6 +173,11 @@ def server_parser(parser):
 		default=False,
 		help="does not instrument exception handler (improves performance but does not protect from errors within instrumentation)")
 
+	group.add_argument("-s_nodynamicbypass", 
+		action="store_true",
+		default=False,
+		help="does not apply dynamic bypass")
+
 	group.add_argument("-s_exclusionlist", 
 		default=None,
 		metavar="PATH",
@@ -333,6 +338,8 @@ def parse_arguments(parser):
 		args.s_opts+= ["-Ddislserver.port="+args.s_port]
 	if args.s_noexcepthandler is True:
 		args.s_opts+= ["-Ddisl.noexcepthandler=true"]
+	if args.s_nodynamicbypass is True:
+		args.s_opts+= ["-Ddislserver.disablebypass=true"]
 	if args.s_exclusionlist is not None:
 		args.s_opts+= ["-Ddisl.exclusionList="+args.s_exclusionlist]
 	if args.s_instrumented is not None:

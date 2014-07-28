@@ -119,7 +119,7 @@ public class Guard {
         }
     }
 
-    public static class IntentPutExtraGuard {
+    public static class PotentialPropagationToThis {
 
         @GuardMethod
         public static boolean isApplicable (final CallContext msc) {
@@ -147,25 +147,17 @@ public class Guard {
             return false;
         }
     }
-    public static class IntentGetExtrasGuard {
-        @GuardMethod
-        public static boolean isApplicable (final CallContext msc) {
-            final String name = msc.getCallee ();
-            final String list[] = { "Intent.getExtras" };
-            for (final String element : list) {
-                if (name.contains (element)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
 
-    public static class IntentBundleGetString {
+    public static class PotentialPropagationGuardToResult{
         @GuardMethod
         public static boolean isApplicable (final CallContext msc) {
+            //Only methods with result can be applied
             final String name = msc.getCallee ();
-            final String list[] = { "Bundle.getString" };
+            if(name.endsWith ("V")) {
+                return false;
+            }
+            final String list[] = { "Intent.getExtras", "Bundle.getString" };
+
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;

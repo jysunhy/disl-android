@@ -12,21 +12,32 @@ import ch.usi.dag.dislre.AREDispatch;
 import ch.usi.dag.taint.analysis.TaintAnalysisStub;
 
 public class TaintDiSLClass {
+
+
+    //propagte from arguments to this
     @Before (
         marker = BytecodeMarker.class,
-        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
-        guard = Guard.IntentPutExtraGuard.class)
-    public static void updateIntentExtra (final CallContext ac, final ArgumentProcessorContext pc) {
+        args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
+        guard = Guard.PotentialPropagationToThis.class)
+    public static void potentialProgationToThis (final CallContext ac, final ArgumentProcessorContext pc) {
         final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
-        AREDispatch.NativeLog ("put field into intent");
-        final android.content.Intent intent = (Intent) pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS);
-        TaintAnalysisStub.taint_propagate (args[0], intent, ac.getCallee (), ac.thisMethodFullName ());
-        TaintAnalysisStub.taint_propagate (args[1], intent, ac.getCallee (), ac.thisMethodFullName ());
+        //receiver type
+        //static this class
+        //
+        final Object obj = pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS);
+        for(final Object arg:args) {
+            TaintAnalysisStub.taint_propagate (arg, obj, ac.getCallee (), ac.thisMethodFullName ());
+        }
     }
 
+
+    //Track the intent to be sent to other activities
+    //attach information into the intent object with the putExtra method
+    //conflict chance is very low even happens, the key can be adapted
+    //the extra information is used to propagate taint in multiple processes
     @Before (
         marker = BytecodeMarker.class,
-        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+        args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
         guard = Guard.StartActivityForResultGuard.class)
     public static void startActivityForResult (final CallContext ac, final ArgumentProcessorContext pc) {
         final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
@@ -36,7 +47,7 @@ public class TaintDiSLClass {
         final long time = AREDispatch.getCPUClock ();
         TaintAnalysisStub.taint_prepare (intent, time ,ac.getCallee (),  ac.thisMethodFullName ());
         if(intent != null){
-            intent.putExtra ("svm_specialtag", "123");
+            intent.putExtra ("svm_specialtag", "svmonly");
             intent.putExtra ("svm_intentid", AREDispatch.getObjectId (intent));
             intent.putExtra ("svm_pid", AREDispatch.getThisProcId ());
             intent.putExtra ("svm_tid", AREDispatch.getThisThreadId ());
@@ -46,7 +57,7 @@ public class TaintDiSLClass {
 
     @AfterReturning (
         marker = BytecodeMarker.class,
-        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+        args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
         guard = Guard.ActivityGetIntentGuard.class)
     public static void getIntent (final CallContext ac, final DynamicContext dc) {
         AREDispatch.NativeLog ("calling get intent");
@@ -58,29 +69,32 @@ public class TaintDiSLClass {
         }
     }
 
+    //Propagatoin from this and arguments into the result
     @AfterReturning (
         marker = BytecodeMarker.class,
-        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
-        guard = Guard.IntentGetExtrasGuard.class)
-    public static void getIntentExtras (final CallContext ac, final DynamicContext dc, final ArgumentProcessorContext pc) {
+        args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
+        guard = Guard.PotentialPropagationGuardToResult.class)
+    public static void potentialPropagationToResult (final CallContext ac, final DynamicContext dc, final ArgumentProcessorContext pc) {
         AREDispatch.NativeLog ("calling get intent extra");
-        final Object bundle = dc.getStackValue(0, Object.class);
-        TaintAnalysisStub.taint_propagate (pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS), bundle, ac.getCallee (), ac.thisMethodFullName ());
+        final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
+        //the result object
+        final Object obj = dc.getStackValue(0, Object.class);
+
+        //from argument -> result
+        for(final Object arg:args){
+            TaintAnalysisStub.taint_propagate (arg, obj, ac.getCallee (), ac.thisMethodFullName ());
+        }
+
+        //from this -> result
+        if(!ac.getCallee ().endsWith ("V")){
+            TaintAnalysisStub.taint_propagate (pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS), obj, ac.getCallee (), ac.thisMethodFullName ());
+        }
     }
 
-    @AfterReturning (
-        marker = BytecodeMarker.class,
-        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
-        guard = Guard.IntentBundleGetString.class)
-    public static void getIntentBundleString (final CallContext ac, final DynamicContext dc, final ArgumentProcessorContext pc) {
-        AREDispatch.NativeLog ("calling get intent extra");
-        final Object str = dc.getStackValue(0, Object.class);
-        TaintAnalysisStub.taint_propagate (pc.getReceiver(ArgumentProcessorMode.CALLSITE_ARGS), str, ac.getCallee (), ac.thisMethodFullName ());
-    }
 
     @Before (
         marker = BytecodeMarker.class,
-        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+        args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
         guard = Guard.SetActivityResultGuard.class)
     public static void setActivityResult (final CallContext ac, final ArgumentProcessorContext pc) {
         final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
@@ -89,7 +103,7 @@ public class TaintDiSLClass {
         final android.content.Intent intent = (Intent)args[1];
         final long time = AREDispatch.getCPUClock ();
         TaintAnalysisStub.taint_prepare (intent, time, ac.getCallee (), ac.thisMethodFullName ());
-        intent.putExtra ("svm_specialtag", "456");
+        intent.putExtra ("svm_specialtag", "svmonly");
         intent.putExtra ("svm_intentid", AREDispatch.getObjectId (intent));
         intent.putExtra ("svm_pid", AREDispatch.getThisProcId ());
         intent.putExtra ("svm_tid", AREDispatch.getThisThreadId ());
@@ -136,7 +150,7 @@ public class TaintDiSLClass {
 
     @AfterReturning (
         marker = BytecodeMarker.class,
-        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+        args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
         guard = Guard.ReflectionGuard.class)
     public static void afterReflectionInvoke (final CallContext ac,final ArgumentProcessorContext pc) {
         final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
@@ -163,7 +177,7 @@ public class TaintDiSLClass {
     }
     @AfterReturning (
             marker = BytecodeMarker.class,
-            args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+            args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
             guard = Guard.DynamicLoadingGuard.class)
         public static void afterDynamicLoadingInvoke (final CallContext ac,final ArgumentProcessorContext pc) {
             final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
@@ -191,7 +205,7 @@ public class TaintDiSLClass {
 
     @AfterReturning (
         marker = BytecodeMarker.class,
-        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+        args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
         guard = Guard.APISourceGuard.class)
     public static void afterAPISourceInvoke (final DynamicContext dc, final CallContext ac) {
         TaintAnalysisStub.taint_source(dc.getStackValue(0, String.class),1, ac.getCallee(), ac.thisMethodFullName());
@@ -199,7 +213,7 @@ public class TaintDiSLClass {
 
     @AfterReturning (
             marker = BytecodeMarker.class,
-            args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+            args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
             guard = Guard.APISinkGuard.class)
         public static void afterAPISinkInvoke (final CallContext ac, final ArgumentProcessorContext pc) {
             final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
@@ -210,7 +224,7 @@ public class TaintDiSLClass {
 
     @AfterReturning (
             marker = BytecodeMarker.class,
-            args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+            args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
             guard = Guard.IOSourceGuard.class)
         public static void afterIOSourceInvoke (final CallContext ac) {
             final String methodName = ac.getCallee ();
@@ -219,7 +233,7 @@ public class TaintDiSLClass {
 
     @AfterReturning (
             marker = BytecodeMarker.class,
-            args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual",
+            args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
             guard = Guard.IOSinkGuard.class)
         public static void afterIOSinkInvoke (final CallContext ac) {
             final String methodName = ac.getCallee ();

@@ -35,22 +35,25 @@
 		<dex>
 			<name>Contacts.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>Browser.apk</name>
 			<isbootstrap>false</isbootstrap>
 			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>com.inspur.test2-1.apk</name>
 			<isbootstrap>false</isbootstrap>
 			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>AndroidPhoneContactsExample.apk</name>
 			<isbootstrap>false</isbootstrap>
 			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>core.jar</name>
@@ -72,6 +75,7 @@
 		<dex>
 			<name>framework.jar</name>
 			<isbootstrap>true</isbootstrap>
+			<!--<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>-->
 		</dex>
 		<dex>
 			<name>services.jar</name>
