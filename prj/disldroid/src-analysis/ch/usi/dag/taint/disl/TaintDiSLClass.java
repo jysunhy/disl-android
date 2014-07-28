@@ -33,12 +33,14 @@ public class TaintDiSLClass {
         AREDispatch.NativeLog ("in start activity for result test");
         AREDispatch.NativeLog (Integer.toString (args.length));
         final android.content.Intent intent = (Intent)args[0];
-        TaintAnalysisStub.taint_prepare (intent, ac.getCallee (), ac.thisMethodFullName ());
+        final long time = AREDispatch.getCPUClock ();
+        TaintAnalysisStub.taint_prepare (intent, time ,ac.getCallee (),  ac.thisMethodFullName ());
         if(intent != null){
             intent.putExtra ("svm_specialtag", "123");
             intent.putExtra ("svm_intentid", AREDispatch.getObjectId (intent));
             intent.putExtra ("svm_pid", AREDispatch.getThisProcId ());
             intent.putExtra ("svm_tid", AREDispatch.getThisThreadId ());
+            intent.putExtra ("svm_time", time);
         }
     }
 
@@ -51,7 +53,7 @@ public class TaintDiSLClass {
         final android.content.Intent intent = dc.getStackValue(0, Intent.class);
         if(intent != null){
             if(intent.hasExtra("svm_specialtag")) {
-                TaintAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), intent, ac.getCallee (), ac.thisMethodFullName ());
+                TaintAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), (long)intent.getExtra ("svm_time"),intent, ac.getCallee (), ac.thisMethodFullName ());
             }
         }
     }
@@ -85,11 +87,13 @@ public class TaintDiSLClass {
         AREDispatch.NativeLog ("in set activity result");
         AREDispatch.NativeLog (Integer.toString (args.length));
         final android.content.Intent intent = (Intent)args[1];
-        TaintAnalysisStub.taint_prepare (intent, ac.getCallee (), ac.thisMethodFullName ());
+        final long time = AREDispatch.getCPUClock ();
+        TaintAnalysisStub.taint_prepare (intent, time, ac.getCallee (), ac.thisMethodFullName ());
         intent.putExtra ("svm_specialtag", "456");
         intent.putExtra ("svm_intentid", AREDispatch.getObjectId (intent));
         intent.putExtra ("svm_pid", AREDispatch.getThisProcId ());
         intent.putExtra ("svm_tid", AREDispatch.getThisThreadId ());
+        intent.putExtra ("svm_time", time);
     }
 
 //    @After (
@@ -124,7 +128,7 @@ public class TaintDiSLClass {
                     if(tag !=null){
                         AREDispatch.NativeLog ("HAHA get the special tag "+tag);
                     }
-                    TaintAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"), intent, ac.getCallee (), ac.thisMethodFullName ());
+                    TaintAnalysisStub.taint_propagate2 ((long)intent.getExtra ("svm_intentid"), (int)intent.getExtra ("svm_pid"),(long)intent.getExtra ("svm_time") , intent, ac.getCallee (), ac.thisMethodFullName ());
                 }
             }
         }

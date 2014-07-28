@@ -77,6 +77,7 @@ public class AREDispatch {
 
 	public static native void sendCurrentThread();
 
+	public static native long getCPUClock();
 	//public static native void onFork(int parent);
 
 	/*static{
