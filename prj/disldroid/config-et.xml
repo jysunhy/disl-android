@@ -4,6 +4,11 @@
 	<default-dislclass></default-dislclass>
 	<dexes> 
 		<dex>
+			<name>bench-dvm.jar</name>
+			<isbootstrap>false</isbootstrap>
+			<dislclass>output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectUses$ReferenceArgumentProcessor.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectAllocations.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectUses.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ReferenceUpdates.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/MethodInvocations.class</dislclass>
+		</dex>
+		<dex>
 			<name>HelloWorld.jar</name>
 			<isbootstrap>false</isbootstrap>
 		</dex>
