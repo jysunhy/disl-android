@@ -4,7 +4,7 @@
 	<default-observed>true</default-observed>
 	<dexes> 
 		<dex>
-			<name>bench-jacoco.jar</name>
+			<name>bench-jacoco-dvm.jar</name>
 			<dislclass></dislclass>
 		</dex>
 		<dex>
