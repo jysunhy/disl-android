@@ -93,8 +93,9 @@ public class Outputter {
 
     //
 
-    public static Outputter create (final String fileName) {
+    public static Outputter create (String fileName) {
         try {
+            fileName = fileName +"."+ java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")[0];
             final Formatter output = new Formatter (fileName);
             __formatters__.add (output);
             return new Outputter (output);

@@ -6,31 +6,31 @@
 		<dex>
 			<name>WriteFile.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>SendSMS.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>dynamicloaded.jar</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>Echoer.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>de.ecspride-1.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>Contacts.apk</name>
@@ -40,19 +40,19 @@
 		<dex>
 			<name>Browser.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>com.inspur.test2-1.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>AndroidPhoneContactsExample.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
@@ -75,7 +75,7 @@
 		<dex>
 			<name>framework.jar</name>
 			<isbootstrap>true</isbootstrap>
-			<!--<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class</dislclass>-->
+			<!--<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>-->
 		</dex>
 		<dex>
 			<name>services.jar</name>

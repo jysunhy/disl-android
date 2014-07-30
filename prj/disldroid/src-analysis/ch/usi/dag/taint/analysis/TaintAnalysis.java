@@ -154,11 +154,18 @@ public class TaintAnalysis extends RemoteAnalysis {
     public void taint_propagate (
         final Context context, final ShadowObject from, final ShadowObject to,
         final ShadowString name, final ShadowString location) {
+        if(to == null)
+        {
+            System.err.println ("shouldn't be null here");
+            return;
+        }
         if (debug) {
             System.out.println ("Proc("
                 + context.pid () + ":" + context.getPname ()
                 + ") tainted from Object ##" + from.getId () + "## to ##"
-                + to.getId () + "## when invoking " + name + " in " + location);
+                + to.getId ()
+                + "## when invoking " + name
+                + " in " + location);
         }
 
         final TaintObject tfromobj = getTaintObject (context, from);
