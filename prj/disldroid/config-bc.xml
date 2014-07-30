@@ -14,42 +14,42 @@
 		<dex>
 			<name>core.jar</name>
 			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
+			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>core-junit.jar</name>
+			<bypass>false</bypass>
 			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
 		</dex>
 		<dex>
 			<name>bouncycastle.jar</name>
+			<bypass>false</bypass>
 			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
 		</dex>
 		<dex>
 			<name>ext.jar</name>
+			<bypass>false</bypass>
 			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
 		</dex>
 		<dex>
 			<name>framework.jar</name>
+			<bypass>false</bypass>
 			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
 		</dex>
 		<dex>
 			<name>services.jar</name>
 			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
+			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>android.policy.jar</name>
 			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
+			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>apache-xml.jar</name>
 			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
+			<bypass>false</bypass>
 		</dex>
 	</dexes>
 	<procs>

@@ -3,4 +3,5 @@ java.lang.ref.FinalizerReference.*
 java.lang.ref.Reference.*
 java.lang.ref.ReferenceQueue.*
 java.lang.Class.*
+java.lang.String.<clinit>
 com.google.android.util.*.*
