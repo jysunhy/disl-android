@@ -109,7 +109,7 @@ public class Guard {
         @GuardMethod
         public static boolean isApplicable (final CallContext msc) {
             final String name = msc.getCallee ();
-            final String list[] = { "getDeviceId" };
+            final String list[] = { "getDeviceId"/*,"Location.getLatitude","Location.getLongitude"*/ };
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;

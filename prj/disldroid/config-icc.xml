@@ -35,7 +35,6 @@
 		<dex>
 			<name>Contacts.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>

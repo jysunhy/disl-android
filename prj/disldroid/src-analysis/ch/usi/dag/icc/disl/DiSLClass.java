@@ -129,6 +129,7 @@ public class DiSLClass {
 				}
 			}
 			AREDispatch.CallAPI (api);
+			AREDispatch.printStack ();
 		}
 
 	// @Before (

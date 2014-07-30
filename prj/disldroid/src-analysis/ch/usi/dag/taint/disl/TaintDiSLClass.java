@@ -113,7 +113,7 @@ public class TaintDiSLClass {
         args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
         guard = Guard.APISourceGuard.class)
     public static void afterAPISourceInvoke (final DynamicContext dc, final CallContext ac) {
-        TaintAnalysisStub.taint_source(dc.getStackValue(0, String.class),1, ac.getCallee(), ac.thisMethodFullName());
+        TaintAnalysisStub.taint_source(dc.getStackValue(0, Object.class),1, ac.getCallee(), ac.thisMethodFullName());
     }
 
     @AfterReturning (
@@ -122,8 +122,8 @@ public class TaintDiSLClass {
             guard = Guard.APISinkGuard.class)
         public static void afterAPISinkInvoke (final CallContext ac, final ArgumentProcessorContext pc) {
             final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
-            if(args.length>2){
-                TaintAnalysisStub.taint_sink(args[2], ac.getCallee(), ac.thisMethodFullName());
+            for (final Object obj : args) {
+                TaintAnalysisStub.taint_sink(obj, ac.getCallee(), ac.thisMethodFullName());
             }
         }
 
