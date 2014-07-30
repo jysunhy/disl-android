@@ -19,6 +19,9 @@ public class TaintAnalysisStub {
     public static short TAINTPROPAGATE= AREDispatch.registerMethod ("ch.usi.dag.taint.analysis.TaintAnalysis.taint_propagate");
 
     public static void taint_propagate(final Object from, final Object to, final String name, final String location) {
+        if(from == null || to == null) {
+            return;
+        }
         AREDispatch.analysisStart (TAINTPROPAGATE);
         AREDispatch.sendObject(from);
         AREDispatch.sendObject(to);

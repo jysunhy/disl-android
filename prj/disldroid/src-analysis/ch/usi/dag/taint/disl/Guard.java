@@ -74,11 +74,11 @@ public class Guard {
         }
     }
 
-    public static class ReflectionGuard {
+    public static class ReflectionInvokeGuard {
         @GuardMethod
         public static boolean isApplicable (final CallContext msc) {
             final String name = msc.getCallee ();
-            final String list[] = { "invoke", "getMethod" };
+            final String list[] = { "java.lang.reflect.Method.invoke"};
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;
@@ -124,7 +124,7 @@ public class Guard {
         @GuardMethod
         public static boolean isApplicable (final CallContext msc) {
             final String name = msc.getCallee ();
-            final String list[] = { "putExtra" };
+            final String list[] = { "Intent.putExtra" };
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;
