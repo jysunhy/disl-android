@@ -4,7 +4,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
 
 import ch.usi.dag.disldroidreserver.exception.DiSLREServerException;
 import ch.usi.dag.disldroidreserver.msg.analyze.AnalysisResolver;
@@ -15,14 +14,36 @@ import ch.usi.dag.disldroidreserver.reqdispatch.RequestHandler;
 public class IPCHandler implements RequestHandler {
 
     List <IPCEventRecord> events_time_ordered = new ArrayList <> ();
-
-    DealingThread thread;
+    List <IPCEventRecord> events_receivetime_ordered = new ArrayList <> ();
+    //DealingThread thread;
 
     public IPCHandler () {
-        thread = new DealingThread (this);
-        thread.run ();
+        //thread = new DealingThread (this);
+        //thread.run ();
     }
 
+    public synchronized IPCTransaction getCurrentThreadTransaction(final int pid, final int tid, final long timestamp){
+        int pos = 0;
+        for(pos = 0; pos < events_time_ordered.size (); pos++){
+            if(events_time_ordered.get (pos).timestamp > timestamp){
+                break;
+            }
+        }
+        for(int i = pos-1; i >=0;i--){
+            final IPCEventRecord event =  events_time_ordered.get (i);
+            if(event.topid == pid && event.totid == tid){
+                if(event.phase != 1 || event.oneway) {
+                    return null;
+                }else{
+                    //parent found here
+                }
+            }
+            if(event.frompid == pid && event.fromtid == tid){
+                //possible children
+            }
+        }
+        return null;
+    }
 
     // pid tid(int) transactionid(int) type(short) pid2 tid2 time(long) boolean(oneway)
     @Override
@@ -60,15 +81,19 @@ public class IPCHandler implements RequestHandler {
             default:
                 break;
             }
+            for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
+                analysis.ipcEventProcessed (newEvent);
+            }
+            events_receivetime_ordered.add (newEvent);
             insert_into_time_ordered (newEvent);
-            thread.newEvent (newEvent);
+            //thread.newEvent (newEvent);
         } catch (final Exception e) {
             throw new DiSLREServerException ("Error in handle IPC events");
         }
     }
 
 
-    void insert_into_time_ordered (final IPCEventRecord newrecord) {
+    synchronized void insert_into_time_ordered (final IPCEventRecord newrecord) {
         // change to half search
         for (int i = events_time_ordered.size () - 1; i >= 0; i--) {
             if (events_time_ordered.get (i).timestamp < newrecord.timestamp) {
@@ -86,49 +111,49 @@ public class IPCHandler implements RequestHandler {
         // TODO Auto-generated method stub
 
     }
-
-
-    public class DealingThread extends Thread {
-        IPCHandler handler;
-
-        List <IPCEventRecord> pending_list = new ArrayList <> ();
-        List <IPCEventRecord> long_waiting_list = new ArrayList <> ();
-
-        Lock mtx;
-
-        public DealingThread (final IPCHandler _handler) {
-            handler = _handler;
-            // TODO Auto-generated constructor stub
-        }
-
-        public synchronized void  newEvent(final IPCEventRecord event){
-            pending_list.add (event);
-        }
-
-        boolean isEnd = false;
-        boolean finished = false;
-        public void endThread(){
-            isEnd = true;
-            while(!finished) {
-                try {
-                    System.out.println ("Waiting for the rest events to be dealt");
-                    Thread.sleep(1000);
-                } catch (final InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        @Override
-        public void run () {
-          while(!isEnd){
-              for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
-                  analysis.ipcEventProcessed (null);
-              }
-          }
-        }
-    }
+//
+//
+//    public class DealingThread extends Thread {
+//        IPCHandler handler;
+//
+//        List <IPCEventRecord> pending_list = new ArrayList <> ();
+//        List <IPCEventRecord> long_waiting_list = new ArrayList <> ();
+//
+//        Lock mtx;
+//
+//        public DealingThread (final IPCHandler _handler) {
+//            handler = _handler;
+//            // TODO Auto-generated constructor stub
+//        }
+//
+//        public synchronized void  newEvent(final IPCEventRecord event){
+//            pending_list.add (event);
+//        }
+//
+//        boolean isEnd = false;
+//        boolean finished = false;
+//        public void endThread(){
+//            isEnd = true;
+//            while(!finished) {
+//                try {
+//                    System.out.println ("Waiting for the rest events to be dealt");
+//                    Thread.sleep(1000);
+//                } catch (final InterruptedException e) {
+//                    // TODO Auto-generated catch block
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//
+//        @Override
+//        public void run () {
+//          while(!isEnd){
+//              for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
+//                  analysis.ipcEventProcessed (null);
+//              }
+//          }
+//        }
+//    }
 
 
 }

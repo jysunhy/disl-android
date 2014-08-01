@@ -65,7 +65,7 @@ public class Context {
         return contexts;
     }
 
-    public static IPCTransaction getCurrentThreadTransaction(final int pid, final int tid){
+    public static IPCTransaction getCurrentThreadTransaction(final int pid, final int tid, final long timestamp){
         return null;
     }
 }

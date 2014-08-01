@@ -13,13 +13,12 @@ import ch.usi.dag.ipc.analysis.lib.IPCGraph;
 
 public class IPCAnalysis extends RemoteAnalysis {
 
-	public void permission_used(final Context context, final int tid, final ShadowString info){
+	public void permission_used(final Context context, final int tid, final long timestamp, final ShadowString info){
 	    System.out.println ("Permission "+info.toString ()+" is used in ("+context.pid ()+tid+":)");
-	    final IPCTransaction curTransaction = context.getCurrentThreadTransaction (context.pid (), tid);
+	    final IPCTransaction curTransaction = context.getCurrentThreadTransaction (context.pid (), tid, timestamp);
 	    if(curTransaction != null) {
             System.out.println ("relative transactoin is ");
         }
-	    //
 	    DetailedPermissionAlert.alert(null, info.toString ());
 	}
 
