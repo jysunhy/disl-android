@@ -6,4 +6,7 @@ public class IPCGraph {
     public static void AddEvent(final IPCEventRecord event){
 
     }
+    public static void GenerateGraphizScript(){
+
+    }
 }
