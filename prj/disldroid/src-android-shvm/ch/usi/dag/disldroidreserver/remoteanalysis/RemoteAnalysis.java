@@ -1,5 +1,6 @@
 package ch.usi.dag.disldroidreserver.remoteanalysis;
 
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
 
@@ -26,4 +27,6 @@ public abstract class RemoteAnalysis {
 	public abstract void atExit(Context context);
 
 	public abstract void objectFree(Context context, ShadowObject netRef);
+
+	public abstract void ipcEventProcessed(IPCEventRecord event);
 }

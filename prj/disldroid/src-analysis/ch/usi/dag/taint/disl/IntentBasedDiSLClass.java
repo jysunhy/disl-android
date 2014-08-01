@@ -9,6 +9,7 @@ import ch.usi.dag.disl.marker.BytecodeMarker;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorMode;
 import ch.usi.dag.dislre.AREDispatch;
+import ch.usi.dag.icc.disl.CallContext;
 import ch.usi.dag.taint.analysis.TaintAnalysisStub;
 
 public class IntentBasedDiSLClass {
@@ -16,13 +17,16 @@ public class IntentBasedDiSLClass {
     //attach information into the intent object with the putExtra method
     //conflict chance is very low even happens, the key can be adapted
     //the extra information is used to propagate taint in multiple processes
+
+
+
     @Before (
         marker = BytecodeMarker.class,
         args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
         guard = Guard.StartActivityForResultGuard.class)
     public static void startActivityForResult (final CallContext ac, final ArgumentProcessorContext pc) {
         final Object [] args = pc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
-        AREDispatch.NativeLog ("in start activity for result test");
+        AREDispatch.NativeLog ("before start activity for result test");
         AREDispatch.NativeLog (Integer.toString (args.length));
         final android.content.Intent intent = (Intent)args[0];
         final long time = AREDispatch.getCPUClock ();
@@ -34,6 +38,16 @@ public class IntentBasedDiSLClass {
             intent.putExtra ("svm_tid", AREDispatch.getThisThreadId ());
             intent.putExtra ("svm_time", time);
         }
+    }
+
+    @AfterReturning (
+        marker = BytecodeMarker.class,
+        args = "invokespecial, invokestatic, invokeinterface, invokevirtual",
+        guard = Guard.StartActivityForResultGuard.class)
+    public static void afterStartActivityForResult (final CallContext ac, final ArgumentProcessorContext pc) {
+
+        AREDispatch.NativeLog ("after start activity for result test");
+
     }
 
     @AfterReturning (

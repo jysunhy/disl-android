@@ -33,7 +33,7 @@ public class Guard {
         @GuardMethod
         public static boolean isApplicable (final CallContext msc) {
             final String name = msc.getCallee ();
-            final String list[] = { "openFileOutput", "write" };
+            final String list[] = { "openFileOutput", "FileOutputStream" };
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;
@@ -49,7 +49,7 @@ public class Guard {
         public static boolean isApplicable (final CallContext msc) {
             final String name = msc.getCallee ();
             final String list[] = {
-                "openFileInput", "openConnection", "read", "getInputStream" };
+                "HttpURLConnection.getInputStream" };//take Network input as example
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;

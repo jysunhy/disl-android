@@ -5,6 +5,7 @@ import java.util.Formatter;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.Replicable;
@@ -386,6 +387,13 @@ public class BCAnalysis extends RemoteAnalysis {
                 key,
                 packageStatistic.toString ());
         }
+    }
+
+
+    @Override
+    public void ipcEventProcessed (final IPCEventRecord event) {
+        // TODO Auto-generated method stub
+
     }
 
 }

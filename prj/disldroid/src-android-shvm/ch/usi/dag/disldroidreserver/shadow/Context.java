@@ -4,6 +4,8 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCTransaction;
+
 
 public class Context {
 
@@ -63,4 +65,7 @@ public class Context {
         return contexts;
     }
 
+    public static IPCTransaction getCurrentThreadTransaction(final int pid, final int tid){
+        return null;
+    }
 }
