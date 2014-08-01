@@ -22,7 +22,7 @@ public class DetailedPermissionAlert{
         }
     }
 
-    public static void alert (final int pid, final int tid, final String permission) {
+    private static void alert (final int pid, final int tid, final String permission) {
         System.out.println("Detect "+permission+" used in ("+pid+":"+tid+")");
         printStack (pid, tid);
     }
