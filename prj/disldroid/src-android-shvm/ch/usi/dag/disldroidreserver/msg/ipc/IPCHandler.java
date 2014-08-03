@@ -6,43 +6,54 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ch.usi.dag.disldroidreserver.exception.DiSLREServerException;
-import ch.usi.dag.disldroidreserver.msg.analyze.AnalysisResolver;
-import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.disldroidreserver.msg.analyze.AnalysisHandler;
 import ch.usi.dag.disldroidreserver.reqdispatch.RequestHandler;
+import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
 
 
 public class IPCHandler implements RequestHandler {
 
-    List <IPCEventRecord> events_time_ordered = new ArrayList <> ();
-    List <IPCEventRecord> events_receivetime_ordered = new ArrayList <> ();
+    public static List <IPCEventRecord> events_time_ordered = new ArrayList <> ();
+    public static List <IPCEventRecord> events_receivetime_ordered = new ArrayList <> ();
     //DealingThread thread;
+    final AnalysisHandler analysisHandler;
 
-    public IPCHandler () {
+    public IPCHandler (final AnalysisHandler anlHndl) {
         //thread = new DealingThread (this);
         //thread.run ();
+        analysisHandler = anlHndl;
     }
 
-    public synchronized IPCTransaction getCurrentThreadTransaction(final int pid, final int tid, final long timestamp){
-        int pos = 0;
-        for(pos = 0; pos < events_time_ordered.size (); pos++){
-            if(events_time_ordered.get (pos).timestamp > timestamp){
-                break;
-            }
-        }
-        for(int i = pos-1; i >=0;i--){
+    public synchronized static List<IPCEventRecord> getInvolvedEvents(final int pid, final int tid, final long timestamp){
+        List<IPCEventRecord> result = new ArrayList <IPCEventRecord>();
+        final int size = events_time_ordered.size ();
+        for(int i = size-1; i >=0;i--){
             final IPCEventRecord event =  events_time_ordered.get (i);
-            if(event.topid == pid && event.totid == tid){
-                if(event.phase != 1 || event.oneway) {
-                    return null;
-                }else{
-                    //parent found here
-                }
+            if(event.timestamp >= timestamp) {
+                continue;
             }
-            if(event.frompid == pid && event.fromtid == tid){
+            if(event.to.pid == pid && event.to.tid == tid){
+
+                if(event.phase == 0 || event.phase == 3)
+                {
+                    //not related to this thread
+                    continue;
+                }
+
+                if(event.phase == 2) {
+                    break;
+                }
+                if(event.oneway)
+                {
+                    break;
+                }
+                result = getInvolvedEvents (event.from.pid, event.from.tid, event.timestamp);
+                result.add(event);
+            }else if(event.from.pid == pid && event.from.tid == tid){
                 //possible children
             }
         }
-        return null;
+        return result;
     }
 
     // pid tid(int) transactionid(int) type(short) pid2 tid2 time(long) boolean(oneway)
@@ -81,13 +92,12 @@ public class IPCHandler implements RequestHandler {
             default:
                 break;
             }
-            for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
-                analysis.ipcEventProcessed (newEvent);
-            }
+            analysisHandler.ipcOccurred (ShadowAddressSpace.getShadowAddressSpace (pid), tid, newEvent);
             events_receivetime_ordered.add (newEvent);
             insert_into_time_ordered (newEvent);
             //thread.newEvent (newEvent);
         } catch (final Exception e) {
+            e.printStackTrace ();
             throw new DiSLREServerException ("Error in handle IPC events");
         }
     }

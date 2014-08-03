@@ -241,9 +241,9 @@ public class TaintAnalysis extends RemoteAnalysis {
         final Context context, final ShadowObject netRef) {
     }
 
-
     @Override
-    public void ipcEventProcessed (final IPCEventRecord event) {
+    public void ipcEventProcessed (
+        final Context context, final long threadid, final IPCEventRecord event) {
         // TODO Auto-generated method stub
 
     }

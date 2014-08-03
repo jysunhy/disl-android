@@ -4,15 +4,13 @@ import java.util.List;
 
 public class IPCTransaction {
     public IPCTransaction () {
-        // TODO Auto-generated constructor stub
     }
     public IPCTransaction parent = null;
     public List<IPCTransaction> children = null;
 
-    public int frompid;
-    public int fromtid;
+    public DVMThread from = new DVMThread (0, 0);
+    public DVMThread to = new DVMThread(0,0);
     public int transaction_id;
-    public int topid;
-    public int totid;
+
     public IPCEventRecord[] events;
 }

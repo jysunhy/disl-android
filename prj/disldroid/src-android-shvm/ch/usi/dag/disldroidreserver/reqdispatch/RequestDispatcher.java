@@ -68,7 +68,7 @@ public final class RequestDispatcher {
 		requestMap.put (__REQUEST_ID_THREAD_END__,  new ThreadEndHandler(anlHndl));
         requestMap.put (__REQUEST_ID_ON_FORK__,  new OnForkHandler(anlHndl));
         requestMap.put (__REQUEST_ID_PNAME__,  new ProcInfoHandler());
-        requestMap.put (__REQUEST_ID_IPC__,  new IPCHandler());
+        requestMap.put (__REQUEST_ID_IPC__,  new IPCHandler(anlHndl));
 		__handlers = Collections.unmodifiableCollection (requestMap.values ());
 		__dispatchTable = __createDispatchTable (requestMap);
 	}

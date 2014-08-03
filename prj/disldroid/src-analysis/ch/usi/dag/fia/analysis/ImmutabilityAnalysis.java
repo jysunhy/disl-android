@@ -131,8 +131,11 @@ public class ImmutabilityAnalysis extends RemoteAnalysis {
         out.close ();
     }
 
+
+
     @Override
-    public void ipcEventProcessed (final IPCEventRecord event) {
+    public void ipcEventProcessed (
+        final Context context, final long threadid, final IPCEventRecord event) {
         // TODO Auto-generated method stub
 
     }

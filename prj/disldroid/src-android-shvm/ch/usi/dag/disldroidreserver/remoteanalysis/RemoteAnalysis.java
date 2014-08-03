@@ -28,5 +28,5 @@ public abstract class RemoteAnalysis {
 
 	public abstract void objectFree(Context context, ShadowObject netRef);
 
-	public abstract void ipcEventProcessed(IPCEventRecord event);
+	public abstract void ipcEventProcessed(final Context context, final long threadid, IPCEventRecord event);
 }

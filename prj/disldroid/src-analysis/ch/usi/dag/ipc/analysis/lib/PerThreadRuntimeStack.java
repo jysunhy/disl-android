@@ -3,24 +3,23 @@ package ch.usi.dag.ipc.analysis.lib;
 import java.util.HashMap;
 import java.util.Stack;
 
-import ch.usi.dag.disldroidreserver.msg.ipc.IPCTransaction;
 
-
-public class DetailedPermissionAlert{
+public class PerThreadRuntimeStack{
 
     static HashMap<Integer, HashMap<Integer,Stack<String>>> runtimeStack = new HashMap <Integer, HashMap<Integer,Stack<String>>>();
 
-    public static void alert (final IPCTransaction transaction, final String permission) {
-        if(transaction == null) {
-            return;
-        }
-        alert(transaction.topid,transaction.totid, permission);
-        IPCTransaction outmost = transaction;
-        while(outmost != null) {
-            alert(transaction.frompid,transaction.fromtid, permission);
-            outmost = outmost.parent;
-        }
-    }
+//    public static void alert (final IPCTransaction transaction, final String permission) {
+//        if(transaction == null) {
+//            return;
+//        }
+//        alert(transaction.to.pid,transaction.to.tid, permission);
+//        IPCTransaction outmost = transaction;
+//        while(outmost != null) {
+//            alert(transaction.from.pid,transaction.from.tid, permission);
+//            outmost = outmost.parent;
+//        }
+//    }
+
 
     private static void alert (final int pid, final int tid, final String permission) {
         System.out.println("Detect "+permission+" used in ("+pid+":"+tid+")");
@@ -43,10 +42,10 @@ public class DetailedPermissionAlert{
         stk.pop();
     }
 
-    static void printStack(final int pid, final int tid){
+    public static void printStack(final int pid, final int tid){
         final Stack<String> stk = getStack (pid, tid);
         for(int i = 0; i < stk.size (); i++){
-            System.out.println ("#"+i+" "+stk.get (i));
+            System.out.println ("("+pid+":"+tid+")#"+i+" "+stk.get (i));
         }
     }
 

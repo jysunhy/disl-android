@@ -1,9 +1,14 @@
 package ch.usi.dag.disldroidreserver.msg.analyze.mtdispatch;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ch.usi.dag.disldroidreserver.exception.DiSLREServerFatalException;
 import ch.usi.dag.disldroidreserver.msg.analyze.AnalysisInvocation;
+import ch.usi.dag.disldroidreserver.msg.analyze.AnalysisResolver;
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
+import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
 
 // Each thread has dedicated queue where new tasks are submitted.
@@ -70,6 +75,44 @@ public class AnalysisDispatcher {
 		// TODO (YZ) distinguish between different processes
 		// update ate manager
 		ateManager.executorIsEnding(threadId);
+	}
+
+	public void ipcOccurredEvent(final ShadowAddressSpace shadowAddressSpace, final long threadid, final IPCEventRecord event){
+	    final AnalysisTaskExecutor ate = ateManager.getExecutor (0);
+	    final List<AnalysisInvocation> list = new ArrayList<> ();
+
+	    long tid = 0;
+	    switch(event.phase){
+	    case 0:
+	        tid = event.from.tid;
+	        break;
+	    case 1:
+	        tid = event.to.tid;
+	        break;
+	    case 2:
+            tid = event.to.tid;
+            break;
+	    case 3:
+            tid = event.from.tid;
+            break;
+	    }
+
+	    for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
+            //analysis.ipcEventProcessed (newEvent);
+	        final List<Object> args = new ArrayList<Object>();
+	        args.add (shadowAddressSpace.getContext ());
+	        args.add (tid);
+	        args.add (event);
+	        try {
+                list.add (new AnalysisInvocation (analysis.getClass ().getMethod ("ipcEventProcessed", new Class[]{Context.class, long.class, IPCEventRecord.class}), analysis, args));
+            } catch (NoSuchMethodException | SecurityException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+	    if(list.size ()>0) {
+            ate.addTask (new AnalysisTask (list,globalEpoch));
+        }
 	}
 
 	public void exit() {

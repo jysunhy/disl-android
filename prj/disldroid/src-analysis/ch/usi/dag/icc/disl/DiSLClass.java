@@ -1,6 +1,5 @@
 package ch.usi.dag.icc.disl;
 
-import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.marker.BodyMarker;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;
@@ -8,91 +7,7 @@ import ch.usi.dag.disl.processorcontext.ArgumentProcessorMode;
 import ch.usi.dag.dislre.AREDispatch;
 
 public class DiSLClass {
-	//@ThreadLocal
-	//	static Stack<Integer> permission_stk;
 
-  @Before (
-  marker = BodyMarker.class,
-  scope = "ActivityManagerService.*")
-public static void a0 (
-      final CallContext msc) {
-          AREDispatch.NativeLog ("IN "+msc.thisMethodFullName ());
-      }
-  @After (
-      marker = BodyMarker.class,
-      scope = "ActivityManagerService.*")
-    public static void a1 (
-          final CallContext msc) {
-              AREDispatch.NativeLog ("OUT "+msc.thisMethodFullName ());
-          }
-
-  @Before (
-      marker = BodyMarker.class,
-      scope = "Activity.*")
-    public static void a2 (
-          final CallContext msc) {
-              AREDispatch.NativeLog ("IN "+msc.thisMethodFullName ());
-          }
-      @After (
-          marker = BodyMarker.class,
-          scope = "Activity.*")
-        public static void a3 (
-              final CallContext msc) {
-                  AREDispatch.NativeLog ("OUT "+msc.thisMethodFullName ());
-              }
-
-      @Before (
-          marker = BodyMarker.class,
-          scope = "ActivityManager*.*")
-        public static void a4 (
-              final CallContext msc) {
-                  AREDispatch.NativeLog ("IN "+msc.thisMethodFullName ());
-              }
-          @After (
-              marker = BodyMarker.class,
-              scope = "ActivityManager*.*")
-            public static void a5 (
-                  final CallContext msc) {
-                      AREDispatch.NativeLog ("OUT "+msc.thisMethodFullName ());
-                  }
-
-          @Before (
-              marker = BodyMarker.class,
-              scope = "ActivityStack.*")
-            public static void a6 (
-                  final CallContext msc) {
-                      AREDispatch.NativeLog ("IN "+msc.thisMethodFullName ());
-                  }
-              @After (
-                  marker = BodyMarker.class,
-                  scope = "ActivityStack.*")
-                public static void a7 (
-                      final CallContext msc) {
-                          AREDispatch.NativeLog ("OUT "+msc.thisMethodFullName ());
-                      }
-
-//	@Before (
-//			marker = BodyMarker.class,
-//			scope = "*.startActivityForResult")
-//		public static void test_0 (
-//				final CallContext msc) {
-//					AREDispatch.NativeLog ("IN "+msc.thisMethodFullName ());
-//				}
-//	@After (
-//			marker = BodyMarker.class,
-//			scope = "*.startActivityForResult")
-//		public static void test_01 (
-//				final CallContext msc) {
-//					AREDispatch.NativeLog ("OUT "+msc.thisMethodFullName ());
-//				}
-
-//	@Before (
-//			marker = BodyMarker.class,
-//			scope = "android.content.Intent.<init>")
-//		public static void test_1 (
-//				final CallContext msc) {
-//					AREDispatch.NativeLog ("IN intent init "+msc.thisMethodFullName ());
-//				}
 
 	@Before (
 			marker = BodyMarker.class,

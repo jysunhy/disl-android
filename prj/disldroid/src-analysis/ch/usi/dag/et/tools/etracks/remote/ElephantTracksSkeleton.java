@@ -394,8 +394,10 @@ public final class ElephantTracksSkeleton extends RemoteAnalysis /* XXX: why not
         return __out__;
     }
 
+
     @Override
-    public void ipcEventProcessed (final IPCEventRecord event) {
+    public void ipcEventProcessed (
+        final Context context, final long threadid, final IPCEventRecord event) {
         // TODO Auto-generated method stub
 
     }
