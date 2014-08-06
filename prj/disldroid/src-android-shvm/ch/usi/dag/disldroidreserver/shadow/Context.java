@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import ch.usi.dag.disldroidreserver.msg.ipc.DVMThread;
+import ch.usi.dag.disldroidreserver.msg.ipc.NativeThread;
 import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
 import ch.usi.dag.disldroidreserver.msg.ipc.IPCHandler;
 
@@ -69,9 +69,9 @@ public class Context {
     }
 
 
-    public List <DVMThread> getInvovedThreads (final int tid, final long timestamp) {
+    public List <NativeThread> getInvovedThreads (final int tid, final long timestamp) {
         // TODO Auto-generated method stub
-        final List<DVMThread> res = new ArrayList <DVMThread>();
+        final List<NativeThread> res = new ArrayList <NativeThread>();
         final List<IPCEventRecord> list = IPCHandler.getInvolvedEvents (pid(), tid, timestamp);
         for(final IPCEventRecord event : list) {
             res.add (event.from);

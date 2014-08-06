@@ -1,9 +1,9 @@
 package ch.usi.dag.disldroidreserver.msg.ipc;
 
-public class DVMThread{
+public class NativeThread{
     public int pid;
     public int tid;
-    public DVMThread(final int _pid, final int _tid){
+    public NativeThread(final int _pid, final int _tid){
         pid = _pid;
         tid = _tid;
     }
@@ -16,10 +16,10 @@ public class DVMThread{
         if(this==obj){
             return true ;
         }
-        if(!(obj instanceof DVMThread)){
+        if(!(obj instanceof NativeThread)){
             return false ;
         }
-        return ((DVMThread)obj).pid == pid && ((DVMThread)obj).tid == tid;
+        return ((NativeThread)obj).pid == pid && ((NativeThread)obj).tid == tid;
     }
     @Override
     public int hashCode(){
