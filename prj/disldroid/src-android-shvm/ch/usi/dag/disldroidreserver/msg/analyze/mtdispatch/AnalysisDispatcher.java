@@ -78,7 +78,7 @@ public class AnalysisDispatcher {
 	}
 
 	public void ipcOccurredEvent(final ShadowAddressSpace shadowAddressSpace, final long threadid, final IPCEventRecord event){
-	    final AnalysisTaskExecutor ate = ateManager.getExecutor (0);
+	    final AnalysisTaskExecutor ate = ateManager.getExecutor (shadowAddressSpace.getContext ().pid()*1000);
 	    final List<AnalysisInvocation> list = new ArrayList<> ();
 
 	    long tid = 0;

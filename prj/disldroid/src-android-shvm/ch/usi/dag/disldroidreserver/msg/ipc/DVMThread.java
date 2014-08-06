@@ -9,7 +9,7 @@ public class DVMThread{
     }
     @Override
     public  String toString(){
-        return String.valueOf (pid)+String.valueOf (tid);
+        return "("+String.valueOf (pid)+" "+String.valueOf (tid)+")";
     }
     @Override
     public boolean equals(final Object obj){

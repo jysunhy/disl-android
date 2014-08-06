@@ -83,6 +83,10 @@ public class Context {
         }
     }
 
+    public List<IPCEventRecord> getEventsOfSameTransactin(final IPCEventRecord event){
+        final List<IPCEventRecord> res = IPCHandler.getEventsOfSameTransactin (event);
+        return res;
+    }
 
 //    public List <DVMThread> getInvovedThreads (final int tid, final long timestamp) {
 //        // TODO Auto-generated method stub

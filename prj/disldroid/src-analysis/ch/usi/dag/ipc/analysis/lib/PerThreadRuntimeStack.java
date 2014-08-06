@@ -31,6 +31,7 @@ public class PerThreadRuntimeStack{
     public static void boundary_start (final int pid, final int tid, final String location) {
         final Stack<String> stk = getStack (pid, tid);
         stk.push (location);
+        System.out.println ("entering "+location+" ("+pid+" "+tid+")");
     }
 
     public static void boundary_end (final int pid, final int tid, final String location) {
@@ -39,6 +40,7 @@ public class PerThreadRuntimeStack{
         if(!curTop.equals (location)){
             System.out.println ("stack error");
         }
+        System.out.println ("leaving "+location+" ("+pid+" "+tid+")");
         stk.pop();
     }
 

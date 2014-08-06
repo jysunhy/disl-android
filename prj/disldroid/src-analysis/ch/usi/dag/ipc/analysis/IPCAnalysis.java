@@ -8,6 +8,7 @@ import ch.usi.dag.disldroidreserver.msg.ipc.DVMThread;
 import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
+import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
 import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 import ch.usi.dag.ipc.analysis.lib.IPCGraph;
@@ -19,12 +20,13 @@ public class IPCAnalysis extends RemoteAnalysis {
     HashMap <DVMThread, List<String>> permission_usage = new HashMap <DVMThread, List<String>>();
 
 	public void permission_used(final Context context, final int tid, final long timestamp, final ShadowString info){
-	    System.out.println ("Permission "+info.toString ()+" is used in ("+context.pid ()+tid+":)");
+	    System.out.println ("Permission "+info.toString ()+" is used in ("+context.pid ()+" "+tid+":)");
 	    final List<DVMThread> involvedThreads = context.getInvovedThreads(tid, timestamp);
 	    if(involvedThreads != null ){
     	    for(final DVMThread thd : involvedThreads)
     	    {
     	        //notify thread of the permission usage
+    	        System.out.println ("involve"+thd.toString ());
     	        List<String> permission_strs = permission_usage.get (thd);
     	        if(permission_strs == null) {
                     permission_strs = new ArrayList <String>();
@@ -46,11 +48,34 @@ public class IPCAnalysis extends RemoteAnalysis {
     @Override
     public void ipcEventProcessed (final Context context, final long threadid, final IPCEventRecord event) {
         //add node to graphiz via IPCGraph
-        System.out.println ("event received in analysis");
+        //System.out.println ("event received in analysis");
         if(isEventInterested (context, threadid, event)) {
             IPCGraph.AddEvent (event);//Select interested IPC event for drawing IPC graph
         }
         if(event.phase == 3) {//the last event
+            //wait for other events ready to keep event order
+            List<IPCEventRecord> list = context.getEventsOfSameTransactin (event);
+
+            int expectedNum = 4;
+
+            if(ShadowAddressSpace.getShadowAddressSpace (event.to.pid).getContext ().getPname ()==null){
+                expectedNum = 2;
+            }
+            int maxCycle = 20;
+            while(list.size()<expectedNum && (--maxCycle)>0){
+                try {
+                    System.out.println ("Waiting IPC event in ("+event.from.pid+" "+event.from.tid+") from ("+event.to.pid+" "+event.to.tid+")"+" transaction id "+event.transactionid);
+                    Thread.sleep (2000);
+                    list = context.getEventsOfSameTransactin (event);
+                } catch (final InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            if(maxCycle>0 && maxCycle!=19){
+                System.out.println ("IPC event ready in ("+event.from.pid+" "+event.from.tid+") from ("+event.to.pid+" "+event.to.tid+")"+" transaction id "+event.transactionid);
+            }
+
             //check any permission leakage
             //if any
             //print stack of thread (pid,tid)
@@ -101,16 +126,6 @@ public class IPCAnalysis extends RemoteAnalysis {
     @Override
     public void objectFree (
             final Context context, final ShadowObject netRef) {
-    }
-
-    public static void main(final String args[]){
-        final RemoteAnalysis a = new IPCAnalysis();
-        try {
-            a.getClass ().getMethod ("ipcEventProcessed", new Class[]{IPCEventRecord.class} );
-        } catch (NoSuchMethodException | SecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
 }
