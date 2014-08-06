@@ -1,5 +1,6 @@
 package ch.usi.dag.icc.analysis;
 
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
@@ -85,5 +86,13 @@ public class ICCAnalysis extends RemoteAnalysis {
 		public void objectFree (
 				final Context context, final ShadowObject netRef) {
 		}
+
+    @Override
+    public void ipcEventProcessed (
+        final Context context, final long threadid, final IPCEventRecord event) {
+        // TODO Auto-generated method stub
+
+    }
+
 
 }

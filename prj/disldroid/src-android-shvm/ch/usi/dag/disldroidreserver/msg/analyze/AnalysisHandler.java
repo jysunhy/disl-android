@@ -10,6 +10,7 @@ import java.util.List;
 import ch.usi.dag.disldroidreserver.exception.DiSLREServerException;
 import ch.usi.dag.disldroidreserver.msg.analyze.AnalysisResolver.AnalysisMethodHolder;
 import ch.usi.dag.disldroidreserver.msg.analyze.mtdispatch.AnalysisDispatcher;
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
 import ch.usi.dag.disldroidreserver.reqdispatch.RequestHandler;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
@@ -213,8 +214,14 @@ public final class AnalysisHandler implements RequestHandler {
 		dispatcher.objectsFreedEvent(shadowAddressSpace, objFreeIDs);
 	}
 
+	public void ipcOccurred(final ShadowAddressSpace shadowAddressSpace, final long threadId, final IPCEventRecord event){
+	    dispatcher.ipcOccurredEvent (shadowAddressSpace, threadId, event);
+	}
+
 	@Override
     public void exit() {
 		dispatcher.exit();
 	}
+
+
 }

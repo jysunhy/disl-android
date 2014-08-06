@@ -35,7 +35,6 @@
 		<dex>
 			<name>Contacts.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
@@ -141,23 +140,7 @@
 			<isobserved>true</isobserved>
 		</proc>
 		<proc>
-			<procname>android.process.media</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.providers.calendar</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
 			<procname>android.process.acore</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.systemui</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.inputmethod.latin</procname>
 			<isobserved>true</isobserved>
 		</proc>
 		<proc>
@@ -165,35 +148,7 @@
 			<isobserved>true</isobserved>
 		</proc>
 		<proc>
-			<procname>com.android.settings</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
 			<procname>android.process.acore</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.provision</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.smspush</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.gallery3d</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.launcher</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.inputmethod.latin</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.voicedialer</procname>
 			<isobserved>true</isobserved>
 		</proc>
 		<proc>
@@ -204,18 +159,6 @@
 			<procname>com.android.contacts</procname>
 			<isobserved>true</isobserved>
 			<dexname>Contacts.apk</dexname>
-		</proc>
-		<proc>
-			<procname>android.process.media</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.deskclock</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.exchange</procname>
-			<isobserved>true</isobserved>
 		</proc>
 	</procs>
 </config>

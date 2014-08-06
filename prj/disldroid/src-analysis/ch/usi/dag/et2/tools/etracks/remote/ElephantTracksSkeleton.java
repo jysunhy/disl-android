@@ -1,5 +1,6 @@
 package ch.usi.dag.et2.tools.etracks.remote;
 
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowClass;
@@ -406,6 +407,14 @@ public final class ElephantTracksSkeleton extends RemoteAnalysis /* XXX: why not
 
     static Outputter getOutput () {
         return __out__;
+    }
+
+
+    @Override
+    public void ipcEventProcessed (
+        final Context context, final long threadid, final IPCEventRecord event) {
+        // TODO Auto-generated method stub
+
     }
 
 }

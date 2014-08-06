@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.NetReferenceHelper;
@@ -15,34 +16,9 @@ public class TaintAnalysis extends RemoteAnalysis {
 
     public boolean debug = true;
 
-
-    public class TaintObject {
-        TaintObject (
-            final Context _context, final ShadowObject _obj, final int _taint,
-            final int _version) {
-            context = _context;
-            obj = _obj;
-            taint = _taint;
-            version = _version;
-        }
-
-
-        public Context context = null;
-
-        public ShadowObject obj = null;
-
-        public int taint = 0;
-
-        public int version = 0;
-
-        public long time = -1;
-    }
-
-
     public HashMap <Integer, HashMap <Long, List <TaintObject>>> taint_map = new HashMap <> ();
 
     public HashMap <Long, List <TaintObject>> timed_map = new HashMap <> ();
-
 
     private TaintObject getTaintObject (final Context context, final ShadowObject obj) {
         HashMap <Long, List <TaintObject>> localmap = taint_map.get (context.pid ());
@@ -263,6 +239,13 @@ public class TaintAnalysis extends RemoteAnalysis {
     @Override
     public void objectFree (
         final Context context, final ShadowObject netRef) {
+    }
+
+    @Override
+    public void ipcEventProcessed (
+        final Context context, final long threadid, final IPCEventRecord event) {
+        // TODO Auto-generated method stub
+
     }
 
 }

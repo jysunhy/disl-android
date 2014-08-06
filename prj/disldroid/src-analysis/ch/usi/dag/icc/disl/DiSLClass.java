@@ -7,31 +7,7 @@ import ch.usi.dag.disl.processorcontext.ArgumentProcessorMode;
 import ch.usi.dag.dislre.AREDispatch;
 
 public class DiSLClass {
-	//@ThreadLocal
-	//	static Stack<Integer> permission_stk;
 
-//	@Before (
-//			marker = BodyMarker.class,
-//			scope = "*.startActivityForResult")
-//		public static void test_0 (
-//				final CallContext msc) {
-//					AREDispatch.NativeLog ("IN "+msc.thisMethodFullName ());
-//				}
-//	@After (
-//			marker = BodyMarker.class,
-//			scope = "*.startActivityForResult")
-//		public static void test_01 (
-//				final CallContext msc) {
-//					AREDispatch.NativeLog ("OUT "+msc.thisMethodFullName ());
-//				}
-
-//	@Before (
-//			marker = BodyMarker.class,
-//			scope = "android.content.Intent.<init>")
-//		public static void test_1 (
-//				final CallContext msc) {
-//					AREDispatch.NativeLog ("IN intent init "+msc.thisMethodFullName ());
-//				}
 
 	@Before (
 			marker = BodyMarker.class,
@@ -117,6 +93,9 @@ public class DiSLClass {
 						int pos = 0;
 						for (final String p : permissions) {
 							if(obj.toString ().equals (p)) {
+							    if(obj.toString ().equals ("android.permission.SEND_SMS") || obj.toString ().equals ("android.permission.READ_PHONE_STATE")){
+							        AREDispatch.printStack ();
+							    }
 								api = 1<<pos;
 								break;
 							}
@@ -129,6 +108,7 @@ public class DiSLClass {
 				}
 			}
 			AREDispatch.CallAPI (api);
+
 		}
 
 	// @Before (
