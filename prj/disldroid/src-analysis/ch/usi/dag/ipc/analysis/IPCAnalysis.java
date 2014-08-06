@@ -34,8 +34,6 @@ public class IPCAnalysis extends RemoteAnalysis {
 
 
     abstract class IPCEvent {
-        int type;
-
         Endpoint endpoint;
 
         NativeThread from;
