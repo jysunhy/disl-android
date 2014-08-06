@@ -1,54 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<default-dislclass>output/build/analysis/ch/usi/dag/bc/disl/DiSLClass.class</default-dislclass>
+	<default-dislclass></default-dislclass>
 	<default-observed>true</default-observed>
 	<dexes> 
+		<dex>
+			<name>binarytrees.jar</name>
+			<dislclass>output/build/analysis/ch/usi/dag/bc/disl/DiSLClass.class</dislclass>
+		</dex>
 		<dex>
 			<name>bench-jacoco-dvm.jar</name>
 			<dislclass></dislclass>
 		</dex>
 		<dex>
 			<name>bench-dvm.jar</name>
-			<bypass>false</bypass>
+			<bypass>true</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/bc/disl/DiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>core.jar</name>
 			<isbootstrap>true</isbootstrap>
+			<dislclass></dislclass>
 		</dex>
 		<dex>
 			<name>core-junit.jar</name>
-			<bypass>false</bypass>
 			<isbootstrap>true</isbootstrap>
 		</dex>
 		<dex>
 			<name>bouncycastle.jar</name>
-			<bypass>false</bypass>
 			<isbootstrap>true</isbootstrap>
 		</dex>
 		<dex>
 			<name>ext.jar</name>
-			<bypass>false</bypass>
 			<isbootstrap>true</isbootstrap>
 		</dex>
 		<dex>
 			<name>framework.jar</name>
-			<bypass>false</bypass>
 			<isbootstrap>true</isbootstrap>
 		</dex>
 		<dex>
 			<name>services.jar</name>
 			<isbootstrap>true</isbootstrap>
-			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>android.policy.jar</name>
 			<isbootstrap>true</isbootstrap>
-			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>apache-xml.jar</name>
 			<isbootstrap>true</isbootstrap>
-			<bypass>false</bypass>
 		</dex>
 	</dexes>
 	<procs>

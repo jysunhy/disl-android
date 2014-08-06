@@ -4,6 +4,9 @@ java.lang.Thread.*
 java.lang.String.*
 java.lang.System.*
 
+java.awt.font.NumericShaper.<clinit>
+com.motorola.bench.parallel.data02.*
+
 java.lang.ref.FinalizerReference.*
 java.lang.ref.Reference.*
 java.lang.ref.ReferenceQueue.*
@@ -21,3 +24,5 @@ java.util.*.*
 
 sun.misc.*.*
 sun.reflect.*.*
+
+# dalvik.*.*
