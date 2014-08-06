@@ -73,4 +73,19 @@ public class PerThreadRuntimeStack{
         // TODO Auto-generated method stub
 
     }
+
+
+
+
+    public static void boundary_start (final NativeThread thd, final String string) {
+        // TODO Auto-generated method stub
+
+    }
+
+
+
+    public static void boundary_end (final NativeThread thd, final String string) {
+        // TODO Auto-generated method stub
+
+    }
 }

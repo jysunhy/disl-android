@@ -115,7 +115,7 @@ public class IPCAnalysis extends RemoteAnalysis {
         }
         public static void printPermission(final NativeThread thd){
             for(final String permission : permission_usage.get (thd)) {
-                System.out.println(permission);
+                Logger.log(permission);
             }
         }
         public static void clearPermissionUsage (final NativeThread thd) {
@@ -200,44 +200,43 @@ public class IPCAnalysis extends RemoteAnalysis {
 
 
     public void boundary_start (
-        final Context context, final int tid, final ShadowString boundaryName) {
+        final NativeThread thd, final ShadowString boundaryName) {
         PerThreadRuntimeStack.boundary_start (
-            context.pid (), tid, boundaryName.toString ());
+            thd, boundaryName.toString ());
     }
 
 
     public void boundary_end (
-        final Context context, final int tid, final ShadowString boundaryName) {
+        final NativeThread thd,final ShadowString boundaryName) {
         PerThreadRuntimeStack.boundary_end (
-            context.pid (), tid, boundaryName.toString ());
+            thd, boundaryName.toString ());
     }
 
     public void permission_used (
-        final Context context, final NativeThread thd,
-        final ShadowString permissionName) {
+        final NativeThread thd, final ShadowString permissionName) {
         Logger.log (permissionName.toString ());
         PermissionUsage.notifyAllCaller (thd, permissionName.toString ());
     }
 
-    void onRequestSent (final Endpoint target,
+    public void onRequestSent (final Endpoint target,
         final NativeThread client, final Context ctx) {
         PermissionUsage.addEvent (new RequestSentEvent (target, client, ctx));
     }
 
 
-    void onRequestReceived (final Endpoint target,
+    public void onRequestReceived (final Endpoint target,
         final NativeThread client, final NativeThread server, final Context ctx) {
         PermissionUsage.addEvent (new RequestReceivedEvent (
             target, client, server, ctx));
     }
 
 
-    void onResponseSent (final Endpoint target,
+    public void onResponseSent (final Endpoint target,
         final NativeThread server, final Context ctx) {
         PermissionUsage.addEvent (new ResponseSentEvent (target, server, ctx));
     }
 
-    void onResponseReceived (final Endpoint target,
+    public void onResponseReceived (final Endpoint target,
         final NativeThread server, final NativeThread client, final Context ctx) {
         final ResponseReceivedEvent event = new ResponseReceivedEvent (
             target, server, client, ctx);
