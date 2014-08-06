@@ -100,10 +100,7 @@ public class IPCAnalysis extends RemoteAnalysis {
                 event_map.get (event.to).add (event);
             }
         }
-        public static void waitEventBefore (final IPCEvent event) {
-            waitAndGetLastEvent (event);
-            return;
-        }
+
         public static void notifyAllCaller (final NativeThread curThd, final String permission) {
             //get top event of the map
             final List<IPCEvent> list = event_map.get (curThd);
@@ -122,6 +119,11 @@ public class IPCAnalysis extends RemoteAnalysis {
             permission_usage.remove (thd);
         }
 
+
+        private static void waitEventBefore (final IPCEvent event) {
+            waitAndGetLastEvent (event);
+            return;
+        }
         private static IPCEvent getLastEventNoWait(final IPCEvent event){
             if(event instanceof RequestSentEvent) {
                 return null;
