@@ -274,8 +274,9 @@ public class Worker extends Thread {
                 }
                 fis.close ();
                 dis.close ();
-				if(debug)
-                	System.out.println(file.getAbsolutePath ()+"a"+size);
+				if(debug) {
+                    System.out.println(file.getAbsolutePath ()+"a"+size);
+                }
             }catch (final Exception e){
                 e.printStackTrace ();
             }
@@ -452,8 +453,9 @@ public class Worker extends Thread {
             }
             instrClass = cacheMap.get (key);
             if (instrClass != null) {
-				if(debug)
- 	               System.out.println (jarName + " " + key + " hits cache");
+				if(debug) {
+                    System.out.println (jarName + " " + key + " hits cache");
+                }
                 return instrClass;
             }
         }
@@ -467,10 +469,10 @@ public class Worker extends Thread {
             jarName, ".tmp");
         }
 
-        if (debug) {
+        //if (debug) {
             System.out.println ("tmp file stored in "
                 + dex2JarFile.getAbsolutePath ());
-        }
+        //}
 
         final DexFileReader reader = new DexFileReader (dexCode);
 
@@ -590,9 +592,10 @@ public class Worker extends Thread {
                                 '/', '.').replace ('/', '.'));
                             if (ori != null) {
                                 if (!Arrays.equals (ori, code)) {
-									if(debug)
- 	                                   System.out.println ("SAME NAME, DIFFERENT CODE FOR "
-                                        + className.replace ('/', '.'));
+									if(debug) {
+                                        System.out.println ("SAME NAME, DIFFERENT CODE FOR "
+                                            + className.replace ('/', '.'));
+                                    }
                                 }
                             }
 
@@ -737,8 +740,9 @@ public class Worker extends Thread {
 //        ReadPkgBlackList ();
 //        ReadObserveList ();
         if(!DiSLConfig.parseXml ()){
-			if(debug)
-				System.out.println("Update DiSL classes");
+			if(debug) {
+                System.out.println("Update DiSL classes");
+            }
 			dislMap = new HashMap <String, DiSL>();
 		}
 
@@ -760,8 +764,9 @@ public class Worker extends Thread {
                     {
                         final String fullPath =new String (
                             nm.getControl ());
-						if(debug)
- 	                       System.out.println(fullPath);
+						if(debug) {
+                            System.out.println(fullPath);
+                        }
 
                         final byte [] dexCode = nm.getClassCode ();
 
@@ -780,9 +785,10 @@ public class Worker extends Thread {
                                 final Collection<DiSLConfig.Proc> list =DiSLConfig.procMap.values ();
                                 final Iterator<DiSLConfig.Proc> iter = list.iterator ();
                                 while(iter.hasNext ()){
-									DiSLConfig.Proc tmp = iter.next();
-									if(tmp.isObserved)
-                                    	observeList += tmp.procname+";";
+									final DiSLConfig.Proc tmp = iter.next();
+									if(tmp.isObserved) {
+                                        observeList += tmp.procname+";";
+                                    }
                                 }
                                 instrClass = observeList.getBytes ();
                             } else {
@@ -857,8 +863,9 @@ public class Worker extends Thread {
 
     private byte [] instrument (String className, final byte [] origCode, final DiSL disl)
     throws DiSLServerException, DiSLException {
-		if(debug)
-			System.out.println("instrumenting "+className);
+		if(debug) {
+            System.out.println("instrumenting "+className);
+        }
 
         // backup for empty class name
         if (className == null || className.isEmpty ()) {

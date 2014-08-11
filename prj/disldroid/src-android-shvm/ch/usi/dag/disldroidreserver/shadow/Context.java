@@ -3,6 +3,11 @@ package ch.usi.dag.disldroidreserver.shadow;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+import ch.usi.dag.disldroidreserver.msg.ipc.NativeThread;
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCHandler;
 
 
 public class Context {
@@ -63,4 +68,32 @@ public class Context {
         return contexts;
     }
 
+
+    public List <NativeThread> getInvovedThreads (final int tid, final long timestamp) {
+        // TODO Auto-generated method stub
+        final List<NativeThread> res = new ArrayList <NativeThread>();
+        final List<IPCEventRecord> list = IPCHandler.getInvolvedEvents (pid(), tid, timestamp);
+        for(final IPCEventRecord event : list) {
+            res.add (event.from);
+        }
+        if(res.size ()==0) {
+            return null;
+        } else {
+            return res;
+        }
+    }
+
+    public List<IPCEventRecord> getEventsOfSameTransactin(final IPCEventRecord event){
+        final List<IPCEventRecord> res = IPCHandler.getEventsOfSameTransactin (event);
+        return res;
+    }
+
+//    public List <DVMThread> getInvovedThreads (final int tid, final long timestamp) {
+//        // TODO Auto-generated method stub
+//        return null;
+//    }
+
+//    public static List<IPCEventRecord> getLastEvents(final int pid, final int tid, final long timestamp){
+//        return null;
+//    }
 }

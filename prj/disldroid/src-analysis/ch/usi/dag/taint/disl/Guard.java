@@ -33,7 +33,7 @@ public class Guard {
         @GuardMethod
         public static boolean isApplicable (final CallContext msc) {
             final String name = msc.getCallee ();
-            final String list[] = { "openFileOutput", "write" };
+            final String list[] = { "openFileOutput", "FileOutputStream" };
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;
@@ -49,7 +49,7 @@ public class Guard {
         public static boolean isApplicable (final CallContext msc) {
             final String name = msc.getCallee ();
             final String list[] = {
-                "openFileInput", "openConnection", "read", "getInputStream" };
+                "HttpURLConnection.getInputStream" };//take Network input as example
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;
@@ -74,11 +74,11 @@ public class Guard {
         }
     }
 
-    public static class ReflectionGuard {
+    public static class ReflectionInvokeGuard {
         @GuardMethod
         public static boolean isApplicable (final CallContext msc) {
             final String name = msc.getCallee ();
-            final String list[] = { "invoke", "getMethod" };
+            final String list[] = { "java.lang.reflect.Method.invoke"};
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;
@@ -109,7 +109,7 @@ public class Guard {
         @GuardMethod
         public static boolean isApplicable (final CallContext msc) {
             final String name = msc.getCallee ();
-            final String list[] = { "getDeviceId" };
+            final String list[] = { "getDeviceId"/*,"Location.getLatitude","Location.getLongitude"*/ };
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;
@@ -119,12 +119,12 @@ public class Guard {
         }
     }
 
-    public static class IntentPutExtraGuard {
+    public static class PotentialPropagationToThis {
 
         @GuardMethod
         public static boolean isApplicable (final CallContext msc) {
             final String name = msc.getCallee ();
-            final String list[] = { "putExtra" };
+            final String list[] = { "Intent.putExtra" };
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;
@@ -147,25 +147,17 @@ public class Guard {
             return false;
         }
     }
-    public static class IntentGetExtrasGuard {
-        @GuardMethod
-        public static boolean isApplicable (final CallContext msc) {
-            final String name = msc.getCallee ();
-            final String list[] = { "Intent.getExtras" };
-            for (final String element : list) {
-                if (name.contains (element)) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
 
-    public static class IntentBundleGetString {
+    public static class PotentialPropagationGuardToResult{
         @GuardMethod
         public static boolean isApplicable (final CallContext msc) {
+            //Only methods with result can be applied
             final String name = msc.getCallee ();
-            final String list[] = { "Bundle.getString" };
+            if(name.endsWith ("V")) {
+                return false;
+            }
+            final String list[] = { "Intent.getExtras", "Bundle.getString" };
+
             for (final String element : list) {
                 if (name.contains (element)) {
                     return true;

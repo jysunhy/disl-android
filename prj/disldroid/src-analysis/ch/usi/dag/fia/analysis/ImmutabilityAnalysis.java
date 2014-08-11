@@ -8,6 +8,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.zip.GZIPOutputStream;
 
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowClass;
@@ -128,6 +129,15 @@ public class ImmutabilityAnalysis extends RemoteAnalysis {
         }
 
         out.close ();
+    }
+
+
+
+    @Override
+    public void ipcEventProcessed (
+        final Context context, final long threadid, final IPCEventRecord event) {
+        // TODO Auto-generated method stub
+
     }
 
 }

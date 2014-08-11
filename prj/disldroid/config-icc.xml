@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<default-dislclass></default-dislclass>
+	<default-dislclass>output/build/analysis/ch/usi/dag/icc/disl/DiSLClass.class</default-dislclass>
 	<default-observed>true</default-observed>
 	<dexes> 
 		<dex>
 			<name>WriteFile.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
 			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>SendSMS.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>dynamicloaded.jar</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>Echoer.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>de.ecspride-1.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>Contacts.apk</name>
@@ -40,19 +40,19 @@
 		<dex>
 			<name>Browser.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>com.inspur.test2-1.apk</name>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>AndroidPhoneContactsExample.apk</name>
+			<dislclass>output/build/analysis/ch/usi/dag/icc/disl/PermissionDiSLClass.class</dislclass>
 			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/taint/disl/TaintDiSLClass.class,output/build/analysis/ch/usi/dag/taint/disl/IntentBasedDiSLClass.class</dislclass>
 			<bypass>false</bypass>
 		</dex>
 		<dex>
@@ -63,14 +63,17 @@
 		<dex>
 			<name>core-junit.jar</name>
 			<isbootstrap>true</isbootstrap>
+			<dislclass></dislclass>
 		</dex>
 		<dex>
 			<name>bouncycastle.jar</name>
 			<isbootstrap>true</isbootstrap>
+			<dislclass></dislclass>
 		</dex>
 		<dex>
 			<name>ext.jar</name>
 			<isbootstrap>true</isbootstrap>
+			<dislclass></dislclass>
 		</dex>
 		<dex>
 			<name>framework.jar</name>
@@ -80,10 +83,12 @@
 		<dex>
 			<name>services.jar</name>
 			<isbootstrap>true</isbootstrap>
+			<dislclass></dislclass>
 		</dex>
 		<dex>
 			<name>apache-xml.jar</name>
 			<isbootstrap>true</isbootstrap>
+			<dislclass></dislclass>
 		</dex>
 	</dexes>
 	<procs>
@@ -135,23 +140,7 @@
 			<isobserved>true</isobserved>
 		</proc>
 		<proc>
-			<procname>android.process.media</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.providers.calendar</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
 			<procname>android.process.acore</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.systemui</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.inputmethod.latin</procname>
 			<isobserved>true</isobserved>
 		</proc>
 		<proc>
@@ -159,35 +148,7 @@
 			<isobserved>true</isobserved>
 		</proc>
 		<proc>
-			<procname>com.android.settings</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
 			<procname>android.process.acore</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.provision</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.smspush</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.gallery3d</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.launcher</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.inputmethod.latin</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.voicedialer</procname>
 			<isobserved>true</isobserved>
 		</proc>
 		<proc>
@@ -198,18 +159,6 @@
 			<procname>com.android.contacts</procname>
 			<isobserved>true</isobserved>
 			<dexname>Contacts.apk</dexname>
-		</proc>
-		<proc>
-			<procname>android.process.media</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.deskclock</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.exchange</procname>
-			<isobserved>true</isobserved>
 		</proc>
 	</procs>
 </config>

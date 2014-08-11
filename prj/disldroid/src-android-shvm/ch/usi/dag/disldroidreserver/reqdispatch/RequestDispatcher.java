@@ -13,6 +13,7 @@ import ch.usi.dag.disldroidreserver.exception.DiSLREServerFatalException;
 import ch.usi.dag.disldroidreserver.msg.analyze.AnalysisHandler;
 import ch.usi.dag.disldroidreserver.msg.classinfo.ClassInfoHandler;
 import ch.usi.dag.disldroidreserver.msg.close.CloseHandler;
+import ch.usi.dag.disldroidreserver.msg.ipc.IPCHandler;
 import ch.usi.dag.disldroidreserver.msg.newclass.NewClassHandler;
 import ch.usi.dag.disldroidreserver.msg.objfree.ObjectFreeHandler;
 import ch.usi.dag.disldroidreserver.msg.onfork.OnForkHandler;
@@ -41,7 +42,7 @@ public final class RequestDispatcher {
 	private static final byte __REQUEST_ID_THREAD_END__ = 8;
     private static final byte __REQUEST_ID_ON_FORK__ = 9;
     private static final byte __REQUEST_ID_PNAME__ = 10;
-
+    private static final byte __REQUEST_ID_IPC__ = 11;
 	//
 
 	private static RequestHandler [] __dispatchTable;
@@ -67,7 +68,7 @@ public final class RequestDispatcher {
 		requestMap.put (__REQUEST_ID_THREAD_END__,  new ThreadEndHandler(anlHndl));
         requestMap.put (__REQUEST_ID_ON_FORK__,  new OnForkHandler(anlHndl));
         requestMap.put (__REQUEST_ID_PNAME__,  new ProcInfoHandler());
-
+        requestMap.put (__REQUEST_ID_IPC__,  new IPCHandler(anlHndl));
 		__handlers = Collections.unmodifiableCollection (requestMap.values ());
 		__dispatchTable = __createDispatchTable (requestMap);
 	}

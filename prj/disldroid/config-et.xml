@@ -4,14 +4,24 @@
 	<default-dislclass></default-dislclass>
 	<dexes> 
 		<dex>
+			<name>bench-dvm.jar</name>
+			<isbootstrap>false</isbootstrap>
+			<dislclass>output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectUses$ReferenceArgumentProcessor.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectAllocations.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectUses.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ReferenceUpdates.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/MethodInvocations.class</dislclass>
+			<bypass>false</bypass>
+		</dex>
+		<dex>
+			<name>bench-et-dvm.jar</name>
+			<isbootstrap>false</isbootstrap>
+		</dex>
+		<dex>
 			<name>HelloWorld.jar</name>
 			<isbootstrap>false</isbootstrap>
 		</dex>
 		<dex>
 			<name>core.jar</name>
 			<isbootstrap>true</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectUses$ReferenceArgumentProcessor.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectAllocations.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ObjectUses.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/ReferenceUpdates.class,output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/MethodInvocations.class</dislclass>
-			<dislclass2>output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/Core.class</dislclass2>
+			<dislclass>output/build/analysis/ch/usi/dag/et2/tools/etracks/disl/Core.class</dislclass>
+			<bypass>false</bypass>
 		</dex>
 		<dex>
 			<name>core-junit.jar</name>
