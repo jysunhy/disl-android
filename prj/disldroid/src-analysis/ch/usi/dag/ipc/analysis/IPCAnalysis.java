@@ -1,14 +1,12 @@
 package ch.usi.dag.ipc.analysis;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import ch.usi.dag.disldroidreserver.msg.ipc.DVMThread;
 import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
+import ch.usi.dag.disldroidreserver.msg.ipc.NativeThread;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
-import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
 import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 import ch.usi.dag.ipc.analysis.lib.IPCGraph;
@@ -17,104 +15,245 @@ import ch.usi.dag.ipc.analysis.lib.PerThreadRuntimeStack;
 
 public class IPCAnalysis extends RemoteAnalysis {
 
-    HashMap <DVMThread, List<String>> permission_usage = new HashMap <DVMThread, List<String>>();
+    class Endpoint {
+        int binderid;
 
-	public void permission_used(final Context context, final int tid, final long timestamp, final ShadowString info){
-	    System.out.println ("Permission "+info.toString ()+" is used in ("+context.pid ()+" "+tid+":)");
-	    final List<DVMThread> involvedThreads = context.getInvovedThreads(tid, timestamp);
-	    if(involvedThreads != null ){
-    	    for(final DVMThread thd : involvedThreads)
-    	    {
-    	        //notify thread of the permission usage
-    	        System.out.println ("involve"+thd.toString ());
-    	        List<String> permission_strs = permission_usage.get (thd);
-    	        if(permission_strs == null) {
-                    permission_strs = new ArrayList <String>();
-                    permission_usage.put (thd, permission_strs);
-                }
-    	        permission_strs.add (info.toString ());
-    	    }
-	    }
-	}
+        int transaction_id; // used to distinguish different transactions via a
+                            // single binder
 
-	public void boundary_start(final Context context, final int tid, final ShadowString boundaryName){
-	    PerThreadRuntimeStack.boundary_start(context.pid (), tid, boundaryName.toString ());
-	}
+        boolean oneway;
+    }
 
-	public void boundary_end(final Context context, final int tid, final ShadowString boundaryName){
-	    PerThreadRuntimeStack.boundary_end(context.pid (), tid, boundaryName.toString ());
-	}
 
-    @Override
-    public void ipcEventProcessed (final Context context, final long threadid, final IPCEventRecord event) {
-        //add node to graphiz via IPCGraph
-        //System.out.println ("event received in analysis");
-        if(isEventInterested (context, threadid, event)) {
-            IPCGraph.AddEvent (event);//Select interested IPC event for drawing IPC graph
+    static class Logger {
+        public static void log (final String a) {
+
         }
-        if(event.phase == 3) {//the last event
-            //wait for other events ready to keep event order
-            List<IPCEventRecord> list = context.getEventsOfSameTransactin (event);
 
-            int expectedNum = 4;
+    }
 
-            if(ShadowAddressSpace.getShadowAddressSpace (event.to.pid).getContext ().getPname ()==null){
-                expectedNum = 2;
+
+    abstract class IPCEvent {
+        Endpoint endpoint;
+
+        NativeThread from;
+
+        NativeThread to;
+    }
+
+
+    class RequestSentEvent extends IPCEvent {
+
+        public RequestSentEvent (
+            final Endpoint target, final NativeThread client, final Context ctx) {
+            // TODO Auto-generated constructor stub
+        }
+
+    }
+
+
+    class RequestReceivedEvent extends IPCEvent {
+
+        public RequestReceivedEvent (
+            final Endpoint target, final NativeThread client,
+            final NativeThread server, final Context ctx) {
+            // TODO Auto-generated constructor stub
+        }
+
+    }
+
+
+    class ResponseSentEvent extends IPCEvent {
+
+        public ResponseSentEvent (
+            final Endpoint target, final NativeThread server, final Context ctx) {
+            // TODO Auto-generated constructor stub
+        }
+
+    }
+
+
+    class ResponseReceivedEvent extends IPCEvent {
+
+        public ResponseReceivedEvent (
+            final Endpoint target, final NativeThread server,
+            final NativeThread client, final Context ctx) {
+            // TODO Auto-generated constructor stub
+        }
+
+    }
+
+    static class PermissionUsage {
+        private static final long WAITING_TIME = 1000;
+
+        static HashMap <NativeThread, List <String>> permission_usage = new HashMap <NativeThread, List <String>> ();
+
+        static HashMap <NativeThread, List <IPCEvent>> event_map = new HashMap <NativeThread, List <IPCEvent>> ();
+
+        public static void addEvent (final IPCEvent event) {
+            waitEventBefore(event);
+            if(event instanceof RequestSentEvent || event instanceof ResponseReceivedEvent) {
+                event_map.get (event.from).add (event);
+            } else {
+                event_map.get (event.to).add (event);
             }
-            int maxCycle = 20;
-            while(list.size()<expectedNum && (--maxCycle)>0){
+        }
+
+        public static void notifyAllCaller (final NativeThread curThd, final String permission) {
+            //get top event of the map
+            final List<IPCEvent> list = event_map.get (curThd);
+            final IPCEvent event = list.get (list.size()-1);
+            notifyAllCaller(event, permission);
+        }
+        public static int getNumberOfPermissionUsage(final NativeThread thd){
+            return permission_usage.get (thd).size ();
+        }
+        public static void printPermission(final NativeThread thd){
+            for(final String permission : permission_usage.get (thd)) {
+                Logger.log(permission);
+            }
+        }
+        public static void clearPermissionUsage (final NativeThread thd) {
+            permission_usage.remove (thd);
+        }
+
+
+        private static void waitEventBefore (final IPCEvent event) {
+            waitAndGetLastEvent (event);
+            return;
+        }
+        private static IPCEvent getLastEventNoWait(final IPCEvent event){
+            if(event instanceof RequestSentEvent) {
+                return null;
+            }else if(event instanceof ResponseSentEvent){
+                return getLastEventOfThread (event.to, event);
+            }else {
+                return getOtherEndEvent (event);
+            }
+        }
+
+        private static IPCEvent waitAndGetLastEvent(final IPCEvent event){
+            IPCEvent res=null;
+            if(event instanceof RequestSentEvent) {
+                return null;
+            }
+            while((res=getLastEventNoWait(event))==null){
                 try {
-                    System.out.println ("Waiting IPC event in ("+event.from.pid+" "+event.from.tid+") from ("+event.to.pid+" "+event.to.tid+")"+" transaction id "+event.transactionid);
-                    Thread.sleep (2000);
-                    list = context.getEventsOfSameTransactin (event);
+                    Thread.sleep (WAITING_TIME);
                 } catch (final InterruptedException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
-            if(maxCycle>0 && maxCycle!=19){
-                System.out.println ("IPC event ready in ("+event.from.pid+" "+event.from.tid+") from ("+event.to.pid+" "+event.to.tid+")"+" transaction id "+event.transactionid);
-            }
-
-            //check any permission leakage
-            //if any
-            //print stack of thread (pid,tid)
-            final List<String> permissions = permission_usage.get (event.from);
-            if(permissions!=null && permissions.size()>0){
-                String permissoin_str="";
-                for(final String p:permissions) {
-                    permissoin_str = p+" "+permissoin_str;
-                }
-                System.out.println (permissoin_str);
-                PerThreadRuntimeStack.printStack (context.pid (), (int)threadid);
-                permission_usage.remove (event.from);
-            }
+            return res;
         }
-    }
 
-    private boolean isEventInterested(final Context context, final long tid, final IPCEventRecord event){
-        return isProcInterested (context);
-    }
-
-    private boolean isProcInterested(final Context context){
-        String pname = context.getPname ();
-        while(pname == null){
-            pname = context.getPname ();
-            System.out.println ("name info is not ready yet");
-            try {
-                Thread.sleep (1000);
-            } catch (final InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+        private static void notifyCaller(final NativeThread thd, final String permission){
+            permission_usage.get (thd).add (permission);
         }
-            final String []interestedProcesses = {"com.android.contacts"};
-            for(final String item:interestedProcesses){
-                if(pname.equals (item)) {
-                    return true;
+
+        private static void notifyAllCaller(final IPCEvent event, final String permission){
+            if(!(event instanceof RequestReceivedEvent) || event.endpoint.oneway) {
+                return;
+            }
+            notifyCaller (event.from, permission);
+            final IPCEvent cli_event =waitAndGetLastEvent (event);
+            notifyAllCaller (getLastEventOfThread(event.from, cli_event), permission);
+        }
+
+        private static IPCEvent getOtherEndEvent (
+            final IPCEvent event) {
+            final NativeThread thd;
+            if(event instanceof RequestSentEvent || event instanceof ResponseSentEvent) {
+                thd = event.to;
+            } else {
+                thd = event.from;
+            }
+            final List<IPCEvent> event_list = event_map.get (thd);
+            for(int i = 0; i < event_list.size (); i++)
+            {
+                if(event_list.get (i).endpoint.equals (event.endpoint)){
+                    return event;
                 }
             }
-        return false;
+            return null;
+        }
+
+        private static IPCEvent getLastEventOfThread (
+            final NativeThread thd, final IPCEvent event) {
+            final List<IPCEvent> event_list = event_map.get (thd);
+            for(int i = 0; i < event_list.size (); i++)
+            {
+                if(event_list.get (i) == event){
+                    if(i>0) {
+                        return event_list.get (i-1);
+                    } else {
+                        return null;
+                    }
+                }
+            }
+            return null;
+        }
+
+
+    }
+
+
+    public void boundary_start (
+        final NativeThread thd, final ShadowString boundaryName) {
+        PerThreadRuntimeStack.boundary_start (
+            thd, boundaryName.toString ());
+    }
+
+
+    public void boundary_end (
+        final NativeThread thd,final ShadowString boundaryName) {
+        PerThreadRuntimeStack.boundary_end (
+            thd, boundaryName.toString ());
+    }
+
+    public void permission_used (
+        final NativeThread thd, final ShadowString permissionName) {
+        Logger.log (permissionName.toString ());
+        PermissionUsage.notifyAllCaller (thd, permissionName.toString ());
+    }
+
+    public void onRequestSent (final Endpoint target,
+        final NativeThread client, final Context ctx) {
+        PermissionUsage.addEvent (new RequestSentEvent (target, client, ctx));
+    }
+
+
+    public void onRequestReceived (final Endpoint target,
+        final NativeThread client, final NativeThread server, final Context ctx) {
+        PermissionUsage.addEvent (new RequestReceivedEvent (
+            target, client, server, ctx));
+    }
+
+
+    public void onResponseSent (final Endpoint target,
+        final NativeThread server, final Context ctx) {
+        PermissionUsage.addEvent (new ResponseSentEvent (target, server, ctx));
+    }
+
+    public void onResponseReceived (final Endpoint target,
+        final NativeThread server, final NativeThread client, final Context ctx) {
+        final ResponseReceivedEvent event = new ResponseReceivedEvent (
+            target, server, client, ctx);
+        if(PermissionUsage.getNumberOfPermissionUsage(client) > 0) {
+            //Print all permission usage in client
+            PermissionUsage.printPermission (client);
+            //Print stack
+            PerThreadRuntimeStack.printStack (client);
+            PermissionUsage.clearPermissionUsage(client);
+        }
+        PermissionUsage.addEvent (event);
+    }
+
+
+    @Override
+    public void ipcEventProcessed (
+        final Context context, final long threadid, final IPCEventRecord event) {
     }
 
     @Override
@@ -122,10 +261,9 @@ public class IPCAnalysis extends RemoteAnalysis {
         IPCGraph.GenerateGraphizScript ();
     }
 
-
     @Override
     public void objectFree (
-            final Context context, final ShadowObject netRef) {
+        final Context context, final ShadowObject netRef) {
     }
 
 }

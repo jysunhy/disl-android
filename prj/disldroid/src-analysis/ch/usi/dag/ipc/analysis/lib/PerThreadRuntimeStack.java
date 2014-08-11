@@ -3,6 +3,8 @@ package ch.usi.dag.ipc.analysis.lib;
 import java.util.HashMap;
 import java.util.Stack;
 
+import ch.usi.dag.disldroidreserver.msg.ipc.NativeThread;
+
 
 public class PerThreadRuntimeStack{
 
@@ -63,5 +65,27 @@ public class PerThreadRuntimeStack{
             pl_stk.put(tid, tl_stk);
         }
         return tl_stk;
+    }
+
+
+
+    public static void printStack (final NativeThread client) {
+        // TODO Auto-generated method stub
+
+    }
+
+
+
+
+    public static void boundary_start (final NativeThread thd, final String string) {
+        // TODO Auto-generated method stub
+
+    }
+
+
+
+    public static void boundary_end (final NativeThread thd, final String string) {
+        // TODO Auto-generated method stub
+
     }
 }

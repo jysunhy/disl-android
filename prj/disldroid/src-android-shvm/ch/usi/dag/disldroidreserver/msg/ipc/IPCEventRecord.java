@@ -18,8 +18,8 @@ public class IPCEventRecord {
         //System.out.println ("DEBUGGING IPC: "+frompid+" "+fromtid+" "+transactionid+" "+phase+" "+topid+" "+totid+" "+timestamp+" "+oneway);
     }
 
-    public DVMThread from = new DVMThread (0, 0);
-    public DVMThread to = new DVMThread(0,0);
+    public NativeThread from = new NativeThread (0, 0);
+    public NativeThread to = new NativeThread(0,0);
     public int transactionid;
     public short phase;
     public long timestamp;
