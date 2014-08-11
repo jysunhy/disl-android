@@ -37,7 +37,9 @@ enum MsgType{
 	// sending fork
 	MSG_FORK,
 	// MAP PID TO PNAME
-	MSG_MAPPID
+	MSG_MAPPID,
+	// IPC EVENT
+	MSG_IPC
 };
 
 enum QueueType{
@@ -87,6 +89,20 @@ class ReProtocol{
 			return true;
 		}
 
+		bool OnIPCEvent(int tid, int transaction_id, short phase, int pid2, int tid2, jlong timestamp, bool isOneway){
+			Buffer tmp(60);
+			tmp.EnqueueJint(getpid());
+			tmp.EnqueueJbyte(MSG_IPC);
+			tmp.EnqueueJint(tid);
+			tmp.EnqueueJint(transaction_id);
+			tmp.EnqueueJshort(phase);
+			tmp.EnqueueJint(pid2);
+			tmp.EnqueueJint(tid2);
+			tmp.EnqueueJlong(timestamp);
+			tmp.EnqueueJboolean(isOneway);
+			Send(tmp.q_data, tmp.q_occupied);
+			return true;
+		}
 		bool OnForkEvent(int para){
 			Buffer tmp(20);
 
