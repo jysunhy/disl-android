@@ -33,9 +33,9 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
     public void permissionUsed (
         final Context ctx, final int tid, final ShadowString permissionName) {
 
-        if(permissionName.toString().equals ("android.permission.WAKE_LOCK")) {
-            return;
-        }
+//        if(permissionName.toString().equals ("android.permission.WAKE_LOCK")) {
+//            return;
+//        }
 
         IPCLogger.debug ("PERMISSION", permissionName.toString ()+ " in "+ctx.pid ()+":"+tid);
         final List<ThreadState> callers = ThreadState.getCallers (ctx, tid);
