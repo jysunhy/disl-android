@@ -295,7 +295,7 @@ public class ThreadState{
     public void printStack () {
         int cnt = 0;
         final String pname = ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname ();
-        IPCLogger.info("PRINTSTACK","Calling Stack in pname("+thd.getPid ()+":"+thd.getTid ()+")");
+        IPCLogger.info("PERMISSION_USAGE","Calling Stack in proc "+pname+"("+thd.getPid ()+":"+thd.getTid ()+")");
         for(int i = runtimeStack.size()-1; i>=0; i--){
             IPCLogger.info ("PRINTSTACK","#"+cnt+":"+runtimeStack.get (i));
             cnt++;
@@ -307,6 +307,6 @@ public class ThreadState{
         for(int i = 0; i < permissions.size(); i++){
             res+=" #"+permissions.get(i);
         }
-        IPCLogger.info("PRINTPERMISSION", res);
+        IPCLogger.info("PERMISSION_USAGE", res);
     }
 }
