@@ -26,6 +26,6 @@ public class SequentialMethodUid extends AbstractMethodUid {
 
     @Override
     protected AbstractUniqueId _getInstance () {
-        return new SequentialMethodUid (new SequenceId (), "methodid.txt");
+        return new SequentialMethodUid (new SequenceId (), "methodid.txt"+"."+ java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
     }
 }

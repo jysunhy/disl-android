@@ -26,6 +26,6 @@ public class RandomMethodUid extends AbstractMethodUid {
 
     @Override
     protected AbstractUniqueId _getInstance () {
-        return new RandomMethodUid (new RandomId (), "methodid.txt");
+        return new RandomMethodUid (new RandomId (), "methodid.txt"+"."+ java.lang.management.ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
     }
 }
