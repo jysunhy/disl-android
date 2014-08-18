@@ -55,10 +55,10 @@ class ShadowCommonClass extends ShadowClass {
 
         //HAIYANG current empty
         //System.out.println ("Getting class code:" +name);
-        if(name.equals("android.os.StrictMode$8")){
-            System.out.println ("debugging here");
-        }
-        if(false) {
+//        if(name.equals("android.os.StrictMode$8")){
+//            System.out.println ("debugging here");
+//        }
+        if(true) {
             return;
         }
         if (classCode == null || classCode.length == 0) {
@@ -86,6 +86,9 @@ class ShadowCommonClass extends ShadowClass {
                 // read class
                 is.readFully(control);
                 is.readFully(classCode);
+                os.close ();
+                is.close ();
+                socket.close ();
             } catch (final UnknownHostException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
