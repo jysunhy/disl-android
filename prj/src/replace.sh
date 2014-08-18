@@ -1,4 +1,4 @@
-ANDROID_SRC=/home/usi/android-src
+ANDROID_SRC=/opt/android/android-src
 cp -r bionic/* $ANDROID_SRC/bionic/
 cp -r build/* $ANDROID_SRC/build/
 cp -r dalvik/* $ANDROID_SRC/dalvik/
