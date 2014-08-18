@@ -33,6 +33,10 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
     public void permissionUsed (
         final Context ctx, final int tid, final ShadowString permissionName) {
 
+        if(permissionName.equals ("android.permission.WAKE_LOCK")) {
+            return;
+        }
+
         IPCLogger.debug ("PERMISSION", permissionName.toString ()+ " in "+ctx.pid ()+":"+tid);
         final List<ThreadState> callers = ThreadState.getCallers (ctx, tid);
         IPCLogger.debug ("PERMISSION","callers "+callers.size ());
@@ -81,7 +85,7 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
             final BinderEvent event = new ResponseRecvdEvent(client, server, info);
             final ThreadState clientState = ThreadState.get (client);
             if(clientState.getPermissionCount()>0){
-                IPCLogger.info ("Result", "Report Event:"+event.toString ());
+                //IPCLogger.info ("Result", "Report Event:"+event.toString ());
                 clientState.printPermission();
                 clientState.printStack();
                 clientState.clearPermissions ();
