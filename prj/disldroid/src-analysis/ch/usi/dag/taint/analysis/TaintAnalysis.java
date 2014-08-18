@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import ch.usi.dag.disldroidreserver.msg.ipc.IPCEventRecord;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.NetReferenceHelper;
@@ -241,11 +240,5 @@ public class TaintAnalysis extends RemoteAnalysis {
         final Context context, final ShadowObject netRef) {
     }
 
-    @Override
-    public void ipcEventProcessed (
-        final Context context, final long threadid, final IPCEventRecord event) {
-        // TODO Auto-generated method stub
-
-    }
 
 }

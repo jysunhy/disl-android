@@ -26,6 +26,7 @@
 #define UNIX_PATH_MAX 108
 
 jlong SetAndGetNetref(Object* obj);
+int64_t getTimeNsec();
 
 int gl_svm_socket = -1;
 
@@ -127,6 +128,9 @@ void update_thread_info_flag_or(int orflag){
 }
 
 void vmEndHook(JavaVM* vm);
+void printStack(JNIEnv * jni_env, jclass this_class){
+	dvmDumpThread(dvmThreadSelf(), false);
+}
 void methodEnter(JNIEnv * jni_env, jclass this_class){
 	if(init_stack()){
 		dvmThreadSelf()->info_flag->push(0);
@@ -145,6 +149,9 @@ int checkThreadPermission(JNIEnv * jni_env, jclass this_class){
 void CallAPI(JNIEnv * jni_env, jclass this_class, jint api){
 	dvmThreadSelf()->transaction_info_flag |= api;
 	update_thread_info_flag_or(api);
+}
+jlong getCPUClock(JNIEnv * jni_env, jclass this_class){
+	return getTimeNsec();
 }
 jlong getObjectId(JNIEnv * jni_env, jclass this_class, jobject jobj){
 	ScopedMutex mtx(&gl_mtx);
@@ -258,7 +265,7 @@ void analysisStart__S
 	DebugFunction(jni_env);
 	if(DEBUGMODE)
 		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis start for method %d, tid:%d", (int)analysis_method_id,dvmThreadSelf()->threadId);
-	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, 0, analysis_method_id);
+	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, getpid()*1000+0, analysis_method_id);
 }
 
 void analysisStart__SB
@@ -267,7 +274,7 @@ void analysisStart__SB
 	DebugFunction(jni_env);
 	if(DEBUGMODE)
 		ALOG(LOG_INFO,isZygote?"SHADOWZYGOTE":"SHADOW","EVENT: analysis start for method %d with ordering %d", (int)analysis_method_id, (int)ordering_id);
-	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, ordering_id, analysis_method_id);
+	remote.AnalysisStartEvent(dvmThreadSelf()->threadId, getpid()*1000+ordering_id, analysis_method_id);
 }
 void manuallyOpen
 (JNIEnv * jni_env, jclass this_class) {
@@ -547,7 +554,9 @@ static JNINativeMethod methods[]= {
 	{"CallAPI", "(I)V", (void*)CallAPI},
 	{"methodEnter", "()V", (void*)methodEnter},
 	{"methodExit", "()V", (void*)methodExit},
+	{"printStack", "()V", (void*)printStack},
 	{"checkThreadPermission", "()I", (void*)checkThreadPermission},
+	{"getCPUClock", "()J", (void*)getCPUClock},
 	{"registerMethod", "(Ljava/lang/String;)S", (void*)registerMethod},
 	{"analysisStart", "(S)V", (void*)analysisStart__S},
 	{"analysisStart", "(SB)V", (void*)analysisStart__SB},
@@ -717,34 +726,45 @@ int64_t getTimeNsec(){
 int clientTransactionStart(int transaction_id, bool isOneWay){
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) starts new transaction", getpid(), dvmThreadSelf()->threadId);
 	//could pass flag of client thread to server thread, for sink
-	ALOG(LOG_DEBUG,"CFG","%d %d %d 0 %d %d %llu %d 0", getpid(), dvmThreadSelf()->threadId, transaction_id, -1, -1, getTimeNsec(), isOneWay?1:0);
+	jlong time = getTimeNsec();
+	ALOG(LOG_DEBUG,"CFG","%d %d %d 0 %d %d %llu %d 0", getpid(), dvmThreadSelf()->threadId, transaction_id, -1, -1, time, isOneWay?1:0);
+	
+	if(!gDvm.bypass)
+		remote.OnIPCEvent(dvmThreadSelf()->threadId, transaction_id, 0, -1, -1, time, isOneWay);
 	return dvmThreadSelf()->threadId;
 }
 int serverTransactionRecv(int transaction_id, int from_pid, int from_tid, bool isOneWay){
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SERVER(%d-%d) receives transaction from client(%d-%d)", getpid(), dvmThreadSelf()->threadId, from_pid, from_tid);
 	//prepare to update server thread's flag
 	dvmThreadSelf()->transaction_info_flag = 0;
-	ALOG(LOG_DEBUG,"CFG","%d %d %d 1 %d %d %llu %d 0", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, getTimeNsec(), isOneWay?1:0);
+	jlong time = getTimeNsec();
+	ALOG(LOG_DEBUG,"CFG","%d %d %d 1 %d %d %llu %d 0", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0);
+	if(!gDvm.bypass)
+		remote.OnIPCEvent(dvmThreadSelf()->threadId, transaction_id, 1, from_pid, from_tid,time, isOneWay);
 	return dvmThreadSelf()->threadId;
 }
 int serverReplySent(int transaction_id, int from_pid, int from_tid, bool isOneWay,int &t_flag){
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","SERVER(%d-%d) sent reply to client", getpid(), dvmThreadSelf()->threadId);
 	//add two flags to event
 	init_stack();
+	jlong time = getTimeNsec();
 	if(dvmThreadSelf()->info_flag->top()){
-		ALOG(LOG_DEBUG,"LEAKSOURCE","%d %d %d x %d %d %llu %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, getTimeNsec(), isOneWay?1:0);
+		ALOG(LOG_DEBUG,"LEAKSOURCE","%d %d %d x %d %d %llu %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0);
 	}
 	if(dvmThreadSelf()->transaction_info_flag){
-		ALOG(LOG_DEBUG,"LEAKSOURCE","%d %d %d y %d %d %llu %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, getTimeNsec(), isOneWay?1:0);
+		ALOG(LOG_DEBUG,"LEAKSOURCE","%d %d %d y %d %d %llu %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0);
 	}
 	t_flag = dvmThreadSelf()->transaction_info_flag;
 	//clear server thread's transaction local flag
-	ALOG(LOG_DEBUG,"CFG","%d %d %d 2 %d %d %llu %d %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, getTimeNsec(), isOneWay?1:0, t_flag);
+	ALOG(LOG_DEBUG,"CFG","%d %d %d 2 %d %d %llu %d %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0, t_flag);
+	if(!gDvm.bypass)
+		remote.OnIPCEvent(dvmThreadSelf()->threadId, transaction_id, 2, from_pid, from_tid,time, isOneWay);
 	return dvmThreadSelf()->threadId;
 }
 int clientReplyRecv(int transaction_id, int from_pid, int from_tid, bool isOneWay, int t_flag){
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) receives reply from server(%d-%d)", getpid(), dvmThreadSelf()->threadId, from_pid, from_tid);
 	init_stack();
+	jlong time = getTimeNsec();
 
 	int ti_old = dvmThreadSelf()->transaction_info_flag;
 	int i_old =dvmThreadSelf()->info_flag->top();
@@ -753,12 +773,15 @@ int clientReplyRecv(int transaction_id, int from_pid, int from_tid, bool isOneWa
 	update_thread_info_flag_or(t_flag);
 	if(dvmThreadSelf()->transaction_info_flag != ti_old){
 		ALOG(LOG_DEBUG,"DETECT0", "%d %d %d %d %d transact_flag %d | %d -> %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, ti_old, t_flag, ti_old | t_flag);
+		dvmDumpThread(dvmThreadSelf(), false);
 	}
 	if(dvmThreadSelf()->info_flag->top() != i_old){
-		ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d %llu %d %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, getTimeNsec(), isOneWay?1:0, t_flag);
+		ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d %llu %d %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, time, isOneWay?1:0, t_flag);
 		ALOG(LOG_DEBUG,"DETECT1", "%d %d %d %d %d thread_flag %d | %d -> %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, i_old, t_flag, i_old | t_flag);
 	}else
-		ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d %llu %d %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, getTimeNsec(), isOneWay?1:0, 0);
+		ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d %llu %d %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, time, isOneWay?1:0, 0);
+	if(!gDvm.bypass)
+		remote.OnIPCEvent(dvmThreadSelf()->threadId, transaction_id, 3, from_pid, from_tid,time, isOneWay);
 	return dvmThreadSelf()->threadId;
 }
 

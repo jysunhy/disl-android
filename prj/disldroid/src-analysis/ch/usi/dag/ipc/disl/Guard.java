@@ -17,11 +17,11 @@ public class Guard {
         @GuardMethod
         public static boolean permissionCheck (final MethodStaticContext msc) {
             final String name = msc.thisMethodFullName ();
-            return name.contains ("ActivityManager.checkComponentPermission")
-            || name.contains ("ActivityManagerProxy.checkPermission")
-            || name.contains ("ContextImpl.checkCallingOrSelfPermission")
-            || name.contains ("ContextImpl.checkCallingPermission")
-            || name.contains ("ContextImpl.checkPermission");
+            return name.contains ("ActivityManager.checkComponentPermission");
+            //|| name.contains ("ActivityManagerProxy.checkPermission")
+            //|| name.contains ("ContextImpl.checkCallingOrSelfPermission")
+            //|| name.contains ("ContextImpl.checkCallingPermission")
+            //|| name.contains ("ContextImpl.checkPermission");
         }
     }
 }
