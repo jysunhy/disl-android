@@ -33,7 +33,7 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
     public void permissionUsed (
         final Context ctx, final int tid, final ShadowString permissionName) {
 
-        if(permissionName.equals ("android.permission.WAKE_LOCK")) {
+        if(permissionName.toString().equals ("android.permission.WAKE_LOCK")) {
             return;
         }
 
