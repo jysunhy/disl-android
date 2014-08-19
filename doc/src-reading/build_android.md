@@ -32,6 +32,9 @@
 	make snod			//repackage the system.img
 
 ### Compile Kernel
+
+####ARM
+(according to external/qemu/docs/ANDROID-KERNEL.TXT)
 git clone git://android.git.kernel.org/kernel/common.git kernel-common
 cd kernel-common
 git checkout origin/archive/android-gldfish-2.6.29
@@ -42,6 +45,13 @@ export SUBARCH=arm
 make goldfish_defconfig
 make
 
+### x86
+git clone http://android.googlesource.com/kernel/goldfish.git goldfish-kernel
+cd goldfish-kernel
+git checkout android-goldfish-3.4
+make ARCH=x86 goldfish_defconfig
+export CROSS\_COMPILE=<AOSP_TREE>/prebuilts/gcc/linux-x86/x86/i686-linux-android-4.7/bin/i686-linux-android-
+make ARCH=x86 CC="${CROSS_COMPILE}gcc -mno-android" bzImage
 
 ### DEBUG
 adb logcat -s TAG:[i|e|...]
