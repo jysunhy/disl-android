@@ -786,7 +786,7 @@ public class Worker extends Thread {
                                 final Iterator<DiSLConfig.Proc> iter = list.iterator ();
                                 while(iter.hasNext ()){
 									final DiSLConfig.Proc tmp = iter.next();
-									if(tmp.isObserved) {
+									if(tmp.isObserved != DiSLConfig.default_proc_observed) {
                                         observeList += tmp.procname+";";
                                     }
                                 }
