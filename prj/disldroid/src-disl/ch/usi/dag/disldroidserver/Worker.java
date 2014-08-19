@@ -781,7 +781,7 @@ public class Worker extends Thread {
                                 "-");
                             if (configMsg) {
 
-                                String observeList="";
+                                String observeList=""+(DiSLConfig.default_proc_observed?"1;":"0;");
                                 final Collection<DiSLConfig.Proc> list =DiSLConfig.procMap.values ();
                                 final Iterator<DiSLConfig.Proc> iter = list.iterator ();
                                 while(iter.hasNext ()){
