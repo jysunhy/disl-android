@@ -31,6 +31,18 @@
 	mmm packages/apps/Email/	//generate Email.app to app folder in out/..
 	make snod			//repackage the system.img
 
+### Compile Kernel
+git clone git://android.git.kernel.org/kernel/common.git kernel-common
+cd kernel-common
+git checkout origin/archive/android-gldfish-2.6.29
+
+export CROSS_COMPILE=arm-eabi-
+export ARCH=arm
+export SUBARCH=arm
+make goldfish_defconfig
+make
+
+
 ### DEBUG
 adb logcat -s TAG:[i|e|...]
 
