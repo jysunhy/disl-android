@@ -171,7 +171,6 @@ public class DiSLConfig {
         dexMap = new HashMap <String, Dex> ();
         procMap = new HashMap <String, Proc> ();
         dex2procMap = new HashMap <String, Proc> ();
-        default_proc_observed = false;
         default_disl_classes = "";
         try {
             final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance ();
@@ -194,7 +193,7 @@ public class DiSLConfig {
                             default_disl_classes="";
                         }
                     }else if (child.getNodeName ().equals ("default-observed")) {
-                        default_proc_observed = Boolean.getBoolean (child.getTextContent ());
+                        default_proc_observed = Boolean.parseBoolean (child.getTextContent ());
                     }
                 }
             }

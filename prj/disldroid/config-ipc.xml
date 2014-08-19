@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<default-dislclass></default-dislclass>
+	<default-dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</default-dislclass>
 	<default-observed>true</default-observed>
 	<dexes> 
 		<dex>
@@ -50,7 +51,6 @@
 			<name>Browser.apk</name>
 			<isbootstrap>false</isbootstrap>
 			<bypass>false</bypass>
-			<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>com.inspur.test2-1.apk</name>
@@ -102,65 +102,86 @@
 		</dex>
 	</dexes>
 	<procs>
-		<proc>
-			<procname>org.cert.WriteFile</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>org.cert.writefile</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>org.cert.sendsms</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>org.cert.echoer</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.typ3studios.easybutton</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>de.ecspride</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.browser</procname>
-			<dexname>Browser.apk</dexname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.inspur.test2</procname>
-			<dexname>com.inspur.test2-1.apk</dexname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.javacodegeeks.android.androidphonecontactsexample</procname>
-			<dexname>AndroidPhoneContactsExample.apk</dexname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>system_server</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.phone</procname>
-			<isobserved>true</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.contacts</procname>
-			<isobserved>false</isobserved>
-			<dexname>Contacts.apk</dexname>
-		</proc>
-		<proc>
-			<procname>com.android.mms</procname>
-			<isobserved>false</isobserved>
-		</proc>
-		<proc>
-			<procname>com.android.smspush</procname>
-			<isobserved>false</isobserved>
-		</proc>
+<!-- built-in processes -->
+<proc>
+<procname>dalvikvm</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>zygote</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>system_server</procname>
+<isobserved>true</isobserved>
+</proc>
+<proc>
+<procname>com.android.providers.calendar</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>android.process.media</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>android.process.acore</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>com.android.systemui</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>com.android.inputmethod.latin</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>com.android.phone</procname>
+<isobserved>true</isobserved>
+</proc>
+<proc>
+<procname>com.android.settings</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>com.android.provision</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>com.android.smspush</procname>
+<isobserved>true</isobserved>
+</proc>
+<proc>
+<procname>com.android.voicedialer</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>com.android.launcher</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>com.android.gallery3d</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>com.android.contacts</procname>
+<isobserved>true</isobserved>
+</proc>
+<proc>
+<procname>com.android.exchange</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>com.android.email</procname>
+<isobserved>false</isobserved>
+</proc>
+<proc>
+<procname>com.android.mms</procname>
+<isobserved>true</isobserved>
+</proc>
+<proc>
+<procname>com.android.deskclock</procname>
+<isobserved>false</isobserved>
+</proc>
 	</procs>
 </config>
