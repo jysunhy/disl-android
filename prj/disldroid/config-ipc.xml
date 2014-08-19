@@ -3,6 +3,7 @@
 	<default-dislclass></default-dislclass>
 	<default-dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</default-dislclass>
 	<default-observed>true</default-observed>
+	<default-bypass>false</default-bypass>
 	<dexes> 
 		<dex>
 			<name>WriteFile.apk</name>
@@ -100,88 +101,93 @@
 			<isbootstrap>true</isbootstrap>
 			<dislclass></dislclass>
 		</dex>
+		<dex>
+			<name>android.test.runner.jar</name>
+			<isbootstrap>true</isbootstrap>
+			<dislclass></dislclass>
+		</dex>
 	</dexes>
 	<procs>
 <!-- built-in processes -->
 <proc>
-<procname>dalvikvm</procname>
-<isobserved>false</isobserved>
+	<procname>dalvikvm</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>zygote</procname>
-<isobserved>false</isobserved>
+	<procname>zygote</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>system_server</procname>
-<isobserved>true</isobserved>
+	<procname>system_server</procname>
+	<isobserved>true</isobserved>
 </proc>
 <proc>
-<procname>com.android.providers.calendar</procname>
-<isobserved>false</isobserved>
+	<procname>com.android.providers.calendar</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>android.process.media</procname>
-<isobserved>false</isobserved>
+	<procname>android.process.media</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>android.process.acore</procname>
-<isobserved>false</isobserved>
+	<procname>android.process.acore</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>com.android.systemui</procname>
-<isobserved>false</isobserved>
+	<procname>com.android.systemui</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>com.android.inputmethod.latin</procname>
-<isobserved>false</isobserved>
+	<procname>com.android.inputmethod.latin</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>com.android.phone</procname>
-<isobserved>true</isobserved>
+	<procname>com.android.phone</procname>
+	<isobserved>true</isobserved>
 </proc>
 <proc>
-<procname>com.android.settings</procname>
-<isobserved>false</isobserved>
+	<procname>com.android.settings</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>com.android.provision</procname>
-<isobserved>false</isobserved>
+	<procname>com.android.provision</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>com.android.smspush</procname>
-<isobserved>true</isobserved>
+	<procname>com.android.smspush</procname>
+	<isobserved>true</isobserved>
 </proc>
 <proc>
-<procname>com.android.voicedialer</procname>
-<isobserved>false</isobserved>
+	<procname>com.android.voicedialer</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>com.android.launcher</procname>
-<isobserved>false</isobserved>
+	<procname>com.android.launcher</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>com.android.gallery3d</procname>
-<isobserved>false</isobserved>
+	<procname>com.android.gallery3d</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>com.android.contacts</procname>
-<isobserved>true</isobserved>
+	<procname>com.android.contacts</procname>
+	<isobserved>true</isobserved>
 </proc>
 <proc>
-<procname>com.android.exchange</procname>
-<isobserved>false</isobserved>
+	<procname>com.android.exchange</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>com.android.email</procname>
-<isobserved>false</isobserved>
+	<procname>com.android.email</procname>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
-<procname>com.android.mms</procname>
-<isobserved>true</isobserved>
+	<procname>com.android.mms</procname>
+	<isobserved>true</isobserved>
 </proc>
 <proc>
-<procname>com.android.deskclock</procname>
-<isobserved>false</isobserved>
+	<procname>com.android.deskclock</procname>
+	<isobserved>false</isobserved>
 </proc>
 	</procs>
 </config>

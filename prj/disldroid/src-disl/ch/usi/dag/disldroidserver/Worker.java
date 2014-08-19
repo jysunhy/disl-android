@@ -412,7 +412,7 @@ public class Worker extends Thread {
 //                        return null;
 //                    }
                     //newdisl = new DiSL (false,DiSLConfig.default_disl_classes);
-                    newdisl = new DiSL (true,DiSLConfig.default_disl_classes,"");
+                    newdisl = new DiSL (DiSLConfig.default_bypass, DiSLConfig.default_disl_classes,"");
                 }catch (final Exception e){
                     e.printStackTrace ();
                 }

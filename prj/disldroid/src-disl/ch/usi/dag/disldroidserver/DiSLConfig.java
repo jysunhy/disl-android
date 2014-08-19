@@ -25,6 +25,8 @@ public class DiSLConfig {
 
     static boolean default_proc_observed = false;
 
+    static boolean default_bypass = true;
+
     public static HashMap <String, Dex> dexMap;
     public static HashMap <String, Proc> procMap;
     public static HashMap <String, Proc> dex2procMap;
@@ -194,6 +196,8 @@ public class DiSLConfig {
                         }
                     }else if (child.getNodeName ().equals ("default-observed")) {
                         default_proc_observed = Boolean.parseBoolean (child.getTextContent ());
+                    }else if (child.getNodeName ().equals ("default-bypass")) {
+                        default_bypass = Boolean.parseBoolean (child.getTextContent ());
                     }
                 }
             }
