@@ -273,7 +273,7 @@ public class ThreadState{
     public synchronized  void popBoundary(final String boundaryName){
         //ASSERT top == boundaryName
         if(!runtimeStack.peek ().equals (boundaryName)) {
-            IPCLogger.write (LoggerType.ERROR,"POPBOUNDARY", "not match when poping boundary "+boundaryName+ ":"+runtimeStack.peek ());
+            IPCLogger.write (LoggerType.ERROR,"POPBOUNDARY", "not match when poping boundary "+boundaryName+ " : "+runtimeStack.peek ());
         }
         runtimeStack.pop ();
     }

@@ -1,6 +1,6 @@
 package ch.usi.dag.ipc.disl;
 
-import ch.usi.dag.disl.annotation.AfterReturning;
+import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.marker.BytecodeMarker;
 import ch.usi.dag.ipc.analysis.IPCAnalysisStub;
@@ -17,7 +17,7 @@ public class MethodCallDiSLClass {
     }
 
     /* every time after calling a method */
-    @AfterReturning (
+    @After (
         marker = BytecodeMarker.class,
         args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual")
     public static void afterInvoke (final CallContext ac) {
