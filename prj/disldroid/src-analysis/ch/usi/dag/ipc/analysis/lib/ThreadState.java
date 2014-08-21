@@ -310,7 +310,7 @@ public class ThreadState{
         for(int i = 0; i < permissions.size(); i++){
             res+=" #"+permissions.get(i);
         }
-        res =  res + "in proc "+pname+"("+thd.getPid ()+":"+thd.getTid ()+")";
+        res =  res + " in proc "+pname+"("+thd.getPid ()+":"+thd.getTid ()+")";
         IPCLogger.info("PERMISSION_USAGE", res);
     }
 }
