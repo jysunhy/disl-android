@@ -1,111 +1,244 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<default-dislclass></default-dislclass>
-	<default-dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</default-dislclass>
+	<default-dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/ipc/disl/MethodCallDiSLClass.class</default-dislclass>
 	<default-observed>true</default-observed>
 	<default-bypass>false</default-bypass>
 	<dexes> 
-		<dex>
-			<name>WriteFile.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<bypass>false</bypass>
-			<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>SendSMS.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
-			<bypass>false</bypass>
-		</dex>
-		<dex>
-			<name>dynamicloaded.jar</name>
-			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
-			<bypass>false</bypass>
-		</dex>
-		<dex>
-			<name>Echoer.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
-			<bypass>false</bypass>
-		</dex>
-		<dex>
-			<name>Reflection_Reflection4.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>de.ecspride-1.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>Phone.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>Contacts.apk</name>
-			<isbootstrap>false</isbootstrap>
-		</dex>
-		<dex>
-			<name>Browser.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<bypass>false</bypass>
-		</dex>
-		<dex>
-			<name>com.inspur.test2-1.apk</name>
-			<isbootstrap>false</isbootstrap>
-			<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
-			<bypass>false</bypass>
-		</dex>
-		<dex>
-			<name>AndroidPhoneContactsExample.apk</name>
-			<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
-			<isbootstrap>false</isbootstrap>
-			<bypass>false</bypass>
-		</dex>
-		<dex>
-			<name>core.jar</name>
-			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
-		</dex>
-		<dex>
-			<name>core-junit.jar</name>
-			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
-		</dex>
-		<dex>
-			<name>bouncycastle.jar</name>
-			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
-		</dex>
-		<dex>
-			<name>ext.jar</name>
-			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
-		</dex>
-		<dex>
-			<name>framework.jar</name>
-			<isbootstrap>true</isbootstrap>
-			<!--<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/PermissionDiSLClass.class,output/build/analysis/ch/usi/dag/icc/disl/DiSLClass.class</dislclass>-->
-			<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/PermissionDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>services.jar</name>
-			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
-		</dex>
-		<dex>
-			<name>apache-xml.jar</name>
-			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
-		</dex>
-		<dex>
-			<name>android.test.runner.jar</name>
-			<isbootstrap>true</isbootstrap>
-			<dislclass></dislclass>
-		</dex>
+<dex>
+<name>core.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>core-junit.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>bouncycastle.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>ext.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>framework.jar</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/PermissionDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>android.policy.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>services.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>apache-xml.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>android.test.runner.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>com.android.location.provider.jar</name>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>javax.obex.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>am.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>svc.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>uiautomator.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>ime.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>content.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>pm.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>monkey.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>bu.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>requestsync.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>input.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>bmgr.jar</name>
+<dislclass></dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>SettingsProvider.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>CalendarProvider.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>MediaProvider.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>ContactsProvider.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>SystemUI.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>LatinIME.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>TelephonyProvider.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>Phone.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>Settings.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>ApplicationsProvider.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>UserDictionaryProvider.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>Provision.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>WAPPushManager.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>Launcher2.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>Exchange2.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>Gallery2.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>Contacts.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>DownloadProvider.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>DrmProvider.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>VoiceDialer.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>Email.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>Mms.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>DeskClock.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>Calendar.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
+<dex>
+<name>QuickSearchBox.apk</name>
+<dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class</dislclass>
+<bypass>true</bypass>
+</dex>
 	</dexes>
 	<procs>
 <!-- built-in processes -->
@@ -131,7 +264,7 @@
 </proc>
 <proc>
 	<procname>android.process.acore</procname>
-	<isobserved>false</isobserved>
+	<isobserved>true</isobserved>
 </proc>
 <proc>
 	<procname>com.android.systemui</procname>
@@ -187,6 +320,14 @@
 </proc>
 <proc>
 	<procname>com.android.deskclock</procname>
+	<isobserved>false</isobserved>
+</proc>
+<proc>
+	<procname>com.android.calendar</procname>
+	<isobserved>false</isobserved>
+</proc>
+<proc>
+	<procname>com.android.quicksearchbox</procname>
 	<isobserved>false</isobserved>
 </proc>
 	</procs>
