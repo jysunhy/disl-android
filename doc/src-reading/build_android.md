@@ -19,7 +19,9 @@
 	repo sync
 
 ##Compile and run
-	make -j16 showcommands WITH_DEXPREOPT=false
+	make -j16 showcommands WITH_DEXPREOPT=false 
+	//or you can change the true to false in build/target/board/generic/BoardConfig.mk
+	
 	#make -j8
 	#make -j8 PRODUCT-sdk-sdk showcommands dist
 	
