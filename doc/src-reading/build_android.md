@@ -19,9 +19,13 @@
 	repo sync
 
 ##Compile and run
-	make -j16 showcommands WITH_DEXPREOPT=false
+	make -j16 showcommands WITH_DEXPREOPT=false 
+	//or you can change the true to false in build/target/board/generic/BoardConfig.mk
+	
 	#make -j8
 	#make -j8 PRODUCT-sdk-sdk showcommands dist
+	
+	make sure java javac javadoc are of version 1.6
 	
 	emulator -sysdir out/target/product/generic/ -system out/target/product/generic/system.img -ramdisk out/target/product/generic/ramdisk.img -data out/target/product/generic/userdata.img -kernel prebuilts/qemu-kernel/arm/kernel-qemu -sdcard sdcard.img -skindir sdk/emulator/skins -skin WVGA800 -scale 0.7 -memory 512 -partition-size 1024
 
