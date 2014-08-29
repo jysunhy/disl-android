@@ -264,7 +264,7 @@
 </proc>
 <proc>
 	<procname>android.process.acore</procname>
-	<isobserved>true</isobserved>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
 	<procname>com.android.systemui</procname>

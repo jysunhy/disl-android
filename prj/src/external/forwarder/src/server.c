@@ -57,6 +57,7 @@ int pids[MAX_PROCESS];
 int psize = 0;
 char* pnames[MAX_PROCESS];
 pthread_mutex_t locks[MAX_PROCESS];
+bool defaultObserved=false;
 char* observedNames[MAX_PROCESS];
 int observedCnt = 0;
 
@@ -126,12 +127,12 @@ void * my_thread (void *arg)
 				}else{
 					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "more than max processes");
 				}
-			int tmp = 1;
+			bool observed = defaultObserved;
 			int i = 0;
 			for(; i < observedCnt; i++){
 				if(!strcmp(pname, observedNames[i])){
-					ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "PROCESS NAME: %s is OBSERVED", pname);
-					tmp = 0;
+					//ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "PROCESS NAME: %s is OBSERVED", pname);
+					observed = !defaultObserved;
 				}else {
 					if(strlen(pname) > strlen(observedNames[i])){
 						char* tmppname = (char*) malloc(pname_len);
@@ -139,8 +140,8 @@ void * my_thread (void *arg)
 						tmppname[strlen(observedNames[i])]='\0';
 						if(!strcmp(tmppname, observedNames[i])){
 							if(pname[strlen(observedNames[i])]==':'){
-								ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "PROCESS NAME: %s is sub process that should be OBSERVED", pname);
-								tmp = 0;
+					//			ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "PROCESS NAME: %s is sub process that should be OBSERVED", pname);
+								observed = !defaultObserved;
 							}
 						}
 						free(tmppname);
@@ -148,10 +149,14 @@ void * my_thread (void *arg)
 					}
 				}
 			}
-			if(tmp)
+			int tmp=0;
+			if(!observed){
+				tmp=1;
 				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED, SENDING BACK 1", pid);
-			else
+			}else {
+				tmp=0;
 				ALOG(LOG_DEBUG,"INSTRUMENTSERVER", "QUERYING %d: FOUNDED and ISTARGET, SENDING BACK 0", pid);
+			}
 
 			send(myClient_s,&tmp,sizeof(int),0);
 
@@ -416,8 +421,9 @@ int main (void)
 		ALOG (LOG_INFO,"INSTRUMENTSERVER","observed name list length beyond 10240");
 	}
 
-	int startPos = 0;
-	int endPos = 0;
+	defaultObserved = buf[0]=='1';
+	int startPos = 2;
+	int endPos = 2;
 	for(;endPos<=listlen;endPos++){
 		if(buf[endPos]==';'){
 			observedNames[observedCnt] = (char*)malloc(endPos-startPos+1);
