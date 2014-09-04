@@ -31,4 +31,10 @@ public class IPCLogger {
         }
         System.out.println (header+log);
     }
+
+    public static void reportPermissionUsage(final ThreadState state){
+        state.printPermission();
+        state.printStack();
+
+    }
 }

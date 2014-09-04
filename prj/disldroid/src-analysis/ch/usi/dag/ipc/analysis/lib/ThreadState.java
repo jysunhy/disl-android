@@ -12,6 +12,9 @@ import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.ipc.analysis.lib.BinderEvent.EventType;
 import ch.usi.dag.ipc.analysis.lib.BinderEvent.RequestRecvdEvent;
+import ch.usi.dag.ipc.analysis.lib.BinderEvent.RequestSentEvent;
+import ch.usi.dag.ipc.analysis.lib.BinderEvent.ResponseRecvdEvent;
+import ch.usi.dag.ipc.analysis.lib.BinderEvent.ResponseSentEvent;
 import ch.usi.dag.ipc.analysis.lib.IPCLogger.LoggerType;
 
 
@@ -147,7 +150,7 @@ public class ThreadState{
 
     static long Waiting_Time=50;
     static long Max_Waiting_Time=500;
-    public void waitForEvent(final TransactionInfo info){
+    public void waitForRequestSent(final TransactionInfo info){
         if(ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname () == null){
             IPCLogger.write (LoggerType.DEBUG, "WAIT", "Proc "+thd.getPid ()+" is not observed");
             return;
@@ -197,7 +200,7 @@ public class ThreadState{
         IPCLogger.debug ("PRINTEVENTLIST",log);
     }
 
-    public void waitForEvent(final TransactionInfo info, final NativeThread client){
+    public void waitForResponseSent(final TransactionInfo info, final NativeThread client){
         if(ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname () == null){
             IPCLogger.write (LoggerType.DEBUG, "WAIT", "Proc "+thd.getPid ()+" is not observed");
             return;
@@ -312,5 +315,24 @@ public class ThreadState{
         }
         res =  res + " in proc "+pname+"("+thd.getPid ()+":"+thd.getTid ()+")";
         IPCLogger.info("PERMISSION_USAGE", res);
+    }
+    public void recordRequestSent (final NativeThread client, final TransactionInfo info) {
+        final BinderEvent event = new RequestSentEvent (client, info);
+        addEvent (event);
+    }
+    public void recordRequestReceived (
+        final NativeThread client, final NativeThread server, final TransactionInfo info) {
+        final BinderEvent event = new RequestRecvdEvent (client, server, info);
+        addEvent (event);
+    }
+    public void recordResponseSent (
+        final NativeThread client, final NativeThread server, final TransactionInfo info) {
+        final BinderEvent event = new ResponseSentEvent(client, server, info);
+        addEvent (event);
+    }
+    public void recordResponseReceived (
+        final NativeThread client, final NativeThread server, final TransactionInfo info) {
+        final BinderEvent event = new ResponseRecvdEvent(client, server, info);
+        addEvent (event);
     }
 }
