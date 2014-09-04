@@ -2,7 +2,7 @@
 <config>
 	<default-dislclass></default-dislclass>
 	<default-dislclass>output/build/analysis/ch/usi/dag/ipc/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/ipc/disl/MethodCallDiSLClass.class</default-dislclass>
-	<default-observed>true</default-observed>
+	<default-observed>false</default-observed>
 	<default-bypass>false</default-bypass>
 	<dexes> 
 <dex>
@@ -288,7 +288,7 @@
 </proc>
 <proc>
 	<procname>com.android.smspush</procname>
-	<isobserved>true</isobserved>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
 	<procname>com.android.voicedialer</procname>
@@ -304,7 +304,7 @@
 </proc>
 <proc>
 	<procname>com.android.contacts</procname>
-	<isobserved>true</isobserved>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
 	<procname>com.android.exchange</procname>
@@ -316,7 +316,7 @@
 </proc>
 <proc>
 	<procname>com.android.mms</procname>
-	<isobserved>true</isobserved>
+	<isobserved>false</isobserved>
 </proc>
 <proc>
 	<procname>com.android.deskclock</procname>
@@ -329,6 +329,10 @@
 <proc>
 	<procname>com.android.quicksearchbox</procname>
 	<isobserved>false</isobserved>
+</proc>
+<proc>
+	<procname>de.ecspride</procname>
+	<isobserved>true</isobserved>
 </proc>
 	</procs>
 </config>
