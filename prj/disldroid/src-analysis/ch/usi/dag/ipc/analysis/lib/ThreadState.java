@@ -128,24 +128,7 @@ public class ThreadState{
 
     public synchronized void addEvent(final BinderEvent event){
         IPCLogger.write (LoggerType.DEBUG, "ADDEVENT", "Add Event "+event.toString ());
-
-//        try {
-//            final File logfile = new File("debug.added"+thd.getPid ()+"_"+thd.getTid ());
-//            if(!logfile.exists()) {
-//                logfile.createNewFile();
-//            }
-//            FileOutputStream fout;
-//            fout = new FileOutputStream (logfile, true);
-//            fout.write (event.toString ().getBytes ());
-//            fout.write ('\n');
-//        } catch (final Exception e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-
-
         eventList.add (event);
-        //printEventList ();
     }
 
     static long Waiting_Time=50;
