@@ -25,14 +25,14 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
 
 
     public void commitBranch (final ShadowString methodID, final int index) {
-        final CoverageState status = methodID.getState (CoverageState.class);
-        status.brancheExecuted [index] = true;
+        final CoverageState state = methodID.getState (CoverageState.class);
+        state.brancheExecuted [index] = true;
     }
 
 
     public void commitBasicBlock (final ShadowString methodID, final int index) {
-        final CoverageState status = methodID.getState (CoverageState.class);
-        status.basicblockExecuted [index] = true;
+        final CoverageState state = methodID.getState (CoverageState.class);
+        state.basicblockExecuted [index] = true;
     }
 
 
@@ -50,10 +50,6 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
 
 
     @Override
-    public void objectFree (final Context context, final ShadowObject netRef) {
+    public void objectFree (final Context context, final ShadowObject obj) {
     }
-
-
-
-
 }

@@ -17,7 +17,6 @@ import ch.usi.dag.ipc.analysis.lib.BinderEvent.ResponseRecvdEvent;
 import ch.usi.dag.ipc.analysis.lib.BinderEvent.ResponseSentEvent;
 import ch.usi.dag.ipc.analysis.lib.IPCLogger.LoggerType;
 
-
 public class ThreadState{
 
 
@@ -33,6 +32,7 @@ public class ThreadState{
     public ThreadState (final NativeThread thd) {
         this.thd=thd;
     }
+
     @Override
     public String toString(){
         return thd.toString ();
@@ -155,14 +155,10 @@ public class ThreadState{
             IPCLogger.write (LoggerType.DEBUG, "WAIT", "Proc "+thd.getPid ()+" is not observed");
             return;
         }
-//        if(info.isOneway ()) {
-//            return;
-//        }
         BinderEvent res = null;
         IPCLogger.write (LoggerType.DEBUG, "WAIT","waiting for request sent event for transaction "+info.getTransactionId ()+" in "+thd.getPid ()+" "+thd.getTid());
         long waitingTime = Waiting_Time;
         while(((res=findEvent(info))==null)
-//        && (waitingTime < Max_Waiting_Time)
         ){
             if(ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().isDead ()){
                 IPCLogger.debug("WAIT","don't wait for a dead process "+thd.getPid ());
@@ -175,17 +171,13 @@ public class ThreadState{
                 waitingTime*=2;
                 waitingTime = waitingTime>Max_Waiting_Time?Max_Waiting_Time:waitingTime;
             } catch (final InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
         if(res != null) {
             IPCLogger.write (LoggerType.DEBUG, "WAIT","request sent event ready for transaction "+info.getTransactionId ()+" in "+thd.getPid ()+" "+thd.getTid());
         } else {
-
             IPCLogger.write (LoggerType.DEBUG,"WAIT", "request sent event lost for transaction "+info.getTransactionId ()+" in "+thd.getPid ()+" "+thd.getTid());
-            //printEventList ();
-
         }
     }
 
@@ -205,12 +197,10 @@ public class ThreadState{
             IPCLogger.write (LoggerType.DEBUG, "WAIT", "Proc "+thd.getPid ()+" is not observed");
             return;
         }
-        //final ThreadState state = get(client);
         BinderEvent res = null;
         IPCLogger.write (LoggerType.DEBUG, "WAIT", "waiting for response sent event for transaction "+info.getTransactionId ()+" in "+thd.getPid ()+" "+thd.getTid() +" from "+client.getPid ()+" "+client.getTid ());
         long waitingTime = Waiting_Time;
         while(((res=findEvent(info,client))==null)
-//        && (waitingTime < Max_Waiting_Time)
         ){
             if(ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().isDead ()){
                 IPCLogger.debug("WAIT", "don't wait for a dead process "+thd.getPid ());
@@ -222,14 +212,12 @@ public class ThreadState{
                 waitingTime*=2;
                 waitingTime = waitingTime>Max_Waiting_Time?Max_Waiting_Time:waitingTime;
             } catch (final InterruptedException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
         if(res != null) {
             IPCLogger.write (LoggerType.DEBUG, "WAIT", "response sent event ready for transaction "+info.getTransactionId ()+" in "+thd.getPid ()+" "+thd.getTid());
         } else{
-            //printEventList ();
             IPCLogger.write (LoggerType.DEBUG, "WAIT", "response sent event lost for transaction "+info.getTransactionId ()+" in "+thd.getPid ()+" "+thd.getTid()+" from "+client.getPid ()+" "+client.getTid ());
         }
     }
@@ -237,11 +225,9 @@ public class ThreadState{
     private synchronized BinderEvent findEvent(final TransactionInfo info){
         final Iterator<BinderEvent> iter = eventList.iterator ();
         BinderEvent res = null;
-        //String log = "try to find request sent for "+thd.toString ()+info.toString ()+"\n";
 
         while(iter.hasNext ()){
             final BinderEvent event = iter.next ();
-            //log = log + event.toString () + "\n";
             if(event.getType () != EventType.REQUEST_SENT) {
                 continue;
             }
@@ -250,7 +236,6 @@ public class ThreadState{
                 break;
             }
         }
-        //IPCLogger.debug (log);
         return res;
     }
     private synchronized BinderEvent findEvent(final TransactionInfo info, final NativeThread client){
@@ -274,7 +259,6 @@ public class ThreadState{
         runtimeStack.push (boundaryName);
     }
     public synchronized  void popBoundary(final String boundaryName){
-        //ASSERT top == boundaryName
         if(!runtimeStack.peek ().equals (boundaryName)) {
             IPCLogger.write (LoggerType.ERROR,"POPBOUNDARY", "not match when poping boundary "+boundaryName+ " : "+runtimeStack.peek ());
         }
@@ -336,7 +320,6 @@ public class ThreadState{
         /*
          * We choose to keep the event history instead of discard events at the moment
          */
-
 
         final BinderEvent event = new ResponseRecvdEvent(client, server, info);
         addEvent (event);

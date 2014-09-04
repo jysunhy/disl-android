@@ -5,6 +5,10 @@ import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.marker.BodyMarker;
 import ch.usi.dag.ipc.analysis.IPCAnalysisStub;
 
+/*
+ * for generating runtime stack
+ * Take effects on app code
+ */
 public class MethodEntryDiSLClass {
 
     /* every time entering a method */

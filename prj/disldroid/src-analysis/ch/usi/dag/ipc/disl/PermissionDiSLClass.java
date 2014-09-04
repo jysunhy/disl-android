@@ -12,11 +12,12 @@ public class PermissionDiSLClass {
 
     /* instrument the framework library for every check permission functions
      * send the permission used to the analysis server
-    */
+     *
+     * This takes effects on framework.jar
+     */
     @Before (
 			marker = BodyMarker.class,
 			guard = Guard.PermissionGuard.class
-			//scope = "*.check*Permission*"
 			)
 		public static void detectPermission (
 				final MethodStaticContext msc, final ArgumentProcessorContext pc) {
@@ -25,7 +26,6 @@ public class PermissionDiSLClass {
 			for (final Object obj : args) {
 			    if(obj!=null){
     			    if(obj.getClass().getCanonicalName().equals ("java.lang.String")) {
-                        //if(obj.toString ().contains ("permission.SEND_SMS") || obj.toString ().contains ("permission.READ_PHONE_STATE")){
     			        if(obj.toString ().contains ("permission")){
                             IPCAnalysisStub.permission_used (obj.toString ());
                         }

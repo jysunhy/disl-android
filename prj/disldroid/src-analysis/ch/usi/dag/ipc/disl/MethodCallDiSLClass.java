@@ -5,7 +5,10 @@ import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.marker.BytecodeMarker;
 import ch.usi.dag.ipc.analysis.IPCAnalysisStub;
 
-/* for generating runtime stack */
+/*
+ * for generating runtime stack
+ * Take effects on app code
+ */
 public class MethodCallDiSLClass {
     /* every time before calling a method */
     @Before (

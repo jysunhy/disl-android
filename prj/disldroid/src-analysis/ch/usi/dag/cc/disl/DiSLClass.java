@@ -76,11 +76,4 @@ public class DiSLClass {
         CodeCoverageAnalysisStub.commitBasicBlock (
             c.thisMethodFullNameWithDesc (), basicblocks);
     }
-
-
-    @Before (marker = BodyMarker.class, scope = "foo.bar", order = 2)
-    public static void printAnalysisResult () {
-        CodeCoverageAnalysisStub.printResult ();
-    }
-
 }

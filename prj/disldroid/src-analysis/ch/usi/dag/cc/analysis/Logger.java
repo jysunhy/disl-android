@@ -28,9 +28,6 @@ public class Logger {
         }
     }
 
-
-
-
     public static void dump (final Context context) {
         final HashMap <String, StatisticSummary> classCovered = new HashMap <> ();
 

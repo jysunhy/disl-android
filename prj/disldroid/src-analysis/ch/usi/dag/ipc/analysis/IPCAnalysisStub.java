@@ -10,8 +10,6 @@ public class IPCAnalysisStub {
     public static void permission_used (final String permission_str) {
         AREDispatch.analysisStart (PERMISSION_USED);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
-        //AREDispatch.sendLong (AREDispatch.getCPUClock ());
-        //AREDispatch.sendCurrentThread ();
         AREDispatch.sendObjectPlusData (permission_str);
         AREDispatch.analysisEnd ();
     }
@@ -19,7 +17,6 @@ public class IPCAnalysisStub {
 
     public static void boundary_start (final String boundaryName) {
         AREDispatch.analysisStart (BOUNDARY_START);
-        //AREDispatch.sendCurrentThread ();
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
         AREDispatch.sendObjectPlusData (boundaryName);
         AREDispatch.analysisEnd ();
@@ -29,7 +26,6 @@ public class IPCAnalysisStub {
     public static void boundary_end (final String boundaryName) {
         AREDispatch.analysisStart (BOUNDARY_END);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
-        //AREDispatch.sendCurrentThread ();
         AREDispatch.sendObjectPlusData (boundaryName);
         AREDispatch.analysisEnd ();
     }
