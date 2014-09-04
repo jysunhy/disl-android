@@ -332,6 +332,12 @@ public class ThreadState{
     }
     public void recordResponseReceived (
         final NativeThread client, final NativeThread server, final TransactionInfo info) {
+
+        /*
+         * We choose to keep the event history instead of discard events at the moment
+         */
+
+
         final BinderEvent event = new ResponseRecvdEvent(client, server, info);
         addEvent (event);
     }
