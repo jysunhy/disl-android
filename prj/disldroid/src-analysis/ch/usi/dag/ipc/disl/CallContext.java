@@ -16,7 +16,7 @@ public class CallContext extends MethodStaticContext {
 			builder.append (min.owner);
 			builder.append ('.');
 			builder.append (min.name);
-			builder.append (min.desc);
+			//builder.append (min.desc);
 		}
 
 		return builder.toString ();

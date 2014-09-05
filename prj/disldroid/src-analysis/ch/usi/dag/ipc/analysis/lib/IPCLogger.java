@@ -35,6 +35,6 @@ public class IPCLogger {
     public static void reportPermissionUsage(final ThreadState state){
         state.printPermission();
         state.printStack();
-
+        info("PERMISSION_USAGE", "");
     }
 }

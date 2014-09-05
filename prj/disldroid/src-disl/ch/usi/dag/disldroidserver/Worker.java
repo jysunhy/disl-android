@@ -470,8 +470,8 @@ public class Worker extends Thread {
         }
 
         //if (debug) {
-            System.out.println ("tmp file stored in "
-                + dex2JarFile.getAbsolutePath ());
+//            System.out.println ("tmp file stored in "
+//                + dex2JarFile.getAbsolutePath ());
         //}
 
         final DexFileReader reader = new DexFileReader (dexCode);
