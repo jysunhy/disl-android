@@ -523,7 +523,7 @@ public class Worker extends Thread {
         if(ON_ANDROID_DEVICE) {
             instrumentedJarName= "/data/"+ "instrumented_" + jarName;
         } else {
-            instrumentedJarName= "instrumented_" + jarName;
+            instrumentedJarName= "/tmp/instrumented_" + jarName;
         }
         final File instrumentedJarFile= new File (instrumentedJarName);
 
