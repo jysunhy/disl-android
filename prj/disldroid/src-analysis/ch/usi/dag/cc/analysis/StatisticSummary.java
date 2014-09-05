@@ -9,7 +9,6 @@ public class StatisticSummary implements Replicable {
 
     int classBasicBlock;
 
-    // for dumping
     int coveredClass;
 
     int coveredMethod;
@@ -17,7 +16,6 @@ public class StatisticSummary implements Replicable {
     int coveredBranches;
 
     int coveredBasicBlocks;
-
 
     public StatisticSummary (final int classBranch, final int classBasicBlock) {
         this.classBranch = classBranch;
@@ -40,15 +38,12 @@ public class StatisticSummary implements Replicable {
     public String toString () {
         final Formatter formatter = new Formatter ();
 
-        formatter.format ("%d %d %.2f %d %d %.2f %d %d",
+        formatter.format ("Total Branches: %d; Covered Branches: %d; "
+            + "Total Basicblocks: %d; Covered Basicblocks: %d",
             classBranch,
             coveredBranches,
-            CodeCoverageUtil.divide (coveredBranches, classBranch),
             classBasicBlock,
-            coveredBasicBlocks,
-            CodeCoverageUtil.divide (coveredBasicBlocks, classBasicBlock),
-            coveredMethod,
-            coveredClass);
+            coveredBasicBlocks);
 
         final String res = formatter.toString ();
         formatter.close ();

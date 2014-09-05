@@ -99,15 +99,12 @@ public class CoverageState implements Replicable {
             }
         }
 
-        formatter.format ("%d %d %.2f %d %d %.2f %s %s",
+        formatter.format ("Total Branches: %d; Covered Branches: %d; "
+            + "Total Basicblocks: %d; Covered Basicblocks: %d; ",
             brancheExecuted.length,
             coveredBranches,
-            CodeCoverageUtil.divide (coveredBranches, brancheExecuted.length),
             basicblockExecuted.length,
-            coveredBasicBlocks,
-            CodeCoverageUtil.divide (coveredBasicBlocks, basicblockExecuted.length),
-            branchBitmap.toString (),
-            basicblockBitmap.toString ());
+            coveredBasicBlocks);
 
         final String res = formatter.toString ();
         formatter.close ();
