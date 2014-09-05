@@ -604,7 +604,7 @@ public final class DiSL {
             ) throws DiSLException {
         // keep the currently processed class around in case of errors
         if (debug) {
-            __dumpClassToFile(classAsBytes, "err.class");
+            __dumpClassToFile(classAsBytes, "ongoing.class");
         }
 
         // apply transformer first

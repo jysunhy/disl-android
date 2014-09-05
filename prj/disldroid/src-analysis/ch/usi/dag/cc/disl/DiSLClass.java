@@ -76,4 +76,10 @@ public class DiSLClass {
         CodeCoverageAnalysisStub.commitBasicBlock (
             c.thisMethodFullNameWithDesc (), basicblocks);
     }
+
+    @Before (marker = BodyMarker.class,
+        scope="ImplicitFlow4.checkUsernamePassword")
+    public static void onPause () {
+        CodeCoverageAnalysisStub.printResult ();
+    }
 }
