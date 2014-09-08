@@ -39,13 +39,13 @@ public class DiSLClass {
     }
 
 
-    @Before (marker = BranchInstrMarker.class, order = 1)
+    @Before (marker = BranchInsnMarker.class, order = 1)
     public static void beforeBranchInstr () {
         encounterBranch = true;
     }
 
 
-    @AfterReturning (marker = BranchInstrMarker.class, order = 1)
+    @AfterReturning (marker = BranchInsnMarker.class, order = 1)
     public static void afterBranchInstr (final CodeCoverageContext c) {
         if (encounterBranch) {
             branches [c.getIndex ()] = true;

@@ -26,5 +26,9 @@
 			<procname>de.ecspride</procname>
 			<isobserved>true</isobserved>
 		</proc>
+		<proc>
+			<procname>net.learn2develop.SMSMessaging</procname>
+			<isobserved>true</isobserved>
+		</proc>
 	</procs>
 </config>

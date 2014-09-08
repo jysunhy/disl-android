@@ -10,7 +10,7 @@ import org.objectweb.asm.tree.MethodNode;
 import ch.usi.dag.disl.marker.AbstractInsnMarker;
 
 
-public class BranchInstrMarker extends AbstractInsnMarker {
+public class BranchInsnMarker extends AbstractInsnMarker {
 
     @Override
     public List <AbstractInsnNode> markInstruction (final MethodNode methodNode) {

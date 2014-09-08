@@ -444,6 +444,9 @@ public class Worker extends Thread {
         }
         byte [] instrClass = null;
         final DiSL curdisl = getDiSL(jarName);//dislMap.get (jarName);
+        if(curdisl == null && !jarName.contains ("core.jar") && !jarName.contains ("framework.jar")){
+            return dexCode;
+        }
         if (cacheUsed) {
             String key ="";
             if(curdisl != null) {
