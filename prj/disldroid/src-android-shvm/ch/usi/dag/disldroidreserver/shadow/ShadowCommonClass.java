@@ -71,20 +71,20 @@ class ShadowCommonClass extends ShadowClass {
                 is = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
                 os.writeInt(name.length ());
-                os.writeInt(0);
 
                 os.write(name.getBytes ());
+                os.writeInt(0);
                 //os.write(nm.getClassCode());
                 os.flush();
                 final int controlLength = is.readInt();
-                final int classCodeLength = is.readInt();
 
                 // allocate buffer for class reading
                 final byte[] control = new byte[controlLength];
-                classCode = new byte[classCodeLength];
 
                 // read class
                 is.readFully(control);
+                final int classCodeLength = is.readInt();
+                classCode = new byte[classCodeLength];
                 is.readFully(classCode);
                 os.close ();
                 is.close ();

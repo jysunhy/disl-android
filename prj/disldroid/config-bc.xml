@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<default-dislclass></default-dislclass>
-	<default-observed>true</default-observed>
+	<default-observed>false</default-observed>
 	<dexes> 
 		<dex>
 			<name>binarytrees.jar</name>
-			<dislclass>output/build/analysis/ch/usi/dag/bc/disl/DiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/cc/disl/DiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>bench-jacoco-dvm.jar</name>
@@ -14,7 +14,7 @@
 		<dex>
 			<name>bench-dvm.jar</name>
 			<bypass>true</bypass>
-			<dislclass>output/build/analysis/ch/usi/dag/bc/disl/DiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/cc/disl/DiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>core.jar</name>

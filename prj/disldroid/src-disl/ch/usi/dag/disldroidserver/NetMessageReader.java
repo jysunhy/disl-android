@@ -25,19 +25,20 @@ public class NetMessageReader {
 
 		// protocol:
 		// java int - control string length (ctl)
-		// java int - class code length (ccl)
 		// bytes[ctl] - control string (contains class name)
+		// java int - class code length (ccl)
 		// bytes[ccl] - class code
 
 		final int controlLength = is.readInt();
-		final int classCodeLength = is.readInt();
+        System.out.println("control length "+controlLength);
 
-		// allocate buffer for class reading
 		final byte[] control = new byte[controlLength];
-		final byte[] classCode = new byte[classCodeLength];
-
-		// read class
 		is.readFully(control);
+        System.out.println("control:"+ new String(control));
+
+		final int classCodeLength = is.readInt();
+        System.out.println("snd length "+classCodeLength);
+		final byte[] classCode = new byte[classCodeLength];
 		is.readFully(classCode);
 
 		return new NetMessage(control, classCode);
@@ -58,9 +59,8 @@ public class NetMessageReader {
 		// bytes[ccl] - class code
 
 		os.writeInt(nm.getControl().length);
-		os.writeInt(nm.getClassCode().length);
-
 		os.write(nm.getControl());
+		os.writeInt(nm.getClassCode().length);
 		os.write(nm.getClassCode());
 		os.flush();
 	}
