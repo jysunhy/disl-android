@@ -11,6 +11,9 @@
 	
 	sudo apt-get install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev libc6-dev lib32ncurses5-dev ia32-libs x11proto-core-dev libx11-dev lib32readline5-dev lib32z-dev libgl1-mesa-dev g++-multilib mingw32 tofrodos python-markdown libxml2-utils xsltproc
   
+  //Ubuntu 14
+  sudo apt-get install libswitch-perl  
+  
   	mkdir android-source
 	cd android-source
 	
