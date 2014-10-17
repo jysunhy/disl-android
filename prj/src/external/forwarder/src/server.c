@@ -175,7 +175,7 @@ void * my_thread (void *arg)
 			cnt+=retcode;
 		}
 		buf[namelen] = 0;
-		//	ALOG (LOG_INFO,"INSTRUMENTSERVER","new name comes : %s ", buf);
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","new name comes : %s ", buf);
 
 		int i = 0;
 		for(; i< map_size;i++){
@@ -194,15 +194,15 @@ void * my_thread (void *arg)
 			}
 
 		}
-		//	ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: sending %d size from IS", sign4);
+			ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: sending %d size from IS", sign4);
 		//	int flag = 123;
 		//	flag = htonl(flag);
 		//	retcode = send(sock_host, &flag, sizeof(int), 0);
 		int namelen2n = htonl(namelen);
 		retcode = send(sock_host, &namelen2n, sizeof(int), 0);
+		retcode = send(sock_host, buf, namelen, 0);
 		int codelen2n = htonl(codelen);
 		retcode = send(sock_host, &codelen2n, sizeof(int), 0);
-		retcode = send(sock_host, buf, namelen, 0);
 		cnt = 0;
 		while(cnt<codelen) {
 			retcode = recv (myClient_s, buf, BUF_SIZE, 0);
@@ -216,15 +216,15 @@ void * my_thread (void *arg)
 		int newnamelen;
 		retcode = recv(sock_host, &newnamelen, sizeof(int), 0);
 		newnamelen = ntohl(newnamelen);
+		ALOG (LOG_INFO, "INSTRUMENTSERVER","new name received %d", newnamelen);
+		retcode = recv(sock_host, buf, newnamelen, 0);
 		retcode = recv(sock_host, &sign4, sizeof(int), 0);
 		sign4 = ntohl(sign4);
 		if(i == map_size - 1){
 			map_value[map_size-1] = sign4;
 		}
-		//ALOG (LOG_INFO, "INSTRUMENTSERVER","new name received %d", newnamelen);
-		retcode = recv(sock_host, buf, newnamelen, 0);
 		//ALOG (LOG_INFO, "INSTRUMENTSERVER","new dexsize received %d", sign4);
-		//ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: new size %d size from HS", sign4);
+		ALOG (LOG_INFO,"INSTRUMENTSERVER","IS: new size %d size from HS", sign4);
 		retcode = send(myClient_s, &sign4, sizeof(int), 0);
 		while(cnt<sign4) {
 			retcode = recv (sock_host, buf, BUF_SIZE, 0);
@@ -397,11 +397,11 @@ int main (void)
 	int flag = 1;
 	flag = htonl(flag);
 	retcode = send(sock_host, &flag, sizeof(int), 0);
+	char minus = '-';
+	retcode = send(sock_host, &minus, sizeof(char), 0);
 	flag = 0;
 	flag = htonl(flag);
 	retcode = send(sock_host, &flag, sizeof(int), 0);
-	char minus = '-';
-	retcode = send(sock_host, &minus, sizeof(char), 0);
 
 	int listlen;
 	char * list;
