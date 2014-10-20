@@ -726,12 +726,12 @@ status_t IPCThreadState::waitForResponse(Parcel *reply, status_t *acquireResult)
 				int curTID = mMyThreadId;
 				if(hook_addr)
 					curTID = (*hook_addr)(tr.transaction_id, tr.sender_pid, tr.sender_tid, tr.flags & TF_ONE_WAY, tr.transaction_flag);
-				if(reply)
-					ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) receives reply from (%d:%d) for transaction(%d)", getpid(), curTID, tr.sender_pid, tr.sender_tid, tr.transaction_id);
-				else
-					ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) receives reply(empty) from (%d:%d) for transaction(%d)", getpid(), curTID, tr.sender_pid, tr.sender_tid, tr.transaction_id);
+				//if(reply)
+				//	ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) receives reply from (%d:%d) for transaction(%d)", getpid(), curTID, tr.sender_pid, tr.sender_tid, tr.transaction_id);
+				//else
+				//	ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) receives reply(empty) from (%d:%d) for transaction(%d)", getpid(), curTID, tr.sender_pid, tr.sender_tid, tr.transaction_id);
 
-				ALOG(LOG_DEBUG,"FFG","%d %d %d 3 %d %d %llu %d %d", getpid(), curTID, tr.transaction_id, tr.sender_pid, tr.sender_tid, getTimeNsec(), tr.flags&TF_ONE_WAY, tr.transaction_flag);
+				//ALOG(LOG_DEBUG,"FFG","%d %d %d 3 %d %d %llu %d %d", getpid(), curTID, tr.transaction_id, tr.sender_pid, tr.sender_tid, getTimeNsec(), tr.flags&TF_ONE_WAY, tr.transaction_flag);
 
 				//}
 	//			ALOG(LOG_DEBUG,"BINDER","try print gDvm %p, %s",&gDvm, *((char**)&gDvm));
@@ -913,20 +913,20 @@ status_t IPCThreadState::writeTransactionData(int32_t cmd, uint32_t binderFlags,
 
 	if(cmd == BC_REPLY){
 		tr.transaction_id = session_transaction_id;
-		if(hook_addr)
-			ALOG(LOG_DEBUG,"BINDER","Server\t(%d:%d) sends reply for transaction(%d)", getpid(), curTID, session_transaction_id);
-		else
-			ALOG(LOG_DEBUG,"BINDER","Native Server\t(%d:%d) sends reply for transaction(%d)", getpid(), curTID, session_transaction_id);
-		ALOG(LOG_DEBUG,"FFG","%d %d %d 2 %d %d %llu %d %d", session_pid, session_tid,session_transaction_id, getpid(), curTID,  getTimeNsec(), binderFlags & TF_ONE_WAY, t_flag);
+		//if(hook_addr)
+		//	ALOG(LOG_DEBUG,"BINDER","Server\t(%d:%d) sends reply for transaction(%d)", getpid(), curTID, session_transaction_id);
+		//else
+		//	ALOG(LOG_DEBUG,"BINDER","Native Server\t(%d:%d) sends reply for transaction(%d)", getpid(), curTID, session_transaction_id);
+		//ALOG(LOG_DEBUG,"FFG","%d %d %d 2 %d %d %llu %d %d", session_pid, session_tid,session_transaction_id, getpid(), curTID,  getTimeNsec(), binderFlags & TF_ONE_WAY, t_flag);
 	}else{
 		tr.transaction_id = local_transaction_cnt;
-		if(hook_addr)
-			ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) starts transaction(%d)", getpid(), curTID, local_transaction_cnt);
-		else
-			ALOG(LOG_DEBUG,"BINDER","Native Client\t(%d:%d) starts transaction(%d)", getpid(), curTID, local_transaction_cnt);
-		if(data.callerTID != curTID && hook_addr)
-			ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) debugging Transaction(%d) seems not from binderproxy", getpid(), curTID, local_transaction_cnt);
-		ALOG(LOG_DEBUG,"FFG","%d %d %d 0 %d %d %llu %d 0", getpid(), curTID, local_transaction_cnt, -1, -1, getTimeNsec(), binderFlags & TF_ONE_WAY);
+		//if(hook_addr)
+		//	ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) starts transaction(%d)", getpid(), curTID, local_transaction_cnt);
+		//else
+		//	ALOG(LOG_DEBUG,"BINDER","Native Client\t(%d:%d) starts transaction(%d)", getpid(), curTID, local_transaction_cnt);
+		//if(data.callerTID != curTID && hook_addr)
+		//	ALOG(LOG_DEBUG,"BINDER","Client\t(%d:%d) debugging Transaction(%d) seems not from binderproxy", getpid(), curTID, local_transaction_cnt);
+		//ALOG(LOG_DEBUG,"FFG","%d %d %d 0 %d %d %llu %d 0", getpid(), curTID, local_transaction_cnt, -1, -1, getTimeNsec(), binderFlags & TF_ONE_WAY);
 	}
     
     const status_t err = data.errorCheck();
@@ -1102,11 +1102,11 @@ status_t IPCThreadState::executeCommand(int32_t cmd)
 			session_tid = tr.sender_tid;
 			if(hook_addr)
 				curTID = (*hook_addr)(session_transaction_id, tr.sender_pid, tr.sender_tid, tr.flags & TF_ONE_WAY);
-			if(hook_addr)
-				ALOG(LOG_DEBUG,"BINDER","Server\t(%d:%d) receives transaction(%d) From PID-TID (%d:%d)", getpid(), curTID , tr.transaction_id, tr.sender_pid, tr.sender_tid);
-			else
-				ALOG(LOG_DEBUG,"BINDER","Native Server\t(%d:%d) receives transaction(%d) From PID-TID (%d:%d)", getpid(), curTID , tr.transaction_id, tr.sender_pid, tr.sender_tid);
-			ALOG(LOG_DEBUG,"FFG","%d %d %d 1 %d %d %llu %d 0", tr.sender_pid, tr.sender_tid, tr.transaction_id,getpid(), curTID,  getTimeNsec(), tr.flags & TF_ONE_WAY);
+			//if(hook_addr)
+			//	ALOG(LOG_DEBUG,"BINDER","Server\t(%d:%d) receives transaction(%d) From PID-TID (%d:%d)", getpid(), curTID , tr.transaction_id, tr.sender_pid, tr.sender_tid);
+			//else
+			//	ALOG(LOG_DEBUG,"BINDER","Native Server\t(%d:%d) receives transaction(%d) From PID-TID (%d:%d)", getpid(), curTID , tr.transaction_id, tr.sender_pid, tr.sender_tid);
+			//ALOG(LOG_DEBUG,"FFG","%d %d %d 1 %d %d %llu %d 0", tr.sender_pid, tr.sender_tid, tr.transaction_id,getpid(), curTID,  getTimeNsec(), tr.flags & TF_ONE_WAY);
 
             if (tr.target.ptr) {
                 sp<BBinder> b((BBinder*)tr.cookie);
@@ -1127,7 +1127,7 @@ status_t IPCThreadState::executeCommand(int32_t cmd)
                 sendReply(reply, 0);
             } else {
                 LOG_ONEWAY("NOT sending reply to %d!", mCallingPid);
-				ALOG(LOG_DEBUG,"BINDER","This Server\t(%d:%d) receive ONEWAY transaction(%d)",getpid(), curTID, tr.transaction_id);
+				//ALOG(LOG_DEBUG,"BINDER","This Server\t(%d:%d) receive ONEWAY transaction(%d)",getpid(), curTID, tr.transaction_id);
             }
             
             mCallingPid = origPid;

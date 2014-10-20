@@ -727,7 +727,7 @@ int clientTransactionStart(int transaction_id, bool isOneWay){
 	//ALOG(LOG_DEBUG,isZygote?"SHADOWZYGOTE":"SHADOW","CLIENT(%d-%d) starts new transaction", getpid(), dvmThreadSelf()->threadId);
 	//could pass flag of client thread to server thread, for sink
 	jlong time = getTimeNsec();
-	ALOG(LOG_DEBUG,"CFG","%d %d %d 0 %d %d %llu %d 0", getpid(), dvmThreadSelf()->threadId, transaction_id, -1, -1, time, isOneWay?1:0);
+	//ALOG(LOG_DEBUG,"CFG","%d %d %d 0 %d %d %llu %d 0", getpid(), dvmThreadSelf()->threadId, transaction_id, -1, -1, time, isOneWay?1:0);
 	
 	if(!gDvm.bypass)
 		remote.OnIPCEvent(dvmThreadSelf()->threadId, transaction_id, 0, -1, -1, time, isOneWay);
@@ -738,7 +738,7 @@ int serverTransactionRecv(int transaction_id, int from_pid, int from_tid, bool i
 	//prepare to update server thread's flag
 	dvmThreadSelf()->transaction_info_flag = 0;
 	jlong time = getTimeNsec();
-	ALOG(LOG_DEBUG,"CFG","%d %d %d 1 %d %d %llu %d 0", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0);
+	//ALOG(LOG_DEBUG,"CFG","%d %d %d 1 %d %d %llu %d 0", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0);
 	if(!gDvm.bypass)
 		remote.OnIPCEvent(dvmThreadSelf()->threadId, transaction_id, 1, from_pid, from_tid,time, isOneWay);
 	return dvmThreadSelf()->threadId;
@@ -749,14 +749,14 @@ int serverReplySent(int transaction_id, int from_pid, int from_tid, bool isOneWa
 	init_stack();
 	jlong time = getTimeNsec();
 	if(dvmThreadSelf()->info_flag->top()){
-		ALOG(LOG_DEBUG,"LEAKSOURCE","%d %d %d x %d %d %llu %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0);
+	//	ALOG(LOG_DEBUG,"LEAKSOURCE","%d %d %d x %d %d %llu %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0);
 	}
 	if(dvmThreadSelf()->transaction_info_flag){
-		ALOG(LOG_DEBUG,"LEAKSOURCE","%d %d %d y %d %d %llu %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0);
+	//	ALOG(LOG_DEBUG,"LEAKSOURCE","%d %d %d y %d %d %llu %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0);
 	}
 	t_flag = dvmThreadSelf()->transaction_info_flag;
 	//clear server thread's transaction local flag
-	ALOG(LOG_DEBUG,"CFG","%d %d %d 2 %d %d %llu %d %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0, t_flag);
+	//ALOG(LOG_DEBUG,"CFG","%d %d %d 2 %d %d %llu %d %d", from_pid, from_tid, transaction_id, getpid(), dvmThreadSelf()->threadId, time, isOneWay?1:0, t_flag);
 	if(!gDvm.bypass)
 		remote.OnIPCEvent(dvmThreadSelf()->threadId, transaction_id, 2, from_pid, from_tid,time, isOneWay);
 	return dvmThreadSelf()->threadId;
@@ -772,14 +772,15 @@ int clientReplyRecv(int transaction_id, int from_pid, int from_tid, bool isOneWa
 	//dvmThreadSelf()->info_flag |= t_flag;
 	update_thread_info_flag_or(t_flag);
 	if(dvmThreadSelf()->transaction_info_flag != ti_old){
-		ALOG(LOG_DEBUG,"DETECT0", "%d %d %d %d %d transact_flag %d | %d -> %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, ti_old, t_flag, ti_old | t_flag);
+		//ALOG(LOG_DEBUG,"DETECT0", "%d %d %d %d %d transact_flag %d | %d -> %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, ti_old, t_flag, ti_old | t_flag);
 		dvmDumpThread(dvmThreadSelf(), false);
 	}
 	if(dvmThreadSelf()->info_flag->top() != i_old){
-		ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d %llu %d %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, time, isOneWay?1:0, t_flag);
-		ALOG(LOG_DEBUG,"DETECT1", "%d %d %d %d %d thread_flag %d | %d -> %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, i_old, t_flag, i_old | t_flag);
-	}else
-		ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d %llu %d %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, time, isOneWay?1:0, 0);
+		//ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d %llu %d %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, time, isOneWay?1:0, t_flag);
+		//ALOG(LOG_DEBUG,"DETECT1", "%d %d %d %d %d thread_flag %d | %d -> %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, i_old, t_flag, i_old | t_flag);
+	}else{
+		//ALOG(LOG_DEBUG,"CFG","%d %d %d 3 %d %d %llu %d %d", getpid(), dvmThreadSelf()->threadId, transaction_id, from_pid, from_tid, time, isOneWay?1:0, 0);
+    }
 	if(!gDvm.bypass)
 		remote.OnIPCEvent(dvmThreadSelf()->threadId, transaction_id, 3, from_pid, from_tid,time, isOneWay);
 	return dvmThreadSelf()->threadId;

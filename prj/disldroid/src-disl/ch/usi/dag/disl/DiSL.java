@@ -87,6 +87,84 @@ public final class DiSL {
 	//HY signature bytes for a disl instance
 	public byte[] dislclassesHash;
 
+	public String wrapperClassName="APIWrapper";
+	private final ClassNode wrapperClassNode = new ClassNode ();
+	public byte[] wrapperClass;
+
+	private void initPerDiSL(final String dislClassPaths){
+	    try{
+	        List<InputStream> dislClasses = null;
+	        if(dislClassPaths != null) {
+                dislClasses= ClassByteLoader.loadDiSLClasses(dislClassPaths);
+            }else{
+                dislClasses= ClassByteLoader.loadDiSLClasses();
+            }
+	        final MessageDigest md = MessageDigest.getInstance("MD5");
+            if(dislClasses != null) {
+                final byte[] buffer = new byte[1024];
+                int numRead = 0;
+                for (final InputStream classIS : dislClasses) {
+                    while((numRead = classIS.read(buffer))>0) {
+                        md.update(buffer,0,numRead);
+                    }
+                    classIS.close ();
+                }
+                dislclassesHash = md.digest();
+            }
+            int cnt = 0;
+            for (final byte element : dislclassesHash) {
+                final byte cur = (byte) (((element)%10+10)%10);
+                wrapperClassName = wrapperClassName + cur;
+                cnt++;
+                if(cnt>10) {
+                    break;
+                }
+            }
+            if(dislClassPaths != null) {
+                dislClasses= ClassByteLoader.loadDiSLClasses(dislClassPaths);
+            }else{
+                dislClasses= ClassByteLoader.loadDiSLClasses();
+            }
+            wrapperClassNode.version = Opcodes.V1_6;
+            wrapperClassNode.access = Opcodes.ACC_PUBLIC;
+            wrapperClassNode.name= wrapperClassName;
+            wrapperClassNode.superName = "java/lang/Object";
+
+            int wrapperMethodCount = 0;
+            for (final InputStream classIS : dislClasses) {
+                final ClassNode cn = new ClassNode();
+                final ClassReader cr = new ClassReader(classIS);
+                cr.accept (cn, 0);
+                for(final MethodNode mn : cn.methods){
+                    if(mn.invisibleAnnotations!=null && mn.invisibleAnnotations.size ()>0){
+                        final String annotationName = mn.invisibleAnnotations.get (0).desc;
+                        if(annotationName.equals ("Lch/usi/dag/disl/annotation/Monitor;")){
+                            wrapperClassNode.methods.add (mn);
+                            wrapperMethodCount++;
+                        }
+                    }
+                }
+                classIS.close ();
+            }
+            if(wrapperMethodCount>0){
+                final ClassWriter cw = new ClassWriter(0);
+                wrapperClassNode.accept(cw);
+                wrapperClass = cw.toByteArray();
+                /*{
+                    final BufferedOutputStream bos = new BufferedOutputStream(
+                            new FileOutputStream(wrapperClassName+".class"));
+                    bos.write(wrapperClass);
+                    bos.flush();
+                    bos.close();
+                }*/
+            }else {
+                wrapperClass = null;
+            }
+        }catch(final Exception e){
+            e.printStackTrace();
+        }
+	}
+
     /**
      * DiSL initialization.
      *
@@ -113,23 +191,7 @@ public final class DiSL {
         exclusionSet = ExclusionSet.prepare();
 
 		// *** HY: compute signature for this disl ***
-		try{
-        	final List<InputStream> dislClasses_forhash = ClassByteLoader.loadDiSLClasses();
-			final MessageDigest md = MessageDigest.getInstance("MD5");
-			if(dislClasses_forhash != null) {
-				final byte[] buffer = new byte[1024];
-				int numRead = 0;
-		        for (final InputStream classIS : dislClasses_forhash) {
-					while((numRead = classIS.read(buffer))>0) {
-						md.update(buffer,0,numRead);
-					}
-					classIS.close();
-		        }
-				dislclassesHash = md.digest();
-			}
-		}catch(final Exception e){
-			e.printStackTrace();
-		}
+        initPerDiSL (null);
 
         // *** load disl classes ***
         final List<InputStream> dislClasses = ClassByteLoader.loadDiSLClasses();
@@ -205,23 +267,8 @@ public final class DiSL {
         exclusionSet = ExclusionSet.prepare();
 
         // *** compute hash ***
-        try{
-            final List<InputStream> dislClasses_forhash = ClassByteLoader.loadDiSLClasses(dislClassPaths);
-            final MessageDigest md = MessageDigest.getInstance("MD5");
-            if(dislClasses_forhash != null) {
-                final byte[] buffer = new byte[1024];
-                int numRead = 0;
-                for (final InputStream classIS : dislClasses_forhash) {
-                    while((numRead = classIS.read(buffer))>0) {
-                        md.update(buffer,0,numRead);
-                    }
-                    classIS.close();
-                }
-                dislclassesHash = md.digest();
-            }
-        }catch(final Exception e){
-            e.printStackTrace();
-        }
+        initPerDiSL (dislClassPaths);
+
         // *** load disl classes ***
         final List<InputStream> dislClasses = ClassByteLoader.loadDiSLClasses(dislClassPaths);
 
@@ -441,7 +488,7 @@ public final class DiSL {
             Weaver.instrument(
                     classNode, methodNode, snippetMarkings,
                     new LinkedList<SyntheticLocalVar>(usedSLVs),
-                    staticInfo, piResolver
+                    staticInfo, piResolver, wrapperClassName
                     );
 
             return true;

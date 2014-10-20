@@ -24,5 +24,6 @@
 	<classpathentry kind="lib" path="lib-android/jar-rename-1.6.jar"/>
 	<classpathentry kind="lib" path="lib-android/jasmin-p2.5.jar"/>
 	<classpathentry kind="lib" path="output/lib/disl-bypass.jar"/>
+	<classpathentry kind="lib" path="/ASM/bin"/>
 	<classpathentry kind="output" path="output/build/disl"/>
 </classpath>

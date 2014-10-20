@@ -533,6 +533,14 @@ public class Worker extends Thread {
 
         final FileOutputStream fos = new FileOutputStream (instrumentedJarFile);
         final ZipOutputStream zos = new ZipOutputStream (fos);
+
+        if(curdisl!= null && curdisl.wrapperClass != null){
+            final ZipEntry wrapperEntry = new ZipEntry (curdisl.wrapperClassName+".class");
+            zos.putNextEntry (wrapperEntry);
+            zos.write (curdisl.wrapperClass);
+            zos.closeEntry ();
+        }
+
         final byte [] buffer = new byte [8192];
         int bytesRead;
         while (entryEnum.hasMoreElements ()) {

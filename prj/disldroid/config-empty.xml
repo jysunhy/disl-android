@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<default-dislclass></default-dislclass>
+	<default-observed>false</default-observed>
+	<dexes> 
+		<dex>
+			<name>core.jar</name>
+            <!--<dislclass>output/build/analysis/ch/usi/dag/monitor/disl/DiSLClass.class,output/build/analysis/ch/usi/dag/empty/disl/LogOnlyDiSLClass.class</dislclass>-->
+			<dislclass>output/build/analysis/ch/usi/dag/monitor/disl/DiSLClass.class</dislclass>
+            <bypass>false</bypass>
+		</dex>
+	</dexes>
+	<procs>
+	</procs>
+</config>

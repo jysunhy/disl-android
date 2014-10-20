@@ -11,6 +11,7 @@ import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
+import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TryCatchBlockNode;
 
@@ -18,6 +19,7 @@ import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.annotation.AfterThrowing;
 import ch.usi.dag.disl.annotation.Before;
+import ch.usi.dag.disl.annotation.Monitor;
 import ch.usi.dag.disl.annotation.SyntheticLocal.Initialize;
 import ch.usi.dag.disl.exception.InvalidContextUsageException;
 import ch.usi.dag.disl.localvar.SyntheticLocalVar;
@@ -29,6 +31,7 @@ import ch.usi.dag.disl.snippet.SnippetCode;
 import ch.usi.dag.disl.staticcontext.generator.SCGenerator;
 import ch.usi.dag.disl.util.AsmHelper;
 import ch.usi.dag.disl.util.AsmHelper.Insns;
+
 
 // The weaver instruments byte-codes into java class.
 public class Weaver {
@@ -42,7 +45,7 @@ public class Weaver {
      */
     private static void static2Local (
         final MethodNode methodNode,
-        final List<SyntheticLocalVar> syntheticLocalVars
+        final List <SyntheticLocalVar> syntheticLocalVars
     ) {
         final InsnList instructions = methodNode.instructions;
         final AbstractInsnNode first = instructions.getFirst ();
@@ -66,7 +69,7 @@ public class Weaver {
             if (var.hasInitCode ()) {
                 instructions.insertBefore (
                     first, AsmHelper.cloneInstructions (var.getInitCode ())
-                );
+                    );
 
             } else {
                 //
@@ -90,10 +93,9 @@ public class Weaver {
                 //
                 instructions.insertBefore (first, AsmHelper.putStatic (
                     var.getOwner (), var.getName (), type.getDescriptor ()
-                ));
+                    ));
             }
         }
-
 
         //
         // Scan the method code for GETSTATIC/PUTSTATIC instructions accessing
@@ -108,7 +110,8 @@ public class Weaver {
             }
 
             final FieldInsnNode fieldInsn = (FieldInsnNode) insn;
-            final String varId = SyntheticLocalVar.fqFieldNameFor (fieldInsn.owner, fieldInsn.name);
+            final String varId = SyntheticLocalVar.fqFieldNameFor (
+                fieldInsn.owner, fieldInsn.name);
 
             //
             // Try to find the static field being accessed among the synthetic
@@ -138,8 +141,8 @@ public class Weaver {
 
             instructions.insertBefore (fieldInsn,
                 (opcode == Opcodes.GETSTATIC) ?
-                AsmHelper.loadVar (type, slot) : AsmHelper.storeVar (type, slot)
-            );
+                    AsmHelper.loadVar (type, slot) : AsmHelper.storeVar (type, slot)
+                );
 
             instructions.remove (fieldInsn);
         }
@@ -153,101 +156,103 @@ public class Weaver {
 
     // Return a successor label of weaving location corresponding to
     // the input 'end'.
-    private static LabelNode getEndLabel(
-        MethodNode methodNode, AbstractInsnNode instr
+    private static LabelNode getEndLabel (
+        final MethodNode methodNode, AbstractInsnNode instr
     ) {
         if (Insns.FORWARD.nextRealInsn (instr) != null) {
-            LabelNode branch = new LabelNode();
-            methodNode.instructions.insert(instr, branch);
+            final LabelNode branch = new LabelNode ();
+            methodNode.instructions.insert (instr, branch);
 
-            JumpInsnNode jump = new JumpInsnNode(Opcodes.GOTO, branch);
-            methodNode.instructions.insert(instr, jump);
+            final JumpInsnNode jump = new JumpInsnNode (Opcodes.GOTO, branch);
+            methodNode.instructions.insert (instr, jump);
             instr = jump;
         }
 
         // Create a label just after the 'GOTO' instruction.
-        LabelNode label = new LabelNode();
-        methodNode.instructions.insert(instr, label);
+        final LabelNode label = new LabelNode ();
+        methodNode.instructions.insert (instr, label);
         return label;
     }
 
+
     // generate a try catch block node given the scope of the handler
-    public static TryCatchBlockNode getTryCatchBlock(MethodNode methodNode,
-            AbstractInsnNode start, AbstractInsnNode end) {
+    public static TryCatchBlockNode getTryCatchBlock (final MethodNode methodNode,
+        AbstractInsnNode start, AbstractInsnNode end) {
 
-        InsnList ilst = methodNode.instructions;
+        final InsnList ilst = methodNode.instructions;
 
-        int new_start_offset = ilst.indexOf(start);
-        int new_end_offset = ilst.indexOf(end);
+        int new_start_offset = ilst.indexOf (start);
+        final int new_end_offset = ilst.indexOf (end);
 
-        for (TryCatchBlockNode tcb : methodNode.tryCatchBlocks) {
+        for (final TryCatchBlockNode tcb : methodNode.tryCatchBlocks) {
 
-            int start_offset = ilst.indexOf(tcb.start);
-            int end_offset = ilst.indexOf(tcb.end);
+            final int start_offset = ilst.indexOf (tcb.start);
+            final int end_offset = ilst.indexOf (tcb.end);
 
-            if (
-                AsmHelper.offsetBefore (ilst, new_start_offset, start_offset)
+            if (AsmHelper.offsetBefore (ilst, new_start_offset, start_offset)
                 && AsmHelper.offsetBefore (ilst, start_offset, new_end_offset)
-                && AsmHelper.offsetBefore (ilst, new_end_offset, end_offset)
-            ) {
+                && AsmHelper.offsetBefore (ilst, new_end_offset, end_offset)) {
                 new_start_offset = start_offset;
 
-            } else if (
-                AsmHelper.offsetBefore (ilst, start_offset, new_start_offset)
+            } else if (AsmHelper.offsetBefore (ilst, start_offset, new_start_offset)
                 && AsmHelper.offsetBefore (ilst, new_start_offset, end_offset)
-                && AsmHelper.offsetBefore (ilst, end_offset, new_end_offset)
-            ) {
+                && AsmHelper.offsetBefore (ilst, end_offset, new_end_offset)) {
                 new_start_offset = end_offset;
             }
         }
 
-        start = ilst.get(new_start_offset);
-        end = ilst.get(new_end_offset);
+        start = ilst.get (new_start_offset);
+        end = ilst.get (new_end_offset);
 
-        LabelNode startLabel = (LabelNode) start;
-        LabelNode endLabel = getEndLabel(methodNode, end);
+        final LabelNode startLabel = (LabelNode) start;
+        final LabelNode endLabel = getEndLabel (methodNode, end);
 
-        return new TryCatchBlockNode(startLabel, endLabel, endLabel, null);
+        return new TryCatchBlockNode (startLabel, endLabel, endLabel, null);
     }
 
-    private static void insert(MethodNode methodNode,
-            SCGenerator staticInfoHolder, PIResolver piResolver,
-            WeavingInfo info, Snippet snippet, SnippetCode code, Shadow shadow,
-            AbstractInsnNode loc) throws InvalidContextUsageException {
+
+    private static void insert (final MethodNode methodNode,
+        final SCGenerator staticInfoHolder, final PIResolver piResolver,
+        final WeavingInfo info, final Snippet snippet, final SnippetCode code, final Shadow shadow,
+        final AbstractInsnNode loc) throws InvalidContextUsageException {
 
         // exception handler will discard the stack and push the
         // exception object. Thus, before entering this snippet,
         // weaver must backup the stack and restore when exiting
-        if (code.containsHandledException() && info.stackNotEmpty(loc)) {
-            InsnList backup = info.backupStack (loc, methodNode.maxLocals);
-            InsnList restore = info.restoreStack (loc, methodNode.maxLocals);
+        if (code.containsHandledException () && info.stackNotEmpty (loc)) {
+            final InsnList backup = info.backupStack (loc, methodNode.maxLocals);
+            final InsnList restore = info.restoreStack (loc, methodNode.maxLocals);
 
-            methodNode.maxLocals += info.getStackHeight(loc);
+            methodNode.maxLocals += info.getStackHeight (loc);
 
-            methodNode.instructions.insertBefore(loc, backup);
-            methodNode.instructions.insert(loc, restore);
+            methodNode.instructions.insertBefore (loc, backup);
+            methodNode.instructions.insert (loc, restore);
         }
 
-        WeavingCode wCode = new WeavingCode(info, methodNode,
-                code, snippet, shadow, loc);
-        wCode.transform(staticInfoHolder, piResolver, false);
+        final WeavingCode wCode = new WeavingCode (info, methodNode,
+            code, snippet, shadow, loc);
+        wCode.transform (staticInfoHolder, piResolver, false);
 
-        methodNode.instructions.insert(loc, wCode.getiList());
-        methodNode.tryCatchBlocks.addAll(wCode.getTCBs());
+        methodNode.instructions.insert (loc, wCode.getiList ());
+        methodNode.tryCatchBlocks.addAll (wCode.getTCBs ());
     }
 
-    public static void instrument(ClassNode classNode, MethodNode methodNode,
-            Map<Snippet, List<Shadow>> snippetMarkings,
-            List<SyntheticLocalVar> syntheticLocalVars,
-            SCGenerator staticInfoHolder, PIResolver piResolver)
-            throws InvalidContextUsageException {
+    static String changeDesc(final String old, final String argType){
+        return "(L"+argType+";"+old.substring(1);
+    }
 
-        WeavingInfo info = new WeavingInfo(classNode, methodNode,
-                snippetMarkings);
+    public static void instrument (final ClassNode classNode, final MethodNode methodNode,
+        final Map <Snippet, List <Shadow>> snippetMarkings,
+        final List <SyntheticLocalVar> syntheticLocalVars,
+        final SCGenerator staticInfoHolder, final PIResolver piResolver, final String wrapperClassName)
+    throws InvalidContextUsageException {
 
-        for (Snippet snippet : info.getSortedSnippets()) {
-            List<Shadow> shadows = snippetMarkings.get(snippet);
-            SnippetCode code = snippet.getCode();
+        final WeavingInfo info = new WeavingInfo (classNode, methodNode,
+            snippetMarkings);
+
+        for (final Snippet snippet : info.getSortedSnippets ()) {
+            final List <Shadow> shadows = snippetMarkings.get (snippet);
+            final SnippetCode code = snippet.getCode ();
 
             // skip snippet with empty code
             if (code == null) {
@@ -257,25 +262,25 @@ public class Weaver {
             // Instrument
             // For @Before, instrument the snippet just before the
             // entrance of a region.
-            if (snippet.getAnnotationClass().equals(Before.class)) {
-                for (Shadow shadow : shadows) {
+            if (snippet.getAnnotationClass ().equals (Before.class)) {
+                for (final Shadow shadow : shadows) {
 
-                    AbstractInsnNode loc = shadow.getWeavingRegion().getStart();
-                    insert(methodNode, staticInfoHolder, piResolver, info,
-                            snippet, code, shadow, loc);
+                    final AbstractInsnNode loc = shadow.getWeavingRegion ().getStart ();
+                    insert (methodNode, staticInfoHolder, piResolver, info,
+                        snippet, code, shadow, loc);
                 }
             }
 
             // For normal after(after returning), instrument the snippet
             // after each adjusted exit of a region.
-            if (snippet.getAnnotationClass().equals(AfterReturning.class)
-                    || snippet.getAnnotationClass().equals(After.class)) {
-                for (Shadow shadow : shadows) {
+            if (snippet.getAnnotationClass ().equals (AfterReturning.class)
+                || snippet.getAnnotationClass ().equals (After.class)) {
+                for (final Shadow shadow : shadows) {
 
-                    for (AbstractInsnNode loc : shadow.getWeavingRegion().getEnds()) {
+                    for (final AbstractInsnNode loc : shadow.getWeavingRegion ().getEnds ()) {
 
-                        insert(methodNode, staticInfoHolder, piResolver, info,
-                                snippet, code, shadow, loc);
+                        insert (methodNode, staticInfoHolder, piResolver, info,
+                            snippet, code, shadow, loc);
                     }
                 }
             }
@@ -283,35 +288,70 @@ public class Weaver {
             // For exceptional after(after throwing), wrap the region with
             // a try-finally clause. And append the snippet as an exception
             // handler.
-            if (snippet.getAnnotationClass().equals(AfterThrowing.class)
-                    || snippet.getAnnotationClass().equals(After.class)) {
+            if (snippet.getAnnotationClass ().equals (AfterThrowing.class)
+                || snippet.getAnnotationClass ().equals (After.class)) {
 
-                for (Shadow shadow : shadows) {
+                for (final Shadow shadow : shadows) {
 
-                    WeavingRegion region = shadow.getWeavingRegion();
+                    final WeavingRegion region = shadow.getWeavingRegion ();
                     // after-throwing inserts the snippet once, and marks
                     // the start and the very end as the scope
-                    AbstractInsnNode loc = region.getAfterThrowEnd();
+                    final AbstractInsnNode loc = region.getAfterThrowEnd ();
 
-                    WeavingCode wCode = new WeavingCode(info, methodNode, code,
-                            snippet, shadow, loc);
-                    wCode.transform(staticInfoHolder, piResolver, true);
+                    final WeavingCode wCode = new WeavingCode (info, methodNode, code,
+                        snippet, shadow, loc);
+                    wCode.transform (staticInfoHolder, piResolver, true);
 
                     // Create a try-catch clause
-                    TryCatchBlockNode tcb = getTryCatchBlock(methodNode,
-                            region.getAfterThrowStart(), loc);
+                    final TryCatchBlockNode tcb = getTryCatchBlock (methodNode,
+                        region.getAfterThrowStart (), loc);
 
-                    methodNode.instructions.insert(tcb.handler,
-                            wCode.getiList());
+                    methodNode.instructions.insert (tcb.handler,
+                        wCode.getiList ());
 
-                    methodNode.tryCatchBlocks.add(tcb);
-                    methodNode.tryCatchBlocks.addAll(wCode.getTCBs());
+                    methodNode.tryCatchBlocks.add (tcb);
+                    methodNode.tryCatchBlocks.addAll (wCode.getTCBs ());
+                }
+            }
+
+            if (snippet.getAnnotationClass ().equals (Monitor.class)) {
+                for (final Shadow shadow : shadows) {
+                    final AbstractInsnNode insn = shadow.getRegionStart ();
+                    if(insn instanceof MethodInsnNode){
+                        final MethodInsnNode mInsn = (MethodInsnNode)insn;
+                        //System.out.println(mInsn.owner);
+                        /*if(!mInsn.owner.equals ("TargetClass")) {
+                            continue;
+                        }*/
+                        if (insn.getOpcode() == Opcodes.INVOKEDYNAMIC) {
+                            // Out of scope
+                            continue;
+                        }
+                        //System.out.println("L"+mInsn.owner+";."+mInsn.name+" "+mInsn.desc);
+                        if (insn.getOpcode() == Opcodes.INVOKESTATIC) {
+                            //Nothing
+                        }else{
+                            if (insn.getOpcode() == Opcodes.INVOKEVIRTUAL) {
+                                mInsn.desc = changeDesc(mInsn.desc, mInsn.owner);
+                            }
+                            if (insn.getOpcode() == Opcodes.INVOKEINTERFACE) {
+                                mInsn.itf = false;
+                                mInsn.desc = changeDesc(mInsn.desc, mInsn.owner);
+                            }
+                            if (insn.getOpcode() == Opcodes.INVOKESPECIAL) {
+                                mInsn.desc = changeDesc(mInsn.desc, mInsn.owner);
+                            }
+                            mInsn.setOpcode(Opcodes.INVOKESTATIC);
+                        }
+                        mInsn.name = mInsn.owner.replace ('/', '_')+"_" + mInsn.name;
+                        mInsn.owner = wrapperClassName;
+                    }
                 }
             }
         }
 
-        static2Local(methodNode, syntheticLocalVars);
-        AdvancedSorter.sort(methodNode);
+        static2Local (methodNode, syntheticLocalVars);
+        AdvancedSorter.sort (methodNode);
     }
 
 }
