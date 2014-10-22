@@ -29,6 +29,9 @@ import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.tree.ClassNode;
+
 import ch.usi.dag.disl.DiSL;
 import ch.usi.dag.disl.exception.DiSLException;
 import ch.usi.dag.disl.util.Constants;
@@ -79,6 +82,54 @@ public class Worker extends Thread {
 
 
     private static final ConcurrentHashMap <String, byte []> bytecodeMap = new ConcurrentHashMap <String, byte []> ();
+    private static final ConcurrentHashMap <String, ClassNode> classNodeMap = new ConcurrentHashMap <String, ClassNode> ();
+
+    private static void newClass(final String name, final byte[] bytes){
+        System.out.println ("new class "+name);
+        bytecodeMap.put (
+            name,
+            bytes);
+        final ClassNode cn = new ClassNode ();;
+        final ClassReader cr = new ClassReader (bytes);
+        cr.accept (cn, 0);
+        classNodeMap.put (name, cn);
+    }
+
+    public static boolean isSelfOrChildOf(final String class1, final String class2){
+        if(class1.equals (class2)){
+            return true;
+        }
+        final ClassNode cn1 = classNodeMap.get (class1);
+        final ClassNode cn2 = classNodeMap.get (class2);
+
+        ClassNode cur = cn1;
+        while(cur != null){
+            if(cur.superName == null) {
+                return false;
+            }
+            if(cur.superName == class2){
+                return true;
+            }
+            cur = classNodeMap.get (cur.superName);
+        }
+
+        return false;
+    }
+
+    public static boolean isInterfaceOf(final String class1, final String class2){
+        if(class1.equals (class2)){
+            return true;
+        }
+        final ClassNode cn1 = classNodeMap.get (class1);
+        final ClassNode cn2 = classNodeMap.get (class2);
+
+        for(final String it1 : cn1.interfaces){
+            if(it1.equals (class2)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private static final ConcurrentHashMap <String, byte []> cacheMap = new ConcurrentHashMap <String, byte []> ();
 
@@ -227,9 +278,8 @@ public class Worker extends Thread {
                             }
                             zos.write (
                                 boutinstr.toByteArray (), 0, boutinstr.size ());
-                            bytecodeMap.put (
-                                curClassName.replace ('/', '.'),
-                                boutinstr.toByteArray ());
+                            newClass (curClassName, boutinstr.toByteArray ());
+
                             zos.closeEntry ();
                         } catch (final Exception e) {
                             e.printStackTrace ();
@@ -599,8 +649,7 @@ public class Worker extends Thread {
                                 code = bout.toByteArray ();
                             }
 
-                            final byte [] ori = bytecodeMap.get (className.replace (
-                                '/', '.').replace ('/', '.'));
+                            final byte [] ori = bytecodeMap.get (className);
                             if (ori != null) {
                                 if (!Arrays.equals (ori, code)) {
 									if(debug) {
@@ -609,8 +658,7 @@ public class Worker extends Thread {
                                     }
                                 }
                             }
-
-                            bytecodeMap.put (className.replace ('/', '.'), code);
+                            newClass (className, code);
                         }
                         bin = new ByteArrayInputStream (code);
 
@@ -803,7 +851,7 @@ public class Worker extends Thread {
                                 }
                                 instrClass = observeList.getBytes ();
                             } else {
-                                instrClass = bytecodeMap.get (fullPath);
+                                instrClass = bytecodeMap.get (fullPath.replace ('.', '/'));
                                 if (instrClass == null) {
                                     System.err.println ("The class "
                                         + fullPath.toString ()

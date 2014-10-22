@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<default-dislclass>output/build/analysis/ch/usi/dag/monitor/disl/SandboxMonitor.class</default-dislclass>
+	<default-observed>true</default-observed>
+	<bypass>false</bypass>
+	<dexes> 
+	</dexes>
+	<procs>
+	</procs>
+</config>
