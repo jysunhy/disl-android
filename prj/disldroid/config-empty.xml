@@ -5,8 +5,7 @@
 	<dexes> 
 		<dex>
 			<name>core.jar</name>
-            <!--<dislclass>output/build/analysis/ch/usi/dag/monitor/disl/DiSLClass.class,output/build/analysis/ch/usi/dag/empty/disl/LogOnlyDiSLClass.class</dislclass>-->
-			<dislclass>output/build/analysis/ch/usi/dag/monitor/disl/DiSLClass.class</dislclass>
+            <dislclass>output/build/analysis/ch/usi/dag/empty/disl/LogOnlyDiSLClass.class</dislclass>
             <bypass>false</bypass>
 		</dex>
 	</dexes>

@@ -105,15 +105,12 @@ void DebugFunction(JNIEnv* env){
 // ******************* AREDispatch methods *******************
 //
 bool init_stack(){
-	ALOG(LOG_DEBUG,"DEBUG","IN INIT STACK");
 	if(!dvmThreadSelf())
 		return false;
 	if(!dvmThreadSelf()->info_flag){
-		ALOG(LOG_DEBUG,"DEBUG","NEW STACK IN INIT STACK");
 		dvmThreadSelf()->info_flag = new std::stack<int>();
 		dvmThreadSelf()->info_flag->push(0);
 	}
-	ALOG(LOG_DEBUG,"DEBUG","INIT STACK RETURN TRUE");
 	return true;
 }
 void update_thread_info_flag_or(int orflag){
