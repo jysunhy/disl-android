@@ -39,6 +39,18 @@ public class SandboxGuard {
         }
     }
 
+    public static class ContentResolver_bulkInsert_Guard{
+        @GuardMethod
+        public static boolean guard (final CallContext msc) {
+            final String name = msc.getCallee ();
+            final boolean res = name.contains("android/content/ContentResolver.bulkInsert");
+            if(res){
+                System.out.println (name);
+            }
+            return res;
+        }
+    }
+
     public static class ContentResolver_delete_Guard{
         @GuardMethod
         public static boolean guard (final CallContext msc) {
@@ -55,6 +67,18 @@ public class SandboxGuard {
         public static boolean guard (final CallContext msc) {
             final String name = msc.getCallee ();
             final boolean res = name.contains("android/content/ContentResolver.update");
+            if(res){
+                System.out.println (name);
+            }
+            return res;
+        }
+    }
+
+    public static class ContentResolver_call_Guard {
+        @GuardMethod
+        public static boolean guard (final CallContext msc) {
+            final String name = msc.getCallee ();
+            final boolean res = name.contains("android/content/ContentResolver.call");
             if(res){
                 System.out.println (name);
             }
