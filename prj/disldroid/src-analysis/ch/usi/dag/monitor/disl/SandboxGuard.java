@@ -12,7 +12,109 @@ public class SandboxGuard {
      * When setting these flags, the file is still owned by your application, but its global read and/or write permissions
      * have been set appropriately so any other application can see it.
      */
+    public static class IOGuard{
+        public static class IoBridge_bind{
+            @GuardMethod
+            public static boolean guard (final CallContext msc) {
+                final String name = msc.getCallee ();
+                final boolean res = name.contains("libcore/io/IoBridge.bind");
+                if(res){
+                    System.out.println (name);
+                }
+                return res;
+            }
+        }
 
+        public static class IoBridge_connect{
+            @GuardMethod
+            public static boolean guard (final CallContext msc) {
+                final String name = msc.getCallee ();
+                final boolean res = name.contains("libcore/io/IoBridge.connect");
+                if(res){
+                    System.out.println (name);
+                }
+                return res;
+            }
+        }
+
+        public static class IoBridge_open{
+            @GuardMethod
+            public static boolean guard (final CallContext msc) {
+                final String name = msc.getCallee ();
+                final boolean res = name.contains("libcore/io/IoBridge.open");
+                if(res){
+                    System.out.println (name);
+                }
+                return res;
+            }
+        }
+        public static class IoBridge_read{
+            @GuardMethod
+            public static boolean guard (final CallContext msc) {
+                final String name = msc.getCallee ();
+                final boolean res = name.contains("libcore/io/IoBridge.read");
+                if(res){
+                    System.out.println (name);
+                }
+                return res;
+            }
+        }
+        public static class IoBridge_write{
+            @GuardMethod
+            public static boolean guard (final CallContext msc) {
+                final String name = msc.getCallee ();
+                final boolean res = name.contains("libcore/io/IoBridge.write");
+                if(res){
+                    System.out.println (name);
+                }
+                return res;
+            }
+        }
+        public static class IoBridge_sendto{
+            @GuardMethod
+            public static boolean guard (final CallContext msc) {
+                final String name = msc.getCallee ();
+                final boolean res = name.contains("libcore/io/IoBridge.sendto") && !name.contains ("ByteBuffer");
+                if(res){
+                    System.out.println (name);
+                }
+                return res;
+            }
+        }
+        public static class IoBridge_sendto_2{
+            @GuardMethod
+            public static boolean guard (final CallContext msc) {
+                final String name = msc.getCallee ();
+                final boolean res = name.contains("libcore/io/IoBridge.sendto") && name.contains ("ByteBuffer");
+                if(res){
+                    System.out.println (name);
+                }
+                return res;
+            }
+        }
+        public static class IoBridge_recvfrom{
+            @GuardMethod
+            public static boolean guard (final CallContext msc) {
+                final String name = msc.getCallee ();
+                final boolean res = name.contains("libcore/io/IoBridge.recvfrom") && !name.contains ("ByteBuffer");
+                if(res){
+                    System.out.println (name);
+                }
+                return res;
+            }
+        }
+        public static class IoBridge_recvfrom_2{
+            @GuardMethod
+            public static boolean guard (final CallContext msc) {
+                final String name = msc.getCallee ();
+                final boolean res = name.contains("libcore/io/IoBridge.recvfrom") && name.contains ("ByteBuffer");
+                if(res){
+                    System.out.println (name);
+                }
+                return res;
+            }
+        }
+    }
 
 
     public static class ContentResolver_query_Guard{

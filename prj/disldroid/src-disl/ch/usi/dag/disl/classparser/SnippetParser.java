@@ -110,7 +110,7 @@ class SnippetParser extends AbstractParser {
         }
 
         // no exception can be thrown
-        if(! method.exceptions.isEmpty()) {
+        if(! method.exceptions.isEmpty() && !method.invisibleAnnotations.get (0).desc.equals ("Lch/usi/dag/disl/annotation/Monitor;")) {
             throw new SnippetParserException("Method " + className + "."
                     + method.name + " cannot throw any exception");
         }

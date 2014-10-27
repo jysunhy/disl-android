@@ -85,7 +85,7 @@ public class Worker extends Thread {
     private static final ConcurrentHashMap <String, ClassNode> classNodeMap = new ConcurrentHashMap <String, ClassNode> ();
 
     private static void newClass(final String name, final byte[] bytes){
-        System.out.println ("new class "+name);
+        //System.out.println ("new class "+name);
         bytecodeMap.put (
             name,
             bytes);
