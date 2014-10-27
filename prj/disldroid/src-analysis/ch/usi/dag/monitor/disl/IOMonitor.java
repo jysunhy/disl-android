@@ -37,7 +37,6 @@ public class IOMonitor {
         final String path, final int flags) throws FileNotFoundException {
         final FileDescriptor res = IoBridge.open (path, flags);
         AREDispatch.NativeLog ("Detection of #open# path:"+path+" opened Fd: "+res.toString ());
-        OuterClass.test();
         return res;
     }
 
