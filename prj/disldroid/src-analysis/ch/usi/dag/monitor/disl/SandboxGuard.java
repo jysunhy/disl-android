@@ -157,7 +157,7 @@ public class SandboxGuard {
         @GuardMethod
         public static boolean guard (final CallContext msc) {
             final String name = msc.getCallee ();
-            final boolean res = name.contains("android/contentContentResolver.delete");
+            final boolean res = name.contains("android/content/ContentResolver.delete");
             if(res){
                 System.out.println (name);
             }
