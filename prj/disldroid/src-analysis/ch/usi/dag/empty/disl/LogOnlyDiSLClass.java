@@ -12,6 +12,6 @@ public class LogOnlyDiSLClass {
         marker = BodyMarker.class,
         scope = "java.lang.String.<clinit>")
     public static void api_194 (final MethodStaticContext msc) {
-        AREDispatch.NativeLog ("test");
+        AREDispatch.NativeLog ("test abc");
     }
 }
