@@ -343,7 +343,14 @@ public class Weaver {
                             }
                             mInsn.setOpcode(Opcodes.INVOKESTATIC);
                         }
-                        mInsn.name = mInsn.owner.replace ('/', '_')+"_" + mInsn.name;
+
+                        if(mInsn.name.equals ("<init>")) {
+                            mInsn.name = mInsn.owner.replace ('/', '_')+"_" + mInsn.owner.substring (mInsn.owner.lastIndexOf  ('/')+1);
+                        } else if(mInsn.name.equals ("<clinit>")){
+                            mInsn.name = mInsn.owner.replace ('/', '_');
+                        }else{
+                            mInsn.name = mInsn.owner.replace ('/', '_')+"_" + mInsn.name;
+                        }
                         mInsn.owner = wrapperClassName;
                     }
                 }
