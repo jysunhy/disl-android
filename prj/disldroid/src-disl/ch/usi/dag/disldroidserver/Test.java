@@ -2,6 +2,7 @@ package ch.usi.dag.disldroidserver;
 
 import java.io.BufferedOutputStream;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -10,6 +11,9 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
+
+import ch.usi.dag.disl.DiSL;
+import ch.usi.dag.disl.exception.DiSLException;
 
 
 public class Test {
@@ -49,7 +53,7 @@ public class Test {
      */
     public static void main (final String [] args) {
 
-        final ClassNode cn = new ClassNode ();
+ /*       final ClassNode cn = new ClassNode ();
         ClassReader cr;
         try {
             cr = new ClassReader (new FileInputStream ("/home/haiyang/workspace/ASM/bin/test/TargetClass.class"));
@@ -70,10 +74,10 @@ public class Test {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+*/
 
         // TODO Auto-generated method stub
-       /* try {
+        try {
             final ClassNode wrapperClassNode = new ClassNode ();
             wrapperClassNode.version = Opcodes.V1_6;
             wrapperClassNode.access = Opcodes.ACC_PUBLIC;
@@ -125,6 +129,6 @@ public class Test {
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        }*/
+        }
     }
 }

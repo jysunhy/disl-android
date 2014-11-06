@@ -2,7 +2,6 @@ package ch.usi.dag.monitor.disl;
 
 import ch.usi.dag.disl.annotation.Monitor;
 import ch.usi.dag.disl.marker.BytecodeMarker;
-import ch.usi.dag.dislre.AREDispatch;
 
 
 public class DiSLClass {
@@ -12,7 +11,7 @@ public class DiSLClass {
         AREDispatch.NativeLog ("Monitoring valueOf");
         return String.valueOf (i);
     }*/
-
+/*
     @Monitor(marker=BytecodeMarker.class, scope="*.*", guard=Guard.String_equals.class, args = "invokespecial, invokevirtual")
     public static boolean java_lang_String_equals(final String instance, final Object obj){
         //System.out.println("Monitoring java/lang/String equals");
@@ -20,8 +19,12 @@ public class DiSLClass {
         final boolean res = instance.equals (obj);
         AREDispatch.NativeLog("Monitoring res "+res);
         return res;
+    }*/
+    @Monitor(marker=BytecodeMarker.class, scope="*.*", guard=Guard.String_String.class, args = "invokespecial, invokevirtual")
+    public static void java_lang_String_String(String instance){
+        //System.out.println("Monitoring java/lang/String equals");
+        instance = new String("abc");
     }
-
     /*@Before(marker=BytecodeMarker.class, scope="*.*", guard=Guard.String_equals.class, args = "invokespecial, invokevirtual")
     public static void java_lang_String_equals_debug(final CallContext cc){
         AREDispatch.NativeLog("before monitoring java/lang/String equals "+cc.thisClassName ()+" "+cc.thisMethodFullName ());

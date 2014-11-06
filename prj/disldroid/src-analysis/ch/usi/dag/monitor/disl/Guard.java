@@ -18,7 +18,13 @@ public class Guard {
             return name.equals ("java/lang/String.equals(Ljava/lang/Object;)Z") && !msc.thisClassName ().equals("java/lang/String");
         }
     }
-
+    public static class String_String {
+        @GuardMethod
+        public static boolean equals (final CallContext msc) {
+            final String name = msc.getCallee ();
+            return name.contains ("java/lang/String.<init>()") && !msc.thisClassName ().equals("java/lang/String");
+        }
+    }
     public static class API0 {
         @GuardMethod
         public static boolean api0 (final CallContext msc) {
