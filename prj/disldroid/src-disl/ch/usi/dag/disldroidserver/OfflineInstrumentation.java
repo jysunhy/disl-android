@@ -24,7 +24,7 @@ import com.googlecode.dex2jar.v3.Dex2jar;
 import com.googlecode.dex2jar.v3.DexExceptionHandlerImpl;
 
 public class OfflineInstrumentation {
-    public static void instrumentJar (final byte [] dexCode, final DiSL curdisl) throws Exception
+    public static void instrumentJar (final byte [] dexCode, final DiSL curdisl, final String outDexPath) throws Exception
     {
         // create tmp file in system temporary files
         File dex2JarFile = null;
@@ -105,7 +105,7 @@ public class OfflineInstrumentation {
                             if (code == null) {
                                 code = bout.toByteArray ();
                             } else{
-                                System.out.println (entryName+" is instrumented");
+//                                System.out.println (entryName+" is instrumented");
                             }
                         }
                         bin = new ByteArrayInputStream (code);
@@ -141,7 +141,7 @@ public class OfflineInstrumentation {
             final Class <?> c = Class.forName ("com.android.dx.command.Main");
             final java.lang.reflect.Method m = c.getMethod (
                 "main", String [].class);
-            outputDex = new File ("output.dex");
+            outputDex = new File (outDexPath);
 
             final List <String> ps = new ArrayList <String> ();
 
@@ -188,7 +188,7 @@ public class OfflineInstrumentation {
         }else {
             final File inputDex = new File(args[0]);
             try {
-                instrumentJar (readbytes (inputDex), new DiSL (false, args[1], ""));
+                instrumentJar (readbytes (inputDex), new DiSL (false, args[1], ""), "output.dex");
             } catch (final Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

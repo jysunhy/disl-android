@@ -14,6 +14,10 @@ import android.provider.ContactsContract;
 import ch.usi.dag.dislre.AREDispatch;
 
 public class ContactProviderBlocker {
+    
+    private static String[] groupIdList = null;
+    private static String[] rawIdList = null;
+    private static String[] contactIdList = null;
 
     public static Cursor queryGroupFilter(final String[] include, final ContentResolver cr, final Uri uri, final String[] projection,
         final String selection, final String[] selectionArgs, final String sortOrder) {
@@ -23,21 +27,27 @@ public class ContactProviderBlocker {
         String[] lst = null;
         try {
             if(uri.equals (Uri.parse ("content://com.android.contacts/data")) || uri.equals (Uri.parse ("content://com.android.contacts/raw_contacts"))) {
-                lst = getRawIdByGroupId(getGroupId(include, cr), cr);
+                if(rawIdList == null) {
+                    rawIdList = getRawIdByGroupId(getGroupId(include, cr), cr);
+                }
             }
             else if(uri.equals (Uri.parse ("content://com.android.contacts/contacts"))) {
-                lst = getContactIdByRawId(getRawIdByGroupId(getGroupId(include, cr), cr), cr);
+                if(contactIdList == null) {
+                    contactIdList = getContactIdByRawId(getRawIdByGroupId(getGroupId(include, cr), cr), cr);
+                }
             }
             else if(uri.equals (Uri.parse ("content://com.android.contacts/groups"))) {
-                lst = getGroupId(include, cr);
+                if(groupIdList == null) {
+                    groupIdList = getGroupId(include, cr);
+                }
             }
             else {
 //                TODO: need handle more uri
             }
             newSelection = getSelection(uri, selection, lst);
             newSelectionArgs = getSelectionArgs(selectionArgs, lst);
-            AREDispatch.NativeLog("original: " + selection + " " + Join(",", selectionArgs));
-            AREDispatch.NativeLog("data uri change-> selection:" + newSelection + " args:" + Join(",", newSelectionArgs));
+            AREDispatch.NativeLog("original: " + selection + " " + ProviderUtil.Join(",", selectionArgs));
+            AREDispatch.NativeLog("data uri change-> selection:" + newSelection + " args:" + ProviderUtil.Join(",", newSelectionArgs));
             rec = cr.query (uri, projection, newSelection, newSelectionArgs, sortOrder);
         } catch (Exception e) {
             AREDispatch.NativeLog ("Exception: " + e.toString ());
@@ -81,7 +91,7 @@ public class ContactProviderBlocker {
         List<String> lst = new ArrayList<String>();
         Cursor cur = cr.query(ContactsContract.Groups.CONTENT_URI,
                 new String[]{ContactsContract.Groups._ID},
-                ContactsContract.Groups.TITLE+" IN (" + getQuestionMark(namelist) + ")",
+                ContactsContract.Groups.TITLE+" IN (" + ProviderUtil.getQuestionMark(namelist) + ")",
                 namelist,
                 null);
         if(cur != null && cur.moveToFirst ()) {
@@ -123,7 +133,7 @@ public class ContactProviderBlocker {
         Set<String> set=new HashSet<String>();
         Cursor cur = cr.query(ContactsContract.RawContacts.CONTENT_URI,
                 new String[]{ContactsContract.RawContacts.CONTACT_ID},
-                "_id IN (" + getQuestionMark(rawlst) + ")",
+                "_id IN (" + ProviderUtil.getQuestionMark(rawlst) + ")",
                 rawlst,
                 null);
         if (cur != null && cur.moveToFirst()) {
@@ -142,20 +152,20 @@ public class ContactProviderBlocker {
         String rec = null;
         if(uri.equals (Uri.parse ("content://com.android.contacts/data"))) {
             if(selection != null) {
-                rec = selection + " and raw_contact_id IN ("+getQuestionMark(lst)+")";
+                rec = selection + " and raw_contact_id IN ("+ProviderUtil.getQuestionMark(lst)+")";
             }
             else {
-                rec = "raw_contact_id IN ("+getQuestionMark(lst)+")";
+                rec = "raw_contact_id IN ("+ProviderUtil.getQuestionMark(lst)+")";
             }
         }
         else if(uri.equals (Uri.parse ("content://com.android.contacts/raw_contacts")) 
         || uri.equals (Uri.parse ("content://com.android.contacts/contacts"))
         || uri.equals (Uri.parse ("content://com.android.contacts/groups"))) {
             if(selection != null) {
-                rec = selection + " and _id IN ("+getQuestionMark(lst)+")";
+                rec = selection + " and _id IN ("+ProviderUtil.getQuestionMark(lst)+")";
             }
             else {
-                rec = "_id IN ("+getQuestionMark(lst)+")";
+                rec = "_id IN ("+ProviderUtil.getQuestionMark(lst)+")";
             }
         }
         else {
@@ -176,36 +186,6 @@ public class ContactProviderBlocker {
         System.arraycopy (lst, 0, rec, SelectionArgs.length, lst.length);
         if(rec.length == 0) {
             return null;
-        }
-        return rec;
-    }
-    
-    private static String getQuestionMark(String[] rawIdList) {
-        String str = "";
-        for (int i = 0; i < rawIdList.length; i++) {
-            if (i == rawIdList.length - 1) {
-                str += "?";
-            }
-            else {
-                str += "?, ";
-            }
-        }
-        return str;
-    }
-
-    
-    private static String Join(String con, String[] lst) {
-        String rec = "";
-        if(lst == null) {
-            return null;
-        }
-        for (int i = 0; i < lst.length; i++) {
-            if(i == lst.length - 1) {
-                rec += lst[i];
-            }
-            else {
-                rec += lst[i] + con + " ";
-            }
         }
         return rec;
     }

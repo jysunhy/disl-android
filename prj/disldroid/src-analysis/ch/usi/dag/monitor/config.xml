@@ -1,9 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<default-dislclass>output/build/analysis/ch/usi/dag/monitor/disl/SandboxMonitor.class,output/build/analysis/ch/usi/dag/monitor/disl/IOMonitor.class</default-dislclass>
+	<!--<default-dislclass>output/build/analysis/ch/usi/dag/monitor/disl/SandboxMonitor.class,output/build/analysis/ch/usi/dag/monitor/disl/IOMonitor.class</default-dislclass>-->
+	<default-dislclass></default-dislclass>
 	<default-observed>true</default-observed>
 	<bypass>false</bypass>
 	<dexes> 
+<!-- 		<dex>
+			<name>com.dianxinos.contacts-1.apk</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/monitor/disl/SandboxBlocker.class</dislclass>
+		</dex>
+		<dex>
+			<name>com.sand.airdroid-1.apk</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/monitor/disl/SandboxBlocker.class</dislclass>
+		</dex> -->
+		<dex>
+			<name>test.Contactlist-1.apk</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/monitor/disl/SandboxBlocker.class</dislclass>
+		</dex>
 	</dexes>
 	<procs>
 	</procs>
