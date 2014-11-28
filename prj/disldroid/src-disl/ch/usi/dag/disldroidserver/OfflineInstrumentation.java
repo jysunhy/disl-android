@@ -23,8 +23,13 @@ import com.googlecode.dex2jar.reader.DexFileReader;
 import com.googlecode.dex2jar.v3.Dex2jar;
 import com.googlecode.dex2jar.v3.DexExceptionHandlerImpl;
 
+
 public class OfflineInstrumentation {
-    public static void instrumentJar (final byte [] dexCode, final DiSL curdisl) throws Exception
+    static boolean isCore = false;
+
+
+    public static void instrumentJar (final byte [] dexCode, final DiSL curdisl)
+    throws Exception
     {
         // create tmp file in system temporary files
         File dex2JarFile = null;
@@ -43,15 +48,13 @@ public class OfflineInstrumentation {
             .verbose (false)
             .to (dex2JarFile);
 
-
-            final Map <com.googlecode.dex2jar.Method, Exception> exceptions = handler.getExceptions ();
-            if (exceptions.size () > 0) {
-                final File errorFile = new File ("error.zip");
-                handler.dumpException (reader, errorFile);
-                System.err.println ("Detail Error Information in File "
-                    + errorFile);
-            }
-
+        final Map <com.googlecode.dex2jar.Method, Exception> exceptions = handler.getExceptions ();
+        if (exceptions.size () > 0) {
+            final File errorFile = new File ("error.zip");
+            handler.dumpException (reader, errorFile);
+            System.err.println ("Detail Error Information in File "
+                + errorFile);
+        }
 
         // Now open the tmp jar file, and instrument only
         // the .class files
@@ -61,12 +64,14 @@ public class OfflineInstrumentation {
         Enumeration <JarEntry> entryEnum;
         entryEnum = dex2JarJar.entries ();
 
-        final File instrumentedJarFile= File.createTempFile ("offline_instrumented", ".jar");;
+        final File instrumentedJarFile = File.createTempFile (
+            "offline_instrumented", ".jar");;
         final FileOutputStream fos = new FileOutputStream (instrumentedJarFile);
         final ZipOutputStream zos = new ZipOutputStream (fos);
 
-        if(curdisl!= null && curdisl.wrapperClass != null){
-            final ZipEntry wrapperEntry = new ZipEntry (curdisl.wrapperClassName+".class");
+        if (curdisl != null && curdisl.wrapperClass != null) {
+            final ZipEntry wrapperEntry = new ZipEntry (curdisl.wrapperClassName
+                + ".class");
             zos.putNextEntry (wrapperEntry);
             zos.write (curdisl.wrapperClass);
             zos.closeEntry ();
@@ -86,6 +91,13 @@ public class OfflineInstrumentation {
                         final String className = entryName.substring (
                             0, entryName.lastIndexOf (".class"));
 
+                        if(className.equals ("java/lang/Object")){
+                            isCore = true;
+                        }
+
+
+
+
                         zos.putNextEntry (nze);
                         byte [] code = null;
                         final ByteArrayInputStream bin;
@@ -97,15 +109,20 @@ public class OfflineInstrumentation {
                             }
                             // java.lang.Thread needs instrumentation for bypass
                             // support
-                            if(curdisl == null){
+                            if (curdisl == null) {
                                 code = bout.toByteArray ();
-                            }else{
-                                code = curdisl.instrument (bout.toByteArray ());
+                            } else {
+                                /*if(className.equals ("java/lang/Thread")) {
+                                    final DiSL disl = new DiSL (true, "output/build/analysis/ch/usi/dag/empty/disl/DiSLClass.class", "");
+                                    code = disl.instrument (bout.toByteArray ());
+                                } else */
+                                    code = curdisl.instrument (bout.toByteArray ());
+
                             }
                             if (code == null) {
                                 code = bout.toByteArray ();
-                            } else{
-                                System.out.println (entryName+" is instrumented");
+                            } else {
+                                System.out.println (entryName + " is instrumented");
                             }
                         }
                         bin = new ByteArrayInputStream (code);
@@ -144,11 +161,17 @@ public class OfflineInstrumentation {
             outputDex = new File ("output.dex");
 
             final List <String> ps = new ArrayList <String> ();
-
+            if (isCore) {
+                ps.addAll (Arrays.asList (
+                    "--dex", "--core-library", "--no-strict",
+                    "--output=" + outputDex.getCanonicalPath (),
+                    instrumentedJarFile.getCanonicalPath ()));
+            } else {
                 ps.addAll (Arrays.asList (
                     "--dex", "--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
                     instrumentedJarFile.getCanonicalPath ()));
+            }
             m.invoke (
                 null, new Object [] { ps.toArray (new String [0]) });
         } catch (final Exception e) {
@@ -158,12 +181,14 @@ public class OfflineInstrumentation {
         instrumentedJarFile.deleteOnExit ();
         dex2JarFile.deleteOnExit ();
     }
-    public static  byte[] readbytes(final File file){
-        final byte[]res=null;
-        FileInputStream fis=null;
-        DataInputStream dis=null;
-        ByteArrayOutputStream bout=null;
-        try{
+
+
+    public static byte [] readbytes (final File file) {
+        final byte [] res = null;
+        FileInputStream fis = null;
+        DataInputStream dis = null;
+        ByteArrayOutputStream bout = null;
+        try {
             fis = new FileInputStream (file);
             dis = new DataInputStream (fis);
             bout = new ByteArrayOutputStream ();
@@ -176,25 +201,26 @@ public class OfflineInstrumentation {
             }
             fis.close ();
             dis.close ();
-        }catch (final Exception e){
+        } catch (final Exception e) {
             e.printStackTrace ();
         }
 
         return bout.toByteArray ();
-}
-    public static void main (final String [] args){
-        if(args.length < 2){
+    }
+
+
+    public static void main (final String [] args) {
+        if (args.length < 2) {
             System.out.println ("Usage: PATH_TO_INPUT_DEX PATH_TO_DISLCLASSES_SEPARTED_WITH_COMMA");
-        }else {
-            final File inputDex = new File(args[0]);
+        } else {
+            final File inputDex = new File (args [0]);
             try {
-                instrumentJar (readbytes (inputDex), new DiSL (false, args[1], ""));
+                instrumentJar (readbytes (inputDex), new DiSL (false, args [1], ""));
             } catch (final Exception e) {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                e.printStackTrace ();
             }
         }
     }
-
 
 }
