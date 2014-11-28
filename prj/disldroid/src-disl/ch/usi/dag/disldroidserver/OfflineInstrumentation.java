@@ -25,10 +25,11 @@ import com.googlecode.dex2jar.v3.DexExceptionHandlerImpl;
 
 
 public class OfflineInstrumentation {
+
     static boolean isCore = false;
 
 
-    public static void instrumentJar (final byte [] dexCode, final DiSL curdisl)
+    public static void instrumentJar (final byte [] dexCode, final DiSL curdisl, final String outDexPath)
     throws Exception
     {
         // create tmp file in system temporary files
@@ -158,7 +159,7 @@ public class OfflineInstrumentation {
             final Class <?> c = Class.forName ("com.android.dx.command.Main");
             final java.lang.reflect.Method m = c.getMethod (
                 "main", String [].class);
-            outputDex = new File ("output.dex");
+            outputDex = new File (outDexPath);
 
             final List <String> ps = new ArrayList <String> ();
             if (isCore) {
@@ -215,7 +216,7 @@ public class OfflineInstrumentation {
         } else {
             final File inputDex = new File (args [0]);
             try {
-                instrumentJar (readbytes (inputDex), new DiSL (false, args [1], ""));
+                instrumentJar (readbytes (inputDex), new DiSL (false, args[1], ""), "output.dex");
             } catch (final Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace ();
