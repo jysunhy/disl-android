@@ -4,7 +4,12 @@
 	<default-observed>false</default-observed>
 	<dexes> 
 		<dex>
-			<name>core.jar</name>
+			<name>bench-emma.jar</name>
+            <dislclass>output/build/analysis/ch/usi/dag/empty/disl/LogOnlyDiSLClass.class</dislclass>
+            <bypass>false</bypass>
+		</dex>
+		<dex>
+			<name>bench-jacoco.jar</name>
             <dislclass>output/build/analysis/ch/usi/dag/empty/disl/LogOnlyDiSLClass.class</dislclass>
             <bypass>false</bypass>
 		</dex>
