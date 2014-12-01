@@ -9,7 +9,7 @@ import android.provider.ContactsContract;
 import ch.usi.dag.disl.annotation.Monitor;
 import ch.usi.dag.disl.marker.BytecodeMarker;
 
-public class SandboxBlocker {
+public class ContentProviderSandbox {
     @Monitor(marker=BytecodeMarker.class, guard=SandboxGuard.ContentResolver_query_Guard.class, args = "invokevirtual,invokestatic,invokeinterface")
     public static Cursor android_content_ContentResolver_query(final ContentResolver cr, final Uri uri, final String[] projection,
         String selection, String[] selectionArgs, final String sortOrder){
