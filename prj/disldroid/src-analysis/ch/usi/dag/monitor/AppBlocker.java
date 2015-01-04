@@ -19,42 +19,41 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.apache.commons.io.IOUtils;
-
 import ch.usi.dag.disl.DiSL;
 import ch.usi.dag.disldroidserver.OfflineInstrumentation;
+//import org.apache.commons.io.IOUtils;
 
 public class AppBlocker {
 
-    public static void main (String [] args) throws Exception{
+    public static void main (final String [] args) throws Exception{
         if (args.length < 1) {
             System.out.println ("args error");
             return;
         }
         String dir = "";
         try {
-            String apkFilePath = args [0];
+            final String apkFilePath = args [0];
             dir = unzip (apkFilePath);
             deleteFile (dir + "/META-INF");
-            String dislClass = "lib-class/SandboxBlocker.class";
-            File dexFile = new File(dir + "/classes.dex");
+            final String dislClass = "lib-class/SandboxBlocker.class";
+            final File dexFile = new File(dir + "/classes.dex");
             OfflineInstrumentation.instrumentJar (OfflineInstrumentation.readbytes (dexFile), new DiSL (false, dislClass, ""), dir + "/out-classes.dex");
             dexFile.delete ();
-            File newDexFile = new File(dir + "/out-classes.dex");
-            File temp = new File(dir + "/classes.dex");
+            final File newDexFile = new File(dir + "/out-classes.dex");
+            final File temp = new File(dir + "/classes.dex");
             newDexFile.renameTo (temp);
             zip (dir, new File (apkFilePath).getParent () + "/repackage-" + new File (apkFilePath).getName ());
             deleteFile(dir);
             System.out.println ("repackage done");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             System.out.println (e.toString ());
             deleteFile(dir);
         }
     }
 
-    public static void zip(String dir, String filePath) throws Exception {
-        File directoryToZip = new File(dir);
-        List<File> fileList = new ArrayList<File>();
+    public static void zip(final String dir, final String filePath) throws Exception {
+        final File directoryToZip = new File(dir);
+        final List<File> fileList = new ArrayList<File>();
         getAllFiles(directoryToZip, fileList);
         if(new File(filePath).exists ()) {
             new File(filePath).delete ();
@@ -62,9 +61,9 @@ public class AppBlocker {
         writeZipFile(directoryToZip, fileList, filePath);
     }
 
-    public static void getAllFiles(File dir, List<File> fileList) throws Exception{
-        File[] files = dir.listFiles();
-        for (File file : files) {
+    public static void getAllFiles(final File dir, final List<File> fileList) throws Exception{
+        final File[] files = dir.listFiles();
+        for (final File file : files) {
             fileList.add(file);
             if (file.isDirectory()) {
                 getAllFiles(file, fileList);
@@ -72,11 +71,11 @@ public class AppBlocker {
         }
     }
 
-    public static void writeZipFile(File directoryToZip, List<File> fileList, String filePath) throws Exception {
-        FileOutputStream fos = new FileOutputStream(filePath);
-        ZipOutputStream zos = new ZipOutputStream(fos);
-        for (File file : fileList) {
-            if (!file.isDirectory()) { 
+    public static void writeZipFile(final File directoryToZip, final List<File> fileList, final String filePath) throws Exception {
+        final FileOutputStream fos = new FileOutputStream(filePath);
+        final ZipOutputStream zos = new ZipOutputStream(fos);
+        for (final File file : fileList) {
+            if (!file.isDirectory()) {
                 addToZip(directoryToZip, file, zos);
             }
         }
@@ -84,14 +83,14 @@ public class AppBlocker {
         fos.close();
     }
 
-    public static void addToZip(File directoryToZip, File file, ZipOutputStream zos) throws Exception {
-        FileInputStream fis = new FileInputStream(file);
-        String zipFilePath = file.getCanonicalPath().substring(directoryToZip.getCanonicalPath().length() + 1,
+    public static void addToZip(final File directoryToZip, final File file, final ZipOutputStream zos) throws Exception {
+        final FileInputStream fis = new FileInputStream(file);
+        final String zipFilePath = file.getCanonicalPath().substring(directoryToZip.getCanonicalPath().length() + 1,
                 file.getCanonicalPath().length());
-        ZipEntry zipEntry = new ZipEntry(zipFilePath);
+        final ZipEntry zipEntry = new ZipEntry(zipFilePath);
         zos.putNextEntry(zipEntry);
 
-        byte[] bytes = new byte[2048];
+        final byte[] bytes = new byte[2048];
         int length;
         while ((length = fis.read(bytes)) >= 0) {
             zos.write(bytes, 0, length);
@@ -99,18 +98,18 @@ public class AppBlocker {
         zos.closeEntry();
         fis.close();
     }
-    
-    public static String unzip (String filePath) throws Exception {
-        String targetDir = filePath + "-unzip";
+
+    public static String unzip (final String filePath) throws Exception {
+        final String targetDir = filePath + "-unzip";
         if(new File(targetDir).exists ()) {
             deleteFile(targetDir);
         }
         new File(targetDir).mkdir ();
-        ZipFile zipFile = new ZipFile (filePath);
-        Enumeration <? extends ZipEntry> entries = zipFile.entries ();
+        final ZipFile zipFile = new ZipFile (filePath);
+        final Enumeration <? extends ZipEntry> entries = zipFile.entries ();
         while (entries.hasMoreElements ()) {
-            ZipEntry entry = entries.nextElement ();
-            File targetFile = new File (targetDir, entry.getName ());
+            final ZipEntry entry = entries.nextElement ();
+            final File targetFile = new File (targetDir, entry.getName ());
             if (entry.isDirectory ()) {
                 targetFile.mkdirs ();
             }
@@ -121,9 +120,14 @@ public class AppBlocker {
                 if (!targetFile.exists ()) {
                     targetFile.createNewFile ();
                 }
-                InputStream input = zipFile.getInputStream (entry);
-                OutputStream output = new FileOutputStream (targetFile);
-                IOUtils.copy (input, output);
+                final InputStream input = zipFile.getInputStream (entry);
+                final OutputStream output = new FileOutputStream (targetFile);
+                //IOUtils.copy (input, output);
+                final byte[] buf = new byte[1024];
+                int rd = -1;
+                while((rd = input.read (buf)) > 0){
+                    output.write (buf,0,rd);
+                }
                 output.close ();
                 input.close ();
             }
@@ -132,17 +136,17 @@ public class AppBlocker {
         return targetDir;
     }
 
-    public static void deleteFile (String filePath) throws Exception {
-        Path directory = Paths.get(filePath);
+    public static void deleteFile (final String filePath) throws Exception {
+        final Path directory = Paths.get(filePath);
         Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
             @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+            public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException {
                 Files.delete(file);
                 return FileVisitResult.CONTINUE;
             }
 
             @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+            public FileVisitResult postVisitDirectory(final Path dir, final IOException exc) throws IOException {
                 Files.delete(dir);
                 return FileVisitResult.CONTINUE;
             }

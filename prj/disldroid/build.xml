@@ -60,8 +60,9 @@
 		<pathelement location="${dextranslator.lib}" />
 		<pathelement location="${dexrename.lib}" />
 	</path>
-	<path id="framework.classpath">
+	<path id="android.classpath">
 		<pathelement location="${android.path}" />
+		<pathelement location="${android.core.path}" />
 	</path>
 	<path id="android.shvm.classpath">
 		<pathelement location="${build.android.shvm}" />
@@ -484,7 +485,7 @@
 			<classpath refid="android.shvm.classpath" />
 			<classpath refid="disl.classpath" />
 			<classpath refid="util.classpath" />
-			<classpath refid="framework.classpath" />
+			<classpath refid="android.classpath" />
 		</javac>
 	</target>
 
