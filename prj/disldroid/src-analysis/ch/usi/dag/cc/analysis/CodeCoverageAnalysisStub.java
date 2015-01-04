@@ -1,5 +1,7 @@
 package ch.usi.dag.cc.analysis;
 
+import java.util.HashMap;
+
 import ch.usi.dag.dislre.AREDispatch;
 
 
@@ -13,11 +15,16 @@ public class CodeCoverageAnalysisStub {
 
     static short PR = AREDispatch.registerMethod ("ch.usi.dag.cc.analysis.CodeCoverageAnalysis.endAnalysis");
 
+    static HashMap<String, Boolean> metaSent = new HashMap<> ();
 
     public static void sendMeta (
         final String className, final String methodID, final int classBranches,
         final int methodBranches, final int classBasicBlocks,
         final int methodBasicBlocks) {
+        if(metaSent.containsKey (className+methodID)) {
+            return;
+        }
+        metaSent.put (className+methodID, true);
         AREDispatch.analysisStart (SM);
         AREDispatch.sendObjectPlusData (className);
         AREDispatch.sendObjectPlusData (methodID);

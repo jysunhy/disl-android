@@ -13,6 +13,11 @@
             <dislclass>output/build/analysis/ch/usi/dag/empty/disl/LogOnlyDiSLClass.class</dislclass>
             <bypass>false</bypass>
 		</dex>
+		<dex>
+			<name>bench-dvm.jar</name>
+            <dislclass>output/build/analysis/ch/usi/dag/empty/disl/LogOnlyDiSLClass.class</dislclass>
+            <bypass>false</bypass>
+		</dex>
 	</dexes>
 	<procs>
 	</procs>

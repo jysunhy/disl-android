@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<default-dislclass></default-dislclass>
+	<default-dislclass>output/build/analysis/ch/usi/dag/cc/disl/DiSLClass.class</default-dislclass>
 	<default-observed>false</default-observed>
 	<dexes> 
 		<dex>
@@ -13,9 +13,10 @@
 		</dex>
 		<dex>
 			<name>bench-dvm.jar</name>
-			<bypass>true</bypass>
+			<bypass>false</bypass>
 			<dislclass>output/build/analysis/ch/usi/dag/cc/disl/DiSLClass.class</dislclass>
 		</dex>
+        <!--
 		<dex>
 			<name>core.jar</name>
 			<isbootstrap>true</isbootstrap>
@@ -47,7 +48,8 @@
 		<dex>
 			<name>apache-xml.jar</name>
 			<isbootstrap>true</isbootstrap>
-		</dex>
+        </dex>
+        -->
 	</dexes>
 	<procs>
 		<proc>
@@ -56,7 +58,7 @@
 		</proc>
 		<proc>
 			<procname>dalvikvm</procname>
-			<isobserved>false</isobserved>
+			<isobserved>true</isobserved>
 		</proc>
         <proc>
             <procname>com.android.contacts</procname>

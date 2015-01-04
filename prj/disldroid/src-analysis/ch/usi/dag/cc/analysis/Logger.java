@@ -31,6 +31,7 @@ public class Logger {
 
     // TODO write map-reduce friendly code
     public static void dump (final Context context) {
+        System.out.println ("in dump");
         final HashMap <String, StatisticSummary> classCovered = new HashMap <> ();
 
          boolean observed = false;
