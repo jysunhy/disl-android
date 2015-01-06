@@ -42,9 +42,12 @@
 
 ####ARM
 (according to external/qemu/docs/ANDROID-KERNEL.TXT)
-git clone git://android.git.kernel.org/kernel/common.git kernel-common
-cd kernel-common
-git checkout origin/archive/android-gldfish-2.6.29
+//git clone git://android.git.kernel.org/kernel/common.git kernel-common
+//cd kernel-common
+//git checkout origin/archive/android-gldfish-2.6.29
+
+git clone https://android.googlesource.com/kernel/goldfish.git
+git checkout -b android-goldfish-2.6.29 origin/android-goldfish-2.6.29
 
 export CROSS_COMPILE=arm-eabi-
 export ARCH=arm
