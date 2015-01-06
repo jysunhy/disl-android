@@ -7,7 +7,7 @@
 	<classpathentry kind="src" output="output/build/util" path="src-util"/>
 	<classpathentry kind="src" output="output/build/test" path="src-test"/>
 	<classpathentry kind="src" output="output/build/shvm-dispatch" path="src-shvm-dispatch"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="lib" path="lib/asm-debug-all-5.0.3.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-core-1.3.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.11.jar"/>
@@ -24,7 +24,6 @@
 	<classpathentry kind="lib" path="lib-android/jar-rename-1.6.jar"/>
 	<classpathentry kind="lib" path="lib-android/jasmin-p2.5.jar"/>
 	<classpathentry kind="lib" path="output/lib/disl-bypass.jar"/>
-	<classpathentry kind="lib" path="/ASM/bin"/>
 	<classpathentry kind="lib" path="lib-android/core.jar"/>
 	<classpathentry kind="output" path="output/build/disl"/>
 </classpath>

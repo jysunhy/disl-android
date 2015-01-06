@@ -116,5 +116,4 @@ public class BCContext extends MethodStaticContext {
 
         return -1;
     }
-
 }

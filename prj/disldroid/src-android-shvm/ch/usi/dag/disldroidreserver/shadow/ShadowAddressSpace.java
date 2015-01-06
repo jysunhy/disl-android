@@ -368,6 +368,7 @@ public class ShadowAddressSpace {
     }
 
 
+
     public ShadowClass createAndRegisterShadowClass (
         final long net_ref, final ShadowClass superClass, ShadowObject loader,
         final String classSignature, final String classGenericStr,

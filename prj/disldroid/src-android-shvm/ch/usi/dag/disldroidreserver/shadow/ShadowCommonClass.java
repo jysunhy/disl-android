@@ -58,9 +58,7 @@ class ShadowCommonClass extends ShadowClass {
 //        if(name.equals("android.os.StrictMode$8")){
 //            System.out.println ("debugging here");
 //        }
-        if(true) {
-            return;
-        }
+
         if (classCode == null || classCode.length == 0) {
             try {
                 final Socket socket = new Socket(InetAddress.getByName (System.getProperty ("dislserver.ip", "127.0.0.1")), Integer.getInteger("dislserver.port", 6666));

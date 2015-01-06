@@ -5,6 +5,7 @@ import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.annotation.SyntheticLocal;
+import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
 
 
@@ -20,9 +21,6 @@ public class DiSLClass {
     @Before (marker = BodyMarker.class, order = 2)
     public static void onMethodEntry (
         final BCContext bcc) {
-        BCAnalysisStub.sendMeta (
-            bcc.thisClassName (), bcc.thisMethodFullNameWithDesc (),
-            bcc.getClassBranchCount (), bcc.getMethodBranchCount ());
         branches = new boolean [bcc.getMethodBranchCount ()];
     }
 
@@ -53,8 +51,9 @@ public class DiSLClass {
     }
 
     @After (marker = BodyMarker.class, order = 2)
-    public static void onMethodExit (final BCContext bcc) {
+    public static void onMethodExit (final BCContext bcc, final DynamicContext dc) {
+
         BCAnalysisStub.commitBranch (
-            bcc.thisMethodFullNameWithDesc (), branches);
+            bcc.thisClassCanonicalName (), bcc.thisMethodFullNameWithDesc (), branches);
     }
 }
