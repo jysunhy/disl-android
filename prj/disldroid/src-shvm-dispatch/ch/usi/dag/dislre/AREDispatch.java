@@ -1,6 +1,9 @@
 package ch.usi.dag.dislre;
 
 public class AREDispatch {
+
+	public static int codeSwitch = 0;
+
 	/**
 	 * Register method and receive id for this transmission
 	 *
