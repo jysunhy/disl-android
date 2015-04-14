@@ -23,14 +23,9 @@ public class PermissionDiSLClass {
 				final MethodStaticContext msc, final ArgumentProcessorContext pc) {
 			AREDispatch.NativeLog (msc.thisMethodFullName ());
 			final Object [] args = pc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
-			for (final Object obj : args) {
-			    if(obj!=null){
-    			    if(obj.getClass().getCanonicalName().equals ("java.lang.String")) {
-    			        if(obj.toString ().contains ("permission")){
-                            IPCAnalysisStub.permission_used (obj.toString ());
-                        }
-                    }
-			    }
-			}
+			final String permisssionUsed = args[0].toString ();
+			if(permisssionUsed!=null) {
+                IPCAnalysisStub.permission_used (permisssionUsed);
+            }
 		}
 }
