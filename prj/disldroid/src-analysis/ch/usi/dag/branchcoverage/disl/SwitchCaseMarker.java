@@ -8,7 +8,6 @@ import java.util.Set;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
-import org.objectweb.asm.tree.JumpInsnNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -17,7 +16,7 @@ import org.objectweb.asm.tree.TableSwitchInsnNode;
 import ch.usi.dag.disl.marker.AbstractInsnMarker;
 
 
-public class BranchLabelMarker extends AbstractInsnMarker {
+public class SwitchCaseMarker extends AbstractInsnMarker {
 
     @Override
     public List <AbstractInsnNode> markInstruction (final MethodNode methodNode) {
@@ -43,22 +42,6 @@ public class BranchLabelMarker extends AbstractInsnMarker {
             }
 
         }
-
-        for (final AbstractInsnNode instruction : ilst.toArray ()) {
-
-            if (BCUtil.isCondBranch (instruction)) {
-                final JumpInsnNode jin = (JumpInsnNode) instruction;
-
-                if (labels.contains (jin.label)) {
-                    final LabelNode newLabel = new LabelNode ();
-                    ilst.insert (jin.label, newLabel);
-                    jin.label = newLabel;
-                }
-
-                labels.add (jin.label);
-            }
-        }
-
         return new LinkedList <AbstractInsnNode> (labels);
     }
 

@@ -1,13 +1,6 @@
 package ch.usi.dag.disldroidreserver.shadow;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.InetAddress;
-import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -21,6 +14,37 @@ public class Context {
     String pname;
 
     boolean dead = false;
+
+    Object store;
+
+    public int getProcessID () {
+        return processID;
+    }
+
+
+    public void setProcessID (final int processID) {
+        this.processID = processID;
+    }
+
+
+    public InetAddress getAddress () {
+        return address;
+    }
+
+
+    public void setAddress (final InetAddress address) {
+        this.address = address;
+    }
+
+
+    public Object getStore () {
+        return store;
+    }
+
+
+    public void setStore (final Object store) {
+        this.store = store;
+    }
 
 
     public boolean isDead () {
@@ -82,60 +106,42 @@ public class Context {
         return contexts;
     }
 
-    public static byte[] getByteCodeFor(final String classFullName){
-        byte[] classCode = null;
-        try {
-            final Socket socket = new Socket(InetAddress.getByName (System.getProperty ("dislserver.ip", "127.0.0.1")), Integer.getInteger("dislserver.port", 6666));
-            DataOutputStream os;
-            DataInputStream is;
-
-            os = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-            is = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-
-            os.writeInt(classFullName.length ());
-
-            os.write(classFullName.getBytes ());
-            os.writeInt(0);
-            //os.write(nm.getClassCode());
-            os.flush();
-            final int controlLength = is.readInt();
-
-            // allocate buffer for class reading
-            final byte[] control = new byte[controlLength];
-
-            // read class
-            is.readFully(control);
-            final int classCodeLength = is.readInt();
-            classCode = new byte[classCodeLength];
-            is.readFully(classCode);
-            os.close ();
-            is.close ();
-            socket.close ();
-        } catch (final UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (final IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return classCode;
-    }
-//    public List <NativeThread> getInvovedThreads (final int tid, final long timestamp) {
-//        // TODO Auto-generated method stub
-//        final List<NativeThread> res = new ArrayList <NativeThread>();
-//        final List<IPCEventRecord> list = IPCHandler.getInvolvedEvents (pid(), tid, timestamp);
-//        for(final IPCEventRecord event : list) {
-//            res.add (event.from);
+//    public static byte[] getByteCodeFor(final String classFullName){
+//        byte[] classCode = null;
+//        try {
+//            final Socket socket = new Socket(InetAddress.getByName (System.getProperty ("dislserver.ip", "127.0.0.1")), Integer.getInteger("dislserver.port", 6666));
+//            DataOutputStream os;
+//            DataInputStream is;
+//
+//            os = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+//            is = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+//
+//            os.writeInt(classFullName.length ());
+//
+//            os.write(classFullName.getBytes ());
+//            os.writeInt(0);
+//            //os.write(nm.getClassCode());
+//            os.flush();
+//            final int controlLength = is.readInt();
+//
+//            // allocate buffer for class reading
+//            final byte[] control = new byte[controlLength];
+//
+//            // read class
+//            is.readFully(control);
+//            final int classCodeLength = is.readInt();
+//            classCode = new byte[classCodeLength];
+//            is.readFully(classCode);
+//            os.close ();
+//            is.close ();
+//            socket.close ();
+//        } catch (final UnknownHostException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        } catch (final IOException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
 //        }
-//        if(res.size ()==0) {
-//            return null;
-//        } else {
-//            return res;
-//        }
-//    }
-
-//    public List<IPCEventRecord> getEventsOfSameTransactin(final IPCEventRecord event){
-//        final List<IPCEventRecord> res = IPCHandler.getEventsOfSameTransactin (event);
-//        return res;
+//        return classCode;
 //    }
 }

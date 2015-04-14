@@ -1,20 +1,16 @@
-package ch.usi.dag.branchcoverage.disl;
+package ch.usi.dag.branchcoverage.util;
 
-import java.util.HashMap;
 import java.util.HashSet;
 
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TableSwitchInsnNode;
 
-import ch.usi.dag.disl.util.cfg.CtrlFlowGraph;
 
-
-public class BCUtil {
+public class CodeCoverageUtil {
 
     public static boolean isCondBranch (final AbstractInsnNode instr) {
         switch (instr.getOpcode ()) {
@@ -40,8 +36,6 @@ public class BCUtil {
             return false;
         }
     }
-
-
     public static int getBranchCount (final AbstractInsnNode instr) {
         if (isCondBranch (instr)) {
             return 2;
@@ -72,40 +66,4 @@ public class BCUtil {
 
         return counter;
     }
-
-    public static int getBBCount (final MethodNode methodNode) {
-        int counter = 0;
-
-        for (final AbstractInsnNode instr : methodNode.instructions.toArray ()) {
-            counter += getBranchCount (instr);
-        }
-
-        return counter;
-    }
-
-    public static String genKey (final ClassNode classNode, final MethodNode methodNode) {
-        return classNode.name + methodNode.name + methodNode.desc;
-    }
-
-    static HashMap <String, CtrlFlowGraph> cache = new HashMap <String, CtrlFlowGraph> ();
-    public static int getBBCount (
-        final ClassNode classNode){
-        int res = 0;
-        for (final MethodNode methodNode : classNode.methods) {
-            res+= getBBCount (classNode, methodNode);
-        }
-        return res;
-    }
-    public static int getBBCount (
-        final ClassNode classNode, final MethodNode methodNode) {
-        final String key = genKey (classNode, methodNode);
-
-        CtrlFlowGraph res = cache.get (key);
-        if (res == null) {
-            res = new CtrlFlowGraph (methodNode);
-            cache.put (key, res);
-        }
-        return res.getNodes ().size();
-    }
-
 }

@@ -5,27 +5,29 @@ import java.util.List;
 
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.TableSwitchInsnNode;
 
 import ch.usi.dag.disl.marker.AbstractInsnMarker;
 
+public class SwitchMarker extends AbstractInsnMarker {
 
-public class BranchInstrMarker extends AbstractInsnMarker {
-
-    @Override
-    public List <AbstractInsnNode> markInstruction (final MethodNode methodNode) {
-
+	@Override
+	public List<AbstractInsnNode> markInstruction(final MethodNode methodNode) {
         final List <AbstractInsnNode> selected = new LinkedList <AbstractInsnNode> ();
         final InsnList ilst = methodNode.instructions;
 
         for (final AbstractInsnNode instruction : ilst.toArray ()) {
 
-            if (BCUtil.isCondBranch (instruction)) {
+            if (instruction instanceof LookupSwitchInsnNode) {
+                selected.add (instruction);
+            } else if (instruction instanceof TableSwitchInsnNode) {
                 selected.add (instruction);
             }
         }
 
         return selected;
-    }
+	}
 
 }
