@@ -5,16 +5,15 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import ch.usi.dag.branchcoverage.util.CodeCoverageUtil;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
-import ch.usi.dag.disldroidreserver.shadow.ShadowClass;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
 import ch.usi.dag.disldroidreserver.shadow.ShadowString;
-import ch.usi.dag.disldroidreserver.shadow.ref.MethodInfo;
 
 
 public class CodeCoverageAnalysis extends RemoteAnalysis {
@@ -26,7 +25,7 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
     public void commitBranch (final Context context, final ShadowString classSignature, final ShadowString methodSignature, final int index) {
 
         ShadowAddressSpace.getShadowAddressSpace (context.getProcessID ());
-        final ShadowClass thisClass = null;
+        final ClassNode clazz = Context.getClassNodeFor(classSignature.toString ());
 
         if(context.getStore ()==null) {
             context.setStore (new HashMap <String, HashMap<String, int[]>> ());
@@ -34,15 +33,14 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
 
         final HashMap <String, HashMap<String, int[]>> store = (HashMap <String, HashMap<String, int[]>>) context.getStore ();
         HashMap<String, int[]> branchMap = null;
-        if(!store.containsKey (thisClass.getCanonicalName  ())){
+        if(!store.containsKey (classSignature.toString ())){
             branchMap= new HashMap<String, int[]>();
-            store.put (thisClass.getCanonicalName (), branchMap);
-            for (final MethodInfo info : thisClass.getMethods ()){
-                final MethodNode mnode = info.getMethodNode ();
+            store.put (classSignature.toString (), branchMap);
+            for (final MethodNode mnode : clazz.methods){
                 branchMap.put (mnode.signature, new int[CodeCoverageUtil.getBranchCount (mnode)]);
             }
         } else {
-            branchMap= store.get (thisClass.getCanonicalName  ());
+            branchMap= store.get (classSignature.toString ());
         }
         branchMap.get (methodSignature.toString ())[index]++;
     }

@@ -1,8 +1,19 @@
 package ch.usi.dag.disldroidreserver.shadow;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.tree.ClassNode;
 
 
 public class Context {
@@ -106,42 +117,50 @@ public class Context {
         return contexts;
     }
 
-//    public static byte[] getByteCodeFor(final String classFullName){
-//        byte[] classCode = null;
-//        try {
-//            final Socket socket = new Socket(InetAddress.getByName (System.getProperty ("dislserver.ip", "127.0.0.1")), Integer.getInteger("dislserver.port", 6666));
-//            DataOutputStream os;
-//            DataInputStream is;
-//
-//            os = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-//            is = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-//
-//            os.writeInt(classFullName.length ());
-//
-//            os.write(classFullName.getBytes ());
-//            os.writeInt(0);
-//            //os.write(nm.getClassCode());
-//            os.flush();
-//            final int controlLength = is.readInt();
-//
-//            // allocate buffer for class reading
-//            final byte[] control = new byte[controlLength];
-//
-//            // read class
-//            is.readFully(control);
-//            final int classCodeLength = is.readInt();
-//            classCode = new byte[classCodeLength];
-//            is.readFully(classCode);
-//            os.close ();
-//            is.close ();
-//            socket.close ();
-//        } catch (final UnknownHostException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (final IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        return classCode;
-//    }
+    public static ClassNode getClassNodeFor(final String classSignature){
+        byte[] classCode = null;
+
+        String classFullName = classSignature.replace('/', '.');
+        if(classFullName.startsWith("L")) {
+            classFullName = classFullName.substring(1);
+        }
+        if(classFullName.endsWith(";")) {
+            classFullName = classFullName.substring(0, classFullName.length()-1);
+        }
+
+        try {
+            final Socket socket = new Socket(InetAddress.getByName (System.getProperty ("dislserver.ip", "127.0.0.1")), Integer.getInteger("dislserver.port", 6667));
+            DataOutputStream os;
+            DataInputStream is;
+
+            os = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            is = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+
+            os.writeInt(classFullName.length ());
+
+            os.write(classFullName.getBytes ());
+            os.writeInt(0);
+            os.flush();
+            final int controlLength = is.readInt();
+
+            final byte[] control = new byte[controlLength];
+
+            is.readFully(control);
+            final int classCodeLength = is.readInt();
+            classCode = new byte[classCodeLength];
+            is.readFully(classCode);
+            os.close ();
+            is.close ();
+            socket.close ();
+        } catch (final UnknownHostException e) {
+            e.printStackTrace();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        final ClassReader classReader = new ClassReader(classCode);
+        final ClassNode classNode = new ClassNode(Opcodes.ASM4);
+        classReader.accept(classNode, ClassReader.SKIP_DEBUG
+                | ClassReader.EXPAND_FRAMES);
+        return classNode;
+    }
 }
