@@ -24,7 +24,7 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
 
     public void commitBranch (final Context context, final ShadowString classSignature, final ShadowString methodSignature, final int index) {
         ShadowAddressSpace.getShadowAddressSpace (context.getProcessID ());
-        final ClassNode clazz = Context.getClassNodeFor(classSignature.toString ());
+        final ClassNode clazz = context.getClassNodeFor(classSignature.toString ());
 
         if(context.getStore ()==null) {
             context.setStore (new HashMap <String, HashMap<String, int[]>> ());

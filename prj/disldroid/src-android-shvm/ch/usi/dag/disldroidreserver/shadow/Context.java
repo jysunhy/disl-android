@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -117,7 +118,14 @@ public class Context {
         return contexts;
     }
 
-    public static ClassNode getClassNodeFor(final String classSignature){
+
+    HashMap<String, ClassNode> clazzCache = new HashMap<String, ClassNode>();
+
+    public ClassNode getClassNodeFor(final String classSignature){
+        if(clazzCache.containsKey (classSignature)) {
+            return clazzCache.get (classSignature);
+        }
+
         byte[] classCode = null;
 
         String classFullName = classSignature.replace('/', '.');
@@ -161,6 +169,7 @@ public class Context {
         final ClassNode classNode = new ClassNode(Opcodes.ASM4);
         classReader.accept(classNode, ClassReader.SKIP_DEBUG
                 | ClassReader.EXPAND_FRAMES);
+        clazzCache.put (classSignature, classNode);
         return classNode;
     }
 }
