@@ -19,7 +19,7 @@ public class DiSLClass {
     @AfterReturning (marker = IfThenBranchMarker.class)
     public static void afterBranchInstr (final CodeCoverageContext c) {
         if (isBranch) {
-            CodeCoverageAnalysisProxy.commitBranch(c.thisClassSignature (), c.thisMethodSignature (), c.getIndex ());
+            CodeCoverageAnalysisProxy.commitBranch(c.thisClassName (), c.thisMethodSignature (), c.getIndex ());
             isBranch = false;
         }
     }
@@ -27,7 +27,7 @@ public class DiSLClass {
     @AfterReturning (marker = IfElseBranchMarker.class)
     public static void afterJmpInstr (final CodeCoverageContext c) {
         if (isBranch) {
-            CodeCoverageAnalysisProxy.commitBranch(c.thisClassSignature (), c.thisMethodSignature (), c.getIndex ());
+            CodeCoverageAnalysisProxy.commitBranch(c.thisClassName (), c.thisMethodSignature (), c.getIndex ());
             isBranch = false;
         }
     }
@@ -40,7 +40,7 @@ public class DiSLClass {
     @AfterReturning (marker = SwitchCaseMarker.class)
     public static void afterBranchLabel (final CodeCoverageContext c) {
         if (isBranch) {
-            CodeCoverageAnalysisProxy.commitBranch(c.thisClassSignature (), c.thisMethodSignature (), c.getIndex ());
+            CodeCoverageAnalysisProxy.commitBranch(c.thisClassName (), c.thisMethodSignature (), c.getIndex ());
             isBranch = false;
         }
     }
