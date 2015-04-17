@@ -66,6 +66,8 @@ public class CodeCoverageUtil {
             counter += getBranchCount (instr);
         }
 
+        System.out.println(getMethodSignature (methodNode)+":"+counter);
+
         return counter;
     }
 
