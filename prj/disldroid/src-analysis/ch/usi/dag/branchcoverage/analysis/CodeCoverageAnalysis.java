@@ -40,7 +40,7 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
             branchMap= new HashMap<String, int[]>();
             store.put (classSignature.toString (), branchMap);
             for (final MethodNode mnode : clazz.methods){
-                branchMap.put (mnode.name, new int[CodeCoverageUtil.getBranchCount (mnode)]);
+                branchMap.put (CodeCoverageUtil.getMethodSignature (mnode), new int[CodeCoverageUtil.getBranchCount (mnode)]);
             }
         } else {
             branchMap= store.get (classSignature.toString ());

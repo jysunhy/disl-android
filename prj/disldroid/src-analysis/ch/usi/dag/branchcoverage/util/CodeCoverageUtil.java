@@ -9,6 +9,8 @@ import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TableSwitchInsnNode;
 
+import ch.usi.dag.disl.util.Constants;
+
 
 public class CodeCoverageUtil {
 
@@ -65,5 +67,9 @@ public class CodeCoverageUtil {
         }
 
         return counter;
+    }
+
+    public static String getMethodSignature(final MethodNode mn){
+        return mn.name+Constants.STATIC_CONTEXT_METHOD_DELIM+mn.desc;
     }
 }

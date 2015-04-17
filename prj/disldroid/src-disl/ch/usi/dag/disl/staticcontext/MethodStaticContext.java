@@ -187,7 +187,6 @@ public class MethodStaticContext extends AbstractStaticContext {
         return __methodName ();
     }
 
-
     /**
      * Returns the fully qualified (internal) name of the instrumented method,
      * i.e., including the (internal) name of the class containing the method.
@@ -209,9 +208,8 @@ public class MethodStaticContext extends AbstractStaticContext {
      * Returns the signature of the instrumented method.
      */
     public String thisMethodSignature () {
-        return staticContextData.getMethodNode ().signature;
+        return __methodName()+Constants.STATIC_CONTEXT_METHOD_DELIM+ thisMethodDescriptor ();
     }
-
 
     /**
      * Returns {@code true} if this method is a constructor.
