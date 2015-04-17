@@ -23,7 +23,6 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
     }
 
     public void commitBranch (final Context context, final ShadowString classSignature, final ShadowString methodSignature, final int index) {
-
         ShadowAddressSpace.getShadowAddressSpace (context.getProcessID ());
         final ClassNode clazz = Context.getClassNodeFor(classSignature.toString ());
 
@@ -41,7 +40,7 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
             branchMap= new HashMap<String, int[]>();
             store.put (classSignature.toString (), branchMap);
             for (final MethodNode mnode : clazz.methods){
-                branchMap.put (mnode.signature, new int[CodeCoverageUtil.getBranchCount (mnode)]);
+                branchMap.put (mnode.name, new int[CodeCoverageUtil.getBranchCount (mnode)]);
             }
         } else {
             branchMap= store.get (classSignature.toString ());
