@@ -23,8 +23,6 @@ public class ShadowAddressSpace {
 
     private final ConcurrentHashMap <Integer, ShadowClass> shadowClasses;
 
-    private final ConcurrentHashMap <String, ShadowClass> name2ShadowClasses;
-
     final Context context;
 
     ShadowClass JAVA_LANG_CLASS;
@@ -36,7 +34,6 @@ public class ShadowAddressSpace {
         shadowObjects = new ConcurrentHashMap <Long, ShadowObject> (100);
         classLoaderMap = new ConcurrentHashMap <ShadowObject, ConcurrentHashMap<String,byte[]>> (100);
         shadowClasses = new ConcurrentHashMap <Integer, ShadowClass>(100);
-        name2ShadowClasses = new ConcurrentHashMap <String, ShadowClass>(100);
         classLoaderMap.put (
             BOOTSTRAP_CLASSLOADER, new ConcurrentHashMap <String, byte []> ());
     }
@@ -56,7 +53,6 @@ public class ShadowAddressSpace {
             final ShadowClass thisClass = shadowClasses.get (key);
             final ShadowClass clonedClass = (ShadowClass) child.getClonedShadowObject (thisClass);
             child.shadowClasses.put (key, clonedClass);
-            child.name2ShadowClasses.put (thisClass.getCanonicalName (), clonedClass);
             // if (DiSLREServer.debug) {
             // System.out.println (Thread.currentThread ().getName ()
             // + ": PROCESS-"
@@ -278,7 +274,6 @@ public class ShadowAddressSpace {
             }
             final int classID = NetReferenceHelper.get_class_id (obj.getNetRef ());
             shadowClasses.remove (classID);
-            name2ShadowClasses.remove (getShadowClass (classID).getCanonicalName ());
         } else if (classLoaderMap.keySet ().contains (obj)) {
             classLoaderMap.remove (obj);
         }
@@ -319,19 +314,7 @@ public class ShadowAddressSpace {
 
 
     // ShadowClass Utilities
-    public ShadowClass getShadowClass (final String name) {
 
-        final ShadowClass klass = name2ShadowClasses.get (name);
-
-        if (klass != null) {
-            return klass;
-        }
-
-        throw new DiSLREServerFatalException (Thread.currentThread ().getName ()
-            + " PROCESS-"
-            + context.processID + ": Unknown class instance "
-            + name);
-    }
     public ShadowClass getShadowClass (final long net_ref) {
         final int classID = NetReferenceHelper.get_class_id (net_ref);
 
@@ -428,7 +411,6 @@ public class ShadowAddressSpace {
 
         final int classID = NetReferenceHelper.get_class_id (net_ref);
         final ShadowClass exist = shadowClasses.putIfAbsent (classID, klass);
-        name2ShadowClasses.putIfAbsent (klass.getCanonicalName (), klass);
         if (DiSLREServer.debug) {
             System.out.println (Thread.currentThread ().getName () + ": PROCESS-"
                 + context.processID + " Creating Shadow Class: "
