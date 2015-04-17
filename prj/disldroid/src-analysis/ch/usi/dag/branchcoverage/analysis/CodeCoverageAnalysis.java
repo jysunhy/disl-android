@@ -31,7 +31,11 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
             context.setStore (new HashMap <String, HashMap<String, int[]>> ());
         }
 
-        final HashMap <String, HashMap<String, int[]>> store = (HashMap <String, HashMap<String, int[]>>) context.getStore ();
+        HashMap <String, HashMap<String, int[]>> store = (HashMap <String, HashMap<String, int[]>>) context.getStore ();
+        if(store==null){
+            store = new HashMap <String, HashMap<String, int[]>>();
+            context.setStore (store);
+        }
         HashMap<String, int[]> branchMap = null;
         if(!store.containsKey (classSignature.toString ())){
             branchMap= new HashMap<String, int[]>();
