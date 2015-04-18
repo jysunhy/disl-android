@@ -1,9 +1,15 @@
 package ch.usi.dag.branchcoverage.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashSet;
 
+import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LookupSwitchInsnNode;
 import org.objectweb.asm.tree.MethodNode;
@@ -73,5 +79,25 @@ public class CodeCoverageUtil {
 
     public static String getMethodSignature(final MethodNode mn){
         return mn.name+Constants.STATIC_CONTEXT_METHOD_DELIM+mn.desc;
+    }
+
+    public static void main(final String[] args){
+        try {
+            final FileInputStream is = new FileInputStream (new File(args[0]));
+            final ClassReader classReader = new ClassReader(is);
+            final ClassNode classNode = new ClassNode(Opcodes.ASM4);
+            classReader.accept(classNode, ClassReader.SKIP_DEBUG
+                    | ClassReader.EXPAND_FRAMES);
+            for (final MethodNode mnode : classNode.methods){
+                System.out.println("class "+classNode.name+" method "+CodeCoverageUtil.getMethodSignature (mnode)+" "+CodeCoverageUtil.getBranchCount (mnode));
+            }
+        } catch (final FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 }
