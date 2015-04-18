@@ -630,6 +630,9 @@ public class Worker extends Thread {
                             while ((bytesRead = is.read (buffer)) != -1) {
                                 bout.write (buffer, 0, bytesRead);
                             }
+
+                            newClass (className, bout.toByteArray ());
+
                             // java.lang.Thread needs instrumentation for bypass
                             // support
                             if (className.equals ("java/lang/Thread")) {
@@ -649,16 +652,7 @@ public class Worker extends Thread {
                                 code = bout.toByteArray ();
                             }
 
-                            final byte [] ori = bytecodeMap.get (className);
-                            if (ori != null) {
-                                if (!Arrays.equals (ori, code)) {
-									if(debug) {
-                                        System.out.println ("SAME NAME, DIFFERENT CODE FOR "
-                                            + className.replace ('/', '.'));
-                                    }
-                                }
-                            }
-                            newClass (className, code);
+
                         }
                         bin = new ByteArrayInputStream (code);
 
