@@ -8,27 +8,21 @@ import java.util.Set;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import ch.usi.dag.branchcoverage.util.CodeCoverageLogger;
 import ch.usi.dag.branchcoverage.util.CodeCoverageUtil;
-import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.disldroidreserver.remoteanalysis.VMExitListener;
 import ch.usi.dag.disldroidreserver.shadow.Context;
-import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
-import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
 import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 
-public class CodeCoverageAnalysis extends RemoteAnalysis {
+public class CodeCoverageAnalysis implements VMExitListener {
 
     String getClassName(final String methodId){
         return methodId.substring (0, methodId.indexOf (';'));
     }
 
-    public void commitBranch (final Context context, final ShadowString classSignature, final ShadowString methodSignature, final int index) {
-        ShadowAddressSpace.getShadowAddressSpace (context.getProcessID ());
+    public void branchTaken (final Context context, final ShadowString classSignature, final ShadowString methodSignature, final int index) {
         final ClassNode clazz = context.getClassNodeFor(classSignature.toString ());
-
-        if(context.getStore ()==null) {
-            context.setStore (new HashMap <String, HashMap<String, int[]>> ());
-        }
 
         HashMap <String, HashMap<String, int[]>> store = (HashMap <String, HashMap<String, int[]>>) context.getStore ();
         if(store==null){
@@ -41,7 +35,6 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
             store.put (classSignature.toString (), branchMap);
             for (final MethodNode mnode : clazz.methods){
                 branchMap.put (CodeCoverageUtil.getMethodSignature (mnode), new int[CodeCoverageUtil.getBranchCount (mnode)]);
-                System.out.println("class "+classSignature.toString()+" method "+CodeCoverageUtil.getMethodSignature (mnode)+" "+CodeCoverageUtil.getBranchCount (mnode));
             }
         } else {
             branchMap= store.get (classSignature.toString ());
@@ -55,7 +48,6 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
         final Iterator <Entry <String, HashMap <String, int []>>> clazzIter = entries.iterator ();
         while(clazzIter.hasNext ()){
             final Entry <String, HashMap <String, int []>> cur = clazzIter.next ();
-            System.out.println ("Class: "+cur.getKey ()+": ");
             final HashMap <String, int []> methds = cur.getValue ();
             final Iterator <Entry <String, int []>> methdIter = methds.entrySet ().iterator ();
             while(methdIter.hasNext ()){
@@ -67,17 +59,13 @@ public class CodeCoverageAnalysis extends RemoteAnalysis {
                         cnt++;
                     }
                 }
-                System.out.println ("\t method: "+item.getKey ()+" "+cnt+" / "+sum);
+                CodeCoverageLogger.printCoverage (cur.getKey (), item.getKey (), cnt, sum);
             }
         }
     }
 
     @Override
-    public void atExit (final Context context) {
+    public void onVMExit (final Context context) {
         printResult (context);
-    }
-
-    @Override
-    public void objectFree (final Context context, final ShadowObject netRef) {
     }
 }
