@@ -36,6 +36,7 @@ public class IfElseBranchMarker extends AbstractInsnMarker {
                 labels.add (jin.label);
             }
         }
+
         return new LinkedList <AbstractInsnNode> (labels);
     }
 

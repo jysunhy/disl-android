@@ -1,15 +1,13 @@
 package ch.usi.dag.branchcoverage.analysis;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
+import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import ch.usi.dag.branchcoverage.util.CodeCoverageLogger;
 import ch.usi.dag.branchcoverage.util.CodeCoverageUtil;
+import ch.usi.dag.disl.util.Constants;
 import ch.usi.dag.disldroidreserver.remoteanalysis.VMExitListener;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowString;
@@ -17,55 +15,82 @@ import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 public class CodeCoverageAnalysis implements VMExitListener {
 
-    String getClassName(final String methodId){
-        return methodId.substring (0, methodId.indexOf (';'));
-    }
+    @SuppressWarnings ("serial")
+    static class ClassProfile extends ConcurrentHashMap <String, int []> {
 
-    public void branchTaken (final Context context, final ShadowString classSignature, final ShadowString methodSignature, final int index) {
-        final ClassNode clazz = context.getClassNodeFor(classSignature.toString ());
+        public ClassProfile (final ClassNode classNode) {
+            for (final MethodNode methodNode : classNode.methods) {
+                final String key = methodNode.name
+                    + Constants.STATIC_CONTEXT_METHOD_DELIM + methodNode.desc;
+                int counter = 0;
 
-        HashMap <String, HashMap<String, int[]>> store = (HashMap <String, HashMap<String, int[]>>) context.getStore ();
-        if(store==null){
-            store = new HashMap <String, HashMap<String, int[]>>();
-            context.setStore (store);
-        }
-        HashMap<String, int[]> branchMap = null;
-        if(!store.containsKey (classSignature.toString ())){
-            branchMap= new HashMap<String, int[]>();
-            store.put (classSignature.toString (), branchMap);
-            for (final MethodNode mnode : clazz.methods){
-                branchMap.put (CodeCoverageUtil.getMethodSignature (mnode), new int[CodeCoverageUtil.getBranchCount (mnode)]);
-            }
-        } else {
-            branchMap= store.get (classSignature.toString ());
-        }
-        branchMap.get (methodSignature.toString ())[index]++;
-    }
-
-    public void printResult (final Context context) {
-        final HashMap <String, HashMap<String, int[]>> store = (HashMap <String, HashMap<String, int[]>>) context.getStore ();
-        final Set <Entry <String, HashMap <String, int []>>> entries = store.entrySet ();
-        final Iterator <Entry <String, HashMap <String, int []>>> clazzIter = entries.iterator ();
-        while(clazzIter.hasNext ()){
-            final Entry <String, HashMap <String, int []>> cur = clazzIter.next ();
-            final HashMap <String, int []> methds = cur.getValue ();
-            final Iterator <Entry <String, int []>> methdIter = methds.entrySet ().iterator ();
-            while(methdIter.hasNext ()){
-                final Entry <String, int []> item = methdIter.next ();
-                int cnt=0;
-                final int sum=item.getValue ().length;
-                for(int i = 0; i < sum; i++){
-                    if(item.getValue ()[i]!=0) {
-                        cnt++;
-                    }
+                for (final AbstractInsnNode instr : methodNode.instructions.toArray ()) {
+                    counter += CodeCoverageUtil.getBranchCount (instr);
                 }
-                CodeCoverageLogger.printCoverage (cur.getKey (), item.getKey (), cnt, sum);
+
+                put (key, new int [counter]);
             }
         }
+
     }
+
+
+    @SuppressWarnings ("serial")
+    static class ProcessProfile extends ConcurrentHashMap <String, ClassProfile> {
+
+    }
+
+
+    public void branchTaken (final ShadowString classSignature,
+        final ShadowString methodSignature, final int index,
+        final Context context) {
+        ProcessProfile processProfile = context.getState (ProcessProfile.class);
+
+        if (processProfile == null) {
+            processProfile = (ProcessProfile) context.setStateIfAbsent (new ProcessProfile ());
+        }
+
+        final String outerKey = classSignature.toString ();
+        final String innerKey = methodSignature.toString ();
+        ClassProfile classProfile = processProfile.get (outerKey);
+
+        if (classProfile == null) {
+            final ClassProfile temp = new ClassProfile (
+                context.getClassNodeFor (outerKey));
+            classProfile = processProfile.putIfAbsent (outerKey, temp);
+
+            if (classProfile == null) {
+                classProfile = temp;
+            }
+        }
+
+        classProfile.get (innerKey) [index]++;
+    }
+
 
     @Override
     public void onVMExit (final Context context) {
-        printResult (context);
+        // Dumping code coverage profile
+        final ProcessProfile processProfile = context.getState (ProcessProfile.class);
+
+        for (final String classSignature : processProfile.keySet ()) {
+            final ClassProfile classProfile = processProfile.get (classSignature);
+            System.out.println ("class: " + classSignature);
+
+            for (final String methodSignature : classProfile.keySet ()) {
+                final int [] coverage = classProfile.get (methodSignature);
+                final int total = coverage.length;
+                int covered = 0;
+
+                for (final int count : coverage) {
+                    if (count > 0) {
+                        covered++;
+                    }
+                }
+
+                System.out.println ("\t method: "
+                    + methodSignature + " " + covered + " / " + total);
+            }
+        }
     }
 }

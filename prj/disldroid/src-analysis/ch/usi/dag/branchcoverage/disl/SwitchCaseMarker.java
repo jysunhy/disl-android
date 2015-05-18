@@ -25,7 +25,6 @@ public class SwitchCaseMarker extends AbstractInsnMarker {
         final InsnList ilst = methodNode.instructions;
 
         for (final AbstractInsnNode instruction : ilst.toArray()) {
-
             switch (instruction.getOpcode()) {
             case Opcodes.LOOKUPSWITCH:
                 labels.add(((LookupSwitchInsnNode) instruction).dflt);

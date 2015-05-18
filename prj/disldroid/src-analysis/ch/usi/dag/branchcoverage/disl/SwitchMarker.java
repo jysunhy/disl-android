@@ -19,7 +19,6 @@ public class SwitchMarker extends AbstractInsnMarker {
         final InsnList ilst = methodNode.instructions;
 
         for (final AbstractInsnNode instruction : ilst.toArray ()) {
-
             if (instruction instanceof LookupSwitchInsnNode) {
                 selected.add (instruction);
             } else if (instruction instanceof TableSwitchInsnNode) {

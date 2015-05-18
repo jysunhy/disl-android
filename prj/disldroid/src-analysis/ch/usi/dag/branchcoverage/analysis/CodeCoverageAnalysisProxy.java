@@ -4,7 +4,9 @@ import ch.usi.dag.dislre.AREDispatch;
 
 
 public class CodeCoverageAnalysisProxy {
+
     public static short CB = AREDispatch.registerMethod ("ch.usi.dag.branchcoverage.analysis.CodeCoverageAnalysis.branchTaken");
+
 
     public static void branchTaken (
         final String classSignature, final String methodSignature, final int idx) {
@@ -14,4 +16,5 @@ public class CodeCoverageAnalysisProxy {
         AREDispatch.sendInt (idx);
         AREDispatch.analysisEnd ();
     }
+
 }

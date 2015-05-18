@@ -13,9 +13,11 @@ import ch.usi.dag.disl.staticcontext.MethodStaticContext;
 
 
 public class CodeCoverageContext extends MethodStaticContext {
+
     public int getIndex () {
         final AbstractInsnNode current = staticContextData.getRegionStart ();
         int index = 0;
+
         if (CodeCoverageUtil.isCondBranch (current)) {
             for (final AbstractInsnNode instr : staticContextData.getMethodNode ().instructions.toArray ()) {
                 if (instr.equals (current)) {
@@ -25,9 +27,11 @@ public class CodeCoverageContext extends MethodStaticContext {
                 }
             }
         }
+
         if (!(current instanceof LabelNode)) {
             return -1;
         }
+
         for (final AbstractInsnNode instr : staticContextData.getMethodNode ().instructions.toArray ()) {
             if (CodeCoverageUtil.isCondBranch (instr)
                 && current.equals (((JumpInsnNode) instr).label)) {
@@ -58,14 +62,17 @@ public class CodeCoverageContext extends MethodStaticContext {
                         list.add (label);
                     }
                 }
+
                 final int lIndex = list.indexOf (current);
 
                 if (lIndex != -1) {
                     return index + lIndex;
                 }
             }
+
             index += CodeCoverageUtil.getBranchCount (instr);
         }
+
         return -1;
     }
 }
