@@ -94,7 +94,7 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
                 }
 
                 System.out.println ("\t method: "
-                    + methodSignature + " " + covered + " / " + total);
+                    + methodSignature + " " + covered + " / " + total +" = "+(total==0?"Nil":((double)covered)/total));
             }
         }
     }
