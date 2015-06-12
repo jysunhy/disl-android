@@ -614,6 +614,7 @@ public class Worker extends Thread {
                         final ByteArrayInputStream bin;
                         if (code == null) {
                             // special case here
+                            /*
                             if (className.equals ("java/text/SimpleDateFormat")) {
                                 final File tmp;
                                 if(ON_ANDROID_DEVICE) {
@@ -625,6 +626,7 @@ public class Worker extends Thread {
                                 }
                                 is = new FileInputStream (tmp);
                             }
+                            */
 
                             final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
                             while ((bytesRead = is.read (buffer)) != -1) {
@@ -929,9 +931,15 @@ public class Worker extends Thread {
         if (uninstrPath != null) {
             dump (className, origCode, uninstrPath);
         }
-
+        byte [] instrCode;
         // instrument
-        final byte [] instrCode = disl.instrument (origCode);
+        try {
+            instrCode = disl.instrument (origCode);
+        }catch (Exception e) {
+            e.printStackTrace();
+            instrCode = origCode;
+            System.out.println("Using original code for "+className);
+        }
 
         // dump instrumented
         if (instrPath != null && instrCode != null) {

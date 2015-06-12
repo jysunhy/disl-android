@@ -94,7 +94,7 @@ public abstract class DiSLREServer {
 
                 // TODO pass the inetaddress
 				if (RequestDispatcher.dispatch (processID, requestNo, is, os, debug)) {
-					//break REQUEST_LOOP;
+					break REQUEST_LOOP;
 				}
 			}
 

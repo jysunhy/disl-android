@@ -111,11 +111,16 @@ class ShadowCommonClass extends ShadowClass {
     private List<String>     innerclasses;
 
     private void initializeClassInfo(final byte[] classCode) {
-
-        final ClassReader classReader = new ClassReader(classCode);
-        classNode = new ClassNode(Opcodes.ASM4);
-        classReader.accept(classNode, ClassReader.SKIP_DEBUG
+        ClassReader classReader;
+        try {
+            classReader = new ClassReader(classCode);
+            classNode = new ClassNode(Opcodes.ASM4);
+            classReader.accept(classNode, ClassReader.SKIP_DEBUG
                 | ClassReader.EXPAND_FRAMES);
+        }catch(Exception e){
+            e.printStackTrace();
+            return;
+        }
 
         access = classNode.access;
         name = classNode.name.replace('/', '.');
