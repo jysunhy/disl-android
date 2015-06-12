@@ -77,6 +77,9 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
     public void atExit (final Context context) {
         // Dumping code coverage profile
         final ProcessProfile processProfile = context.getState (ProcessProfile.class);
+        if(processProfile == null) {
+            return;
+        }
 
         for (final String classSignature : processProfile.keySet ()) {
             final ClassProfile classProfile = processProfile.get (classSignature);
