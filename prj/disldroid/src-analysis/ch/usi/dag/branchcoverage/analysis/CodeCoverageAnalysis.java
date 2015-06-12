@@ -8,12 +8,13 @@ import org.objectweb.asm.tree.MethodNode;
 
 import ch.usi.dag.branchcoverage.util.CodeCoverageUtil;
 import ch.usi.dag.disl.util.Constants;
-import ch.usi.dag.disldroidreserver.remoteanalysis.VMExitListener;
+import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
+import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
 import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 
-public class CodeCoverageAnalysis implements VMExitListener {
+public class CodeCoverageAnalysis extends RemoteAnalysis  {
 
     @SuppressWarnings ("serial")
     static class ClassProfile extends ConcurrentHashMap <String, int []> {
@@ -47,7 +48,11 @@ public class CodeCoverageAnalysis implements VMExitListener {
         ProcessProfile processProfile = context.getState (ProcessProfile.class);
 
         if (processProfile == null) {
-            processProfile = (ProcessProfile) context.setStateIfAbsent (new ProcessProfile ());
+            final ProcessProfile temp = new ProcessProfile ();
+            processProfile = (ProcessProfile) context.setStateIfAbsent (temp);
+            if(processProfile == null) {
+                processProfile = temp;
+            }
         }
 
         final String outerKey = classSignature.toString ();
@@ -69,7 +74,7 @@ public class CodeCoverageAnalysis implements VMExitListener {
 
 
     @Override
-    public void onVMExit (final Context context) {
+    public void atExit (final Context context) {
         // Dumping code coverage profile
         final ProcessProfile processProfile = context.getState (ProcessProfile.class);
 
@@ -92,5 +97,12 @@ public class CodeCoverageAnalysis implements VMExitListener {
                     + methodSignature + " " + covered + " / " + total);
             }
         }
+    }
+
+
+    @Override
+    public void objectFree (final Context context, final ShadowObject netRef) {
+        // TODO Auto-generated method stub
+
     }
 }
