@@ -9,39 +9,39 @@ import ch.usi.dag.disl.annotation.SyntheticLocal;
 public class DiSLClass {
 
     @SyntheticLocal
-    public static boolean isBranch = false;
+    public static boolean encounterBranch = false;
 
     @Before (marker = BranchMarker.class)
-    public static void beforeBranchInstr () {
-        isBranch = true;
+    public static void beforeBranchInstruction () {
+        encounterBranch = true;
     }
 
     @AfterReturning (marker = IfThenBranchMarker.class)
-    public static void afterBranchInstr (final CodeCoverageContext c) {
-        if (isBranch) {
-            CodeCoverageAnalysisProxy.commitBranch(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
-            isBranch = false;
+    public static void thenBranch (final CodeCoverageContext c) {
+        if (encounterBranch) {
+            CodeCoverageAnalysisProxy.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
+            encounterBranch = false;
         }
     }
 
     @AfterReturning (marker = IfElseBranchMarker.class)
-    public static void afterJmpInstr (final CodeCoverageContext c) {
-        if (isBranch) {
-            CodeCoverageAnalysisProxy.commitBranch(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
-            isBranch = false;
+    public static void elseBranch (final CodeCoverageContext c) {
+        if (encounterBranch) {
+            CodeCoverageAnalysisProxy.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
+            encounterBranch = false;
         }
     }
 
     @Before (marker = SwitchMarker.class)
-    public static void beforeSwitch (final CodeCoverageContext c) {
-        isBranch = true;
+    public static void beforeSwitchInstruction (final CodeCoverageContext c) {
+        encounterBranch = true;
     }
 
     @AfterReturning (marker = SwitchCaseMarker.class)
     public static void afterBranchLabel (final CodeCoverageContext c) {
-        if (isBranch) {
-            CodeCoverageAnalysisProxy.commitBranch(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
-            isBranch = false;
+        if (encounterBranch) {
+            CodeCoverageAnalysisProxy.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
+            encounterBranch = false;
         }
     }
 }

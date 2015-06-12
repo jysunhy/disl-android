@@ -27,7 +27,33 @@ public class Context {
 
     boolean dead = false;
 
-    Object store;
+    Object state;
+
+    public Object getState () {
+        return state;
+    }
+
+
+    public <T> T getState (final Class <T> type) {
+        return type.cast (state);
+    }
+
+
+    public synchronized void setState (final Object store) {
+        this.state = store;
+    }
+
+
+    public synchronized Object setStateIfAbsent (final Object state) {
+
+        final Object retVal = this.state;
+
+        if (retVal == null) {
+            this.state = state;
+        }
+
+        return retVal;
+    }
 
     public int getProcessID () {
         return processID;
@@ -47,17 +73,6 @@ public class Context {
     public void setAddress (final InetAddress address) {
         this.address = address;
     }
-
-
-    public Object getStore () {
-        return store;
-    }
-
-
-    public void setStore (final Object store) {
-        this.store = store;
-    }
-
 
     public boolean isDead () {
         return dead;
