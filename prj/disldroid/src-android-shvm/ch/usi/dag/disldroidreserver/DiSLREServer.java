@@ -93,8 +93,16 @@ public abstract class DiSLREServer {
 				final byte requestNo = is.readByte();
 
                 // TODO pass the inetaddress
-				if (RequestDispatcher.dispatch (processID, requestNo, is, os, debug)) {
-					break REQUEST_LOOP;
+				try {
+    				if (RequestDispatcher.dispatch (processID, requestNo, is, os, debug)) {
+    					break REQUEST_LOOP;
+    				}
+				}catch(final Exception e){
+				    e.printStackTrace ();
+				    final byte[] tmp = new byte[1024];
+				    while(true){
+				        is.read (tmp);
+				    }
 				}
 			}
 
