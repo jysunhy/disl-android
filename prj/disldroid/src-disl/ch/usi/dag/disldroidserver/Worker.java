@@ -512,6 +512,7 @@ public class Worker extends Thread {
                 return instrClass;
             }
         }
+        final long start = System.nanoTime ();
 
         // create tmp file in system temporary files
         File dex2JarFile = null;
@@ -596,7 +597,7 @@ public class Worker extends Thread {
         while (entryEnum.hasMoreElements ()) {
             final ZipEntry ze = entryEnum.nextElement ();
             final String entryName = ze.getName ();
-            InputStream is = dex2JarJar.getInputStream (ze);
+            final InputStream is = dex2JarJar.getInputStream (ze);
             if (!ze.isDirectory ()) {
                 if (entryName.endsWith (".class")) {
 
@@ -743,6 +744,7 @@ public class Worker extends Thread {
                 cacheMap.put (getCacheHash (dexCode, null), instrClass);
             }
         }
+        System.out.println("time for "+jarName+":"+(System.nanoTime ()-start));
         return instrClass;
     }
 
@@ -935,7 +937,7 @@ public class Worker extends Thread {
         // instrument
         try {
             instrCode = disl.instrument (origCode);
-        }catch (Exception e) {
+        }catch (final Exception e) {
             e.printStackTrace();
             instrCode = origCode;
             System.out.println("Using original code for "+className);
