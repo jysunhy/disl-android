@@ -32,7 +32,7 @@ public class InvocationFilterContext extends MethodStaticContext {
 	    if(!min.name.equals ("connect")) {
             return false;
         }
-        if(!min.desc.equals ("((Ljava/io/FileDescriptor;Ljava/net/InetAddress;II)Z)")) {
+        if(!min.desc.equals ("(Ljava/io/FileDescriptor;Ljava/net/InetAddress;II)Z")) {
             return false;
         }
         System.out.println ("Connecting in "+thisMethodFullName ());
@@ -50,7 +50,7 @@ public class InvocationFilterContext extends MethodStaticContext {
         if(!min.name.equals ("sendto")) {
             return false;
         }
-        if(!min.desc.equals ("((Ljava/io/FileDescriptor;[BIIILjava/net/InetAddress;I)I)")) {
+        if(!min.desc.equals ("(Ljava/io/FileDescriptor;[BIIILjava/net/InetAddress;I)I")) {
             return false;
         }
         System.out.println ("Sending in "+thisMethodFullName ());
@@ -68,7 +68,7 @@ public class InvocationFilterContext extends MethodStaticContext {
         if(!min.name.equals ("sendto")) {
             return false;
         }
-        if(!min.desc.equals ("((Ljava/io/FileDescriptor;Ljava/nio/ByteBuffer;ILjava/net/InetAddress;I)I)")) {
+        if(!min.desc.equals ("(Ljava/io/FileDescriptor;Ljava/nio/ByteBuffer;ILjava/net/InetAddress;I)I")) {
             return false;
         }
         System.out.println ("Sending in "+thisMethodFullName ());
