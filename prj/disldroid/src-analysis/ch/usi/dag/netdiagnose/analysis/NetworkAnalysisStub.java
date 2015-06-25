@@ -8,8 +8,8 @@ import ch.usi.dag.dislre.AREDispatch;
 
 public class NetworkAnalysisStub {
 
-    public static short NEW_CONNECTION = AREDispatch.registerMethod ("ch.usi.dag.netdiagnose.analysis.newConnection");
-    public static short SEND_MESSAGE = AREDispatch.registerMethod ("ch.usi.dag.netdiagnose.analysis.sendMessage");
+    public static short NEW_CONNECTION = AREDispatch.registerMethod ("ch.usi.dag.netdiagnose.analysis.NetworkAnalysis.newConnection");
+    public static short SEND_MESSAGE = AREDispatch.registerMethod ("ch.usi.dag.netdiagnose.analysis.NetworkAnalysis.sendMessage");
     public static void newConnection (
         final FileDescriptor fd, final InetAddress inetAddress, final int port, final int timeoutMs, final boolean successful) {
         AREDispatch.analysisStart (NEW_CONNECTION);
