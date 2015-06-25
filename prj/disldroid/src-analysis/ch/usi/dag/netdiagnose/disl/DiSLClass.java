@@ -35,7 +35,7 @@ public class DiSLClass {
         //final int byteCount = (int)args[3];
         final int flags  = (int)args[4];
         final InetAddress address = (InetAddress)args[5];
-        final int port = (Integer)args[6];
+        final int port = (int)args[6];
         final int sentSize = dc.getStackValue (0, int.class);
         //[byteOffset, byteOffset+sentSize)
         NetworkAnalysisStub.sendMessage (fd, buffer, byteOffset, sentSize, flags, address, port);
@@ -50,7 +50,7 @@ public class DiSLClass {
         final ByteBuffer buffer = (ByteBuffer)args[1];
         final int flags  = (int)args[2];
         final InetAddress address = (InetAddress)args[3];
-        final int port = (Integer)args[4];
+        final int port = (int)args[4];
         final int sentSize = dc.getStackValue (0, int.class);
         //[buffer.position()-sentSize, buffer.position())
         NetworkAnalysisStub.sendMessage (fd, buffer.array (), buffer.position () - sentSize, sentSize, flags, address, port);
