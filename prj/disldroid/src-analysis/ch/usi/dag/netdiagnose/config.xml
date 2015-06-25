@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<default-dislclass>output/build/analysis/ch/usi/dag/netdiagnose/disl/DiSLClass.class</default-dislclass>
+	<default-observed>true</default-observed>
+</config>
