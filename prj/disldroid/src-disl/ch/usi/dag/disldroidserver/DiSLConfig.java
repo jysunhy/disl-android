@@ -25,7 +25,7 @@ public class DiSLConfig {
 
     static boolean default_proc_observed = false;
 
-    static boolean default_bypass = true;
+    static boolean default_bypass = false;
 
     public static HashMap <String, Dex> dexMap;
     public static HashMap <String, Proc> procMap;
