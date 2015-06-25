@@ -4,7 +4,7 @@ import java.io.FileDescriptor;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 
-import ch.usi.dag.disl.annotation.After;
+import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BytecodeMarker;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;
@@ -13,7 +13,7 @@ import ch.usi.dag.netdiagnose.analysis.NetworkAnalysisStub;
 
 public class DiSLClass {
 
-    @After(marker=BytecodeMarker.class, guard=Guard.IoBridge_connect.class, args = "invokestatic")
+    @AfterReturning(marker=BytecodeMarker.class, guard=Guard.IoBridge_connect.class, args = "invokestatic")
     public static void network_connect(final ArgumentProcessorContext apc, final DynamicContext dc){
         //connect(FileDescriptor fd, InetAddress inetAddress, int port, int timeoutMs)
         final Object [] args = apc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
@@ -25,7 +25,7 @@ public class DiSLClass {
         NetworkAnalysisStub.newConnection (fd, address, port, timeoutMs, successful);
     }
 
-    @After(marker=BytecodeMarker.class, guard=Guard.IoBridge_sendto.class, args = "invokestatic")
+    @AfterReturning(marker=BytecodeMarker.class, guard=Guard.IoBridge_sendto.class, args = "invokestatic")
     public static void sendto(final ArgumentProcessorContext apc, final DynamicContext dc){
         final Object [] args = apc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
         //(FileDescriptor fd, byte[] bytes, int byteOffset, int byteCount, int flags, InetAddress inetAddress, int port)
@@ -42,7 +42,7 @@ public class DiSLClass {
     }
 
 
-    @After(marker=BytecodeMarker.class, guard=Guard.IoBridge_sendto_bytebuffer.class, args = "invokestatic")
+    @AfterReturning(marker=BytecodeMarker.class, guard=Guard.IoBridge_sendto_bytebuffer.class, args = "invokestatic")
     public static void sendto_bytebuffer(final ArgumentProcessorContext apc, final DynamicContext dc){
         final Object [] args = apc.getArgs (ArgumentProcessorMode.CALLSITE_ARGS);
         //(FileDescriptor fd, ByteBuffer buffer, int flags, InetAddress inetAddress, int port)
