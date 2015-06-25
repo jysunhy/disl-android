@@ -22,7 +22,6 @@ public class InvocationFilterContext extends MethodStaticContext {
 
 	public boolean isConnect(){
 	    final MethodInsnNode min = getInvocationNode ();
-	    System.out.println ("Try guard Connecting in "+thisMethodFullName ()+" "+min.owner+"."+min.name+min.desc);
 	    if(min == null) {
             return false;
         }
