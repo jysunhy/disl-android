@@ -14,7 +14,11 @@ public class NetworkAnalysisStub {
         final FileDescriptor fd, final InetAddress inetAddress, final int port, final int timeoutMs, final boolean successful) {
         AREDispatch.analysisStart (NEW_CONNECTION);
         AREDispatch.sendInt(fd.hashCode ());
-        AREDispatch.sendObjectPlusData (inetAddress.getHostAddress ());
+        if(inetAddress != null) {
+            AREDispatch.sendObjectPlusData (inetAddress.getHostAddress ());
+        } else {
+            AREDispatch.sendObjectPlusData (null);
+        }
         AREDispatch.sendInt(port);
         AREDispatch.sendInt(timeoutMs);
         AREDispatch.sendBoolean (successful);
@@ -30,10 +34,14 @@ public class NetworkAnalysisStub {
         AREDispatch.sendInt(fd.hashCode ());
         AREDispatch.sendObjectPlusData (Base64.encodeToString (buffer, start, length, Base64.DEFAULT));
         AREDispatch.sendInt(flags);
-        AREDispatch.sendObjectPlusData (inetAddress.getHostAddress ());
+        if(inetAddress != null) {
+            AREDispatch.sendObjectPlusData (inetAddress.getHostAddress ());
+        } else {
+            AREDispatch.sendObjectPlusData (null);
+        }
         AREDispatch.sendInt(port);
         AREDispatch.analysisEnd ();
-        AREDispatch.NativeLog ("send data - fd:"+fd.hashCode ()+" "+inetAddress.getHostAddress ()+":"+port+" data-length:"+length);
+        AREDispatch.NativeLog ("send data - fd:"+fd.hashCode ()+" "+(inetAddress==null?"":inetAddress.getHostAddress ())+":"+port+" data-length:"+length);
     }
 
 }
