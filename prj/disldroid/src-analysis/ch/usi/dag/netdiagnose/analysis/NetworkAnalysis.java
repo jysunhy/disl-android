@@ -7,7 +7,7 @@ import android.util.Base64;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
-import ch.usi.dag.dislreserver.shadow.ShadowString;
+import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 
 public class NetworkAnalysis extends RemoteAnalysis {
@@ -90,7 +90,7 @@ public class NetworkAnalysis extends RemoteAnalysis {
 
     public static void sendMessage (final Context ctx, final int fdHash, final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
-        final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address.toString (), port);
+        final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
         connection.addNewData (dataBase64.toString ());
         if(connection.matchPlainUsernamePassword(PREDEFINED_PASSWORD)){
             connection.dumpConnectionInfo ();

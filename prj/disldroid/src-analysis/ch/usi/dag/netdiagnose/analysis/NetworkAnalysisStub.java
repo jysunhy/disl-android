@@ -23,7 +23,11 @@ public class NetworkAnalysisStub {
         AREDispatch.sendInt(timeoutMs);
         AREDispatch.sendBoolean (successful);
         AREDispatch.analysisEnd ();
-        AREDispatch.NativeLog ("new connection - fd:"+fd.hashCode ()+" "+inetAddress.getHostAddress ()+":"+port+" successful?"+successful);
+        if(inetAddress != null) {
+            AREDispatch.NativeLog ("new connection - fd:"+fd.hashCode ()+" "+inetAddress.getHostAddress ()+":"+port+" successful?"+successful);
+        }else{
+            AREDispatch.NativeLog ("new connection - fd:"+fd.hashCode ()+" null "+":"+port+" successful?"+successful);
+        }
     }
 
     public static void sendMessage (final FileDescriptor fd, final byte[] buffer, final int start, final int length, final int flags, final InetAddress inetAddress, final int port) {

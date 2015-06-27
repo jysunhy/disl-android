@@ -7,7 +7,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 
 import ch.usi.dag.disldroidreserver.exception.DiSLREServerException;
 import ch.usi.dag.disldroidreserver.reqdispatch.RequestDispatcher;
@@ -81,8 +80,8 @@ public abstract class DiSLREServer {
 		System.exit(0); // to kill other threads
 	}
 
-	static HashMap <Socket , Integer> sockPid = new HashMap <Socket, Integer> ();
-	static HashMap <Integer , Socket> pidSock = new HashMap <Integer, Socket> ();
+//	static HashMap <Socket , Integer> sockPid = new HashMap <Socket, Integer> ();
+//	static HashMap <Integer , Socket> pidSock = new HashMap <Integer, Socket> ();
 	private static void requestLoop(final Socket sock) throws DiSLREServerException {
 		try {
 			final DataInputStream is = new DataInputStream(
@@ -113,21 +112,21 @@ public abstract class DiSLREServer {
             while (true) {
                 final int processID = is.readInt ();
 				final byte requestNo = is.readByte();
-				if(pidSock.containsKey (processID)){
-				    if(pidSock.get(processID)!=sock) {
-                        System.err.println ("receive wrong events which is a fake "+ processID);
-                    }
-				}else {
-				    pidSock.put (processID, sock);
-				}
-
-	            if(!sockPid.containsKey (sock)) {
-	                sockPid.put (sock, processID);
-	            }else{
-	                if(sockPid.get (sock) != processID){
-	                    System.err.println ("receive wrong events in "+sockPid.get (sock)+" with wrong pid "+processID);
-	                }
-	            }
+//				if(pidSock.containsKey (processID)){
+//				    if(pidSock.get(processID)!=sock) {
+//                        System.err.println ("receive wrong events which is a fake "+ processID);
+//                    }
+//				}else {
+//				    pidSock.put (processID, sock);
+//				}
+//
+//	            if(!sockPid.containsKey (sock)) {
+//	                sockPid.put (sock, processID);
+//	            }else{
+//	                if(sockPid.get (sock) != processID){
+//	                    System.err.println ("receive wrong events in "+sockPid.get (sock)+" with wrong pid "+processID);
+//	                }
+//	            }
                 // TODO pass the inetaddress
 				try {
     				if (RequestDispatcher.dispatch (processID, requestNo, is, os, debug)) {

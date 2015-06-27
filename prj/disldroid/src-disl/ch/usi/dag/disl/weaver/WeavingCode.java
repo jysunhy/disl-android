@@ -303,7 +303,10 @@ public class WeavingCode {
 
                     // Check that the expected type matches the actual type.
                     final Type actualType = FrameHelper.getStackByIndex (basicFrame, itemIndex).getType ();
-                    if (expectedType.getSort () != actualType.getSort ()) {
+                    //-                    if (expectedType.getSort () != actualType.getSort ()) {
+                    if ((expectedType.getSort () != actualType.getSort ())
+                        && !(actualType.getSort () == Type.INT && expectedType.getSort () < Type.INT)) {
+
                         throw new InvalidContextUsageException (
                             "%s: expected %s but found %s when accessing stack item %d",
                             __location (snippet, invokeInsn), expectedType, actualType, itemIndex

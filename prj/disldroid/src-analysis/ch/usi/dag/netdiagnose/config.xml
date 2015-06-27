@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<default-dislclass>output/build/analysis/ch/usi/dag/netdiagnose/disl/DiSLClass.class</default-dislclass>
+	<default-dislclass></default-dislclass>
 	<default-observed>true</default-observed>
     <default-bypass>false</default-bypass>
+	<dexes>
+		<dex>
+			<name>core.jar</name>
+			<dislclass>output/build/analysis/ch/usi/dag/netdiagnose/disl/DiSLClass.class</dislclass>
+			<bypass>false</bypass>
+		</dex>
+	</dexes>
 </config>

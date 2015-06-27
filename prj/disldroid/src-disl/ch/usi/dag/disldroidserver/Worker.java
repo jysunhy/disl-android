@@ -512,6 +512,7 @@ public class Worker extends Thread {
                 return instrClass;
             }
         }
+
         final long start = System.nanoTime ();
 
         // create tmp file in system temporary files
@@ -741,11 +742,16 @@ public class Worker extends Thread {
             if(curdisl != null) {
                 cacheMap.put (getCacheHash (dexCode, curdisl.dislclassesHash), instrClass);
             } else {
-                cacheMap.put (getCacheHash (dexCode, null), instrClass);
+                //use original one
+                cacheMap.put (getCacheHash (dexCode, null), dexCode);
             }
         }
         System.out.println("time for "+jarName+":"+(System.nanoTime ()-start));
-        return instrClass;
+        if(curdisl==null) {
+            return dexCode;
+        } else {
+            return instrClass;
+        }
     }
 
 

@@ -43,7 +43,7 @@ public class DiSLConfig {
 
         public String preinstrumented_path = "";
 
-		public boolean bypass = true;
+		public boolean bypass = default_bypass;
 
         public void print () {
             System.out.println (dexname +":"+ isBootstrapDex +":"+ dislClass);

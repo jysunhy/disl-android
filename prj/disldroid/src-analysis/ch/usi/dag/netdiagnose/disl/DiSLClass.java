@@ -4,28 +4,27 @@ import java.io.FileDescriptor;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 
-import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.annotation.Before;
+import ch.usi.dag.disl.annotation.SyntheticLocal;
 import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorMode;
-import ch.usi.dag.disl.staticcontext.MethodStaticContext;
 import ch.usi.dag.dislre.AREDispatch;
 import ch.usi.dag.netdiagnose.analysis.NetworkAnalysisStub;
 
 public class DiSLClass {
-
-    @Before(marker=BodyMarker.class, scope="com.squareup.okhttp.*.*")
-    public static void okhttp_before(final MethodStaticContext msc){
-        AREDispatch.NativeLog ("Entering"+msc.thisMethodFullName ());
-    }
-
-    @After(marker=BodyMarker.class, scope="com.squareup.okhttp.*.*")
-    public static void okhttp_after(final MethodStaticContext msc){
-        AREDispatch.NativeLog ("Leaving"+msc.thisMethodFullName ());
-    }
+//
+//    @Before(marker=BodyMarker.class, scope="com.squareup.okhttp.*.*")
+//    public static void okhttp_before(final MethodStaticContext msc){
+//        AREDispatch.NativeLog ("Entering"+msc.thisMethodFullName ());
+//    }
+//
+//    @After(marker=BodyMarker.class, scope="com.squareup.okhttp.*.*")
+//    public static void okhttp_after(final MethodStaticContext msc){
+//        AREDispatch.NativeLog ("Leaving"+msc.thisMethodFullName ());
+//    }
 
     @AfterReturning(marker=BodyMarker.class, scope="libcore.io.IoBridge.connect(java.io.FileDescriptor,java.net.InetAddress,int,int)")
     public static void network_connect(final ArgumentProcessorContext apc, final DynamicContext dc){
@@ -35,7 +34,7 @@ public class DiSLClass {
         final InetAddress address = (InetAddress)args[1];
         final int port = (int)args[2];
         final int timeoutMs = (int) args[3];
-        final boolean successful = true;//dc.getStackValue (0, boolean.class);
+        final boolean successful = dc.getStackValue (0, boolean.class);
         NetworkAnalysisStub.newConnection (fd, address, port, timeoutMs, successful);
     }
 
@@ -46,15 +45,26 @@ public class DiSLClass {
         final FileDescriptor fd = (FileDescriptor)args[0];
         final byte[] buffer = (byte[])args[1];
         final int byteOffset = (int)args[2];
-        //final int byteCount = (int)args[3];
+        final int byteCount = (int)args[3];
         final int flags  = (int)args[4];
         final InetAddress address = (InetAddress)args[5];
         final int port = (int)args[6];
         final int sentSize = dc.getStackValue (0, int.class);
+        AREDispatch.NativeLog ("Num to send: "+byteCount+"; Num sent: "+sentSize);
         //[byteOffset, byteOffset+sentSize)
         NetworkAnalysisStub.sendMessage (fd, buffer, byteOffset, sentSize, flags, address, port);
     }
 
+    @SyntheticLocal
+    static int oldPosition;
+
+    @Before(marker=BodyMarker.class, scope="libcore.io.IoBridge.sendto(java.io.FileDescriptor,java.nio.ByteBuffer,int,java.net.InetAddress,int)")
+    public static void sendto_bytebuffer_before(final ArgumentProcessorContext apc){
+        final Object [] args = apc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
+        //(FileDescriptor fd, ByteBuffer buffer, int flags, InetAddress inetAddress, int port)
+        final ByteBuffer buffer = (ByteBuffer)args[1];
+        oldPosition = buffer.position ();
+    }
 
     @AfterReturning(marker=BodyMarker.class, scope="libcore.io.IoBridge.sendto(java.io.FileDescriptor,java.nio.ByteBuffer,int,java.net.InetAddress,int)")
     public static void sendto_bytebuffer(final ArgumentProcessorContext apc, final DynamicContext dc){
@@ -67,6 +77,7 @@ public class DiSLClass {
         final int port = (int)args[4];
         final int sentSize = dc.getStackValue (0, int.class);
         //[buffer.position()-sentSize, buffer.position())
+        AREDispatch.NativeLog ("old position:"+oldPosition+" new position:"+buffer.position ()+" ret val:"+sentSize);
         NetworkAnalysisStub.sendMessage (fd, buffer.array (), buffer.position () - sentSize, sentSize, flags, address, port);
     }
 }
