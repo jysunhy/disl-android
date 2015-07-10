@@ -135,11 +135,11 @@ public abstract class DiSLREServer {
 				}catch(final Exception e){
 				    e.printStackTrace ();
 				    //final byte[] tmp = new byte[1024];
-//				    while(true){
-//				        is.read (tmp);
-//				    }
-				    sock.close ();
-				    System.exit (-1);
+				    while(true){
+				        is.read (tmp);
+				    }
+//				    sock.close ();
+//				    System.exit (-1);
 				    //throw e;
 				}
 			}

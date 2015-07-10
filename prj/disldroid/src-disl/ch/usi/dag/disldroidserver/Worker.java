@@ -743,15 +743,15 @@ public class Worker extends Thread {
                 cacheMap.put (getCacheHash (dexCode, curdisl.dislclassesHash), instrClass);
             } else {
                 //use original one
-                cacheMap.put (getCacheHash (dexCode, null), dexCode);
+                cacheMap.put (getCacheHash (dexCode, null), instrClass);
             }
         }
         System.out.println("time for "+jarName+":"+(System.nanoTime ()-start));
-        if(curdisl==null) {
-            return dexCode;
-        } else {
+        //if(curdisl==null) {
+        //    return dexCode;
+        //} else {
             return instrClass;
-        }
+        //}
     }
 
 
