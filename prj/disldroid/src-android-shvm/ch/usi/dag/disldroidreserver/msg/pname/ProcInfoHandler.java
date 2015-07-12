@@ -17,6 +17,7 @@ public class ProcInfoHandler implements RequestHandler {
         final DataOutputStream os, final boolean debug) throws DiSLREServerException {
         try {
             final String pname = is.readUTF();
+            System.out.println ("New Process "+pname+"-"+pid);
             for(final ShadowAddressSpace space : ShadowAddressSpace.getAllShadowAddressSpace ()){
                 if(space.getContext ().pid() == pid ) {
                     continue;

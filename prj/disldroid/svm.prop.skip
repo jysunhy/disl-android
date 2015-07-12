@@ -1,8 +1,8 @@
 enable_usb 0
 instr_port 6667
-instr_ip 10.10.6.188
+instr_ip 140.78.231.52
 analysis_port 6668
-analysis_ip 10.10.6.188
+analysis_ip 140.78.231.52
 %event_log_dir /data/data
 %dex_to_skip /system/framework/core.jar
 dex_to_skip /system/framework/conscrypt.jar
