@@ -108,12 +108,13 @@ public abstract class DiSLREServer {
 //                }
 //			}
 
-            //REQUEST_LOOP:
+            REQUEST_LOOP:
             while (true) {
                 final int processID = is.readInt ();
+                //System.out.print(processID);
 				final byte requestNo = is.readByte();
+				//System.out.println (" - "+requestNo);
 
-				System.out.println (processID+" - "+requestNo);
 //				if(pidSock.containsKey (processID)){
 //				    if(pidSock.get(processID)!=sock) {
 //                        System.err.println ("receive wrong events which is a fake "+ processID);
@@ -132,14 +133,14 @@ public abstract class DiSLREServer {
                 // TODO pass the inetaddress
 				try {
     				if (RequestDispatcher.dispatch (processID, requestNo, is, os, debug)) {
-    					//break REQUEST_LOOP;
+    					break REQUEST_LOOP;
     				}
 				}catch(final Exception e){
 				    e.printStackTrace ();
 				    //final byte[] tmp = new byte[1024];
-				    while(true){
-				        is.read (tmp);
-				    }
+//				    while(true){
+//				        is.read (tmp);
+//				    }
 //				    sock.close ();
 //				    System.exit (-1);
 				    //throw e;
