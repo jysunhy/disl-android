@@ -112,6 +112,8 @@ public abstract class DiSLREServer {
             while (true) {
                 final int processID = is.readInt ();
 				final byte requestNo = is.readByte();
+
+				System.out.println (processID+" - "+requestNo);
 //				if(pidSock.containsKey (processID)){
 //				    if(pidSock.get(processID)!=sock) {
 //                        System.err.println ("receive wrong events which is a fake "+ processID);
