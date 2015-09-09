@@ -8,17 +8,47 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 
 public class USBForwarder {
 
     public static void combineAnalysis(final String analysisServerIP, final int analysisPort, final int localPort){
         try{
+            DataInputStream isAndroid = null;
+
             final HashMap<Integer, DataOutputStream> connectionMap = new HashMap <Integer, DataOutputStream> ();
-            final Socket sockToAndroid = new Socket(InetAddress.getByName ("127.0.0.1"), localPort);
-            final DataInputStream isAndroid = new DataInputStream(new BufferedInputStream(sockToAndroid.getInputStream()));
             while(true){
-                final int pid = isAndroid.readInt ();
+//                Socket sockToAndroid = null;
+//                if(isAndroid == null){
+//                    sockToAndroid = new Socket(InetAddress.getByName ("127.0.0.1"), localPort);
+//                    sockToAndroid.setSoTimeout (10000);
+//                    isAndroid = new DataInputStream(new BufferedInputStream(sockToAndroid.getInputStream()));
+//                }
+
+                final Socket sockToAndroid = new Socket(InetAddress.getByName ("127.0.0.1"), localPort);
+                sockToAndroid.setSoTimeout (20000);
+                isAndroid = new DataInputStream(new BufferedInputStream(sockToAndroid.getInputStream()));
+                int pid;
+                try {
+                    pid = isAndroid.readInt ();
+                }catch(final SocketTimeoutException e){
+                    if(sockToAndroid != null) {
+                        sockToAndroid.close ();
+                    }
+                    isAndroid.close ();
+                    isAndroid = null;
+                    System.out.println("Wait analysis connection starts");
+                    continue;
+                }catch(final Exception e){
+                    e.printStackTrace ();
+                    if(sockToAndroid != null) {
+                        sockToAndroid.close ();
+                    }
+                    isAndroid.close ();
+                    isAndroid = null;
+                    return;
+                }
                 final FileOutputStream fos = new FileOutputStream (new File("debug_events."+pid), true);
                 if(!connectionMap.containsKey (pid)){
                     try{
@@ -63,29 +93,130 @@ public class USBForwarder {
         }
     }
 
-    public static void combineInstrumentation(final String instrServerIP, final int instrPort, final int localPort){
+    public static void echoDex(final int localPort){
+        String info = "";
         try{
-            final Socket sockToAndroid = new Socket(InetAddress.getByName ("127.0.0.1"), localPort);
-            final DataOutputStream osAndroid = new DataOutputStream(new BufferedOutputStream(sockToAndroid.getOutputStream()));
-            final DataInputStream isAndroid = new DataInputStream(new BufferedInputStream(sockToAndroid.getInputStream()));
-
-
-
             while(true){
+                try{
+                    final Socket sockToAndroid = new Socket(InetAddress.getByName ("127.0.0.1"), localPort);
+
+                    sockToAndroid.setSoTimeout (20000);
+
+                    final DataOutputStream osAndroid = new DataOutputStream(new BufferedOutputStream(sockToAndroid.getOutputStream()));
+                    final DataInputStream isAndroid = new DataInputStream(new BufferedInputStream(sockToAndroid.getInputStream()));
+
+                    int dexNameLength;
+                    System.out.println ("New dex");
+                    try {
+                        dexNameLength = isAndroid.readInt();
+                    }catch (final SocketTimeoutException e){
+                        sockToAndroid.close ();
+                        osAndroid.close ();
+                        isAndroid.close ();
+                        System.out.println ("timeout reconnect");
+                        continue;
+                    }
+                    System.out.println ("Name Length "+dexNameLength);
+                    final byte[] dexName = new byte[dexNameLength];
+                    isAndroid.readFully (dexName);
+
+                    info = new String(dexName);
+                    System.out.println ("Name "+ info);
+                    //final String name = new String(dexName);
+
+                    final int dexLength = isAndroid.readInt ();
+
+                    System.out.println ("Dex length "+ dexLength);
+
+                    final byte[] bytecode = new byte[dexLength];
+                    isAndroid.readFully (bytecode);
+
+                    System.out.println ("Dex all read");
+
+                    //dexNameLength = 0;
+                    osAndroid.writeInt(dexNameLength);
+                    //dexName = new byte[dexNameLength];
+                    osAndroid.write(dexName);
+
+                    osAndroid.writeInt(dexLength);
+                    osAndroid.write(bytecode);
+                    osAndroid.flush ();
+                    try{
+                        sockToAndroid.close ();
+                        osAndroid.close ();
+                        isAndroid.close ();
+                    }catch(final Exception e ){
+
+                    }
+                }catch(final Exception e){
+                    e.printStackTrace ();
+                }
+            }
+
+        } catch(final Exception e){
+            System.err.println (info);
+            e.printStackTrace ();
+        }
+
+    }
+
+
+    public static void combineInstrumentation(final String instrServerIP, final int instrPort, final int localPort){
+        String info = "";
+        try{
+            while(true){
+                final Socket sockToAndroid = new Socket(InetAddress.getByName ("127.0.0.1"), localPort);
+                sockToAndroid.setSoTimeout (20000);
+                final DataOutputStream osAndroid = new DataOutputStream(new BufferedOutputStream(sockToAndroid.getOutputStream()));
+                final DataInputStream isAndroid = new DataInputStream(new BufferedInputStream(sockToAndroid.getInputStream()));
+
+
+                int dexNameLength;
+                System.out.println ("New dex");
+                try {
+                    dexNameLength = isAndroid.readInt();
+                }catch (final SocketTimeoutException e){
+                    sockToAndroid.close ();
+                    osAndroid.close ();
+                    isAndroid.close ();
+                    System.out.println ("timeout reconnect");
+                    continue;
+                }catch (final Exception e){
+                    e.printStackTrace ();
+                    sockToAndroid.close ();
+                    osAndroid.close ();
+                    isAndroid.close ();
+                    continue;
+                }
                 final Socket sockToInstr = new Socket(InetAddress.getByName (instrServerIP), instrPort);
                 final DataOutputStream osInstr = new DataOutputStream(new BufferedOutputStream(sockToInstr.getOutputStream()));;
                 final DataInputStream isInstr = new DataInputStream(new BufferedInputStream(sockToInstr.getInputStream()));;
 
-                int dexNameLength = isAndroid.readInt();
+
+                System.out.println ("Name Length "+dexNameLength);
                 osInstr.writeInt(dexNameLength);
                 byte[] dexName = new byte[dexNameLength];
                 isAndroid.readFully (dexName);
+
+                info = new String(dexName);
+                System.out.println ("Name "+ info);
+
                 osInstr.write(dexName);
                 int dexLength = isAndroid.readInt ();
+
+                System.out.println ("Dex length "+ dexLength);
+
                 osInstr.writeInt(dexLength);
                 byte[] bytecode = new byte[dexLength];
                 isAndroid.readFully (bytecode);
+
+                System.out.println ("Dex all read");
+
                 osInstr.write(bytecode);
+
+                osInstr.flush ();
+
+
                 dexNameLength = isInstr.readInt();
                 osAndroid.writeInt(dexNameLength);
                 dexName = new byte[dexNameLength];
@@ -97,29 +228,39 @@ public class USBForwarder {
                 isInstr.readFully (bytecode);
                 osAndroid.write(bytecode);
 
+                osAndroid.flush ();
+                System.out.println ("Dex all written");
+                sockToAndroid.close ();
+                osAndroid.close ();
+                isAndroid.close ();
                 sockToInstr.close ();
-                osInstr.close ();
+                osInstr.close();
                 isInstr.close ();
             }
-        } catch(final Exception e){
-            e.printStackTrace ();
 
+        } catch(final Exception e){
+            System.err.println (info);
+            e.printStackTrace ();
         }
     }
 
     public static void main (final String [] args) {
         // TODO Auto-generated method stub
-        (new Thread(new Thread1())).start ();
-        (new Thread(new Thread2())).start ();
+        (new Thread(new InstrThread())).start ();
+        if(args.length == 0 || !args[0].equals ("--instrument-only")){
+            (new Thread(new AnalysisThread())).start ();
+        }
+
     }
-    static class Thread1 implements Runnable{
+    static class InstrThread implements Runnable{
         @Override
         public void run () {
             // TODO Auto-generated method stub
             USBForwarder.combineInstrumentation ("127.0.0.1", 6667, 6100);
+            //USBForwarder.echoDex (6100);
         }
     }
-    static class Thread2 implements Runnable{
+    static class AnalysisThread implements Runnable{
         @Override
         public void run () {
             // TODO Auto-generated method stub
