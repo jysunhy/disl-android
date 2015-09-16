@@ -2,8 +2,9 @@ enable_usb 1
 instr_port 6667
 instr_ip 192.168.10.84
 analysis_port 6668
-analysis_ip 192.168.10.84
-force_internet 0
+analysis_ip 10.10.2.143
+force_internet 1
+per_instr_timeout 0
 %event_log_dir /data/data
 %dex_to_skip /system/framework/core.jar
 %dex_to_skip /system/framework/conscrypt.jar

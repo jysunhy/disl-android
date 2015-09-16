@@ -165,6 +165,7 @@ public class USBForwarder {
         String info = "";
         try{
             while(true){
+                try{
                 final Socket sockToAndroid = new Socket(InetAddress.getByName ("127.0.0.1"), localPort);
                 sockToAndroid.setSoTimeout (20000);
                 final DataOutputStream osAndroid = new DataOutputStream(new BufferedOutputStream(sockToAndroid.getOutputStream()));
@@ -186,6 +187,7 @@ public class USBForwarder {
                     sockToAndroid.close ();
                     osAndroid.close ();
                     isAndroid.close ();
+                    Thread.sleep(1000);
                     continue;
                 }
                 final Socket sockToInstr = new Socket(InetAddress.getByName (instrServerIP), instrPort);
@@ -236,6 +238,9 @@ public class USBForwarder {
                 sockToInstr.close ();
                 osInstr.close();
                 isInstr.close ();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
 
         } catch(final Exception e){
