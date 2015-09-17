@@ -41,6 +41,7 @@
 
 	<path id="disl.bypass.classpath">
 		<pathelement location="${build.disl.bypass}/android" />
+		<pathelement location="${build.disl.bypass}/dynamic" />
 	</path>
 
 	<path id="shvm.classpath">
@@ -202,7 +203,7 @@
 		</for>
 
 		<union id="disl.bypass.files">
-			<fileset dir="${build.disl.bypass}/always" includes="**/BypassCheck.class" />
+			<fileset dir="${build.disl.bypass}/android" includes="**/BypassCheck.class" />
 			<fileset dir="${build.disl.bypass}/dynamic" includes="**/DynamicBypass.class" />
 		</union>
 	</target>
