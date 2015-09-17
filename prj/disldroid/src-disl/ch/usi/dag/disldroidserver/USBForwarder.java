@@ -181,6 +181,7 @@ public class USBForwarder {
                     osAndroid.close ();
                     isAndroid.close ();
                     System.out.println ("timeout reconnect");
+                    Thread.sleep(1000);
                     continue;
                 }catch (final Exception e){
                     e.printStackTrace ();
