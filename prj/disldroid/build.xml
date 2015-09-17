@@ -40,7 +40,7 @@
 	</path>
 
 	<path id="disl.bypass.classpath">
-		<pathelement location="${build.disl.bypass}/dynamic" />
+		<pathelement location="${build.disl.bypass}/android" />
 	</path>
 
 	<path id="shvm.classpath">
@@ -192,7 +192,7 @@
 		in the weaver code.
 	-->
 	<target name="compile-disl-bypass" depends="prepare-disl-thread">
-		<for list="always,never,dynamic" param="variant">
+		<for list="always,never,dynamic,android" param="variant">
 			<sequential>
 				<mkdir dir="${build.disl.bypass}/@{variant}" />
 				<javac destdir="${build.disl.bypass}/@{variant}" srcdir="${src.disl.bypass}/@{variant}" debug="true" source="1.4" target="1.4">
@@ -225,8 +225,7 @@
 	<!-- Lib for putting into android core.jar -->
 	<target name="build-builtin" depends="compile-disl-bypass, compile-shvm-dispatch">
 		<union id="disl.builtin.files">
-			<fileset dir="${build.disl.bypass}/dynamic" includes="**/BypassCheck.class" />
-			<fileset dir="${build.disl.bypass}/dynamic" includes="**/DynamicBypass.class" />
+			<fileset dir="${build.disl.bypass}/android" includes="**/BypassCheck.class" />
 			<fileset dir="${build.shvm.dispatch}/" includes="**/AREDispatch.class" />
 			<fileset dir="${build.util}" />
 		</union>
