@@ -10,9 +10,11 @@ package ch.usi.dag.disl.dynamicbypass;
  * determine whether to bypass instrumented code dynamically.
  */
 public final class BypassCheck {
-    static boolean flag = true;
+
+    static int executeInstrumented = 0;
+
     public static boolean executeUninstrumented () {
-        return flag;
+        return executeInstrumented == 0;
     }
 
 }
