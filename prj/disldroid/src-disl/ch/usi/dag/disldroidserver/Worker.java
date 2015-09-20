@@ -209,28 +209,29 @@ public class Worker extends Thread {
         while (entryEnum.hasMoreElements ()) {
             final ZipEntry ze = entryEnum.nextElement ();
             final String entryName = ze.getName ();
-            if (entryName.equals ("java/lang/Thread.class")) {// Java lang
-                                                              // Thread should
-                                                              // be replaced for
-                                                              // the bypass
-                                                              // field
-                final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
-                final InputStream is = originalJar.getInputStream (ze);
-
-                final ZipEntry nze = new ZipEntry (entryName);
-                zos.putNextEntry (nze);
-                while ((bytesRead = is.read (buffer)) != -1) {
-                    bout.write (buffer, 0, bytesRead);
-                }
-                try {
-                    zos.write (instrument (
-                        "java/lang/Thread", bout.toByteArray (), getDiSL ("core.jar")==null?getDiSL ("core.jar"):disl));
-                } catch (final Exception e) {
-                    e.printStackTrace ();
-                }
-
-                zos.closeEntry ();
-            } else {
+//            if (entryName.equals ("java/lang/Thread.class")) {// Java lang
+//                                                              // Thread should
+//                                                              // be replaced for
+//                                                              // the bypass
+//                                                              // field
+//                final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
+//                final InputStream is = originalJar.getInputStream (ze);
+//
+//                final ZipEntry nze = new ZipEntry (entryName);
+//                zos.putNextEntry (nze);
+//                while ((bytesRead = is.read (buffer)) != -1) {
+//                    bout.write (buffer, 0, bytesRead);
+//                }
+//                try {
+//                    zos.write (instrument (
+//                        "java/lang/Thread", bout.toByteArray (), getDiSL ("core.jar")==null?getDiSL ("core.jar"):disl));
+//                } catch (final Exception e) {
+//                    e.printStackTrace ();
+//                }
+//
+//                zos.closeEntry ();
+//            } else
+            {
 
                 final InputStream is = originalJar.getInputStream (ze);
 
@@ -639,10 +640,11 @@ public class Worker extends Thread {
 
                             // java.lang.Thread needs instrumentation for bypass
                             // support
-                            if (className.equals ("java/lang/Thread")) {
-                                code = instrument (
-                                    className, bout.toByteArray (), disl);
-                            } else if(curdisl == null){
+//                            if (className.equals ("java/lang/Thread")) {
+//                                code = instrument (
+//                                    className, bout.toByteArray (), disl);
+//                            } else
+                            if(curdisl == null){
                                 code = bout.toByteArray ();
                             }else{
                                 code = instrument (
