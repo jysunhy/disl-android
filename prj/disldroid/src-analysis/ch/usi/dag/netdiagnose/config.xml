@@ -7,7 +7,7 @@
 		<dex>
 			<name>core.jar</name>
 			<dislclass>output/build/analysis/ch/usi/dag/netdiagnose/disl/DiSLClass.class</dislclass>
-			<bypass>false</bypass>
+			<bypass>true</bypass>
 		</dex>
 	</dexes>
 </config>
