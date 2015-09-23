@@ -1,6 +1,7 @@
 package ch.usi.dag.disldroidreserver.shadow;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -135,6 +136,14 @@ public class ShadowAddressSpace {
 
     public Context getContext () {
         return context;
+    }
+
+    public static ArrayList <Context> getContexts () {
+        final ArrayList<Context> contexts = new ArrayList <Context> ();
+        for (final ShadowAddressSpace space : shadowAddressSpaces.values ()){
+            contexts.add (space.getContext ());
+        }
+        return contexts;
     }
 
 

@@ -10,11 +10,35 @@ import ch.usi.dag.branchcoverage.util.CodeCoverageUtil;
 import ch.usi.dag.disl.util.Constants;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
+import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
 import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 
 public class CodeCoverageAnalysis extends RemoteAnalysis  {
+
+    static class OutputThread extends Thread {
+        @Override
+        public void run(){
+            while(true) {
+                try {
+                    sleep(10000);
+
+                    for(final Context context: ShadowAddressSpace.getContexts ())
+                    {
+                        CodeCoverageAnalysis.printResult (context);
+                    }
+                }catch(final Exception e)
+                {
+                }
+            }
+        }
+      }
+
+    static {
+        final Thread thd = new OutputThread();
+        thd.start ();
+    }
 
     @SuppressWarnings ("serial")
     static class ClassProfile extends ConcurrentHashMap <String, int []> {
@@ -76,6 +100,18 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
     @Override
     public void atExit (final Context context) {
         // Dumping code coverage profile
+        //printResult (context);
+    }
+
+
+    @Override
+    public void objectFree (final Context context, final ShadowObject netRef) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public static void printResult(final Context context){
+        // Dumping code coverage profile
         final ProcessProfile processProfile = context.getState (ProcessProfile.class);
         if(processProfile == null) {
             return;
@@ -100,12 +136,5 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
                     + methodSignature + " " + covered + " / " + total +" = "+(total==0?"Nil":((double)covered)/total));
             }
         }
-    }
-
-
-    @Override
-    public void objectFree (final Context context, final ShadowObject netRef) {
-        // TODO Auto-generated method stub
-
     }
 }

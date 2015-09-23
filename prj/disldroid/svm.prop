@@ -1,8 +1,8 @@
 enable_usb 0
 instr_port 6667
-instr_ip 10.10.2.143
+instr_ip 10.0.2.2
 analysis_port 6668
-analysis_ip 10.10.2.143
+analysis_ip 10.0.2.2
 #event_log_dir /data/data
 #force_internet 0
 #per_instr_timeout 0
