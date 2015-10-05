@@ -27,7 +27,7 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
 
     public void permissionUsed (
         final Context ctx, final int tid, final ShadowString permissionName) {
-
+        System.out.println (permissionName+" used");
         final List<ThreadState> callers = ThreadState.getCallers (ctx, tid);
         for(final ThreadState caller:callers){
             caller.addPermission(permissionName.toString ());

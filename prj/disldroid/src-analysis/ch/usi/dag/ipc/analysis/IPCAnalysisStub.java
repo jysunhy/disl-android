@@ -16,6 +16,7 @@ public class IPCAnalysisStub {
     public static short BOUNDARY_START = AREDispatch.registerMethod ("ch.usi.dag.ipc.analysis.IPCAnalysis.boundaryStart");
 
     public static void boundary_start (final String boundaryName) {
+        AREDispatch.NativeLog ("boundary start");
         AREDispatch.analysisStart (BOUNDARY_START);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
         AREDispatch.sendObjectPlusData (boundaryName);
@@ -24,6 +25,7 @@ public class IPCAnalysisStub {
     public static short BOUNDARY_END = AREDispatch.registerMethod ("ch.usi.dag.ipc.analysis.IPCAnalysis.boundaryEnd");
 
     public static void boundary_end (final String boundaryName) {
+        AREDispatch.NativeLog ("boundary end");
         AREDispatch.analysisStart (BOUNDARY_END);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
         AREDispatch.sendObjectPlusData (boundaryName);

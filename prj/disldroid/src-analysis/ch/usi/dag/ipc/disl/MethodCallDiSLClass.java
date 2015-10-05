@@ -13,6 +13,7 @@ public class MethodCallDiSLClass {
     /* every time before calling a method */
     @Before (
         marker = BytecodeMarker.class,
+        scope = "de.ecspride.*.*",
         args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual")
     public static void beforeInvoke (final CallContext ac) {
         final String methodName = ac.getCallee ();
@@ -22,6 +23,7 @@ public class MethodCallDiSLClass {
     /* every time after calling a method */
     @After (
         marker = BytecodeMarker.class,
+        scope = "de.ecspride.*.*",
         args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual")
     public static void afterInvoke (final CallContext ac) {
         final String methodName = ac.getCallee ();

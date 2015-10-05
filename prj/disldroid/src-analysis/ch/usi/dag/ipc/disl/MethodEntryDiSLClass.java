@@ -14,7 +14,7 @@ public class MethodEntryDiSLClass {
     /* every time entering a method */
     @Before (
         marker = BodyMarker.class,
-        scope = "*.*",
+        scope = "de.ecspride.*.*",
         order = 1000)
     public static void before_enter (final CallContext msc) {
         IPCAnalysisStub.boundary_start (msc.thisMethodFullName ());
@@ -23,7 +23,7 @@ public class MethodEntryDiSLClass {
     /* every time leaving a method */
     @After (
         marker = BodyMarker.class,
-        scope = "*.*",
+        scope = "de.ecspride.*.*",
         order = 1000)
     public static void after_enter (final CallContext msc) {
         IPCAnalysisStub.boundary_end (msc.thisMethodFullName());
