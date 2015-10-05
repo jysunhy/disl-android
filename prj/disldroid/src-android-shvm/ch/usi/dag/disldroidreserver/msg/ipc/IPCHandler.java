@@ -143,9 +143,11 @@ public class IPCHandler implements RequestHandler {
 //            fout.write (newEvent.toString ().getBytes ());
 //            fout.write ('\n');
 
-            analysisHandler.ipcOccurred (ShadowAddressSpace.getShadowAddressSpace (pid), tid, newEvent);
-            events_receivetime_ordered.add (newEvent);
-            insert_into_time_ordered (newEvent);
+            if(ShadowAddressSpace.getShadowAddressSpace (pid) != null){
+                analysisHandler.ipcOccurred (ShadowAddressSpace.getShadowAddressSpace (pid), tid, newEvent);
+                events_receivetime_ordered.add (newEvent);
+                insert_into_time_ordered (newEvent);
+            }
             //thread.newEvent (newEvent);
         } catch (final Exception e) {
             e.printStackTrace ();

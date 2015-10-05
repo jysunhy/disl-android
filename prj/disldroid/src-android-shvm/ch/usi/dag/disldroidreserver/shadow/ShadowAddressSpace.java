@@ -452,15 +452,15 @@ public class ShadowAddressSpace {
 
 
     public static ShadowAddressSpace getShadowAddressSpace (final Integer pid) {
-        ShadowAddressSpace shadowAddressSpace = null;
+        final ShadowAddressSpace shadowAddressSpace = null;
 
-        if ((shadowAddressSpace = shadowAddressSpaces.get (pid)) == null) {
-            final ShadowAddressSpace temp = new ShadowAddressSpace (pid);
-
-            if ((shadowAddressSpace = shadowAddressSpaces.putIfAbsent (pid, temp)) == null) {
-                shadowAddressSpace = temp;
-            }
-        }
+//        if ((shadowAddressSpace = shadowAddressSpaces.get (pid)) == null) {
+//            final ShadowAddressSpace temp = new ShadowAddressSpace (pid);
+//
+//            if ((shadowAddressSpace = shadowAddressSpaces.putIfAbsent (pid, temp)) == null) {
+//                shadowAddressSpace = temp;
+//            }
+//        }
 
         return shadowAddressSpace;
     }
