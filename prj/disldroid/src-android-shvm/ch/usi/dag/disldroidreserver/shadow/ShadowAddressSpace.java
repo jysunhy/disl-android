@@ -450,17 +450,21 @@ public class ShadowAddressSpace {
         return shadowAddressSpaces.values ();
     }
 
+    public static ShadowAddressSpace getShadowAddressSpaceNoCreate (final Integer pid) {
+        return shadowAddressSpaces.get (pid);
+    }
 
     public static ShadowAddressSpace getShadowAddressSpace (final Integer pid) {
-        final ShadowAddressSpace shadowAddressSpace = null;
+        ShadowAddressSpace shadowAddressSpace = null;
 
-//        if ((shadowAddressSpace = shadowAddressSpaces.get (pid)) == null) {
-//            final ShadowAddressSpace temp = new ShadowAddressSpace (pid);
-//
-//            if ((shadowAddressSpace = shadowAddressSpaces.putIfAbsent (pid, temp)) == null) {
-//                shadowAddressSpace = temp;
-//            }
-//        }
+        if ((shadowAddressSpace = shadowAddressSpaces.get (pid)) == null) {
+            System.out.println ("Creating shadow address for "+pid);
+            final ShadowAddressSpace temp = new ShadowAddressSpace (pid);
+
+            if ((shadowAddressSpace = shadowAddressSpaces.putIfAbsent (pid, temp)) == null) {
+                shadowAddressSpace = temp;
+            }
+        }
 
         return shadowAddressSpace;
     }
