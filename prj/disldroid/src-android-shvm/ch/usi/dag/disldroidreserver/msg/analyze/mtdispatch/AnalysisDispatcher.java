@@ -100,7 +100,7 @@ public class AnalysisDispatcher {
             {
                 final List <Object> args = new ArrayList <Object> ();
                 AnalysisInvocation ipcEventInvocation = null;
-                System.out.println ("dispatching the "+event);
+                //System.out.println ("dispatching the "+event);
                 switch (event.phase) {
                 case 0:
                     args.add (new TransactionInfo (event.transactionid, event.oneway));
