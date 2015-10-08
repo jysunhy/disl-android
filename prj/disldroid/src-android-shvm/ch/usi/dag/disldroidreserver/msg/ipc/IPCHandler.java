@@ -112,7 +112,7 @@ public class IPCHandler implements RequestHandler {
             final int tid2 = is.readInt ();
             final long timestamp = is.readLong ();
             final boolean oneway = is.readBoolean ();
-            IPCEventRecord newEvent = new IPCEventRecord();
+            IPCEventRecord newEvent = null;//new IPCEventRecord();
             switch (type) {
             case 0:
                 newEvent= (new IPCEventRecord (
@@ -131,6 +131,7 @@ public class IPCHandler implements RequestHandler {
                     pid, tid,transaction_id ,type, pid2, tid2, timestamp,oneway));
                 break;
             default:
+                System.err.println ("wrong happens");
                 break;
             }
             //System.out.println ("IPC event arrives "+newEvent.toString ());
@@ -147,6 +148,8 @@ public class IPCHandler implements RequestHandler {
                 analysisHandler.ipcOccurred (ShadowAddressSpace.getShadowAddressSpaceNoCreate (pid), tid, newEvent);
                 events_receivetime_ordered.add (newEvent);
                 insert_into_time_ordered (newEvent);
+            }else {
+                System.out.println ("cannot be!!");
             }
             //thread.newEvent (newEvent);
         } catch (final Exception e) {

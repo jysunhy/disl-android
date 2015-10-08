@@ -91,9 +91,7 @@ public class AnalysisDispatcher {
     public void ipcOccurredEvent (
         final ShadowAddressSpace shadowAddressSpace, final long threadid,
         final IPCEventRecord event) {
-        final AnalysisTaskExecutor ate = ateManager.getExecutor (shadowAddressSpace.getContext ().pid () * 1000);
         final List <AnalysisInvocation> list = new ArrayList <> ();
-
         for (final RemoteAnalysis analysis : AnalysisResolver.getAllAnalyses ()) {
             // analysis.ipcEventProcessed (newEvent);
             //
@@ -102,6 +100,7 @@ public class AnalysisDispatcher {
             {
                 final List <Object> args = new ArrayList <Object> ();
                 AnalysisInvocation ipcEventInvocation = null;
+                System.out.println ("dispatching the "+event);
                 switch (event.phase) {
                 case 0:
                     args.add (new TransactionInfo (event.transactionid, event.oneway));
@@ -174,6 +173,7 @@ public class AnalysisDispatcher {
                 list.add (ipcEventInvocation);
             }
         }
+        final AnalysisTaskExecutor ate = ateManager.getExecutor (shadowAddressSpace.getContext ().pid () * 1000 +(event.phase %3 == 0?event.from.getTid ():event.to.getTid ()) );
         if (list.size () > 0) {
             ate.addTask (new AnalysisTask (list, globalEpoch));
         }

@@ -1,10 +1,10 @@
 package ch.usi.dag.ipc.analysis.lib;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
+import java.util.concurrent.ConcurrentHashMap;
 
 import ch.usi.dag.disldroidreserver.msg.ipc.NativeThread;
 import ch.usi.dag.disldroidreserver.msg.ipc.TransactionInfo;
@@ -20,7 +20,7 @@ import ch.usi.dag.ipc.analysis.lib.IPCLogger.LoggerType;
 public class ThreadState{
 
 
-    static HashMap<NativeThread, ThreadState> stateMap=new HashMap <NativeThread, ThreadState>();
+    static ConcurrentHashMap<NativeThread, ThreadState> stateMap=new ConcurrentHashMap <NativeThread, ThreadState>();
 
     List<BinderEvent> eventList= new ArrayList<>();
 
@@ -117,13 +117,13 @@ public class ThreadState{
     }
 
     public static ThreadState get(final NativeThread key){
-        ThreadState res = stateMap.get (key);
+        final ThreadState temp = new ThreadState (key);
+        final ThreadState res = stateMap.putIfAbsent (key, temp);
         if(res != null) {
             return res;
+        } else {
+            return temp;
         }
-        res = new ThreadState (key);
-        stateMap.put (key, res);
-        return res;
     }
 
     public synchronized void addEvent(final BinderEvent event){
@@ -133,26 +133,40 @@ public class ThreadState{
 
     static long Waiting_Time=50;
     static long Max_Waiting_Time=500;
-    public void waitForRequestSent(final TransactionInfo info){
-        if(ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname () == null){
+    public void waitForRequestSent(final TransactionInfo info, final NativeThread server){
+        final ShadowAddressSpace space = ShadowAddressSpace.getShadowAddressSpaceNoCreate(thd.getPid ());
+        if(space == null || space.getContext ().getPname () == null){
             IPCLogger.write (LoggerType.DEBUG, "WAIT", "Proc "+thd.getPid ()+" is not observed");
             return;
         }
+
+        if(eventList.size ()==0){
+            IPCLogger.write(LoggerType.DEBUG, "START", "Proc "+thd.getPid ()+" just starts");
+            return;
+        }
+
         BinderEvent res = null;
-        IPCLogger.write (LoggerType.DEBUG, "WAIT","waiting for request sent event for transaction "+info.getTransactionId ()+" in "+thd.getPid ()+" "+thd.getTid());
-        long waitingTime = Waiting_Time;
+        IPCLogger.write (LoggerType.DEBUG, "WAIT",server+" is waiting for request sent event for transaction "+info.getTransactionId ()+" in "+thd.getPid ()+" "+thd.getTid());
+        final long waitingTime = Waiting_Time;
+
+        int cnt = 0;
         while(((res=findEvent(info))==null)
         ){
             if(ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().isDead ()){
                 IPCLogger.debug("WAIT","don't wait for a dead process "+thd.getPid ());
                 break;
             }
-
+            cnt++;
             try {
 
                 Thread.sleep (waitingTime);
-                waitingTime*=2;
-                waitingTime = waitingTime>Max_Waiting_Time?Max_Waiting_Time:waitingTime;
+                if(cnt > 49 && cnt % 50 == 0)
+                {
+                   IPCLogger.write(LoggerType.DEBUG, "PENDING", server+" timeout "+thd+" transaction "+info);
+                   IPCLogger.write(LoggerType.DEBUG, "PENDING", server+" is waiting for "+thd+" transaction "+info);
+                }
+                //waitingTime*=2;
+                //waitingTime = waitingTime>Max_Waiting_Time?Max_Waiting_Time:waitingTime;
             } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
@@ -176,15 +190,22 @@ public class ThreadState{
     }
 
     public void waitForResponseSent(final TransactionInfo info, final NativeThread client){
-        if(ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname () == null){
+        final ShadowAddressSpace space = ShadowAddressSpace.getShadowAddressSpaceNoCreate(thd.getPid ());
+        if(space == null ||space.getShadowAddressSpace (thd.getPid ()).getContext ().getPname () == null){
             IPCLogger.write (LoggerType.DEBUG, "WAIT", "Proc "+thd.getPid ()+" is not observed");
+            return;
+        }
+        if(eventList.size ()==0){
+            IPCLogger.write(LoggerType.DEBUG, "START", "Proc "+thd.getPid ()+" just starts");
             return;
         }
         BinderEvent res = null;
         IPCLogger.write (LoggerType.DEBUG, "WAIT", "waiting for response sent event for transaction "+info.getTransactionId ()+" in "+thd.getPid ()+" "+thd.getTid() +" from "+client.getPid ()+" "+client.getTid ());
-        long waitingTime = Waiting_Time;
+        final long waitingTime = Waiting_Time;
+        int cnt = 0;
         while(((res=findEvent(info,client))==null)
         ){
+            cnt++;
             if(ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().isDead ()){
                 IPCLogger.debug("WAIT", "don't wait for a dead process "+thd.getPid ());
                 break;
@@ -192,8 +213,12 @@ public class ThreadState{
 
             try {
                 Thread.sleep (waitingTime);
-                waitingTime*=2;
-                waitingTime = waitingTime>Max_Waiting_Time?Max_Waiting_Time:waitingTime;
+                if(cnt > 49 && cnt % 50 == 0) {
+                    IPCLogger.write(LoggerType.DEBUG, "PENDING", client + " timeout for "+thd+" transaction "+info);
+                    IPCLogger.write(LoggerType.DEBUG, "PENDING", client + " is waiting for "+thd+" transaction "+info);
+                }
+                //waitingTime*=2;
+                //waitingTime = waitingTime>Max_Waiting_Time?Max_Waiting_Time:waitingTime;
             } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
@@ -306,5 +331,18 @@ public class ThreadState{
 
         final BinderEvent event = new ResponseRecvdEvent(client, server, info);
         addEvent (event);
+    }
+
+    public boolean checkResponseReceivedValid (
+        final TransactionInfo info, final NativeThread server) {
+        if (eventList.size () == 0) {
+            return true;
+        }
+        final BinderEvent top = eventList.get (eventList.size ()-1);
+        if(top.getType () == EventType.REQUEST_SENT && top.getClient ().equals (thd) && top.getInfo ().equals (info)) {
+            return true;
+        }
+        IPCLogger.debug ("INVALID", "Invalid response received found "+ thd + info+server+" last event "+top);
+        return false;
     }
 }

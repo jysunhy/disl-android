@@ -33,6 +33,6 @@ public class TransactionInfo {
         if(!(info instanceof TransactionInfo)){
             return false;
         }
-        return this.transactionId == ((TransactionInfo)info).transactionId;
+        return this.transactionId == ((TransactionInfo)info).transactionId && this.oneway == ((TransactionInfo)info).oneway;
     }
 }

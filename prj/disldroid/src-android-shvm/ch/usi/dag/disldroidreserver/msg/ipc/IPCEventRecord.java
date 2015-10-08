@@ -14,7 +14,7 @@ public class IPCEventRecord {
 
         timestamp = _timestamp;
         oneway = _oneway;
-        //System.out.println ("DEBUGGING IPC: "+frompid+" "+fromtid+" "+transactionid+" "+phase+" "+topid+" "+totid+" "+timestamp+" "+oneway);
+        //System.out.println (from.getPid ()+" "+from.getTid ()+" "+transactionid+" "+to.getPid ()+" "+to.getTid ()+" "+(oneway?"Oneway ":" ")+_phase+ " "+timestamp);
     }
 
     @Override

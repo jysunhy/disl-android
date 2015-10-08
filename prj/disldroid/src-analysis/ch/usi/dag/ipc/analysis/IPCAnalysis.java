@@ -27,7 +27,6 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
 
     public void permissionUsed (
         final Context ctx, final int tid, final ShadowString permissionName) {
-        System.out.println (permissionName+" used");
         final List<ThreadState> callers = ThreadState.getCallers (ctx, tid);
         for(final ThreadState caller:callers){
             caller.addPermission(permissionName.toString ());
@@ -47,7 +46,7 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
         final TransactionInfo info, final NativeThread client,
         final NativeThread server, final Context ctx) {
         final ThreadState clientState = ThreadState.get (client);
-        clientState.waitForRequestSent (info);
+        clientState.waitForRequestSent (info, server);
         final ThreadState serverState = ThreadState.get (server);
         serverState.recordRequestReceived(client, server, info);
     }
@@ -64,8 +63,12 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
         final TransactionInfo info, final NativeThread client,
         final NativeThread server, final Context ctx) {
             final ThreadState serverState = ThreadState.get (server);
-            serverState.waitForResponseSent (info, client);
             final ThreadState clientState = ThreadState.get (client);
+            if(!clientState.checkResponseReceivedValid(info,server)) {
+                return;
+            }
+            serverState.waitForResponseSent (info, client);
+
             if(clientState.getPermissionCount()>0){
                 IPCLogger.reportPermissionUsage (clientState);
                 clientState.clearPermissions ();

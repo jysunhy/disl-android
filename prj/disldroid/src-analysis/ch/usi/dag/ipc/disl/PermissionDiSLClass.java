@@ -29,10 +29,10 @@ public class PermissionDiSLClass {
                 }
 			}
 			if(args[0] != null) {
-			final String permisssionUsed = args[0].toString ();
+			    final String permisssionUsed = args[0].toString ();
     			if(permisssionUsed!=null) {
-                    IPCAnalysisStub.permission_used (permisssionUsed);
-                }
+    			    IPCAnalysisStub.permission_used (permisssionUsed);
+    			}
 			}
 		}
 }
