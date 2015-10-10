@@ -1,4 +1,4 @@
-package ch.usi.dag.netdiagnose.analysis;
+package ch.usi.dag.demo.netdiagnose.analysis;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.ConcurrentHashMap;
@@ -70,10 +70,10 @@ public class NetworkAnalysis extends RemoteAnalysis {
         }
         int pid;
         public static ProcessProfiler initProfilerIfAbsent(final Context ctx){
-            ProcessProfiler processProfile = ctx.getState ("net",ProcessProfiler.class);
+            ProcessProfiler processProfile = ctx.getState ("Net", ProcessProfiler.class);
             if (processProfile == null) {
                 final ProcessProfiler temp = new ProcessProfiler (ctx.getProcessID ());
-                processProfile = (ProcessProfiler) ctx.setStateIfAbsent ("net",temp);
+                processProfile = (ProcessProfiler) ctx.setStateIfAbsent ("Net", temp);
                 if(processProfile == null) {
                     processProfile = temp;
                 }

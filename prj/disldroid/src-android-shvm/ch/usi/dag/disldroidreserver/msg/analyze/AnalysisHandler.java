@@ -80,7 +80,7 @@ public final class AnalysisHandler implements RequestHandler {
 
 			// read method id from network and retrieve method
 			final short methodId = is.readShort ();
-			final AnalysisMethodHolder amh = AnalysisResolver.getMethod (methodId);
+			final AnalysisMethodHolder amh = AnalysisResolver.getMethod (shadowAddressSpace.getContext ().pid (), methodId);
 
 			// *** retrieve method argument values ***
 

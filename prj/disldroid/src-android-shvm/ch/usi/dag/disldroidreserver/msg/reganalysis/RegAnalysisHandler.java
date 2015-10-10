@@ -18,7 +18,7 @@ public final class RegAnalysisHandler implements RequestHandler {
 			final String methodString = is.readUTF();
 
 			// register method
-			AnalysisResolver.registerMethodId(methodId, methodString);
+			AnalysisResolver.registerMethodId(pid, methodId, methodString);
 
 			if (debug) {
 				System.out.printf(

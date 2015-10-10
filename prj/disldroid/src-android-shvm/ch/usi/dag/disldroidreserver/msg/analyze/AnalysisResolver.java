@@ -10,12 +10,19 @@ import java.util.concurrent.ConcurrentHashMap;
 import ch.usi.dag.disldroidreserver.exception.DiSLREServerException;
 import ch.usi.dag.disldroidreserver.exception.DiSLREServerFatalException;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
+import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
 
 public final class AnalysisResolver {
 	private static final String METHOD_DELIM = ".";
 
-	private static final ConcurrentHashMap <Short, AnalysisMethodHolder>
-		methodMap = new ConcurrentHashMap <Short, AnalysisMethodHolder> ();
+	private static class MethodMap extends ConcurrentHashMap <Short, AnalysisMethodHolder>{
+
+	}
+
+	//private static final ConcurrentHashMap <Short, AnalysisMethodHolder>
+	//	methodMap = new ConcurrentHashMap <Short, AnalysisMethodHolder> ();
+	private static ConcurrentHashMap<Integer, MethodMap> methodMaps = new ConcurrentHashMap <Integer, AnalysisResolver.MethodMap> ();
+
 
 	private static final ConcurrentHashMap <String, RemoteAnalysis>
 		analysisMap = new ConcurrentHashMap <String, RemoteAnalysis> ();
@@ -131,8 +138,20 @@ public final class AnalysisResolver {
 	}
 
 
-	static AnalysisMethodHolder getMethod (final short methodId)
+	static AnalysisMethodHolder getMethod (int pid, final short methodId)
 	throws DiSLREServerException {
+
+	    if(!methodMaps.containsKey (pid)) {
+	        final ShadowAddressSpace parent = ShadowAddressSpace.getShadowAddressSpaceNoCreate (pid).getParent ();
+	        if(parent == null) {
+                throw new DiSLREServerFatalException ("Unknown method id: "+ methodId + " in "+pid);
+            }else {
+                pid = parent.getContext ().pid ();
+            }
+	    }
+
+	    final MethodMap methodMap = methodMaps.get (pid);
+
 		final AnalysisMethodHolder result = methodMap.get (methodId);
 		if (result == null) {
 			throw new DiSLREServerFatalException ("Unknown method id: "+ methodId);
@@ -143,9 +162,15 @@ public final class AnalysisResolver {
 
 
 	public static void registerMethodId (
-		final short methodId, final String methodString
+		final int pid, final short methodId, final String methodString
 	) throws DiSLREServerException {
-		methodMap.putIfAbsent (methodId, resolveMethod(methodString));
+		//methodMap.putIfAbsent (methodId, resolveMethod(methodString));
+	    final MethodMap temp = new MethodMap ();
+	    MethodMap res = methodMaps.putIfAbsent (pid, temp);
+	    if(res == null) {
+            res = temp;
+        }
+	    res.putIfAbsent (methodId, resolveMethod(methodString));
 	}
 
 

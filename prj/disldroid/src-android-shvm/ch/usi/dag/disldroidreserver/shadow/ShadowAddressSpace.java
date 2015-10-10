@@ -28,6 +28,7 @@ public class ShadowAddressSpace {
 
     ShadowClass JAVA_LANG_CLASS;
 
+    private ShadowAddressSpace parent = null;
 
     public ShadowAddressSpace (final int processID) {
         context = new Context (processID, null);
@@ -42,7 +43,7 @@ public class ShadowAddressSpace {
 
     public ShadowAddressSpace onFork (final int childProcessID) {
         final ShadowAddressSpace child = new ShadowAddressSpace (childProcessID);
-
+        child.parent = this;
         // clone shadowObjects
         for (final Long key : shadowObjects.keySet ()) {
             child.shadowObjects.put (
@@ -136,6 +137,10 @@ public class ShadowAddressSpace {
 
     public Context getContext () {
         return context;
+    }
+
+    public ShadowAddressSpace getParent(){
+        return parent;
     }
 
     public static ArrayList <Context> getContexts () {

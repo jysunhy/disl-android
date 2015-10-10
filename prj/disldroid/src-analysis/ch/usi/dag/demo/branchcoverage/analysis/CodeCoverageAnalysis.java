@@ -1,4 +1,4 @@
-package ch.usi.dag.branchcoverage.analysis;
+package ch.usi.dag.demo.branchcoverage.analysis;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -6,7 +6,7 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import ch.usi.dag.branchcoverage.util.CodeCoverageUtil;
+import ch.usi.dag.demo.branchcoverage.util.CodeCoverageUtil;
 import ch.usi.dag.disl.util.Constants;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
@@ -69,11 +69,11 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
     public void branchTaken (final ShadowString classSignature,
         final ShadowString methodSignature, final int index,
         final Context context) {
-        ProcessProfile processProfile = context.getState ("bc",ProcessProfile.class);
+        ProcessProfile processProfile = context.getState ("bc", ProcessProfile.class);
 
         if (processProfile == null) {
             final ProcessProfile temp = new ProcessProfile ();
-            processProfile = (ProcessProfile) context.setStateIfAbsent ("bc",temp);
+            processProfile = (ProcessProfile) context.setStateIfAbsent ("bc", temp);
             if(processProfile == null) {
                 processProfile = temp;
             }
@@ -112,7 +112,7 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
 
     public static void printResult(final Context context){
         // Dumping code coverage profile
-        final ProcessProfile processProfile = context.getState ("bc",ProcessProfile.class);
+        final ProcessProfile processProfile = context.getState ("bc", ProcessProfile.class);
         if(processProfile == null) {
             return;
         }

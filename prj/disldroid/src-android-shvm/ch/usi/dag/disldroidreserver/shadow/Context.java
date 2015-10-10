@@ -11,6 +11,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.Opcodes;
@@ -27,32 +28,28 @@ public class Context {
 
     boolean dead = false;
 
-    Object state;
+    ConcurrentHashMap <String, Object> states = new ConcurrentHashMap <String, Object> ();
 
-    public Object getState () {
-        return state;
-    }
-
-
-    public <T> T getState (final Class <T> type) {
-        return type.cast (state);
-    }
-
-
-    public synchronized void setState (final Object store) {
-        this.state = store;
-    }
-
-
-    public synchronized Object setStateIfAbsent (final Object state) {
-
-        final Object retVal = this.state;
-
-        if (retVal == null) {
-            this.state = state;
+    public <T> T getState (final String key, final Class <T> type) {
+        if(states.containsKey (key)) {
+            return type.cast (states.get (key));
+        } else {
+            return null;
         }
+    }
 
-        return retVal;
+
+    public synchronized void setState (final String key, final Object store) {
+        states.put (key, store);
+    }
+
+
+    public synchronized Object setStateIfAbsent (final String key, final Object state) {
+        Object res = states.putIfAbsent (key, state);
+        if(res == null) {
+            res = state;
+        }
+        return res;
     }
 
     public int getProcessID () {
