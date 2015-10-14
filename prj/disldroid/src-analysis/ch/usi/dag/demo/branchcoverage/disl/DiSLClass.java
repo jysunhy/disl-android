@@ -11,12 +11,12 @@ public class DiSLClass {
     @SyntheticLocal
     public static boolean encounterBranch = false;
 
-    @Before (marker = BranchMarker.class, scope = "ch.usi.dag.android.example.*.*")
+    @Before (marker = BranchMarker.class)
     public static void beforeBranchInstruction () {
         encounterBranch = true;
     }
 
-    @AfterReturning (marker = IfThenBranchMarker.class, scope = "ch.usi.dag.android.example.*.*")
+    @AfterReturning (marker = IfThenBranchMarker.class)
     public static void thenBranch (final CodeCoverageContext c) {
         if (encounterBranch) {
             CodeCoverageAnalysisProxy.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
@@ -24,7 +24,7 @@ public class DiSLClass {
         }
     }
 
-    @AfterReturning (marker = IfElseBranchMarker.class, scope = "ch.usi.dag.android.example.*.*")
+    @AfterReturning (marker = IfElseBranchMarker.class)
     public static void elseBranch (final CodeCoverageContext c) {
         if (encounterBranch) {
             CodeCoverageAnalysisProxy.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
@@ -32,12 +32,12 @@ public class DiSLClass {
         }
     }
 
-    @Before (marker = SwitchMarker.class, scope = "ch.usi.dag.android.example.*.*")
+    @Before (marker = SwitchMarker.class)
     public static void beforeSwitchInstruction (final CodeCoverageContext c) {
         encounterBranch = true;
     }
 
-    @AfterReturning (marker = SwitchCaseMarker.class, scope = "ch.usi.dag.android.example.*.*")
+    @AfterReturning (marker = SwitchCaseMarker.class)
     public static void afterBranchLabel (final CodeCoverageContext c) {
         if (encounterBranch) {
             CodeCoverageAnalysisProxy.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());

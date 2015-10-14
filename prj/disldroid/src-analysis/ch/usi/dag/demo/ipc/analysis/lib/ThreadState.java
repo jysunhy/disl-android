@@ -6,12 +6,14 @@ import java.util.List;
 import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
+import ch.usi.dag.demo.ipc.analysis.IPCAnalysis;
 import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.EventType;
 import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.RequestRecvdEvent;
 import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.RequestSentEvent;
 import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.ResponseRecvdEvent;
 import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.ResponseSentEvent;
 import ch.usi.dag.demo.ipc.analysis.lib.IPCLogger.LoggerType;
+import ch.usi.dag.demo.logging.DemoLogger;
 import ch.usi.dag.disldroidreserver.msg.ipc.NativeThread;
 import ch.usi.dag.disldroidreserver.msg.ipc.TransactionInfo;
 import ch.usi.dag.disldroidreserver.shadow.Context;
@@ -19,8 +21,7 @@ import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
 
 public class ThreadState{
 
-
-    static ConcurrentHashMap<NativeThread, ThreadState> stateMap=new ConcurrentHashMap <NativeThread, ThreadState>();
+    public static ConcurrentHashMap<NativeThread, ThreadState> stateMap=new ConcurrentHashMap <NativeThread, ThreadState>();
 
     List<BinderEvent> eventList= new ArrayList<>();
 
@@ -264,12 +265,13 @@ public class ThreadState{
 
 
     public synchronized void pushBoundary(final String boundaryName){
+        DemoLogger.debug (IPCAnalysis.analysisTag, this.thd+" enter "+boundaryName);
+        IPCLogger.debug (IPCAnalysis.analysisTag, this.thd+" enter "+boundaryName);
         runtimeStack.push (boundaryName);
     }
     public synchronized  void popBoundary(final String boundaryName){
-        if(!runtimeStack.peek ().equals (boundaryName)) {
-            IPCLogger.write (LoggerType.ERROR,"POPBOUNDARY", "not match when poping boundary "+boundaryName+ " : "+runtimeStack.peek ());
-        }
+        DemoLogger.debug (IPCAnalysis.analysisTag, this.thd+" leave "+boundaryName);
+        IPCLogger.debug (IPCAnalysis.analysisTag, this.thd+" leave "+boundaryName);
         runtimeStack.pop ();
     }
     public synchronized String peekBoundary(){
@@ -287,26 +289,34 @@ public class ThreadState{
         return permissions.size();
     }
 
-    public void printStack () {
+    public void printStack (final String tag) {
         int cnt = 0;
         final String pname = ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname ();
         if(runtimeStack.size()>0){
             IPCLogger.info("PERMISSION_USAGE","Calling Stack in proc "+pname+"("+thd.getPid ()+":"+thd.getTid ()+")");
+            DemoLogger.info (IPCAnalysis.analysisTag, "Calling Stack in proc "+pname+"("+thd.getPid ()+":"+thd.getTid ()+")");
             for(int i = runtimeStack.size()-1; i>=0; i--){
-                IPCLogger.info ("PERMISSION_USAGE","#"+cnt+":"+runtimeStack.get (i));
+                IPCLogger.info (tag,"#"+cnt+":"+runtimeStack.get (i));
+                DemoLogger.info (tag,"#"+cnt+":"+runtimeStack.get (i));
                 cnt++;
             }
         }
     }
 
     public void printPermission () {
-        final String pname = ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname ();
-        String res="Detect use of permission(s):";
-        for(int i = 0; i < permissions.size(); i++){
-            res+=" #"+permissions.get(i);
+        if(runtimeStack.size () > 0){
+            DemoLogger.info (IPCAnalysis.analysisTag, "**************************************************");
+            final String pname = ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname ();
+            String res="Detect use of permission(s):";
+            for(int i = 0; i < permissions.size(); i++){
+                res+=" #"+permissions.get(i);
+            }
+            res =  res + " in proc "+pname+"("+thd.getPid ()+":"+thd.getTid ()+")";
+            IPCLogger.info("PERMISSION_USAGE", res);
+            DemoLogger.info(IPCAnalysis.analysisTag, res);
+            this.printStack(IPCAnalysis.analysisTag);
+            DemoLogger.info (IPCAnalysis.analysisTag, "**************************************************");
         }
-        res =  res + " in proc "+pname+"("+thd.getPid ()+":"+thd.getTid ()+")";
-        IPCLogger.info("PERMISSION_USAGE", res);
     }
     public void recordRequestSent (final NativeThread client, final TransactionInfo info) {
         final BinderEvent event = new RequestSentEvent (client, info);

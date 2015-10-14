@@ -4,6 +4,9 @@ import java.nio.ByteBuffer;
 import java.util.concurrent.ConcurrentHashMap;
 
 import android.util.Base64;
+import ch.usi.dag.demo.ipc.analysis.lib.IPCLogger;
+import ch.usi.dag.demo.ipc.analysis.lib.ThreadState;
+import ch.usi.dag.demo.logging.DemoLogger;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
@@ -14,7 +17,7 @@ public class NetworkAnalysis extends RemoteAnalysis {
 
     static String PREDEFINED_USERNAME = "username";
     static String PREDEFINED_PASSWORD = "password";
-
+    static String analysisTag = "NetworkUsage";
     static class ConnectionStruct{
         public ConnectionStruct (final int fdHash, final String address, final int port) {
             this.fdHash = fdHash;
@@ -22,8 +25,9 @@ public class NetworkAnalysis extends RemoteAnalysis {
             this.port = port;
             bf = ByteBuffer.allocate (1024);
         }
-        public void dumpConnectionInfo(){
-            System.out.println (new StringBuilder(address).append(":").append (port).append ("-").append (fdHash));
+        public String dumpConnectionInfo(){
+            //System.out.println (new StringBuilder(address).append(":").append (port).append ("-").append (fdHash));
+            return new StringBuilder(address).append(":").append (port).append ("-").append (fdHash).toString ();
         }
         public ByteBuffer addNewData(final byte[] data){
             while(bf.remaining () < data.length) {
@@ -34,6 +38,7 @@ public class NetworkAnalysis extends RemoteAnalysis {
         }
         public ByteBuffer addNewData(final String base64){
             final byte data[] = Base64.decode (base64.toString (), Base64.DEFAULT);
+            DemoLogger.info (analysisTag, data);
             while(bf.remaining () < data.length) {
                 bf = bf.duplicate ();
             }
@@ -82,21 +87,46 @@ public class NetworkAnalysis extends RemoteAnalysis {
         }
     }
 
-    public static void newConnection (final Context ctx,
+    public static void newConnection (final Context ctx, final int tid,
         final int fdHash, final ShadowString address, final int port, final int timeoutMs, final boolean successful) {
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent (ctx);
         final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address.toString (), port);
+        DemoLogger.info (analysisTag, "**************************************************");
+        IPCLogger.debug(analysisTag, "New connection "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname () +" "+ ThreadState.get(ctx, tid));
+        DemoLogger.info(analysisTag, "New connection "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname () +" "+ ThreadState.get(ctx, tid));
+        ThreadState.get(ctx, tid).printStack (analysisTag);
+        DemoLogger.info (analysisTag, "**************************************************");
     }
 
-    public static void sendMessage (final Context ctx, final int fdHash, final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
+    public static void sendMessage (final Context ctx, final int tid, final int fdHash, final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
         final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
+        DemoLogger.info (analysisTag, "**************************************************");
+        IPCLogger.debug (analysisTag, "new data sent via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
+        DemoLogger.info (analysisTag, "new data sent via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
+        ThreadState.get(ctx, tid).printStack (analysisTag);
         connection.addNewData (dataBase64.toString ());
         if(connection.matchPlainUsernamePassword(PREDEFINED_PASSWORD)){
-            connection.dumpConnectionInfo ();
+            DemoLogger.info (analysisTag, "Found target plain text "+PREDEFINED_PASSWORD+" in "+connection.dumpConnectionInfo ());
+            DemoLogger.info(analysisTag, PREDEFINED_PASSWORD.getBytes ());
         }
+        DemoLogger.info (analysisTag, "**************************************************");
     }
 
+    public static void sendMessageFailed (final Context ctx, final int tid, final int fdHash, final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
+        final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
+        final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
+        ThreadState.get(ctx, tid).printStack (analysisTag);
+        DemoLogger.info (analysisTag, "**************************************************");
+        IPCLogger.debug (analysisTag, "tried but failed in sending data via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
+        DemoLogger.info (analysisTag, "tried but failed in sending data via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
+        connection.addNewData (dataBase64.toString ());
+        if(connection.matchPlainUsernamePassword(PREDEFINED_PASSWORD)){
+            DemoLogger.info (analysisTag, "Found target plain text "+PREDEFINED_PASSWORD+" in "+connection.dumpConnectionInfo ());
+            DemoLogger.info(analysisTag, PREDEFINED_PASSWORD.getBytes ());
+        }
+        DemoLogger.info (analysisTag, "**************************************************");
+    }
 
     public static int indexOf(final byte[] outerArray, final byte[] smallerArray) {
         for(int i = 0; i < outerArray.length - smallerArray.length+1; ++i) {

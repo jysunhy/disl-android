@@ -7,6 +7,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
 import ch.usi.dag.demo.branchcoverage.util.CodeCoverageUtil;
+import ch.usi.dag.demo.logging.DemoLogger;
 import ch.usi.dag.disl.util.Constants;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
@@ -17,17 +18,17 @@ import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 public class CodeCoverageAnalysis extends RemoteAnalysis  {
 
+    static String analysisTag = "BranchCoverage";
     static class OutputThread extends Thread {
         @Override
         public void run(){
             while(true) {
                 try {
-                    sleep(10000);
-
                     for(final Context context: ShadowAddressSpace.getContexts ())
                     {
                         CodeCoverageAnalysis.printResult (context);
                     }
+                    sleep(5000);
                 }catch(final Exception e)
                 {
                 }
@@ -62,7 +63,15 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
 
     @SuppressWarnings ("serial")
     static class ProcessProfile extends ConcurrentHashMap <String, ClassProfile> {
+        private boolean changed = false;
 
+        boolean isChanged () {
+            return changed;
+        }
+
+        void setChanged (final boolean changed) {
+            this.changed = changed;
+        }
     }
 
 
@@ -93,7 +102,13 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
             }
         }
 
-        classProfile.get (innerKey) [index]++;
+        final int times = ++classProfile.get (innerKey) [index];
+
+        DemoLogger.debug (analysisTag, "branch taken at Method "+methodSignature+" of "+classSignature+", taken times: "+ times);
+
+        if(times == 1) {
+            processProfile.setChanged (true);
+        }
     }
 
 
@@ -116,10 +131,13 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
         if(processProfile == null) {
             return;
         }
-
+        if(!processProfile.isChanged ()) {
+            return;
+        }
+        DemoLogger.info (analysisTag, "**************************************************");
         for (final String classSignature : processProfile.keySet ()) {
             final ClassProfile classProfile = processProfile.get (classSignature);
-            System.out.println ("class: " + classSignature);
+            //System.out.println ("class: " + classSignature);
 
             for (final String methodSignature : classProfile.keySet ()) {
                 final int [] coverage = classProfile.get (methodSignature);
@@ -132,9 +150,19 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
                     }
                 }
 
-                System.out.println ("\t method: "
-                    + methodSignature + " " + covered + " / " + total +" = "+(total==0?"Nil":((double)covered)/total));
+                if(covered!=0) {
+                    DemoLogger.info (analysisTag,
+                        context.getPname ()+" coverage report:"
+                        +"class: " + classSignature
+                        + "\t method: "+ methodSignature + " "
+                        + covered + " / " + total +" = "+(total==0?"Nil":((double)covered)/total));
+                }
+
+//                System.out.println ("\t method: "
+//                    + methodSignature + " " + covered + " / " + total +" = "+(total==0?"Nil":((double)covered)/total));
             }
         }
+        processProfile.setChanged (false);
+        DemoLogger.info (analysisTag, "**************************************************");
     }
 }

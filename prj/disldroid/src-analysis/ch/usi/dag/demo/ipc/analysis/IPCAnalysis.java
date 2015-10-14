@@ -13,6 +13,7 @@ import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 public class IPCAnalysis extends RemoteIPCAnalysis {
 
+    public static String analysisTag = "PermissionUsage";
     public void boundaryStart (
         final Context ctx, final int tid, final ShadowString boundaryName) {
         final ThreadState state = ThreadState.get (ctx, tid);

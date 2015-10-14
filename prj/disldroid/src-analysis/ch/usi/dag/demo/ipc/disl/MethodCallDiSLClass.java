@@ -14,7 +14,7 @@ public class MethodCallDiSLClass {
     @Before (
         marker = BytecodeMarker.class,
         scope = "ch.usi.dag.android.example.*.*",
-        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual")
+        args = "invokestatic, invokespecial, invokeinterface, invokevirtual")
     public static void beforeInvoke (final CallContext ac) {
         final String methodName = ac.getCallee ();
         IPCAnalysisStub.boundary_start (methodName);
@@ -24,7 +24,7 @@ public class MethodCallDiSLClass {
     @After (
         marker = BytecodeMarker.class,
         scope = "ch.usi.dag.android.example.*.*",
-        args = "invokestatic, invokespecial, invokestatic, invokeinterface, invokevirtual")
+        args = "invokestatic, invokespecial, invokeinterface, invokevirtual")
     public static void afterInvoke (final CallContext ac) {
         final String methodName = ac.getCallee ();
         IPCAnalysisStub.boundary_end (methodName);

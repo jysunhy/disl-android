@@ -9,7 +9,6 @@ public class CodeCoverageAnalysisProxy {
 
     public static void branchTaken (
         final String classSignature, final String methodSignature, final int idx) {
-        AREDispatch.NativeLog ("IN BRANCH TAKEN");
         AREDispatch.analysisStart (CB);
         AREDispatch.sendObjectPlusData (classSignature);
         AREDispatch.sendObjectPlusData (methodSignature);

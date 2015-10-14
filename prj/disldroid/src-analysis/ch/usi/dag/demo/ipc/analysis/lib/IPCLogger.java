@@ -1,8 +1,9 @@
 package ch.usi.dag.demo.ipc.analysis.lib;
 
+
 public class IPCLogger {
 
-    static boolean debug = false;
+    static boolean debug = true;
 
     public enum LoggerType {DEBUG, INFO, ERROR};
 
@@ -33,7 +34,6 @@ public class IPCLogger {
     }
 
     public static void reportPermissionUsage(final ThreadState state){
-        state.printPermission();
-        state.printStack();
+            state.printPermission();
     }
 }

@@ -6,7 +6,6 @@ import ch.usi.dag.disl.marker.BodyMarker;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorMode;
 import ch.usi.dag.disl.staticcontext.MethodStaticContext;
-import ch.usi.dag.dislre.AREDispatch;
 /* for framework.jar */
 public class PermissionDiSLClass {
 
@@ -21,13 +20,15 @@ public class PermissionDiSLClass {
 			)
 		public static void detectPermission (
 				final MethodStaticContext msc, final ArgumentProcessorContext pc) {
-			AREDispatch.NativeLog (msc.thisMethodFullName ());
-			final Object [] args = pc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
+            final Object [] args = pc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
+			/* AREDispatch.NativeLog (msc.thisMethodFullName ());
+
 			for(final Object obj : args){
 			    if(obj != null) {
                     AREDispatch.NativeLog (obj.toString ());
                 }
 			}
+			*/
 			if(args[0] != null) {
 			    final String permisssionUsed = args[0].toString ();
     			if(permisssionUsed!=null) {

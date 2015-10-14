@@ -11,7 +11,6 @@ import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorMode;
-import ch.usi.dag.dislre.AREDispatch;
 
 public class DiSLClass {
 //
@@ -25,7 +24,9 @@ public class DiSLClass {
 //        AREDispatch.NativeLog ("Leaving"+msc.thisMethodFullName ());
 //    }
 
-    @AfterReturning(marker=BodyMarker.class, scope="libcore.io.IoBridge.connect(java.io.FileDescriptor,java.net.InetAddress,int,int)")
+    @AfterReturning(marker=BodyMarker.class,
+    order = 1,
+    scope="libcore.io.IoBridge.connect(java.io.FileDescriptor,java.net.InetAddress,int,int)")
     public static void network_connect(final ArgumentProcessorContext apc, final DynamicContext dc){
         //connect(FileDescriptor fd, InetAddress inetAddress, int port, int timeoutMs)
         final Object [] args = apc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
@@ -37,7 +38,9 @@ public class DiSLClass {
         NetworkAnalysisStub.newConnection (fd, address, port, timeoutMs, successful);
     }
 
-    @AfterReturning(marker=BodyMarker.class, scope="libcore.io.IoBridge.sendto(java.io.FileDescriptor,byte[],int,int,int,java.net.InetAddress,int)")
+    @AfterReturning(marker=BodyMarker.class,
+    order = 1,
+    scope="libcore.io.IoBridge.sendto(java.io.FileDescriptor,byte[],int,int,int,java.net.InetAddress,int)")
     public static void sendto(final ArgumentProcessorContext apc, final DynamicContext dc){
         final Object [] args = apc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
         //(FileDescriptor fd, byte[] bytes, int byteOffset, int byteCount, int flags, InetAddress inetAddress, int port)
@@ -49,9 +52,13 @@ public class DiSLClass {
         final InetAddress address = (InetAddress)args[5];
         final int port = (int)args[6];
         final int sentSize = dc.getStackValue (0, int.class);
-        AREDispatch.NativeLog ("Num to send: "+byteCount+"; Num sent: "+sentSize);
+        //AREDispatch.NativeLog ("Num to send: "+byteCount+"; Num sent: "+sentSize);
         //[byteOffset, byteOffset+sentSize)
-        NetworkAnalysisStub.sendMessage (fd, buffer, byteOffset, sentSize, flags, address, port);
+        if(sentSize > 0) {
+            NetworkAnalysisStub.sendMessage (fd, buffer, byteOffset, sentSize, flags, address, port);
+        }else {
+            NetworkAnalysisStub.sendMessageFailed(fd, buffer, 0, buffer.length, flags, address, port);
+        }
     }
 
 //    @SyntheticLocal
@@ -65,7 +72,9 @@ public class DiSLClass {
         //oldPosition = buffer.position ();
     }
 
-    @AfterReturning(marker=BodyMarker.class, scope="libcore.io.IoBridge.sendto(java.io.FileDescriptor,java.nio.ByteBuffer,int,java.net.InetAddress,int)")
+    @AfterReturning(marker=BodyMarker.class,
+    order = 1,
+    scope="libcore.io.IoBridge.sendto(java.io.FileDescriptor,java.nio.ByteBuffer,int,java.net.InetAddress,int)")
     public static void sendto_bytebuffer(final ArgumentProcessorContext apc, final DynamicContext dc){
         final Object [] args = apc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
         //(FileDescriptor fd, ByteBuffer buffer, int flags, InetAddress inetAddress, int port)
@@ -77,6 +86,10 @@ public class DiSLClass {
         final int sentSize = dc.getStackValue (0, int.class);
         //[buffer.position()-sentSize, buffer.position())
         //AREDispatch.NativeLog ("old position:"+oldPosition+" new position:"+buffer.position ()+" ret val:"+sentSize);
-        NetworkAnalysisStub.sendMessage (fd, buffer.array (), buffer.position () - sentSize, sentSize, flags, address, port);
+        if(sentSize > 0) {
+            NetworkAnalysisStub.sendMessage (fd, buffer.array (), buffer.position () - sentSize, sentSize, flags, address, port);
+        }else {
+            NetworkAnalysisStub.sendMessageFailed (fd, buffer.array (), 0, buffer.position (), flags, address, port);
+        }
     }
 }
