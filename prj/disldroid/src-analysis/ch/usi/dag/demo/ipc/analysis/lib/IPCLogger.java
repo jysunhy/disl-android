@@ -3,7 +3,7 @@ package ch.usi.dag.demo.ipc.analysis.lib;
 
 public class IPCLogger {
 
-    static boolean debug = true;
+    static boolean debug = false;
 
     public enum LoggerType {DEBUG, INFO, ERROR};
 
