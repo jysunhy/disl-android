@@ -101,7 +101,14 @@ public class DemoLogger {
             getWriter(tag).write (header);
             for(final byte b: data){
                 getWriter(tag).write (Integer.toBinaryString(b & 255 | 256).substring(1));
+                getWriter(tag).write ('(');
+                getWriter(tag).write (b);
+                getWriter(tag).write (')');
                 getWriter(tag).write (' ');
+            }
+            getWriter(tag).write ("\n");
+            for(final byte b: data){
+                getWriter(tag).write (b);
             }
             getWriter(tag).write ("\n");
             getWriter(tag).flush ();

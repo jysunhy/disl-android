@@ -14,12 +14,17 @@
 		<dex>
 			<name>pixelrush.xphonefree-1.apk</name>
 			<bypass>false</bypass>
-			<dislclass>output/build/analysis/ch/usi/dag/demo/ipc/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/demo/ipc/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/demo/ipc/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/demo/ipc/disl/MethodCallDiSLClass2.class,output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>pixelrush.xphonefree-2.apk</name>
 			<bypass>false</bypass>
-			<dislclass>output/build/analysis/ch/usi/dag/demo/ipc/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/demo/ipc/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</dislclass>
+			<dislclass>output/build/analysis/ch/usi/dag/demo/ipc/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/demo/ipc/disl/MethodCallDiSLClass2.class,output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</dislclass>
+		</dex>
+		<dex>
+			<name>pixelrush.xphonefree-3.apk</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/demo/ipc/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/demo/ipc/disl/MethodCallDiSLClass2.class,output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>core.jar</name>
