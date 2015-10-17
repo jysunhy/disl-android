@@ -128,6 +128,25 @@ public class NetworkAnalysis extends RemoteAnalysis {
         DemoLogger.info (analysisTag, "**************************************************");
     }
 
+    public static void recvMessage (final Context ctx, final int tid, final int fdHash, final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
+        final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
+        final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
+        DemoLogger.info (analysisTag, "**************************************************");
+        DemoLogger.info (analysisTag, "new data recvd via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
+        ThreadState.get(ctx, tid).printStack (analysisTag);
+        DemoLogger.info (analysisTag, "**************************************************");
+    }
+
+    public static void recvMessageFailed (final Context ctx, final int tid, final int fdHash, final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
+        final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
+        final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
+        DemoLogger.info (analysisTag, "**************************************************");
+        DemoLogger.info (analysisTag, "recvd failed via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
+        ThreadState.get(ctx, tid).printStack (analysisTag);
+        DemoLogger.info (analysisTag, "**************************************************");
+    }
+
+
     public static int indexOf(final byte[] outerArray, final byte[] smallerArray) {
         for(int i = 0; i < outerArray.length - smallerArray.length+1; ++i) {
             boolean found = true;

@@ -8,6 +8,7 @@ import org.objectweb.asm.tree.MethodNode;
 
 import ch.usi.dag.demo.branchcoverage.util.CodeCoverageUtil;
 import ch.usi.dag.demo.logging.DemoLogger;
+import ch.usi.dag.demo.logging.WebLogger;
 import ch.usi.dag.disl.util.Constants;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
@@ -24,13 +25,15 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
         public void run(){
             while(true) {
                 try {
-                    for(final Context context: ShadowAddressSpace.getContexts ())
+                    for(int i =0; i < ShadowAddressSpace.getContexts ().size ();i++)
                     {
-                        CodeCoverageAnalysis.printResult (context);
+                        CodeCoverageAnalysis.printResult (ShadowAddressSpace.getContexts ().get (i), i==0?true:false);
                     }
-                    sleep(5000);
+                    Thread.sleep(5000);
                 }catch(final Exception e)
                 {
+                    e.printStackTrace ();
+                    break;
                 }
             }
         }
@@ -104,8 +107,8 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
 
         final int times = ++classProfile.get (innerKey) [index];
 
-        DemoLogger.debug (analysisTag, "branch taken at Method "+methodSignature+" of "+classSignature+", taken times: "+ times);
-
+        DemoLogger.info (analysisTag, "branch taken at Method "+methodSignature+" of "+classSignature+", taken times: "+ times);
+        WebLogger.branchTaken (context.getProcessID (), context.getPname (), classSignature.toString (), methodSignature.toString (), index, classProfile.get (innerKey).length, times);
         if(times == 1) {
             processProfile.setChanged (true);
         }
@@ -125,7 +128,7 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
 
     }
 
-    public static void printResult(final Context context){
+    public static void printResult(final Context context, final boolean clean){
         // Dumping code coverage profile
         final ProcessProfile processProfile = context.getState ("bc", ProcessProfile.class);
         if(processProfile == null) {
@@ -156,6 +159,7 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
                         +"class: " + classSignature
                         + "\t method: "+ methodSignature + " "
                         + covered + " / " + total +" = "+(total==0?"Nil":((double)covered)/total));
+                    WebLogger.reportBranchCoverage (context.getProcessID (), context.getPname (), classSignature, methodSignature, covered, total, clean);
                 }
 
 //                System.out.println ("\t method: "

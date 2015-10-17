@@ -14,6 +14,7 @@ import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.ResponseRecvdEvent;
 import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.ResponseSentEvent;
 import ch.usi.dag.demo.ipc.analysis.lib.IPCLogger.LoggerType;
 import ch.usi.dag.demo.logging.DemoLogger;
+import ch.usi.dag.demo.logging.WebLogger;
 import ch.usi.dag.disldroidreserver.msg.ipc.NativeThread;
 import ch.usi.dag.disldroidreserver.msg.ipc.TransactionInfo;
 import ch.usi.dag.disldroidreserver.shadow.Context;
@@ -304,9 +305,9 @@ public class ThreadState{
     }
 
     public void printPermission () {
+        final String pname = ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname ();
         if(runtimeStack.size () > 0){
             DemoLogger.info (IPCAnalysis.analysisTag, "**************************************************");
-            final String pname = ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname ();
             String res="Detect use of permission(s):";
             for(int i = 0; i < permissions.size(); i++){
                 res+=" #"+permissions.get(i);
@@ -316,6 +317,9 @@ public class ThreadState{
             DemoLogger.info(IPCAnalysis.analysisTag, res);
             this.printStack(IPCAnalysis.analysisTag);
             DemoLogger.info (IPCAnalysis.analysisTag, "**************************************************");
+            WebLogger.reportPermission (thd.getPid (), pname, thd.getTid (), permissions, runtimeStack);
+        }else {
+            WebLogger.reportPermission (thd.getPid (), pname, thd.getTid (), permissions, null);
         }
     }
     public void recordRequestSent (final NativeThread client, final TransactionInfo info) {
