@@ -13,8 +13,8 @@ public class MethodCallDiSLClass2 {
     /* every time before calling a method */
     @Before (
         marker = BytecodeMarker.class,
-        scope= "c.a.a.bxxxv.*",
-        args = "invokestatic, invokespecial, invokeinterface, invokevirtual")
+        scope= "c.a.a.bv.*",
+        args = "invokestatic, invokespecial, invokevirtual")
     public static void beforeInvoke (final CallContext ac) {
         final String methodName = ac.getCallee ();
         IPCAnalysisStub.boundary_start (methodName);
@@ -23,8 +23,8 @@ public class MethodCallDiSLClass2 {
     /* every time after calling a method */
     @After (
         marker = BytecodeMarker.class,
-        scope= "c.a.a.bxxxv.*",
-        args = "invokestatic, invokespecial, invokeinterface, invokevirtual")
+        scope= "c.a.a.bv.*",
+        args = "invokestatic, invokespecial, invokevirtual")
     public static void afterInvoke (final CallContext ac) {
         final String methodName = ac.getCallee ();
         IPCAnalysisStub.boundary_end (methodName);

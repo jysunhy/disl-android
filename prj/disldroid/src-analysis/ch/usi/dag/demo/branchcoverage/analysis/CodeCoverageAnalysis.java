@@ -25,11 +25,14 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
         public void run(){
             while(true) {
                 try {
+                    boolean clean = true;
                     for(int i =0; i < ShadowAddressSpace.getContexts ().size ();i++)
                     {
-                        CodeCoverageAnalysis.printResult (ShadowAddressSpace.getContexts ().get (i), i==0?true:false);
+                        if(CodeCoverageAnalysis.printResult (ShadowAddressSpace.getContexts ().get (i), clean)){
+                            clean = false;
+                        }
                     }
-                    Thread.sleep(5000);
+                    Thread.sleep(10000);
                 }catch(final Exception e)
                 {
                     e.printStackTrace ();
@@ -128,15 +131,15 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
 
     }
 
-    public static void printResult(final Context context, final boolean clean){
+    public static boolean printResult(final Context context, final boolean clean){
         // Dumping code coverage profile
         final ProcessProfile processProfile = context.getState ("bc", ProcessProfile.class);
         if(processProfile == null) {
-            return;
+            return false;
         }
-        if(!processProfile.isChanged ()) {
-            return;
-        }
+//        if(!processProfile.isChanged ()) {
+//            return false;
+//        }
         DemoLogger.info (analysisTag, "**************************************************");
         for (final String classSignature : processProfile.keySet ()) {
             final ClassProfile classProfile = processProfile.get (classSignature);
@@ -168,5 +171,6 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
         }
         processProfile.setChanged (false);
         DemoLogger.info (analysisTag, "**************************************************");
+        return true;
     }
 }

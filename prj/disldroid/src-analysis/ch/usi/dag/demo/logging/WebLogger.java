@@ -13,7 +13,23 @@ public class WebLogger {
     static String path = "/Library/WebServer/Documents/Websites/splashdemo/data/";
     static FileWriter writer0 = null;
 
-    public static void branchTaken(final int pid, final String pname, final String classname, final String methodsig, final int idx, final int total, final int times){
+    static int counter = 0;
+
+    public static void branchTaken(final int pid, final String pname, final String classname, String methodsig, final int idx, final int total, final int times){
+        methodsig = sig2name (methodsig);
+        counter++;
+        if(counter > 50){
+            counter = 0;
+            if(writer0 != null){
+                try {
+                    writer0.close ();
+                } catch (final IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                writer0 = null;
+            }
+        }
         if(writer0 == null) {
             try {
                 writer0 = new FileWriter (new File(path+"branch-takens.log"));
@@ -41,23 +57,51 @@ public class WebLogger {
 
     static FileWriter writer1 = null;
 
-    public static void reportBranchCoverage(final int pid, final String pname, final String classname, final String methodsig, final int covered, final int total, final boolean clean){
-        if(clean) {
-            try {
-                if(writer1 != null) {
-                    writer1.close ();
-                    writer1 = null;
-                }
+    static String sig2name(final String methodsig){
+        String res = "";
+        int l = -1;
+        String tmp = "";
 
-            } catch (final IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                return;
+        for(int i = 0; i < methodsig.length (); i++){
+            final char c = methodsig.charAt (i);
+            if(c == 'L' && l == -1) {
+                l = i;
+                tmp = "";
+            }
+            if(l == -1) {
+                res = res + c;
+            }else {
+                if(c=='/') {
+                    tmp = "";
+                } else if(c==';') {
+                    res = res + tmp+";";
+                    l = -1;
+                }else{
+                    tmp += c;
+                }
+            }
+        }
+        return res;
+    }
+    static int counter2 = 0;
+    public static void reportBranchCoverage(final int pid, final String pname, final String classname, String methodsig, final int covered, final int total, final boolean clean){
+        methodsig = sig2name (methodsig);
+        counter2++;
+        if(counter2 > 5000){
+            counter2 = 0;
+            if(writer1 != null){
+                try {
+                    writer1.close ();
+                } catch (final IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                writer1 = null;
             }
         }
         if(writer1 == null) {
             try {
-                writer1 = new FileWriter (new File(path+"branch-overall.log"), false);
+                writer1 = new FileWriter (new File(path+"branch-overall.log"));
                 writer1.write ("<tr><th>process</th><th>class name</th><th>method signature</th><th>total branches</th><th>covered branches</th><th>coverage</th></tr>\n");
             } catch (final IOException e) {
                 // TODO Auto-generated catch block
@@ -65,12 +109,19 @@ public class WebLogger {
                 return;
             }
         }
+
+        double perc = 0;
+        if(total != 0 ) {
+            final int tmp = (10000*covered/total);
+            perc = tmp / 100.0;
+        }
+
         final String line = "<tr><td>"+pname+"("+pid+")"+"</td>"
             +"<td>"+classname+"</td>"
             +"<td>"+methodsig+"</td>"
             +"<td>"+total+"</td>"
             +"<td>"+covered+"</td>"
-            +"<td>"+(total==0?"NA":covered*100.0/total)+"%</td></tr>\n";
+            +"<td>"+(total==0?"NA":perc)+"%</td></tr>\n";
         try {
             writer1.write (line);
             writer1.flush ();
@@ -104,10 +155,10 @@ public class WebLogger {
         String param = "";
 
         String msgType = "success";
-        if(res.contains ("SEND_SMS")){
-            msgType = "warning";
-        }else if(res.contains ("READ_PHONE_STATE")) {
+        if(res.contains ("SMS")){
             msgType = "danger";
+        }else if(res.contains ("READ_PHONE_STATE") || res.contains ("ACCOUNT")) {
+            msgType = "warning";
         }else if(res.contains ("CALL_LOG") || res.contains ("CONTACTS")){
             msgType = "info";
         }
@@ -131,7 +182,117 @@ public class WebLogger {
         }
     }
 
+    static FileWriter writer3 = null;
+    public static void reportNetworkBind(final int pid, final String pname, final long tid, final int fd, final String address, final int port){
+        if(writer3 == null) {
+            try {
+                writer3 = new FileWriter (new File(path+"network.log"));
+                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th></tr>\n");
+            } catch (final IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return;
+            }
+        }
+        final String line = "<tr class=\"success\"><td>"+pname+"("+pid+")"+"</td>"
+            +"<td>"+tid+"</td>"
+            +"<td>bind</td>"
+            +"<td>"+fd+"</td>"
+            +"<td>"+address+" : "+port +"</td>"
+            +"<td> N/A </td></tr>\n";
+        try {
+            writer3.write (line);
+            writer3.flush ();
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    public static void reportNetworkConnect(final int pid, final String pname, final long tid, final int fd, final String address, final int port){
+        if(writer3 == null) {
+            try {
+                writer3 = new FileWriter (new File(path+"network.log"));
+                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th></tr>\n");
+            } catch (final IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return;
+            }
+        }
+        final String line = "<tr class=\"info\"><td>"+pname+"("+pid+")"+"</td>"
+            +"<td>"+tid+"</td>"
+            +"<td>connect</td>"
+            +"<td>"+fd+"</td>"
+            +"<td>"+address+" : "+port +"</td>"
+            +"<td> N/A </td></tr>\n";
+        try {
+            writer3.write (line);
+            writer3.flush ();
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    public static void reportNetworkSend(final int pid, final String pname, final long tid, final int fd, final String address, final int port, final byte[] data){
+        final int start = 0;
+        final int length = data.length;
+        if(writer3 == null) {
+            try {
+                writer3 = new FileWriter (new File(path+"network.log"));
+                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th></tr>\n");
+            } catch (final IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return;
+            }
+        }
+        final String packet = bytesToHex (data, start, length) +"</br>"+ bytesToHtml (data, start, length);
+        final String line = "<tr class=\"danger\"><td>"+pname+"("+pid+")"+"</td>"
+            +"<td>"+tid+"</td>"
+            +"<td>send</td>"
+            +"<td>"+fd+"</td>"
+            +"<td>"+address+" : "+port +"</td>"
+            +"<td> <a data-toggle=\"modal\" data-target=\"#packet\" onclick=\"setPacket('"+packet+"')\">"+length+" bytes</a> </td></tr>\n";
+        try {
+            writer3.write (line);
+            writer3.flush ();
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+    public static void reportNetworkRecv(final int pid, final String pname, final long tid, final int fd, final String address, final int port, final byte[] data){
+        final int start = 0;
+        final int length = data.length;
+        if(writer3 == null) {
+            try {
+                writer3 = new FileWriter (new File(path+"network.log"));
+                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th></tr>\n");
+            } catch (final IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return;
+            }
+        }
+        final String packet = bytesToHex (data, start, length) +"</br>"+ bytesToHtml (data, start, length);
+        final String line = "<tr class=\"warning\"><td>"+pname+"("+pid+")"+"</td>"
+            +"<td>"+tid+"</td>"
+            +"<td>recv</td>"
+            +"<td>"+fd+"</td>"
+            +"<td>"+address+" : "+port +"</td>"
+            +"<td> <a data-toggle=\"modal\" data-target=\"#packet\" onclick=\"setPacket('"+packet+"')\">"+length+" bytes</a> </td></tr>\n";
+        try {
+            writer3.write (line);
+            writer3.flush ();
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
     public static void main(final String args[]){
+
+        System.out.println (sig2name ("(La/b/c;I)V"));
+
         branchTaken (1, "com.android.phone", "class", "method", 0, 10, 1);
         branchTaken (1, "com.android.phone", "class", "method", 0, 10, 1);
         reportBranchCoverage (1, "phone", "cls", "mtd", 0, 1, true);
@@ -143,6 +304,67 @@ public class WebLogger {
         a.add ("c");
         reportPermission (2, "af", 3, a, a);
         reportPermission (2, "af", 3, a, a);
+
+        final int pid = 1;
+        final String pname = "d";
+        final int tid = 0;
+        final int fd = -1;
+        final String address = "address";
+        final int port = -1;
+        final byte[] data = new byte[32];
+        for(int i = 0; i < 32; i++) {
+            data[i] = (byte)('a'+(i%26));
+        }
+        reportNetworkBind (1, "a", 0, fd, "0.0", 666);
+        reportNetworkConnect (1, "a", 0, fd, "0.0", 666);
+        reportNetworkSend (pid, pname, tid, fd, address, port, data);
+        reportNetworkRecv (pid, pname, tid, fd, address, port, data);
     }
 
+    final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();
+    static int bytesPerLine = 16;
+    public static String bytesToHex(final byte[] bytes, final int start, final int len) {
+        String res = "";
+
+        int cnt = 0;
+        for ( int j = start; j < start+len; j++ ) {
+            if(cnt % bytesPerLine == 0 && j != start){
+                res += ('<');
+                res += ('/');
+                res += ('b');
+                res += ('r');
+                res += ('>');
+            }
+            cnt++;
+
+            final int v = bytes[j] & 0xFF;
+            res += (hexArray[v >>> 4]);
+            res += (hexArray[v & 0x0F]);
+            res += ' ';
+        }
+        return res;
+    }
+
+    public static boolean isAsciiPrintable(final byte ch) {
+        return ch >= 32 && ch < 127;
+    }
+
+    public static String bytesToHtml(final byte[] bytes, final int start, final int len) {
+        String res = "";
+
+        for ( int j = start; j < start+len; j++ ) {
+            if(isAsciiPrintable(bytes[j])) {
+                res += (char)bytes[j];
+            }else if(bytes[j]=='\n'){
+                res += ('<');
+                res += ('/');
+                res += ('b');
+                res += ('r');
+                res += ('>');
+            }else {
+                res += '?';
+            }
+        }
+        return res;
+    }
 }

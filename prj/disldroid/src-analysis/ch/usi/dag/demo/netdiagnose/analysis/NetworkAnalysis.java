@@ -7,6 +7,7 @@ import android.util.Base64;
 import ch.usi.dag.demo.ipc.analysis.lib.IPCLogger;
 import ch.usi.dag.demo.ipc.analysis.lib.ThreadState;
 import ch.usi.dag.demo.logging.DemoLogger;
+import ch.usi.dag.demo.logging.WebLogger;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
@@ -87,21 +88,29 @@ public class NetworkAnalysis extends RemoteAnalysis {
         }
     }
 
+    public static void bind (final Context ctx, final int tid,
+        final int fdHash, final ShadowString address, final int port) {
+        final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent (ctx);
+        //final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address.toString (), port);
+        DemoLogger.info(analysisTag, "New bind ("+address.toString ()+":"+port+") in process "+ctx.getPname () +" "+ ThreadState.get(ctx, tid));
+        //ThreadState.get(ctx, tid).printStack (analysisTag);
+        WebLogger.reportNetworkBind (ctx.getProcessID (), ctx.getPname (), tid, fdHash, address==null?"Unknown":address.toString (), port);
+    }
+
+
     public static void newConnection (final Context ctx, final int tid,
         final int fdHash, final ShadowString address, final int port, final int timeoutMs, final boolean successful) {
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent (ctx);
         final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address.toString (), port);
-        DemoLogger.info (analysisTag, "**************************************************");
         IPCLogger.debug(analysisTag, "New connection "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname () +" "+ ThreadState.get(ctx, tid));
         DemoLogger.info(analysisTag, "New connection "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname () +" "+ ThreadState.get(ctx, tid));
         ThreadState.get(ctx, tid).printStack (analysisTag);
-        DemoLogger.info (analysisTag, "**************************************************");
+        WebLogger.reportNetworkConnect (ctx.getProcessID (), ctx.getPname (), tid, fdHash, address==null?"Unknown":address.toString (), port);
     }
 
     public static void sendMessage (final Context ctx, final int tid, final int fdHash, final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
         final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
-        DemoLogger.info (analysisTag, "**************************************************");
         IPCLogger.debug (analysisTag, "new data sent via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
         DemoLogger.info (analysisTag, "new data sent via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
         ThreadState.get(ctx, tid).printStack (analysisTag);
@@ -110,14 +119,14 @@ public class NetworkAnalysis extends RemoteAnalysis {
             DemoLogger.info (analysisTag, "Found target plain text "+PREDEFINED_PASSWORD+" in "+connection.dumpConnectionInfo ());
             DemoLogger.info(analysisTag, PREDEFINED_PASSWORD.getBytes ());
         }
-        DemoLogger.info (analysisTag, "**************************************************");
+
+        WebLogger.reportNetworkSend (ctx.getProcessID (), ctx.getPname (), tid, fdHash, connection.address, connection.port, Base64.decode (dataBase64.toString (), Base64.DEFAULT));
     }
 
     public static void sendMessageFailed (final Context ctx, final int tid, final int fdHash, final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
         final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
         ThreadState.get(ctx, tid).printStack (analysisTag);
-        DemoLogger.info (analysisTag, "**************************************************");
         IPCLogger.debug (analysisTag, "tried but failed in sending data via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
         DemoLogger.info (analysisTag, "tried but failed in sending data via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
         connection.addNewData (dataBase64.toString ());
@@ -125,25 +134,22 @@ public class NetworkAnalysis extends RemoteAnalysis {
             DemoLogger.info (analysisTag, "Found target plain text "+PREDEFINED_PASSWORD+" in "+connection.dumpConnectionInfo ());
             DemoLogger.info(analysisTag, PREDEFINED_PASSWORD.getBytes ());
         }
-        DemoLogger.info (analysisTag, "**************************************************");
+
     }
 
     public static void recvMessage (final Context ctx, final int tid, final int fdHash, final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
         final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
-        DemoLogger.info (analysisTag, "**************************************************");
         DemoLogger.info (analysisTag, "new data recvd via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
         ThreadState.get(ctx, tid).printStack (analysisTag);
-        DemoLogger.info (analysisTag, "**************************************************");
+        WebLogger.reportNetworkRecv(ctx.getProcessID (), ctx.getPname (), tid, fdHash, connection.address,connection.port, Base64.decode (dataBase64.toString (), Base64.DEFAULT));
     }
 
     public static void recvMessageFailed (final Context ctx, final int tid, final int fdHash, final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
         final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
-        DemoLogger.info (analysisTag, "**************************************************");
         DemoLogger.info (analysisTag, "recvd failed via "+connection.dumpConnectionInfo ()+" in process "+ctx.getPname ()+" "+ ThreadState.get(ctx, tid));
         ThreadState.get(ctx, tid).printStack (analysisTag);
-        DemoLogger.info (analysisTag, "**************************************************");
     }
 
 

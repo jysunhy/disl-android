@@ -122,4 +122,16 @@ public class DiSLClass {
             NetworkAnalysisStub.recvMessageFailed (fd, null, 0, 0, flags, packet.getAddress (), packet.getPort ());
         }
     }
+
+    @AfterReturning(marker=BodyMarker.class,
+    order = 1,
+    scope="libcore.io.IoBridge.bind(java.io.FileDescriptor,java.net.InetAddress,int)")
+    public static void libcore_io_IoBridge_bind (final ArgumentProcessorContext apc, final DynamicContext dc) {
+        final Object [] args = apc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
+        final FileDescriptor fd = (FileDescriptor)args[0];
+        final InetAddress address = (InetAddress)args[1];
+        final int port = (int)args[2];
+        NetworkAnalysisStub.bind(fd, address, port);
+    }
+
 }

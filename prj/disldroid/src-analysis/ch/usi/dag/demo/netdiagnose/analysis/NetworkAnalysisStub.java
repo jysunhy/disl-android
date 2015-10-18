@@ -8,11 +8,27 @@ import ch.usi.dag.dislre.AREDispatch;
 
 public class NetworkAnalysisStub {
 
+    public static short BIND = AREDispatch.registerMethod ("ch.usi.dag.demo.netdiagnose.analysis.NetworkAnalysis.bind");
     public static short NEW_CONNECTION = AREDispatch.registerMethod ("ch.usi.dag.demo.netdiagnose.analysis.NetworkAnalysis.newConnection");
     public static short SEND_MESSAGE = AREDispatch.registerMethod ("ch.usi.dag.demo.netdiagnose.analysis.NetworkAnalysis.sendMessage");
     public static short SEND_MESSAGE_FAILED = AREDispatch.registerMethod ("ch.usi.dag.demo.netdiagnose.analysis.NetworkAnalysis.sendMessageFailed");
     public static short RECV_MESSAGE = AREDispatch.registerMethod ("ch.usi.dag.demo.netdiagnose.analysis.NetworkAnalysis.recvMessage");
     public static short RECV_MESSAGE_FAILED = AREDispatch.registerMethod ("ch.usi.dag.demo.netdiagnose.analysis.NetworkAnalysis.recvMessageFailed");
+
+
+    public static void bind (final FileDescriptor fd, final InetAddress inetAddress, final int port) {
+        AREDispatch.analysisStart (BIND);
+        AREDispatch.sendInt (AREDispatch.getThisThreadId ());
+        AREDispatch.sendInt(fd.hashCode ());
+        if(inetAddress != null) {
+            AREDispatch.sendObjectPlusData (inetAddress.getHostAddress ());
+        } else {
+            AREDispatch.sendObjectPlusData (null);
+        }
+        AREDispatch.sendInt(port);
+        AREDispatch.analysisEnd ();
+    }
+
     public static void newConnection (
         final FileDescriptor fd, final InetAddress inetAddress, final int port, final int timeoutMs, final boolean successful) {
         AREDispatch.analysisStart (NEW_CONNECTION);
@@ -110,4 +126,5 @@ public class NetworkAnalysisStub {
         AREDispatch.analysisEnd ();
         //AREDispatch.NativeLog ("send data - fd:"+fd.hashCode ()+" "+(inetAddress==null?"":inetAddress.getHostAddress ())+":"+port+" data-length:"+length);
     }
+
 }
