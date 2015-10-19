@@ -21,14 +21,6 @@ public class PermissionDiSLClass {
 		public static void detectPermission (
 				final MethodStaticContext msc, final ArgumentProcessorContext pc) {
             final Object [] args = pc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
-			/* AREDispatch.NativeLog (msc.thisMethodFullName ());
-
-			for(final Object obj : args){
-			    if(obj != null) {
-                    AREDispatch.NativeLog (obj.toString ());
-                }
-			}
-			*/
 			if(args[0] != null) {
 			    final String permisssionUsed = args[0].toString ();
     			if(permisssionUsed!=null) {

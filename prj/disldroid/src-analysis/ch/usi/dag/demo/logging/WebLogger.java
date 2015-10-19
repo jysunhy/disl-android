@@ -15,8 +15,15 @@ public class WebLogger {
 
     static int counter = 0;
 
-    public static void branchTaken(final int pid, final String pname, final String classname, String methodsig, final int idx, final int total, final int times){
+    static String removeForHtml(final String input){
+        String res = input.replace ("<init>", "()");
+        res = res.replace ("<clinit>", "()");
+        return res;
+    }
+
+    public synchronized static void branchTaken(final int pid, final String pname, final String classname, String methodsig, final int idx, final int total, final int times){
         methodsig = sig2name (methodsig);
+        methodsig = removeForHtml (methodsig);
         counter++;
         if(counter > 50){
             counter = 0;
@@ -24,7 +31,6 @@ public class WebLogger {
                 try {
                     writer0.close ();
                 } catch (final IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
                 writer0 = null;
@@ -52,6 +58,7 @@ public class WebLogger {
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            writer0 = null;
         }
     }
 
@@ -84,10 +91,11 @@ public class WebLogger {
         return res;
     }
     static int counter2 = 0;
-    public static void reportBranchCoverage(final int pid, final String pname, final String classname, String methodsig, final int covered, final int total, final boolean clean){
+    public static void reportBranchCoverage(final int pid, final String pname, final String classname, String methodsig, final int covered, final int total){
         methodsig = sig2name (methodsig);
+        methodsig = removeForHtml (methodsig);
         counter2++;
-        if(counter2 > 5000){
+        if(counter2 > 500){
             counter2 = 0;
             if(writer1 != null){
                 try {
@@ -128,6 +136,7 @@ public class WebLogger {
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            writer1 = null;
         }
     }
 
@@ -168,7 +177,9 @@ public class WebLogger {
                 if(i!=0) {
                     param = param + "<br/>";
                 }
-                param += runtimeStack.get (i);
+                String cur = runtimeStack.get (i);
+                cur = removeForHtml (cur);
+                param += cur;
             }
         }
         res = "<tr class=\""+ msgType +"\"><td>"+pname+"("+pid+")"+"</td>"+res;
@@ -179,114 +190,176 @@ public class WebLogger {
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            writer2 = null;
         }
     }
 
     static FileWriter writer3 = null;
-    public static void reportNetworkBind(final int pid, final String pname, final long tid, final int fd, final String address, final int port){
+    public static void reportNetworkBind(final int pid, final String pname, final long tid, final int fd, final String address, final int port,  final Stack <String> runtimeStack ){
         if(writer3 == null) {
             try {
                 writer3 = new FileWriter (new File(path+"network.log"));
-                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th></tr>\n");
+                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th><th>call stack</th></tr>\n");
             } catch (final IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
                 return;
             }
         }
+        String param = "";
+        if(runtimeStack!=null){
+            for(int i = 0; i < runtimeStack.size (); i++)
+            {
+                if(i!=0) {
+                    param = param + "<br/>";
+                }
+                String cur = runtimeStack.get (i);
+                cur = removeForHtml (cur);
+                param += cur;
+            }
+        }
+        final String column = "<td><a data-toggle=\"modal\" data-target=\"#packet\" onclick=\"setPacket('"+param+"')\">open</a></td>";
+
         final String line = "<tr class=\"success\"><td>"+pname+"("+pid+")"+"</td>"
             +"<td>"+tid+"</td>"
             +"<td>bind</td>"
             +"<td>"+fd+"</td>"
             +"<td>"+address+" : "+port +"</td>"
-            +"<td> N/A </td></tr>\n";
+            +"<td> N/A </td>"+column+"</tr>\n";
         try {
             writer3.write (line);
             writer3.flush ();
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            writer3 = null;
         }
     }
-    public static void reportNetworkConnect(final int pid, final String pname, final long tid, final int fd, final String address, final int port){
+    public static void reportNetworkConnect(final int pid, final String pname, final long tid, final int fd, final String address, final int port,  final Stack <String> runtimeStack){
         if(writer3 == null) {
             try {
                 writer3 = new FileWriter (new File(path+"network.log"));
-                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th></tr>\n");
+                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th><th>call stack</th></tr>\n");
             } catch (final IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
                 return;
             }
         }
+        String param = "";
+        if(runtimeStack!=null){
+            for(int i = 0; i < runtimeStack.size (); i++)
+            {
+                if(i!=0) {
+                    param = param + "<br/>";
+                }
+                String cur = runtimeStack.get (i);
+                cur = removeForHtml (cur);
+                param += cur;
+            }
+        }
+        final String column = "<td><a data-toggle=\"modal\" data-target=\"#packet\" onclick=\"setPacket('"+param+"')\">open</a></td>";
+
         final String line = "<tr class=\"info\"><td>"+pname+"("+pid+")"+"</td>"
             +"<td>"+tid+"</td>"
             +"<td>connect</td>"
             +"<td>"+fd+"</td>"
             +"<td>"+address+" : "+port +"</td>"
-            +"<td> N/A </td></tr>\n";
+            +"<td> N/A </td>"+column+"</tr>\n";
+
         try {
             writer3.write (line);
             writer3.flush ();
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            writer3= null;
         }
     }
-    public static void reportNetworkSend(final int pid, final String pname, final long tid, final int fd, final String address, final int port, final byte[] data){
+    public static void reportNetworkSend(final int pid, final String pname, final long tid, final int fd, final String address, final int port, final byte[] data,  final Stack <String> runtimeStack){
         final int start = 0;
         final int length = data.length;
         if(writer3 == null) {
             try {
                 writer3 = new FileWriter (new File(path+"network.log"));
-                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th></tr>\n");
+                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th><th>call stack</th></tr>\n");
             } catch (final IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
                 return;
             }
         }
+        String param = "";
+        if(runtimeStack!=null){
+            for(int i = 0; i < runtimeStack.size (); i++)
+            {
+                if(i!=0) {
+                    param = param + "<br/>";
+                }
+                String cur = runtimeStack.get (i);
+                cur = removeForHtml (cur);
+                param += cur;
+            }
+        }
+        final String column = "<td><a data-toggle=\"modal\" data-target=\"#packet\" onclick=\"setPacket('"+param+"')\">open</a></td>";
+
         final String packet = bytesToHex (data, start, length) +"</br>"+ bytesToHtml (data, start, length);
         final String line = "<tr class=\"danger\"><td>"+pname+"("+pid+")"+"</td>"
             +"<td>"+tid+"</td>"
             +"<td>send</td>"
             +"<td>"+fd+"</td>"
             +"<td>"+address+" : "+port +"</td>"
-            +"<td> <a data-toggle=\"modal\" data-target=\"#packet\" onclick=\"setPacket('"+packet+"')\">"+length+" bytes</a> </td></tr>\n";
+            +"<td> <a data-toggle=\"modal\" data-target=\"#packet\" onclick=\"setPacket('"+packet+"')\">"+length+" bytes</a> </td>"+column+"</tr>\n";
         try {
             writer3.write (line);
             writer3.flush ();
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            writer3= null;
         }
     }
-    public static void reportNetworkRecv(final int pid, final String pname, final long tid, final int fd, final String address, final int port, final byte[] data){
+    public static void reportNetworkRecv(final int pid, final String pname, final long tid, final int fd, final String address, final int port, final byte[] data,  final Stack <String> runtimeStack){
         final int start = 0;
         final int length = data.length;
         if(writer3 == null) {
             try {
                 writer3 = new FileWriter (new File(path+"network.log"));
-                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th></tr>\n");
+                writer3.write ("<tr><th>process</th><th>thread id</th><th>event type</th><th>file descriptor hash</th><th>address</th><th>data</th><th>call stack</th></tr>\n");
             } catch (final IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
                 return;
             }
         }
+        String param = "";
+        if(runtimeStack!=null){
+            for(int i = 0; i < runtimeStack.size (); i++)
+            {
+                if(i!=0) {
+                    param = param + "<br/>";
+                }
+                String cur = runtimeStack.get (i);
+                cur = removeForHtml (cur);
+                param += cur;
+            }
+        }
+        final String column = "<td><a data-toggle=\"modal\" data-target=\"#packet\" onclick=\"setPacket('"+param+"')\">open</a></td>";
+
         final String packet = bytesToHex (data, start, length) +"</br>"+ bytesToHtml (data, start, length);
         final String line = "<tr class=\"warning\"><td>"+pname+"("+pid+")"+"</td>"
             +"<td>"+tid+"</td>"
             +"<td>recv</td>"
             +"<td>"+fd+"</td>"
             +"<td>"+address+" : "+port +"</td>"
-            +"<td> <a data-toggle=\"modal\" data-target=\"#packet\" onclick=\"setPacket('"+packet+"')\">"+length+" bytes</a> </td></tr>\n";
+            +"<td> <a data-toggle=\"modal\" data-target=\"#packet\" onclick=\"setPacket('"+packet+"')\">"+length+" bytes</a> </td>"+column+"</tr>\n";
         try {
             writer3.write (line);
             writer3.flush ();
         } catch (final IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            writer3= null;
         }
     }
     public static void main(final String args[]){
@@ -295,9 +368,9 @@ public class WebLogger {
 
         branchTaken (1, "com.android.phone", "class", "method", 0, 10, 1);
         branchTaken (1, "com.android.phone", "class", "method", 0, 10, 1);
-        reportBranchCoverage (1, "phone", "cls", "mtd", 0, 1, true);
-        reportBranchCoverage (1, "phone", "cls", "mtd", 0, 0, true);
-        reportBranchCoverage (1, "phone", "cls", "mtd", 0, 3, false);
+        reportBranchCoverage (1, "phone", "cls", "mtd", 0, 1);
+        reportBranchCoverage (1, "phone", "cls", "mtd", 0, 0);
+        reportBranchCoverage (1, "phone", "cls", "mtd", 0, 3);
         final Stack<String> a = new Stack <String> ();
         a.add ("a");
         a.add ("b");
@@ -315,10 +388,10 @@ public class WebLogger {
         for(int i = 0; i < 32; i++) {
             data[i] = (byte)('a'+(i%26));
         }
-        reportNetworkBind (1, "a", 0, fd, "0.0", 666);
-        reportNetworkConnect (1, "a", 0, fd, "0.0", 666);
-        reportNetworkSend (pid, pname, tid, fd, address, port, data);
-        reportNetworkRecv (pid, pname, tid, fd, address, port, data);
+        reportNetworkBind (1, "a", 0, fd, "0.0", 666, a);
+        reportNetworkConnect (1, "a", 0, fd, "0.0", 666, a);
+        reportNetworkSend (pid, pname, tid, fd, address, port, data, a);
+        reportNetworkRecv (pid, pname, tid, fd, address, port, data, a);
     }
 
     final protected static char[] hexArray = "0123456789ABCDEF".toCharArray();

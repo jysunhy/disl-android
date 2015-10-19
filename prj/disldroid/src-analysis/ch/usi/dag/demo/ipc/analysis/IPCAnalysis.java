@@ -69,7 +69,6 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
                 return;
             }
             serverState.waitForResponseSent (info, client);
-
             if(clientState.getPermissionCount()>0){
                 IPCLogger.reportPermissionUsage (clientState);
                 clientState.clearPermissions ();

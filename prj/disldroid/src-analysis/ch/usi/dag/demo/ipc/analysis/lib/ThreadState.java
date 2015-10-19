@@ -28,7 +28,7 @@ public class ThreadState{
 
     List<String> permissions = new ArrayList<> ();
 
-    Stack<String> runtimeStack = new Stack <String>();
+    public Stack<String> runtimeStack = new Stack <String>();
     NativeThread thd;
 
     public ThreadState (final NativeThread thd) {
