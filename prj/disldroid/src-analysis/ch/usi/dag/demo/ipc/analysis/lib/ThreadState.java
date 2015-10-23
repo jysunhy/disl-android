@@ -3,17 +3,15 @@ package ch.usi.dag.demo.ipc.analysis.lib;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ch.usi.dag.demo.ipc.analysis.IPCAnalysis;
+import ch.usi.dag.demo.callstack.analysis.SVMCallStack;
 import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.EventType;
 import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.RequestRecvdEvent;
 import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.RequestSentEvent;
 import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.ResponseRecvdEvent;
 import ch.usi.dag.demo.ipc.analysis.lib.BinderEvent.ResponseSentEvent;
 import ch.usi.dag.demo.ipc.analysis.lib.IPCLogger.LoggerType;
-import ch.usi.dag.demo.logging.DemoLogger;
 import ch.usi.dag.demo.logging.WebLogger;
 import ch.usi.dag.disldroidreserver.msg.ipc.NativeThread;
 import ch.usi.dag.disldroidreserver.msg.ipc.TransactionInfo;
@@ -28,7 +26,6 @@ public class ThreadState{
 
     List<String> permissions = new ArrayList<> ();
 
-    public Stack<String> runtimeStack = new Stack <String>();
     NativeThread thd;
 
     public ThreadState (final NativeThread thd) {
@@ -101,18 +98,6 @@ public class ThreadState{
         return null;
     }
 
-    private synchronized static BinderEvent getOtherEndEvent(final RequestRecvdEvent event){
-        final ThreadState cliState = get(event.getClient ());
-        BinderEvent e = null;
-        for(int i = cliState.eventList.size ()-1; i>=0;i--){
-            e = cliState.eventList.get (i);
-            if(e.isSameTransaction (event) && e.getType ()==EventType.REQUEST_SENT){
-                return e;
-            }
-        }
-        return null;
-    }
-
     public static ThreadState get(final Context ctx, final int tid){
         final NativeThread key = new NativeThread(ctx.pid (), tid);
         return get(key);
@@ -180,20 +165,9 @@ public class ThreadState{
         }
     }
 
-    private void printEventList(){
-        final Iterator<BinderEvent> iter = eventList.iterator ();
-        String log = "event list for "+thd.toString ()+ "\n";
-
-        while(iter.hasNext ()){
-            final BinderEvent event = iter.next ();
-            log = log + event.toString () + "\n";
-        }
-        IPCLogger.debug ("PRINTEVENTLIST",log);
-    }
-
     public void waitForResponseSent(final TransactionInfo info, final NativeThread client){
         final ShadowAddressSpace space = ShadowAddressSpace.getShadowAddressSpaceNoCreate(thd.getPid ());
-        if(space == null ||space.getShadowAddressSpace (thd.getPid ()).getContext ().getPname () == null){
+        if(space == null ||ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname () == null){
             IPCLogger.write (LoggerType.DEBUG, "WAIT", "Proc "+thd.getPid ()+" is not observed");
             return;
         }
@@ -265,20 +239,6 @@ public class ThreadState{
     }
 
 
-    public synchronized void pushBoundary(final String boundaryName){
-        DemoLogger.debug (IPCAnalysis.analysisTag, this.thd+" enter "+boundaryName);
-        IPCLogger.debug (IPCAnalysis.analysisTag, this.thd+" enter "+boundaryName);
-        runtimeStack.push (boundaryName);
-    }
-    public synchronized  void popBoundary(final String boundaryName){
-        DemoLogger.debug (IPCAnalysis.analysisTag, this.thd+" leave "+boundaryName);
-        IPCLogger.debug (IPCAnalysis.analysisTag, this.thd+" leave "+boundaryName);
-        runtimeStack.pop ();
-    }
-    public synchronized String peekBoundary(){
-        return runtimeStack.peek ();
-    }
-
     public synchronized void addPermission (final String permissionName) {
         permissions.add (permissionName);
     }
@@ -290,34 +250,15 @@ public class ThreadState{
         return permissions.size();
     }
 
-    public void printStack (final String tag) {
-        int cnt = 0;
-        final String pname = ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname ();
-        if(runtimeStack.size()>0){
-            IPCLogger.info("PERMISSION_USAGE","Calling Stack in proc "+pname+"("+thd.getPid ()+":"+thd.getTid ()+")");
-            DemoLogger.info (IPCAnalysis.analysisTag, "Calling Stack in proc "+pname+"("+thd.getPid ()+":"+thd.getTid ()+")");
-            for(int i = runtimeStack.size()-1; i>=0; i--){
-                IPCLogger.info (tag,"#"+cnt+":"+runtimeStack.get (i));
-                DemoLogger.info (tag,"#"+cnt+":"+runtimeStack.get (i));
-                cnt++;
-            }
-        }
-    }
-
     public void printPermission () {
         final String pname = ShadowAddressSpace.getShadowAddressSpace (thd.getPid ()).getContext ().getPname ();
-        if(runtimeStack.size () > 0){
-            DemoLogger.info (IPCAnalysis.analysisTag, "**************************************************");
+        if(SVMCallStack.get (thd).getRuntimeStack ().size () > 0){
             String res="Detect use of permission(s):";
             for(int i = 0; i < permissions.size(); i++){
                 res+=" #"+permissions.get(i);
             }
             res =  res + " in proc "+pname+"("+thd.getPid ()+":"+thd.getTid ()+")";
-            IPCLogger.info("PERMISSION_USAGE", res);
-            DemoLogger.info(IPCAnalysis.analysisTag, res);
-            this.printStack(IPCAnalysis.analysisTag);
-            DemoLogger.info (IPCAnalysis.analysisTag, "**************************************************");
-            WebLogger.reportPermission (thd.getPid (), pname, thd.getTid (), permissions, runtimeStack);
+            WebLogger.reportPermission (thd.getPid (), pname, thd.getTid (), permissions, SVMCallStack.get (thd).getRuntimeStack ());
         }else {
             WebLogger.reportPermission (thd.getPid (), pname, thd.getTid (), permissions, null);
         }

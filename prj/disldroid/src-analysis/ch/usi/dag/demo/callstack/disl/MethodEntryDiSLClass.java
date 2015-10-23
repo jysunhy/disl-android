@@ -1,6 +1,7 @@
-package ch.usi.dag.demo.ipc.disl;
+package ch.usi.dag.demo.callstack.disl;
 
-import ch.usi.dag.demo.ipc.analysis.IPCAnalysisStub;
+import ch.usi.dag.demo.callstack.analysis.CallStackAnalysisStub;
+import ch.usi.dag.demo.ipc.disl.CallContext;
 import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.marker.BodyMarker;
@@ -17,7 +18,7 @@ public class MethodEntryDiSLClass {
         //scope = "ch.usi.dag.android.example.*.*",
         order = 1000)
     public static void before_enter (final CallContext msc) {
-        IPCAnalysisStub.boundary_start (msc.thisMethodFullName ());
+        CallStackAnalysisStub.boundary_start (msc.thisMethodFullName ());
     }
 
     /* every time leaving a method */
@@ -26,6 +27,6 @@ public class MethodEntryDiSLClass {
         //scope = "ch.usi.dag.android.example.*.*",
         order = 1000)
     public static void after_enter (final CallContext msc) {
-        IPCAnalysisStub.boundary_end (msc.thisMethodFullName());
+        CallStackAnalysisStub.boundary_end (msc.thisMethodFullName());
     }
 }

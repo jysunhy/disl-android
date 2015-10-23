@@ -16,7 +16,8 @@ public class PermissionDiSLClass {
      */
     @Before (
 			marker = BodyMarker.class,
-			guard = Guard.PermissionGuard.class
+			//guard = Guard.PermissionGuard.class
+			scope = "ActivityManager.checkComponentPermission"
 			)
 		public static void detectPermission (
 				final MethodStaticContext msc, final ArgumentProcessorContext pc) {

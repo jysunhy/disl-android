@@ -1,6 +1,6 @@
 package ch.usi.dag.demo.branchcoverage.disl;
 
-import ch.usi.dag.demo.branchcoverage.analysis.CodeCoverageAnalysisProxy;
+import ch.usi.dag.demo.branchcoverage.analysis.CodeCoverageAnalysisStub;
 import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.annotation.SyntheticLocal;
@@ -19,7 +19,7 @@ public class DiSLClass {
     @AfterReturning (marker = IfThenBranchMarker.class)
     public static void thenBranch (final CodeCoverageContext c) {
         if (encounterBranch) {
-            CodeCoverageAnalysisProxy.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
+            CodeCoverageAnalysisStub.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
             encounterBranch = false;
         }
     }
@@ -27,7 +27,7 @@ public class DiSLClass {
     @AfterReturning (marker = IfElseBranchMarker.class)
     public static void elseBranch (final CodeCoverageContext c) {
         if (encounterBranch) {
-            CodeCoverageAnalysisProxy.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
+            CodeCoverageAnalysisStub.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
             encounterBranch = false;
         }
     }
@@ -40,7 +40,7 @@ public class DiSLClass {
     @AfterReturning (marker = SwitchCaseMarker.class)
     public static void afterBranchLabel (final CodeCoverageContext c) {
         if (encounterBranch) {
-            CodeCoverageAnalysisProxy.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
+            CodeCoverageAnalysisStub.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
             encounterBranch = false;
         }
     }

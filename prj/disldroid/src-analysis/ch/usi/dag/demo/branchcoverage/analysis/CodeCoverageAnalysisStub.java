@@ -3,7 +3,7 @@ package ch.usi.dag.demo.branchcoverage.analysis;
 import ch.usi.dag.dislre.AREDispatch;
 
 
-public class CodeCoverageAnalysisProxy {
+public class CodeCoverageAnalysisStub {
 
     public static short CB = AREDispatch.registerMethod ("ch.usi.dag.demo.branchcoverage.analysis.CodeCoverageAnalysis.branchTaken");
 
