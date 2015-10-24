@@ -23,7 +23,7 @@ public class ProcInfoHandler implements RequestHandler {
                     continue;
                 }
                 if((space.getContext ().getPname ()!= null) && (space.getContext ().getPname ().equals (pname))) {
-                    System.out.println ("DEBUGGING:"+pname+" pid "+space.getContext ().pid ()+" died");
+                    System.out.println ("DEBUGGING:"+pname+" pid "+space.getContext ().pid ()+" stopped");
                     space.getContext ().setDead (true);
                 }
             }

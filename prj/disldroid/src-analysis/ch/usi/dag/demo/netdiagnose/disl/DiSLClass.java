@@ -41,8 +41,6 @@ public class DiSLClass {
         final int sentSize = dc.getStackValue (0, int.class);
         if(sentSize > 0) {
             NetworkAnalysisStub.sendMessage (fd, buffer, byteOffset, sentSize, flags, address, port);
-        }else {
-            NetworkAnalysisStub.sendMessageFailed(fd, buffer, 0, buffer.length, flags, address, port);
         }
     }
 
@@ -59,8 +57,6 @@ public class DiSLClass {
         final int sentSize = dc.getStackValue (0, int.class);
         if(sentSize > 0) {
             NetworkAnalysisStub.sendMessage (fd, buffer.array (), buffer.position () - sentSize, sentSize, flags, address, port);
-        }else {
-            NetworkAnalysisStub.sendMessageFailed (fd, buffer.array (), 0, buffer.position (), flags, address, port);
         }
     }
 
@@ -82,8 +78,6 @@ public class DiSLClass {
         final int ret = dc.getStackValue (0, int.class);
         if(ret > 0) {
             NetworkAnalysisStub.recvMessage (fd, bytes, byteOffset, ret, flags, packet.getAddress (), packet.getPort ());
-        }else {
-            NetworkAnalysisStub.recvMessageFailed (fd, bytes, byteOffset, 0, flags, packet.getAddress (), packet.getPort ());
         }
     }
 
@@ -103,8 +97,6 @@ public class DiSLClass {
         final int ret = dc.getStackValue (0, int.class);
         if(ret > 0) {
             NetworkAnalysisStub.recvMessage (fd, buffer.array (), buffer.position () - ret, ret, flags, packet.getAddress (), packet.getPort ());
-        }else {
-            NetworkAnalysisStub.recvMessageFailed (fd, null, 0, 0, flags, packet.getAddress (), packet.getPort ());
         }
     }
 

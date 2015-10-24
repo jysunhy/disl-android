@@ -59,6 +59,12 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
                 classProfile = temp;
             }
         }
+
+        if(classProfile.get (innerKey) == null){
+            //System.out.println ("array null at "+outerKey+" "+innerKey);
+            return;
+        }
+
         final int times = ++classProfile.get (innerKey) [index];
 
         WebLogger.branchTaken (context.getProcessID (), context.getPname (),
@@ -68,7 +74,7 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
 
     public static boolean printResult(final Context context){
         final ProcessProfile processProfile = context.getState ("bc", ProcessProfile.class);
-        if(processProfile == null) {
+        if(processProfile == null || context.isDead ()) {
             return false;
         }
         for (final String classSignature : processProfile.keySet ()) {
@@ -123,3 +129,4 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
         thd.start ();
     }
 }
+

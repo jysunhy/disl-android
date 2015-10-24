@@ -48,10 +48,10 @@ int main(int argc, char *argv[])
 		n = read(newsockfd,buffer,bufferSize);
 		//cout<<n<<endl;
 		sum+=n;
-		if(sum > 10 * 1024 * 1024) {
-			cout<<sum<<endl;
-			return 0;
-		}
+//		if(sum > 10 * 1024 * 1024) {
+//			cout<<sum<<endl;
+//			return 0;
+//		}
 	}
 	if (n < 0) error("ERROR reading from socket");
 	printf("Here is the message: %s\n",buffer);

@@ -43,13 +43,6 @@ public class NetworkAnalysisStub {
         AREDispatch.sendInt(timeoutMs);
         AREDispatch.sendBoolean (successful);
         AREDispatch.analysisEnd ();
-        /*
-        if(inetAddress != null) {
-            AREDispatch.NativeLog ("new connection - fd:"+fd.hashCode ()+" "+inetAddress.getHostAddress ()+":"+port+" successful?"+successful);
-        }else{
-            AREDispatch.NativeLog ("new connection - fd:"+fd.hashCode ()+" null "+":"+port+" successful?"+successful);
-        }
-        */
     }
 
     public static void sendMessage (final FileDescriptor fd, final byte[] buffer, final int start, final int length, final int flags, final InetAddress inetAddress, final int port) {
@@ -68,7 +61,6 @@ public class NetworkAnalysisStub {
         }
         AREDispatch.sendInt(port);
         AREDispatch.analysisEnd ();
-        //AREDispatch.NativeLog ("send data - fd:"+fd.hashCode ()+" "+(inetAddress==null?"":inetAddress.getHostAddress ())+":"+port+" data-length:"+length);
     }
 
     public static void sendMessageFailed (final FileDescriptor fd, final byte[] buffer, final int start, final int length, final int flags, final InetAddress inetAddress, final int port) {
@@ -87,7 +79,6 @@ public class NetworkAnalysisStub {
         }
         AREDispatch.sendInt(port);
         AREDispatch.analysisEnd ();
-        //AREDispatch.NativeLog ("send data - fd:"+fd.hashCode ()+" "+(inetAddress==null?"":inetAddress.getHostAddress ())+":"+port+" data-length:"+length);
     }
 
     public static void recvMessage (final FileDescriptor fd, final byte[] buffer, final int start, final int length, final int flags, final InetAddress inetAddress, final int port) {
@@ -106,7 +97,6 @@ public class NetworkAnalysisStub {
         }
         AREDispatch.sendInt(port);
         AREDispatch.analysisEnd ();
-        //AREDispatch.NativeLog ("send data - fd:"+fd.hashCode ()+" "+(inetAddress==null?"":inetAddress.getHostAddress ())+":"+port+" data-length:"+length);
     }
     public static void recvMessageFailed (final FileDescriptor fd, final byte[] buffer, final int start, final int length, final int flags, final InetAddress inetAddress, final int port) {
         if(length <= 0) {
@@ -124,7 +114,6 @@ public class NetworkAnalysisStub {
         }
         AREDispatch.sendInt(port);
         AREDispatch.analysisEnd ();
-        //AREDispatch.NativeLog ("send data - fd:"+fd.hashCode ()+" "+(inetAddress==null?"":inetAddress.getHostAddress ())+":"+port+" data-length:"+length);
     }
 
 }

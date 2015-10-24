@@ -463,7 +463,9 @@ public class ShadowAddressSpace {
         ShadowAddressSpace shadowAddressSpace = null;
 
         if ((shadowAddressSpace = shadowAddressSpaces.get (pid)) == null) {
-            System.out.println ("Creating shadow address for "+pid);
+            if (DiSLREServer.debug) {
+                System.out.println ("Creating shadow address for "+pid);
+            }
             final ShadowAddressSpace temp = new ShadowAddressSpace (pid);
 
             if ((shadowAddressSpace = shadowAddressSpaces.putIfAbsent (pid, temp)) == null) {

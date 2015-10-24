@@ -30,14 +30,14 @@ public class NetMessageReader {
 		// bytes[ccl] - class code
 
 		final int controlLength = is.readInt();
-        System.out.println("control length "+controlLength);
+        //System.out.println("control length "+controlLength);
 
 		final byte[] control = new byte[controlLength];
 		is.readFully(control);
-        System.out.println("control:"+ new String(control));
+        //System.out.println("control:"+ new String(control));
 
 		final int classCodeLength = is.readInt();
-        System.out.println("snd length "+classCodeLength);
+        //System.out.println("snd length "+classCodeLength);
 		final byte[] classCode = new byte[classCodeLength];
 		is.readFully(classCode);
 

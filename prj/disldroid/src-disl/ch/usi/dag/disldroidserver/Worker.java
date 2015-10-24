@@ -493,6 +493,7 @@ public class Worker extends Thread {
         if (debug) {
             System.out.println (jarName);
         }
+        System.out.println("Start instrumenting "+jarName);
         byte [] instrClass = null;
         final DiSL curdisl = getDiSL(jarName);//dislMap.get (jarName);
         /* if(curdisl == null && !jarName.contains ("core.jar") && !jarName.contains ("framework.jar")){
@@ -507,9 +508,7 @@ public class Worker extends Thread {
             }
             instrClass = cacheMap.get (key);
             if (instrClass != null) {
-				if(debug) {
-                    System.out.println (jarName + " " + key + " hits cache");
-                }
+                System.out.println (jarName + " " + key + " hits cache");
                 return instrClass;
             }
         }
@@ -748,7 +747,7 @@ public class Worker extends Thread {
                 cacheMap.put (getCacheHash (dexCode, null), instrClass);
             }
         }
-        System.out.println("time for "+jarName+":"+(System.nanoTime ()-start));
+        System.out.println("Instrumentation time for "+jarName+":"+(System.nanoTime ()-start)/1000000.0 + "ms");
         //if(curdisl==null) {
         //    return dexCode;
         //} else {

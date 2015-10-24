@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<dexes> 
+	<dexes>
+	    <dex>
+			<name>ch.usi.dag.android.example-1.apk</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</dislclass>
+		</dex>
 		<dex>
 			<name>ch.usi.dag.android.example-2.apk</name>
 			<bypass>false</bypass>
 			<dislclass>output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodCallDiSLClass.class,output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</dislclass>
 		</dex>
 		<dex>
+			<name>Contacts.apk</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</dislclass>
+		</dex>
+		<dex>
 			<name>pixelrush.xphonefree-1.apk</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodCallDiSLClass2.class,output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</dislclass>
+		</dex>
+		<dex>
+			<name>pixelrush.xphonefree-2.apk</name>
 			<bypass>false</bypass>
 			<dislclass>output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodCallDiSLClass2.class,output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</dislclass>
 		</dex>
