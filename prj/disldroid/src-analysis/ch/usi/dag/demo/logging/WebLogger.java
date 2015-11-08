@@ -39,7 +39,7 @@ public class WebLogger {
         if(writer0 == null) {
             try {
                 writer0 = new FileWriter (new File(path+"branch-takens.log"));
-                writer0.write ("<tr><th>process</th><th>class name</th><th>method signature</th><th>total branches</th><th>token index</th><th>token times</th></tr>\n");
+                writer0.write ("<tr><th>process</th><th>class name</th><th>method signature</th><th>total branches</th><th>branch index</th><th>taken times</th></tr>\n");
             } catch (final IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -426,7 +426,7 @@ public class WebLogger {
         String res = "";
 
         for ( int j = start; j < start+len; j++ ) {
-            if(isAsciiPrintable(bytes[j])) {
+            if(isAsciiPrintable(bytes[j]) && bytes[j] != '\'' && bytes[j] != '"' && bytes[j] != '\\') {
                 res += (char)bytes[j];
             }else if(bytes[j]=='\n'){
                 res += ('<');
