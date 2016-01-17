@@ -6,10 +6,10 @@ import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
 
 public abstract class RemoteIPCAnalysis extends RemoteAnalysis{
-    public abstract void onRequestSent(TransactionInfo info, NativeThread client, Context ctx);
-    public abstract void onRequestReceived(TransactionInfo info, NativeThread client,NativeThread server, Context ctx);
-    public abstract void onResponseSent(TransactionInfo info, NativeThread client, NativeThread server, Context ctx);
-    public abstract void onResponseReceived(TransactionInfo info, NativeThread client,NativeThread server, Context ctx);
+    public void onRequestSent(final TransactionInfo info, final NativeThread client, final Context ctx){}
+    public void onRequestReceived(final TransactionInfo info, final NativeThread client,final NativeThread server, final Context ctx){}
+    public void onResponseSent(final TransactionInfo info, final NativeThread client, final NativeThread server, final Context ctx){}
+    public void onResponseReceived(final TransactionInfo info, final NativeThread client,final NativeThread server, final Context ctx){}
     @Override
     public void atExit (final Context context) {
         // TODO Auto-generated method stub
