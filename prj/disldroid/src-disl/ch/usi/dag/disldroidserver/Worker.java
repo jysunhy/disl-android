@@ -72,6 +72,9 @@ public class Worker extends Thread {
     private static final String instrLibPath = System.getProperty (
         PROP_INSTR_LIB_PATH, "output/lib/analysis.jar");
 
+    private static final String[] extraLibs = {"lib/rv-monitor-rt.jar","lib/rv-monitor.jar"};
+
+
     private static final String PROP_BUILTIN_LIB_PATH = "builtin.lib";
 
     //private static final String builtinLibPath = "lib/built-in-emma.jar";
@@ -82,9 +85,10 @@ public class Worker extends Thread {
 
 
     private static final ConcurrentHashMap <String, byte []> bytecodeMap = new ConcurrentHashMap <String, byte []> ();
-    private static final ConcurrentHashMap <String, ClassNode> classNodeMap = new ConcurrentHashMap <String, ClassNode> ();
+    public static final ConcurrentHashMap <String, ClassNode> classNodeMap = new ConcurrentHashMap <String, ClassNode> ();
+    public static final ConcurrentHashMap <String, String> classNodeDexName = new ConcurrentHashMap <String, String> ();
 
-    private static void newClass(final String name, final byte[] bytes){
+    private static void newClass(final String name, final byte[] bytes, final String dexName){
         //System.out.println ("new class "+name);
         bytecodeMap.put (
             name,
@@ -93,6 +97,7 @@ public class Worker extends Thread {
         final ClassReader cr = new ClassReader (bytes);
         cr.accept (cn, 0);
         classNodeMap.put (name, cn);
+        classNodeDexName.put (name, dexName);
     }
 
     public static boolean isSelfOrChildOf(final String class1, final String class2){
@@ -231,21 +236,17 @@ public class Worker extends Thread {
 //
 //                zos.closeEntry ();
 //            } else
-            {
+            final InputStream is = originalJar.getInputStream (ze);
 
-                final InputStream is = originalJar.getInputStream (ze);
-
-                final ZipEntry nze = new ZipEntry (entryName);
-                zos.putNextEntry (nze);
-                while ((bytesRead = is.read (buffer)) != -1) {
-                    zos.write (buffer, 0, bytesRead);
-                }
-                zos.closeEntry ();
+            final ZipEntry nze = new ZipEntry (entryName);
+            zos.putNextEntry (nze);
+            while ((bytesRead = is.read (buffer)) != -1) {
+                zos.write (buffer, 0, bytesRead);
             }
-
+            zos.closeEntry ();
         }
 
-        putExtraClassesIntoJar (zos, extraClassesJar);
+        putExtraClassesIntoJar (zos, extraClassesJar, originalJarName);
 
         originalJar.close ();
         extraClassesJar.close ();
@@ -253,7 +254,7 @@ public class Worker extends Thread {
 
 
     private void putExtraClassesIntoJar (
-        final ZipOutputStream zos, final JarFile instrlib) throws IOException {
+        final ZipOutputStream zos, final JarFile instrlib, final String dexName) throws IOException {
         try {
             int bytesRead;
             final byte [] buffer = new byte [8192];
@@ -279,7 +280,7 @@ public class Worker extends Thread {
                             }
                             zos.write (
                                 boutinstr.toByteArray (), 0, boutinstr.size ());
-                            newClass (curClassName, boutinstr.toByteArray ());
+                            newClass (curClassName, boutinstr.toByteArray (), dexName);
 
                             zos.closeEntry ();
                         } catch (final Exception e) {
@@ -377,18 +378,6 @@ public class Worker extends Thread {
         try {
 
             final String instrumentedJarName = "preinstrumented_" + jarName;
-
-            //if(blacklist.contains (jarName.substring (0, jarName.lastIndexOf (".")))) {
-            //final String thekeyname = jarName.substring (0, jarName.lastIndexOf ("."));
-            //TODO
-            //if(!DiSLConfig.dex2procMap.get (thekeyname).isObserved){
-            //    originalJarName = "originals/" + jarName;
-            //}else{
-            //    originalJarName = "preinstrumented/preinstrumented_" + jarName;
-            //}
-
-            //originalJarName = "preinstrumented/preinstrumented_" + jarName;
-
             if (jarName.equals ("core.jar")) {
                 final FileOutputStream fos = new FileOutputStream (instrumentedJarName);
                 final ZipOutputStream zos = new ZipOutputStream (fos);
@@ -454,15 +443,6 @@ public class Worker extends Thread {
                     return null;
                 }
                 try{
-//                    final Proc proc = DiSLConfig.dex2procMap.get (jarName);
-//                    boolean observe = DiSLConfig.default_proc_observed;
-//                    if(proc!=null){
-//                        observe = proc.isObserved;
-//                    }
-//                    if(!observe) {
-//                        return null;
-//                    }
-                    //newdisl = new DiSL (false,DiSLConfig.default_disl_classes);
                     newdisl = new DiSL (DiSLConfig.default_bypass, DiSLConfig.default_disl_classes,"");
                 }catch (final Exception e){
                     e.printStackTrace ();
@@ -495,10 +475,7 @@ public class Worker extends Thread {
         }
         System.out.println("Start instrumenting "+jarName);
         byte [] instrClass = null;
-        final DiSL curdisl = getDiSL(jarName);//dislMap.get (jarName);
-        /* if(curdisl == null && !jarName.contains ("core.jar") && !jarName.contains ("framework.jar")){
-            return dexCode;
-        } */
+        final DiSL curdisl = getDiSL(jarName);
         if (cacheUsed) {
             String key ="";
             if(curdisl != null) {
@@ -523,11 +500,6 @@ public class Worker extends Thread {
             dex2JarFile = File.createTempFile (
             jarName, ".tmp");
         }
-
-        //if (debug) {
-//            System.out.println ("tmp file stored in "
-//                + dex2JarFile.getAbsolutePath ());
-        //}
 
         final DexFileReader reader = new DexFileReader (dexCode);
 
@@ -559,21 +531,38 @@ public class Worker extends Thread {
             dex2JarFile.getAbsolutePath ());
 
         Enumeration <JarEntry> entryEnum;
+        //read the jar before instrumentation
         entryEnum = dex2JarJar.entries ();
+        final byte [] buffer = new byte [8192];
+        int bytesRead;
+        while (entryEnum.hasMoreElements ()) {
+            final ZipEntry ze = entryEnum.nextElement ();
+            final String entryName = ze.getName ();
+            final InputStream is = dex2JarJar.getInputStream (ze);
+            if (!ze.isDirectory ()) {
+                if (entryName.endsWith (".class")) {
+                    try {
+                        final String className = entryName.substring (
+                            0, entryName.lastIndexOf (".class"));
 
-        //final boolean skipInstrument = false;
+                        final byte [] code = null;
+                        if (code == null) {
+                            final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
+                            while ((bytesRead = is.read (buffer)) != -1) {
+                                bout.write (buffer, 0, bytesRead);
+                            }
+                            newClass (className, bout.toByteArray (), jarName);
+                        }
+                    } catch (final Exception e) {
+                        e.printStackTrace ();
+                    }
+                }
 
-        // compare the jar name, and decide whether to skip instrument or not
-//        if (blacklist.contains (jarName)) {
-//            System.out.println (jarName + " is in blacklist");
-//            skipInstrument = true;
-//        }
-        //if (!skipInstrument) {
-        //    System.out.println ("Instrumenting Jar: " + jarName);
-        //} else {
-        //    System.out.println ("Skip instrumenting Jar: " + jarName);
-        //}
+            } else {
+            }
+        }
 
+        //Do the instrumentation
         String instrumentedJarName;;
         if(ON_ANDROID_DEVICE) {
             instrumentedJarName= "/data/"+ "instrumented_" + jarName;
@@ -581,8 +570,6 @@ public class Worker extends Thread {
             instrumentedJarName= "/tmp/instrumented_" + jarName;
         }
         final File instrumentedJarFile= new File (instrumentedJarName);
-
-
         final FileOutputStream fos = new FileOutputStream (instrumentedJarFile);
         final ZipOutputStream zos = new ZipOutputStream (fos);
 
@@ -592,9 +579,7 @@ public class Worker extends Thread {
             zos.write (curdisl.wrapperClass);
             zos.closeEntry ();
         }
-
-        final byte [] buffer = new byte [8192];
-        int bytesRead;
+        entryEnum = dex2JarJar.entries ();
         while (entryEnum.hasMoreElements ()) {
             final ZipEntry ze = entryEnum.nextElement ();
             final String entryName = ze.getName ();
@@ -604,39 +589,19 @@ public class Worker extends Thread {
 
                     try {
                         final ZipEntry nze = new ZipEntry (entryName);
-                        // final ClassReader cr = new ClassReader(is);
 
                         final String className = entryName.substring (
                             0, entryName.lastIndexOf (".class"));
 
                         zos.putNextEntry (nze);
-                        // TODO
-                        // add cache here
                         byte [] code = null;
                         final ByteArrayInputStream bin;
                         if (code == null) {
-                            // special case here
-                            /*
-                            if (className.equals ("java/text/SimpleDateFormat")) {
-                                final File tmp;
-                                if(ON_ANDROID_DEVICE) {
-                                    tmp = new File (
-                                    "/system/bin/disldroid/SimpleDateFormat.class");
-                                } else {
-                                    tmp = new File (
-                                    "lib-android/SimpleDateFormat.class");
-                                }
-                                is = new FileInputStream (tmp);
-                            }
-                            */
-
                             final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
                             while ((bytesRead = is.read (buffer)) != -1) {
                                 bout.write (buffer, 0, bytesRead);
                             }
-
-                            newClass (className, bout.toByteArray ());
-
+                            //newClass (className, bout.toByteArray ());
                             // java.lang.Thread needs instrumentation for bypass
                             // support
 //                            if (className.equals ("java/lang/Thread")) {
@@ -679,7 +644,6 @@ public class Worker extends Thread {
                 }
                 zos.closeEntry ();
             }
-
         }
 
         // put the needed stuff into core.jar: built-in classes(bypass,
@@ -689,13 +653,18 @@ public class Worker extends Thread {
 
             final JarFile instrlib = new JarFile (
                 instrLibPath);
-            putExtraClassesIntoJar (zos, instrlib);
+            putExtraClassesIntoJar (zos, instrlib, jarName);
             instrlib.close ();
 
             final JarFile builtinlib = new JarFile (
                 builtinLibPath);
-            putExtraClassesIntoJar (zos, builtinlib);
+            putExtraClassesIntoJar (zos, builtinlib, jarName);
             builtinlib.close ();
+            for(final String name: extraLibs){
+                final JarFile extraLib = new JarFile (name);
+                putExtraClassesIntoJar (zos, extraLib, name);
+                extraLib.close ();
+            }
         }
         zos.finish ();
         zos.close ();
@@ -726,6 +695,7 @@ public class Worker extends Thread {
                     "--output=" + outputDex.getCanonicalPath (),
                     realJar.getCanonicalPath ()));
             }
+            System.out.println ("running dx");
             m.invoke (
                 null, new Object [] { ps.toArray (new String [0]) });
         } catch (final Exception e) {

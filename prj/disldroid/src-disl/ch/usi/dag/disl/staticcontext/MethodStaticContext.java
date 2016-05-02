@@ -274,6 +274,9 @@ public class MethodStaticContext extends AbstractStaticContext {
         return __methodAccessFlag (Opcodes.ACC_STATIC);
     }
 
+    public boolean isMethodNative () {
+        return __methodAccessFlag (Opcodes.ACC_NATIVE);
+    }
 
     /**
      * Returns {@code true} if the instrumented method is synchronized.
