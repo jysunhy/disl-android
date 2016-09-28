@@ -1,0 +1,3 @@
+package javamop;
+Manifest-Version: 1.0
+DiSL-Classes: DiSLClass

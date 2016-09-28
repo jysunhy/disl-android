@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!-- <default-dislclass>output/build/analysis/ch/usi/dag/javamop/fileclose/DiSLClass.class</default-dislclass> -->
+	<!-- <default-dislclass>output/build/analysis/ch/usi/dag/javamop/hasnext/DiSLClass.class</default-dislclass> -->
+	<!-- <default-dislclass>output/build/analysis/ch/usi/dag/javamop/safeenum/DiSLClass.class</default-dislclass> -->
+	<!-- <default-dislclass>output/build/analysis/ch/usi/dag/javamop/safefile/DiSLClass.class</default-dislclass> -->
+	<!-- <default-dislclass>output/build/analysis/ch/usi/dag/javamop/safesyncmap/DiSLClass.class</default-dislclass> -->
+	<!-- <default-dislclass>output/build/analysis/ch/usi/dag/javamop/unsafeiterator/DiSLClass.class</default-dislclass> -->
+  <!-- <default-dislclass>output/build/analysis/ch/usi/dag/javamop/unsafemap/DiSLClass.class</default-dislclass> -->
+	<default-dislclass>output/build/analysis/ch/usi/dag/javamop/fileclose/DiSLClass.class</default-dislclass>
+	<dexes> 
+		<dex>
+			<name>core.jar</name>
+			<dislclass></dislclass>
+		</dex>
+	</dexes> 
+</config>
