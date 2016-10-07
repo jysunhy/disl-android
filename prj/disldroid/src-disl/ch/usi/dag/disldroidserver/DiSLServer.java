@@ -39,6 +39,9 @@ public abstract class DiSLServer {
 
 	public static void main (final String [] args) {
 		try {
+		    if(FolderWorker.isFromFolder){
+		        new FolderWorker ().start ();
+		    }
 			// use dynamic bypass
 			disl = new DiSL (bypass);
 

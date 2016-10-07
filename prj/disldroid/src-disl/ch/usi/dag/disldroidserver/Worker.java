@@ -54,7 +54,7 @@ public class Worker extends Thread {
 
     //private String blacklist = ""; // content read from PKG_BLACKLIST
 
-    private final boolean cacheUsed = true;
+    private static boolean cacheUsed = true;
 
     // the file containging the names of a list of process names that will be
     // observed
@@ -142,9 +142,6 @@ public class Worker extends Thread {
     // instrument the core.jar or not
     private static boolean appOnly = true;
 
-    private static final boolean debug = Boolean
-        .getBoolean (DiSLServer.PROP_DEBUG);
-
     private static final String PROP_UNINSTR = "dislserver.uninstrumented";
 
     private static final String uninstrPath =
@@ -161,9 +158,11 @@ public class Worker extends Thread {
     private final NetMessageReader sc;
 
     private DiSL disl = null;
-    private HashMap<String, DiSL> dislMap = new HashMap <String, DiSL>();
+//    public static HashMap<String, DiSL> dislMap = new HashMap <String, DiSL>();
 
     private final AtomicLong instrumentationTime = new AtomicLong ();
+
+
 
 
     Worker (final NetMessageReader sc, final DiSL dislArg) {
@@ -182,7 +181,7 @@ public class Worker extends Thread {
     // current DiSL class cannot be changed during a single run
     // in future, if it can be changed during run, we should add also the
     // DiSLClass bytecode as cacheHashKey
-    private String getCacheHash (final byte [] bcode, final byte [] dislclassesHash) {
+    private static String getCacheHash (final byte [] bcode, final byte [] dislclassesHash) {
         try {
             final MessageDigest md = MessageDigest.getInstance ("MD5");
             md.update (bcode);
@@ -197,7 +196,7 @@ public class Worker extends Thread {
     }
 
 
-    private void putExtraClassesIntoJar (
+    static void putExtraClassesIntoJar (
         final String originalJarName, final ZipOutputStream zos ,
         final String extraClassesJarName)
     throws IOException {
@@ -253,7 +252,7 @@ public class Worker extends Thread {
     }
 
 
-    private void putExtraClassesIntoJar (
+    static void putExtraClassesIntoJar (
         final ZipOutputStream zos, final JarFile instrlib, final String dexName) throws IOException {
         try {
             int bytesRead;
@@ -297,7 +296,7 @@ public class Worker extends Thread {
                     zos.closeEntry ();
                     }catch(final Exception e){
                         //e.printStackTrace ();
-                        if(debug) {
+                        if(AndroidInstrumenter.debug) {
                             System.out.println("duplicate entry, ignore");
                         }
                     }
@@ -308,33 +307,6 @@ public class Worker extends Thread {
         }
     }
 
-    public byte[] readbytes(final File file){
-            final byte[]res=null;
-            FileInputStream fis=null;
-            DataInputStream dis=null;
-            ByteArrayOutputStream bout=null;
-            try{
-                fis = new FileInputStream (file);
-                dis = new DataInputStream (fis);
-                bout = new ByteArrayOutputStream ();
-                int temp;
-                int size = 0;
-                final byte [] b = new byte [2048];
-                while ((temp = dis.read (b)) != -1) {
-                    bout.write (b, 0, temp);
-                    size += temp;
-                }
-                fis.close ();
-                dis.close ();
-				if(debug) {
-                    System.out.println(file.getAbsolutePath ()+"a"+size);
-                }
-            }catch (final Exception e){
-                e.printStackTrace ();
-            }
-
-            return bout.toByteArray ();
-    }
 
     public static long copy (final String srcFilename, final String
         outFilename)
@@ -371,7 +343,7 @@ public class Worker extends Thread {
     }
 
 
-    private byte [] preInstrumentJar (final String jarName, final String originalJarName, final byte [] dexCode) {
+    static byte [] preInstrumentJar (final String jarName, final String originalJarName, final byte [] dexCode) {
         File outputDex = null;
         File realJar = null;
         byte [] res = null;
@@ -417,14 +389,14 @@ public class Worker extends Thread {
             m.invoke (
                 null, new Object [] { ps.toArray (new String [0]) });
             //res = Files.readAllBytes (Paths.get (outputDex.getAbsolutePath ()));
-            res = readbytes (outputDex);
+            res = Utils.readbytes (outputDex);
         } catch (final Exception e) {
             System.err.println ("call dx error");
             e.printStackTrace ();
         }
         // now read the instrumented dex file and pass
         // return it as byte[]
-        if (!debug) {
+        if (!AndroidInstrumenter.debug) {
             outputDex.deleteOnExit ();
         }
         if (res == null) {
@@ -434,10 +406,10 @@ public class Worker extends Thread {
 
     }
 
-    DiSL getDiSL(final String jarName){
+    static DiSL getDiSL(final String jarName){
         DiSL newdisl = null;
         final Dex dex = DiSLConfig.dexMap.get(jarName);
-        if(dislMap.get (jarName)==null){
+        if(AndroidInstrumenter.dislMap.get (jarName)==null){
             if(dex == null){
                 if(DiSLConfig.default_disl_classes.equals ("")) {
                     return null;
@@ -462,15 +434,15 @@ public class Worker extends Thread {
             }
         }
         if(newdisl != null) {
-            dislMap.put (jarName, newdisl);
+            AndroidInstrumenter.dislMap.put (jarName, newdisl);
         }
         return newdisl;
     }
 
-    private byte [] instrumentJar (final String jarName, final byte [] dexCode)
+    static byte [] instrumentJar (final String jarName, final byte [] dexCode)
     throws IOException,
     FileNotFoundException {
-        if (debug) {
+        if (AndroidInstrumenter.debug) {
             System.out.println (jarName);
         }
         System.out.println("Start instrumenting "+jarName);
@@ -514,7 +486,7 @@ public class Worker extends Thread {
             .verbose (false)
             .to (dex2JarFile);
 
-        if (debug) {
+        if (AndroidInstrumenter.debug) {
             final Map <com.googlecode.dex2jar.Method, Exception> exceptions = handler.getExceptions ();
             if (exceptions.size () > 0) {
                 final File errorFile = new File (jarName
@@ -615,7 +587,7 @@ public class Worker extends Thread {
                                     className, bout.toByteArray (), curdisl);
                             }
                             if (code == null) {
-                                if (debug) {
+                                if (AndroidInstrumenter.debug) {
                                     System.out.println (className
                                         + " need not be instrumented");
                                 }
@@ -704,7 +676,7 @@ public class Worker extends Thread {
         }
         // now read the instrumented dex file and pass
         // return it as byte[]
-        instrClass = readbytes (outputDex);
+        instrClass = Utils.readbytes (outputDex);
         outputDex.deleteOnExit ();
         realJar.deleteOnExit ();
         dex2JarFile.deleteOnExit ();
@@ -768,18 +740,14 @@ public class Worker extends Thread {
 //        reader.close ();
 //    }
 
-
     private void instrumentationLoop () throws Exception {
 
-//        ReadPkgBlackList ();
-//        ReadObserveList ();
         if(!DiSLConfig.parseXml ()){
-			if(debug) {
+			if(AndroidInstrumenter.debug) {
                 System.out.println("Update DiSL classes");
             }
-			dislMap = new HashMap <String, DiSL>();
+			AndroidInstrumenter.dislMap = new HashMap <String, DiSL>();
 		}
-
         try {
 
             while (true) {
@@ -798,7 +766,7 @@ public class Worker extends Thread {
                     {
                         final String fullPath =new String (
                             nm.getControl ());
-						if(debug) {
+						if(AndroidInstrumenter.debug) {
                             System.out.println(fullPath);
                         }
 
@@ -854,7 +822,7 @@ public class Worker extends Thread {
                     String errToReport = e.getMessage ();
 
                     // during debug send the whole message
-                    if (debug) {
+                    if (AndroidInstrumenter.debug) {
                         final StringWriter sw = new StringWriter ();
                         e.printStackTrace (new PrintWriter (sw));
                         errToReport = sw.toString ();
@@ -895,9 +863,9 @@ public class Worker extends Thread {
     }
 
 
-    private byte [] instrument (String className, final byte [] origCode, final DiSL disl)
+    static byte [] instrument (String className, final byte [] origCode, final DiSL disl)
     throws DiSLServerException, DiSLException {
-		if(debug) {
+		if(AndroidInstrumenter.debug) {
             System.out.println("instrumenting "+className);
         }
 
@@ -929,7 +897,7 @@ public class Worker extends Thread {
     }
 
 
-    private void dump (
+    static void dump (
         final String className, final byte [] codeAsBytes, final String path)
     throws DiSLServerException {
 
