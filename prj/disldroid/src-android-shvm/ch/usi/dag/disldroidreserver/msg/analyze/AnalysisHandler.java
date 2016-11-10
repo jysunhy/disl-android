@@ -180,6 +180,29 @@ public final class AnalysisHandler implements RequestHandler {
 			return Double.SIZE / Byte.SIZE;
 		}
 
+		if(argClass.equals (String.class)){
+		    final String arg = is.readUTF ();
+		    args.add(arg);
+		    return 2+arg.length ();
+//		    final int num = is.readInt ();
+//		    final byte[] bytes = new byte[num];
+//		    int left = num;
+//
+//		    while(left > 0){
+//		        final int n = is.read(bytes, num-left, left);
+//		        if(n<0){
+//		            throw new DiSLREServerException (String.format (
+//		                "Wrong data format %s in analysis method %s.%s",
+//		                argClass.getName (), analysisMethod.getDeclaringClass ().getName (),
+//		                analysisMethod.getName ()
+//		            ));
+//		        }
+//		        left -= n;
+//		    }
+//		    args.add(new String(bytes, "UTF-8"));
+//		    return Integer.SIZE / Byte.SIZE + num;
+		}
+
 		if (ShadowObject.class.isAssignableFrom(argClass)) {
 			final long net_ref = is.readLong();
 

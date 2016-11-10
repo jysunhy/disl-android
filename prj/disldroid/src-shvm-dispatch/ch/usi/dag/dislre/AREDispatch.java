@@ -50,6 +50,7 @@ public class AREDispatch {
 	public static native void sendShort(short shortToSend);
 	public static native void sendInt(int intToSend);
 	public static native void sendLong(long longToSend);
+	public static native void sendString(String text);
 	public static native void sendObject(Object objToSend);
 	public static native void sendObjectPlusData(Object objToSend);
 
