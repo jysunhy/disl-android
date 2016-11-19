@@ -10,8 +10,10 @@ public class CodeCoverageAnalysisStub {
     public static void branchTaken (
         final String classSignature, final String methodSignature, final int idx) {
         AREDispatch.analysisStart (CB);
-        AREDispatch.sendObjectPlusData (classSignature);
-        AREDispatch.sendObjectPlusData (methodSignature);
+        //AREDispatch.sendObjectPlusData (classSignature);
+        //AREDispatch.sendObjectPlusData (methodSignature);
+        AREDispatch.sendString (classSignature);
+        AREDispatch.sendString (methodSignature);
         AREDispatch.sendInt (idx);
         AREDispatch.analysisEnd ();
     }

@@ -2,12 +2,33 @@
 <config>
 	<default-dislclass></default-dislclass>
 	<default-observed>false</default-observed>
-	<dexes> 
+	<dexes>
+		<dex>
+			<name>ch.usi.dag.android.example-1.apk</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class</dislclass>
+		</dex>
 		<dex>
 			<name>framework.jar</name>
-            <dislclass>output/build/analysis/ch/usi/dag/empty/disl/DiSLClass.class</dislclass>
-            <bypass>false</bypass>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/demo/ipc/disl/PermissionDiSLClass.class</dislclass>
 		</dex>
+		<dex>
+			<name>core.jar</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/demo/netdiagnose/disl/DiSLClass.class</dislclass>
+		</dex>
+		<dex>
+			<name>Contacts.apk</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</dislclass>
+		</dex>
+		<dex>
+			<name>com.facebook.katana-1.apk</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class</dislclass>
+		</dex>
+		
 	</dexes>
 	<procs>
 	</procs>

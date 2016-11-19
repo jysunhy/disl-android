@@ -11,6 +11,7 @@ import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorMode;
+import ch.usi.dag.dislre.AREDispatch;
 
 public class DiSLClass {
     @AfterReturning(marker=BodyMarker.class,
@@ -71,6 +72,7 @@ public class DiSLClass {
         final ArgumentProcessorContext apc, final DynamicContext dc
         ){
         final Object [] args = apc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
+        AREDispatch.NativeLog ("byte[] version recv "+args+" "+args.length);
         //final boolean isRead = (boolean)args[0];
         final FileDescriptor fd = (FileDescriptor)args[1];
         final byte [] bytes = (byte[])args[2];
@@ -78,12 +80,20 @@ public class DiSLClass {
         //final int byteCount = (int)args[4];
         final int flags = (int) args[5];
         final DatagramPacket packet = (DatagramPacket)args[6];
+        InetAddress address = null;
+        int port = 0;
+        if(packet != null){
+            address = packet.getAddress ();
+            port = packet.getPort ();
+        }
         //final boolean isConnected = (boolean)args[7];
+        AREDispatch.NativeLog ("buggy where dc.getStackValue?");
         final int ret = dc.getStackValue (0, int.class);
+        AREDispatch.NativeLog ("the answer is no");
         if(ret > 0) {
-            NetworkAnalysisStub.recvMessage (fd, bytes, byteOffset, ret, flags, packet.getAddress (), packet.getPort ());
+            NetworkAnalysisStub.recvMessage (fd, bytes, byteOffset, ret, flags, address, port);
         }else{
-            NetworkAnalysisStub.recvMessageFailed (fd, bytes, byteOffset, 0, flags, packet.getAddress (), packet.getPort ());
+            NetworkAnalysisStub.recvMessageFailed (fd, bytes, byteOffset, 0, flags, address, port);
         }
     }
 
@@ -94,17 +104,24 @@ public class DiSLClass {
         final ArgumentProcessorContext apc, final DynamicContext dc
         ){
         final Object [] args = apc.getArgs (ArgumentProcessorMode.METHOD_ARGS);
+        AREDispatch.NativeLog ("bytebuffer version recv "+args);
         //final boolean isRead = (boolean)args[0];
         final FileDescriptor fd = (FileDescriptor)args[1];
         final ByteBuffer buffer = (ByteBuffer)args[2];
         final int flags = (int)args[3];
         final DatagramPacket packet = (DatagramPacket)args[4];
+        InetAddress address = null;
+        int port = 0;
+        if(packet != null){
+            address = packet.getAddress ();
+            port = packet.getPort ();
+        }
         //final boolean isConnected = (boolean)args[5];
         final int ret = dc.getStackValue (0, int.class);
         if(ret > 0) {
-            NetworkAnalysisStub.recvMessage (fd, buffer.array (), buffer.position () - ret, ret, flags, packet.getAddress (), packet.getPort ());
+            NetworkAnalysisStub.recvMessage (fd, buffer.array (), buffer.position () - ret, ret, flags, address, port);
         }else{
-            NetworkAnalysisStub.recvMessageFailed (fd, null, 0, 0, flags, packet.getAddress (), packet.getPort ());
+            NetworkAnalysisStub.recvMessageFailed (fd, null, 0, 0, flags, address, port);
         }
     }
 

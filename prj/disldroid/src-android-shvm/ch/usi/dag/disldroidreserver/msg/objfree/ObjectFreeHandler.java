@@ -3,6 +3,7 @@ package ch.usi.dag.disldroidreserver.msg.objfree;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import ch.usi.dag.disldroidreserver.exception.DiSLREServerException;
 import ch.usi.dag.disldroidreserver.msg.analyze.AnalysisHandler;
@@ -47,5 +48,28 @@ public class ObjectFreeHandler implements RequestHandler {
     public void exit() {
 
 	}
+
+    @Override
+    public void handle (final int pid, final ByteBuffer is, final boolean debug) throws Exception {
+        try {
+
+            final int freeCount = is.getInt();
+
+            final long[] objFreeIDs = new long[freeCount];
+
+            for(int i = 0; i < freeCount; ++i) {
+
+                final long netref = is.getLong();
+
+                objFreeIDs[i] = netref;
+            }
+
+            analysisHandler.objectsFreed (
+                ShadowAddressSpace.getShadowAddressSpaceBlocked (pid), objFreeIDs);
+
+        } catch (final Exception e) {
+            throw e;
+        }
+    }
 
 }

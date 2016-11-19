@@ -3,7 +3,9 @@ package ch.usi.dag.disldroidreserver.msg.newclass;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
+import ch.usi.dag.disldroidreserver.Utils;
 import ch.usi.dag.disldroidreserver.exception.DiSLREServerException;
 import ch.usi.dag.disldroidreserver.reqdispatch.RequestHandler;
 import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
@@ -35,5 +37,22 @@ public class NewClassHandler implements RequestHandler {
     public void exit() {
 
 	}
+
+    @Override
+    public void handle (final int pid, final ByteBuffer is, final boolean debug) throws Exception {
+        try {
+            final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpace (pid);
+            final String className = Utils.readUTF (is);
+            final long oid = is.getLong();
+
+            final ShadowObject classLoader = shadowAddressSpace.getShadowObject (oid);
+            final int classCodeLength = is.getInt();
+            final byte[] classCode = new byte[classCodeLength];
+            is.get(classCode);
+            shadowAddressSpace.loadBytecode(classLoader, className, classCode, debug);
+        } catch (final Exception e) {
+            throw new Exception(e);
+        }
+    }
 
 }

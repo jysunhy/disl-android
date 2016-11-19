@@ -10,7 +10,8 @@ public class IPCAnalysisStub {
     public static void permission_used (final String permission_str) {
         AREDispatch.analysisStart (PERMISSION_USED);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
-        AREDispatch.sendObjectPlusData (permission_str);
+        AREDispatch.sendString (permission_str);
+        //AREDispatch.sendObjectPlusData (permission_str);
         AREDispatch.analysisEnd ();
     }
 }

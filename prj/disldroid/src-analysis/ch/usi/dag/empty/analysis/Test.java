@@ -1,14 +1,13 @@
 package ch.usi.dag.empty.analysis;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
-import ch.usi.dag.disldroidreserver.shadow.Forkable;
+import ch.usi.dag.disldroidreserver.shadow.ShadowClass;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
 import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 import ch.usi.dag.disldroidreserver.shadow.ShadowThread;
-import ch.usi.dag.disldroidreserver.shadow.ShadowClass;
 
 public class Test extends RemoteAnalysis{
-    public void test(ShadowObject obj ){
+    public void test(final ShadowObject obj ){
         System.out.println("Success test");
 		if(! (obj instanceof ShadowClass)) {
 			throw new RuntimeException("This class should be transfered as class");
@@ -55,6 +54,9 @@ public class Test extends RemoteAnalysis{
 			throw new RuntimeException("Incorect transfer of double");
 		}
 	}
+    public static void testingString(final String s) {
+        System.out.println ("testing string successfully - "+s);
+    }
 
 	public static void testingAdvanced(final ShadowObject s, final ShadowObject o, final ShadowObject c, final ShadowObject t) {
 

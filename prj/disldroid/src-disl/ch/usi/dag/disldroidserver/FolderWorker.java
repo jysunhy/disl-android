@@ -22,14 +22,14 @@ public class FolderWorker extends Thread {
 
     static class DexStruct {
         String path;
-        int idx;
+        //int idx;
         int size;
         int instrumentedSize;
-        public DexStruct (final String path, final int size, final int idx) {
+        public DexStruct (final String path, final int size) {
             super ();
-            System.out.println(path+" "+size+" "+idx);
+            //System.out.println(path+" "+size+" "+idx);
             this.path = path;
-            this.idx = idx;
+            //this.idx = idx;
             this.size = size;
             instrumentedSize = 0;
         }
@@ -65,7 +65,7 @@ public class FolderWorker extends Thread {
         while (true) {
             AndroidInstrumenter.checkConfigXMLChange();
             try {
-                System.out.println("pulling");
+                //System.out.println("pulling");
                 //final Process p = Runtime.getRuntime().exec(new String[]{"zsh","-c","adb pull /data/data/ /Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder"});
                 //p.waitFor ();
                 final List<String> commands = new ArrayList<String>();
@@ -79,7 +79,7 @@ public class FolderWorker extends Thread {
                 e1.printStackTrace();
             }
             try {
-                Thread.sleep(2000);
+                Thread.sleep(1000);
             } catch (final InterruptedException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -104,7 +104,7 @@ public class FolderWorker extends Thread {
                                 final int size = Integer.parseInt (tmp[1]);
                                 final int isize = Integer.parseInt (tmp[2]);
                                 if(!dexes.containsKey (fname)){
-                                    dexes.put (fname, new DexStruct (name,size,Integer.parseInt(arr[arr.length-1])));
+                                    dexes.put (fname, new DexStruct (name,size));
                                 }
                                 if(isize == 0){
                                     if(AndroidInstrumenter.debug) {
@@ -161,7 +161,7 @@ public class FolderWorker extends Thread {
                 }
             }
             try {
-                System.out.println("pushing and cleaning");
+                //System.out.println("pushing and cleaning");
                 //final Process p = Runtime.getRuntime().exec(new String[]{"zsh","-c","adb push /Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/ /data/app/ "});
                 final List<String> commands = new ArrayList<String>();
                 commands.add("/Users/haiyang/Library/Android/sdk/platform-tools/adb");
@@ -178,6 +178,12 @@ public class FolderWorker extends Thread {
                 //final Process p2 = Runtime.getRuntime().exec(new String[]{"zsh","-c","rm /Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/*"});
                 //p2.waitFor ();
             } catch (final Exception e1) {
+                e1.printStackTrace();
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (final InterruptedException e1) {
+                // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         }

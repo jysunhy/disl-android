@@ -34,6 +34,7 @@ public class IPCLogger {
     }
 
     public static void reportPermissionUsage(final ThreadState state){
+        System.out.println("Found permission use!");
             state.printPermission();
     }
 }

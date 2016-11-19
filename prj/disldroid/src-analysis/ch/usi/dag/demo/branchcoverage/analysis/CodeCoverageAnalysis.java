@@ -13,7 +13,6 @@ import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
-import ch.usi.dag.disldroidreserver.shadow.ShadowString;
 
 
 public class CodeCoverageAnalysis extends RemoteAnalysis  {
@@ -36,8 +35,10 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
     static class ProcessProfile extends ConcurrentHashMap <String, ClassProfile> {
     }
 
-    public void branchTaken (final ShadowString classSignature,
-        final ShadowString methodSignature, final int index,
+    //public void branchTaken (final ShadowString classSignature,
+    //final ShadowString methodSignature, final int index,
+    public void branchTaken (final String classSignature,
+        final String methodSignature, final int index,
         final Context context) {
         ProcessProfile processProfile = context.getState ("bc", ProcessProfile.class);
         if (processProfile == null) {
@@ -64,8 +65,13 @@ public class CodeCoverageAnalysis extends RemoteAnalysis  {
             //System.out.println ("array null at "+outerKey+" "+innerKey);
             return;
         }
-
-        final int times = ++classProfile.get (innerKey) [index];
+        int times = 0;
+        try {
+            times = ++classProfile.get (innerKey) [index];
+        }catch (final Exception e){
+            e.printStackTrace ();
+            System.err.println("Error details: "+outerKey+"."+innerKey+" "+classProfile.get (innerKey).length);
+        }
 
         WebLogger.branchTaken (context.getProcessID (), context.getPname (),
             classSignature.toString (), methodSignature.toString (), index,

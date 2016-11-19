@@ -12,6 +12,10 @@ public class TestStub {
 	private static short tbId = AREDispatch.registerMethod(
 			"ch.usi.dag.empty.analysis.Test.testingBasic");
 
+	private static short tsId = AREDispatch.registerMethod(
+    "ch.usi.dag.empty.analysis.Test.testingString");
+
+
 	private static short taId = AREDispatch.registerMethod(
 			"ch.usi.dag.empty.analysis.Test.testingAdvanced");
 
@@ -36,6 +40,15 @@ public class TestStub {
 
 		AREDispatch.analysisEnd();
 	}
+
+	public static void testingString(final String s) {
+        AREDispatch.analysisStart(tsId);
+
+        AREDispatch.sendString(s);
+
+        AREDispatch.analysisEnd();
+    }
+
 
 	public static void testingAdvanced(final String s, final Object o, final Class<?> c,
 			final Thread t) {

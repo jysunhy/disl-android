@@ -10,8 +10,6 @@ import ch.usi.dag.demo.utils.DemoUtils;
 import ch.usi.dag.disldroidreserver.remoteanalysis.RemoteAnalysis;
 import ch.usi.dag.disldroidreserver.shadow.Context;
 import ch.usi.dag.disldroidreserver.shadow.ShadowObject;
-import ch.usi.dag.disldroidreserver.shadow.ShadowString;
-
 
 public class NetworkAnalysis extends RemoteAnalysis {
 
@@ -82,7 +80,7 @@ public class NetworkAnalysis extends RemoteAnalysis {
     private static final String PREDEFINED_KEYWORD = "NONE";
 
     public static void bind (final Context ctx, final int tid,
-        final int fdHash, final ShadowString address, final int port) {
+        final int fdHash, final String address, final int port) {
         WebLogger.reportNetworkBind (
             ctx.getProcessID (), ctx.getPname (), tid, fdHash,
             address==null?"Unknown":address.toString (), port, SVMCallStack.get (ctx, tid).getRuntimeStack ());
@@ -90,7 +88,7 @@ public class NetworkAnalysis extends RemoteAnalysis {
 
 
     public static void newConnection (final Context ctx, final int tid,
-        final int fdHash, final ShadowString address, final int port, final int timeoutMs, final boolean successful) {
+        final int fdHash, final String address, final int port, final int timeoutMs, final boolean successful) {
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent (ctx);
         ConnectionStruct.initConnectionIfAbsent (processProfile, fdHash, address.toString (), port);
         WebLogger.reportNetworkConnect (
@@ -99,7 +97,7 @@ public class NetworkAnalysis extends RemoteAnalysis {
     }
 
     public static void sendMessage (final Context ctx, final int tid, final int fdHash,
-        final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
+        final String dataBase64, final int flags, final String address, final int port){
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
         final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (
             processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
@@ -114,7 +112,7 @@ public class NetworkAnalysis extends RemoteAnalysis {
     }
 
     public static void sendMessageFailed (final Context ctx, final int tid, final int fdHash,
-        final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
+        final String dataBase64, final int flags, final String address, final int port){
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
         final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (
             processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
@@ -122,7 +120,7 @@ public class NetworkAnalysis extends RemoteAnalysis {
     }
 
     public static void recvMessage (final Context ctx, final int tid, final int fdHash,
-        final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
+        final String dataBase64, final int flags, final String address, final int port){
         final ProcessProfiler processProfile = ProcessProfiler.initProfilerIfAbsent(ctx);
         final ConnectionStruct connection = ConnectionStruct.initConnectionIfAbsent (
             processProfile, fdHash, address==null?"Unknown ":address.toString (), port);
@@ -131,7 +129,7 @@ public class NetworkAnalysis extends RemoteAnalysis {
             SVMCallStack.get (ctx, tid).getRuntimeStack ());
     }
 
-    public static void recvMessageFailed (final Context ctx, final int tid, final int fdHash, final ShadowString dataBase64, final int flags, final ShadowString address, final int port){
+    public static void recvMessageFailed (final Context ctx, final int tid, final int fdHash, final String dataBase64, final int flags, final String address, final int port){
     }
 
     @Override

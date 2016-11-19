@@ -19,11 +19,16 @@ public class NetworkAnalysisStub {
     public static void bind (final FileDescriptor fd, final InetAddress inetAddress, final int port) {
         AREDispatch.analysisStart (BIND);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
-        AREDispatch.sendInt(fd.hashCode ());
+        if(fd == null){
+            AREDispatch.sendInt(0);
+        }else {
+            AREDispatch.sendInt(fd.hashCode ());
+        }
         if(inetAddress != null) {
-            AREDispatch.sendObjectPlusData (inetAddress.getHostAddress ());
+            final String a = inetAddress.getHostAddress ();
+            AREDispatch.sendString (a==null?"":a);
         } else {
-            AREDispatch.sendObjectPlusData (null);
+            AREDispatch.sendString ("");
         }
         AREDispatch.sendInt(port);
         AREDispatch.analysisEnd ();
@@ -33,11 +38,16 @@ public class NetworkAnalysisStub {
         final FileDescriptor fd, final InetAddress inetAddress, final int port, final int timeoutMs, final boolean successful) {
         AREDispatch.analysisStart (NEW_CONNECTION);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
-        AREDispatch.sendInt(fd.hashCode ());
+        if(fd == null){
+            AREDispatch.sendInt(0);
+        }else {
+            AREDispatch.sendInt(fd.hashCode ());
+        }
         if(inetAddress != null) {
-            AREDispatch.sendObjectPlusData (inetAddress.getHostAddress ());
+            final String a = inetAddress.getHostAddress ();
+            AREDispatch.sendString (a==null?"":a);
         } else {
-            AREDispatch.sendObjectPlusData (null);
+            AREDispatch.sendString ("");
         }
         AREDispatch.sendInt(port);
         AREDispatch.sendInt(timeoutMs);
@@ -51,13 +61,22 @@ public class NetworkAnalysisStub {
         }
         AREDispatch.analysisStart (SEND_MESSAGE);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
-        AREDispatch.sendInt(fd.hashCode ());
-        AREDispatch.sendObjectPlusData (Base64.encodeToString (buffer, start, length, Base64.DEFAULT));
+        if(fd == null){
+            AREDispatch.sendInt(0);
+        }else {
+            AREDispatch.sendInt(fd.hashCode ());
+        }
+        if(buffer == null) {
+            AREDispatch.sendString("");
+        } else{
+            AREDispatch.sendString (Base64.encodeToString (buffer, start, length, Base64.DEFAULT));
+        }
         AREDispatch.sendInt(flags);
         if(inetAddress != null) {
-            AREDispatch.sendObjectPlusData (inetAddress.getHostAddress ());
+            final String a = inetAddress.getHostAddress ();
+            AREDispatch.sendString (a==null?"":a);
         } else {
-            AREDispatch.sendObjectPlusData (null);
+            AREDispatch.sendString ("");
         }
         AREDispatch.sendInt(port);
         AREDispatch.analysisEnd ();
@@ -69,13 +88,22 @@ public class NetworkAnalysisStub {
         }
         AREDispatch.analysisStart (SEND_MESSAGE_FAILED);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
-        AREDispatch.sendInt(fd.hashCode ());
-        AREDispatch.sendObjectPlusData (Base64.encodeToString (buffer, start, length, Base64.DEFAULT));
+        if(fd == null){
+            AREDispatch.sendInt(0);
+        }else {
+            AREDispatch.sendInt(fd.hashCode ());
+        }
+        if(buffer == null) {
+            AREDispatch.sendString("");
+        } else{
+            AREDispatch.sendString (Base64.encodeToString (buffer, start, length, Base64.DEFAULT));
+        }
         AREDispatch.sendInt(flags);
         if(inetAddress != null) {
-            AREDispatch.sendObjectPlusData (inetAddress.getHostAddress ());
+            final String a = inetAddress.getHostAddress ();
+            AREDispatch.sendString (a==null?"":a);
         } else {
-            AREDispatch.sendObjectPlusData (null);
+            AREDispatch.sendString ("");
         }
         AREDispatch.sendInt(port);
         AREDispatch.analysisEnd ();
@@ -85,16 +113,31 @@ public class NetworkAnalysisStub {
         if(length <= 0) {
             return;
         }
+        AREDispatch.NativeLog ("still fine here 0");
         AREDispatch.analysisStart (RECV_MESSAGE);
+        AREDispatch.NativeLog ("still fine here");
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
-        AREDispatch.sendInt(fd.hashCode ());
-        AREDispatch.sendObjectPlusData (Base64.encodeToString (buffer, start, length, Base64.DEFAULT));
-        AREDispatch.sendInt(flags);
-        if(inetAddress != null) {
-            AREDispatch.sendObjectPlusData (inetAddress.getHostAddress ());
-        } else {
-            AREDispatch.sendObjectPlusData (null);
+        if(fd == null){
+            AREDispatch.sendInt(0);
+        }else {
+            AREDispatch.sendInt(fd.hashCode ());
         }
+        AREDispatch.NativeLog ("still fine here 2");
+        if(buffer == null) {
+            AREDispatch.sendString("");
+        } else{
+            AREDispatch.sendString (Base64.encodeToString (buffer, start, length, Base64.DEFAULT));
+        }
+        AREDispatch.NativeLog ("still fine here 3");
+        AREDispatch.sendInt(flags);
+        AREDispatch.NativeLog ("still fine here 4");
+        if(inetAddress != null) {
+            final String a = inetAddress.getHostAddress ();
+            AREDispatch.sendString (a==null?"":a);
+        } else {
+            AREDispatch.sendString ("");
+        }
+        AREDispatch.NativeLog ("still fine here 5");
         AREDispatch.sendInt(port);
         AREDispatch.analysisEnd ();
     }
@@ -102,18 +145,32 @@ public class NetworkAnalysisStub {
         if(length <= 0) {
             return;
         }
+        AREDispatch.NativeLog ("still fine here 0");
         AREDispatch.analysisStart (RECV_MESSAGE_FAILED);
+        AREDispatch.NativeLog ("still fine here 1");
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
-        AREDispatch.sendInt(fd.hashCode ());
-        AREDispatch.sendObjectPlusData ("");
-        AREDispatch.sendInt(flags);
-        if(inetAddress != null) {
-            AREDispatch.sendObjectPlusData (inetAddress.getHostAddress ());
-        } else {
-            AREDispatch.sendObjectPlusData (null);
+        AREDispatch.NativeLog ("still fine here 2");
+        if(fd == null){
+            AREDispatch.sendInt(0);
+        }else {
+            AREDispatch.sendInt(fd.hashCode ());
         }
+        AREDispatch.NativeLog ("still fine here 3");
+        AREDispatch.sendString("");
+        AREDispatch.NativeLog ("still fine here 4");
+        AREDispatch.sendInt(flags);
+        AREDispatch.NativeLog ("still fine here 5");
+        if(inetAddress != null) {
+            final String a = inetAddress.getHostAddress ();
+            AREDispatch.sendString (a==null?"":a);
+        } else {
+            AREDispatch.sendString ("");
+        }
+        AREDispatch.NativeLog ("still fine here 6");
         AREDispatch.sendInt(port);
+        AREDispatch.NativeLog ("still fine here 7");
         AREDispatch.analysisEnd ();
+        AREDispatch.NativeLog ("still fine here 8");
     }
 
 }

@@ -3,7 +3,9 @@ package ch.usi.dag.disldroidreserver.msg.classinfo;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
+import ch.usi.dag.disldroidreserver.Utils;
 import ch.usi.dag.disldroidreserver.exception.DiSLREServerException;
 import ch.usi.dag.disldroidreserver.reqdispatch.RequestHandler;
 import ch.usi.dag.disldroidreserver.shadow.ShadowAddressSpace;
@@ -38,6 +40,25 @@ public class ClassInfoHandler implements RequestHandler {
     @Override
     public void exit () {
 
+    }
+
+
+    @Override
+    public void handle (final int pid, final ByteBuffer is, final boolean debug) throws Exception {
+        try {
+            final ShadowAddressSpace shadowAddressSpace = ShadowAddressSpace.getShadowAddressSpace (pid);
+            final long net_ref = is.getLong ();
+            final String classSignature = Utils.readUTF (is);
+            final String classGenericStr = Utils.readUTF (is);
+            final ShadowObject classLoader = shadowAddressSpace.getShadowObject (is.getLong ());
+
+            final ShadowClass superClass = (ShadowClass) shadowAddressSpace.getShadowObject (is.getLong ());
+            shadowAddressSpace.createAndRegisterShadowClass (
+                net_ref, superClass, classLoader,
+                classSignature, classGenericStr, debug);
+        } catch (final Exception e) {
+            throw e;
+        }
     }
 
 }

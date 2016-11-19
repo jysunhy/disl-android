@@ -2,6 +2,7 @@ package ch.usi.dag.disldroidreserver.reqdispatch;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -118,6 +119,31 @@ public final class RequestDispatcher {
 		}
 	}
 
+    public static boolean dispatch (
+        final int pid, final byte requestId, final ByteBuffer is,final boolean debug
+    ) throws DiSLREServerException,Exception {
+        //
+        // Lookup the request handler and process the request using the handler.
+        // Signal to terminate the request loop after handling a close request.
+        //
+        final RequestHandler rh = __dispatchTable [requestId];
+        if (rh != null) {
+            if (debug) {
+                System.out.printf (
+                    "DiSL-RE: dispatching request message (%d)(%d) to %s\n", pid,
+                    requestId, rh.getClass ().getSimpleName ()
+                    );
+            }
+
+            rh.handle (pid, is, debug);
+            return requestId == __REQUEST_ID_CLOSE__;
+
+        } else {
+            throw new DiSLREServerFatalException (
+                "Unsupported message type: "+ requestId
+            );
+        }
+    }
 
 	public static Iterable <RequestHandler> getAllHandlers () {
 		return __handlers;

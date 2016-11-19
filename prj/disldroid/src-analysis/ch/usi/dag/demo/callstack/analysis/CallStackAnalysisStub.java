@@ -10,7 +10,8 @@ public class CallStackAnalysisStub {
         //AREDispatch.NativeLog ("boundary start");
         AREDispatch.analysisStart (BOUNDARY_START);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
-        AREDispatch.sendObjectPlusData (boundaryName);
+        AREDispatch.sendString (boundaryName);
+        //AREDispatch.sendObjectPlusData (boundaryName);
         AREDispatch.analysisEnd ();
     }
     public static short BOUNDARY_END = AREDispatch.registerMethod ("ch.usi.dag.demo.callstack.analysis.CallStackAnalysis.boundaryEnd");
@@ -19,7 +20,8 @@ public class CallStackAnalysisStub {
         //AREDispatch.NativeLog ("boundary end");
         AREDispatch.analysisStart (BOUNDARY_END);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
-        AREDispatch.sendObjectPlusData (boundaryName);
+        AREDispatch.sendString (boundaryName);
+        //AREDispatch.sendObjectPlusData (boundaryName);
         AREDispatch.analysisEnd ();
     }
 }

@@ -3,6 +3,7 @@ package ch.usi.dag.disldroidreserver.msg.onfork;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 import ch.usi.dag.disldroidreserver.exception.DiSLREServerException;
 import ch.usi.dag.disldroidreserver.msg.analyze.AnalysisHandler;
@@ -41,6 +42,22 @@ public class OnForkHandler implements RequestHandler {
 
     @Override
     public void exit () {
+    }
+
+
+    @Override
+    public void handle (final int pid, final ByteBuffer is, final boolean debug) throws Exception {
+        try {
+            final int childPID = is.getInt ();
+            if (childPID != 0) {
+                ShadowAddressSpace.getShadowAddressSpace (pid).onFork (childPID);
+            } else {
+                // Blocked the child process
+                ShadowAddressSpace.getShadowAddressSpaceBlocked (pid);
+            }
+        } catch (final Exception e) {
+            throw e;
+        }
     }
 
 }

@@ -2,6 +2,7 @@ package ch.usi.dag.disldroidreserver.msg.ipc;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,7 +112,7 @@ public class IPCHandler implements RequestHandler {
             final int pid2 = is.readInt ();
             final int tid2 = is.readInt ();
             final long timestamp = is.readLong ();
-            final boolean oneway = is.readBoolean ();
+            final boolean oneway = is.readShort () > 0;
             IPCEventRecord newEvent = null;//new IPCEventRecord();
             switch (type) {
             case 0:
@@ -222,6 +223,52 @@ public class IPCHandler implements RequestHandler {
 //          }
 //        }
 //    }
+
+    @Override
+    public void handle (final int pid, final ByteBuffer is, final boolean debug) throws Exception {
+        try {
+            final int tid = is.getInt ();
+            final int transaction_id = is.getInt ();
+            final short type = is.getShort ();
+            final int pid2 = is.getInt ();
+            final int tid2 = is.getInt ();
+            final long timestamp = is.getLong ();
+            final boolean oneway = is.getShort () > 0;
+            IPCEventRecord newEvent = null;//new IPCEventRecord();
+            switch (type) {
+            case 0:
+                newEvent= (new IPCEventRecord (
+                     pid, tid,transaction_id ,type, -1, -1, timestamp,oneway));
+                break;
+            case 1:
+                newEvent= (new IPCEventRecord (
+                    pid2, tid2,transaction_id ,type, pid, tid, timestamp,oneway));
+                break;
+            case 2:
+                newEvent= (new IPCEventRecord (
+                    pid2, tid2,transaction_id ,type, pid, tid, timestamp,oneway));
+                break;
+            case 3:
+                newEvent= (new IPCEventRecord (
+                    pid, tid,transaction_id ,type, pid2, tid2, timestamp,oneway));
+                break;
+            default:
+                System.err.println ("wrong happens");
+                break;
+            }
+            if(ShadowAddressSpace.getShadowAddressSpaceNoCreate (pid) != null){
+                analysisHandler.ipcOccurred (ShadowAddressSpace.getShadowAddressSpaceNoCreate (pid), tid, newEvent);
+                events_receivetime_ordered.add (newEvent);
+                insert_into_time_ordered (newEvent);
+            }else {
+                System.out.println ("cannot be!!");
+            }
+            //thread.newEvent (newEvent);
+        } catch (final Exception e) {
+            e.printStackTrace ();
+            throw new DiSLREServerException ("Error in handle IPC events");
+        }
+    }
 
 
 }
