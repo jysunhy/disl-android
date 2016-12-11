@@ -34,6 +34,15 @@ public class NetworkAnalysisStub {
         AREDispatch.analysisEnd ();
     }
 
+    public static void fileopen(final String path){
+        AREDispatch.analysisStart (BIND);
+        AREDispatch.sendInt (AREDispatch.getThisThreadId ());
+        AREDispatch.sendInt(-1);
+        AREDispatch.sendString (path);
+        AREDispatch.sendInt(-1);
+        AREDispatch.analysisEnd ();
+    }
+
     public static void newConnection (
         final FileDescriptor fd, final InetAddress inetAddress, final int port, final int timeoutMs, final boolean successful) {
         AREDispatch.analysisStart (NEW_CONNECTION);

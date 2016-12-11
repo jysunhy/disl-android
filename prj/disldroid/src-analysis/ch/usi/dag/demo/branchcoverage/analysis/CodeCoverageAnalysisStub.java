@@ -18,4 +18,14 @@ public class CodeCoverageAnalysisStub {
         AREDispatch.analysisEnd ();
     }
 
+    public static short CBB = AREDispatch.registerMethod ("ch.usi.dag.demo.branchcoverage.analysis.CodeCoverageAnalysis.bbTaken");
+
+    public static void bbTaken (
+        final String classSignature, final String methodSignature, final int idx) {
+        AREDispatch.analysisStart (CBB);
+        AREDispatch.sendString (classSignature);
+        AREDispatch.sendString (methodSignature);
+        AREDispatch.sendInt (idx);
+        AREDispatch.analysisEnd ();
+    }
 }

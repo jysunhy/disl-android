@@ -81,6 +81,7 @@ public class NetworkAnalysis extends RemoteAnalysis {
 
     public static void bind (final Context ctx, final int tid,
         final int fdHash, final String address, final int port) {
+        System.out.println(address);
         WebLogger.reportNetworkBind (
             ctx.getProcessID (), ctx.getPname (), tid, fdHash,
             address==null?"Unknown":address.toString (), port, SVMCallStack.get (ctx, tid).getRuntimeStack ());

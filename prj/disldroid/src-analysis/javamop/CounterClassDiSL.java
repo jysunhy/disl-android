@@ -1,6 +1,11 @@
 package javamop;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 import ch.usi.dag.dislre.AREDispatch;
@@ -11,38 +16,34 @@ public class CounterClassDiSL{
     static ConcurrentMap<String,AtomicLong> sortedJoinPointMap;
 
     public static void countJoinPoints(final String mName){
+
     	joinPointMap.putIfAbsent(mName,new AtomicLong(0));
     	joinPointMap.get(mName).incrementAndGet();
-        //System.out.println(mName +" = "+joinPointMap.get(mName));
-    	AREDispatch.NativeLog (mName +" = "+joinPointMap.get(mName));
-    }
-/*
-    static {
-    	Runtime.getRuntime().addShutdownHook(new Thread(CounterClassDiSL::getStatistics));
+    	AREDispatch.NativeLog ("JAVAMOP: "+mName+" "+joinPointMap.get(mName).get());
     }
 
 	public static void getStatistics(){
 		sortedJoinPointMap = new ConcurrentSkipListMap<String,AtomicLong>(joinPointMap);
-   		for (ConcurrentMap.Entry<String,AtomicLong> entry :sortedJoinPointMap.entrySet())
+   		for (final ConcurrentMap.Entry<String,AtomicLong> entry :sortedJoinPointMap.entrySet())
    		{
-       		String key = entry.getKey();
-       		AtomicLong value = (AtomicLong) entry.getValue();
+       		final String key = entry.getKey();
+       		final AtomicLong value = entry.getValue();
 
 			try {
-				File file = new File("/Users/omarjaved/Results/JavaMOP_5052016/benchmarks/DiSLStatistics.txt");
-				FileWriter fileWriter = new FileWriter(file,true);
-				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+				final File file = new File("DiSLStatistics.txt");
+				final FileWriter fileWriter = new FileWriter(file,true);
+				final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 				bufferedWriter.write(key+","+value+"\n");
 				bufferedWriter.close();
 			}
-			catch(IOException ex){ex.printStackTrace();}
+			catch(final IOException ex){ex.printStackTrace();}
 
 		}
 
 	}
 
 
-*/
+
 
 
 

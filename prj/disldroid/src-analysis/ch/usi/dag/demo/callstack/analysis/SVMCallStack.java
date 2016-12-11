@@ -36,11 +36,26 @@ public class SVMCallStack {
     }
     public synchronized void pushBoundary(final String boundaryName){
         runtimeStack.push (boundaryName);
+        //showStack("push "+boundaryName);
     }
     public synchronized  void popBoundary(final String boundaryName){
-        runtimeStack.pop ();
+//        try{
+//            runtimeStack.pop ();
+//        }catch (final Exception e){
+//            e.printStackTrace ();
+//            return;
+//        }
+        runtimeStack.push (boundaryName+"_pop");
+        //showStack("pop "+boundaryName);
     }
     public synchronized String peekBoundary(){
         return runtimeStack.peek ();
+    }
+    public void showStack(final String tag){
+        System.out.print("Stack info "+tag+" ("+this.thd.getPid ()+"-"+this.thd.getTid ()+"):");
+        for(int i = 0; i < runtimeStack.size (); i++){
+            System.out.print ("#"+runtimeStack.get (i));
+        }
+        System.out.println("");
     }
 }

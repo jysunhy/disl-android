@@ -12,7 +12,7 @@ public class CallStackAnalysis extends RemoteAnalysis {
         final Context ctx, final int tid, final String boundaryName) {
         final SVMCallStack state = SVMCallStack.get (ctx, tid);
         state.pushBoundary (boundaryName.toString ());
-        System.out.println(ctx.getPname ()+" entering "+boundaryName);
+        //System.out.println(ctx.getPname ()+" "+tid+" entering "+boundaryName);
     }
 
     public void boundaryEnd (
@@ -20,7 +20,10 @@ public class CallStackAnalysis extends RemoteAnalysis {
         final Context ctx, final int tid, final String boundaryName) {
         final SVMCallStack state = SVMCallStack.get (ctx, tid);
         state.popBoundary (boundaryName.toString ());
-        System.out.println(ctx.getPname ()+" leaving "+boundaryName);
+        //System.out.println(ctx.getPname ()+" leaving "+boundaryName);
+    }
+    public void stacktrace(final Context ctx, final int tid, final String st){
+        System.out.println(ctx.getPname ()+" "+tid+" thread "+tid+"\n"+st);
     }
 
     @Override

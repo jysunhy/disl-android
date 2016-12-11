@@ -7,7 +7,8 @@ package javamop;
 public class ConstrSynInvocationMarker extends AbstractInvocationMarker {
 
 	public String getMethodDescription(){
-		return "* java.util.Collections.synchr*(..)";
+		//return "* java.util.Collections.synchr*(..)";
+        return "java.util.Map java.util.Collections.synchr*(..)";
 	}
 
 }

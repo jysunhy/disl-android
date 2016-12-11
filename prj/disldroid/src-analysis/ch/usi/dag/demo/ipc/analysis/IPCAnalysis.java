@@ -26,7 +26,7 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
     @Override
     public void onRequestSent (
         final TransactionInfo info, final NativeThread client, final Context ctx) {
-        System.out.println("Consumed "+client.getPid ()+" "+client.getTid ()+info.getTransactionId ()+" 0");
+//        System.out.println("Consumed "+client.getPid ()+" "+client.getTid ()+info.getTransactionId ()+" 0");
         final ThreadState clientState = ThreadState.get (client);
         clientState.recordRequestSent(client,info);
     }
@@ -35,7 +35,7 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
     public void onRequestReceived (
         final TransactionInfo info, final NativeThread client,
         final NativeThread server, final Context ctx) {
-        System.out.println("Consumed "+client.getPid ()+" "+client.getTid ()+info.getTransactionId ()+" 1");
+//        System.out.println("Consumed "+client.getPid ()+" "+client.getTid ()+info.getTransactionId ()+" 1");
         final ThreadState clientState = ThreadState.get (client);
         clientState.waitForRequestSent (info, server);
         final ThreadState serverState = ThreadState.get (server);
@@ -45,7 +45,7 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
     @Override
     public void onResponseSent (
         final TransactionInfo info, final NativeThread client, final NativeThread server, final Context ctx) {
-        System.out.println("Consumed "+client.getPid ()+" "+client.getTid ()+info.getTransactionId ()+" 2");
+//        System.out.println("Consumed "+client.getPid ()+" "+client.getTid ()+info.getTransactionId ()+" 2");
             final ThreadState serverState = ThreadState.get (server);
             serverState.recordResponseSent(client, server, info);
     }
@@ -54,7 +54,7 @@ public class IPCAnalysis extends RemoteIPCAnalysis {
     public void onResponseReceived (
         final TransactionInfo info, final NativeThread client,
         final NativeThread server, final Context ctx) {
-        System.out.println("Consumed "+client.getPid ()+" "+client.getTid ()+info.getTransactionId ()+" 3");
+//        System.out.println("Consumed "+client.getPid ()+" "+client.getTid ()+info.getTransactionId ()+" 3");
             final ThreadState serverState = ThreadState.get (server);
             final ThreadState clientState = ThreadState.get (client);
             if(!clientState.checkResponseReceivedValid(info,server)) {

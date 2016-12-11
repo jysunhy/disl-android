@@ -1,27 +1,21 @@
 package javamop;
 import java.util.LinkedList;
 import java.util.List;
-import java.io.*;
+
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
+import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
-import org.objectweb.asm.tree.ClassNode;
-import ch.usi.dag.disl.marker.AbstractMarker;
-import ch.usi.dag.disl.marker.AbstractDWRMarker;
-import ch.usi.dag.disl.marker.Marker;
-import ch.usi.dag.disl.snippet.Snippet;
-import ch.usi.dag.disl.snippet.Shadow;
-import ch.usi.dag.disl.snippet.Shadow.WeavingRegion;
+
 import ch.usi.dag.disl.exception.MarkerException;
 import ch.usi.dag.disl.marker.AbstractMarker.MarkedRegion;
-import java.util.*;
-import org.objectweb.asm.tree.LabelNode;
-
+import ch.usi.dag.disl.marker.Marker;
 import ch.usi.dag.disl.scope.Scope;
 import ch.usi.dag.disl.scope.ScopeImpl;
-import ch.usi.dag.disl.exception.ScopeParserException;
+import ch.usi.dag.disl.snippet.Shadow;
+import ch.usi.dag.disl.snippet.Snippet;
 
 /**
  * Sets the region on every method invocation instruction.
@@ -67,43 +61,49 @@ public abstract class AbstractInvocationMarker implements Marker {
 	    }
 
 
-	public final List<MarkedRegion> mark(MethodNode methodNode) {
+	public final List<MarkedRegion> mark(final MethodNode methodNode) {
 
 
-		      List<MarkedRegion> mrs = markWithDefaultWeavingReg(methodNode);
+		      final List<MarkedRegion> mrs = markWithDefaultWeavingReg(methodNode);
 
 		        // automatically compute default weaving region
-		        for (MarkedRegion mr : mrs) {
+		        for (final MarkedRegion mr : mrs) {
 		            mr.setWeavingRegion(mr.computeDefaultWeavingRegion(methodNode));
 		        }
 
 		        return mrs;
 		    }
 
-		public List<MarkedRegion> markWithDefaultWeavingReg(MethodNode method) {
-			List<MarkedRegion> regions = new LinkedList<MarkedRegion>();
+		public List<MarkedRegion> markWithDefaultWeavingReg(final MethodNode method) {
+			final List<MarkedRegion> regions = new LinkedList<MarkedRegion>();
 
 			// traverse all instructions
 			if((method.access & Opcodes.ACC_BRIDGE)<1){
-				InsnList instructions = method.instructions;
+				final InsnList instructions = method.instructions;
 
-					for (AbstractInsnNode instruction : instructions.toArray()) {
+					for (final AbstractInsnNode instruction : instructions.toArray()) {
 
 							// check for method invocation instructions
 						if(instruction.getOpcode()!=Opcodes.INVOKESPECIAL){
 							if (instruction instanceof MethodInsnNode) {
-									MethodInsnNode inst = (MethodInsnNode)instruction;
+									final MethodInsnNode inst = (MethodInsnNode)instruction;
 								//if(IdentifyClass.allowSubInterfaces(getMethodDescription(),instruction,inst)){
+										//System.out.println("OuterClass="+className+" "+"and method"+ methodName);
 											appropriateMethodDescription = IdentifyClass.ClassFromInterface(inst.owner, inst.name, getMethodDescription(),className,methodName);
 										//}
 										try{
-											Scope s = new ScopeImpl(appropriateMethodDescription);
+											final Scope s = new ScopeImpl(appropriateMethodDescription);
 											//if(s.matches(inst.owner, inst.name, inst.desc)){
 												//System.out.println("Status of isInterfaceMethod="+IdentifyClass.isInterfaceMethod());
+												//System.out.println("Before Weaving check condition"
+												//		+ s.matches(inst.owner, inst.name, inst.desc)+ " && "+IdentifyClass.isInterfaceMethod() );
 												if(s.matches(inst.owner, inst.name, inst.desc) && IdentifyClass.isInterfaceMethod()){
+												    {
+												        //System.out.println("Weaved code");
+												    }
 												regions.add(new MarkedRegion(instruction, instruction));
 											}
-										} catch(Exception ex){}
+										} catch(final Exception ex){}
 
 							//	}
 							}

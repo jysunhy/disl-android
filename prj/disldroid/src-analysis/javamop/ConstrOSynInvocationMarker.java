@@ -1,8 +1,14 @@
 package javamop;
 
-public class ConstrOSynInvocationMarker extends AbstractInvocationMarker{
-    @Override
-    public String getMethodDescription(){
-        return "* java.util.Collections.synchr*(..)";
-    }
+/**
+ * Sets the region on every method invocation instruction.
+ *
+ */
+public class ConstrOSynInvocationMarker extends AbstractInvocationMarker {
+
+	public String getMethodDescription(){
+		return "* java.util.Collections.synchr*(..)";
+       
+	}
+
 }

@@ -8,6 +8,7 @@ public class IPCAnalysisStub {
     public static short PERMISSION_USED = AREDispatch.registerMethod ("ch.usi.dag.demo.ipc.analysis.IPCAnalysis.permissionUsed");
 
     public static void permission_used (final String permission_str) {
+        AREDispatch.NativeLog ("PERMISSION "+permission_str);
         AREDispatch.analysisStart (PERMISSION_USED);
         AREDispatch.sendInt (AREDispatch.getThisThreadId ());
         AREDispatch.sendString (permission_str);

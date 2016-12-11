@@ -1,9 +1,12 @@
 package javamop;
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Map;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
@@ -14,22 +17,25 @@ public class IdentifyClass {
 	    static Boolean methodExists;
 	    static Boolean isPlus=false;
 
-	    static String ClassFromInterface(String Owner, String name, String methodDescription, String outerClass, String outerMethod){
+	    static String ClassFromInterface(String Owner, final String name, String methodDescription, final String outerClass, final String outerMethod){
 
-	    	String noChangeDesc = methodDescription;
+	    	final String noChangeDesc = methodDescription;
 	    	methodExists=false;
 	    	isPlus = false;
 //		//	if(name.equals("<init>")){
 //				return methodDescription;
 //			}
 
-	    	String onlyClassName = Owner.substring(Owner.lastIndexOf("/")+1,Owner.length());
+	    	final String onlyClassName = Owner.substring(Owner.lastIndexOf("/")+1,Owner.length());
 
-
+	    	if(Owner.equals(outerClass)){
+	    		//System.out.println("Hello World");
+	    	}
 
 //
+	    	//System.out.println("Owner="+Owner +" "+"outClass="+outerClass);
 
-
+	    		//System.out.println("Method name is="+name +"and outmethodname is"+outerMethod );
 
 
 	    		if(methodDescription.contains("+")){
@@ -41,7 +47,7 @@ public class IdentifyClass {
 	    		Owner = Owner.replace("/", ".");
 	    		setParameters(methodDescription);
 	    		checkMethod(Owner,name, methodDescription,interfacesToCheck);
-
+	    		//System.out.println("methodExists"+methodExists);
 	    		if(__checkInterfaces(Owner, isClass, interfacesToCheck,name,outerMethod,outerClass)){
 
 
@@ -51,11 +57,12 @@ public class IdentifyClass {
 	    		}
 
 
-
+	    			//System.out.println("Exiting normally");
+	    			//System.out.println("Exit with method Description"+methodDescription);
 	    		return methodDescription;
 	    }
 
-	    private static void setParameters(String methodDescription) {
+	    private static void setParameters(final String methodDescription) {
 
 	    	//Only require the interface name for conditional checks.
 
@@ -71,12 +78,13 @@ public class IdentifyClass {
 	    	}
 		}
 
-		static boolean __checkInterfaces(final String className, Map<String, Boolean> hashMapCache, final String interfacesToCheck,String name ,String outerMethod, String outerClass){
-
+		static boolean __checkInterfaces(final String className, final Map<String, Boolean> hashMapCache, final String interfacesToCheck,final String name ,final String outerMethod, final String outerClass){
+			//System.out.println("Inside __checkInterfaces="+className+" " +interfacesToCheck);
 
 			final Boolean alreadyMatched = hashMapCache.get(className+"&"+interfacesToCheck);
 			if (alreadyMatched == null) { // Class not already processed
 
+				//System.out.println(name+" "+outerMethod);
 
 	    		Class<?> cl = null;
 	    		boolean matches = false;
@@ -85,21 +93,22 @@ public class IdentifyClass {
 	    		try {
 	    		cl = Class.forName(className);
 
-	    		} catch (ClassNotFoundException e) {
+	    		} catch (final ClassNotFoundException e) {
 
 	    			try {
-	    				File file = new File("ClassFileList.txt");
-	    				FileWriter fileWriter = new FileWriter(file.getName(),true);
-	    				BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+	    				final File file = new File("ClassFileList.txt");
+	    				final FileWriter fileWriter = new FileWriter(file.getName(),true);
+	    				final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 
 	    				bufferedWriter.write("================================="+"\n");
 	    				bufferedWriter.write("Keyed class not found="+className+"\n");
 	    				bufferedWriter.write("================================="+"\n");
 
 	    				bufferedWriter.close();
-	    			} catch(IOException ex){ex.printStackTrace();}
+	    			} catch(final IOException ex){ex.printStackTrace();}
 
-	    		} catch (Throwable t) {}
+	    		} catch (final Throwable t) {}
+	    		//System.out.println("After Checking conditions for the class existance");
 
 
 	    		if (cl != null) {
@@ -111,13 +120,16 @@ public class IdentifyClass {
 	    		// hierarchy
 
 	    			while (cl != null && !matches) {
+	    				//System.out.println("Checking for isPlus");
 
 	    					cl = cl.getSuperclass();
 
+	    					//System.out.println("Existing from isPlus condition");
 	    					matches = __checkInterfacesOfClass(cl, interfacesToCheck);
 	    			}
 
 	    		hashMapCache.put(className+"&"+interfacesToCheck, matches);
+	    		//System.out.println("Leaving matches on first attempt="+matches);
 	    		return matches;
 
 	    		}
@@ -130,28 +142,33 @@ public class IdentifyClass {
 	    }
 
 	    private static boolean __checkInterfacesOfClass(final Class<?> cl, final String interfacesToCheck) {
-	    	if (cl == null)
-	    		return false;
+	    	//System.out.println("Inside __checkInterfacesOfClass");
+	    	if (cl == null) {
+                return false;
+            }
 
 	    	if(checkString(cl.getName(),interfacesToCheck)){
+	    		//System.out.println("success on first Attempt");
 	    		return true;
 	    	}
 
 	    	final Class<?>[] interfaces = cl.getInterfaces();
 
-	    		for (int i = 0; i < interfaces.length; i++) {
-	    			String ifName = interfaces[i].getName();
+	    		for (final Class <?> interface1 : interfaces) {
+	    			String ifName = interface1.getName();
 	    			ifName = checkForTopHierarchy(ifName,interfacesToCheck);
+	    			//System.out.println("After Checking TopHeirarchy="+ ifName+" "+interfacesToCheck);
 
-	    			if (checkString(ifName, interfacesToCheck))
-	    				return true;
+	    			if (checkString(ifName, interfacesToCheck)) {
+                        return true;
+                    }
 	    			}
 
 	    	return false;
 	    }
 
 
-	    public static boolean checkString(String stringToCheck, String stringsAllowed) {
+	    public static boolean checkString(final String stringToCheck, final String stringsAllowed) {
 
 		    if (stringToCheck.equals(stringsAllowed)) {
 		    	return true;
@@ -187,17 +204,17 @@ public class IdentifyClass {
 //Better way to do is to make this recursive function,
 //Idea is to use replaceme method
 
-	    public static String checkForTopHierarchy(String ifName,String interfacesToCheck){
+	    public static String checkForTopHierarchy(String ifName,final String interfacesToCheck){
 
 
 			String topInterface = null;
 			String topInterface_inner = null;
 			try{
-				Class<?> cl = Class.forName(ifName);
-				Class<?>[] interfaces = cl.getInterfaces();
+				final Class<?> cl = Class.forName(ifName);
+				final Class<?>[] interfaces = cl.getInterfaces();
 
-				for(int i =0;i<interfaces.length;i++){
-					topInterface = interfaces[i].getName();
+				for (final Class <?> interface1 : interfaces) {
+					topInterface = interface1.getName();
 
 					if(topInterface!=null){
 
@@ -205,8 +222,8 @@ public class IdentifyClass {
 							ifName = topInterface;
 						}
 						else{
-							Class<?> cl1 = Class.forName(topInterface);
-							Class<?>[] interfaces1 = cl1.getInterfaces();
+							final Class<?> cl1 = Class.forName(topInterface);
+							final Class<?>[] interfaces1 = cl1.getInterfaces();
 							topInterface_inner = interfaces1[0].getName();
 								if(topInterface_inner.equals(interfacesToCheck)){  //In case top most interface is equal to interfaces to Check
 									ifName = topInterface_inner;
@@ -216,7 +233,7 @@ public class IdentifyClass {
 				}
 			}
 
-			 catch(Exception ex){}
+			 catch(final Exception ex){}
 
 			return ifName;
 
@@ -254,11 +271,13 @@ public class IdentifyClass {
 //	    }
 
 
-	    public static Boolean allowSubInterfaces(String JoinPointDescription, AbstractInsnNode instruction, MethodInsnNode methodInsn){
+	    public static Boolean allowSubInterfaces(final String JoinPointDescription, final AbstractInsnNode instruction, final MethodInsnNode methodInsn){
 	    		if(!JoinPointDescription.contains("+")){
 
-	    			String name = methodInsn.owner.replace("/",".");
+	    			final String name = methodInsn.owner.replace("/",".");
 
+	    			System.out.println("JoinPointDescription="+JoinPointDescription);
+	    			System.out.println("MethodInsn.owner="+methodInsn.owner);
 
 	    			if((instruction.getOpcode()!=Opcodes.INVOKEINTERFACE) || (JoinPointDescription.contains(name))){
 	    				return true;
@@ -274,7 +293,7 @@ public class IdentifyClass {
 	    }
 
 
-	    public static  void checkMethod(String Owner, String mName, String mTest, String interfaceName){
+	    public static  void checkMethod(final String Owner, final String mName, String mTest, final String interfaceName){
 
 	    	//mName = mName.substring(0,mName.indexOf("("));
      		//mName = mName.substring(mName.lastIndexOf(".")+1,mName.length());
@@ -283,11 +302,15 @@ public class IdentifyClass {
     		mTest = mTest.substring(mTest.lastIndexOf(".")+1,mTest.length());
 
 
+    			//System.out.println("mTest="+mTest+" "+"mName="+mName);
 
     		if(mTest.endsWith("*")){
-    			String onlyMethod = mTest.substring(0,mTest.indexOf("*"));
+    			//System.out.println("entering endsWith");
+    			final String onlyMethod = mTest.substring(0,mTest.indexOf("*"));
     			if(!onlyMethod.isEmpty()){
+    				//System.out.println("Not Empty String");
     				if(mName.startsWith(onlyMethod)){
+    					//System.out.println("Inside condition");
    // 					methodExists = isPlus?true:getMethods(mName,Owner);
     					methodExists = true;
     					//System.out.println("What is the value of methodExists="+methodExists);
@@ -295,8 +318,10 @@ public class IdentifyClass {
     			}
     		}
 
+    		//System.out.println("Leaving endsWith");
     		if(mTest.startsWith("*")){
-    			String onlyMethod = mTest.substring(mTest.indexOf("*")+1,mTest.length());
+    			//System.out.println("entering StartsWith");
+    			final String onlyMethod = mTest.substring(mTest.indexOf("*")+1,mTest.length());
     			if(!onlyMethod.isEmpty()){
     				if(mTest.endsWith(onlyMethod)){
 
@@ -305,6 +330,7 @@ public class IdentifyClass {
     			}
     		}
     		if(mTest.equals("*")){
+    			//System.out.println("MethodTest is equal");
     			methodExists = getMethods(mName,interfaceName);
 
     		}
@@ -343,19 +369,21 @@ public class IdentifyClass {
 //	        	}
 	    }
 
-	    public static Boolean getMethods(String methodTest,String interfaceName){
+	    public static Boolean getMethods(final String methodTest,final String interfaceName){
 	    	Boolean testMethod = false;
 	    	try {
-	            Class<?> c = Class.forName(interfaceName);
+	            final Class<?> c = Class.forName(interfaceName);
 
-	            Method[] m = c.getDeclaredMethods();
-	            for (int i = 0; i < m.length; i++){
-	            	String mName = m[i].toString();
+	            final Method[] m = c.getDeclaredMethods();
+	            for (final Method element : m) {
+	            	String mName = element.toString();
             		mName = mName.substring(0,mName.indexOf("("));
             		mName = mName.substring(mName.lastIndexOf(".")+1,mName.length());
-
+            		//System.out.println("MethodTest="+methodTest);
+            		//System.out.println("mName"+mName);
             		if(methodTest.equals(mName)){
             			testMethod=true;
+            			//System.out.println("Value of testMethod="+testMethod);
             			break;
             		}
 
@@ -363,30 +391,36 @@ public class IdentifyClass {
             	}
 
 
-	    	}catch(Exception ex){}
-	    	catch(Throwable t){}
+	    	}catch(final Exception ex){}
+	    	catch(final Throwable t){}
 
 	    	return testMethod;
 	    }
 
 
-	    static Boolean allowExtends(String Owner, String interfaceName){
-
+	    static Boolean allowExtends(final String Owner, final String interfaceName){
+	    	//System.out.println("Inside allowExtends");
+	    	//System.out.println("Owner="+Owner);
+	    	//System.out.println("interfaceName="+interfaceName);
 	    	try{
-	    		Class<?> superClass = Class.forName(interfaceName);
-	    		Class<?> classToTest = Class.forName(Owner);
+	    		final Class<?> superClass = Class.forName(interfaceName);
+	    		final Class<?> classToTest = Class.forName(Owner);
+	    		//System.out.println("Testing condition is about to start");
 	    		if(classToTest.isAssignableFrom(superClass)){
+	    			//System.out.println(Owner+"is a sub class of"+interfaceName);
 	    			//return true;
 	    		}
 
-	    	}catch(Exception ex){
+	    		//System.out.println("Test condition went well, I think");
+	    	}catch(final Exception ex){
 	    	}
-	    	catch(Throwable t){}
+	    	catch(final Throwable t){}
 	    	return false;
 
 	    }
 
 	    public static Boolean isInterfaceMethod(){
+	    		//System.out.println("Inside isInterfaceMethod="+methodExists);
 	    		return methodExists;
 	    }
 

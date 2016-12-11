@@ -2,6 +2,8 @@ package ch.usi.dag.javamop.hasnext;
 
 import java.util.Iterator;
 
+import javamop.HasNextInvocationMarker;
+import javamop.NextInvocationMarker;
 import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.processorcontext.ArgumentProcessorContext;

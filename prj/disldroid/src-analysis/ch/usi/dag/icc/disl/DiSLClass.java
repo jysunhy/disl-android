@@ -94,7 +94,7 @@ public class DiSLClass {
 						for (final String p : permissions) {
 							if(obj.toString ().equals (p)) {
 							    if(obj.toString ().equals ("android.permission.SEND_SMS") || obj.toString ().equals ("android.permission.READ_PHONE_STATE")){
-							        AREDispatch.printStack ();
+//							        AREDispatch.printStack ();
 							    }
 								api = 1<<pos;
 								break;

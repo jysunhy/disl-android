@@ -4,6 +4,7 @@ import ch.usi.dag.demo.branchcoverage.analysis.CodeCoverageAnalysisStub;
 import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.annotation.SyntheticLocal;
+import ch.usi.dag.disl.marker.BasicBlockMarker;
 
 
 public class DiSLClass {
@@ -43,5 +44,10 @@ public class DiSLClass {
             CodeCoverageAnalysisStub.branchTaken(c.thisClassName (), c.thisMethodSignature  (), c.getIndex ());
             encounterBranch = false;
         }
+    }
+
+    @Before (marker = BasicBlockMarker.class, order = 1)
+    public static void beforeBB (final CodeCoverageContext c) {
+        CodeCoverageAnalysisStub.bbTaken (c.thisClassName (), c.thisMethodSignature  (), c.getMethodBBindex ());
     }
 }

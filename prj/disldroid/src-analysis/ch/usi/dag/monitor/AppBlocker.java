@@ -37,7 +37,7 @@ public class AppBlocker {
             deleteFile (dir + "/META-INF");
             final String dislClass = "lib-class/SandboxBlocker.class";
             final File dexFile = new File(dir + "/classes.dex");
-            OfflineInstrumentation.instrumentJar (OfflineInstrumentation.readbytes (dexFile), new DiSL (false, dislClass, ""), dir + "/out-classes.dex");
+            OfflineInstrumentation.instrumentJar ("a",OfflineInstrumentation.readbytes (dexFile), new DiSL (false, dislClass, ""), dir + "/out-classes.dex");
             dexFile.delete ();
             final File newDexFile = new File(dir + "/out-classes.dex");
             final File temp = new File(dir + "/classes.dex");
