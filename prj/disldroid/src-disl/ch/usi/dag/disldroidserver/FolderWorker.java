@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 
 public class FolderWorker extends Thread {
-    public static boolean isFromFolder = true;
+    public static boolean isFromFolder = false;
 
     public FolderWorker () {
     }
@@ -71,7 +71,7 @@ public class FolderWorker extends Thread {
                 final List<String> commands = new ArrayList<String>();
                 commands.add("/Users/haiyang/Library/Android/sdk/platform-tools/adb");
                 commands.add("pull");
-                commands.add("/data/data/disl");
+                commands.add("/data/data/disl/table");
                 commands.add("/Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder");
                 final ProcessBuilder pb = new ProcessBuilder (commands);
                 pb.start ();
@@ -110,6 +110,23 @@ public class FolderWorker extends Thread {
                                     if(AndroidInstrumenter.debug) {
                                         System.out.println("Notice uninstrumented "+name);
                                     }
+                                    try {
+                                        final List<String> commands = new ArrayList<String>();
+                                        commands.add("/Users/haiyang/Library/Android/sdk/platform-tools/adb");
+                                        commands.add("pull");
+                                        commands.add("/data/data/disl/dex/"+fname.replace ("dextable", "dex"));
+                                        commands.add("/Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder");
+                                        final ProcessBuilder pb = new ProcessBuilder (commands);
+                                        pb.start ();
+                                    } catch (final Exception e1) {
+                                        e1.printStackTrace();
+                                    }
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (final InterruptedException e1) {
+                                        // TODO Auto-generated catch block
+                                        e1.printStackTrace();
+                                    }
                                     byte[] dexCode;
                                     do{
                                         dexCode = Utils.readbytes (new File(androidFolder+"/"+fname.replace ("dextable", "dex")));
@@ -118,6 +135,7 @@ public class FolderWorker extends Thread {
                                     final String jarName = name.substring(name.lastIndexOf ('/')+1);
                                     if(DiSLConfig.dexMap.get (jarName) == null || DiSLConfig.dexMap.get (jarName).preinstrumented_path.equals ("")) {
                                         instrClass = Worker.instrumentJar (jarName, dexCode);
+                                        //javamop.Guard.printCounters ();
                                     }
                                     else {
                                         instrClass = Worker.preInstrumentJar (jarName, DiSLConfig.dexMap.get (jarName).preinstrumented_path, dexCode);
@@ -142,6 +160,53 @@ public class FolderWorker extends Thread {
                                     fw0.flush ();
                                     fw0.close ();
                                     dexes.get (fname).instrumentedSize = instrClass.length;
+
+                                    try {
+                                        //System.out.println("pushing and cleaning");
+                                        //final Process p = Runtime.getRuntime().exec(new String[]{"zsh","-c","adb push /Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/ /data/app/ "});
+                                        final List<String> commands = new ArrayList<String>();
+                                        commands.add("/Users/haiyang/Library/Android/sdk/platform-tools/adb");
+                                        commands.add("push");
+                                        commands.add("/Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/"+fname.replace ("dextable", "instrdex"));
+                                        commands.add("/data/app/");
+                                        final ProcessBuilder pb = new ProcessBuilder (commands);
+                                        pb.start ();
+//                                        final List<String> commands2 = new ArrayList<String>();
+//                                        commands2.add("rm");
+//                                        commands2.add("/Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/*");
+//                                        final ProcessBuilder pb2 = new ProcessBuilder (commands);
+//                                        pb2.start ();
+                                        //final Process p2 = Runtime.getRuntime().exec(new String[]{"zsh","-c","rm /Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/*"});
+                                        //p2.waitFor ();
+                                    } catch (final Exception e1) {
+                                        e1.printStackTrace();
+                                    }
+                                    try {
+                                        //System.out.println("pushing and cleaning");
+                                        //final Process p = Runtime.getRuntime().exec(new String[]{"zsh","-c","adb push /Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/ /data/app/ "});
+                                        final List<String> commands = new ArrayList<String>();
+                                        commands.add("/Users/haiyang/Library/Android/sdk/platform-tools/adb");
+                                        commands.add("push");
+                                        commands.add("/Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/"+fname);
+                                        commands.add("/data/app/");
+                                        final ProcessBuilder pb = new ProcessBuilder (commands);
+                                        pb.start ();
+//                                        final List<String> commands2 = new ArrayList<String>();
+//                                        commands2.add("rm");
+//                                        commands2.add("/Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/*");
+//                                        final ProcessBuilder pb2 = new ProcessBuilder (commands);
+//                                        pb2.start ();
+                                        //final Process p2 = Runtime.getRuntime().exec(new String[]{"zsh","-c","rm /Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/*"});
+                                        //p2.waitFor ();
+                                    } catch (final Exception e1) {
+                                        e1.printStackTrace();
+                                    }
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (final InterruptedException e1) {
+                                        // TODO Auto-generated catch block
+                                        e1.printStackTrace();
+                                    }
                                 }else {
                                 }
                                 scanner.close ();
@@ -159,32 +224,6 @@ public class FolderWorker extends Thread {
 
 
                 }
-            }
-            try {
-                //System.out.println("pushing and cleaning");
-                //final Process p = Runtime.getRuntime().exec(new String[]{"zsh","-c","adb push /Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/ /data/app/ "});
-                final List<String> commands = new ArrayList<String>();
-                commands.add("/Users/haiyang/Library/Android/sdk/platform-tools/adb");
-                commands.add("push");
-                commands.add("/Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/");
-                commands.add("/data/app/");
-                final ProcessBuilder pb = new ProcessBuilder (commands);
-                pb.start ();
-//                final List<String> commands2 = new ArrayList<String>();
-//                commands2.add("rm");
-//                commands2.add("/Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/*");
-//                final ProcessBuilder pb2 = new ProcessBuilder (commands);
-//                pb2.start ();
-                //final Process p2 = Runtime.getRuntime().exec(new String[]{"zsh","-c","rm /Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder2/*"});
-                //p2.waitFor ();
-            } catch (final Exception e1) {
-                e1.printStackTrace();
-            }
-            try {
-                Thread.sleep(1000);
-            } catch (final InterruptedException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
             }
         }
     }

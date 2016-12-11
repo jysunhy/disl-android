@@ -29,13 +29,13 @@ public class OfflineInstrumentation {
     static boolean isCore = false;
 
 
-    public static void instrumentJar (final byte [] dexCode, final DiSL curdisl, final String outDexPath)
+    public static void instrumentJar (final String name, final byte [] dexCode, final DiSL curdisl, final String outDexPath)
     throws Exception
     {
         // create tmp file in system temporary files
         File dex2JarFile = null;
-        dex2JarFile = File.createTempFile ("offline_dex2jar", ".jar");
-
+        //dex2JarFile = File.createTempFile ("offline_dex2jar", ".jar");
+        dex2JarFile = new File("offline/"+name+".jar");
         final DexFileReader reader = new DexFileReader (dexCode);
 
         final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
@@ -65,8 +65,10 @@ public class OfflineInstrumentation {
         Enumeration <JarEntry> entryEnum;
         entryEnum = dex2JarJar.entries ();
 
-        final File instrumentedJarFile = File.createTempFile (
-            "offline_instrumented", ".jar");;
+        final File instrumentedJarFile =
+        //File.createTempFile (
+        //    "offline_instrumented", ".jar");;
+        new File("offline/instr_"+name+".jar");
         final FileOutputStream fos = new FileOutputStream (instrumentedJarFile);
         final ZipOutputStream zos = new ZipOutputStream (fos);
 
@@ -95,9 +97,6 @@ public class OfflineInstrumentation {
                         if(className.equals ("java/lang/Object")){
                             isCore = true;
                         }
-
-
-
 
                         zos.putNextEntry (nze);
                         byte [] code = null;
@@ -154,6 +153,10 @@ public class OfflineInstrumentation {
         fos.close ();
         dex2JarJar.close ();
 
+        //System.out.println("now run dx");
+        if(true) {
+            return;
+        }
         File outputDex = null;
         try {
             final Class <?> c = Class.forName ("com.android.dx.command.Main");
@@ -179,8 +182,8 @@ public class OfflineInstrumentation {
             System.err.println ("call dx error");
             e.printStackTrace ();
         }
-        instrumentedJarFile.deleteOnExit ();
-        dex2JarFile.deleteOnExit ();
+        //instrumentedJarFile.deleteOnExit ();
+        //dex2JarFile.deleteOnExit ();
     }
 
 
@@ -215,8 +218,9 @@ public class OfflineInstrumentation {
             System.out.println ("Usage: PATH_TO_INPUT_DEX PATH_TO_DISLCLASSES_SEPARTED_WITH_COMMA");
         } else {
             final File inputDex = new File (args [0]);
+            final String name = args[0].replace ('/', '_');
             try {
-                instrumentJar (readbytes (inputDex), new DiSL (false, args[1], ""), "output.dex");
+                instrumentJar (name, readbytes (inputDex), new DiSL (false, args[1], ""), "output.dex");
             } catch (final Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace ();

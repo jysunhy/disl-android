@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import ch.usi.dag.disl.DiSL;
 import ch.usi.dag.disl.exception.DiSLException;
 import ch.usi.dag.disl.exception.DiSLInMethodException;
 
@@ -32,7 +31,7 @@ public abstract class DiSLServer {
 	private static final AtomicInteger aliveWorkers = new AtomicInteger();
 	private static final AtomicLong instrumentationTime = new AtomicLong();
 
-	private static DiSL disl;
+	//private static DiSL disl;
 	private static ServerSocket listenSocket;
 
 	//
@@ -43,7 +42,7 @@ public abstract class DiSLServer {
 		        new FolderWorker ().start ();
 		    }
 			// use dynamic bypass
-			disl = new DiSL (bypass);
+			//disl = new DiSL (bypass);
 
 			if (debug) {
 				System.out.println ("DiSL: starting instrumentation server...");
@@ -70,7 +69,7 @@ public abstract class DiSLServer {
 
 				final NetMessageReader sc = new NetMessageReader (newClient);
 				aliveWorkers.incrementAndGet ();
-				new Worker (sc, disl).start ();
+				new Worker (sc, null).start ();
 				//new Worker (sc).start ();
 			}
 
@@ -147,7 +146,7 @@ public abstract class DiSLServer {
 
 			// no workers - shutdown
 			if (!continuous) {
-				disl.terminate ();
+				//disl.terminate ();
 
 				if (debug) {
 					System.out.println ("DiSL: shutting down instrumentation server...");

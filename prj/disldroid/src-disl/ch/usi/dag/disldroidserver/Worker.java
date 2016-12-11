@@ -157,7 +157,7 @@ public class Worker extends Thread {
 
     private final NetMessageReader sc;
 
-    private DiSL disl = null;
+    //private DiSL disl = null;
 //    public static HashMap<String, DiSL> dislMap = new HashMap <String, DiSL>();
 
     private final AtomicLong instrumentationTime = new AtomicLong ();
@@ -167,7 +167,7 @@ public class Worker extends Thread {
 
     Worker (final NetMessageReader sc, final DiSL dislArg) {
         this.sc = sc;
-        this.disl = dislArg;
+        //this.disl = dislArg;
         //this.disl = disl;
     }
 
@@ -283,7 +283,8 @@ public class Worker extends Thread {
 
                             zos.closeEntry ();
                         } catch (final Exception e) {
-                            e.printStackTrace ();
+                            //System.out.println("duplicate");
+                            //e.printStackTrace ();
                         }
                     }
                 } else {
@@ -439,13 +440,30 @@ public class Worker extends Thread {
         return newdisl;
     }
 
-    static byte [] instrumentJar (final String jarName, final byte [] dexCode)
+    static synchronized byte [] instrumentJar (final String jarName, final byte [] dexCode)
     throws IOException,
     FileNotFoundException {
         if (AndroidInstrumenter.debug) {
             System.out.println (jarName);
         }
         System.out.println("Start instrumenting "+jarName);
+
+        if(jarName.startsWith ("prog-")){
+            System.out.println("Skipping facebook packages first");
+            final FileOutputStream fos = new FileOutputStream (new File("dexes/"+jarName));
+              fos.write (dexCode, 0, dexCode.length);
+              fos.flush ();
+              fos.close ();
+            return dexCode;
+        }
+
+//        if(true){
+//            final FileOutputStream fos = new FileOutputStream (new File("dexes/"+jarName));
+//            fos.write (dexCode, 0, dexCode.length);
+//            fos.flush ();
+//            fos.close ();
+//            return dexCode;
+//        }
         byte [] instrClass = null;
         final DiSL curdisl = getDiSL(jarName);
         if (cacheUsed) {
@@ -485,6 +503,8 @@ public class Worker extends Thread {
             .printIR (false)
             .verbose (false)
             .to (dex2JarFile);
+
+        System.out.println(dex2JarFile.toString ());
 
         if (AndroidInstrumenter.debug) {
             final Map <com.googlecode.dex2jar.Method, Exception> exceptions = handler.getExceptions ();
@@ -546,6 +566,7 @@ public class Worker extends Thread {
         final ZipOutputStream zos = new ZipOutputStream (fos);
 
         if(curdisl!= null && curdisl.wrapperClass != null){
+            System.out.println("found wrapper class");
             final ZipEntry wrapperEntry = new ZipEntry (curdisl.wrapperClassName+".class");
             zos.putNextEntry (wrapperEntry);
             zos.write (curdisl.wrapperClass);
@@ -677,9 +698,9 @@ public class Worker extends Thread {
         // now read the instrumented dex file and pass
         // return it as byte[]
         instrClass = Utils.readbytes (outputDex);
-        outputDex.deleteOnExit ();
-        realJar.deleteOnExit ();
-        dex2JarFile.deleteOnExit ();
+        //outputDex.deleteOnExit ();
+        //realJar.deleteOnExit ();
+        //dex2JarFile.deleteOnExit ();
 
         if (cacheUsed) {
             if(curdisl != null) {
@@ -689,7 +710,7 @@ public class Worker extends Thread {
                 cacheMap.put (getCacheHash (dexCode, null), instrClass);
             }
         }
-        System.out.println("Instrumentation time for "+jarName+":"+(System.nanoTime ()-start)/1000000.0 + "ms");
+        System.out.println("Instrumentation time for "+jarName+":"+(System.nanoTime ()-start)/1000000.0 + "ms" + " size from "+dexCode.length+" bytes "+" to "+instrClass.length);
         //if(curdisl==null) {
         //    return dexCode;
         //} else {
@@ -805,6 +826,7 @@ public class Worker extends Thread {
                             final String jarName = fullPath.substring(fullPath.lastIndexOf ('/')+1);
                             if(DiSLConfig.dexMap.get (jarName) == null || DiSLConfig.dexMap.get (jarName).preinstrumented_path.equals ("")) {
                                 instrClass = instrumentJar (jarName, dexCode);
+                                //javamop.Guard.printCounters ();
                             }
                             else {
                                 instrClass = preInstrumentJar (jarName, DiSLConfig.dexMap.get (jarName).preinstrumented_path, dexCode);
