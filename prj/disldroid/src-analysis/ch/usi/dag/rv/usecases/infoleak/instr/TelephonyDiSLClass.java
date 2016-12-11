@@ -13,7 +13,7 @@ public class TelephonyDiSLClass {
     args = "invokevirtual")
     public static void getDeviceId (final DynamicContext dc) {
         final String value = dc.getStackValue (0, String.class);
-        DataLeakMonitorState.getInstance ().newEvent (new GetDeviceIdEvent ("DeviceId", value));
+        DataLeakMonitorState.getInstance ().newGlobalEvent (new GetDeviceIdEvent ("DeviceId", value));
     }
 
     @AfterReturning(marker=BytecodeMarker.class,
@@ -21,6 +21,6 @@ public class TelephonyDiSLClass {
     args = "invokevirtual")
     public static void getSubscriberId (final DynamicContext dc) {
         final String value = dc.getStackValue (0, String.class);
-        DataLeakMonitorState.getInstance ().newEvent (new GetSubscriberIdEvent ("SubscriberId", value));
+        DataLeakMonitorState.getInstance ().newGlobalEvent (new GetSubscriberIdEvent ("SubscriberId", value));
     }
 }

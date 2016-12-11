@@ -20,18 +20,29 @@ public abstract class MonitorState{
         processings.add (processing);
     }
 
+
+    public void newGlobalEvent(final MonitorEvent e){
+        for(final ThreadState state : threadStates.values ()){
+            addEventToThreadState (e, state);
+        }
+    }
+
     public void newEvent(final MonitorEvent e){
-        e.print ();
         final long tid = DefaultLog.getTID();
         final ThreadState tmp = new ThreadState ();
         ThreadState cur = threadStates.putIfAbsent (tid, tmp);
         if(cur == null){
             cur = tmp;
         }
-        cur.eventList.add (e);
+        addEventToThreadState (e, cur);
+    }
+
+    public void addEventToThreadState(final MonitorEvent e, final ThreadState state){
+        e.print ();
+        state.eventList.add (e);
         if(e.needProcess ()) {
             for(final MonitorEventProcessing p : processings){
-                p.process (cur.eventList);
+                p.process (state.eventList);
             }
         }
     }
