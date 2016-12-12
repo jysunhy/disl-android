@@ -78,7 +78,8 @@ public class Worker extends Thread {
     private static final String PROP_BUILTIN_LIB_PATH = "builtin.lib";
 
     //private static final String builtinLibPath = "lib/built-in-emma.jar";
-    private static final String builtinLibPath = System.getProperty (PROP_BUILTIN_LIB_PATH, "output/lib/builtin.jar");
+    //private static final String builtinLibPath = System.getProperty (PROP_BUILTIN_LIB_PATH, "output/lib/builtin.jar");
+    private static final String builtinLibPath = System.getProperty (PROP_BUILTIN_LIB_PATH, "");
 
     // the code to store the java bytecode which may be needed by the SVM server
     // TODO use DislClass+jarname as cache entry
@@ -355,8 +356,10 @@ public class Worker extends Thread {
                 final FileOutputStream fos = new FileOutputStream (instrumentedJarName);
                 final ZipOutputStream zos = new ZipOutputStream (fos);
 
-                putExtraClassesIntoJar (
-                    originalJarName, zos, builtinLibPath);
+                if(!builtinLibPath.equals ("")) {
+                    putExtraClassesIntoJar (
+                        originalJarName, zos, builtinLibPath);
+                }
 
                 zos.finish ();
                 zos.close ();
@@ -649,10 +652,13 @@ public class Worker extends Thread {
             putExtraClassesIntoJar (zos, instrlib, jarName);
             instrlib.close ();
 
-            final JarFile builtinlib = new JarFile (
-                builtinLibPath);
-            putExtraClassesIntoJar (zos, builtinlib, jarName);
-            builtinlib.close ();
+            if(!builtinLibPath.equals ("")) {
+                final JarFile builtinlib = new JarFile (
+                    builtinLibPath);
+
+                putExtraClassesIntoJar (zos, builtinlib, jarName);
+                builtinlib.close ();
+            }
             for(final String name: extraLibs){
                 final JarFile extraLib = new JarFile (name);
                 putExtraClassesIntoJar (zos, extraLib, name);
