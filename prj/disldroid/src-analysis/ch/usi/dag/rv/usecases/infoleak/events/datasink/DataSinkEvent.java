@@ -2,7 +2,6 @@ package ch.usi.dag.rv.usecases.infoleak.events.datasink;
 
 import java.util.Arrays;
 
-import ch.usi.dag.rv.logging.DefaultLog;
 import ch.usi.dag.rv.state.MonitorEvent;
 import ch.usi.dag.rv.usecases.infoleak.events.datasource.DataSourceEvent;
 
@@ -31,7 +30,7 @@ public class DataSinkEvent extends MonitorEvent{
         return match(this.content, source.getBytes ());
     }
     static boolean match(final byte[] a, final byte[] b){
-        DefaultLog.d("MATCHTEST", showBytes (a, 0, a.length)+" to "+showBytes (b, 0, b.length));
+        //DefaultLog.d("MATCHTEST", showBytes (a, 0, a.length)+" to "+showBytes (b, 0, b.length));
         if(a == null || b == null || a.length < b.length) {
             return false;
         }
@@ -49,7 +48,7 @@ public class DataSinkEvent extends MonitorEvent{
     }
     @Override
     public String toString(){
-        return "DataSink with value "+showBytes (content, 0, content.length);
+        return "RVDataSink with value "+showBytes (content, 0, content.length);
     }
 
     public static String showBytes(final byte[] bytes, final int start, final int len){

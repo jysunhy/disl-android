@@ -27,9 +27,9 @@ public class DataLeakEventProcessing implements MonitorEventProcessing{
             final DataSinkEvent last = (DataSinkEvent)events.get (events.size ()-1);
             for(final DataSourceEvent se : sources){
                 if(last.matches(se)){
-                    DefaultLog.v ("VIOLATION", last+" found "+se);
+                    DefaultLog.v ("RVDataLeak", last+" found "+se);
                     for(final MonitorEvent event : events){
-                        DefaultLog.v ("VIOLATION_TRACE", event.toString ());
+                        DefaultLog.v ("RVDataLeak-Trace", event.toString ());
                     }
                 }
             }

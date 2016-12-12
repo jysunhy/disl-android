@@ -38,12 +38,15 @@ public class NetworkDiSLClass {
         final InetAddress address = (InetAddress)args[5];
         final int port = (int)args[6];
         final int sentSize = dc.getStackValue (0, int.class);
-        DataLeakMonitorState.getInstance ().newEvent (new NetworkSendEvent (fd, buffer, byteOffset, sentSize, flags, address, port));
+        if(sentSize > 0)
+        {
+            DataLeakMonitorState.getInstance ().newEvent (new NetworkSendEvent (fd, buffer, byteOffset, sentSize, flags, address, port));
 //        if(sentSize > 0) {
 //            NetworkMonitor.sendMessage (fd, buffer, byteOffset, sentSize, flags, address, port);
 //        }else {
 //            NetworkMonitor.sendMessageFailed(fd, buffer, 0, buffer.length, flags, address, port);
 //        }
+        }
     }
 
     @AfterReturning(marker=BodyMarker.class,
@@ -57,7 +60,7 @@ public class NetworkDiSLClass {
         final InetAddress address = (InetAddress)args[3];
         final int port = (int)args[4];
         final int sentSize = dc.getStackValue (0, int.class);
-        if(buffer != null) {
+        if(sentSize > 0 && buffer != null) {
             DataLeakMonitorState.getInstance ().newEvent (new NetworkSendEvent (fd, buffer.array (), buffer.position () - sentSize, sentSize, flags, address, port));
         }
     }
