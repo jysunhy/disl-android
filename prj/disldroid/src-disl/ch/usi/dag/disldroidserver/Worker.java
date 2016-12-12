@@ -704,9 +704,9 @@ public class Worker extends Thread {
         // now read the instrumented dex file and pass
         // return it as byte[]
         instrClass = Utils.readbytes (outputDex);
-        //outputDex.deleteOnExit ();
-        //realJar.deleteOnExit ();
-        //dex2JarFile.deleteOnExit ();
+        outputDex.deleteOnExit ();
+        realJar.deleteOnExit ();
+        dex2JarFile.deleteOnExit ();
 
         if (cacheUsed) {
             if(curdisl != null) {
