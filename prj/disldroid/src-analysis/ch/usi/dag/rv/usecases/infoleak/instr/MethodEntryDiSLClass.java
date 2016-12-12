@@ -1,6 +1,5 @@
 package ch.usi.dag.rv.usecases.infoleak.instr;
 
-import ch.usi.dag.demo.ipc.disl.CallContext;
 import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.Before;
 import ch.usi.dag.disl.marker.BodyMarker;

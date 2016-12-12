@@ -22,12 +22,14 @@ public abstract class MonitorState{
 
 
     public void newGlobalEvent(final MonitorEvent e){
+        e.print ();
         for(final ThreadState state : threadStates.values ()){
             addEventToThreadState (e, state);
         }
     }
 
     public void newEvent(final MonitorEvent e){
+        e.print ();
         final long tid = DefaultLog.getTID();
         final ThreadState tmp = new ThreadState ();
         ThreadState cur = threadStates.putIfAbsent (tid, tmp);
@@ -38,7 +40,6 @@ public abstract class MonitorState{
     }
 
     public void addEventToThreadState(final MonitorEvent e, final ThreadState state){
-        e.print ();
         state.eventList.add (e);
         if(e.needProcess ()) {
             for(final MonitorEventProcessing p : processings){

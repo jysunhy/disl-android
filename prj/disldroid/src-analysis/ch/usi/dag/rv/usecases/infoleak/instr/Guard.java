@@ -1,7 +1,6 @@
 package ch.usi.dag.rv.usecases.infoleak.instr;
 
 import ch.usi.dag.disl.annotation.GuardMethod;
-import ch.usi.dag.monitor.disl.CallContext;
 
 public class Guard {
     public static class ReflectionGuard{
