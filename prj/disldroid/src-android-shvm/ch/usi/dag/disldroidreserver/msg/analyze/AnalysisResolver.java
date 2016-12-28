@@ -138,15 +138,15 @@ public final class AnalysisResolver {
 	}
 
 
-	static AnalysisMethodHolder getMethod (int pid, final short methodId)
+	static AnalysisMethodHolder getMethod (final int pid, final short methodId)
 	throws DiSLREServerException {
 
-	    if(!methodMaps.containsKey (pid)) {
+	    if(!methodMaps.containsKey (pid) || !methodMaps.get (pid).containsKey (methodId)) {
 	        final ShadowAddressSpace parent = ShadowAddressSpace.getShadowAddressSpaceNoCreate (pid).getParent ();
 	        if(parent == null) {
                 throw new DiSLREServerFatalException ("Unknown method id: "+ methodId + " in "+pid);
             }else {
-                pid = parent.getContext ().pid ();
+                return getMethod(parent.getContext ().pid (), methodId);
             }
 	    }
 

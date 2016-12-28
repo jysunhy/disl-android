@@ -20,7 +20,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -37,9 +36,8 @@ import ch.usi.dag.disl.exception.DiSLException;
 import ch.usi.dag.disl.util.Constants;
 import ch.usi.dag.disldroidserver.DiSLConfig.Dex;
 
-import com.googlecode.dex2jar.reader.DexFileReader;
-import com.googlecode.dex2jar.v3.Dex2jar;
-import com.googlecode.dex2jar.v3.DexExceptionHandlerImpl;
+import com.googlecode.d2j.dex.Dex2jar;
+import com.googlecode.d2j.reader.DexFileReader;
 
 
 public class Worker extends Thread {
@@ -496,29 +494,29 @@ public class Worker extends Thread {
 
         final DexFileReader reader = new DexFileReader (dexCode);
 
-        final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
+//        final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
 
-        Dex2jar.from (reader).withExceptionHandler (handler).reUseReg (
+        Dex2jar.from (reader).reUseReg (
             false)
             .topoLogicalSort (false)
             .skipDebug (true)
             .optimizeSynchronized (false)
             .printIR (false)
-            .verbose (false)
-            .to (dex2JarFile);
+//            .verbose (false)
+            .to (dex2JarFile.toPath ());
 
         System.out.println(dex2JarFile.toString ());
 
-        if (AndroidInstrumenter.debug) {
-            final Map <com.googlecode.dex2jar.Method, Exception> exceptions = handler.getExceptions ();
-            if (exceptions.size () > 0) {
-                final File errorFile = new File (jarName
-                    + "-error.zip");
-                handler.dumpException (reader, errorFile);
-                System.err.println ("Detail Error Information in File "
-                    + errorFile);
-            }
-        }
+//        if (AndroidInstrumenter.debug) {
+//            final Map <com.googlecode.dex2jar.Method, Exception> exceptions = handler.getExceptions ();
+//            if (exceptions.size () > 0) {
+//                final File errorFile = new File (jarName
+//                    + "-error.zip");
+//                handler.dumpException (reader, errorFile);
+//                System.err.println ("Detail Error Information in File "
+//                    + errorFile);
+//            }
+//        }
 
         // Now open the tmp jar file, and instrument only
         // the .class files

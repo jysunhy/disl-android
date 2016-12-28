@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 
 public class FolderWorker extends Thread {
-    public static boolean isFromFolder = false;
+    public static boolean isFromFolder = true;
 
     public FolderWorker () {
     }

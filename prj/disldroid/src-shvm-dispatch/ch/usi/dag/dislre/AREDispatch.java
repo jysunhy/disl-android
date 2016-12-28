@@ -83,7 +83,9 @@ public class AREDispatch {
 
 	public static native long getCPUClock();
 
-	public static native void printStack();
+//	public static native void printStack();
+
+	public static native void triggerEvent(int eventId);
 	//public static native void onFork(int parent);
 
 	/*static{

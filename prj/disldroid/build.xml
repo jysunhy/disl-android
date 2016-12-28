@@ -52,18 +52,18 @@
 		 For android
 	-->
 	<path id="dex2jar.classpath">
-		<pathelement location="${dex2jar.ir.lib}" />
 		<pathelement location="${dextools.lib}" />
 		<pathelement location="${dx.lib}" />
-		<pathelement location="${jasmin.lib}" />
-		<pathelement location="${commons.lite.lib}" />
 		<pathelement location="${dexreader.lib}" />
 		<pathelement location="${dextranslator.lib}" />
-		<pathelement location="${dexrename.lib}" />
 	</path>
 	<path id="android.classpath">
 		<pathelement location="${android.path}" />
 		<pathelement location="${android.core.path}" />
+	</path>
+	<path id="rv.classpath">
+		<pathelement location="${rv1.path}" />
+		<pathelement location="${rv2.path}" />
 	</path>
 	<path id="android.shvm.classpath">
 		<pathelement location="${build.android.shvm}" />
@@ -486,6 +486,7 @@
 			<classpath refid="disl.classpath" />
 			<classpath refid="util.classpath" />
 			<classpath refid="android.classpath" />
+			<classpath refid="rv.classpath" />
 		</javac>
 	</target>
 

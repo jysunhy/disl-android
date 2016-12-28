@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -19,9 +18,8 @@ import java.util.zip.ZipOutputStream;
 
 import ch.usi.dag.disl.DiSL;
 
-import com.googlecode.dex2jar.reader.DexFileReader;
-import com.googlecode.dex2jar.v3.Dex2jar;
-import com.googlecode.dex2jar.v3.DexExceptionHandlerImpl;
+import com.googlecode.d2j.dex.Dex2jar;
+import com.googlecode.d2j.reader.DexFileReader;
 
 
 public class OfflineInstrumentation {
@@ -38,24 +36,28 @@ public class OfflineInstrumentation {
         dex2JarFile = new File("offline/"+name+".jar");
         final DexFileReader reader = new DexFileReader (dexCode);
 
-        final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
+        //final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
 
-        Dex2jar.from (reader).withExceptionHandler (handler).reUseReg (
-            false)
-            .topoLogicalSort (false)
-            .skipDebug (true)
-            .optimizeSynchronized (false)
-            .printIR (false)
-            .verbose (false)
-            .to (dex2JarFile);
+        Dex2jar.from(reader).withExceptionHandler(null).reUseReg(false).topoLogicalSort()
+        .skipDebug(true).optimizeSynchronized(false).printIR(false)
+        .noCode(true).to(dex2JarFile.toPath ());
 
-        final Map <com.googlecode.dex2jar.Method, Exception> exceptions = handler.getExceptions ();
-        if (exceptions.size () > 0) {
-            final File errorFile = new File ("error.zip");
-            handler.dumpException (reader, errorFile);
-            System.err.println ("Detail Error Information in File "
-                + errorFile);
-        }
+//        Dex2jar.from (reader).reUseReg (
+//            false)
+//            .topoLogicalSort (false)
+//            .skipDebug (true)
+//            .optimizeSynchronized (false)
+//            .printIR (false)
+////            .verbose (false)
+//            .to (new ZipPath());
+
+//        final Map <com.googlecode.dex2jar.Method, Exception> exceptions = handler.getExceptions ();
+//        if (exceptions.size () > 0) {
+//            final File errorFile = new File ("error.zip");
+//            handler.dumpException (reader, errorFile);
+//            System.err.println ("Detail Error Information in File "
+//                + errorFile);
+//        }
 
         // Now open the tmp jar file, and instrument only
         // the .class files
