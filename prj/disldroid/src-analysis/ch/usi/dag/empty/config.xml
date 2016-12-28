@@ -1,45 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-	<default-dislclass></default-dislclass>
+	<default-dislclass>output/build/analysis/ch/usi/dag/demo/branchcoverage/disl/DiSLClass.class</default-dislclass>
 	<default-observed>false</default-observed>
 	<dexes>
-		<dex>
-			<name>ch.usi.dag.android.example-1.apk</name>
-			<bypass>false</bypass>
-			<dislclass>output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>framework.jar</name>
-			<bypass>false</bypass>
-			<dislclass>output/build/analysis/ch/usi/dag/demo/ipc/disl/PermissionDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>core.jar</name>
-			<bypass>false</bypass>
-			<!--  <dislclass>output/build/analysis/ch/usi/dag/demo/dynamicloader/disl/DynamicClassLoader.class</dislclass>-->
-      <!-- <dislclass>output/build/analysis/ch/usi/dag/demo/file/disl/FileDiSLClass.class,output/build/analysis/ch/usi/dag/demo/netdiagnose/disl/DiSLClass.class,output/build/analysis/ch/usi/dag/demo/dynamicloader/disl/DynamicClassLoader.class</dislclass> -->
-			<dislclass>output/build/analysis/ch/usi/dag/demo/netdiagnose/disl/DiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>com.fdhgkjhrtjkjbx.model-1.apk</name>
-			<bypass>false</bypass>
-			<dislclass>output/build/analysis/ch/usi/dag/demo/dynamicloader/disl/Reflection.class,output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>zkl.jar</name>
-			<bypass>false</bypass>
-			<dislclass>output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>bvfg.zip</name>
-			<bypass>false</bypass>
-			<dislclass>output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class</dislclass>
-		</dex>
-		<dex>
-			<name>classes.jar</name>
-			<bypass>false</bypass>
-			<dislclass>output/build/analysis/ch/usi/dag/demo/callstack/disl/MethodEntryDiSLClass.class</dislclass>
-		</dex>
 	</dexes>
 	<procs>
 	</procs>
