@@ -55,7 +55,9 @@
 		<pathelement location="${dextools.lib}" />
 		<pathelement location="${dx.lib}" />
 		<pathelement location="${dexreader.lib}" />
+		<pathelement location="${dexreaderapi.lib}" />
 		<pathelement location="${dextranslator.lib}" />
+		<pathelement location="${dexir.lib}" />
 	</path>
 	<path id="android.classpath">
 		<pathelement location="${android.path}" />
