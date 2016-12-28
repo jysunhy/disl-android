@@ -159,9 +159,9 @@ public class OfflineInstrumentation {
         dex2JarJar.close ();
 
         //System.out.println("now run dx");
-        if(true) {
-            return;
-        }
+//        if(true) {
+//            return;
+//        }
         File outputDex = null;
         try {
             final Class <?> c = Class.forName ("com.android.dx.command.Main");
