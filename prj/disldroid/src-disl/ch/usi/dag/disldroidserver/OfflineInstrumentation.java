@@ -20,6 +20,7 @@ import ch.usi.dag.disl.DiSL;
 
 import com.googlecode.d2j.dex.Dex2jar;
 import com.googlecode.d2j.reader.DexFileReader;
+import com.googlecode.dex2jar.tools.BaksmaliBaseDexExceptionHandler;
 
 
 public class OfflineInstrumentation {
@@ -35,12 +36,14 @@ public class OfflineInstrumentation {
         //dex2JarFile = File.createTempFile ("offline_dex2jar", ".jar");
         dex2JarFile = new File("offline/"+name+".jar");
         final DexFileReader reader = new DexFileReader (dexCode);
+        //final BaseDexFileReader reader = MultiDexFileReader.open(dexCode);
+        final BaksmaliBaseDexExceptionHandler handler = false ? null : new BaksmaliBaseDexExceptionHandler();
 
         //final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
 
-        Dex2jar.from(reader).withExceptionHandler(null).reUseReg(false).topoLogicalSort()
+        Dex2jar.from(reader).withExceptionHandler(handler).reUseReg(false).topoLogicalSort()
         .skipDebug(true).optimizeSynchronized(false).printIR(false)
-        .noCode(true).to(dex2JarFile.toPath ());
+        .noCode(false).to(dex2JarFile.toPath ());
 
 //        Dex2jar.from (reader).reUseReg (
 //            false)

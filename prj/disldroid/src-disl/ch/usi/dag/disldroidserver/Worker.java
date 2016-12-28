@@ -38,6 +38,7 @@ import ch.usi.dag.disldroidserver.DiSLConfig.Dex;
 
 import com.googlecode.d2j.dex.Dex2jar;
 import com.googlecode.d2j.reader.DexFileReader;
+import com.googlecode.dex2jar.tools.BaksmaliBaseDexExceptionHandler;
 
 
 public class Worker extends Thread {
@@ -494,16 +495,24 @@ public class Worker extends Thread {
 
         final DexFileReader reader = new DexFileReader (dexCode);
 
+        final BaksmaliBaseDexExceptionHandler handler = false ? null : new BaksmaliBaseDexExceptionHandler();
+
+        //final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
+
+        Dex2jar.from(reader).withExceptionHandler(handler).reUseReg(false).topoLogicalSort()
+        .skipDebug(true).optimizeSynchronized(false).printIR(false)
+        .noCode(false).to(dex2JarFile.toPath ());
+
 //        final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
 
-        Dex2jar.from (reader).reUseReg (
-            false)
-            .topoLogicalSort (false)
-            .skipDebug (true)
-            .optimizeSynchronized (false)
-            .printIR (false)
-//            .verbose (false)
-            .to (dex2JarFile.toPath ());
+//        Dex2jar.from (reader).reUseReg (
+//            false)
+//            .topoLogicalSort (false)
+//            .skipDebug (true)
+//            .optimizeSynchronized (false)
+//            .printIR (false)
+////            .verbose (false)
+//            .to (dex2JarFile.toPath ());
 
         System.out.println(dex2JarFile.toString ());
 
