@@ -450,13 +450,11 @@ public class Worker extends Thread {
         }
         System.out.println("Start instrumenting "+jarName);
 
-        if(jarName.startsWith ("prog-")){
-            System.out.println("Skipping facebook packages first");
+        if(true){
             final FileOutputStream fos = new FileOutputStream (new File("dexes/"+jarName));
               fos.write (dexCode, 0, dexCode.length);
               fos.flush ();
               fos.close ();
-            return dexCode;
         }
 
 //        if(true){
