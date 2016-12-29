@@ -19,7 +19,8 @@ import java.util.zip.ZipOutputStream;
 import ch.usi.dag.disl.DiSL;
 
 import com.googlecode.d2j.dex.Dex2jar;
-import com.googlecode.d2j.reader.DexFileReader;
+import com.googlecode.d2j.reader.BaseDexFileReader;
+import com.googlecode.d2j.reader.MultiDexFileReader;
 import com.googlecode.dex2jar.tools.BaksmaliBaseDexExceptionHandler;
 
 
@@ -35,8 +36,8 @@ public class OfflineInstrumentation {
         File dex2JarFile = null;
         //dex2JarFile = File.createTempFile ("offline_dex2jar", ".jar");
         dex2JarFile = new File("offline/"+name+".jar");
-        final DexFileReader reader = new DexFileReader (dexCode);
-        //final BaseDexFileReader reader = MultiDexFileReader.open(dexCode);
+        //final DexFileReader reader = new DexFileReader (dexCode);
+        final BaseDexFileReader reader = MultiDexFileReader.open(dexCode);
         final BaksmaliBaseDexExceptionHandler handler = false ? null : new BaksmaliBaseDexExceptionHandler();
 
         //final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
