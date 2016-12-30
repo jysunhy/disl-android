@@ -59,6 +59,9 @@
 		<pathelement location="${dextranslator.lib}" />
 		<pathelement location="${dexir.lib}" />
 	</path>
+	<path id="jadb.classpath">
+		<pathelement location="${jadb.path}" />
+	</path>
 	<path id="android.classpath">
 		<pathelement location="${android.path}" />
 		<pathelement location="${android.core.path}" />
@@ -257,6 +260,7 @@
 				<path refid="util.classpath" />
 				<path refid="asm.classpath" />
 				<path refid="dex2jar.classpath" />
+				<path refid="jadb.classpath" />
 			</classpath>
 		</javac>
 	</target>
