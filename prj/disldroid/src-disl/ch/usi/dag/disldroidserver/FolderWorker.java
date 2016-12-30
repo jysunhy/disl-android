@@ -98,6 +98,8 @@ public class FolderWorker extends Thread {
                             }
                             scanner.close ();
                         }catch (final Throwable e){
+                            System.out.println("empty table file, delete for re download");
+                            fileEntry.delete ();
                             scanner.close ();
                             continue;
                         }
@@ -178,7 +180,7 @@ public class FolderWorker extends Thread {
                 if (!filename.startsWith (".")) {
 
                     final File lf = new File (localFolder + filename);
-                    if(lf.exists () && skipOverride) {
+                    if(skipOverride && lf.exists () && lf.length () >1) {
                         continue;
                     } else {
                         adbPullFile(device, pathInDevice + filename, lf);
