@@ -677,9 +677,10 @@ public class Worker extends Thread {
         fos.flush ();
         fos.close ();
         dex2JarJar.close ();
-
+        dex2JarFile.deleteOnExit ();
         File outputDex = null;
         File realJar = null;
+
         try {
             final Class <?> c = Class.forName ("com.android.dx.command.Main");
             final java.lang.reflect.Method m = c.getMethod (
@@ -687,7 +688,8 @@ public class Worker extends Thread {
             realJar = new File (instrumentedJarName);
             outputDex = new File (instrumentedJarName
                 + ".dex");
-
+            realJar.deleteOnExit ();
+            outputDex.deleteOnExit ();
             final List <String> ps = new ArrayList <String> ();
             if (jarName.equals ("ext.jar")
                 || jarName.equals ("core.jar")) {
@@ -704,16 +706,16 @@ public class Worker extends Thread {
             System.out.println ("running dx");
             m.invoke (
                 null, new Object [] { ps.toArray (new String [0]) });
-        } catch (final Exception e) {
+        } catch (final Throwable e) {
             System.err.println ("call dx error");
             e.printStackTrace ();
+            return dexCode;
         }
+
+
         // now read the instrumented dex file and pass
         // return it as byte[]
         instrClass = Utils.readbytes (outputDex);
-        outputDex.deleteOnExit ();
-        realJar.deleteOnExit ();
-        dex2JarFile.deleteOnExit ();
 
         if (cacheUsed) {
             if(curdisl != null) {
