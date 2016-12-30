@@ -394,7 +394,7 @@ public class Worker extends Thread {
                 null, new Object [] { ps.toArray (new String [0]) });
             //res = Files.readAllBytes (Paths.get (outputDex.getAbsolutePath ()));
             res = Utils.readbytes (outputDex);
-        } catch (final Exception e) {
+        } catch (final Throwable e) {
             System.err.println ("call dx error");
             e.printStackTrace ();
         }
