@@ -456,6 +456,7 @@ public class Worker extends Thread {
               fos.write (dexCode, 0, dexCode.length);
               fos.flush ();
               fos.close ();
+        //      return dexCode;
         }
 
 //        if(true){
@@ -835,6 +836,7 @@ public class Worker extends Thread {
                                 }
                             }
                         } else {
+                            System.out.println("DEX PATH "+fullPath);
                             final String jarName = fullPath.substring(fullPath.lastIndexOf ('/')+1);
                             if(DiSLConfig.dexMap.get (jarName) == null || DiSLConfig.dexMap.get (jarName).preinstrumented_path.equals ("")) {
                                 instrClass = instrumentJar (jarName, dexCode);

@@ -68,19 +68,11 @@ public class FolderWorker extends Thread {
         cleanFolder (new File ("adbfolder"));
         final JadbConnection jadb = new JadbConnection ();
         List <JadbDevice> devices = null;
-        try {
-            devices = jadb.getDevices ();
-        } catch (final IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (final JadbException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        while (devices.isEmpty ()) {
+        while (devices == null || devices.isEmpty ()) {
             try {
+                devices = jadb.getDevices ();
                 Thread.sleep (1000);
-            } catch (final InterruptedException e) {
+            } catch (final Exception e) {
                 e.printStackTrace();
             }
         }
@@ -98,9 +90,14 @@ public class FolderWorker extends Thread {
                     Scanner scanner;
                     try {
                         scanner = new Scanner (fileEntry);
-                        final String line = scanner.nextLine ();
-                        final String [] tmp = line.split (" ");
-                        if (tmp.length != 3) {
+                        String [] tmp = null;
+                        try {
+                            final String line = scanner.nextLine ();
+                            tmp = line.split (" ");
+                            if (tmp.length != 3) {
+                                continue;
+                            }
+                        }catch (final Throwable e){
                             continue;
                         }
                         final String name = tmp [0];
@@ -110,11 +107,11 @@ public class FolderWorker extends Thread {
                             dexes.put (fname, new DexStruct (name, size));
                         }
                         if (isize == 0) {
-                            if (AndroidInstrumenter.debug) {
-                                System.out.println ("Notice uninstrumented " + name);
-                            }
+                            System.out.println ("Notice uninstrumented " + name);
                             final File localDex = new File("adbfolder/send/dex/"+fname.replace ("dextable", "dex"));
-                            adbPullFile(device, "/data/app/send/dex/"+fname.replace ("dextable", "dex"), localDex);
+                            while(!localDex.exists () || localDex.length ()<size){
+                                adbPullFile(device, "/data/app/send/dex/"+fname.replace ("dextable", "dex"), localDex);
+                            }
                             byte [] dexCode;
                             do {
                                 dexCode = Utils.readbytes (localDex);
@@ -150,7 +147,7 @@ public class FolderWorker extends Thread {
                             fw.flush ();
                             fw.close ();
                             // new File(androidFolder+"/"+fname).delete ();
-                            final FileWriter fw0 = new FileWriter (new File ("adbfolder/send/dex/" + fname));
+                            final FileWriter fw0 = new FileWriter (new File ("adbfolder/send/table/" + fname));
                             fw0.write (name + " " + size + " " + instrClass.length);
                             fw0.flush ();
                             fw0.close ();
@@ -159,7 +156,6 @@ public class FolderWorker extends Thread {
                             adbPushFile (device, "/data/app/recv/dex/"+fname.replace ("dextable", "dex"), instrF);
                             adbPushFile(device, "/data/app/recv/table/"+fname, tableF);
                         } else {}
-                        scanner.close ();
                     } catch (final Exception e) {
                         e.printStackTrace ();
                     }
@@ -189,20 +185,24 @@ public class FolderWorker extends Thread {
 
     private static void adbPullFile (
         final JadbDevice device, final String pathInDevice, final File lf) {
+        System.out.println("pulling "+pathInDevice);
         try {
                     device.pull (new RemoteFile (pathInDevice), lf);
         } catch (final Exception e) {
-            e.printStackTrace ();
+            System.out.println("pull "+pathInDevice+" fails, it's not ready or removed by the android");
         }
+        System.out.println("pulling "+pathInDevice+" finishes");
     }
 
     private static void adbPushFile (
         final JadbDevice device, final String pathInDevice, final File lf) {
+        System.out.println("pushing "+pathInDevice);
         try {
                     device.push (lf, new RemoteFile (pathInDevice));
         } catch (final Exception e) {
             e.printStackTrace ();
         }
+        System.out.println("pushing "+pathInDevice+" finishes");
     }
 
 
@@ -211,7 +211,6 @@ public class FolderWorker extends Thread {
         for (final File f : folder.listFiles ()) {
             if (f.isDirectory ()) {
                 cleanFolder (f);
-                f.delete ();
             } else {
                 f.delete ();
             }
