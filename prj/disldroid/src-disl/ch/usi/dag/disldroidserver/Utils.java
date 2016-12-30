@@ -4,11 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 
 
 public class Utils {
     static public byte [] readbytes (final File file) {
-        final byte [] res = null;
+        byte [] res = null;
         FileInputStream fis = null;
         DataInputStream dis = null;
         ByteArrayOutputStream bout = null;
@@ -32,6 +33,12 @@ public class Utils {
             e.printStackTrace ();
         }
 
-        return bout.toByteArray ();
+        res = bout.toByteArray ();
+        try {
+            bout.close ();
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        return res;
     }
 }

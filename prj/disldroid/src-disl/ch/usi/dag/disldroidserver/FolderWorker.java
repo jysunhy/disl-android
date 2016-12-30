@@ -76,9 +76,10 @@ public class FolderWorker extends Thread {
         }
         final JadbDevice device = devices.get (0);
         System.out.println ("Device detected " + device.getSerial ());
+        DiSLConfig.parseXml ();
         while (true) {
-            AndroidInstrumenter.checkConfigXMLChange ();
-            adbPull (device, "/data/app/send/table/", "adbfolder/send/table/");
+            //AndroidInstrumenter.checkConfigXMLChange ();
+            adbPull (device, "/data/app/send/table/", "adbfolder/send/table/", true);
 
             final File folder = new File ("adbfolder/send/table/");
             for (final File fileEntry : folder.listFiles ()) {
@@ -95,9 +96,12 @@ public class FolderWorker extends Thread {
                             if (tmp.length != 3) {
                                 continue;
                             }
+                            scanner.close ();
                         }catch (final Throwable e){
+                            scanner.close ();
                             continue;
                         }
+
                         final String name = tmp [0];
                         final int size = Integer.parseInt (tmp [1]);
                         final int isize = Integer.parseInt (tmp [2]);
@@ -165,15 +169,20 @@ public class FolderWorker extends Thread {
 
 
     private static void adbPull (
-        final JadbDevice device, final String pathInDevice, final String localFolder) {
+        final JadbDevice device, final String pathInDevice, final String localFolder, final boolean skipOverride) {
         try {
             final List <RemoteFile> fl = device.list (pathInDevice);
             final int idx = 0;
             for (final RemoteFile f : fl) {
                 final String filename = f.getPath ();
                 if (!filename.startsWith (".")) {
+
                     final File lf = new File (localFolder + filename);
-                    adbPullFile(device, pathInDevice + filename, lf);
+                    if(lf.exists () && skipOverride) {
+                        continue;
+                    } else {
+                        adbPullFile(device, pathInDevice + filename, lf);
+                    }
                 }
             }
         } catch (final Exception e) {

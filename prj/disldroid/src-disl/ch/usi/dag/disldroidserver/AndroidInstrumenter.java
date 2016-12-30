@@ -8,6 +8,7 @@ public class AndroidInstrumenter {
     public static HashMap<String, DiSL> dislMap = new HashMap <String, DiSL>();
     public static final boolean debug = Boolean
     .getBoolean (DiSLServer.PROP_DEBUG);
+
     public static void checkConfigXMLChange(){
         if(!DiSLConfig.parseXml ()){
             if(AndroidInstrumenter.debug) {

@@ -160,11 +160,17 @@ public class DiSLConfig {
                 xmlcontent = bout.toByteArray ();
             }else{
                 if(xmlcontent.length == bout.toByteArray ().length && Arrays.toString(xmlcontent).equals (Arrays.toString (bout.toByteArray ()))){
+                    fis.close ();
+                    dis.close ();
+                    bout.close ();
 					return true;
                 }else{
                     xmlcontent = bout.toByteArray ();
                 }
             }
+            fis.close ();
+            dis.close ();
+            bout.close ();
         }catch(final Exception e){
             e.printStackTrace ();
         }
@@ -178,7 +184,6 @@ public class DiSLConfig {
             final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance ();
             final DocumentBuilder db = dbf.newDocumentBuilder ();
             final Document document = db.parse (new File(fileName));
-
             final Element rootElem = document.getDocumentElement ();
             // System.out.println(rootElem.getChildNodes ().getLength ());
             final NodeList nodes = rootElem.getChildNodes ();
