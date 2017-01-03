@@ -43,6 +43,8 @@ public class DiSLConfig {
 
         public String preinstrumented_path = "";
 
+        public boolean useOriginal = false;
+
 		public boolean bypass = default_bypass;
 
         public void print () {
@@ -89,6 +91,9 @@ public class DiSLConfig {
                         }
                         if (attrNode.getNodeName ().equals ("bypass")) {
                             newdex.bypass = Boolean.parseBoolean (attrNode.getTextContent ());
+                        }
+                        if (attrNode.getNodeName ().equals ("useoriginal")) {
+                            newdex.useOriginal = Boolean.parseBoolean (attrNode.getTextContent ());
                         }
                         if (attrNode.getNodeName ().equals ("dislclass")) {
                             newdex.dislClass = attrNode.getTextContent ();
