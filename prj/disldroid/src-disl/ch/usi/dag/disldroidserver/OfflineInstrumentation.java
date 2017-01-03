@@ -65,6 +65,9 @@ public class OfflineInstrumentation {
 
         // Now open the tmp jar file, and instrument only
         // the .class files
+
+        System.out.println("DEX2JAR ENDS");
+
         final JarFile dex2JarJar = new JarFile (
             dex2JarFile.getAbsolutePath ());
 
@@ -101,6 +104,12 @@ public class OfflineInstrumentation {
                             0, entryName.lastIndexOf (".class"));
 
                         if(className.equals ("java/lang/Object")){
+                            isCore = true;
+                        }
+                        if(className.startsWith("java/")){
+                            isCore = true;
+                        }
+                        if(className.startsWith("javax/")){
                             isCore = true;
                         }
 

@@ -40,6 +40,7 @@ import com.googlecode.d2j.dex.Dex2jar;
 import com.googlecode.d2j.reader.BaseDexFileReader;
 import com.googlecode.d2j.reader.MultiDexFileReader;
 import com.googlecode.dex2jar.tools.BaksmaliBaseDexExceptionHandler;
+import com.googlecode.dex2jar.tools.Jar2Dex;
 
 
 public class Worker extends Thread {
@@ -381,12 +382,14 @@ public class Worker extends Thread {
             if (jarName.equals ("ext.jar")
                 || jarName.equals ("core.jar")) {
                 ps.addAll (Arrays.asList (
-                    "--dex", "--core-library", "--no-strict",
+                    "--dex", "--core-library", 
+//"--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
                     realJar.getCanonicalPath ()));
             } else {
                 ps.addAll (Arrays.asList (
-                    "--dex", "--no-strict",
+                    "--dex", 
+//"--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
                     realJar.getCanonicalPath ()));
             }
@@ -443,20 +446,26 @@ public class Worker extends Thread {
         return newdisl;
     }
 
+    static int idx = 0;
+
     static synchronized byte [] instrumentJar (final String jarName, final byte [] dexCode)
     throws IOException,
     FileNotFoundException {
+        boolean isCore = false;
         if (AndroidInstrumenter.debug) {
             System.out.println (jarName);
         }
         System.out.println("Start instrumenting "+jarName);
 
         if(true){
-            final FileOutputStream fos = new FileOutputStream (new File("dexes/"+jarName));
+            final FileOutputStream fos = new FileOutputStream (new File("dexes/"+jarName+"_"+(idx++)));
               fos.write (dexCode, 0, dexCode.length);
               fos.flush ();
               fos.close ();
-        //      return dexCode;
+              if(DiSLConfig.dexMap.get (jarName).useOriginal)
+              {
+                return dexCode;
+              }
         }
 
 //        if(true){
@@ -547,6 +556,13 @@ public class Worker extends Thread {
                         final String className = entryName.substring (
                             0, entryName.lastIndexOf (".class"));
 
+                        if(className.startsWith("java/")){
+                            isCore = true;
+                        }
+                        if(className.startsWith("javax/")){
+                            isCore = true;
+                        }
+
                         final byte [] code = null;
                         if (code == null) {
                             final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
@@ -567,9 +583,9 @@ public class Worker extends Thread {
         //Do the instrumentation
         String instrumentedJarName;;
         if(ON_ANDROID_DEVICE) {
-            instrumentedJarName= "/data/"+ "instrumented_" + jarName;
+            instrumentedJarName= "/data/"+ "instrumented_" + jarName + ".jar";
         } else {
-            instrumentedJarName= "/tmp/instrumented_" + jarName;
+            instrumentedJarName= "/tmp/instrumented_" + jarName + ".jar";
         }
         final File instrumentedJarFile= new File (instrumentedJarName);
         final FileOutputStream fos = new FileOutputStream (instrumentedJarFile);
@@ -677,29 +693,40 @@ public class Worker extends Thread {
         fos.flush ();
         fos.close ();
         dex2JarJar.close ();
-        dex2JarFile.deleteOnExit ();
+//        dex2JarFile.deleteOnExit ();
         File outputDex = null;
         File realJar = null;
-
+            outputDex = new File (instrumentedJarName
+                + ".dex");
+if(false){
+if(isCore){
+    new Jar2Dex().doMain("--core-library", "-f","--output", outputDex.getCanonicalPath () , instrumentedJarFile.getCanonicalPath ());
+}else{
+    new Jar2Dex().doMain("-f","--output", outputDex.getCanonicalPath () , instrumentedJarFile.getCanonicalPath ());
+}
+}else
+{
         try {
             final Class <?> c = Class.forName ("com.android.dx.command.Main");
             final java.lang.reflect.Method m = c.getMethod (
                 "main", String [].class);
+System.out.println("instrumentedJarName "+instrumentedJarName);
             realJar = new File (instrumentedJarName);
-            outputDex = new File (instrumentedJarName
-                + ".dex");
-            realJar.deleteOnExit ();
-            outputDex.deleteOnExit ();
+ //           realJar.deleteOnExit ();
+//            outputDex.deleteOnExit ();
             final List <String> ps = new ArrayList <String> ();
-            if (jarName.equals ("ext.jar")
-                || jarName.equals ("core.jar")) {
+//            if (jarName.equals ("ext.jar")
+//                || jarName.equals ("core.jar")) {
+            if(isCore) {
                 ps.addAll (Arrays.asList (
-                    "--dex", "--core-library", "--no-strict",
+                    "--dex", "--core-library", 
+//"--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
                     realJar.getCanonicalPath ()));
             } else {
                 ps.addAll (Arrays.asList (
-                    "--dex", "--no-strict",
+                    "--dex", 
+//"--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
                     realJar.getCanonicalPath ()));
             }
@@ -711,6 +738,7 @@ public class Worker extends Thread {
             e.printStackTrace ();
             return dexCode;
         }
+}
 
 
         // now read the instrumented dex file and pass

@@ -120,7 +120,9 @@ public class FolderWorker extends Thread {
                             do {
                                 dexCode = Utils.readbytes (localDex);
                             } while (dexCode.length != size);
-                            byte [] instrClass;
+                            byte [] instrClass = null;
+if(true) {
+//if(false) {
                             final String jarName = name.substring (name.lastIndexOf ('/') + 1);
                             if (DiSLConfig.dexMap.get (jarName) == null
                                 || DiSLConfig.dexMap.get (jarName).preinstrumented_path.equals ("")) {
@@ -133,10 +135,11 @@ public class FolderWorker extends Thread {
                                     DiSLConfig.dexMap.get (jarName).preinstrumented_path,
                                     dexCode);
                             }
+}
                             if (instrClass == null) {
                                 instrClass = dexCode;
-                                System.out.println ("instrumentation failure "
-                                    + name);
+                                System.out.println ("instrumentation "
+                                    + name + " use original");
                             }
                             final File instrF = new File ("adbfolder/recv/dex/" + fname.replace ("dextable", "dex"));
                             instrF.createNewFile ();
