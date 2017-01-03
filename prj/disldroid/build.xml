@@ -53,6 +53,7 @@
 	-->
 	<path id="dex2jar.classpath">
 		<pathelement location="${dextools.lib}" />
+		<pathelement location="${dexbase.lib}" />
 		<pathelement location="${dx.lib}" />
 		<pathelement location="${dexreader.lib}" />
 		<pathelement location="${dexreaderapi.lib}" />
