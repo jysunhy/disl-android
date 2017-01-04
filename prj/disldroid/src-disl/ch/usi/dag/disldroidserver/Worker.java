@@ -40,7 +40,6 @@ import com.googlecode.d2j.dex.Dex2jar;
 import com.googlecode.d2j.reader.BaseDexFileReader;
 import com.googlecode.d2j.reader.MultiDexFileReader;
 import com.googlecode.dex2jar.tools.BaksmaliBaseDexExceptionHandler;
-import com.googlecode.dex2jar.tools.Jar2Dex;
 
 
 public class Worker extends Thread {
@@ -382,13 +381,13 @@ public class Worker extends Thread {
             if (jarName.equals ("ext.jar")
                 || jarName.equals ("core.jar")) {
                 ps.addAll (Arrays.asList (
-                    "--dex", "--core-library", 
+                    "--dex", "--core-library",
 //"--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
                     realJar.getCanonicalPath ()));
             } else {
                 ps.addAll (Arrays.asList (
-                    "--dex", 
+                    "--dex",
 //"--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
                     realJar.getCanonicalPath ()));
@@ -462,19 +461,22 @@ public class Worker extends Thread {
               fos.write (dexCode, 0, dexCode.length);
               fos.flush ();
               fos.close ();
-              if(DiSLConfig.dexMap.get (jarName).useOriginal)
+              if(DiSLConfig.dexMap.get (jarName) == null || DiSLConfig.dexMap.get (jarName).useOriginal)
               {
                 return dexCode;
               }
         }
 
-//        if(true){
-//            final FileOutputStream fos = new FileOutputStream (new File("dexes/"+jarName));
-//            fos.write (dexCode, 0, dexCode.length);
-//            fos.flush ();
-//            fos.close ();
-//            return dexCode;
-//        }
+        if(true){
+            final FileOutputStream fos = new FileOutputStream (new File("dexes/"+jarName));
+            fos.write (dexCode, 0, dexCode.length);
+            fos.flush ();
+            fos.close ();
+            final FileOutputStream fos2 = new FileOutputStream (new File("dexes/instr_"+jarName));
+            fos2.write (dexCode, 0, dexCode.length);
+            fos2.flush ();
+            fos2.close ();
+        }
         byte [] instrClass = null;
         final DiSL curdisl = getDiSL(jarName);
         if (cacheUsed) {
@@ -607,14 +609,12 @@ public class Worker extends Thread {
                 if (entryName.endsWith (".class")) {
 
                     try {
-                        final ZipEntry nze = new ZipEntry (entryName);
-
                         final String className = entryName.substring (
                             0, entryName.lastIndexOf (".class"));
 
-                        zos.putNextEntry (nze);
                         byte [] code = null;
                         final ByteArrayInputStream bin;
+                        boolean isInstrumented = true;
                         if (code == null) {
                             final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
                             while ((bytesRead = is.read (buffer)) != -1) {
@@ -628,6 +628,7 @@ public class Worker extends Thread {
 //                                    className, bout.toByteArray (), disl);
 //                            } else
                             if(curdisl == null){
+                                isInstrumented = false;
                                 code = bout.toByteArray ();
                             }else{
                                 code = instrument (
@@ -639,16 +640,18 @@ public class Worker extends Thread {
                                         + " need not be instrumented");
                                 }
                                 code = bout.toByteArray ();
+                                isInstrumented = false;
                             }
 
-
                         }
-                        bin = new ByteArrayInputStream (code);
-
-                        while ((bytesRead = bin.read (buffer)) != -1) {
-                            zos.write (buffer, 0, bytesRead);
+                        if(isInstrumented) {
+                            final ZipEntry nze = new ZipEntry (entryName);
+                            zos.putNextEntry (nze);
+                            bin = new ByteArrayInputStream (code);
+                            while ((bytesRead = bin.read (buffer)) != -1) {
+                                zos.write (buffer, 0, bytesRead);
+                            }
                         }
-
                         zos.closeEntry ();
                     } catch (final Exception e) {
                         e.printStackTrace ();
@@ -696,15 +699,7 @@ public class Worker extends Thread {
 //        dex2JarFile.deleteOnExit ();
         File outputDex = null;
         File realJar = null;
-            outputDex = new File (instrumentedJarName
-                + ".dex");
-if(false){
-if(isCore){
-    new Jar2Dex().doMain("--core-library", "-f","--output", outputDex.getCanonicalPath () , instrumentedJarFile.getCanonicalPath ());
-}else{
-    new Jar2Dex().doMain("-f","--output", outputDex.getCanonicalPath () , instrumentedJarFile.getCanonicalPath ());
-}
-}else
+        outputDex = new File ("dexes/instr_"+jarName);
 {
         try {
             final Class <?> c = Class.forName ("com.android.dx.command.Main");
@@ -719,15 +714,17 @@ System.out.println("instrumentedJarName "+instrumentedJarName);
 //                || jarName.equals ("core.jar")) {
             if(isCore) {
                 ps.addAll (Arrays.asList (
-                    "--dex", "--core-library", 
+                    "--dex", "--core-library",
 //"--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
+                    "--verbose", "--incremental",
                     realJar.getCanonicalPath ()));
             } else {
                 ps.addAll (Arrays.asList (
-                    "--dex", 
+                    "--dex",
 //"--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
+                    "--verbose", "--incremental",
                     realJar.getCanonicalPath ()));
             }
             System.out.println ("running dx");
