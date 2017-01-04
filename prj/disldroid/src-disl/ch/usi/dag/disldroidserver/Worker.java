@@ -645,14 +645,16 @@ public class Worker extends Thread {
 
                         }
                         if(isInstrumented) {
+                            System.out.println("put entry for "+entryName);
                             final ZipEntry nze = new ZipEntry (entryName);
                             zos.putNextEntry (nze);
                             bin = new ByteArrayInputStream (code);
                             while ((bytesRead = bin.read (buffer)) != -1) {
                                 zos.write (buffer, 0, bytesRead);
                             }
+                            zos.closeEntry ();
+                        }else {
                         }
-                        zos.closeEntry ();
                     } catch (final Exception e) {
                         e.printStackTrace ();
                     }
