@@ -472,7 +472,7 @@ public class Worker extends Thread {
             fos.write (dexCode, 0, dexCode.length);
             fos.flush ();
             fos.close ();
-            final FileOutputStream fos2 = new FileOutputStream (new File("dexes/instr_"+jarName));
+            final FileOutputStream fos2 = new FileOutputStream (new File("dexes/instr_"+jarName+".dex"));
             fos2.write (dexCode, 0, dexCode.length);
             fos2.flush ();
             fos2.close ();
@@ -701,7 +701,7 @@ public class Worker extends Thread {
 //        dex2JarFile.deleteOnExit ();
         File outputDex = null;
         File realJar = null;
-        outputDex = new File ("dexes/instr_"+jarName);
+        outputDex = new File ("dexes/instr_"+jarName+".dex");
 {
         try {
             final Class <?> c = Class.forName ("com.android.dx.command.Main");
