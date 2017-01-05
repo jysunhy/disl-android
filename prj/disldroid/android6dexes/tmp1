@@ -1,0 +1,33 @@
+1f5134:                                        |[1f5134] java.lang.Daemons.ReferenceQueueDaemon.run:()V
+1f5144: 6e10 4e31 0400                         |0000: invoke-virtual {v4}, Ljava/lang/Daemons$ReferenceQueueDaemon;.isRunning:()Z // method@314e
+1f514a: 0a02                                   |0003: move-result v2
+1f514c: 3802 1e00                              |0004: if-eqz v2, 0022 // +001e
+1f5150: 1c03 8205                              |0006: const-class v3, Ljava/lang/ref/ReferenceQueue; // type@0582
+1f5154: 1d03                                   |0008: monitor-enter v3
+1f5156: 6202 1627                              |0009: sget-object v2, Ljava/lang/ref/ReferenceQueue;.unenqueued:Ljava/lang/ref/Reference; // field@2716
+1f515a: 3902 0d00                              |000b: if-nez v2, 0018 // +000d
+1f515e: 1c02 8205                              |000d: const-class v2, Ljava/lang/ref/ReferenceQueue; // type@0582
+1f5162: 6e10 e430 0200                         |000f: invoke-virtual {v2}, Ljava/lang/Class;.wait:()V // method@30e4
+1f5168: 28f7                                   |0012: goto 0009 // -0009
+1f516a: 0d02                                   |0013: move-exception v2
+1f516c: 1e03                                   |0014: monitor-exit v3
+1f516e: 2702                                   |0015: throw v2
+1f5170: 0d00                                   |0016: move-exception v0
+1f5172: 28e9                                   |0017: goto 0000 // -0017
+1f5174: 6201 1627                              |0018: sget-object v1, Ljava/lang/ref/ReferenceQueue;.unenqueued:Ljava/lang/ref/Reference; // field@2716
+1f5178: 1202                                   |001a: const/4 v2, #int 0 // #0
+1f517a: 6902 1627                              |001b: sput-object v2, Ljava/lang/ref/ReferenceQueue;.unenqueued:Ljava/lang/ref/Reference; // field@2716
+1f517e: 1e03                                   |001d: monitor-exit v3
+1f5180: 7020 4d31 1400                         |001e: invoke-direct {v4, v1}, Ljava/lang/Daemons$ReferenceQueueDaemon;.enqueue:(Ljava/lang/ref/Reference;)V // method@314d
+1f5186: 28df                                   |0021: goto 0000 // -0021
+1f5188: 0e00                                   |0022: return-void
+        0x0006 - 0x0009
+          Ljava/lang/InterruptedException; -> 0x0016
+        0x0009 - 0x0012
+          <any> -> 0x0013
+        0x0014 - 0x0016
+          Ljava/lang/InterruptedException; -> 0x0016
+        0x0018 - 0x001d
+          <any> -> 0x0013
+        0x001d - 0x001e
+          Ljava/lang/InterruptedException; -> 0x0016
