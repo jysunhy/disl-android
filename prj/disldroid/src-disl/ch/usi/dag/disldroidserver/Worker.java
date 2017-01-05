@@ -672,26 +672,26 @@ public class Worker extends Thread {
 
         // put the needed stuff into core.jar: built-in classes(bypass,
         // AREDispatch) + analysis stubs
-        if (jarName.equals ("core.jar"))
+        if (jarName.equals ("core.jar") || jarName.equals ("core-libart.jar"))
         {
 
             final JarFile instrlib = new JarFile (
                 instrLibPath);
             putExtraClassesIntoJar (zos, instrlib, jarName);
             instrlib.close ();
-
-            if(!builtinLibPath.equals ("")) {
-                final JarFile builtinlib = new JarFile (
-                    builtinLibPath);
-
-                putExtraClassesIntoJar (zos, builtinlib, jarName);
-                builtinlib.close ();
-            }
-            for(final String name: extraLibs){
-                final JarFile extraLib = new JarFile (name);
-                putExtraClassesIntoJar (zos, extraLib, name);
-                extraLib.close ();
-            }
+//
+//            if(!builtinLibPath.equals ("")) {
+//                final JarFile builtinlib = new JarFile (
+//                    builtinLibPath);
+//
+//                putExtraClassesIntoJar (zos, builtinlib, jarName);
+//                builtinlib.close ();
+//            }
+//            for(final String name: extraLibs){
+//                final JarFile extraLib = new JarFile (name);
+//                putExtraClassesIntoJar (zos, extraLib, name);
+//                extraLib.close ();
+//            }
         }
         zos.finish ();
         zos.close ();

@@ -32,6 +32,13 @@ public class OfflineInstrumentation {
     public static void instrumentJar (final String name, final byte [] dexCode, final DiSL curdisl, final String outDexPath)
     throws Exception
     {
+        if(true){
+            final FileOutputStream fos = new FileOutputStream (new File("offline/append_"+name+".dex"));
+              fos.write (dexCode, 0, dexCode.length);
+              fos.flush ();
+              fos.close ();
+        }
+
         // create tmp file in system temporary files
         File dex2JarFile = null;
         //dex2JarFile = File.createTempFile ("offline_dex2jar", ".jar");
@@ -91,6 +98,7 @@ public class OfflineInstrumentation {
 
         final byte [] buffer = new byte [8192];
         int bytesRead;
+
         while (entryEnum.hasMoreElements ()) {
             final ZipEntry ze = entryEnum.nextElement ();
             final String entryName = ze.getName ();
@@ -98,8 +106,8 @@ public class OfflineInstrumentation {
             if (!ze.isDirectory ()) {
                 if (entryName.endsWith (".class")) {
                     try {
-                        final ZipEntry nze = new ZipEntry (entryName);
 
+                        boolean isInstrumented = true;
                         final String className = entryName.substring (
                             0, entryName.lastIndexOf (".class"));
 
@@ -113,7 +121,6 @@ public class OfflineInstrumentation {
                             isCore = true;
                         }
 
-                        zos.putNextEntry (nze);
                         byte [] code = null;
                         final ByteArrayInputStream bin;
                         if (code == null) {
@@ -125,6 +132,7 @@ public class OfflineInstrumentation {
                             // java.lang.Thread needs instrumentation for bypass
                             // support
                             if (curdisl == null) {
+                                isInstrumented = false;
                                 code = bout.toByteArray ();
                             } else {
                                 /*if(className.equals ("java/lang/Thread")) {
@@ -135,18 +143,23 @@ public class OfflineInstrumentation {
 
                             }
                             if (code == null) {
+                                isInstrumented = false;
                                 code = bout.toByteArray ();
                             } else {
+                                isInstrumented = true;
                                 System.out.println (entryName + " is instrumented");
                             }
                         }
-                        bin = new ByteArrayInputStream (code);
-
-                        while ((bytesRead = bin.read (buffer)) != -1) {
-                            zos.write (buffer, 0, bytesRead);
+                        if(isInstrumented) {
+                            final ZipEntry nze = new ZipEntry (entryName);
+                            zos.putNextEntry (nze);
+                            bin = new ByteArrayInputStream (code);
+                            while ((bytesRead = bin.read (buffer)) != -1) {
+                                zos.write (buffer, 0, bytesRead);
+                            }
+                            zos.closeEntry ();
                         }
 
-                        zos.closeEntry ();
                     } catch (final Exception e) {
                         e.printStackTrace ();
                     }
@@ -172,23 +185,25 @@ public class OfflineInstrumentation {
 //        if(true) {
 //            return;
 //        }
-        File outputDex = null;
+        final File outputDex = new File("offline/append_"+name+".dex");
         try {
             final Class <?> c = Class.forName ("com.android.dx.command.Main");
             final java.lang.reflect.Method m = c.getMethod (
                 "main", String [].class);
-            outputDex = new File (outDexPath);
+//            outputDex = new File ("");
 
             final List <String> ps = new ArrayList <String> ();
             if (isCore) {
                 ps.addAll (Arrays.asList (
                     "--dex", "--core-library", "--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
+                    "--verbose", "--incremental",
                     instrumentedJarFile.getCanonicalPath ()));
             } else {
                 ps.addAll (Arrays.asList (
                     "--dex", "--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
+                    "--verbose", "--incremental",
                     instrumentedJarFile.getCanonicalPath ()));
             }
             m.invoke (
