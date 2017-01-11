@@ -59,11 +59,7 @@ public class FolderWorker extends Thread {
         return res;
     }
 
-
-    @Override
-    public void run () {
-        //
-        cleanFolder (new File ("adbfolder"));
+    static JadbDevice getDevice(){
         final JadbConnection jadb = new JadbConnection ();
         List <JadbDevice> devices = null;
         while (devices == null || devices.isEmpty ()) {
@@ -76,10 +72,18 @@ public class FolderWorker extends Thread {
         }
         final JadbDevice device = devices.get (0);
         System.out.println ("Device detected " + device.getSerial ());
+        return device;
+    }
+
+    @Override
+    public void run () {
+        //
+        cleanFolder (new File ("adbfolder"));
+
         DiSLConfig.parseXml ();
         while (true) {
             //AndroidInstrumenter.checkConfigXMLChange ();
-            adbPull (device, "/data/app/send/table/", "adbfolder/send/table/", true);
+            adbPull (getDevice (), "/data/app/send/table/", "adbfolder/send/table/", true);
 
             final File folder = new File ("adbfolder/send/table/");
             for (final File fileEntry : folder.listFiles ()) {
@@ -114,7 +118,7 @@ public class FolderWorker extends Thread {
                             System.out.println ("Notice uninstrumented " + name);
                             final File localDex = new File("adbfolder/send/dex/"+fname.replace ("dextable", "dex"));
                             while(!localDex.exists () || localDex.length ()<size){
-                                adbPullFile(device, "/data/app/send/dex/"+fname.replace ("dextable", "dex"), localDex);
+                                adbPullFile(getDevice (), "/data/app/send/dex/"+fname.replace ("dextable", "dex"), localDex);
                             }
                             byte [] dexCode;
                             do {
@@ -160,8 +164,8 @@ if(true) {
                             fw0.close ();
                             dexes.get (fname).instrumentedSize = instrClass.length;
 
-                            adbPushFile (device, "/data/app/recv/dex/"+fname.replace ("dextable", "dex"), instrF);
-                            adbPushFile(device, "/data/app/recv/table/"+fname, tableF);
+                            adbPushFile (getDevice (), "/data/app/recv/dex/"+fname.replace ("dextable", "dex"), instrF);
+                            adbPushFile(getDevice (), "/data/app/recv/table/"+fname, tableF);
                         } else {}
                     } catch (final Exception e) {
                         e.printStackTrace ();

@@ -273,6 +273,7 @@ public class Worker extends Thread {
                             final ZipEntry curnze = new ZipEntry (curName);
                             final String curClassName = curName.substring (
                                 0, curName.lastIndexOf (".class"));
+                            System.out.println("put entry for "+curClassName);
                             zos.putNextEntry (curnze);
                             final ByteArrayOutputStream boutinstr = new ByteArrayOutputStream ();
                             while ((bytesRead = curis.read (buffer)) != -1) {
