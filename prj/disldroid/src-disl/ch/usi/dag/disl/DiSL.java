@@ -67,8 +67,8 @@ public final class DiSL {
     // default is that exception handler is inserted
     // this is the reason for "double" negation in assignment
     private final String        PROP_NO_EXCEPT_HANDLER  = "disl.noexcepthandler";
-    private final boolean       exceptHandler           =
-                                                                !Boolean.getBoolean(PROP_NO_EXCEPT_HANDLER);
+    private final boolean       exceptHandler           = false;
+//                                                                !Boolean.getBoolean(PROP_NO_EXCEPT_HANDLER);
 
     private final String        PROP_SPLIT_LONG_METHODS = "disl.splitmethods";
     private final boolean       splitLongMethods        =
@@ -188,7 +188,7 @@ public final class DiSL {
         }
 
         // *** prepare exclusion set ***
-        exclusionSet = ExclusionSet.prepare();
+        exclusionSet = ExclusionSet.prepare(null);
 
 		// *** HY: compute signature for this disl ***
         initPerDiSL (null);
@@ -264,7 +264,7 @@ public final class DiSL {
         }
 
         // *** prepare exclusion set ***
-        exclusionSet = ExclusionSet.prepare();
+        exclusionSet = ExclusionSet.prepare(exclListPath);
 
         // *** compute hash ***
         initPerDiSL (dislClassPaths);

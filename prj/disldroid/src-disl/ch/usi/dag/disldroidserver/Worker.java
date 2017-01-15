@@ -15,10 +15,7 @@ import java.io.StringWriter;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,7 +31,6 @@ import org.objectweb.asm.tree.ClassNode;
 import ch.usi.dag.disl.DiSL;
 import ch.usi.dag.disl.exception.DiSLException;
 import ch.usi.dag.disl.util.Constants;
-import ch.usi.dag.disldroidserver.DiSLConfig.Dex;
 
 import com.googlecode.d2j.dex.Dex2jar;
 import com.googlecode.d2j.reader.BaseDexFileReader;
@@ -43,54 +39,18 @@ import com.googlecode.dex2jar.tools.BaksmaliBaseDexExceptionHandler;
 
 
 public class Worker extends Thread {
-    // Android Specific Code
-    // the file containing the names of jars or apks that won't be instrumented
-    private static final boolean ON_ANDROID_DEVICE = Boolean.getBoolean ("on.android");
-
-    private static final String PROP_PKG_BLACKLIST = "pkg.blacklist";
-
-    private static final String PKG_BLACKLIST = System.getProperty (
-        PROP_PKG_BLACKLIST, "pkg.blacklist");
-
-    //private String blacklist = ""; // content read from PKG_BLACKLIST
-
     private static boolean cacheUsed = true;
 
-    // the file containging the names of a list of process names that will be
-    // observed
-    private static final String PROP_PROC_OBSERVELIST = "proc.observelist";
-
-    private static final String PROC_OBSERVELIST = System.getProperty (
-        PROP_PROC_OBSERVELIST, "proc.observelist");
-
-    //private String observeList = "";
-
-    // specify the jar library that containing all needed analysis classes to be
-    // added into core.jar(The stubs)
-    private static final String PROP_INSTR_LIB_PATH = "instr.lib";
-
-    private static final String instrLibPath = System.getProperty (
-        PROP_INSTR_LIB_PATH, "output/lib/analysis.jar");
-
-    private static final String[] extraLibs = {"lib/rv-monitor-rt.jar","lib/rv-monitor.jar"};
-
-
-    private static final String PROP_BUILTIN_LIB_PATH = "builtin.lib";
-
-    //private static final String builtinLibPath = "lib/built-in-emma.jar";
-    //private static final String builtinLibPath = System.getProperty (PROP_BUILTIN_LIB_PATH, "output/lib/builtin.jar");
-    private static final String builtinLibPath = System.getProperty (PROP_BUILTIN_LIB_PATH, "");
-
-    // the code to store the java bytecode which may be needed by the SVM server
-    // TODO use DislClass+jarname as cache entry
-
-
     private static final ConcurrentHashMap <String, byte []> bytecodeMap = new ConcurrentHashMap <String, byte []> ();
+
     public static final ConcurrentHashMap <String, ClassNode> classNodeMap = new ConcurrentHashMap <String, ClassNode> ();
+
     public static final ConcurrentHashMap <String, String> classNodeDexName = new ConcurrentHashMap <String, String> ();
 
-    private static void newClass(final String name, final byte[] bytes, final String dexName){
-        //System.out.println ("new class "+name);
+    static boolean incremental = true;
+
+    private static void newClass (
+        final String name, final byte [] bytes, final String dexName) {
         bytecodeMap.put (
             name,
             bytes);
@@ -101,19 +61,20 @@ public class Worker extends Thread {
         classNodeDexName.put (name, dexName);
     }
 
-    public static boolean isSelfOrChildOf(final String class1, final String class2){
-        if(class1.equals (class2)){
+
+    public static boolean isSelfOrChildOf (final String class1, final String class2) {
+        if (class1.equals (class2)) {
             return true;
         }
         final ClassNode cn1 = classNodeMap.get (class1);
         final ClassNode cn2 = classNodeMap.get (class2);
 
         ClassNode cur = cn1;
-        while(cur != null){
-            if(cur.superName == null) {
+        while (cur != null) {
+            if (cur.superName == null) {
                 return false;
             }
-            if(cur.superName == class2){
+            if (cur.superName == class2) {
                 return true;
             }
             cur = classNodeMap.get (cur.superName);
@@ -122,26 +83,24 @@ public class Worker extends Thread {
         return false;
     }
 
-    public static boolean isInterfaceOf(final String class1, final String class2){
-        if(class1.equals (class2)){
+
+    public static boolean isInterfaceOf (final String class1, final String class2) {
+        if (class1.equals (class2)) {
             return true;
         }
         final ClassNode cn1 = classNodeMap.get (class1);
         final ClassNode cn2 = classNodeMap.get (class2);
 
-        for(final String it1 : cn1.interfaces){
-            if(it1.equals (class2)) {
+        for (final String it1 : cn1.interfaces) {
+            if (it1.equals (class2)) {
                 return true;
             }
         }
         return false;
     }
 
-    private static final ConcurrentHashMap <String, byte []> cacheMap = new ConcurrentHashMap <String, byte []> ();
 
-    // not used, but may be needed if we want to set a flag to switch between
-    // instrument the core.jar or not
-    private static boolean appOnly = true;
+    private static final ConcurrentHashMap <String, byte []> cacheMap = new ConcurrentHashMap <String, byte []> ();
 
     private static final String PROP_UNINSTR = "dislserver.uninstrumented";
 
@@ -153,40 +112,24 @@ public class Worker extends Thread {
     private static final String instrPath =
         System.getProperty (PROP_INSTR, null);
 
-    // used for replays
     private static final byte [] emptyByteArray = new byte [0];
 
     private final NetMessageReader sc;
 
-    //private DiSL disl = null;
-//    public static HashMap<String, DiSL> dislMap = new HashMap <String, DiSL>();
-
     private final AtomicLong instrumentationTime = new AtomicLong ();
 
 
-
-
-    Worker (final NetMessageReader sc, final DiSL dislArg) {
+    Worker (final NetMessageReader sc) {
         this.sc = sc;
-        //this.disl = dislArg;
-        //this.disl = disl;
     }
 
-//    Worker (final NetMessageReader sc) {
-//        this.sc = sc;
-//        //this.disl = null;
-//    }
 
-
-    // hash for speed up of duplicate instrumentation
-    // current DiSL class cannot be changed during a single run
-    // in future, if it can be changed during run, we should add also the
-    // DiSLClass bytecode as cacheHashKey
-    private static String getCacheHash (final byte [] bcode, final byte [] dislclassesHash) {
+    private static String getCacheHash (
+        final byte [] bcode, final byte [] dislclassesHash) {
         try {
             final MessageDigest md = MessageDigest.getInstance ("MD5");
             md.update (bcode);
-            if(dislclassesHash != null) {
+            if (dislclassesHash != null) {
                 md.update (dislclassesHash);
             }
             return Arrays.toString (md.digest ());
@@ -198,12 +141,11 @@ public class Worker extends Thread {
 
 
     static void putExtraClassesIntoJar (
-        final String originalJarName, final ZipOutputStream zos ,
+        final String originalJarName, final ZipOutputStream zos,
         final String extraClassesJarName)
     throws IOException {
         final JarFile originalJar = new JarFile (originalJarName);
         final JarFile extraClassesJar = new JarFile (extraClassesJarName);
-
 
         Enumeration <JarEntry> entryEnum;
         entryEnum = originalJar.entries ();
@@ -214,28 +156,6 @@ public class Worker extends Thread {
         while (entryEnum.hasMoreElements ()) {
             final ZipEntry ze = entryEnum.nextElement ();
             final String entryName = ze.getName ();
-//            if (entryName.equals ("java/lang/Thread.class")) {// Java lang
-//                                                              // Thread should
-//                                                              // be replaced for
-//                                                              // the bypass
-//                                                              // field
-//                final ByteArrayOutputStream bout = new ByteArrayOutputStream ();
-//                final InputStream is = originalJar.getInputStream (ze);
-//
-//                final ZipEntry nze = new ZipEntry (entryName);
-//                zos.putNextEntry (nze);
-//                while ((bytesRead = is.read (buffer)) != -1) {
-//                    bout.write (buffer, 0, bytesRead);
-//                }
-//                try {
-//                    zos.write (instrument (
-//                        "java/lang/Thread", bout.toByteArray (), getDiSL ("core.jar")==null?getDiSL ("core.jar"):disl));
-//                } catch (final Exception e) {
-//                    e.printStackTrace ();
-//                }
-//
-//                zos.closeEntry ();
-//            } else
             final InputStream is = originalJar.getInputStream (ze);
 
             final ZipEntry nze = new ZipEntry (entryName);
@@ -254,7 +174,8 @@ public class Worker extends Thread {
 
 
     static void putExtraClassesIntoJar (
-        final ZipOutputStream zos, final JarFile instrlib, final String dexName) throws IOException {
+        final ZipOutputStream zos, final JarFile instrlib, final String dexName)
+    throws IOException {
         try {
             int bytesRead;
             final byte [] buffer = new byte [8192];
@@ -273,7 +194,7 @@ public class Worker extends Thread {
                             final ZipEntry curnze = new ZipEntry (curName);
                             final String curClassName = curName.substring (
                                 0, curName.lastIndexOf (".class"));
-                            System.out.println("put entry for "+curClassName);
+                            //System.out.println ("instrumented class " + curClassName);
                             zos.putNextEntry (curnze);
                             final ByteArrayOutputStream boutinstr = new ByteArrayOutputStream ();
                             while ((bytesRead = curis.read (buffer)) != -1) {
@@ -281,26 +202,27 @@ public class Worker extends Thread {
                             }
                             zos.write (
                                 boutinstr.toByteArray (), 0, boutinstr.size ());
-                            newClass (curClassName, boutinstr.toByteArray (), dexName);
+                            newClass (
+                                curClassName, boutinstr.toByteArray (), dexName);
 
                             zos.closeEntry ();
                         } catch (final Exception e) {
-                            //System.out.println("duplicate");
-                            //e.printStackTrace ();
+                            // System.out.println("duplicate");
+                            // e.printStackTrace ();
                         }
                     }
                 } else {
-                    try{
-                    final ZipEntry curnze = new ZipEntry (curName);
-                    zos.putNextEntry (curnze);
-                    while ((bytesRead = curis.read (buffer)) != -1) {
-                        zos.write (buffer, 0, bytesRead);
-                    }
-                    zos.closeEntry ();
-                    }catch(final Exception e){
-                        //e.printStackTrace ();
-                        if(AndroidInstrumenter.debug) {
-                            System.out.println("duplicate entry, ignore");
+                    try {
+                        final ZipEntry curnze = new ZipEntry (curName);
+                        zos.putNextEntry (curnze);
+                        while ((bytesRead = curis.read (buffer)) != -1) {
+                            zos.write (buffer, 0, bytesRead);
+                        }
+                        zos.closeEntry ();
+                    } catch (final Exception e) {
+                        // e.printStackTrace ();
+                        if (AndroidInstrumenter.debug) {
+                            System.out.println ("duplicate entry, ignore " + curName);
                         }
                     }
                 }
@@ -329,7 +251,7 @@ public class Worker extends Thread {
             int temp;
             final byte [] b = new byte [2048];
             while ((temp = dis.read (b)) != -1) {
-                fos.write (b,0,temp);
+                fos.write (b, 0, temp);
                 size += temp;
             }
         } catch (final FileNotFoundException ex) {
@@ -346,150 +268,47 @@ public class Worker extends Thread {
     }
 
 
-    static byte [] preInstrumentJar (final String jarName, final String originalJarName, final byte [] dexCode) {
-        File outputDex = null;
-        File realJar = null;
-        byte [] res = null;
-        try {
-
-            final String instrumentedJarName = "preinstrumented_" + jarName;
-            if (jarName.equals ("core.jar")) {
-                final FileOutputStream fos = new FileOutputStream (instrumentedJarName);
-                final ZipOutputStream zos = new ZipOutputStream (fos);
-
-                if(!builtinLibPath.equals ("")) {
-                    putExtraClassesIntoJar (
-                        originalJarName, zos, builtinLibPath);
-                }
-
-                zos.finish ();
-                zos.close ();
-                fos.flush ();
-                fos.close ();
-
-            } else {
-                copy (originalJarName, instrumentedJarName);
-            }
-
-            final Class <?> c = Class.forName ("com.android.dx.command.Main");
-            final java.lang.reflect.Method m = c.getMethod (
-                "main", String [].class);
-            realJar = new File (instrumentedJarName);
-            outputDex = new File (realJar.getName ()
-                + ".dex");
-
-            final List <String> ps = new ArrayList <String> ();
-            if (jarName.equals ("ext.jar")
-                || jarName.equals ("core.jar")) {
-                ps.addAll (Arrays.asList (
-                    "--dex", "--core-library",
-//"--no-strict",
-                    "--output=" + outputDex.getCanonicalPath (),
-                    realJar.getCanonicalPath ()));
-            } else {
-                ps.addAll (Arrays.asList (
-                    "--dex",
-//"--no-strict",
-                    "--output=" + outputDex.getCanonicalPath (),
-                    realJar.getCanonicalPath ()));
-            }
-            m.invoke (
-                null, new Object [] { ps.toArray (new String [0]) });
-            //res = Files.readAllBytes (Paths.get (outputDex.getAbsolutePath ()));
-            res = Utils.readbytes (outputDex);
-        } catch (final Throwable e) {
-            System.err.println ("call dx error");
-            e.printStackTrace ();
-        }
-        // now read the instrumented dex file and pass
-        // return it as byte[]
-        if (!AndroidInstrumenter.debug) {
-            outputDex.deleteOnExit ();
-        }
-        if (res == null) {
-            return res;
-        }
-        return res;
-
-    }
-
-    static DiSL getDiSL(final String jarName){
-        DiSL newdisl = null;
-        final Dex dex = DiSLConfig.dexMap.get(jarName);
-        if(AndroidInstrumenter.dislMap.get (jarName)==null){
-            if(dex == null){
-                if(DiSLConfig.default_disl_classes.equals ("")) {
-                    return null;
-                }
-                try{
-                    newdisl = new DiSL (DiSLConfig.default_bypass, DiSLConfig.default_disl_classes,"");
-                }catch (final Exception e){
-                    e.printStackTrace ();
-                }
-
-            }else{
-                if(dex.dislClass.equals ("")) {
-                    return null;
-                }
-                try {
-                    newdisl = new DiSL(dex.bypass, dex.dislClass,"");
-                    //newdisl = new DiSL(true, dex.dislClass,"");
-                } catch (final DiSLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        }
-        if(newdisl != null) {
-            AndroidInstrumenter.dislMap.put (jarName, newdisl);
-        }
-        return newdisl;
-    }
-
     static int idx = 0;
 
-    static synchronized byte [] instrumentJar (final String jarName, final byte [] dexCode)
+    static String flattenName(final String fullName){
+        return fullName.replace ('/', '_');
+    }
+
+    static synchronized byte [] instrumentJar (
+        final String fullName, final byte [] dexCode)
     throws IOException,
     FileNotFoundException {
         boolean isCore = false;
-        if (AndroidInstrumenter.debug) {
-            System.out.println (jarName);
-        }
-        System.out.println("Start instrumenting "+jarName);
 
-        if(true){
-            final FileOutputStream fos = new FileOutputStream (new File("dexes/"+jarName+"_"+(idx++)));
-              fos.write (dexCode, 0, dexCode.length);
-              fos.flush ();
-              fos.close ();
-              if(DiSLConfig.dexMap.get (jarName) == null || DiSLConfig.dexMap.get (jarName).useOriginal)
-              {
-                return dexCode;
-              }
-        }
+        // keep a local copy of the original dex
+        final FileOutputStream dexofs = new FileOutputStream (new File ("dexes/"
+            + flattenName(fullName)));
+        dexofs.write (dexCode, 0, dexCode.length);
+        dexofs.flush ();
+        dexofs.close ();
 
-        if(true){
-            final FileOutputStream fos = new FileOutputStream (new File("dexes/"+jarName));
-            fos.write (dexCode, 0, dexCode.length);
-            fos.flush ();
-            fos.close ();
-            final FileOutputStream fos2 = new FileOutputStream (new File("dexes/instr_"+jarName+".dex"));
-            fos2.write (dexCode, 0, dexCode.length);
-            fos2.flush ();
-            fos2.close ();
-        }
+        // the instrumented dex file
+        final FileOutputStream instrofs = new FileOutputStream (new File (
+            "dexes/instr_" + flattenName(fullName) + ".dex"));
+        instrofs.write (dexCode, 0, dexCode.length);
+        instrofs.flush ();
+        instrofs.close ();
+
         byte [] instrClass = null;
-        final DiSL curdisl = getDiSL(jarName);
+        final DiSL curdisl = UserConfiguration.getInstance ().getDiSL (fullName);
+
+        //System.out.println ("Start instrumenting " + fullName);
+
         if (cacheUsed) {
-            String key ="";
-            if(curdisl != null) {
+            String key = "";
+            if (curdisl != null) {
                 key = getCacheHash (dexCode, curdisl.dislclassesHash);
             } else {
                 key = getCacheHash (dexCode, null);
             }
             instrClass = cacheMap.get (key);
             if (instrClass != null) {
-                System.out.println (jarName + " " + key + " hits cache");
+                System.out.println (fullName + " " + key + " hits cache");
                 return instrClass;
             }
         }
@@ -498,54 +317,27 @@ public class Worker extends Thread {
 
         // create tmp file in system temporary files
         File dex2JarFile = null;
-        if(ON_ANDROID_DEVICE) {
-            dex2JarFile = new File("/data/"+jarName+".tmp");
-        } else {
-            dex2JarFile = File.createTempFile (
-            jarName, ".tmp");
-        }
+        dex2JarFile = File.createTempFile (flattenName(fullName), ".tmp");
 
-        //final DexFileReader reader = new DexFileReader (dexCode);
-        final BaseDexFileReader reader = MultiDexFileReader.open(dexCode);
-        final BaksmaliBaseDexExceptionHandler handler = false ? null : new BaksmaliBaseDexExceptionHandler();
+        // final DexFileReader reader = new DexFileReader (dexCode);
+        final BaseDexFileReader reader = MultiDexFileReader.open (dexCode);
+        final BaksmaliBaseDexExceptionHandler handler = false
+            ? null : new BaksmaliBaseDexExceptionHandler ();
 
-        //final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
+        // final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl
+        // ().skipDebug (true);
 
-        Dex2jar.from(reader).withExceptionHandler(handler).reUseReg(false).topoLogicalSort()
-        .skipDebug(true).optimizeSynchronized(false).printIR(false)
-        .noCode(false).to(dex2JarFile.toPath ());
+        Dex2jar.from (reader).withExceptionHandler (handler).reUseReg (false).topoLogicalSort ()
+            .skipDebug (true).optimizeSynchronized (false).printIR (false)
+            .noCode (false).to (dex2JarFile.toPath ());
 
-//        final DexExceptionHandlerImpl handler = new DexExceptionHandlerImpl ().skipDebug (true);
+        //System.out.println (dex2JarFile.toString ());
 
-//        Dex2jar.from (reader).reUseReg (
-//            false)
-//            .topoLogicalSort (false)
-//            .skipDebug (true)
-//            .optimizeSynchronized (false)
-//            .printIR (false)
-////            .verbose (false)
-//            .to (dex2JarFile.toPath ());
-
-        System.out.println(dex2JarFile.toString ());
-
-//        if (AndroidInstrumenter.debug) {
-//            final Map <com.googlecode.dex2jar.Method, Exception> exceptions = handler.getExceptions ();
-//            if (exceptions.size () > 0) {
-//                final File errorFile = new File (jarName
-//                    + "-error.zip");
-//                handler.dumpException (reader, errorFile);
-//                System.err.println ("Detail Error Information in File "
-//                    + errorFile);
-//            }
-//        }
-
-        // Now open the tmp jar file, and instrument only
-        // the .class files
         final JarFile dex2JarJar = new JarFile (
             dex2JarFile.getAbsolutePath ());
 
         Enumeration <JarEntry> entryEnum;
-        //read the jar before instrumentation
+        // read the jar before instrumentation
         entryEnum = dex2JarJar.entries ();
         final byte [] buffer = new byte [8192];
         int bytesRead;
@@ -559,10 +351,10 @@ public class Worker extends Thread {
                         final String className = entryName.substring (
                             0, entryName.lastIndexOf (".class"));
 
-                        if(className.startsWith("java/")){
+                        if (className.startsWith ("java/")) {
                             isCore = true;
                         }
-                        if(className.startsWith("javax/")){
+                        if (className.startsWith ("javax/")) {
                             isCore = true;
                         }
 
@@ -572,31 +364,27 @@ public class Worker extends Thread {
                             while ((bytesRead = is.read (buffer)) != -1) {
                                 bout.write (buffer, 0, bytesRead);
                             }
-                            newClass (className, bout.toByteArray (), jarName);
+                            newClass (className, bout.toByteArray (), fullName);
                         }
                     } catch (final Exception e) {
                         e.printStackTrace ();
                     }
                 }
 
-            } else {
-            }
+            } else {}
         }
 
-        //Do the instrumentation
+        // Do the instrumentation
         String instrumentedJarName;;
-        if(ON_ANDROID_DEVICE) {
-            instrumentedJarName= "/data/"+ "instrumented_" + jarName + ".jar";
-        } else {
-            instrumentedJarName= "/tmp/instrumented_" + jarName + ".jar";
-        }
-        final File instrumentedJarFile= new File (instrumentedJarName);
+        instrumentedJarName = "/tmp/instrumented_" + flattenName(fullName) + ".jar";
+        final File instrumentedJarFile = new File (instrumentedJarName);
         final FileOutputStream fos = new FileOutputStream (instrumentedJarFile);
         final ZipOutputStream zos = new ZipOutputStream (fos);
 
-        if(curdisl!= null && curdisl.wrapperClass != null){
-            System.out.println("found wrapper class");
-            final ZipEntry wrapperEntry = new ZipEntry (curdisl.wrapperClassName+".class");
+        if (curdisl != null && curdisl.wrapperClass != null) {
+            System.out.println ("found wrapper class");
+            final ZipEntry wrapperEntry = new ZipEntry (curdisl.wrapperClassName
+                + ".class");
             zos.putNextEntry (wrapperEntry);
             zos.write (curdisl.wrapperClass);
             zos.closeEntry ();
@@ -621,17 +409,10 @@ public class Worker extends Thread {
                             while ((bytesRead = is.read (buffer)) != -1) {
                                 bout.write (buffer, 0, bytesRead);
                             }
-                            //newClass (className, bout.toByteArray ());
-                            // java.lang.Thread needs instrumentation for bypass
-                            // support
-//                            if (className.equals ("java/lang/Thread")) {
-//                                code = instrument (
-//                                    className, bout.toByteArray (), disl);
-//                            } else
-                            if(curdisl == null){
+                            if (curdisl == null) {
                                 isInstrumented = false;
                                 code = bout.toByteArray ();
-                            }else{
+                            } else {
                                 code = instrument (
                                     className, bout.toByteArray (), curdisl);
                             }
@@ -645,8 +426,8 @@ public class Worker extends Thread {
                             }
 
                         }
-                        if(isInstrumented) {
-                            System.out.println("put entry for "+entryName);
+                        if (!incremental || isInstrumented) {
+                            //System.out.println ("put entry for " + entryName);
                             final ZipEntry nze = new ZipEntry (entryName);
                             zos.putNextEntry (nze);
                             bin = new ByteArrayInputStream (code);
@@ -654,8 +435,7 @@ public class Worker extends Thread {
                                 zos.write (buffer, 0, bytesRead);
                             }
                             zos.closeEntry ();
-                        }else {
-                        }
+                        } else {}
                     } catch (final Exception e) {
                         e.printStackTrace ();
                     }
@@ -671,94 +451,106 @@ public class Worker extends Thread {
             }
         }
 
-        // put the needed stuff into core.jar: built-in classes(bypass,
-        // AREDispatch) + analysis stubs
-        if (jarName.equals ("core.jar") || jarName.equals ("core-libart.jar"))
+        if (fullName.contains ("core.jar") || fullName.contains ("core-libart.jar"))
         {
+            final JarFile rvlib = new JarFile ("output/lib/rv.jar");
+            putExtraClassesIntoJar (zos, rvlib, fullName);
+            rvlib.close ();
 
-            final JarFile instrlib = new JarFile (
-                instrLibPath);
-            putExtraClassesIntoJar (zos, instrlib, jarName);
-            instrlib.close ();
-//
-//            if(!builtinLibPath.equals ("")) {
-//                final JarFile builtinlib = new JarFile (
-//                    builtinLibPath);
-//
-//                putExtraClassesIntoJar (zos, builtinlib, jarName);
-//                builtinlib.close ();
-//            }
-//            for(final String name: extraLibs){
-//                final JarFile extraLib = new JarFile (name);
-//                putExtraClassesIntoJar (zos, extraLib, name);
-//                extraLib.close ();
-//            }
+            final JarFile analysislib = new JarFile ("output/lib/analysis.jar");
+            putExtraClassesIntoJar (zos, analysislib, fullName);
+            analysislib.close ();
         }
         zos.finish ();
         zos.close ();
         fos.flush ();
         fos.close ();
         dex2JarJar.close ();
-//        dex2JarFile.deleteOnExit ();
+        // dex2JarFile.deleteOnExit ();
         File outputDex = null;
         File realJar = null;
-        outputDex = new File ("dexes/instr_"+jarName+".dex");
-{
-        try {
-            final Class <?> c = Class.forName ("com.android.dx.command.Main");
-            final java.lang.reflect.Method m = c.getMethod (
-                "main", String [].class);
-System.out.println("instrumentedJarName "+instrumentedJarName);
-            realJar = new File (instrumentedJarName);
- //           realJar.deleteOnExit ();
-//            outputDex.deleteOnExit ();
-            final List <String> ps = new ArrayList <String> ();
-//            if (jarName.equals ("ext.jar")
-//                || jarName.equals ("core.jar")) {
-            if(isCore) {
-                ps.addAll (Arrays.asList (
-                    "--dex", "--core-library",
-//"--no-strict",
-                    "--output=" + outputDex.getCanonicalPath (),
-                    "--verbose", "--incremental",
-                    realJar.getCanonicalPath ()));
-            } else {
-                ps.addAll (Arrays.asList (
-                    "--dex",
-//"--no-strict",
-                    "--output=" + outputDex.getCanonicalPath (),
-                    "--verbose", "--incremental",
-                    realJar.getCanonicalPath ()));
+        outputDex = new File ("dexes/instr_" + flattenName(fullName) + ".dex");
+        {
+            try {
+                final Class <?> c = Class.forName ("com.android.dx.command.Main");
+                final java.lang.reflect.Method m = c.getMethod (
+                    "main", String [].class);
+                //System.out.println ("instrumentedJarName " + instrumentedJarName);
+                realJar = new File (instrumentedJarName);
+                // realJar.deleteOnExit ();
+                // outputDex.deleteOnExit ();
+                final List <String> ps = new ArrayList <String> ();
+                // if (jarName.equals ("ext.jar")
+                // || jarName.equals ("core.jar")) {
+                if (isCore) {
+                    if(incremental) {
+                        ps.addAll (Arrays.asList (
+                            "--dex", "--core-library",
+                            // "--no-strict",
+                            "--output=" + outputDex.getCanonicalPath (),
+                            //"--verbose",
+                            "--incremental",
+                            realJar.getCanonicalPath ()));
+                    }else {
+                        ps.addAll (Arrays.asList (
+                            "--dex", "--core-library",
+                            // "--no-strict",
+                            "--output=" + outputDex.getCanonicalPath (),
+                            //"--verbose",
+                            //"--incremental",
+                            realJar.getCanonicalPath ()));
+                    }
+                } else {
+                    if(incremental) {
+                        ps.addAll (Arrays.asList (
+                            "--dex",
+                            // "--no-strict",
+                            "--output=" + outputDex.getCanonicalPath (),
+                            //"--verbose",
+                            "--incremental",
+                            realJar.getCanonicalPath ()));
+                    }else {
+                        ps.addAll (Arrays.asList (
+                            "--dex",
+                            // "--no-strict",
+                            "--output=" + outputDex.getCanonicalPath (),
+                            //"--verbose",
+                            //"--incremental",
+                            realJar.getCanonicalPath ()));
+                    }
+                }
+                //System.out.println ("running dx");
+                m.invoke (
+                    null, new Object [] { ps.toArray (new String [0]) });
+            } catch (final Throwable e) {
+                System.err.println ("call dx error");
+                e.printStackTrace ();
+                return dexCode;
             }
-            System.out.println ("running dx");
-            m.invoke (
-                null, new Object [] { ps.toArray (new String [0]) });
-        } catch (final Throwable e) {
-            System.err.println ("call dx error");
-            e.printStackTrace ();
-            return dexCode;
         }
-}
-
 
         // now read the instrumented dex file and pass
         // return it as byte[]
         instrClass = Utils.readbytes (outputDex);
 
         if (cacheUsed) {
-            if(curdisl != null) {
-                cacheMap.put (getCacheHash (dexCode, curdisl.dislclassesHash), instrClass);
+            if (curdisl != null) {
+                cacheMap.put (
+                    getCacheHash (dexCode, curdisl.dislclassesHash), instrClass);
             } else {
-                //use original one
+                // use original one
                 cacheMap.put (getCacheHash (dexCode, null), instrClass);
             }
         }
-        System.out.println("Instrumentation time for "+jarName+":"+(System.nanoTime ()-start)/1000000.0 + "ms" + " size from "+dexCode.length+" bytes "+" to "+instrClass.length);
-        //if(curdisl==null) {
-        //    return dexCode;
-        //} else {
-            return instrClass;
-        //}
+        System.out.println ("Instrumentation time for "
+            + fullName + ":" + (System.nanoTime () - start) / 1000000.0 + "ms"
+            + " size from " + dexCode.length + " bytes " + " to "
+            + instrClass.length);
+        // if(curdisl==null) {
+        // return dexCode;
+        // } else {
+        return instrClass;
+        // }
     }
 
 
@@ -778,42 +570,8 @@ System.out.println("instrumentedJarName "+instrumentedJarName);
     }
 
 
-//    private void ReadPkgBlackList () throws Exception {
-//        final FileReader reader = new FileReader (PKG_BLACKLIST);
-//        final BufferedReader br = new BufferedReader (reader);
-//        String s1 = null;
-//        while ((s1 = br.readLine ()) != null) {
-//            blacklist += s1;
-//            blacklist += ";";
-//        }
-//        br.close ();
-//        reader.close ();
-//    }
-
-
-//    private void ReadObserveList () throws Exception
-//    {
-//        final FileReader reader = new FileReader (PROC_OBSERVELIST);
-//        final BufferedReader br = new BufferedReader (reader);
-//        String s1 = null;
-//        while ((s1 = br.readLine ()) != null) {
-//            observeList += s1;
-//            observeList += ";";
-//        }
-//        br.close ();
-//        reader.close ();
-//    }
-
     private void instrumentationLoop () throws Exception {
-
-        if(!DiSLConfig.parseXml ()){
-			if(AndroidInstrumenter.debug) {
-                System.out.println("Update DiSL classes");
-            }
-			AndroidInstrumenter.dislMap = new HashMap <String, DiSL>();
-		}
         try {
-
             while (true) {
                 final NetMessage nm = sc.readMessage ();
                 // communication closed by the client
@@ -828,10 +586,10 @@ System.out.println("instrumentedJarName "+instrumentedJarName);
                     final long startTime = System.nanoTime ();
 
                     {
-                        final String fullPath =new String (
+                        final String fullPath = new String (
                             nm.getControl ());
-						if(AndroidInstrumenter.debug) {
-                            System.out.println(fullPath);
+                        if (AndroidInstrumenter.debug) {
+                            System.out.println (fullPath);
                         }
 
                         final byte [] dexCode = nm.getClassCode ();
@@ -843,60 +601,28 @@ System.out.println("instrumentedJarName "+instrumentedJarName);
                                                  // server querying for loaded
                                                  // bytecode
                         {
-                            final boolean configMsg = fullPath.equals (
-                                "-");
-                            if (configMsg) {
-
-                                String observeList=""+(DiSLConfig.default_proc_observed?"1;":"0;");
-                                final Collection<DiSLConfig.Proc> list =DiSLConfig.procMap.values ();
-                                final Iterator<DiSLConfig.Proc> iter = list.iterator ();
-                                while(iter.hasNext ()){
-									final DiSLConfig.Proc tmp = iter.next();
-									if(tmp.isObserved != DiSLConfig.default_proc_observed) {
-                                        observeList += tmp.procname+";";
-                                    }
-                                }
-                                instrClass = observeList.getBytes ();
-                            } else {
-                                instrClass = bytecodeMap.get (fullPath.replace ('.', '/'));
-                                if (instrClass == null) {
-                                    System.err.println ("The class "
-                                        + fullPath.toString ()
-                                        + " has not been loaded");
-                                }
+                            instrClass = bytecodeMap.get (fullPath.replace (
+                                '.', '/'));
+                            if (instrClass == null) {
+                                System.err.println ("The class "
+                                    + fullPath.toString ()
+                                    + " has not been loaded");
                             }
                         } else {
-                            System.out.println("DEX PATH "+fullPath);
-                            final String jarName = fullPath.substring(fullPath.lastIndexOf ('/')+1);
-                            if(DiSLConfig.dexMap.get (jarName) == null || DiSLConfig.dexMap.get (jarName).preinstrumented_path.equals ("")) {
-                                instrClass = instrumentJar (jarName, dexCode);
-                                //javamop.Guard.printCounters ();
-                            }
-                            else {
-                                instrClass = preInstrumentJar (jarName, DiSLConfig.dexMap.get (jarName).preinstrumented_path, dexCode);
-                             //instrClass = dexCode;
-                            }
+                            //System.out.println ("DEX PATH " + fullPath);
+                            final String jarName = fullPath.substring (fullPath.lastIndexOf ('/') + 1);
+                            instrClass = instrumentJar (fullPath, dexCode);
                         }
-
                     }
                     instrumentationTime.addAndGet (System.nanoTime () - startTime);
                 } catch (final Exception e) {
-
-                    // instrumentation error
-                    // send the client a description of the server-side error
-
                     String errToReport = e.getMessage ();
-
-                    // during debug send the whole message
                     if (AndroidInstrumenter.debug) {
                         final StringWriter sw = new StringWriter ();
                         e.printStackTrace (new PrintWriter (sw));
                         errToReport = sw.toString ();
                     }
 
-                    // error protocol:
-                    // control contains the description of the server-side error
-                    // class code is an array of size zero
                     final String errMsg = "Instrumentation error for class "
                         + new String (nm.getControl ()) + ": " + errToReport;
 
@@ -929,10 +655,11 @@ System.out.println("instrumentedJarName "+instrumentedJarName);
     }
 
 
-    static byte [] instrument (String className, final byte [] origCode, final DiSL disl)
+    static byte [] instrument (
+        String className, final byte [] origCode, final DiSL disl)
     throws DiSLServerException, DiSLException {
-		if(AndroidInstrumenter.debug) {
-            System.out.println("instrumenting "+className);
+        if (AndroidInstrumenter.debug) {
+            System.out.println ("instrumenting " + className);
         }
 
         // backup for empty class name
@@ -948,10 +675,10 @@ System.out.println("instrumentedJarName "+instrumentedJarName);
         // instrument
         try {
             instrCode = disl.instrument (origCode);
-        }catch (final Exception e) {
-            e.printStackTrace();
+        } catch (final Exception e) {
+            e.printStackTrace ();
             instrCode = origCode;
-            System.out.println("Using original code for "+className);
+            System.out.println ("Using original code for " + className);
         }
 
         // dump instrumented

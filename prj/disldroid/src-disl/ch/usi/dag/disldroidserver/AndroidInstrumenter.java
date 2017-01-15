@@ -10,12 +10,12 @@ public class AndroidInstrumenter {
     .getBoolean (DiSLServer.PROP_DEBUG);
 
     public static void checkConfigXMLChange(){
-        if(!DiSLConfig.parseXml ()){
+//        if(!DiSLConfig.parseRaw ()){
             if(AndroidInstrumenter.debug) {
                 System.out.println("Detect config change");
             }
             AndroidInstrumenter.dislMap = new HashMap <String, DiSL>();
-        }
+//        }
         return;
     }
 }

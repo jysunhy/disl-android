@@ -23,9 +23,6 @@ import ch.usi.dag.disl.util.Constants;
 
 public abstract class ExclusionSet {
 
-    private static final String excListPath =
-        System.getProperty ("disl.exclusionList", null);
-
     private static final String JAR_PATH_BEGIN = "/";
 
     private static final String JAR_PATH_END = "!";
@@ -37,12 +34,12 @@ public abstract class ExclusionSet {
     private static final String ALL_METHODS = ".*";
 
 
-    public static Set <Scope> prepare ()
+    public static Set <Scope> prepare (final String path)
     throws ScopeParserException, ManifestInfoException,
     ExclusionPrepareException {
         final Set <Scope> exclSet = defaultExcludes ();
         exclSet.addAll (instrumentationJar ());
-        exclSet.addAll (readExlusionList ());
+        exclSet.addAll (readExlusionList (path));
         return exclSet;
     }
 
@@ -133,7 +130,7 @@ public abstract class ExclusionSet {
     }
 
 
-    private static Set <Scope> readExlusionList ()
+    private static Set <Scope> readExlusionList (final String path)
     throws ExclusionPrepareException, ScopeParserException {
         final String COMMENT_START = "#";
 
@@ -141,9 +138,9 @@ public abstract class ExclusionSet {
             final Set <Scope> exclSet = new HashSet <Scope> ();
 
             // if exclusion list path exits
-            if (excListPath != null) {
+            if (path != null) {
                 // read exclusion list line by line
-                final Scanner scanner = new Scanner (new FileInputStream (excListPath));
+                final Scanner scanner = new Scanner (new FileInputStream (path));
                 while (scanner.hasNextLine ()) {
                     final String line = scanner.nextLine ().trim ();
                     if (!line.isEmpty () && !line.startsWith (COMMENT_START)) {

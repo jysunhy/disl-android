@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -14,13 +13,24 @@ import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.RemoteFile;
 
 
-public class FolderWorker extends Thread {
+public class FolderWorker {
+    private static final String PROP_DISL_CONFIG              = "config.path";
+    public static final String dislConfigPath = System.getProperty (PROP_DISL_CONFIG, null);
+    public static final String localConfig = dislConfigPath == null?"config.local":dislConfigPath;
+
+
+    public static String lineSeparator = "********************************************";
+
+    public static String configPathInDevice = "/data/app/disl.config";
+
     public static boolean isFromFolder = true;
 
+    public static UserConfiguration config = null;
+
+    public static String curDex = "";
 
     public FolderWorker () {
     }
-
 
     static class DexStruct {
         String path;
@@ -71,16 +81,32 @@ public class FolderWorker extends Thread {
             }
         }
         final JadbDevice device = devices.get (0);
-        System.out.println ("Device detected " + device.getSerial ());
+        //System.out.println ("Device detected " + device.getSerial ());
         return device;
     }
 
-    @Override
-    public void run () {
+    public void start () {
         //
+        new File("adbfolder/send/table").mkdirs ();
+        new File("adbfolder/send/dex").mkdirs ();
+        new File("adbfolder/recv/table").mkdirs ();
+        new File("adbfolder/recv/dex").mkdirs ();
         cleanFolder (new File ("adbfolder"));
 
-        DiSLConfig.parseXml ();
+        if(dislConfigPath == null) {
+            final File originalConfig = new File("adbfolder/disl.config.original");
+            adbPullFile (getDevice (), configPathInDevice, originalConfig);
+            config = UserConfiguration.parseRawInteractive (originalConfig);
+        }else {
+            config = UserConfiguration.parseRaw (new File(dislConfigPath));
+        }
+        UserConfiguration.setInstance (config);
+        final File updatedConfig = new File("adbfolder/disl.config");
+        config.writeToFile (updatedConfig);
+        adbPushFile (getDevice(), configPathInDevice, updatedConfig);
+        adbPushFile (getDevice(), "/data/app/disl.ok", updatedConfig);
+        //DiSLConfig.parseXml ();
+//        DiSLConfig.parseRaw ();
         while (true) {
             //AndroidInstrumenter.checkConfigXMLChange ();
             adbPull (getDevice (), "/data/app/send/table/", "adbfolder/send/table/", true);
@@ -115,7 +141,9 @@ public class FolderWorker extends Thread {
                             dexes.put (fname, new DexStruct (name, size));
                         }
                         if (isize == 0) {
-                            System.out.println ("Notice uninstrumented " + name);
+                            //System.out.println ("Notice uninstrumented " + name);
+                            System.out.println(FolderWorker.lineSeparator);
+                            //System.out.println ("bytecode " + name + " to be instrumented");
                             final File localDex = new File("adbfolder/send/dex/"+fname.replace ("dextable", "dex"));
                             while(!localDex.exists () || localDex.length ()<size){
                                 adbPullFile(getDevice (), "/data/app/send/dex/"+fname.replace ("dextable", "dex"), localDex);
@@ -128,22 +156,23 @@ public class FolderWorker extends Thread {
 if(true) {
 //if(false) {
                             final String jarName = name.substring (name.lastIndexOf ('/') + 1);
-                            if (DiSLConfig.dexMap.get (jarName) == null
-                                || DiSLConfig.dexMap.get (jarName).preinstrumented_path.equals ("")) {
-                                instrClass = Worker.instrumentJar (jarName, dexCode);
-                                // javamop.Guard.printCounters ();
+
+                            if (config.needQuery (name)) {
+                                System.out.println ("Configuration for "+name+" is missing, configure it now");
+                                config.queryAndUpdate(name);
                             }
-                            else {
-                                instrClass = Worker.preInstrumentJar (
-                                    jarName,
-                                    DiSLConfig.dexMap.get (jarName).preinstrumented_path,
-                                    dexCode);
+
+                            if(config.shouldInstrument(name))
+                            {
+                                System.out.println("Instrumenting "+name);
+                                curDex = name;
+                                instrClass = Worker.instrumentJar (name, dexCode);
                             }
 }
                             if (instrClass == null) {
                                 instrClass = dexCode;
-                                System.out.println ("instrumentation "
-                                    + name + " use original");
+                                System.out.println ("Skip instrumenting "
+                                    + name + "");
                             }
                             final File instrF = new File ("adbfolder/recv/dex/" + fname.replace ("dextable", "dex"));
                             instrF.createNewFile ();
@@ -163,7 +192,7 @@ if(true) {
                             fw0.flush ();
                             fw0.close ();
                             dexes.get (fname).instrumentedSize = instrClass.length;
-
+                            System.out.println ();
                             adbPushFile (getDevice (), "/data/app/recv/dex/"+fname.replace ("dextable", "dex"), instrF);
                             adbPushFile(getDevice (), "/data/app/recv/table/"+fname, tableF);
                         } else {}
@@ -201,27 +230,26 @@ if(true) {
 
     private static void adbPullFile (
         final JadbDevice device, final String pathInDevice, final File lf) {
-        System.out.println("pulling "+pathInDevice);
+        //System.out.println("pulling "+pathInDevice);
         try {
                     device.pull (new RemoteFile (pathInDevice), lf);
         } catch (final Exception e) {
-            System.out.println("pull "+pathInDevice+" fails, it's not ready or removed by the android");
+            e.printStackTrace ();
+            //System.out.println("pull "+pathInDevice+" fails, it's not ready or removed by the android");
         }
-        System.out.println("pulling "+pathInDevice+" finishes");
+        //System.out.println("pulling "+pathInDevice+" finishes");
     }
 
-    private static void adbPushFile (
+    public static void adbPushFile (
         final JadbDevice device, final String pathInDevice, final File lf) {
-        System.out.println("pushing "+pathInDevice);
+        //System.out.println("pushing "+pathInDevice);
         try {
                     device.push (lf, new RemoteFile (pathInDevice));
         } catch (final Exception e) {
             e.printStackTrace ();
         }
-        System.out.println("pushing "+pathInDevice+" finishes");
+        //System.out.println("pushing "+pathInDevice+" finishes");
     }
-
-
 
     private static void cleanFolder (final File folder) {
         for (final File f : folder.listFiles ()) {
@@ -231,24 +259,5 @@ if(true) {
                 f.delete ();
             }
         }
-    }
-
-
-    public static void main (final String args []) {
-        try {
-            // final Process p = Runtime.getRuntime().exec(new
-            // String[]{"zsh","-c","ls"});
-            // Runtime.getRuntime().exec ("ls").waitFor ();
-            final List <String> commands = new ArrayList <String> ();
-            commands.add ("/Users/haiyang/Library/Android/sdk/platform-tools/adb");
-            commands.add ("pull");
-            commands.add ("/data/data/disl/");
-            commands.add ("/Users/haiyang/Documents/WorkSpace/Github/disl-android/prj/disldroid/android_folder");
-            final ProcessBuilder pb = new ProcessBuilder (commands);
-            pb.start ();
-        } catch (final Exception e) {
-            e.printStackTrace ();
-        }
-
     }
 }
