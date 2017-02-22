@@ -4,6 +4,7 @@ import java.io.FileDescriptor;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 
+import android.util.Log;
 import ch.usi.dag.disl.annotation.AfterReturning;
 import ch.usi.dag.disl.dynamiccontext.DynamicContext;
 import ch.usi.dag.disl.marker.BodyMarker;
@@ -38,6 +39,7 @@ public class NetworkDiSLClass {
         final InetAddress address = (InetAddress)args[5];
         final int port = (int)args[6];
         final int sentSize = dc.getStackValue (0, int.class);
+        Log.d ("HAIYANG", "MONITOR NETWORK");
         if(sentSize > 0)
         {
             DataLeakMonitorState.getInstance ().newEvent (new NetworkSendEvent (fd, buffer, byteOffset, sentSize, flags, address, port));
@@ -60,6 +62,7 @@ public class NetworkDiSLClass {
         final InetAddress address = (InetAddress)args[3];
         final int port = (int)args[4];
         final int sentSize = dc.getStackValue (0, int.class);
+        Log.d ("HAIYANG", "MONITOR NETWORK");
         if(sentSize > 0 && buffer != null) {
             DataLeakMonitorState.getInstance ().newEvent (new NetworkSendEvent (fd, buffer.array (), buffer.position () - sentSize, sentSize, flags, address, port));
         }

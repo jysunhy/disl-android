@@ -4,9 +4,20 @@
 	<default-observed>false</default-observed>
 	<dexes>
 		<dex>
-			<name>core.jar</name>
+			<name>core-libart.jar</name>
 			<bypass>false</bypass>
 			<dislclass>output/build/analysis/ch/usi/dag/rv/usecases/infoleak/instr/NetworkDiSLClass.class</dislclass>
+      <useoriginal>false</useoriginal>
+		</dex>
+    <dex>
+      <name>prog-b4482ccf29e6df7f7e7861af487683779120d001.dex</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/rv/usecases/infoleak/instr/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/rv/usecases/infoleak/instr/TelephonyDiSLClass.class</dislclass>
+    </dex>
+		<dex>
+			<name>basexxx.apk</name>
+			<bypass>false</bypass>
+			<dislclass>output/build/analysis/ch/usi/dag/rv/usecases/infoleak/instr/MethodEntryDiSLClass.class,output/build/analysis/ch/usi/dag/rv/usecases/infoleak/instr/TelephonyDiSLClass.class</dislclass>
 		</dex>
 		<dex>
 			<name>com.fdhgkjhrtjkjbx.model-1.apk</name>

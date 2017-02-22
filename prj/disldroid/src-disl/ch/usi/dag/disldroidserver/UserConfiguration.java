@@ -33,6 +33,7 @@ public class UserConfiguration {
             super ();
             this.dexname = dexname;
             this.status = status;
+            this.exclusionListFile = DEFAULT_EXCL;
         }
         public Dex (
             final String dexname, final int status, final String dislClass, final String exclusionListFile) {
@@ -73,11 +74,11 @@ public class UserConfiguration {
                 final int status = Integer.parseInt (para[1]);
                 if(status > 0){
                     res.addDex (new Dex(para[0], status, para[2], para[3]));
-                    if(para[3].equals (DEFAULT_EXCL)) {
-                        System.out.println("config: "+para[0] + " using "+para[2]);
-                    }else {
-                        System.out.println("config: "+para[0] + " using "+para[2]+" with exclusion defined in "+para[3]);
-                    }
+                    //if(para[3].equals (DEFAULT_EXCL)) {
+                    System.out.println("config: "+para[0] + " using "+para[2]);
+                    //}else {
+                    //    System.out.println("config: "+para[0] + " using "+para[2]+" with exclusion defined in "+para[3]);
+                    //}
                 }else {
                     res.addDex (new Dex(para[0], status));
                 }
@@ -97,18 +98,22 @@ public class UserConfiguration {
             final Scanner fileScanner = new Scanner (configFile);
             while(fileScanner.hasNextLine ()){
                 final String line = fileScanner.nextLine ();
-                System.out.println(line);
+                if(line.endsWith (DEFAULT_EXCL)){
+                    System.out.println(line.substring (0, line.length ()-DEFAULT_EXCL.length ()-1));
+                }else {
+                    System.out.println(line);
+                }
                 final String para[] = line.split (" ");
                 final int status = Integer.parseInt (para[1]);
                 Dex dex;
                 if(status > 0){
-                    dex = new Dex(para[0], status, para[2], para[3]);
+                    dex = new Dex(para[0], status, para[2], DEFAULT_EXCL);
                 }else {
                     dex = new Dex(para[0], status);
                 }
                 final Dex tmp = queryUser (para[0], status);
                 if(tmp != null) {
-                    System.out.println("update entry for "+para[0]+" "+tmp.status+" "+tmp.dislClasses+" "+tmp.exclusionListFile);
+                    System.out.println("update entry for "+para[0]+" "+tmp.status+" "+tmp.dislClasses);
                     dex = tmp;
                 }
                 res.addDex (dex);
@@ -159,22 +164,24 @@ public class UserConfiguration {
                 }
                 break;
             }
-            System.out.println("skip exclusion list? [y/n]");
-            if(!checkYN()){
-                while(true) {
-                    System.out.println("set path to exclusion list:");
-                    final String excl = getString ();
-                    if(!new File(excl).exists ()){
-                        System.out.println("cannot find "+excl);
-                        continue;
-                    }else {
-                        dex.exclusionListFile = excl;
-                        break;
-                    }
-                }
-            } else {
-                dex.exclusionListFile = DEFAULT_EXCL;
-            }
+//            System.out.println("skip exclusion list? [y/n]");
+//            if(!checkYN()){
+//                while(true) {
+//                    System.out.println("set path to exclusion list:");
+//                    final String excl = getString ();
+//                    if(!new File(excl).exists ()){
+//                        System.out.println("cannot find "+excl);
+//                        continue;
+//                    }else {
+//                        dex.exclusionListFile = excl;
+//                        break;
+//                    }
+//                }
+//            } else {
+//                dex.exclusionListFile = DEFAULT_EXCL;
+//            }
+
+            dex.exclusionListFile = DEFAULT_EXCL;
         }else {
             dex = new Dex (dexName, -1);
         }
@@ -182,26 +189,42 @@ public class UserConfiguration {
     }
     static Scanner scanner = new Scanner (System.in);
     private static boolean checkYN(){
+//        final String confirm = "";
+//        while(confirm.equals("")){
+//            confirm = scanner.nextLine ();
+//        }
         final String confirm = scanner.nextLine ();
-        return confirm.equals ("Y") || confirm.equals ("y") || confirm.equals("");
+        System.out.println(confirm);
+        return confirm.equals ("Y") || confirm.equals ("y") || confirm.equals ("");
     }
+    private static boolean fakeCheckYN(){
+      final String confirm = "y";
+      System.out.println(confirm);
+      return confirm.equals ("Y") || confirm.equals ("y") || confirm.equals ("");
+  }
     public static String getString(){
         final String res = scanner.nextLine ();
         return res;
     }
+
+
 
     public void writeToFile(final File outputFile){
         FileWriter fw;
         try {
             fw = new FileWriter (outputFile);
             for(final Dex dex: dexMap.values ()){
-                //there is a google ads dex with a hashed name ads[-][0-9]*.jar
-                final String fullName = dex.dexname;
-                final String shortName = fullName.substring(fullName.lastIndexOf('/')+1);
-                if(shortName.startsWith ("ads")){
-                    continue;
+                if(isBuiltin (dex.dexname)){
+                    fw.write (dex.toString ()+"\n");
                 }
-                fw.write (dex.toString ()+"\n");
+            }
+            for(final Dex dex: dexMap.values ()){
+                if(!isBuiltin (dex.dexname)){
+                    if(isAdvertisementDex (dex.dexname)) {
+                        continue;
+                    }
+                    fw.write (dex.toString ()+"\n");
+                }
             }
             fw.flush ();
             fw.close ();
@@ -214,7 +237,15 @@ public class UserConfiguration {
         config.writeToFile (new File("output.disl.config"));
     }
 
+    boolean isAdvertisementDex(final String dexName){
+        final String shortName = dexName.substring(dexName.lastIndexOf('/')+1);
+        return shortName.startsWith ("ads");
+    }
+
     public boolean needQuery (final String name) {
+        if(isAdvertisementDex (name)){
+            return false;
+        }
         if(!dexMap.containsKey (name)) {
             return true;
         }
@@ -285,11 +316,163 @@ public class UserConfiguration {
     }
     public void queryAndUpdate (final String dexName) {
         final Dex dex = queryUser(dexName, 0);
-        System.out.println("update entry for "+dexName+" "+dex.status+" "+dex.dislClasses+" "+dex.exclusionListFile);
+        if(dex.exclusionListFile.equals (DEFAULT_EXCL)) {
+            System.out.println("update entry for "+dexName+" "+dex.status+" "+dex.dislClasses);
+        } else {
+            System.out.println("update entry for "+dexName+" "+dex.status+" "+dex.dislClasses+" "+dex.exclusionListFile);
+        }
         this.addDex (dex);
         final File lf = new File(FolderWorker.localConfig);
         this.writeToFile (lf);
         FolderWorker.adbPushFile (FolderWorker.getDevice (), FolderWorker.configPathInDevice, lf);
     }
+    static String[] nexus5BuiltIn={
+        "/system/framework/core.jar",
+        "/system/framework/conscrypt.jar",
+        "/system/framework/okhttp.jar",
+        "/system/framework/core-junit.jar",
+        "/system/framework/bouncycastle.jar",
+        "/system/framework/ext.jar",
+        "/system/framework/framework.jar",
+        "/system/framework/framework2.jar",
+        "/system/framework/telephony-common.jar",
+        "/system/framework/voip-common.jar",
+        "/system/framework/mms-common.jar",
+        "/system/framework/android.policy.jar",
+        "/system/framework/services.jar",
+        "/system/framework/apache-xml.jar",
+        "/system/framework/webviewchromium.jar",
+        "/system/framework/javax.obex.jar",
+        "/system/framework/com.google.android.media.effects.jar",
+        "/system/framework/com.android.future.usb.accessory.jar",
+        "/system/framework/android.test.runner.jar",
+        "/system/framework/com.google.widevine.software.drm.jar",
+        "/system/framework/com.google.android.maps.jar",
+        "/system/framework/qcrilhook.jar",
+        "/system/framework/com.android.location.provider.jar",
+        "/system/framework/serviceitems.jar",
+        "/system/framework/am.jar",
+        "/system/framework/bmgr.jar",
+        "/system/framework/bu.jar",
+        "/system/framework/content.jar",
+        "/system/framework/ime.jar",
+        "/system/framework/input.jar",
+        "/system/framework/media_cmd.jar",
+        "/system/framework/monkey.jar",
+        "/system/framework/pm.jar",
+        "/system/framework/requestsync.jar",
+        "/system/framework/settings.jar",
+        "/system/framework/svc.jar",
+        "/system/framework/uiautomator.jar",
+        "/system/framework/wm.jar",
+        "/system/priv-app/SettingsProvider.apk",
+        "/system/priv-app/VoiceDialer.apk",
+        "/system/app/MediaUploader.apk",
+        "/system/priv-app/GooglePartnerSetup.apk",
+        "/system/app/GoogleHome.apk",
+        "/system/app/Chrome.apk",
+        "/system/priv-app/DefaultContainerService.apk",
+        "/system/priv-app/DownloadProvider.apk",
+        "/system/app/HoloSpiralWallpaper.apk",
+        "/system/app/TimeService.apk",
+        "/system/app/YouTube.apk",
+        "/system/app/DownloadProviderUi.apk",
+        "/system/app/PinyinIME.apk",
+        "/system/priv-app/Dialer.apk",
+        "/system/app/WAPPushManager.apk",
+        "/system/priv-app/ConfigUpdater.apk",
+        "/system/priv-app/WallpaperCropper.apk",
+        "/system/priv-app/Keyguard.apk",
+        "/system/app/DeskClock.apk",
+        "/system/app/PackageInstaller.apk",
+        "/system/app/VideoEditor.apk",
+        "/system/priv-app/Settings.apk",
+        "/system/app/GenieWidget.apk",
+        "/system/priv-app/BackupRestoreConfirmation.apk",
+        "/system/app/Maps.apk",
+        "/system/app/PlayGames.apk",
+        "/system/app/DocumentsUI.apk",
+        "/system/app/CertInstaller.apk",
+        "/system/app/SoundRecorder.apk",
+        "/system/priv-app/InputDevices.apk",
+        "/system/app/Bluetooth.apk",
+        "/system/priv-app/MusicFX.apk",
+        "/system/app/CalendarGoogle.apk",
+        "/system/priv-app/GoogleServicesFramework.apk",
+        "/system/app/Music2.apk",
+        "/system/priv-app/GoogleFeedback.apk",
+        "/system/app/TelephonyProvider.apk",
+        "/system/priv-app/Wallet.apk",
+        "/system/app/PhotoTable.apk",
+        "/system/app/NfcNci.apk",
+        "/system/priv-app/GoogleLoginService.apk",
+        "/system/app/NoiseField.apk",
+        "/system/app/ChromeBookmarksSyncAdapter.apk",
+        "/system/app/Magazines.apk",
+        "/system/app/QuickSearchBox.apk",
+        "/system/app/HTMLViewer.apk",
+        "/system/app/GoogleTTS.apk",
+        "/system/app/Gmail2.apk",
+        "/system/app/GalleryGoogle.apk",
+        "/system/app/LatinImeGoogle.apk",
+        "/system/app/OpenWnn.apk",
+        "/system/priv-app/MediaProvider.apk",
+        "/system/app/Videos.apk",
+        "/system/app/LiveWallpapers.apk",
+        "/system/priv-app/Velvet.apk",
+        "/system/app/BasicDreams.apk",
+        "/system/priv-app/VpnDialogs.apk",
+        "/system/priv-app/CalendarProvider.apk",
+        "/system/app/Drive.apk",
+        "/system/app/PlusOne.apk",
+        "/system/priv-app/PrebuiltGmsCore.apk",
+        "/system/app/PacProcessor.apk",
+        "/system/priv-app/ContactsProvider.apk",
+        "/system/priv-app/ProxyHandler.apk",
+        "/system/priv-app/FusedLocation.apk",
+        "/system/app/Provision.apk",
+        "/system/app/GoogleEars.apk",
+        "/system/app/Books.apk",
+        "/system/priv-app/Tag.apk",
+        "/system/app/MagicSmokeWallpapers.apk",
+        "/system/priv-app/TeleService.apk",
+        "/system/app/Street.apk",
+        "/system/priv-app/SetupWizard.apk",
+        "/system/app/Email.apk",
+        "/system/app/UpdateSetting.apk",
+        "/system/app/KeyChain.apk",
+        "/system/app/VisualizationWallpapers.apk",
+        "/system/app/PhaseBeam.apk",
+        "/system/priv-app/ExternalStorageProvider.apk",
+        "/system/app/Calculator.apk",
+        "/system/priv-app/SystemUI.apk",
+        "/system/app/UserDictionaryProvider.apk",
+        "/system/app/PrintSpooler.apk",
+        "/system/priv-app/Mms.apk",
+        "/system/priv-app/SharedStorageBackup.apk",
+        "/system/priv-app/GoogleBackupTransport.apk",
+        "/system/priv-app/Contacts.apk",
+        "/system/priv-app/Shell.apk",
+        "/system/priv-app/talkback.apk",
+        "/system/app/GoogleContactsSyncAdapter.apk",
+        "/system/app/Camera2.apk",
+        "/system/priv-app/Phonesky.apk",
+        "/system/app/Exchange2.apk",
+        "/system/app/QuickOffice.apk",
+        "/system/priv-app/OneTimeInitializer.apk",
+        "/system/app/GoogleEarth.apk",
+        "/system/app/Galaxy4.apk",
+        "/system/app/LiveWallpapersPicker.apk",
+        "/system/app/Keep.apk",
+        "/system/app/Hangouts.apk"
+    };
 
+    private static boolean isBuiltin(final String name){
+        for(final String dexName : nexus5BuiltIn){
+            if(name.equals (dexName)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

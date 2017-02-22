@@ -150,7 +150,7 @@ public class OfflineInstrumentation {
                                 System.out.println (entryName + " is instrumented");
                             }
                         }
-                        if(isInstrumented) {
+                        if(isInstrumented || true) {
                             final ZipEntry nze = new ZipEntry (entryName);
                             zos.putNextEntry (nze);
                             bin = new ByteArrayInputStream (code);
@@ -197,13 +197,15 @@ public class OfflineInstrumentation {
                 ps.addAll (Arrays.asList (
                     "--dex", "--core-library", "--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
-                    "--verbose", "--incremental",
+                    "--verbose",
+                    //"--incremental",
                     instrumentedJarFile.getCanonicalPath ()));
             } else {
                 ps.addAll (Arrays.asList (
                     "--dex", "--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
-                    "--verbose", "--incremental",
+                    "--verbose",
+                    //"--incremental",
                     instrumentedJarFile.getCanonicalPath ()));
             }
             m.invoke (
@@ -250,7 +252,7 @@ public class OfflineInstrumentation {
             final File inputDex = new File (args [0]);
             final String name = args[0].replace ('/', '_');
             try {
-                instrumentJar (name, readbytes (inputDex), new DiSL (false, args[1], ""), "output.dex");
+                instrumentJar (name, readbytes (inputDex), new DiSL (false, args[1], null), "output.dex");
             } catch (final Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace ();

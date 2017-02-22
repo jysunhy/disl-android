@@ -30,6 +30,7 @@ import org.objectweb.asm.tree.ClassNode;
 
 import ch.usi.dag.disl.DiSL;
 import ch.usi.dag.disl.exception.DiSLException;
+import ch.usi.dag.disl.staticcontext.DexStaticContext;
 import ch.usi.dag.disl.util.Constants;
 
 import com.googlecode.d2j.dex.Dex2jar;
@@ -43,11 +44,9 @@ public class Worker extends Thread {
 
     private static final ConcurrentHashMap <String, byte []> bytecodeMap = new ConcurrentHashMap <String, byte []> ();
 
-    public static final ConcurrentHashMap <String, ClassNode> classNodeMap = new ConcurrentHashMap <String, ClassNode> ();
-
     public static final ConcurrentHashMap <String, String> classNodeDexName = new ConcurrentHashMap <String, String> ();
 
-    static boolean incremental = true;
+    static boolean incremental = false;
 
     private static void newClass (
         final String name, final byte [] bytes, final String dexName) {
@@ -57,48 +56,10 @@ public class Worker extends Thread {
         final ClassNode cn = new ClassNode ();;
         final ClassReader cr = new ClassReader (bytes);
         cr.accept (cn, 0);
-        classNodeMap.put (name, cn);
+//        System.out.println("putting "+name);
+        DexStaticContext.classNodeMap.put (name, cn);
         classNodeDexName.put (name, dexName);
     }
-
-
-    public static boolean isSelfOrChildOf (final String class1, final String class2) {
-        if (class1.equals (class2)) {
-            return true;
-        }
-        final ClassNode cn1 = classNodeMap.get (class1);
-        final ClassNode cn2 = classNodeMap.get (class2);
-
-        ClassNode cur = cn1;
-        while (cur != null) {
-            if (cur.superName == null) {
-                return false;
-            }
-            if (cur.superName == class2) {
-                return true;
-            }
-            cur = classNodeMap.get (cur.superName);
-        }
-
-        return false;
-    }
-
-
-    public static boolean isInterfaceOf (final String class1, final String class2) {
-        if (class1.equals (class2)) {
-            return true;
-        }
-        final ClassNode cn1 = classNodeMap.get (class1);
-        final ClassNode cn2 = classNodeMap.get (class2);
-
-        for (final String it1 : cn1.interfaces) {
-            if (it1.equals (class2)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     private static final ConcurrentHashMap <String, byte []> cacheMap = new ConcurrentHashMap <String, byte []> ();
 
@@ -122,7 +83,6 @@ public class Worker extends Thread {
     Worker (final NetMessageReader sc) {
         this.sc = sc;
     }
-
 
     private static String getCacheHash (
         final byte [] bcode, final byte [] dislclassesHash) {
@@ -544,8 +504,9 @@ public class Worker extends Thread {
         }
         System.out.println ("Instrumentation time for "
             + fullName + ":" + (System.nanoTime () - start) / 1000000.0 + "ms"
-            + " size from " + dexCode.length + " bytes " + " to "
-            + instrClass.length);
+//            + " size from " + dexCode.length + " bytes " + " to "
+//            + instrClass.length
+            );
         // if(curdisl==null) {
         // return dexCode;
         // } else {

@@ -18,7 +18,7 @@ public abstract class DiSLServer {
 
     private static final String PROP_PORT = "dislserver.port";
 
-    private static final int DEFAULT_PORT = 11217;
+    private static final int DEFAULT_PORT = 6668;
 
     private static final int port = Integer.getInteger (PROP_PORT, DEFAULT_PORT);
 
@@ -48,9 +48,11 @@ public abstract class DiSLServer {
 
     public static void main (final String [] args) {
         try {
-            if (FolderWorker.isFromFolder) {
-                new FolderWorker ().start ();
-            } else {
+            new Thread(new FolderWorker ()).start ();
+//            if (FolderWorker.isFromFolder) {
+//                new FolderWorker ().start ();
+//            } else {
+            {
                 // use dynamic bypass
                 // disl = new DiSL (bypass);
 

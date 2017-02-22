@@ -14,6 +14,7 @@ import ch.usi.dag.rv.usecases.infoleak.events.MethodTraceEvent;
 public class MethodEntryDiSLClass {
     @Before (
         marker = BodyMarker.class,
+//        scope = "com.facebook.*.*",
         order = 1000)
     public static void before_enter (final MethodStaticContext msc) {
         DataLeakMonitorState.getInstance ().newEvent (new MethodTraceEvent (msc.thisMethodFullName (), true));
@@ -21,6 +22,7 @@ public class MethodEntryDiSLClass {
 
     @After (
         marker = BodyMarker.class,
+//        scope = "com.facebook.*.*",
         order = 1000)
     public static void after_enter (final CallContext msc) {
         DataLeakMonitorState.getInstance ().newEvent (new MethodTraceEvent (msc.thisMethodFullName (), false));

@@ -16,5 +16,4 @@ public class EmptyDiSLClass {
     public static void before_enter (final MethodStaticContext msc) {
         Log.d ("HAIYANG", msc.thisMethodFullName ());
     }
-
 }

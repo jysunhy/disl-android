@@ -20,7 +20,7 @@ public class DiSLFinder {
             return;
         }
         System.out.println(FolderWorker.lineSeparator);
-        System.out.println("Scanning available analysis...");
+        System.out.println("Scanning available DiSLClass...");
         readDir(dir, dir.getAbsolutePath ());
         System.out.println("");
     }
@@ -33,7 +33,7 @@ public class DiSLFinder {
             if(entry.isDirectory ()){
                 readDir(entry, prefix);
             }else {
-                if(entry.getAbsolutePath ().contains ("DiSLClass")){
+                if(entry.getAbsolutePath ().contains ("DiSLClass") && !entry.getAbsolutePath ().contains ("$")){
                     String sig = entry.getAbsolutePath ().substring (prefix.length ()).replace ('/', '.');
                     if(sig.startsWith (".")) {
                         sig = sig.substring (1);
@@ -45,7 +45,7 @@ public class DiSLFinder {
                         sig = sig.substring (0, sig.length ()-5);
                     }
 
-                    System.out.println("found analysis "+sig);
+                    System.out.println("found DiSLClass "+sig);
                     dislfileMap.put (sig, new DiSLClassFile (entry, sig));
                 }
             }

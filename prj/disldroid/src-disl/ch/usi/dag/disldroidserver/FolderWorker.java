@@ -13,7 +13,7 @@ import se.vidstige.jadb.JadbDevice;
 import se.vidstige.jadb.RemoteFile;
 
 
-public class FolderWorker {
+public class FolderWorker implements Runnable{
     private static final String PROP_DISL_CONFIG              = "config.path";
     public static final String dislConfigPath = System.getProperty (PROP_DISL_CONFIG, null);
     public static final String localConfig = dislConfigPath == null?"config.local":dislConfigPath;
@@ -155,7 +155,6 @@ public class FolderWorker {
                             byte [] instrClass = null;
 if(true) {
 //if(false) {
-                            final String jarName = name.substring (name.lastIndexOf ('/') + 1);
 
                             if (config.needQuery (name)) {
                                 System.out.println ("Configuration for "+name+" is missing, configure it now");
@@ -259,5 +258,10 @@ if(true) {
                 f.delete ();
             }
         }
+    }
+
+    @Override
+    public void run () {
+        start ();
     }
 }
