@@ -16,6 +16,11 @@ public class DexStaticContext extends MethodStaticContext {
 	public String getDexName(){
 		return FolderWorker.curDex;
 	}
+
+	public String getStaticInfo(){
+        return getDexShortName ()+":"+thisMethodFullName ();
+    }
+
 	public String getDexShortName(){
 		final String fullName = getDexName();
 		final String shortName = fullName.substring(fullName.lastIndexOf('/')+1);

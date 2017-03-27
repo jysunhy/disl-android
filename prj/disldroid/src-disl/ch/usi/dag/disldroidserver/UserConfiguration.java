@@ -25,6 +25,14 @@ public class UserConfiguration {
     }
 
     public void addDex(final Dex dex){
+        if(dex.dexname.contains ("core.jar")){
+            if(dex.exclusionListFile.equals (DEFAULT_EXCL)){
+                dex.exclusionListFile = "excl.sample";
+            }
+            if(dex.status == -1){
+                dex.status = 0;
+            }
+        }
         this.dexMap.put (dex.dexname, dex);
     }
     public static class Dex {
@@ -72,16 +80,18 @@ public class UserConfiguration {
                 //System.out.println(line);
                 final String para[] = line.split (" ");
                 final int status = Integer.parseInt (para[1]);
+                Dex dex;
                 if(status > 0){
-                    res.addDex (new Dex(para[0], status, para[2], para[3]));
+                    dex = new Dex(para[0], status, para[2], para[3]);
                     //if(para[3].equals (DEFAULT_EXCL)) {
                     System.out.println("config: "+para[0] + " using "+para[2]);
                     //}else {
                     //    System.out.println("config: "+para[0] + " using "+para[2]+" with exclusion defined in "+para[3]);
                     //}
                 }else {
-                    res.addDex (new Dex(para[0], status));
+                    dex = new Dex(para[0], status);
                 }
+                res.addDex (dex);
             }
             fileScanner.close ();
         } catch (final FileNotFoundException e) {
