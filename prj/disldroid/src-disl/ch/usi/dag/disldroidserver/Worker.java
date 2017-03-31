@@ -420,6 +420,10 @@ public class Worker extends Thread {
             final JarFile analysislib = new JarFile ("output/lib/analysis.jar");
             putExtraClassesIntoJar (zos, analysislib, fullName);
             analysislib.close ();
+
+            final JarFile processinglib = new JarFile ("output/lib/processings.jar");
+            putExtraClassesIntoJar (zos, processinglib, fullName);
+            analysislib.close ();
         }
         zos.finish ();
         zos.close ();

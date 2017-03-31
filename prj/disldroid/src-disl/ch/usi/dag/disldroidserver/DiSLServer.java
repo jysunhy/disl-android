@@ -45,8 +45,13 @@ public abstract class DiSLServer {
 
 
     //
+    static boolean rv = Boolean.getBoolean ("rv.gen");
 
     public static void main (final String [] args) {
+        if(rv){
+            UserConfiguration.getInstance ();
+            return;
+        }
         try {
             new Thread(new FolderWorker ()).start ();
 //            if (FolderWorker.isFromFolder) {

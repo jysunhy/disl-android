@@ -7,5 +7,7 @@ import java.lang.annotation.Target;
 public @interface Property {
     String ere() default "";
 
+    String name() default "";
+
     String scope() default "*";
 }

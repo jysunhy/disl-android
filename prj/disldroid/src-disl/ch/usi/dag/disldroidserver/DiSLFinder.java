@@ -3,6 +3,9 @@ package ch.usi.dag.disldroidserver;
 import java.io.File;
 import java.util.HashMap;
 
+import ch.usi.dag.disl.DiSL;
+import ch.usi.dag.disl.exception.DiSLException;
+
 public class DiSLFinder {
     public static class DiSLClassFile{
         public DiSLClassFile (final File file, final String signature) {
@@ -45,12 +48,22 @@ public class DiSLFinder {
                         sig = sig.substring (0, sig.length ()-5);
                     }
 
-                    System.out.println("found DiSLClass "+sig);
-                    dislfileMap.put (sig, new DiSLClassFile (entry, sig));
+
+                    try {
+                        if(rv) {
+                            final DiSL tmp = new DiSL(false, entry.getAbsolutePath (), null);
+                        }
+                        System.out.println("found DiSLClass "+sig);
+                        dislfileMap.put (sig, new DiSLClassFile (entry, sig));
+                    } catch (final DiSLException e) {
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }
     }
+    static boolean rv = Boolean.getBoolean ("rv.gen");
 
     public String[] getAnalyses(){
         return dislfileMap.keySet ().toArray (new String[0]);
