@@ -10,4 +10,10 @@ public @interface Property {
     String name() default "";
 
     String scope() default "*";
+
+    String complement() default "false";
+
+    String binder() default "false";
+
+    String reverse() default "false";
 }

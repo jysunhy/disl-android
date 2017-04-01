@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -99,8 +100,8 @@ class SnippetParser extends AbstractParser {
     static boolean rv = Boolean.getBoolean ("rv.gen");
 
     public static void main(final String args[]){
-        final byte[] bytes = generateNewProcessing ("test", "hasnext", null);
-        bytesToFile ("./", "test.class", bytes, 0, bytes.length);
+//        final byte[] bytes = generateNewProcessing ("test", "hasnext", null);
+//        bytesToFile ("./", "test.class", bytes, 0, bytes.length);
     }
 
     static ClassNode updateClassName(final ClassNode cn, final String oldstr, final String newstr){
@@ -129,7 +130,10 @@ class SnippetParser extends AbstractParser {
     }
 
     static byte [] generateNewProcessing (
-        final String processingName, final String regularExpression, final MethodNode methodNode) {
+        final String scope,
+        final String processingName,
+        final String regularExpression, final String binder, final String complement, final String reverse,
+        final MethodNode methodNode) {
         final InputStream input = ClassLoader.getSystemResourceAsStream ("ch/usi/dag/rv/processing/ProcessingTemplate.class");
         final ByteBuffer buffer = ByteBuffer.allocate (1000000);
         final byte [] arr = new byte [1024];
@@ -155,15 +159,35 @@ class SnippetParser extends AbstractParser {
         cr.accept (cn, 0);
         updateClassName (cn, "ProcessingTemplate", processingName);
         for (final MethodNode method : cn.methods) {
-            if (method.name.equals ("getNFA")) {
-                final InsnList list = method.instructions;
-                for (final AbstractInsnNode instruction : list.toArray ()) {
-                    if (instruction instanceof LdcInsnNode) {
-                        ((LdcInsnNode) instruction).cst = regularExpression;
+//            if (method.name.equals ("getNFA")) {
+//                final InsnList list = method.instructions;
+//                for (final AbstractInsnNode instruction : list.toArray ()) {
+//                    if (instruction instanceof LdcInsnNode) {
+//                        ((LdcInsnNode) instruction).cst = regularExpression;
+//                    }
+//                }
+//            }
+            final InsnList list = method.instructions;
+            for (final AbstractInsnNode instruction : list.toArray ()) {
+                if (instruction instanceof LdcInsnNode) {
+                    final String str = ((LdcInsnNode) instruction).cst.toString ();
+                    switch(str){
+                        case "DEFAULTREGULAR":
+                            ((LdcInsnNode) instruction).cst = regularExpression;
+                        case "DEFAULTBINDER":
+                            ((LdcInsnNode) instruction).cst = binder;
+                        case "DEFAULTCOMPLEMENT":
+                            ((LdcInsnNode) instruction).cst = complement;
+                        case "DEFAULTREVERSE":
+                            ((LdcInsnNode) instruction).cst = reverse;
+                        case "DEFAULTSCOPE":
+                            ((LdcInsnNode) instruction).cst = scope;
+                        default:
+                            break;
                     }
                 }
             }
-            if(method.name.equals ("onAccepts")){
+            if(method.name.equals ("callback")){
 //                final InsnList list = method.instructions;
                 method.instructions = methodNode.instructions;
 //                for (final AbstractInsnNode instruction : list.toArray ()) {
@@ -294,28 +318,35 @@ class SnippetParser extends AbstractParser {
 
         final AnnotationNode annotation = method.invisibleAnnotations.get(0);
 
-        if(rv && Type.getType(annotation.desc).equals (Type.getType (Property.class))){
-            final Iterator<?> it = annotation.values.iterator();
-            String processingName="";
-            String ere = "";
-            while (it.hasNext()) {
-                // get attribute name
-                final String name = (String) it.next();
-                final Object value = it.next ();
-                if(name.equals ("ere")){
-                    ere = (String)value;
-                }else if(name.equals ("name")){
-                    processingName = (String)value;
+        if(Type.getType(annotation.desc).equals (Type.getType (Property.class))){
+            if(rv) {
+                final Iterator<?> it = annotation.values.iterator();
+    //            final String processingName="";
+    //            final String ere = "";
+    //            final String binder ="";
+    //            final String complement = "";
+    //            final String reverse = "";
+                final HashMap<String, String> kvs = new HashMap <String, String> ();
+                kvs.put("name","");
+                kvs.put("ere","");
+                kvs.put("binder","");
+                kvs.put("complement","");
+                kvs.put("reverse","");
+                kvs.put ("scope", "");
+                while (it.hasNext()) {
+                    // get attribute name
+                    final String name = (String) it.next();
+                    final Object value = it.next ();
+                    kvs.put (name, (String)value);
                 }
+
+                //read ProcessingTemplate.class
+                //and weave the ere value
+                //final byte[] bytes = generateNewClass("ProcessingTemplate",processingName,"DEFAULTREGULAR", ere, "ch/usi/dag/rv/processing/ProcessingTemplate");
+                final byte[] bytes = generateNewProcessing (kvs.get ("scope"), kvs.get("name"), kvs.get ("ere"),kvs.get ("binder"), kvs.get ("complement"),kvs.get ("reverse"), method);
+                //generate NEW.class
+                bytesToFile ("output/build/processings/ch/usi/dag/rv/processing/", kvs.get("name")+".class", bytes, 0, bytes.length);
             }
-
-            //read ProcessingTemplate.class
-            //and weave the ere value
-            //final byte[] bytes = generateNewClass("ProcessingTemplate",processingName,"DEFAULTREGULAR", ere, "ch/usi/dag/rv/processing/ProcessingTemplate");
-            final byte[] bytes = generateNewProcessing (processingName,ere, method);
-            //generate NEW.class
-            bytesToFile ("output/build/processings/ch/usi/dag/rv/processings/", processingName+".class", bytes, 0, bytes.length);
-
             return null;
         }
 
