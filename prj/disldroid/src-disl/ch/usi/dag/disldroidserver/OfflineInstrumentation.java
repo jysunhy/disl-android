@@ -197,14 +197,14 @@ public class OfflineInstrumentation {
                 ps.addAll (Arrays.asList (
                     "--dex", "--core-library", "--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
-                    "--verbose",
+//                    "--verbose",
                     //"--incremental",
                     instrumentedJarFile.getCanonicalPath ()));
             } else {
                 ps.addAll (Arrays.asList (
                     "--dex", "--no-strict",
                     "--output=" + outputDex.getCanonicalPath (),
-                    "--verbose",
+//                    "--verbose",
                     //"--incremental",
                     instrumentedJarFile.getCanonicalPath ()));
             }
@@ -247,12 +247,16 @@ public class OfflineInstrumentation {
 
     public static void main (final String [] args) {
         if (args.length < 2) {
-            System.out.println ("Usage: PATH_TO_INPUT_DEX PATH_TO_DISLCLASSES_SEPARTED_WITH_COMMA");
+            System.out.println ("Usage: PATH_TO_INPUT_DEX PATH_TO_DISLCLASSES_SEPARTED_WITH_COMMA [exclfile]");
         } else {
             final File inputDex = new File (args [0]);
             final String name = args[0].replace ('/', '_');
             try {
-                instrumentJar (name, readbytes (inputDex), new DiSL (false, args[1], null), "output.dex");
+                if(args.length > 2) {
+                    instrumentJar (name, readbytes (inputDex), new DiSL (false, args[1], args[2]), "output.dex");
+                }else {
+                    instrumentJar (name, readbytes (inputDex), new DiSL (false, args[1], null), "output.dex");
+                }
             } catch (final Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace ();

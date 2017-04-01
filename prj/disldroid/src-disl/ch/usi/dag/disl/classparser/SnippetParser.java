@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.objectweb.asm.ClassReader;
@@ -22,11 +23,17 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.FieldInsnNode;
+import org.objectweb.asm.tree.IincInsnNode;
 import org.objectweb.asm.tree.InsnList;
+import org.objectweb.asm.tree.InsnNode;
+import org.objectweb.asm.tree.JumpInsnNode;
+import org.objectweb.asm.tree.LabelNode;
 import org.objectweb.asm.tree.LdcInsnNode;
+import org.objectweb.asm.tree.LineNumberNode;
 import org.objectweb.asm.tree.LocalVariableNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.VarInsnNode;
 
 import ch.usi.dag.disl.annotation.After;
 import ch.usi.dag.disl.annotation.AfterReturning;
@@ -55,6 +62,7 @@ import ch.usi.dag.disl.staticcontext.StaticContext;
 import ch.usi.dag.disl.util.AsmHelper;
 import ch.usi.dag.disl.util.Constants;
 import ch.usi.dag.disl.util.ReflectionHelper;
+import ch.usi.dag.disl.weaver.AdvancedSorter;
 
 /**
  * The parser takes annotated java file as input and creates Snippet classes
@@ -189,7 +197,8 @@ class SnippetParser extends AbstractParser {
             }
             if(method.name.equals ("callback")){
 //                final InsnList list = method.instructions;
-                method.instructions = methodNode.instructions;
+//                method.instructions = methodNode.instructions;
+                weave (cn, methodNode, method);
 //                for (final AbstractInsnNode instruction : list.toArray ()) {
 //                    System.out.println(instruction);
 //                }
@@ -205,6 +214,58 @@ class SnippetParser extends AbstractParser {
 //        final byte[] res = byte_replace(newClassBytes, 0, newClassBytes.length, toReplace2, replaceTo2);
 //        System.out.println ("instrumented size "+res.length);
         return res;
+    }
+
+    static void weave (final ClassNode cn, final MethodNode snippetMethod, final MethodNode method) {
+        for (final AbstractInsnNode instruction : method.instructions.toArray ()) {
+            // System.out.println ("a-" + instruction.toString ());
+            // list.add (instruction);
+        }
+
+        // final int slotOff = AsmHelper.getParameterSlotCount
+        // (empty);
+        final int slotOff = method.maxLocals
+            - AsmHelper.getParameterSlotCount (snippetMethod);
+        final InsnList list = method.instructions;
+        final Map <LabelNode, LabelNode> oldNewMap = AsmHelper.__createReplacementLabelMap (snippetMethod.instructions);
+        AbstractInsnNode pos = list.get (1);
+        boolean skipnext = false;
+
+        final HashMap <String, Integer> extraLocals = new HashMap <String, Integer> ();
+        final int extraLocalIndex = 0;
+        for (final AbstractInsnNode oldInstruction : snippetMethod.instructions.toArray ()) {
+            if (skipnext) {
+                skipnext = false;
+                continue;
+            }
+            final AbstractInsnNode instruction = oldInstruction.clone (oldNewMap);
+
+            final AbstractInsnNode next = oldInstruction.getNext ();
+
+            if (instruction instanceof LineNumberNode) {
+                continue;
+            }
+            if (instruction.getOpcode () == Opcodes.RETURN) {
+                final InsnNode ret = (InsnNode) instruction;
+                continue;
+            }
+            if (instruction instanceof JumpInsnNode) {
+                final JumpInsnNode thisNode = (JumpInsnNode) instruction;
+            }
+
+            if (instruction instanceof VarInsnNode) {
+                ((VarInsnNode) instruction).var -= slotOff;
+            } else if (instruction instanceof IincInsnNode) {
+                ((IincInsnNode) instruction).var -= slotOff;
+            }
+
+            list.insert (pos, instruction);
+            pos = instruction;
+        }
+        // method.maxLocals += extraLocals.size ();
+        method.maxLocals += snippetMethod.maxLocals + extraLocals.size ();
+        method.maxStack += snippetMethod.maxStack;
+        AdvancedSorter.sort (method);
     }
 
 //    public static byte [] byte_replace (final byte [] bytes, final int offset, final int length, final String ori, final String n) {
